@@ -81,6 +81,7 @@
             this.udPSCalWait = new System.Windows.Forms.NumericUpDownTS();
             this.chkQuickAttenuate = new System.Windows.Forms.CheckBoxTS();
             this.chkAdvancedViewHidden = new System.Windows.Forms.CheckBoxTS();
+            this.chkAmpV = new System.Windows.Forms.CheckBoxTS();
             ((System.ComponentModel.ISupportInitialize)(this.udPSMoxDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udPSPhnum)).BeginInit();
             this.grpPSInfo.SuspendLayout();
@@ -118,6 +119,7 @@
             this.btnPSRestore.Image = null;
             this.btnPSRestore.Location = new System.Drawing.Point(399, 12);
             this.btnPSRestore.Name = "btnPSRestore";
+            this.btnPSRestore.Selectable = true;
             this.btnPSRestore.Size = new System.Drawing.Size(71, 20);
             this.btnPSRestore.TabIndex = 0;
             this.btnPSRestore.Text = "Restore";
@@ -131,6 +133,7 @@
             this.btnPSSave.Image = null;
             this.btnPSSave.Location = new System.Drawing.Point(322, 12);
             this.btnPSSave.Name = "btnPSSave";
+            this.btnPSSave.Selectable = true;
             this.btnPSSave.Size = new System.Drawing.Size(71, 20);
             this.btnPSSave.TabIndex = 4;
             this.btnPSSave.Text = "Save";
@@ -143,6 +146,7 @@
             this.btnPSAdvanced.Image = null;
             this.btnPSAdvanced.Location = new System.Drawing.Point(245, 12);
             this.btnPSAdvanced.Name = "btnPSAdvanced";
+            this.btnPSAdvanced.Selectable = true;
             this.btnPSAdvanced.Size = new System.Drawing.Size(71, 20);
             this.btnPSAdvanced.TabIndex = 46;
             this.btnPSAdvanced.Text = "Advanced";
@@ -230,6 +234,7 @@
             this.btnPSAmpView.Image = null;
             this.btnPSAmpView.Location = new System.Drawing.Point(168, 12);
             this.btnPSAmpView.Name = "btnPSAmpView";
+            this.btnPSAmpView.Selectable = true;
             this.btnPSAmpView.Size = new System.Drawing.Size(71, 20);
             this.btnPSAmpView.TabIndex = 40;
             this.btnPSAmpView.Text = "AmpView";
@@ -257,6 +262,7 @@
             this.btnPSTwoToneGen.Image = null;
             this.btnPSTwoToneGen.Location = new System.Drawing.Point(14, 12);
             this.btnPSTwoToneGen.Name = "btnPSTwoToneGen";
+            this.btnPSTwoToneGen.Selectable = true;
             this.btnPSTwoToneGen.Size = new System.Drawing.Size(71, 20);
             this.btnPSTwoToneGen.TabIndex = 37;
             this.btnPSTwoToneGen.Text = "Two-tone";
@@ -429,6 +435,7 @@
             this.btnDefaultPeaks.Image = null;
             this.btnDefaultPeaks.Location = new System.Drawing.Point(277, 117);
             this.btnDefaultPeaks.Name = "btnDefaultPeaks";
+            this.btnDefaultPeaks.Selectable = true;
             this.btnDefaultPeaks.Size = new System.Drawing.Size(67, 23);
             this.btnDefaultPeaks.TabIndex = 41;
             this.btnDefaultPeaks.Text = "Default";
@@ -691,6 +698,7 @@
             this.btnPSReset.Image = null;
             this.btnPSReset.Location = new System.Drawing.Point(476, 12);
             this.btnPSReset.Name = "btnPSReset";
+            this.btnPSReset.Selectable = true;
             this.btnPSReset.Size = new System.Drawing.Size(71, 20);
             this.btnPSReset.TabIndex = 20;
             this.btnPSReset.Text = "OFF";
@@ -703,6 +711,7 @@
             this.btnPSCalibrate.Image = null;
             this.btnPSCalibrate.Location = new System.Drawing.Point(91, 12);
             this.btnPSCalibrate.Name = "btnPSCalibrate";
+            this.btnPSCalibrate.Selectable = true;
             this.btnPSCalibrate.Size = new System.Drawing.Size(71, 20);
             this.btnPSCalibrate.TabIndex = 19;
             this.btnPSCalibrate.Text = "Single Cal";
@@ -776,12 +785,26 @@
             this.chkAdvancedViewHidden.UseVisualStyleBackColor = false;
             this.chkAdvancedViewHidden.Visible = false;
             // 
+            // chkAmpV
+            // 
+            this.chkAmpV.AutoSize = true;
+            this.chkAmpV.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.chkAmpV.Image = null;
+            this.chkAmpV.Location = new System.Drawing.Point(397, 178);
+            this.chkAmpV.Name = "chkAmpV";
+            this.chkAmpV.Size = new System.Drawing.Size(159, 17);
+            this.chkAmpV.TabIndex = 52;
+            this.chkAmpV.Text = "Enable Amp View At Startup";
+            this.chkAmpV.UseVisualStyleBackColor = true;
+            this.chkAmpV.CheckedChanged += new System.EventHandler(this.chkAmpV_CheckedChanged);
+            // 
             // PSForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(560, 303);
+            this.Controls.Add(this.chkAmpV);
             this.Controls.Add(this.chkAdvancedViewHidden);
             this.Controls.Add(this.chkQuickAttenuate);
             this.Controls.Add(this.chkPSOnTop);
@@ -880,5 +903,6 @@
         private System.Windows.Forms.CheckBoxTS chkQuickAttenuate;
         private System.Windows.Forms.ButtonTS btnDefaultPeaks;
         private System.Windows.Forms.CheckBoxTS chkAdvancedViewHidden;
+        private System.Windows.Forms.CheckBoxTS chkAmpV;
     }
 }

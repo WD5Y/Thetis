@@ -182,7 +182,7 @@ namespace Thetis
                 }
             }
         }
-        public static void Init(Console c, PictureBox rx1, PictureBox rx2, string sImagePath = "")
+        public static void Init(Console c, Control rx1, Control rx2, string sImagePath = "")
         {
             _console = c;
             //_mox = _console.MOX;
@@ -198,19 +198,9 @@ namespace Thetis
             addDelegates();
 
             if (rx1 != null)
-            {
                 _rx1Renderer = new DXRenderer(1, rx1, _console, sImagePath);
-                rx1.Parent.Show();
-            }
-
             if (rx2 != null)
-            {
                 _rx2Renderer = new DXRenderer(2, rx2, _console, sImagePath);
-                if (c.RX2Enabled)
-                    rx2.Parent.Show();
-                else
-                    rx2.Parent.Hide();
-            }
 
             _meterThread = new Thread(new ThreadStart(UpdateMeters))
             {
@@ -468,6 +458,16 @@ namespace Thetis
             }
 
             return updateInterval;
+        }
+
+        internal static void Init(Setup setup, PictureBox displayContainer1, PictureBox displayContainer2, string sImagePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void Init(Setup setup, PictureBox displayContainer1, PictureBox displayContainer2)
+        {
+            throw new NotImplementedException();
         }
         #endregion
         #region clsMeterItem
@@ -1975,7 +1975,7 @@ namespace Thetis
             private bool _bAntiAlias;
             private Vector2 _pixelShift;
             private int _nVBlanks;
-            private PictureBox _displayTarget;
+            private Control _displayTarget;
             private object _DXlock = new object();
             //
             private Dictionary<System.Drawing.Color, SharpDX.Direct2D1.Brush> _DXBrushes;
@@ -1990,7 +1990,7 @@ namespace Thetis
             private int _rx;
             private Console _console;
 
-            public DXRenderer(int rx, PictureBox target, Console c, string sImagePath)
+            public DXRenderer(int rx, Control target, Console c, string sImagePath)
             {
                 _rx = rx;
                 _console = c;
@@ -2411,7 +2411,7 @@ namespace Thetis
                     _nVBlanks = v;
                 }
             }
-            public PictureBox Target
+            public Control Target
             {
                 get { return _displayTarget; }
                 set
@@ -2840,10 +2840,10 @@ namespace Thetis
 
                 string sImage = ipg.ImageName;
 
-                string sKey = sImage + "-" + MeterManager.CurrentPowerRating.ToString();
+                string sKey = sImage + "_" + MeterManager.CurrentPowerRating.ToString();
                 if (_images.ContainsKey(sKey)) sImage = sKey;
 
-                sKey = sImage + "-small";
+                sKey = sImage + "_small";
                 if ((w < 100 || h < 100) && _images.ContainsKey(sKey)) sImage = sKey; // use small version of the image if available
 
                 if (_images.ContainsKey(sImage))

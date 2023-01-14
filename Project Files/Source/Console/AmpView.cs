@@ -54,6 +54,7 @@ namespace Thetis
             chkAVShowGain_CheckedChanged(this, ex);
             chkAVLowRes_CheckedChanged(this, ex);
             chkAVPhaseZoom_CheckedChanged(this, ex);
+            PSForm.ampv.TopMost = true;
         }
 
         private void disp_setup()

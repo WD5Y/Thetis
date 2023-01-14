@@ -9220,6 +9220,9 @@ namespace Thetis
                     case "DiversityForm":
                     case "AmpView":
                     case "PureSignal":
+                    case "ucDockedMeterRX1":
+                    case "ucDockedMeterRX2":
+                    case "psform":
                         // Get table of same name in oldDB     
                         tempTable.Clear();
                         tempMergedTable.Clear();

@@ -27,7 +27,7 @@ namespace Thetis
         public EntryAdd EntryAddHandlers;
 
         public delegate void EntryUpdate(BandStackFilter bsf, BandStackEntry bse);
-        public EntryUpdate EntryUpdateHandlers;
+        public EntryDelete EntryUpdateHandlers;
 
         public delegate void EntryDelete(BandStackFilter bsf, BandStackEntry bse);
         public EntryDelete EntryDeleteHandlers;

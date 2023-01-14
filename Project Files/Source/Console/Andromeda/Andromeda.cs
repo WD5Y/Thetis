@@ -1969,6 +1969,8 @@ namespace Thetis
 
         private const int VFMSTEPCOUNT = 24;
         private int FMSteps;
+        internal string sImagePath;
+
         //
         // handle a rotational step from a front panel VFO encoder
         // steps = number of turns; +ve = clockwise
@@ -2050,7 +2052,7 @@ namespace Thetis
                 MakeAttachedVersionString(ProductID, HardwareVersion, SoftwareVersion);
             }
         }
-
+        
         //
         // handle a button press from a front panel physical button, sent by CAT command
         // button = 0-98

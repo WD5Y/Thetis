@@ -15,6 +15,9 @@ namespace Thetis
     {
         private Console _console;
         private int _rx;
+        private Setup setup;
+        private int v;
+
         public frmMeterDisplay(Console c, int rx)
         {
             InitializeComponent();
@@ -22,8 +25,18 @@ namespace Thetis
             _console = c;
             _rx = rx;
 
+            _console.MoxChangeHandlers += OnMox;
+
+            setTitle(_console.MOX);
+
             Common.RestoreForm(this, "MeterDisplay_" + _rx.ToString(), true);
             Common.ForceFormOnScreen(this);
+        }
+
+        public frmMeterDisplay(Setup setup, int v)
+        {
+            this.setup = setup;
+            this.v = v;
         }
 
         private void frmMeterDisplay_FormClosing(object sender, FormClosingEventArgs e)
@@ -33,8 +46,23 @@ namespace Thetis
                 this.Hide();
                 e.Cancel = true;
             }
+            else
+            {
+                _console.MoxChangeHandlers -= OnMox;
+            }
 
             Common.SaveForm(this, "MeterDisplay_" + _rx.ToString());
+            Common.SaveForm(this, "_frmRX1Meter");
+            Common.SaveForm(this, "_frmRX2Meter");
+        }
+
+        private void OnMox(int rx, bool oldMox, bool newMox)
+        {
+            setTitle(newMox);
+        }
+        private void setTitle(bool mox)
+        {
+            this.Text = (mox ? "TX " : "RX ") + _rx.ToString();
         }
 
         public void TakeOwner(ucMeter m)
