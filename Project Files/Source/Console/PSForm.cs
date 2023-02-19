@@ -368,7 +368,6 @@ namespace Thetis
                 ampvThread.SetApartmentState(ApartmentState.STA);
                 ampvThread.Name = "Ampv Thread";
                 ampvThread.Start();
-                console.Focus();
             }
         }
 
@@ -795,7 +794,6 @@ namespace Thetis
             _topmost = chkPSOnTop.Checked;
 
             this.TopMost = _topmost; //MW0LGE
-            console.Focus();
         }
 
         #endregion
@@ -848,7 +846,7 @@ namespace Thetis
         private void chkAmpV_CheckedChanged(object sender, EventArgs e)
         {
             if (chkAmpV.Checked == true)
-            {                
+            {
                 if (ampv == null || (ampv != null && ampv.IsDisposed))
                 {
                     _dismissAmpv = false;
@@ -857,14 +855,14 @@ namespace Thetis
                     ampvThread.Name = "Ampv Thread";
                     ampvThread.Start();
                     console.Focus();
-                }                
+                }
             }
-               if (chkAmpV.Checked == false)
-               {
-                    _dismissAmpv = true;
-                    console.Focus();
-               }          
-        }        
+            if (chkAmpV.Checked == false)
+            {
+                _dismissAmpv = true;
+                console.Focus();
+            }
+        }
     }
 
     unsafe static class puresignal

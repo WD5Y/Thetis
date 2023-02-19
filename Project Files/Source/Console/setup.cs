@@ -312,10 +312,6 @@ namespace Thetis
 
             RefreshSkinList(); //moved down the initialisation order, so we at least know if we are gdi or dx, only build the list
 
-            //wd5y
-            RefreshMtrSkinList();
-            //wd5y
-
             //display defaults
             chkVSyncDX.Enabled = true;
             //chkLegacyDXBuffers_CheckedChanged(this, EventArgs.Empty);
@@ -328,9 +324,10 @@ namespace Thetis
             getOptions();
 
             selectSkin();
-            //wd5y
-            selectMtrSkin();
-            //wd5y
+
+            //MW0LGE [2.9.0.7] setup amp/volts calibration
+            initVoltsAmpsCalibration();
+            //
 
             // display setup
             console.SetupDisplayEngine(false); //MW0LGE_21k9
@@ -544,6 +541,8 @@ namespace Thetis
 
             openFileDialog1.Filter = "Thetis Database Files (*.xml) | *.xml";
 
+            btnRX2PBsnr.Enabled = console.RX2Enabled; //MW0LGE [2.9.0.7]
+
             // AddHPSDRPages();
 
 
@@ -568,6 +567,7 @@ namespace Thetis
             //console.BandChangeHandlers += OnBandChangeHandler;
             //console.VFOTXChangedHandlers += OnVFOTXChanged;
             console.TXBandChangeHandlers += OnTXBandChanged;
+            console.RX2EnabledChangedHandlers += OnRX2EnabledChanged;
 
             _bAddedDelegates = true;
         }
@@ -580,8 +580,13 @@ namespace Thetis
             //console.BandChangeHandlers -= OnBandChangeHandler;
             //console.VFOTXChangedHandlers -= OnVFOTXChanged;
             console.TXBandChangeHandlers -= OnTXBandChanged;
+            console.RX2EnabledChangedHandlers -= OnRX2EnabledChanged;
 
             _bAddedDelegates = false;
+        }
+        private void OnRX2EnabledChanged(bool enabled)
+        {
+            btnRX2PBsnr.Enabled = enabled;
         }
         #endregion
 
@@ -934,9 +939,8 @@ namespace Thetis
             chkWaterfallUseRX1SpectrumMinMax_CheckedChanged(this, e);
             chkWaterfallUseRX2SpectrumMinMax_CheckedChanged(this, e);
 
-            //MW0LGE_21d step atten
-            //adcsLinked();
-            //updateConsoleWithAttenuationInfo();
+            //MW0LGE [2.9.0.7]
+            updateMeter2Controls();
         }
 
         private void RefreshCOMPortLists()
@@ -1042,63 +1046,6 @@ namespace Thetis
             else if (comboAppSkin.Items.Contains(skin))
                 comboAppSkin.Text = skin;
             else comboAppSkin.Text = "IK3VIG Special";
-        }
-
-        private void RefreshMtrSkinList()
-        {
-            comboMtrSkin.Items.Clear();
-            string path = ".\\Meters\\";
-            if (Directory.Exists(path))
-                path = ".\\Meters\\";
-            else
-                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                    "\\OpenHPSDR\\Meters";
-
-            if (!Directory.Exists(path))
-            {
-                MessageBox.Show("The console presentation files (Meter Skins) were not found.\n" +
-                    "Appearance will suffer until this is rectified.\n",
-                    "Meter Skins files not found",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST); //MW0LGE_[2.9.0.7]);
-                return;
-            }
-
-            foreach (string d in Directory.GetDirectories(path))
-            {
-                string s = d.Substring(d.LastIndexOf("\\") + 1);
-                if (!s.StartsWith("."))
-                    comboMtrSkin.Items.Add(d.Substring(d.LastIndexOf("\\") + 1));
-            }
-
-            if (comboMtrSkin.Items.Count == 0)
-            {
-                MessageBox.Show("The console presentation files (Meter Skins) were not found.\n" +
-                    "Appearance will suffer until this is rectified.\n",
-                    "Meter Skins files not found",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST); //MW0LGE_[2.9.0.7]);
-                return;
-            }
-        }
-        private void selectMtrSkin()
-        {
-            string skin = comboMtrSkin.Text;
-
-            if (skin == "")
-            {
-                //if (comboAppSkin.Items.Contains("Default"))
-                //    comboAppSkin.Text = "Default";
-                //else
-                //    comboAppSkin.Text = "IK3VIG Special"; //"OpenHPSDR-Gray";
-                if (comboMtrSkin.Items.Contains("Anan-SDR"))
-                    comboMtrSkin.Text = "Anan-SDR";
-                else
-                    comboMtrSkin.Text = "Anan-7000"; //"Anan-7000";
-            }
-            else if (comboMtrSkin.Items.Contains(skin))
-                comboMtrSkin.Text = skin;
-            else comboMtrSkin.Text = "Anan-SDR";
         }
 
         private void GetHosts()
@@ -2110,6 +2057,8 @@ namespace Thetis
             // FM Tab
             chkEmphPos_CheckedChanged(this, e);
             chkRemoveTone_CheckedChanged(this, e);
+            chkFMDetLimON_CheckedChanged(this, e);
+            tbDSPDetLimGain_Scroll(this, e);
 
             // EER Tab
             chkDSPEERon_CheckedChanged(this, e);
@@ -2233,7 +2182,6 @@ namespace Thetis
             udDSPNBLead_ValueChanged(this, e);
             udDSPNBLag_ValueChanged(this, e);
             comboMeterType_SelectedIndexChanged(this, e);
-            comboMtrSkin_SelectedIndexChanged(this, e);
             comboAppSkin_SelectedIndexChanged(this, e);
             chkDisablePicDisplayBackgroundImage_CheckedChanged(this, e);
 
@@ -2362,6 +2310,9 @@ namespace Thetis
 
             //PA
             comboPAProfile_SelectedIndexChanged(this, e); //MW0LGE_22b
+
+            //
+            chkForceATTwhenPSAoff_CheckedChanged(this, e); //MW0LGE [2.9.0.7]
         }
 
         public string[] GetTXProfileStrings()
@@ -3252,6 +3203,7 @@ namespace Thetis
                 if (udATTOnTX != null)
                 {
                     if (value > 31) value = 31;
+                    if (value < 0) value = 0; //MW0LGE [2.9.0.7] added after mi0bot source review
                     udATTOnTX.Value = value;
                 }
             }
@@ -7947,7 +7899,6 @@ namespace Thetis
             //    comboAudioSampleRateRX2.SelectedIndex = comboAudioSampleRate1.SelectedIndex;
             //    comboAudioSampleRateRX2_SelectedIndexChanged(this, e);
             //}
-
         }
 
         private void comboAudioSampleRateRX2_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -7958,7 +7909,10 @@ namespace Thetis
             int new_rate = Int32.Parse(comboAudioSampleRateRX2.Text);
             bool was_enabled = console.RX2Enabled;
 
-            if ((NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH) && (new_rate != old_rate || initializing || m_bForceAudio))
+            // MW0LGE [2.9.07] always initialise rx2 even if P1. Thanks to Reid (Gi8TME/Mi0BOT) and DH1KLM
+            // see https://github.com/ramdor/Thetis-2.9.0/issues/66
+            //if ((NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH) && (new_rate != old_rate || initializing || m_bForceAudio))
+            if (new_rate != old_rate || initializing || m_bForceAudio)
             {
                 // turn OFF the DSP channel so it gets flushed out (must do while data is flowing to get slew-down and flush)
                 WDSP.SetChannelState(WDSP.id(2, 0), 0, 1);
@@ -9826,7 +9780,7 @@ namespace Thetis
             console.radio.GetDSPTX(0).TXLevelerOn = chkDSPLevelerEnabled.Checked;
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.Leveler, chkDSPLevelerEnabled.Checked);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.Leveler, chkDSPLevelerEnabled.Checked);
         }
 
         #endregion
@@ -13767,7 +13721,7 @@ namespace Thetis
             Display.PanFill = chkDisplayPanFill.Checked;
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.DisplayFill, Display.PanFill);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.DisplayFill, Display.PanFill);
         }
 
         private void chkTXPanFill_CheckedChanged(object sender, System.EventArgs e)
@@ -15295,11 +15249,11 @@ namespace Thetis
             {
                 if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH)
                 {
-                    sRet = "Protocol 2 v" + NetworkIO.FWCodeVersion.ToString("0\\.0") + "." + NetworkIO.BetaVersion.ToString();
+                    sRet = "FW v" + NetworkIO.FWCodeVersion.ToString("0\\.0") + "." + NetworkIO.BetaVersion.ToString() + " Protocol 2";
                 }
                 else
                 {
-                    sRet = "Protocol 1 v" + NetworkIO.FWCodeVersion.ToString("0\\.0");
+                    sRet = "FW v" + NetworkIO.FWCodeVersion.ToString("0\\.0") + " Protocol 1";
                 }
             }
 
@@ -17782,17 +17736,31 @@ namespace Thetis
             console.radio.GetDSPRX(1, 0).RXFMCTCSSFilter = chkRemoveTone.Checked;
         }
 
+        private void chkFMDetLimON_CheckedChanged(object sender, EventArgs e)
+        {
+            console.radio.GetDSPRX(0, 0).RXFMDETLIMRUN = chkFMDetLimON.Checked;
+            console.radio.GetDSPRX(0, 1).RXFMDETLIMRUN = chkFMDetLimON.Checked;
+            console.radio.GetDSPRX(1, 0).RXFMDETLIMRUN = chkFMDetLimON.Checked;
+        }
+
+        private void tbDSPDetLimGain_Scroll(object sender, EventArgs e)
+        {
+            console.radio.GetDSPRX(0, 0).RXFMDETLIMGAIN = (double)tbDSPFMDetLimGain.Value;
+            console.radio.GetDSPRX(0, 1).RXFMDETLIMGAIN = (double)tbDSPFMDetLimGain.Value;
+            console.radio.GetDSPRX(1, 0).RXFMDETLIMGAIN = (double)tbDSPFMDetLimGain.Value;
+        }
+
         private void chkDSPEERon_CheckedChanged(object sender, EventArgs e)
         {
             if (chkDSPEERon.Checked)
             {
                 console.radio.GetDSPTX(0).TXEERModeRun = true;
-                NetworkIO.EnableEClassModulation(1);
+                //NetworkIO.EnableEClassModulation(1);
             }
             else
             {
                 console.radio.GetDSPTX(0).TXEERModeRun = false;
-                NetworkIO.EnableEClassModulation(0);
+                //NetworkIO.EnableEClassModulation(0);
             }
         }
 
@@ -18939,29 +18907,33 @@ namespace Thetis
             WDSP.RXANBPSetAutoIncrease(WDSP.id(2, 0), chkMNFAutoIncrease.Checked);
         }
 
+        private Object _notchLock = new Object();
         unsafe public void SaveNotchesToDatabase()
         {
-            // get the number of notches that exist
-            int nn;
-            WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
-            numnotches = nn;
-            // HERE:  SAVE 'numnotches', THE NUMBER OF NOTCHES, TO THE DATABASE
-            MNotchDB.List.Clear();
-            for (int i = 0; i < numnotches; i++)
+            lock (_notchLock)
             {
-                double fcenter, fwidth;
-                int active;
-                // get fcenter, fwidth, and active for a notch
-                WDSP.RXANBPGetNotch(WDSP.id(0, 0), i, &fcenter, &fwidth, &active);
-                // HERE:  SAVE fcenter, fwidth, and active FOR THIS NOTCH TO THE DATABASE
-                MNotchDB.List.Add(new MNotch(fcenter, fwidth, Convert.ToBoolean(active)));
+                // get the number of notches that exist
+                int nn;
+                WDSP.RXANBPGetNumNotches(WDSP.id(0, 0), &nn);
+                numnotches = nn;
+                // HERE:  SAVE 'numnotches', THE NUMBER OF NOTCHES, TO THE DATABASE
+                MNotchDB.Clear();
+                for (int i = 0; i < numnotches; i++)
+                {
+                    double fcenter, fwidth;
+                    int active;
+                    // get fcenter, fwidth, and active for a notch
+                    WDSP.RXANBPGetNotch(WDSP.id(0, 0), i, &fcenter, &fwidth, &active);
+                    // HERE:  SAVE fcenter, fwidth, and active FOR THIS NOTCH TO THE DATABASE
+                    MNotchDB.Add(new MNotch(fcenter, fwidth, Convert.ToBoolean(active)));
+                }
             }
         }
 
         unsafe public void UpdateNotchDisplay()
         {
             // sets max limits, and selects first notch if one exists
-            numnotches = MNotchDB.List.Count;
+            numnotches = MNotchDB.Count;
             udMNFNotch.Value = 0;
             udMNFNotch.Maximum = 0;
             if (numnotches > 0)
@@ -18994,15 +18966,15 @@ namespace Thetis
         unsafe public void RestoreNotchesFromDatabase()
         {
             // HERE:  Read the number of notches, 'numnotches' from the database
-            for (int i = 0; i < MNotchDB.List.Count; i++)
+            for (int i = 0; i < MNotchDB.Count; i++)
             {
                 double fcenter = 0.0, fwidth = 0.0;
                 bool active = false;
 
                 // HERE:  READ VALUES OF fcenter, fwidth, and active FOR NOTCH[i] FROM THE DATABASE
-                fcenter = MNotchDB.List[i].FCenter;
-                fwidth = MNotchDB.List[i].FWidth;
-                active = MNotchDB.List[i].Active;
+                fcenter = MNotchDB.NotchFromIndex(i).FCenter;
+                fwidth = MNotchDB.NotchFromIndex(i).FWidth;
+                active = MNotchDB.NotchFromIndex(i).Active;
 
                 WDSP.RXANBPAddNotch(WDSP.id(0, 0), i, fcenter, fwidth, active);
                 WDSP.RXANBPAddNotch(WDSP.id(0, 1), i, fcenter, fwidth, active);
@@ -19307,7 +19279,7 @@ namespace Thetis
             WDSP.SetTXACFCOMPRun(WDSP.id(1, 0), run);
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.CFC, chkCFCEnable.Checked);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.CFC, chkCFCEnable.Checked);
         }
 
         private void setCFCProfile(object sender, EventArgs e)
@@ -19372,7 +19344,7 @@ namespace Thetis
             WDSP.SetTXACFCOMPPeqRun(WDSP.id(1, 0), run);
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.CFCeq, chkCFCPeqEnable.Checked);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.CFCeq, chkCFCPeqEnable.Checked);
         }
 
         private void chkPHROTEnable_CheckedChanged(object sender, EventArgs e)
@@ -20298,7 +20270,7 @@ namespace Thetis
             Display.ShowPeakBlobs = bEnabled;
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.Blobs, bEnabled);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.Blobs, bEnabled);
         }
 
         private void udPeakBlobs_ValueChanged(object sender, EventArgs e)
@@ -21443,7 +21415,7 @@ namespace Thetis
             
             Display.SpectralPeakHoldRX1 = chkActivePeakHoldRX1.Checked;
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.ActivePeaks, chkActivePeakHoldRX1.Checked | (console.RX2Enabled && chkActivePeakHoldRX2.Checked));
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.ActivePeaks, chkActivePeakHoldRX1.Checked | (console.RX2Enabled && chkActivePeakHoldRX2.Checked));
         }
 
         private void udActivePeakHoldDurationRX1_ValueChanged(object sender, EventArgs e)
@@ -21461,7 +21433,7 @@ namespace Thetis
 
             Display.SpectralPeakHoldRX2 = chkActivePeakHoldRX2.Checked;
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.ActivePeaks, chkActivePeakHoldRX1.Checked | (console.RX2Enabled && chkActivePeakHoldRX2.Checked));
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.ActivePeaks, chkActivePeakHoldRX1.Checked | (console.RX2Enabled && chkActivePeakHoldRX2.Checked));
         }
 
         private void udActivePeakHoldDurationRX2_ValueChanged(object sender, EventArgs e)
@@ -23080,7 +23052,7 @@ namespace Thetis
             Display.AlwaysShowCursorInfo = chkShowMHzOnCursor.Checked;
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.CursorInfo, chkShowMHzOnCursor.Checked);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.CursorInfo, chkShowMHzOnCursor.Checked);
         }
 
         private void chkLimitFilterEdgesToSidebands_CheckedChanged(object sender, EventArgs e)
@@ -23303,7 +23275,7 @@ namespace Thetis
             Display.ShowTCISpots = chkShowTCISpots.Checked;
 
             //
-            console.SetupInfoBar(ucInfoBar.ActionTypes.ShowSpots, chkShowTCISpots.Checked/* | console.SpotForm*/);
+            console.SetupInfoBarButton(ucInfoBar.ActionTypes.ShowSpots, chkShowTCISpots.Checked/* | console.SpotForm*/);
         }
         public bool ShowTCISpots
         {
@@ -25060,8 +25032,7 @@ namespace Thetis
             }
         }
 
-        private Band _adjustingBand = Band.FIRST;       
-
+        private Band _adjustingBand = Band.FIRST;
         private void nudAdjustGain_ValueChanged(object sender, EventArgs e)
         {
             if (_bIgnoreNUDAdjustUpdate || initializing || _PAProfiles == null) return;
@@ -25162,7 +25133,7 @@ namespace Thetis
 
         private void nudNFshift_ValueChanged(object sender, EventArgs e)
         {
-            Display.NFshiftDBM = (int)nudNFshift.Value;
+            Display.NFshiftDBM = (float)nudNFshift.Value;
         }
 
         private void chkNFShowDecimal_CheckedChanged(object sender, EventArgs e)
@@ -25202,47 +25173,189 @@ namespace Thetis
 
             if (dr == DialogResult.Yes)
                 console.ResetLevelCalibration();
-        }       
-
-        private void chkPSLinWin_CheckedChanged(object sender, EventArgs e)
-        {            
-                if (chkPSLinWin.Checked == true)
-                {
-                    console.psform.SetupForm();//EventArgs.Empty); //MW0LGE_21k9d (rc3) //MW0LGE_[2.9.0.7]
-                    console.psform.Show();
-                    console.psform.Focus();
-                }           
-
-                if (chkPSLinWin.Checked == false)
-                {
-                    console.psform.Hide();
-                }               
-        }
-        
-        public void comboMtrSkin_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (initializing) return;  // prevents call on getoptions, need to force call after options loaded MW0LGE 
-
-            string path = ".\\Meters\\";
-            if (Directory.Exists(path + comboMtrSkin.Text))
-                console.CurrentMtrSkin = comboMtrSkin.Text;
-
-            else
-
-            path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Meters\\";            
-            if (Directory.Exists(path + comboMtrSkin.Text))           
-            console.CurrentMtrSkin = comboMtrSkin.Text;            
         }
 
-        private void chkMtrHme_CheckedChanged(object sender, EventArgs e)
+        private void chkSupportUkraine_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkMtrHme.Checked == true)
+            Display.FlagShown = chkSupportUkraine.Checked; //MW0LGE [2.9.0.7]
+        }
+
+        private bool _bVoffSet = false;
+        private bool _bSensSet = false;
+        private void btnAmpDefault_Click(object sender, EventArgs e)
+        {
+            float voff = 360.0f, sens = 120.0f;
+            if (console.CurrentHPSDRModel == HPSDRModel.ANAN7000D)
             {
-                console.MtrHme = true;
+                voff = 340.0f;
+                sens = 88.0f;
+            }
+
+            udAmpVoff.Value = (decimal)voff;
+            udAmpSens.Value = (decimal)sens;
+        }
+        private void udAmpVoff_ValueChanged(object sender, EventArgs e)
+        {
+            console.AmpVoff = (float)udAmpVoff.Value;
+            _bVoffSet = true;
+        }
+        private void udAmpSens_ValueChanged(object sender, EventArgs e)
+        {
+            console.AmpSens = (float)udAmpSens.Value;
+            _bSensSet = true;
+        }
+        private void initVoltsAmpsCalibration()
+        {
+            if (!_bSensSet || !_bVoffSet) btnAmpDefault_Click(this, EventArgs.Empty);
+        }
+
+        private void chkForceATTwhenPSAoff_CheckedChanged(object sender, EventArgs e)
+        {
+            console.ForceATTwhenPSAoff = chkForceATTwhenPSAoff.Checked;
+        }
+
+        private void chkVisualNotch_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowVisualNotch = chkVisualNotch.Checked;
+        }
+
+        private void btnRX1PBsnr_Click(object sender, EventArgs e)
+        {
+            float snr = console.RXPBsnr(1);
+
+            float t = (float)nudNFshift.Value + snr;
+
+            // limit to 12 for the shift
+            if (t < -12) t = -12;
+            if (t > 12) t = 12;
+
+            nudNFshift.Value = (decimal)t;
+        }
+
+        private void btnRX2PBsnr_Click(object sender, EventArgs e)
+        {
+            float snr = console.RXPBsnr(2);
+
+            float t = (float)nudNFshift.Value + snr;
+
+            // limit to 12 for the shift
+            if (t < -12) t = -12;
+            if (t > 12) t = 12;
+
+            nudNFshift.Value = (decimal)t;
+        }
+
+        private void btnResetNFShift_Click(object sender, EventArgs e)
+        {
+            nudNFshift.Value = (decimal)0f;
+        }
+
+        private void btnAddRX1Container_Click(object sender, EventArgs e)
+        {
+            if (MeterManager.TotalMeterContainers < 10)
+            {
+                string sId = MeterManager.AddMeterContainer(1, false);
+                updateMeter2Controls(sId);
+            }            
+        }
+
+        private void btnAddRX2Container_Click(object sender, EventArgs e)
+        {
+            if (MeterManager.TotalMeterContainers < 10)
+            {
+                string sId = MeterManager.AddMeterContainer(2, false);
+                updateMeter2Controls(sId);
+            }           
+        }
+        private class clsContainerComboboxItem
+        {
+            public string Text { get; set; }
+            public string ID { get; set; }
+
+            public override string ToString()
+            {
+                return Text;
+            }
+        }
+        private void updateMeter2Controls(string sId = "")
+        {
+            bool bEnableAdd = MeterManager.TotalMeterContainers < 10;
+
+            btnAddRX1Container.Enabled = bEnableAdd;
+            btnAddRX2Container.Enabled = bEnableAdd;
+
+            comboContainerSelect.Items.Clear();
+            int i = 0;
+            int nSelect = 0;
+            foreach(KeyValuePair<string, ucMeter> kvp in MeterManager.MeterContainers)
+            {
+                clsContainerComboboxItem cci = new clsContainerComboboxItem();
+                cci.Text = "Container " + (i+1).ToString() + " RX" + kvp.Value.RX.ToString();
+                cci.ID = kvp.Value.ID;
+
+                comboContainerSelect.Items.Add(cci);
+
+                if (cci.ID == sId) nSelect = i;
+
+                i++;                
+            }
+
+            bool bEnableControls = false;
+
+            if (comboContainerSelect.Items.Count > 0)
+            {
+                comboContainerSelect.SelectedIndex = nSelect;
+
+                bEnableControls = true;
             }
             else
             {
-                console.MtrHme = false;
+                comboContainerSelect.Text = "";
+            }
+
+            btnContainerDelete.Enabled = bEnableControls;
+            chkContainerHighlight.Enabled = bEnableControls;
+            comboContainerSelect.Enabled = bEnableControls;
+        }
+
+        private void btnContainerDelete_Click(object sender, EventArgs e)
+        {
+            clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
+
+            if (cci != null)
+            {
+                MeterManager.RemoveMeterContainer(cci.ID);
+                comboContainerSelect.Items.Remove(cci);
+
+                updateMeter2Controls();
+            }
+        }
+
+        private void comboContainerSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (chkContainerHighlight.Checked)
+            {
+                clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
+                if (cci != null)
+                {
+                    MeterManager.HighlightContainer = cci.ID;
+                }
+            }
+        }
+
+        private void chkContainerHighlight_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkContainerHighlight.Checked)
+            {
+                clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
+                if (cci != null)
+                {
+                    MeterManager.HighlightContainer = cci.ID;
+                }
+            }
+            else
+            {
+                MeterManager.HighlightContainer = "";
             }
         }
 

@@ -785,10 +785,5 @@ namespace Thetis
 			{ 
 			}
 		}
-
-        internal static void HightlightControl(ToolStripMenuItem rX1MetertoolStripMenuItem, bool bHighlight)
-        {
-            throw new NotImplementedException();
-        }
-    }
+	}
 }

@@ -287,6 +287,7 @@
         private RadioButtonTS radDisplayZoom4x;
         private RadioButtonTS radDisplayZoom2x;
         private RadioButtonTS radDisplayZoom1x;
+        private CheckBoxTS chkFWCATUBypass;
         private CheckBoxTS chkFWCATU;
         private CheckBoxTS chkMicMute;
         private CheckBoxTS chkMUT;
@@ -508,10 +509,6 @@
             this.timer_cpu_meter = new System.Windows.Forms.Timer(this.components);
             this.timer_peak_text = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
-            this.pnlResizeMeter = new System.Windows.Forms.PanelTS();
-            this.picMultiMeterDigital = new System.Windows.Forms.PictureBox();
-            this.txtMultiText = new System.Windows.Forms.TextBoxTS();
             this.ptbFilterShift = new Thetis.PrettyTrackBar();
             this.ptbFilterWidth = new Thetis.PrettyTrackBar();
             this.btnFilterShiftReset = new System.Windows.Forms.ButtonTS();
@@ -854,14 +851,6 @@
             this.BPFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MTRStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX1MetertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2MetertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX1HometoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2HometoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MtrSkintoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX1OnToptoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2OnToptoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picRX2Squelch = new System.Windows.Forms.PictureBox();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripDropDownButton_ScreenSize = new System.Windows.Forms.ToolStripDropDownButton();
@@ -915,8 +904,10 @@
             this.toolStripStatusLabel_Date = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_LocalTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrAutoAGC = new System.Windows.Forms.Timer(this.components);
-            this.buttonTS2 = new System.Windows.Forms.ButtonTS();
-            this.buttonTS1 = new System.Windows.Forms.ButtonTS();
+            this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
+            this.pnlResizeMeter = new System.Windows.Forms.PanelTS();
+            this.picMultiMeterDigital = new System.Windows.Forms.PictureBox();
+            this.txtMultiText = new System.Windows.Forms.TextBoxTS();
             this.panelFilter = new System.Windows.Forms.PanelTS();
             this.radFilter1 = new System.Windows.Forms.RadioButtonTS();
             this.lblFilterHigh = new System.Windows.Forms.LabelTS();
@@ -1055,8 +1046,6 @@
             this.grpDIGSampleRate = new System.Windows.Forms.GroupBoxTS();
             this.panelDisplay = new System.Windows.Forms.PanelTS();
             this.infoBar = new Thetis.ucInfoBar();
-            this.ucDockedMeterRX2 = new Thetis.ucMeter();
-            this.ucDockedMeterRX1 = new Thetis.ucMeter();
             this.lblDisplayZoom = new System.Windows.Forms.LabelTS();
             this.lblDisplayPan = new System.Windows.Forms.LabelTS();
             this.picDisplay = new System.Windows.Forms.PictureBox();
@@ -1130,8 +1119,6 @@
             this.tbAndromedaEncoderSlider = new System.Windows.Forms.TrackBarTS();
             this.lblAndromedaEncoderSlider = new System.Windows.Forms.LabelTS();
             this.lblATUTuneLabel = new System.Windows.Forms.LabelTS();
-            this.grpMultimeter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -1175,6 +1162,8 @@
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).BeginInit();
             this.statusStripMain.SuspendLayout();
+            this.grpMultimeter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
             this.panelFilter.SuspendLayout();
             this.panelRX2RF.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).BeginInit();
@@ -1239,50 +1228,6 @@
             // 
             this.timer_peak_text.Interval = 500;
             this.timer_peak_text.Tick += new System.EventHandler(this.timer_peak_text_Tick);
-            // 
-            // grpMultimeter
-            // 
-            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
-            this.grpMultimeter.Controls.Add(this.pnlResizeMeter);
-            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
-            this.grpMultimeter.Controls.Add(this.txtMultiText);
-            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
-            this.grpMultimeter.Name = "grpMultimeter";
-            this.grpMultimeter.TabStop = false;
-            this.toolTip1.SetToolTip(this.grpMultimeter, resources.GetString("grpMultimeter.ToolTip"));
-            // 
-            // pnlResizeMeter
-            // 
-            resources.ApplyResources(this.pnlResizeMeter, "pnlResizeMeter");
-            this.pnlResizeMeter.Cursor = System.Windows.Forms.Cursors.SizeWE;
-            this.pnlResizeMeter.Name = "pnlResizeMeter";
-            this.pnlResizeMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseDown);
-            this.pnlResizeMeter.MouseEnter += new System.EventHandler(this.pnlResizeMeter_MouseEnter);
-            this.pnlResizeMeter.MouseLeave += new System.EventHandler(this.pnlResizeMeter_MouseLeave);
-            this.pnlResizeMeter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseMove);
-            this.pnlResizeMeter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseUp);
-            // 
-            // picMultiMeterDigital
-            // 
-            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
-            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
-            this.picMultiMeterDigital.TabStop = false;
-            this.picMultiMeterDigital.Click += new System.EventHandler(this.picMultiMeterDigital_Click);
-            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
-            // 
-            // txtMultiText
-            // 
-            this.txtMultiText.BackColor = System.Drawing.Color.Black;
-            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
-            resources.ApplyResources(this.txtMultiText, "txtMultiText");
-            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
-            this.txtMultiText.Name = "txtMultiText";
-            this.txtMultiText.ReadOnly = true;
-            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
-            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
             // 
             // ptbFilterShift
             // 
@@ -1505,8 +1450,8 @@
             this.comboRX2AGC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2AGC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2AGC.DropDownWidth = 48;
-            resources.ApplyResources(this.comboRX2AGC, "comboRX2AGC");
             this.comboRX2AGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboRX2AGC, "comboRX2AGC");
             this.comboRX2AGC.Name = "comboRX2AGC";
             this.toolTip1.SetToolTip(this.comboRX2AGC, resources.GetString("comboRX2AGC.ToolTip"));
             this.comboRX2AGC.SelectedIndexChanged += new System.EventHandler(this.comboRX2AGC_SelectedIndexChanged);
@@ -1655,8 +1600,8 @@
             this.comboRX2Band.DisplayMember = "0";
             this.comboRX2Band.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2Band.DropDownWidth = 56;
-            resources.ApplyResources(this.comboRX2Band, "comboRX2Band");
             this.comboRX2Band.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboRX2Band, "comboRX2Band");
             this.comboRX2Band.Items.AddRange(new object[] {
             resources.GetString("comboRX2Band.Items"),
             resources.GetString("comboRX2Band.Items1"),
@@ -1977,8 +1922,8 @@
             this.comboRX2DisplayMode.DisplayMember = "0";
             this.comboRX2DisplayMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2DisplayMode.DropDownWidth = 88;
-            resources.ApplyResources(this.comboRX2DisplayMode, "comboRX2DisplayMode");
             this.comboRX2DisplayMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboRX2DisplayMode, "comboRX2DisplayMode");
             this.comboRX2DisplayMode.Items.AddRange(new object[] {
             resources.GetString("comboRX2DisplayMode.Items"),
             resources.GetString("comboRX2DisplayMode.Items1"),
@@ -2124,13 +2069,13 @@
             // udRIT
             // 
             this.udRIT.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.udRIT, "udRIT");
             this.udRIT.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.udRIT.Increment = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            resources.ApplyResources(this.udRIT, "udRIT");
             this.udRIT.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -2202,13 +2147,13 @@
             // udXIT
             // 
             this.udXIT.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.udXIT, "udXIT");
             this.udXIT.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.udXIT.Increment = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            resources.ApplyResources(this.udXIT, "udXIT");
             this.udXIT.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -2255,8 +2200,8 @@
             this.comboAGC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboAGC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAGC.DropDownWidth = 48;
-            resources.ApplyResources(this.comboAGC, "comboAGC");
             this.comboAGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboAGC, "comboAGC");
             this.comboAGC.Name = "comboAGC";
             this.toolTip1.SetToolTip(this.comboAGC, resources.GetString("comboAGC.ToolTip"));
             this.comboAGC.SelectedIndexChanged += new System.EventHandler(this.comboAGC_SelectedIndexChanged);
@@ -2274,8 +2219,8 @@
             this.comboPreamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboPreamp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPreamp.DropDownWidth = 48;
-            resources.ApplyResources(this.comboPreamp, "comboPreamp");
             this.comboPreamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboPreamp, "comboPreamp");
             this.comboPreamp.Name = "comboPreamp";
             this.toolTip1.SetToolTip(this.comboPreamp, resources.GetString("comboPreamp.ToolTip"));
             this.comboPreamp.SelectedIndexChanged += new System.EventHandler(this.comboPreamp_SelectedIndexChanged);
@@ -2321,8 +2266,8 @@
             this.comboTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTXProfile.DropDownWidth = 96;
-            resources.ApplyResources(this.comboTXProfile, "comboTXProfile");
             this.comboTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboTXProfile, "comboTXProfile");
             this.comboTXProfile.Name = "comboTXProfile";
             this.toolTip1.SetToolTip(this.comboTXProfile, resources.GetString("comboTXProfile.ToolTip"));
             this.comboTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboTXProfile_SelectedIndexChanged);
@@ -2383,8 +2328,8 @@
             this.comboDigTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboDigTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDigTXProfile.DropDownWidth = 96;
-            resources.ApplyResources(this.comboDigTXProfile, "comboDigTXProfile");
             this.comboDigTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboDigTXProfile, "comboDigTXProfile");
             this.comboDigTXProfile.Name = "comboDigTXProfile";
             this.toolTip1.SetToolTip(this.comboDigTXProfile, resources.GetString("comboDigTXProfile.ToolTip"));
             this.comboDigTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboDigTXProfile_SelectedIndexChanged);
@@ -2402,8 +2347,8 @@
             this.comboVACSampleRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboVACSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboVACSampleRate.DropDownWidth = 64;
-            resources.ApplyResources(this.comboVACSampleRate, "comboVACSampleRate");
             this.comboVACSampleRate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboVACSampleRate, "comboVACSampleRate");
             this.comboVACSampleRate.Items.AddRange(new object[] {
             resources.GetString("comboVACSampleRate.Items"),
             resources.GetString("comboVACSampleRate.Items1"),
@@ -2596,8 +2541,8 @@
             this.comboMeterTXMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboMeterTXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMeterTXMode.DropDownWidth = 72;
-            resources.ApplyResources(this.comboMeterTXMode, "comboMeterTXMode");
             this.comboMeterTXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboMeterTXMode, "comboMeterTXMode");
             this.comboMeterTXMode.Name = "comboMeterTXMode";
             this.toolTip1.SetToolTip(this.comboMeterTXMode, resources.GetString("comboMeterTXMode.ToolTip"));
             this.comboMeterTXMode.SelectedIndexChanged += new System.EventHandler(this.comboMeterTXMode_SelectedIndexChanged);
@@ -2607,8 +2552,8 @@
             this.comboMeterRXMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboMeterRXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMeterRXMode.DropDownWidth = 72;
-            resources.ApplyResources(this.comboMeterRXMode, "comboMeterRXMode");
             this.comboMeterRXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboMeterRXMode, "comboMeterRXMode");
             this.comboMeterRXMode.Name = "comboMeterRXMode";
             this.toolTip1.SetToolTip(this.comboMeterRXMode, resources.GetString("comboMeterRXMode.ToolTip"));
             this.comboMeterRXMode.SelectedIndexChanged += new System.EventHandler(this.comboMeterRXMode_SelectedIndexChanged);
@@ -2733,8 +2678,8 @@
             this.comboRX2MeterMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2MeterMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2MeterMode.DropDownWidth = 72;
-            resources.ApplyResources(this.comboRX2MeterMode, "comboRX2MeterMode");
             this.comboRX2MeterMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboRX2MeterMode, "comboRX2MeterMode");
             this.comboRX2MeterMode.Name = "comboRX2MeterMode";
             this.toolTip1.SetToolTip(this.comboRX2MeterMode, resources.GetString("comboRX2MeterMode.ToolTip"));
             this.comboRX2MeterMode.SelectedIndexChanged += new System.EventHandler(this.comboRX2MeterMode_SelectedIndexChanged);
@@ -3283,8 +3228,8 @@
             this.comboFMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboFMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFMTXProfile.DropDownWidth = 96;
-            resources.ApplyResources(this.comboFMTXProfile, "comboFMTXProfile");
             this.comboFMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboFMTXProfile, "comboFMTXProfile");
             this.comboFMTXProfile.Name = "comboFMTXProfile";
             this.toolTip1.SetToolTip(this.comboFMTXProfile, resources.GetString("comboFMTXProfile.ToolTip"));
             this.comboFMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboFMTXProfile_SelectedIndexChanged);
@@ -3546,8 +3491,8 @@
             this.comboRX2Preamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2Preamp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2Preamp.DropDownWidth = 48;
-            resources.ApplyResources(this.comboRX2Preamp, "comboRX2Preamp");
             this.comboRX2Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboRX2Preamp, "comboRX2Preamp");
             this.comboRX2Preamp.Name = "comboRX2Preamp";
             this.toolTip1.SetToolTip(this.comboRX2Preamp, resources.GetString("comboRX2Preamp.ToolTip"));
             this.comboRX2Preamp.SelectedIndexChanged += new System.EventHandler(this.comboRX2Preamp_SelectedIndexChanged);
@@ -3945,8 +3890,8 @@
             this.comboAMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboAMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAMTXProfile.DropDownWidth = 96;
-            resources.ApplyResources(this.comboAMTXProfile, "comboAMTXProfile");
             this.comboAMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboAMTXProfile, "comboAMTXProfile");
             this.comboAMTXProfile.Name = "comboAMTXProfile";
             this.toolTip1.SetToolTip(this.comboAMTXProfile, resources.GetString("comboAMTXProfile.ToolTip"));
             this.comboAMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboAMTXProfile_SelectedIndexChanged);
@@ -4111,8 +4056,7 @@
             this.RAtoolStripMenuItem,
             this.wBToolStripMenuItem,
             this.pIToolStripMenuItem,
-            this.BPFToolStripMenuItem,
-            this.MTRStripMenuItem});
+            this.BPFToolStripMenuItem});
             resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Name = "menuStrip1";
             // 
@@ -4930,66 +4874,6 @@
             resources.ApplyResources(this.BPF2ToolStripMenuItem, "BPF2ToolStripMenuItem");
             this.BPF2ToolStripMenuItem.Click += new System.EventHandler(this.BPF2ToolStripMenuItem_Click);
             // 
-            // MTRStripMenuItem
-            // 
-            this.MTRStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RX1MetertoolStripMenuItem,
-            this.RX2MetertoolStripMenuItem,
-            this.RX1HometoolStripMenuItem,
-            this.RX2HometoolStripMenuItem,
-            this.MtrSkintoolStripMenuItem,
-            this.RX1OnToptoolStripMenuItem,
-            this.RX2OnToptoolStripMenuItem});
-            this.MTRStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.MTRStripMenuItem.Name = "MTRStripMenuItem";
-            resources.ApplyResources(this.MTRStripMenuItem, "MTRStripMenuItem");
-            // 
-            // RX1MetertoolStripMenuItem
-            // 
-            this.RX1MetertoolStripMenuItem.CheckOnClick = true;
-            this.RX1MetertoolStripMenuItem.Name = "RX1MetertoolStripMenuItem";
-            resources.ApplyResources(this.RX1MetertoolStripMenuItem, "RX1MetertoolStripMenuItem");
-            this.RX1MetertoolStripMenuItem.Click += new System.EventHandler(this.RX1MetertoolStripMenuItem_Click);
-            // 
-            // RX2MetertoolStripMenuItem
-            // 
-            this.RX2MetertoolStripMenuItem.CheckOnClick = true;
-            this.RX2MetertoolStripMenuItem.Name = "RX2MetertoolStripMenuItem";
-            resources.ApplyResources(this.RX2MetertoolStripMenuItem, "RX2MetertoolStripMenuItem");
-            this.RX2MetertoolStripMenuItem.Click += new System.EventHandler(this.RX2MetertoolStripMenuItem_Click);
-            // 
-            // RX1HometoolStripMenuItem
-            // 
-            this.RX1HometoolStripMenuItem.Name = "RX1HometoolStripMenuItem";
-            resources.ApplyResources(this.RX1HometoolStripMenuItem, "RX1HometoolStripMenuItem");
-            this.RX1HometoolStripMenuItem.Click += new System.EventHandler(this.RX1HometoolStripMenuItem_Click);
-            // 
-            // RX2HometoolStripMenuItem
-            // 
-            this.RX2HometoolStripMenuItem.Name = "RX2HometoolStripMenuItem";
-            resources.ApplyResources(this.RX2HometoolStripMenuItem, "RX2HometoolStripMenuItem");
-            this.RX2HometoolStripMenuItem.Click += new System.EventHandler(this.RX2HometoolStripMenuItem_Click);
-            // 
-            // MtrSkintoolStripMenuItem
-            // 
-            this.MtrSkintoolStripMenuItem.Name = "MtrSkintoolStripMenuItem";
-            resources.ApplyResources(this.MtrSkintoolStripMenuItem, "MtrSkintoolStripMenuItem");
-            this.MtrSkintoolStripMenuItem.Click += new System.EventHandler(this.MtrSkintoolStripMenuItem_Click);
-            // 
-            // RX1OnToptoolStripMenuItem
-            // 
-            this.RX1OnToptoolStripMenuItem.CheckOnClick = true;
-            this.RX1OnToptoolStripMenuItem.Name = "RX1OnToptoolStripMenuItem";
-            resources.ApplyResources(this.RX1OnToptoolStripMenuItem, "RX1OnToptoolStripMenuItem");
-            this.RX1OnToptoolStripMenuItem.Click += new System.EventHandler(this.RX1OnToptoolStripMenuItem_Click);
-            // 
-            // RX2OnToptoolStripMenuItem
-            // 
-            this.RX2OnToptoolStripMenuItem.CheckOnClick = true;
-            this.RX2OnToptoolStripMenuItem.Name = "RX2OnToptoolStripMenuItem";
-            resources.ApplyResources(this.RX2OnToptoolStripMenuItem, "RX2OnToptoolStripMenuItem");
-            this.RX2OnToptoolStripMenuItem.Click += new System.EventHandler(this.RX2OnToptoolStripMenuItem_Click);
-            // 
             // picRX2Squelch
             // 
             this.picRX2Squelch.BackColor = System.Drawing.SystemColors.ControlText;
@@ -5375,21 +5259,48 @@
             this.tmrAutoAGC.Interval = 500;
             this.tmrAutoAGC.Tick += new System.EventHandler(this.tmrAutoAGC_Tick);
             // 
-            // buttonTS2
+            // grpMultimeter
             // 
-            resources.ApplyResources(this.buttonTS2, "buttonTS2");
-            this.buttonTS2.Name = "buttonTS2";
-            this.buttonTS2.Selectable = true;
-            this.buttonTS2.UseVisualStyleBackColor = true;
-            this.buttonTS2.Click += new System.EventHandler(this.buttonTS2_Click);
+            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
+            this.grpMultimeter.Controls.Add(this.pnlResizeMeter);
+            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
+            this.grpMultimeter.Controls.Add(this.txtMultiText);
+            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
+            this.grpMultimeter.Name = "grpMultimeter";
+            this.grpMultimeter.TabStop = false;
             // 
-            // buttonTS1
+            // pnlResizeMeter
             // 
-            resources.ApplyResources(this.buttonTS1, "buttonTS1");
-            this.buttonTS1.Name = "buttonTS1";
-            this.buttonTS1.Selectable = true;
-            this.buttonTS1.UseVisualStyleBackColor = true;
-            this.buttonTS1.Click += new System.EventHandler(this.buttonTS1_Click);
+            resources.ApplyResources(this.pnlResizeMeter, "pnlResizeMeter");
+            this.pnlResizeMeter.Cursor = System.Windows.Forms.Cursors.SizeWE;
+            this.pnlResizeMeter.Name = "pnlResizeMeter";
+            this.pnlResizeMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseDown);
+            this.pnlResizeMeter.MouseEnter += new System.EventHandler(this.pnlResizeMeter_MouseEnter);
+            this.pnlResizeMeter.MouseLeave += new System.EventHandler(this.pnlResizeMeter_MouseLeave);
+            this.pnlResizeMeter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseMove);
+            this.pnlResizeMeter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseUp);
+            // 
+            // picMultiMeterDigital
+            // 
+            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
+            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
+            this.picMultiMeterDigital.TabStop = false;
+            this.picMultiMeterDigital.Click += new System.EventHandler(this.picMultiMeterDigital_Click);
+            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
+            // 
+            // txtMultiText
+            // 
+            this.txtMultiText.BackColor = System.Drawing.Color.Black;
+            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
+            resources.ApplyResources(this.txtMultiText, "txtMultiText");
+            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
+            this.txtMultiText.Name = "txtMultiText";
+            this.txtMultiText.ReadOnly = true;
+            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
+            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
             // 
             // panelFilter
             // 
@@ -6552,8 +6463,8 @@
             // 
             // lblTransmitProfile
             // 
-            resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
             this.lblTransmitProfile.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
             this.lblTransmitProfile.Name = "lblTransmitProfile";
             // 
             // panelModeSpecificDigital
@@ -6629,9 +6540,7 @@
             this.panelDisplay.Controls.Add(this.btnDisplayZTB);
             this.panelDisplay.Controls.Add(this.radDisplayZoom4x);
             this.panelDisplay.Controls.Add(this.radDisplayZoom2x);
-            this.panelDisplay.Controls.Add(this.ucDockedMeterRX2);
             this.panelDisplay.Controls.Add(this.radDisplayZoom1x);
-            this.panelDisplay.Controls.Add(this.ucDockedMeterRX1);
             this.panelDisplay.Controls.Add(this.radDisplayZoom05);
             this.panelDisplay.Controls.Add(this.ptbDisplayZoom);
             this.panelDisplay.Controls.Add(this.ptbDisplayPan);
@@ -6658,34 +6567,6 @@
             this.infoBar.Button2MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2MouseDown);
             this.infoBar.SwapRedBlueChanged += new System.EventHandler(this.infoBar_SwapRedBlueChanged);
             this.infoBar.HideFeedbackChanged += new System.EventHandler(this.infoBar_HideFeedbackChanged);
-            // 
-            // ucDockedMeterRX2
-            // 
-            this.ucDockedMeterRX2.AxisLock = Thetis.Axis.NONE;
-            this.ucDockedMeterRX2.BackColor = System.Drawing.Color.Black;
-            this.ucDockedMeterRX2.Delta = new System.Drawing.Point(0, 0);
-            this.ucDockedMeterRX2.DockedLocation = new System.Drawing.Point(0, 0);
-            this.ucDockedMeterRX2.DockedSize = new System.Drawing.Size(407, 403);
-            this.ucDockedMeterRX2.Floating = false;
-            resources.ApplyResources(this.ucDockedMeterRX2, "ucDockedMeterRX2");
-            this.ucDockedMeterRX2.Name = "ucDockedMeterRX2";
-            this.ucDockedMeterRX2.RX = 2;
-            this.ucDockedMeterRX2.FloatingDockedClicked += new System.EventHandler(this.ucDockedMeterRX2_FloatingDockedClicked);
-            this.ucDockedMeterRX2.DockedMoved += new System.EventHandler(this.ucDockedMeterRX2_DockedMoved);
-            // 
-            // ucDockedMeterRX1
-            // 
-            this.ucDockedMeterRX1.AxisLock = Thetis.Axis.NONE;
-            this.ucDockedMeterRX1.BackColor = System.Drawing.Color.Black;
-            this.ucDockedMeterRX1.Delta = new System.Drawing.Point(0, 0);
-            this.ucDockedMeterRX1.DockedLocation = new System.Drawing.Point(0, 0);
-            this.ucDockedMeterRX1.DockedSize = new System.Drawing.Size(407, 403);
-            this.ucDockedMeterRX1.Floating = false;
-            resources.ApplyResources(this.ucDockedMeterRX1, "ucDockedMeterRX1");
-            this.ucDockedMeterRX1.Name = "ucDockedMeterRX1";
-            this.ucDockedMeterRX1.RX = 1;
-            this.ucDockedMeterRX1.FloatingDockedClicked += new System.EventHandler(this.ucDockedMeterRX1_FloatingDockedClicked);
-            this.ucDockedMeterRX1.DockedMoved += new System.EventHandler(this.ucDockedMeterRX1_DockedMoved);
             // 
             // lblDisplayZoom
             // 
@@ -7335,8 +7216,8 @@
             // labelTS7
             // 
             this.labelTS7.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.labelTS7, "labelTS7");
             this.labelTS7.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.labelTS7, "labelTS7");
             this.labelTS7.Name = "labelTS7";
             // 
             // lblFMOffset
@@ -7358,8 +7239,8 @@
             this.comboFMMemory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboFMMemory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFMMemory.DropDownWidth = 96;
-            resources.ApplyResources(this.comboFMMemory, "comboFMMemory");
             this.comboFMMemory.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.comboFMMemory, "comboFMMemory");
             this.comboFMMemory.Name = "comboFMMemory";
             this.comboFMMemory.SelectedIndexChanged += new System.EventHandler(this.comboFMMemory_SelectedIndexChanged);
             // 
@@ -7459,8 +7340,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.Controls.Add(this.buttonTS2);
-            this.Controls.Add(this.buttonTS1);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.grpMultimeter);
             this.Controls.Add(this.panelFilter);
@@ -7524,9 +7403,6 @@
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Console_KeyUp);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Console_MouseWheel);
             this.Resize += new System.EventHandler(this.Console_Resize);
-            this.grpMultimeter.ResumeLayout(false);
-            this.grpMultimeter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).EndInit();
@@ -7572,6 +7448,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).EndInit();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
+            this.grpMultimeter.ResumeLayout(false);
+            this.grpMultimeter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
             this.panelFilter.ResumeLayout(false);
             this.panelRX2RF.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).EndInit();
@@ -7766,18 +7645,5 @@
         private LabelTS lblTune;
         private LabelTS lblPAProfile;
         private LabelTS labelTS2;
-        private ButtonTS buttonTS1;
-        public ucMeter ucDockedMeterRX1;
-        public ucMeter ucDockedMeterRX2;
-        private ButtonTS buttonTS2;
-        private ToolStripMenuItem MTRStripMenuItem;
-        private ToolStripMenuItem RX2MetertoolStripMenuItem;
-        private ToolStripMenuItem RX1MetertoolStripMenuItem;
-        public CheckBoxTS chkFWCATUBypass;
-        private ToolStripMenuItem RX1HometoolStripMenuItem;
-        private ToolStripMenuItem RX2HometoolStripMenuItem;
-        private ToolStripMenuItem MtrSkintoolStripMenuItem;
-        private ToolStripMenuItem RX1OnToptoolStripMenuItem;
-        private ToolStripMenuItem RX2OnToptoolStripMenuItem;
     }
 }

@@ -15,30 +15,27 @@ namespace Thetis
     {
         private Console _console;
         private int _rx;
-        private Setup setup;
-        private int v;
+        private string _id;
 
         public frmMeterDisplay(Console c, int rx)
         {
             InitializeComponent();
 
+            _id = System.Guid.NewGuid().ToString();
             _console = c;
-            _rx = rx;
-
-            _console.MoxChangeHandlers += OnMox;
-
-            setTitle(_console.MOX);
-
-            Common.RestoreForm(this, "MeterDisplay_" + _rx.ToString(), true);
-            Common.ForceFormOnScreen(this);
+            _rx = rx;            
         }
-
-        public frmMeterDisplay(Setup setup, int v)
+        public string ID
         {
-            this.setup = setup;
-            this.v = v;
-        }
+            get { return _id; }
+            set 
+            {
+                _id = value;
 
+                Common.RestoreForm(this, "MeterDisplay_" + _id, true);
+                Common.ForceFormOnScreen(this);
+            }
+        }
         private void frmMeterDisplay_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
@@ -46,23 +43,8 @@ namespace Thetis
                 this.Hide();
                 e.Cancel = true;
             }
-            else
-            {
-                _console.MoxChangeHandlers -= OnMox;
-            }
 
-            Common.SaveForm(this, "MeterDisplay_" + _rx.ToString());
-            Common.SaveForm(this, "_frmRX1Meter");
-            Common.SaveForm(this, "_frmRX2Meter");
-        }
-
-        private void OnMox(int rx, bool oldMox, bool newMox)
-        {
-            setTitle(newMox);
-        }
-        private void setTitle(bool mox)
-        {
-            this.Text = (mox ? "TX " : "RX ") + _rx.ToString();
+            Common.SaveForm(this, "MeterDisplay_" + _id);
         }
 
         public void TakeOwner(ucMeter m)
