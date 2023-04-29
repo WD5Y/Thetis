@@ -9,6 +9,25 @@
 
         // vac 
 
+        [DllImport("ChannelMaster.dll", EntryPoint = "ThreadPrioritySetFailureCount", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int ThreadPrioritySetFailureCount(); // KLJ
+
+        internal static int GetThreadPriorityFailureCount()
+        {
+            return ThreadPrioritySetFailureCount();
+        }
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACExclusive", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetIVACExclusive(int id, int e); // KLJ
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "GetIVACExclusive", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetIVACExclusive(int id); // KLJ
+
+        // vac 
+        // G7KLJ: Added to get Txmon volume working on VAC
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACMonVolume", CallingConvention = CallingConvention.Cdecl)] // StartAudioVAC()
+        public static extern void SetIVACMonVolume(int id, double volume);
+
         [DllImport("ChannelMaster.dll", EntryPoint = "StartAudioIVAC", CallingConvention = CallingConvention.Cdecl)] // StartAudioVAC()
         public static extern int StartAudioIVAC(int id);
 
@@ -23,6 +42,12 @@
 
         [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACiqType", CallingConvention = CallingConvention.Cdecl)] // SetVACOutputIQ(int enabled)
         public static extern void SetIVACiqType(int id, int type);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "nanosleepms", CallingConvention = CallingConvention.Cdecl)] // SetVACOutputIQ(int enabled)
+        public static extern Int64 nanosleepms(UInt64 ms);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "nanosleep", CallingConvention = CallingConvention.Cdecl)] // SetVACOutputIQ(int enabled)
+        public static extern Int64 nanosleep(UInt64 ns);
 
         // [DllImport("wdsp.dll", EntryPoint = "SetIVACmicRate", CallingConvention = CallingConvention.Cdecl)] // SetBlockSize(int size)
         // public static extern void SetIVACmicRate(int id, int rate);

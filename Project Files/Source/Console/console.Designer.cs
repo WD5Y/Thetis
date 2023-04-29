@@ -292,7 +292,13 @@
         private CheckBoxTS chkMicMute;
         private CheckBoxTS chkMUT;
         private PanelTS panelPower;
+        //wd5y
+        private LabelTS lblAF3;
+        //wd5y
         private LabelTS lblAF2;
+        //wd5y
+        private LabelTS lblRF3;
+        //wd5y
         private LabelTS lblRF2;
         private LabelTS lblPWR2;
         private LabelTS lblModeLabel;
@@ -973,6 +979,7 @@
             this.chkRX2 = new System.Windows.Forms.CheckBoxTS();
             this.radRX1Show = new System.Windows.Forms.RadioButtonTS();
             this.radRX2Show = new System.Windows.Forms.RadioButtonTS();
+            this.lblRF3 = new System.Windows.Forms.LabelTS();
             this.lblRF2 = new System.Windows.Forms.LabelTS();
             this.panelPower = new System.Windows.Forms.PanelTS();
             this.panelModeSpecificCW = new System.Windows.Forms.PanelTS();
@@ -1017,13 +1024,12 @@
             this.lblAF = new System.Windows.Forms.LabelTS();
             this.lblPWR = new System.Windows.Forms.LabelTS();
             this.lblPreamp = new System.Windows.Forms.LabelTS();
+            this.lblAF3 = new System.Windows.Forms.LabelTS();
             this.lblAF2 = new System.Windows.Forms.LabelTS();
             this.lblPWR2 = new System.Windows.Forms.LabelTS();
             this.panelModeSpecificPhone = new System.Windows.Forms.PanelTS();
             this.labelTS2 = new System.Windows.Forms.LabelTS();
             this.lblPAProfile = new System.Windows.Forms.LabelTS();
-            this.labelTS4 = new System.Windows.Forms.LabelTS();
-            this.labelTS3 = new System.Windows.Forms.LabelTS();
             this.picNoiseGate = new System.Windows.Forms.PictureBox();
             this.lblNoiseGateVal = new System.Windows.Forms.LabelTS();
             this.ptbNoiseGate = new Thetis.PrettyTrackBar();
@@ -1036,6 +1042,8 @@
             this.ptbMic = new Thetis.PrettyTrackBar();
             this.lblMIC = new System.Windows.Forms.LabelTS();
             this.lblTransmitProfile = new System.Windows.Forms.LabelTS();
+            this.labelTS4 = new System.Windows.Forms.LabelTS();
+            this.labelTS3 = new System.Windows.Forms.LabelTS();
             this.panelModeSpecificDigital = new System.Windows.Forms.PanelTS();
             this.lblVACTXIndicator = new System.Windows.Forms.LabelTS();
             this.lblVACRXIndicator = new System.Windows.Forms.LabelTS();
@@ -1119,6 +1127,9 @@
             this.tbAndromedaEncoderSlider = new System.Windows.Forms.TrackBarTS();
             this.lblAndromedaEncoderSlider = new System.Windows.Forms.LabelTS();
             this.lblATUTuneLabel = new System.Windows.Forms.LabelTS();
+            this.nudPwrTemp = new System.Windows.Forms.NumericUpDownTS();
+            this.nudPwrTemp2 = new System.Windows.Forms.NumericUpDownTS();
+            this.chkMNU = new System.Windows.Forms.CheckBoxTS();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -1216,11 +1227,12 @@
             this.grpMultimeterMenus.SuspendLayout();
             this.panelAndromedaMisc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbAndromedaEncoderSlider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).BeginInit();
             this.SuspendLayout();
             // 
             // timer_cpu_meter
             // 
-            this.timer_cpu_meter.Enabled = true;
             this.timer_cpu_meter.Interval = 1000;
             this.timer_cpu_meter.Tick += new System.EventHandler(this.timer_cpu_meter_Tick);
             // 
@@ -4034,6 +4046,7 @@
             // 
             // menuStrip1
             // 
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4057,7 +4070,6 @@
             this.wBToolStripMenuItem,
             this.pIToolStripMenuItem,
             this.BPFToolStripMenuItem});
-            resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Name = "menuStrip1";
             // 
             // setupToolStripMenuItem
@@ -5538,7 +5550,6 @@
             this.panelButtonBar.Controls.Add(this.btnAndrBar2);
             this.panelButtonBar.Controls.Add(this.btnAndrBar1);
             this.panelButtonBar.Name = "panelButtonBar";
-            this.panelButtonBar.Layout += new System.Windows.Forms.LayoutEventHandler(this.panelButtonBar_Layout);
             // 
             // btnAndrBar8
             // 
@@ -5864,6 +5875,13 @@
             this.radRX2Show.Name = "radRX2Show";
             this.radRX2Show.UseVisualStyleBackColor = false;
             this.radRX2Show.CheckedChanged += new System.EventHandler(this.radRX2Show_CheckedChanged);
+            // 
+            // lblRF3
+            // 
+            this.lblRF3.BackColor = System.Drawing.Color.Transparent;
+            this.lblRF3.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblRF3, "lblRF3");
+            this.lblRF3.Name = "lblRF3";
             // 
             // lblRF2
             // 
@@ -6202,6 +6220,7 @@
             resources.ApplyResources(this.ucVAC2UnderOver, "ucVAC2UnderOver");
             this.ucVAC2UnderOver.Name = "ucVAC2UnderOver";
             this.ucVAC2UnderOver.NoFade = false;
+            this.ucVAC2UnderOver.ClearIssuesClick += new System.EventHandler(this.ucVAC2UnderOver_ClearIssuesClick);
             // 
             // ucVAC1UnderOver
             // 
@@ -6210,6 +6229,7 @@
             resources.ApplyResources(this.ucVAC1UnderOver, "ucVAC1UnderOver");
             this.ucVAC1UnderOver.Name = "ucVAC1UnderOver";
             this.ucVAC1UnderOver.NoFade = false;
+            this.ucVAC1UnderOver.ClearIssuesClick += new System.EventHandler(this.ucVAC1UnderOver_ClearIssuesClick);
             // 
             // panelSoundControls
             // 
@@ -6272,6 +6292,13 @@
             this.lblPreamp.Name = "lblPreamp";
             this.lblPreamp.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lblPreamp_MouseDoubleClick);
             // 
+            // lblAF3
+            // 
+            this.lblAF3.BackColor = System.Drawing.Color.Transparent;
+            this.lblAF3.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblAF3, "lblAF3");
+            this.lblAF3.Name = "lblAF3";
+            // 
             // lblAF2
             // 
             this.lblAF2.BackColor = System.Drawing.Color.Transparent;
@@ -6292,8 +6319,6 @@
             this.panelModeSpecificPhone.BackColor = System.Drawing.Color.Transparent;
             this.panelModeSpecificPhone.Controls.Add(this.labelTS2);
             this.panelModeSpecificPhone.Controls.Add(this.lblPAProfile);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
             this.panelModeSpecificPhone.Controls.Add(this.udTXFilterLow);
             this.panelModeSpecificPhone.Controls.Add(this.udTXFilterHigh);
             this.panelModeSpecificPhone.Controls.Add(this.chkMicMute);
@@ -6317,6 +6342,8 @@
             this.panelModeSpecificPhone.Controls.Add(this.chkVOX);
             this.panelModeSpecificPhone.Controls.Add(this.chkNoiseGate);
             this.panelModeSpecificPhone.Controls.Add(this.comboAMTXProfile);
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
             this.panelModeSpecificPhone.Name = "panelModeSpecificPhone";
             // 
             // labelTS2
@@ -6330,18 +6357,6 @@
             resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
             this.lblPAProfile.ForeColor = System.Drawing.Color.White;
             this.lblPAProfile.Name = "lblPAProfile";
-            // 
-            // labelTS4
-            // 
-            resources.ApplyResources(this.labelTS4, "labelTS4");
-            this.labelTS4.ForeColor = System.Drawing.Color.White;
-            this.labelTS4.Name = "labelTS4";
-            // 
-            // labelTS3
-            // 
-            resources.ApplyResources(this.labelTS3, "labelTS3");
-            this.labelTS3.ForeColor = System.Drawing.Color.White;
-            this.labelTS3.Name = "labelTS3";
             // 
             // picNoiseGate
             // 
@@ -6467,6 +6482,18 @@
             resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
             this.lblTransmitProfile.Name = "lblTransmitProfile";
             // 
+            // labelTS4
+            // 
+            resources.ApplyResources(this.labelTS4, "labelTS4");
+            this.labelTS4.ForeColor = System.Drawing.Color.White;
+            this.labelTS4.Name = "labelTS4";
+            // 
+            // labelTS3
+            // 
+            resources.ApplyResources(this.labelTS3, "labelTS3");
+            this.labelTS3.ForeColor = System.Drawing.Color.White;
+            this.labelTS3.Name = "labelTS3";
+            // 
             // panelModeSpecificDigital
             // 
             resources.ApplyResources(this.panelModeSpecificDigital, "panelModeSpecificDigital");
@@ -6567,6 +6594,7 @@
             this.infoBar.Button2MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2MouseDown);
             this.infoBar.SwapRedBlueChanged += new System.EventHandler(this.infoBar_SwapRedBlueChanged);
             this.infoBar.HideFeedbackChanged += new System.EventHandler(this.infoBar_HideFeedbackChanged);
+            this.infoBar.Load += new System.EventHandler(this.infoBar_Load);
             // 
             // lblDisplayZoom
             // 
@@ -6587,6 +6615,7 @@
             this.picDisplay.Cursor = System.Windows.Forms.Cursors.Default;
             this.picDisplay.Name = "picDisplay";
             this.picDisplay.TabStop = false;
+            this.picDisplay.Click += new System.EventHandler(this.picDisplay_Click);
             this.picDisplay.DoubleClick += new System.EventHandler(this.picDisplay_DoubleClick);
             this.picDisplay.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseDown);
             this.picDisplay.MouseLeave += new System.EventHandler(this.picDisplay_MouseLeave);
@@ -7335,11 +7364,77 @@
             this.lblATUTuneLabel.ForeColor = System.Drawing.Color.White;
             this.lblATUTuneLabel.Name = "lblATUTuneLabel";
             // 
+            // nudPwrTemp
+            // 
+            this.nudPwrTemp.DecimalPlaces = 1;
+            this.nudPwrTemp.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            resources.ApplyResources(this.nudPwrTemp, "nudPwrTemp");
+            this.nudPwrTemp.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudPwrTemp.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPwrTemp.Name = "nudPwrTemp";
+            this.nudPwrTemp.TinyStep = false;
+            this.nudPwrTemp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // nudPwrTemp2
+            // 
+            this.nudPwrTemp2.DecimalPlaces = 2;
+            this.nudPwrTemp2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            resources.ApplyResources(this.nudPwrTemp2, "nudPwrTemp2");
+            this.nudPwrTemp2.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudPwrTemp2.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPwrTemp2.Name = "nudPwrTemp2";
+            this.nudPwrTemp2.TinyStep = false;
+            this.nudPwrTemp2.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // chkMNU
+            // 
+            resources.ApplyResources(this.chkMNU, "chkMNU");
+            this.chkMNU.FlatAppearance.BorderSize = 0;
+            this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMNU.Name = "chkMNU";
+            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
+            this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
+            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Controls.Add(this.chkMNU);
+            this.Controls.Add(this.nudPwrTemp2);
+            this.Controls.Add(this.nudPwrTemp);
             this.Controls.Add(this.statusStripMain);
             this.Controls.Add(this.grpMultimeter);
             this.Controls.Add(this.panelFilter);
@@ -7357,6 +7452,7 @@
             this.Controls.Add(this.panelRX2Display);
             this.Controls.Add(this.panelRX2Mixer);
             this.Controls.Add(this.panelMultiRX);
+            this.Controls.Add(this.lblAF3);
             this.Controls.Add(this.lblAF2);
             this.Controls.Add(this.lblPWR2);
             this.Controls.Add(this.panelDisplay2);
@@ -7375,6 +7471,7 @@
             this.Controls.Add(this.panelMode);
             this.Controls.Add(this.ptbSquelch);
             this.Controls.Add(this.panelRX2Power);
+            this.Controls.Add(this.lblRF3);
             this.Controls.Add(this.lblRF2);
             this.Controls.Add(this.panelBandHF);
             this.Controls.Add(this.panelBandVHF);
@@ -7390,13 +7487,15 @@
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
             this.Controls.Add(this.panelModeSpecificCW);
-            this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";
+            this.Opacity = 0D;
             this.Activated += new System.EventHandler(this.Console_Activated);
             this.Closing += new System.ComponentModel.CancelEventHandler(this.Console_Closing);
             this.Deactivate += new System.EventHandler(this.Console_Deactivate);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Console_FormClosing);
+            this.Load += new System.EventHandler(this.Console_Load);
             this.Shown += new System.EventHandler(this.Console_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Console_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Console_KeyPress);
@@ -7511,6 +7610,8 @@
             this.grpMultimeterMenus.ResumeLayout(false);
             this.panelAndromedaMisc.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbAndromedaEncoderSlider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -7645,5 +7746,8 @@
         private LabelTS lblTune;
         private LabelTS lblPAProfile;
         private LabelTS labelTS2;
+        private NumericUpDownTS nudPwrTemp;
+        private NumericUpDownTS nudPwrTemp2;
+        private CheckBoxTS chkMNU;
     }
 }

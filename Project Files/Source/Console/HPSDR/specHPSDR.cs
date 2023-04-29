@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Thetis
 {
@@ -34,23 +35,25 @@ namespace Thetis
         {
             spec_rx = new SpecHPSDR[NUM_RX_DISP];
 
-           // for (int i = 0; i < NUM_RX_DISP; i++)
-           // {
+            // for (int i = 0; i < NUM_RX_DISP; i++)
+            // {
             spec_rx[cmaster.inid(0, 0)] = new SpecHPSDR(cmaster.inid(0, 0));
             spec_rx[cmaster.inid(0, 1)] = new SpecHPSDR(cmaster.inid(0, 1));
             spec_rx[cmaster.inid(1, 0)] = new SpecHPSDR(cmaster.inid(1, 0));
-           // }
+            // }
         }
 
         public SpecHPSDR GetSpecRX(int disp)
         {
-            return spec_rx[disp];
+            var ret = spec_rx[disp];
+            Debug.Assert(ret.disp == disp);
+            return ret;
         }
     }
 
     public class SpecHPSDR
     {
-        private int disp;
+        public int disp { get; private set; }
         public SpecHPSDR(int d)
         {
             disp = d;
@@ -106,19 +109,19 @@ namespace Thetis
                 blocksize = value;
                 if (update) initAnalyzer();
                 if (disp == 0)
-                    {
-                        // cmaster.SetRCVRANBBuffsize(0, 0, blocksize);
-                        // cmaster.SetRCVRANBBuffsize(2, 0, blocksize);
-                        // cmaster.SetRCVRANBBuffsize(2, 1, blocksize);
-                        // cmaster.SetRCVRNOBBuffsize(0, 0, blocksize);
-                        // cmaster.SetRCVRNOBBuffsize(2, 0, blocksize);
-                        // cmaster.SetRCVRNOBBuffsize(2, 1, blocksize);
+                {
+                    // cmaster.SetRCVRANBBuffsize(0, 0, blocksize);
+                    // cmaster.SetRCVRANBBuffsize(2, 0, blocksize);
+                    // cmaster.SetRCVRANBBuffsize(2, 1, blocksize);
+                    // cmaster.SetRCVRNOBBuffsize(0, 0, blocksize);
+                    // cmaster.SetRCVRNOBBuffsize(2, 0, blocksize);
+                    // cmaster.SetRCVRNOBBuffsize(2, 1, blocksize);
                     // for (int i = 0; i < 3; i++)
                     // {
-                        // SpecHPSDRDLL.SetEXTANBBuffsize(i, blocksize);
-                        // SpecHPSDRDLL.SetEXTNOBBuffsize(i, blocksize);
+                    // SpecHPSDRDLL.SetEXTANBBuffsize(i, blocksize);
+                    // SpecHPSDRDLL.SetEXTNOBBuffsize(i, blocksize);
                     // }
-                    }
+                }
                 if (disp == 1)
                 {
                     // cmaster.SetRCVRANBBuffsize(0, 1, blocksize);
@@ -302,7 +305,7 @@ namespace Thetis
         {
             get { return det_type_pan; }
             set
-            { 
+            {
                 det_type_pan = value;
                 SpecHPSDRDLL.SetDisplayDetectorMode(disp, 0, value);
                 updateNormalizePan();
@@ -314,7 +317,7 @@ namespace Thetis
         {
             get { return det_type_wf; }
             set
-            { 
+            {
                 det_type_wf = value;
                 SpecHPSDRDLL.SetDisplayDetectorMode(disp, 1, value);
             }
@@ -324,7 +327,7 @@ namespace Thetis
         public bool NormOneHzPan
         {
             get { return norm_oneHz_pan; }
-            set 
+            set
             {
                 norm_oneHz_pan = value;
                 updateNormalizePan();
@@ -475,8 +478,16 @@ namespace Thetis
         //    public int[] flip;
         //}
 
+        private bool _analyzerInitialised = false;
+        public bool AnalyzerInitialised
+        {
+            get { return _analyzerInitialised; }
+            set { /*_analyzerInitialised = true;*/ }
+        }
         public void initAnalyzer()
         {
+            _analyzerInitialised = false;
+
             //no spur elimination => only one spur_elim_fft and it's spectrum is not flipped
             int[] flip = { 0 };
             GCHandle handle = GCHandle.Alloc(flip, GCHandleType.Pinned);
@@ -485,7 +496,7 @@ namespace Thetis
             //FlipStruct fs = new FlipStruct();
             //fs.flip = new int[] { 0 };
             //h_flip.ManangedObject = fs;
-            
+
             int low = 0;
             int high = 0;
             double bw_per_subspan = 0.0;
@@ -555,7 +566,7 @@ namespace Thetis
                         //   The Thetis grid interface is limited to integer Hertz values.
                         low = -(int)((intervals / 2.0 - span_clip_l) * bin_width);
                         high = +(int)((intervals / 2.0 - span_clip_h) * bin_width);
-                        
+
                         max_w = fft_size + (int)Math.Min(KEEP_TIME * sample_rate, KEEP_TIME * fft_size * frame_rate);
                         break;
                     }
@@ -566,7 +577,7 @@ namespace Thetis
                 case 0:
                     Display.RXDisplayLow = low;
                     Display.RXDisplayHigh = high;
-                     break;
+                    break;
                 case 1:
                     Display.RX2DisplayLow = low;
                     Display.RX2DisplayHigh = high;
@@ -591,7 +602,7 @@ namespace Thetis
                    Display.CurrentDisplayMode != DisplayMode.PANASCOPE)
                     return;
             }
-     
+
             SpecHPSDRDLL.SetAnalyzer(
                         disp,
                         2,
@@ -612,6 +623,8 @@ namespace Thetis
                         span_min_freq,
                         span_max_freq,
                         max_w);
+
+            _analyzerInitialised = true;
         }
 
         public void CalcSpectrum(int filter_low, int filter_high, int spec_blocksize, int sample_rate)
@@ -629,8 +642,8 @@ namespace Thetis
             //FlipStruct fs = new FlipStruct();
             //fs.flip = new int[] { 0 };
             //h_flip.ManangedObject = fs;
- 
-           // const int extra = 1000;
+
+            // const int extra = 1000;
             //if we allow a little extra spectrum to be displayed on each side of
             //  the filter settings, then, you can look at filter rolloff.  This
             //  seems to happen at least some of the time with the old spectrum display.
@@ -658,11 +671,11 @@ namespace Thetis
             max_w = fft_size + (int)Math.Min(KEEP_TIME * sample_rate, KEEP_TIME * fft_size * frame_rate);
             //Display.RXSpectrumDisplayLow = lower_freq;
             //Display.RXSpectrumDisplayHigh = upper_freq;
-  
+
             // set overlap as needed to achieve the desired frame rate
             overlap = (int)Math.Max(0.0, Math.Ceiling(fft_size - (double)sample_rate / (double)frame_rate));
 
-            SpecHPSDRDLL.SetAnalyzer (
+            SpecHPSDRDLL.SetAnalyzer(
               disp,
               2,
               spur_eliminationtion_ffts,
@@ -734,13 +747,13 @@ namespace Thetis
         public static extern void SnapSpectrum(int disp, int ss, int LO, double* snap_buff);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetDisplayDetectorMode (int disp, int pixout, int mode);
+        public static extern void SetDisplayDetectorMode(int disp, int pixout, int mode);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetDisplayAverageMode (int disp, int pixout, int mode);
+        public static extern void SetDisplayAverageMode(int disp, int pixout, int mode);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetDisplayNumAverage (int disp, int pixout, int num);
+        public static extern void SetDisplayNumAverage(int disp, int pixout, int num);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayAvBackmult(int disp, int pixout, double mult);
@@ -752,7 +765,7 @@ namespace Thetis
         public static extern double GetDisplayENB(int disp);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetDisplaySampleRate (int disp, int rate);
+        public static extern void SetDisplaySampleRate(int disp, int rate);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void create_nobEXT(

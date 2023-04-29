@@ -194,11 +194,14 @@
             this.Controls.Add(this.chkAVLowRes);
             this.Controls.Add(this.chkAVShowGain);
             this.Controls.Add(this.chart1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "AmpView";
             this.Text = "AmpView 1.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AmpView_FormClosing);
             this.Load += new System.EventHandler(this.AmpView_Load);
+            this.Resize += new System.EventHandler(this.AmpView_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -1,0 +1,120 @@
+Fri Apr 28 05:22:18 2023 +0100 - sjk7: Close #36: All I can do to prevent Ampview from interfering with low latency audio is lower the thread priority of Ampview, which I have done
+Thu Apr 27 23:19:03 2023 +0100 - sjk7: Added some timing code for #19, but I can't see anything amiss
+Thu Apr 27 22:36:23 2023 +0100 - sjk7: Bugs fixed: HL2 power dip just after hit TUN has gone away, and this closes #33 where the PA power was crippled on subsequent transmissions even after a bad SWR condition was detected
+Thu Apr 27 21:46:18 2023 +0100 - sjk7: Bumped ChannelMaster revision
+Thu Apr 27 21:38:51 2023 +0100 - sjk7: Steve is stoopid, left memset() on the vac output, so no audio in txgit add .
+Thu Apr 27 20:33:46 2023 +0100 - sjk7: Re-engineering PS-M so it is available on the console, if enabled in PureSignal. WIP 2. This one compiles
+Thu Apr 27 15:20:18 2023 +0100 - sjk7: Re-engineering PS-M so it is available on the console, if enabled in PureSignal. WIP
+Thu Apr 27 13:50:59 2023 +0100 - sjk7: Changelog
+Thu Apr 27 13:50:08 2023 +0100 - sjk7: Hopefully fix and close #11. Bring display into sanity
+Wed Apr 26 05:55:34 2023 +0100 - sjk7: Changelog closes #30
+Wed Apr 26 05:54:39 2023 +0100 - sjk7: Ampview is required by some users to be 'always on top', so I made it owned by console, rather than making it on top of ALL other windows, andbbreaking the desktop in the process. Also Documentation added in the Documentation/Radio folder for PureSignal feedback studies.
+Tue Apr 25 22:24:28 2023 +0100 - sjk7: Changelog
+Tue Apr 25 22:21:57 2023 +0100 - sjk7: Debug cleanup and bumped CMaster revision
+Tue Apr 25 22:17:41 2023 +0100 - sjk7: Took a looooooooong time to find buffer overruns in ChannelMaster. Fixes and closes #27 and many other weird happenings when changes to VAC are made.
+Tue Apr 25 03:11:10 2023 +0100 - sjk7: Merge pull request #24 from DH1KLM/master
+Mon Apr 24 21:52:30 2023 +0100 - sjk7: Changelog
+Mon Apr 24 21:52:06 2023 +0100 - sjk7: Assign ChannelMaster a proper Windows version so the installer understands he must overwrite previous versions. Bump version due to zombie threads fix and aignoring zero-size buffer requests and treating them as 1-byte buffers
+Mon Apr 24 19:27:23 2023 +0200 - Sigi: more optical fine-tuning in the setup area
+Sun Apr 23 22:13:57 2023 +0200 - Sigi: Cleaned up a bit in Setup>Display>RX1 and RX2
+Sun Apr 23 15:21:14 2023 +0100 - sjk7: Metering Racy
+Sun Apr 23 03:25:42 2023 +0100 - sjk7: Fixed racy s-meter/power readings on tx->rx transition. This possibly helps with bogus SWR protection, too
+Fri Apr 21 11:36:28 2023 +0100 - BRUNO: commented out sandbox, G7VKK
+Fri Apr 21 01:03:20 2023 +0100 - sjk7: Saving work, night night
+Thu Apr 20 23:56:04 2023 +0100 - sjk7: Tidy code now that window fades in, as desired.
+Thu Apr 20 11:32:43 2023 +0100 - sjk7: Finally! Console fades in properly. Opacity was 0.01 instead of zero, and this was causing it to flicker up briefly @ startup and this looked 'orrible
+Thu Apr 20 09:06:06 2023 +0100 - sjk7: Added Sandbox project so developers can test new ideas and I am hoping I can use it to see why console is wanky on start-up
+Wed Apr 19 21:43:51 2023 +0100 - sjk7: Changelog
+Wed Apr 19 21:42:46 2023 +0100 - sjk7: Pushes in a twist. This should resolve. Uploaded installer for revision 19.
+Wed Apr 19 21:10:00 2023 +0100 - sjk7: I think finally console restoring size and windowstate correctly, even when collapsed. RestoreBounds is maintained if you close it maximised, and minimise @ start-up is not permitted. Should close #20.
+Wed Apr 19 13:49:45 2023 +0100 - sjk7: Should close #18, Andromeda mode dependent settings bug. Found that form state was not being restored (even though it was being saved) and fixed bug where mode controls suddenly show if you are in Andromeda mode and you click the display. Scared to do any more in case I break stuff!
+Wed Apr 19 11:51:28 2023 +0100 - sjk7: QuickRec and QuickPlay buttons disabled unless the power is on. QuickPlay will be enabled across app starts if there is a previously recorded file
+Wed Apr 19 11:30:45 2023 +0100 - sjk7: Make splash window moveable with the mouse
+Wed Apr 19 11:25:26 2023 +0100 - sjk7: Channelmaster and wdsp: fixes Zombie thread issue. Thanks to Bryan Rambo for contribution. Now we are less likely to run out of MMCS resources.
+Wed Apr 19 10:37:45 2023 +0100 - sjk7: Channelmaster: use PORT where possible without breaking stuff instead of extern __declspec(dllexport)
+Tue Apr 18 19:40:39 2023 +0100 - sjk7: Closes #17. Previous session's recording is now available on the play button in a new session if the file exists, has a reasonable size. The check is made as the app is powered on
+Tue Apr 18 18:14:57 2023 +0100 - sjk7: Upload installer and bump revision
+Tue Apr 18 18:13:39 2023 +0100 - sjk7: More Protocol/Radio/Samplerate issues. Addresses #15 .Added unconditional tick box to show all sample rates, always, for advanced use. Forgotten sample rate re-added. Should close #13
+Tue Apr 18 05:54:36 2023 +0100 - sjk7: Changelog
+Tue Apr 18 05:53:32 2023 +0100 - sjk7: Close #012 -- Broken transmit profile saving repaired
+Tue Apr 18 00:50:45 2023 +0100 - sjk7: Update ReadMe.md
+Tue Apr 18 00:44:52 2023 +0100 - sjk7: Merge branch 'master' of https://github.com/sjk7/Thetis-2.9.0
+Tue Apr 18 00:44:41 2023 +0100 - sjk7: Update ReadMe.md
+Tue Apr 18 00:40:31 2023 +0100 - sjk7: Update ReadMe.md
+Tue Apr 18 00:28:53 2023 +0100 - sjk7: Update ChangeLog
+Mon Apr 17 21:28:25 2023 +0100 - sjk7: Parallelising CreateDSP(), as much as possible consistent with sanity, has shaved a couple seconds more from startup time.
+Mon Apr 17 21:26:41 2023 +0100 - sjk7: Added correct defaults for PureSignal2 SetPeak values. These are not quite what I thought they were, closes #009
+Mon Apr 17 21:24:02 2023 +0100 - sjk7: Added correct defaults for PureSignal2 SetPeak values. These are not quite what I thought they were
+Mon Apr 17 21:18:41 2023 +0100 - sjk7: Change confusing tri-state Protocol Selection checkbox with the more appropriate radio buttons. This was creating confusion, for example #005
+Sun Apr 16 02:24:47 2023 +0100 - sjk7: Changelog updated
+Sun Apr 16 01:03:20 2023 +0100 - sjk7: Regarding #004: Master volume change VAC2 level if the option is set on the VAC1 setup tab. This needs a re-think so that common properties affecting both VAC1 and VAC2 are on a common tab. Since setup.cs is so bloated, the whole VAC thing should be on a separate form? Future ...
+Sun Apr 16 00:01:52 2023 +0100 - sjk7: Close #004 VAC2 was not working. Please note that whilst VAC2 should actually work, all current active development on the VAC side is limited to VAC1, since it avoids duplication of effort. Once VAC1 is proved, the same implementations will be copied to VAC2
+Sat Apr 15 11:14:05 2023 +0100 - sjk7: Update 32 and 64-bit exectables in Releases area
+Sat Apr 15 11:10:50 2023 +0100 - sjk7: Changelog
+Sat Apr 15 11:10:04 2023 +0100 - sjk7: More work on #002 -- Sample rates and what happens when you try to connect to the radio with the wrong protocol. I think now, finally, the UI agrees with either the protocol you have chose, or the one actually used by the radio. Maybe. I did check to make sure that even if you set an invalid sample rate (by say choosing a high P2 sample rate when your radio actually uses P1, a standard, safe radio samplerate is set instead.
+Sat Apr 15 09:23:06 2023 +0100 - sjk7: Trying launcher on installer
+Sat Apr 15 06:57:41 2023 +0100 - sjk7: Hopeful about #001
+Sat Apr 15 06:57:16 2023 +0100 - sjk7: Hopeful about #002 (high sample rates not working on Anan 7000DLE)
+Sat Apr 15 06:54:59 2023 +0100 - sjk7: Hopeful #003 Issue resolved (-autostart not working, thank you, Ernst)
+Fri Apr 14 14:55:56 2023 +0100 - BRUNO: highest sample rate now works. Close #002
+Fri Apr 14 14:54:10 2023 +0100 - BRUNO: Highest sample rate had zero missing on the end, plus the higher bitrates were not showing until the radio actually connected in P2. They now correctly show if you just select P2. But if you set an enormous sample rate on a radio that does not support it, you are on your own. Them's the breaks!
+Fri Apr 14 11:54:05 2023 +0100 - BRUNO: Fixed race condition where cpu info would be disabled before it was ever created on a background thread. I now start the cpu timer via an action from the CPU creation thread. It seems to do other stuff too, like measuring current on some models, so it is enabled unconditionally
+Fri Apr 14 10:44:29 2023 +0100 - BRUNO: Fixed ErrorLog.txt not saving on some machines, Added two buttons on first setup tab to get to database and data path easily.
+Wed Apr 12 23:28:07 2023 +0100 - sjk7: fixes #001 with extra option on VAC1 to allow default, original master volume behaviour for old school use. Note that if you select HL2 as the radio, this feature is automagically set to the correct option. All other radios -- you are on your own!
+Wed Apr 12 19:37:57 2023 +0100 - sjk7: Trying to make UI and PSForm agree on just when PS is off, vs in auto mode or manual (single-calibrate) mode
+Tue Apr 11 07:24:10 2023 +0100 - sjk7: Working on Puresignal display when in Single Cal mode. Currently, there is no indication that it is on!
+Sun Apr 9 01:34:12 2023 +0100 - sjk7: Failed attempt at stopping console briefly flashing before it fades in
+Sat Apr 8 19:32:59 2023 +0100 - sjk7: Fixed App hanging on exit when Profiles set to auto-save (Setupform was initializing twice) -- update changelog
+Sat Apr 8 19:30:21 2023 +0100 - sjk7: Fixed App hanging on exit when Profiles set to auto-save (Setupform was initializing twice)
+Sat Apr 8 17:22:33 2023 +0100 - sjk7: Needed correct PSPeak for HL2
+Sat Apr 8 14:58:14 2023 +0100 - sjk7: 1. Fix no TX display when DUP off. 2) Fix high samplerate availability for HL2
+Fri Apr 7 22:58:58 2023 +0100 - sjk7: Working towards a clean compile
+Fri Apr 7 12:34:48 2023 +0100 - sjk7: All seems OK to release
+Thu Apr 6 04:49:52 2023 +0100 - sjk7: Refactoring Portaudio background thread Init
+Thu Apr 6 04:29:59 2023 +0100 - sjk7: Fixed regression where no spectra displayed during tx
+Wed Apr 5 23:22:37 2023 +0100 - sjk7: Now working with the current release of PortAudio, which has WASAPI loopback support
+Wed Apr 5 22:49:56 2023 +0100 - sjk7: Now working with the current release of PortAudio, which has WASAPI loopback support
+Wed Apr 5 13:50:08 2023 +0100 - sjk7: Part way through adding the REAL portaudio as a dependency with source)
+Wed Apr 5 05:58:58 2023 +0100 - sjk7: Portaudio needs testing
+Wed Apr 5 04:01:21 2023 +0100 - sjk7: Audio wip. Soundcard selection works again. Yay.
+Wed Apr 5 03:25:24 2023 +0100 - sjk7: Audio wip
+Tue Apr 4 13:14:00 2023 +0100 - sjk7: AudioExtras means we have to lose the PADevice helper in setup.cs. So now lots wip
+Tue Apr 4 11:33:44 2023 +0100 - sjk7: AudioExtras wip
+Tue Apr 4 10:11:17 2023 +0100 - sjk7: Modified PortAudio to allow easier checking whether or not a Format is supported for the new AudioExtras class
+Tue Apr 4 10:39:20 2023 +0100 - sjk7: Working towards getting sane defaults for VAC
+Mon Apr 3 12:40:19 2023 +0100 - sjk7: Make export TX profile more sane, now with a choice as to where the file that you save goes.
+Mon Apr 3 08:21:16 2023 +0100 - sjk7: TX Profile export and input cleaned up. You can choose the location and filename of the profile now. WIP is setting sane defaults for HL2 users.
+Sun Apr 2 13:49:57 2023 +0100 - sjk7: New High SWR notification method (needs testing) Make averaging enabled or not more consistent between console and setup
+Sun Apr 2 11:42:54 2023 +0100 - sjk7: Began decreasing memory footprint (by deleting unused variables) and improve HIGH SWR display to the user(no annoying, and possibly buried) messageboxes.
+Sat Apr 1 17:31:17 2023 +0100 - sjk7: Added some more files to gitignore
+Sat Apr 1 17:07:27 2023 +0100 - BRUNO: ChannelMaster not building in bin directory, fixed in x64 Release
+Sat Apr 1 17:03:26 2023 +0100 - BRUNO: Setup form now properly owned by console.
+Sat Apr 1 16:45:04 2023 +0100 - BRUNO: Only show exclusive audio check on VAC1 for appropriate APIs (WASAPI and Kernel streaming
+Sat Apr 1 16:30:21 2023 +0100 - sjk7: Updated controls
+Sat Apr 1 16:04:12 2023 +0100 - sjk7: Made radio connection more user friendly by trying both protocols if the static ip is not set
+Sat Apr 1 13:10:27 2023 +0100 - sjk7: Confidence push
+Sat Apr 1 12:38:13 2023 +0100 - sjk7: Note: using VS2017 for development (32-bit) as VS 2022 is munching all the cpu and its hard to get stuff done
+Fri Mar 31 13:59:10 2023 +0100 - sjk7: Display Experiments
+Fri Mar 31 12:54:43 2023 +0100 - sjk7: Widened UI display for soundcards, added exclusive mode for lower VAC latency, undid my mute button fix (because I didn't see the checkbox for it on setup). Master AF now works on VAC1
+Fri Mar 31 12:01:12 2023 +0100 - sjk7: PortAudio now initialised not on the main thread. App starts much faster!
+Fri Mar 31 11:24:08 2023 +0100 - sjk7: updated KLJ changelog.txt
+Fri Mar 31 11:23:03 2023 +0100 - sjk7: Fix: master volume not working on VAC1. Mute button not working on VAC1.
+Thu Mar 30 20:04:38 2023 +0100 - BRUNO: Reinstate cpu monitor
+Thu Mar 30 19:08:35 2023 +0100 - sjk7: tx mon volume was not working on VAC and mute button not working on VAC
+Thu Mar 30 18:46:33 2023 +0100 - sjk7: Log error if cpu monitor fails to create
+Thu Mar 30 18:34:46 2023 +0100 - sjk7: AVRT_PRIORITY_CRITICAL is the correct ultra-thread priority
+Thu Mar 30 16:19:07 2023 +0100 - sjk7: Added G7KLJChangelog.txt
+Thu Mar 30 15:37:16 2023 +0100 - sjk7: Added G7KLJChangelog.txt
+Thu Mar 30 14:50:48 2023 +0100 - sjk7: Update ReadMe.md
+Thu Mar 30 14:47:17 2023 +0100 - sjk7: Update ReadMe.md
+Thu Mar 30 13:19:27 2023 +0100 - sjk7: Fixed console not remembering RestoreBounds when saved when Maximized. Richie to check as there is some DropShadow stuff going on there that I have probably broken
+Thu Mar 30 12:51:36 2023 +0100 - sjk7: Some work on threads not exiting in ChannelMaster, leading to refusal of high MM thread priorities
+Thu Mar 30 08:49:16 2023 +0100 - sjk7: THREAD_PRIORITY_TIME_CRITICAL is most appropriate for a fallback thread scheduling
+Thu Mar 30 07:27:05 2023 +0100 - sjk7: Fade-in for main console window
+Thu Mar 30 07:11:57 2023 +0100 - sjk7: Fade-in for main console window
+Thu Mar 30 06:53:38 2023 +0100 - sjk7: Slight startup speed improvement. Make Cpu counters init in a different thread.
+Thu Mar 30 04:56:19 2023 +0100 - sjk7: Audio fails to start gets in a tangle fixed
+Thu Mar 30 04:53:05 2023 +0100 - sjk7: Automated build date for display on the Console window. It's one less thing to forget when making a release!
+Thu Mar 30 04:39:12 2023 +0100 - sjk7: VAC start failure now correctly avoids starting the radio
+Thu Mar 30 03:32:35 2023 +0100 - sjk7: Latest PortAudio, lots of perf improvements to VAC, including Multimedia threading.
+Thu Mar 30 03:25:49 2023 +0100 - sjk7: Added clang-format file

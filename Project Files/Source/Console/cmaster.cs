@@ -49,16 +49,16 @@ namespace Thetis
         public static extern void SetXmtrChannelOutrate(int xmtr_id, int rate, bool state);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "getbuffsize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetBuffSize (int rate);
+        public static extern int GetBuffSize(int rate);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "inid", CallingConvention = CallingConvention.Cdecl)]
         public static extern int inid(int stype, int id);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "chid", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int chid (int stream, int subrx);
+        public static extern int chid(int stream, int subrx);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "getInputRate", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetInputRate (int stype, int id);
+        public static extern int GetInputRate(int stype, int id);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "getChannelOutputRate", CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetChannelOutputRate(int stype, int id);
@@ -66,7 +66,7 @@ namespace Thetis
         // router
 
         [DllImport("ChannelMaster.dll", EntryPoint = "LoadRouterAll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void LoadRouterAll(void* ptr, int id, int ports, int calls, int varvals, 
+        public static extern void LoadRouterAll(void* ptr, int id, int ports, int calls, int varvals,
             int* nstreams, int* function, int* callid);
 
         [DllImport("ChannelMaster.dll", EntryPoint = "LoadRouterControlBit", CallingConvention = CallingConvention.Cdecl)]
@@ -97,7 +97,7 @@ namespace Thetis
         public static extern void GetDEXPPeakSignal(int id, double* peak);         // called by console.cs
 
         [DllImport("wdsp.dll", EntryPoint = "SetDEXPRun", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetDEXPRun (int id, bool run);
+        public static extern void SetDEXPRun(int id, bool run);
 
         [DllImport("wdsp.dll", EntryPoint = "SetDEXPDetectorTau", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDEXPDetectorTau(int id, double tau);
@@ -156,10 +156,10 @@ namespace Thetis
         // siphon
 
         [DllImport("wdsp.dll", EntryPoint = "SetSiphonInsize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetSiphonInsize (int id, int size);
+        public static extern void SetSiphonInsize(int id, int size);
 
         [DllImport("wdsp.dll", EntryPoint = "GetaSipF1EXT", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetaSipF1EXT (int id, float* buff, int size);     // called by console.cs
+        public static extern void GetaSipF1EXT(int id, float* buff, int size);     // called by console.cs
 
         // audio mixer
 
@@ -285,12 +285,12 @@ namespace Thetis
         public static bool Mox
         {
             get { return mox; }
-            set         
+            set
             {
                 mox = value;
                 if (mox)
                 {
-                    LoadRouterControlBit((void *)0, 0, 2, 1);
+                    LoadRouterControlBit((void*)0, 0, 2, 1);
                     WaveThing.wplayer[0].Condx = 1;
                     WaveThing.wplayer[1].Condx = 1;
                     WaveThing.wrecorder[0].Condx = 1;
@@ -320,10 +320,10 @@ namespace Thetis
             }
         }
 
-       
+
 
         // number of software receivers
-        private static int cmRCVR = 5;  
+        private static int cmRCVR = 5;
         public static int CMrcvr
         {
             get { return cmRCVR; }
@@ -343,7 +343,11 @@ namespace Thetis
             set { ps_rate = value; }
         }
 
-        public static RadioProtocol CurrentRadioProtocol { get; set; }
+        public static RadioProtocol CurrentRadioProtocol
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region logic calls
@@ -351,7 +355,7 @@ namespace Thetis
         public static void CMCreateCMaster()
         {
             // set radio structure
-            int[] cmSPC = new int[1] {2};
+            int[] cmSPC = new int[1] { 2 };
             int[] cmInboundSize = new int[8] { 240, 240, 240, 240, 240, 720, 240, 240 };
             fixed (int* pcmSPC = cmSPC, pcmIbSize = cmInboundSize)
                 cmaster.SetRadioStructure(8, cmRCVR, 1, cmSubRCVR, 1, pcmSPC, pcmIbSize, 1536000, 48000, 384000);
@@ -360,14 +364,15 @@ namespace Thetis
             cmaster.SendCallbacks();
 
             // set default rates
-            int[] xcm_inrates = new int[8] {192000, 192000, 192000, 192000, 192000, 48000, 192000, 192000};
+            int[] xcm_inrates = new int[8] { 192000, 192000, 192000, 192000, 192000, 48000, 192000, 192000 };
             int aud_outrate = 48000;
-            int[] rcvr_ch_outrates = new int[5] {48000, 48000, 48000, 48000, 48000};
+            int[] rcvr_ch_outrates = new int[5] { 48000, 48000, 48000, 48000, 48000 };
             int[] xmtr_ch_outrates = new int[1] { 192000 };
             fixed (int* p1 = xcm_inrates, p2 = rcvr_ch_outrates, p3 = xmtr_ch_outrates)
                 cmaster.SetCMDefaultRates(p1, aud_outrate, p2, p3);
 
             // create receivers, transmitters, specials, and buffers
+            Splash.SetStatus("Creating receivers, transmitters and required buffers ...");
             cmaster.CreateRadio();
 
             // get transmitter identifiers
@@ -380,23 +385,32 @@ namespace Thetis
             // setup CFIR to run; it will always be ON with new protocol firmware
             WDSP.SetTXACFIRRun(txch, true);
 
+            Splash.SetStatus("Setting PureSignal basic parameters ...");
             // set PureSignal basic parameters
             // note:  if future models have different settings, these calls could be moved to
             //      CMLoadRouterAll() which is called each time the receiver model changes.
+            // KLJ NOTE: ^^ I don't think this is accurate any more. What seems to happen
+            // is that 
+            //           console.psform.SetDefaultPeaks(NetworkIO.CurrentRadioProtocol  != oldProto);
+            // is called whenever the audio starts.
+
             SetPSRxIdx(0, 0);   // txid = 0, all current models use Stream0 for RX feedback
             SetPSTxIdx(0, 1);   // txid = 0, all current models use Stream1 for TX feedback
             puresignal.SetPSFeedbackRate(txch, ps_rate);
-            puresignal.SetPSHWPeak(txch, 0.2899);
+            puresignal.SetPSHWPeak(txch, puresignal.PSPK_FOR_PROTO2);
 
+            Splash.SetStatus("Setting up transmitter display ...");
             // setup transmitter display
             WDSP.TXASetSipMode(txch, 1);            // 1=>call the appropriate 'analyzer'
             WDSP.TXASetSipDisplay(txch, txinid);    // disp = txinid = tx stream
 
+            Splash.SetStatus("Making networking available for the radio...");
             NetworkIO.CreateRNet();
-            
+
+            Splash.SetStatus("Creating the main receiver ...");
             cmaster.create_rxa();
 
-           // create_wb();
+            // create_wb();
         }
 
         private static bool ps_loopback = false;
@@ -593,8 +607,8 @@ namespace Thetis
                                 //      respectively, (as well as to PureSignal) when transmitting with PureSignal 
                                 //      Enabled in Setup.
                                 // control bits are { MOX, Diversity_Enabled, PureSignal_Enabled }
-                                int[] Angelia_Function_PSTest = new int[112] 
-                                { 
+                                int[] Angelia_Function_PSTest = new int[112]
+                                {
                                     0, 0, 2, 2, 0, 2, 2, 2,     // Rx0, port 1035, Call 0
                                     0, 0, 0, 0, 0, 2, 0, 2,     // Rx0, port 1035, Call 1
                                     0, 0, 0, 0, 0, 0, 0, 0,     // Rx1, port 1036, Call 0
@@ -680,8 +694,8 @@ namespace Thetis
                             case HPSDRModel.ANAN7000D:
                             case HPSDRModel.ANAN8000D:
                                 // control bits are { MOX, Diversity_Enabled, PureSignal_Enabled }
-                                int[] Angelia_Function = new int[56] 
-                                { 
+                                int[] Angelia_Function = new int[56]
+                                {
                                     0, 0, 2, 2, 0, 2, 2, 2,     // Rx0, port 1035
                                     0, 0, 0, 0, 0, 0, 0, 0,     // Rx1, port 1036
                                     1, 1, 0, 0, 1, 1, 0, 1,     // Rx2, port 1037
@@ -748,8 +762,9 @@ namespace Thetis
                     }
                     break;
             }
+
         }
-        
+
         public static void CMSetAntiVoxSourceWhat()
         {
             bool VACEn = Audio.console.VACEnabled;
@@ -762,27 +777,27 @@ namespace Thetis
             {
                 if (VACEn)
                 {
-                    cmaster.SetAntiVOXSourceWhat(0, RX1,  1);
+                    cmaster.SetAntiVOXSourceWhat(0, RX1, 1);
                     cmaster.SetAntiVOXSourceWhat(0, RX1S, 1);
                 }
                 else
                 {
-                    cmaster.SetAntiVOXSourceWhat(0, RX1,  0);
+                    cmaster.SetAntiVOXSourceWhat(0, RX1, 0);
                     cmaster.SetAntiVOXSourceWhat(0, RX1S, 0);
                 }
                 if (VAC2En)
-                    cmaster.SetAntiVOXSourceWhat(0, RX2,  1);
+                    cmaster.SetAntiVOXSourceWhat(0, RX2, 1);
                 else
-                    cmaster.SetAntiVOXSourceWhat(0, RX2,  0);
+                    cmaster.SetAntiVOXSourceWhat(0, RX2, 0);
             }
             else         // use audio going to hardware minus MON
             {
-                cmaster.SetAntiVOXSourceWhat(0, RX1,  1);
+                cmaster.SetAntiVOXSourceWhat(0, RX1, 1);
                 cmaster.SetAntiVOXSourceWhat(0, RX1S, 1);
-                cmaster.SetAntiVOXSourceWhat(0, RX2,  1);
+                cmaster.SetAntiVOXSourceWhat(0, RX2, 1);
             }
         }
-        
+
         public static void CMSetAudioVolume(double volume)
         {
             cmaster.SetAAudioMixVolume((void*)0, 0, volume);
@@ -795,12 +810,12 @@ namespace Thetis
             {
                 case 0:
                     run = Audio.console.specRX.GetSpecRX(0).NBOn;
-                    cmaster.SetRCVRANBRun (0, 0, run);
+                    cmaster.SetRCVRANBRun(0, 0, run);
                     break;
                 case 1:
-                    run =  Audio.console.specRX.GetSpecRX(1).NBOn
+                    run = Audio.console.specRX.GetSpecRX(1).NBOn
                         && Audio.console.RX2Enabled;
-                    cmaster.SetRCVRANBRun (0, 1, run);
+                    cmaster.SetRCVRANBRun(0, 1, run);
                     break;
             }
         }
@@ -815,7 +830,7 @@ namespace Thetis
                     cmaster.SetRCVRNOBRun(0, 0, run);
                     break;
                 case 1:
-                    run =  Audio.console.specRX.GetSpecRX(1).NB2On
+                    run = Audio.console.specRX.GetSpecRX(1).NB2On
                         && Audio.console.RX2Enabled;
                     cmaster.SetRCVRNOBRun(0, 1, run);
                     break;
@@ -828,11 +843,11 @@ namespace Thetis
             switch (id)
             {
                 case 0:
-                    run =  Audio.WavePlayback
+                    run = Audio.WavePlayback
                         && WaveThing.wave_file_reader[0] != null;
                     break;
                 case 1:
-                    run =  Audio.WavePlayback
+                    run = Audio.WavePlayback
                         && WaveThing.wave_file_reader[1] != null
                         && Audio.console.RX2Enabled;
                     break;
@@ -846,7 +861,7 @@ namespace Thetis
             switch (id)
             {
                 case 0:
-                    run =  Audio.WaveRecord
+                    run = Audio.WaveRecord
                         && WaveThing.wave_file_writer[0] != null;
                     break;
                 case 1:
@@ -951,7 +966,7 @@ namespace Thetis
 
         #region callbacks
 
-        
+
         unsafe public static void SendCallbacks()
         {
             SendCBPushVox(0, PushVoxDel);
@@ -972,11 +987,13 @@ namespace Thetis
 
         #region rxa
 
-        private static bool EXPOSE = false; 
+        private static bool EXPOSE = false;
         private static bool EXPOSEwb = true;
         private const int nrxa = 8;
         private static rxa[] rxa = new rxa[nrxa];
+
         private static wideband[] wideband = new wideband[3];
+
 
         private static void create_rxa()
         {
@@ -1008,16 +1025,18 @@ namespace Thetis
 
         #region wideband
 
+
         private static void create_wb(int adc)
         {
             if (EXPOSEwb)
             {
                 //wideband = new wideband[3];
                 wideband[adc] = new wideband(adc);
-               // wideband[0].Show();
+                // wideband[0].Show();
             }
 
         }
+
 
         public static wideband Getwb(int adc)
         {
@@ -1030,10 +1049,11 @@ namespace Thetis
             return wideband[adc];
         }
 
+
         public static void Hidewb(int adc)
         {
             if (wideband[adc] != null)
-            wideband[adc].Hide();           
+                wideband[adc].Hide();
         }
 
         public static void Closewb(int adc)
@@ -1048,6 +1068,7 @@ namespace Thetis
                 wideband[adc].SaveWideBand();
         }
 
+
         #endregion
 
     }
@@ -1061,7 +1082,7 @@ namespace Thetis
             Audio.VOXActive = (active == 1);
         }
     }
-#endregion
+    #endregion
 
     #region WaveThing
 
@@ -1069,20 +1090,23 @@ namespace Thetis
     {
         #region createStuff
 
-        // declare a delegate of the correct form for the createWavePlayer method
+        // declare a delegate of the correct form for the createWavePlayer
+        // method
         unsafe public delegate void createWplay(int id);
 
         // assign the function to an instance of the delegate
         unsafe private static createWplay cwpDel = createWavePlayer;
 
         // define the method to send the createWavePlayer function pointer
-        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateWPlay", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateWPlay",
+            CallingConvention = CallingConvention.Cdecl)]
         unsafe public static extern void SendCBCreateWPlay(createWplay del);
 
         unsafe public delegate void createWrecord(int id);
         unsafe private static createWrecord cwrDel = createWaveRecorder;
 
-        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateWRecord", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateWRecord",
+            CallingConvention = CallingConvention.Cdecl)]
         unsafe public static extern void SendCBCreateWRecord(createWrecord del);
 
         unsafe public static void initWaves()
@@ -1100,7 +1124,8 @@ namespace Thetis
         unsafe public delegate void WPlay(int state, double* data);
 
         // define the method to send the player function pointer
-        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBWavePlayer", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBWavePlayer",
+            CallingConvention = CallingConvention.Cdecl)]
         unsafe public static extern void SendCBWavePlayer(int id, WPlay del);
 
         // maximum number of wave players
@@ -1110,7 +1135,8 @@ namespace Thetis
         // initialize an array for pointers to the wave player method instances
         static WPlay[] pplay = new WPlay[nplayers];
         // initialize an array for the wave_file_readers
-        public static WaveFileReader1[] wave_file_reader = new WaveFileReader1[nplayers];
+        public static WaveFileReader1[] wave_file_reader
+            = new WaveFileReader1[nplayers];
 
         unsafe public static void createWavePlayer(int id)
         {
@@ -1122,7 +1148,8 @@ namespace Thetis
             SendCBWavePlayer(id, pplay[id]);
             // tell the waveplayer its ID
             wplayer[id].ID = id;
-            // NOTE:  the wave_file_reader instance gets created in OpenWaveFile(filename, id)
+            // NOTE:  the wave_file_reader instance gets created in
+            // OpenWaveFile(filename, id)
         }
 
         #endregion
@@ -1131,13 +1158,16 @@ namespace Thetis
 
         unsafe public delegate void WRecord(int state, int pos, double* data);
 
-        [DllImport("ChannelMaster", EntryPoint = "SendCBWaveRecorder", CallingConvention = CallingConvention.Cdecl)]
-        unsafe public static extern void SendCBWaveRecorder(int id, WRecord del);
+        [DllImport("ChannelMaster", EntryPoint = "SendCBWaveRecorder",
+            CallingConvention = CallingConvention.Cdecl)]
+        unsafe public static extern void SendCBWaveRecorder(
+            int id, WRecord del);
 
         const int nrecorders = 16;
         public static RecordWave[] wrecorder = new RecordWave[nrecorders];
         static WRecord[] precord = new WRecord[nrecorders];
-        public static WaveFileWriter[] wave_file_writer = new WaveFileWriter[nrecorders];
+        public static WaveFileWriter[] wave_file_writer
+            = new WaveFileWriter[nrecorders];
 
         unsafe public static void createWaveRecorder(int id)
         {
@@ -1186,11 +1216,13 @@ namespace Thetis
             {
                 if (System.Threading.Interlocked.Exchange(ref busy, 1) != 1)
                 {
-                    int size = 2048;    // could check actual size, depending upon MOX
+                    int size
+                        = 2048; // could check actual size, depending upon MOX
                     fixed (float* pleft = &left[0])
                     fixed (float* pright = &right[0])
                     {
-                        WaveThing.wave_file_reader[id].GetPlayBuffer(pleft, pright);
+                        WaveThing.wave_file_reader[id].GetPlayBuffer(
+                            pleft, pright);
                         swizzle(size, pleft, pright, data);
                     }
                     System.Threading.Interlocked.Exchange(ref busy, 0);
@@ -1198,7 +1230,8 @@ namespace Thetis
             }
         }
 
-        unsafe private static void swizzle(int n, float* I, float* Q, double* C)
+        unsafe private static void swizzle(
+            int n, float* I, float* Q, double* C)
         {
             int i;
             for (i = 0; i < n; i++)
@@ -1259,76 +1292,140 @@ namespace Thetis
         // 'wrecord()' is called by ChannelMaster.dll
         unsafe public void wrecord(int state, int pos, double* data)
         {
-            if (run && (condx == state))    // if run && (!MOX and calling with receive data, or, MOX and calling with transmit data)
+            if (run
+                && (condx
+                    == state)) // if run && (!MOX and calling with receive data,
+                               // or, MOX and calling with transmit data)
             {
                 if (System.Threading.Interlocked.Exchange(ref busy, 1) != 1)
                 {
-                    fixed (float* pleft  = &left[0], pright = &right[0], pltemp = &ltemp[0], prtemp = &rtemp[0])
+                    fixed (float* pleft = &left[0], pright = &right[0],
+                        pltemp = &ltemp[0], prtemp = &rtemp[0])
                     {
-                        if (pos == 0)   // calling from the "pre" location
+                        if (pos == 0) // calling from the "pre" location
                         {
-                            if ((state == 0) && rxpre)  // getting receive data and want receive data for 'pre' position
+                            if ((state == 0)
+                                && rxpre) // getting receive data and want
+                                          // receive data for 'pre' position
                             {
-                                int rcvr_inrate = cmaster.GetInputRate(0, id);  // could just read these from WaveThing.wave_file_writer[id]
-                                int rcvr_insize = cmaster.GetBuffSize(rcvr_inrate);
+                                int rcvr_inrate = cmaster.GetInputRate(
+                                    0, id); // could just read these from
+                                            // WaveThing.wave_file_writer[id]
+                                int rcvr_insize
+                                    = cmaster.GetBuffSize(rcvr_inrate);
                                 deswizzle(rcvr_insize, data, pleft, pright);
-                                if (WaveThing.wave_file_writer[id].BaseRate != rcvr_inrate)
+                                if (WaveThing.wave_file_writer[id].BaseRate
+                                    != rcvr_inrate)
                                 {
                                     int outsamps;
-                                    WDSP.xresampleFV(pleft,  pltemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
-                                    WDSP.xresampleFV(pright, prtemp, rcvr_insize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
+                                    WDSP.xresampleFV(pleft, pltemp, rcvr_insize,
+                                        &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .RcvrResampL);
+                                    WDSP.xresampleFV(pright, prtemp,
+                                        rcvr_insize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .RcvrResampR);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pltemp, prtemp, outsamps);
                                 }
                                 else
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pleft, pright, rcvr_insize);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pleft, pright, rcvr_insize);
                             }
-                            if ((state == 1) && txpre)  // getting transmit data and want transmit data for 'pre' position
+                            if ((state == 1)
+                                && txpre) // getting transmit data and want
+                                          // transmit data for 'pre' position
                             {
                                 int xmtr_inrate = cmaster.GetInputRate(1, 0);
-                                int xmtr_insize = cmaster.GetBuffSize(xmtr_inrate);
+                                int xmtr_insize
+                                    = cmaster.GetBuffSize(xmtr_inrate);
                                 deswizzle(xmtr_insize, data, pleft, pright);
-                                if (WaveThing.wave_file_writer[id].BaseRate != xmtr_inrate)
+                                if (WaveThing.wave_file_writer[id].BaseRate
+                                    != xmtr_inrate)
                                 {
                                     int outsamps;
-                                    WDSP.xresampleFV(pleft,  pltemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
-                                    WDSP.xresampleFV(pright, prtemp, xmtr_insize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
+                                    WDSP.xresampleFV(pleft, pltemp, xmtr_insize,
+                                        &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .XmtrResampL);
+                                    WDSP.xresampleFV(pright, prtemp,
+                                        xmtr_insize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .XmtrResampR);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pltemp, prtemp, outsamps);
                                 }
                                 else
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pleft, pright, xmtr_insize);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pleft, pright, xmtr_insize);
                             }
                         }
-                        if (pos == 1)   // calling from "post" location
+                        if (pos == 1) // calling from "post" location
                         {
-                            if ((state == 0) && !rxpre) // getting receive data and want receive data for 'post' position
+                            if ((state == 0)
+                                && !rxpre) // getting receive data and want
+                                           // receive data for 'post' position
                             {
-                                int rcvr_outrate = cmaster.GetChannelOutputRate(0, id);
-                                int rcvr_outsize = cmaster.GetBuffSize(rcvr_outrate);
+                                int rcvr_outrate
+                                    = cmaster.GetChannelOutputRate(0, id);
+                                int rcvr_outsize
+                                    = cmaster.GetBuffSize(rcvr_outrate);
                                 deswizzle(rcvr_outsize, data, pleft, pright);
-                                if (WaveThing.wave_file_writer[id].BaseRate != rcvr_outrate)
+                                if (WaveThing.wave_file_writer[id].BaseRate
+                                    != rcvr_outrate)
                                 {
                                     int outsamps;
-                                    WDSP.xresampleFV(pleft,  pltemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampL);
-                                    WDSP.xresampleFV(pright, prtemp, rcvr_outsize, &outsamps, WaveThing.wave_file_writer[id].RcvrResampR);
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
+                                    WDSP.xresampleFV(pleft, pltemp,
+                                        rcvr_outsize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .RcvrResampL);
+                                    WDSP.xresampleFV(pright, prtemp,
+                                        rcvr_outsize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .RcvrResampR);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pltemp, prtemp, outsamps);
                                 }
                                 else
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pleft, pright, rcvr_outsize);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pleft, pright, rcvr_outsize);
                             }
-                            if ((state == 1) && !txpre) // getting transmit data and want transmit data for 'post' position
+                            if ((state == 1)
+                                && !txpre) // getting transmit data and want
+                                           // transmit data for 'post' position
                             {
-                                int xmtr_outrate = cmaster.GetChannelOutputRate(1, 0);
-                                int xmtr_outsize = cmaster.GetBuffSize(xmtr_outrate);
+                                int xmtr_outrate
+                                    = cmaster.GetChannelOutputRate(1, 0);
+                                int xmtr_outsize
+                                    = cmaster.GetBuffSize(xmtr_outrate);
                                 deswizzle(xmtr_outsize, data, pleft, pright);
-                                if (WaveThing.wave_file_writer[id].BaseRate != xmtr_outrate)
+                                if (WaveThing.wave_file_writer[id].BaseRate
+                                    != xmtr_outrate)
                                 {
                                     int outsamps;
-                                    WDSP.xresampleFV(pleft,  pltemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampL);
-                                    WDSP.xresampleFV(pright, prtemp, xmtr_outsize, &outsamps, WaveThing.wave_file_writer[id].XmtrResampR);
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pltemp, prtemp, outsamps);
+                                    WDSP.xresampleFV(pleft, pltemp,
+                                        xmtr_outsize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .XmtrResampL);
+                                    WDSP.xresampleFV(pright, prtemp,
+                                        xmtr_outsize, &outsamps,
+                                        WaveThing.wave_file_writer[id]
+                                            .XmtrResampR);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pltemp, prtemp, outsamps);
                                 }
                                 else
-                                    WaveThing.wave_file_writer[id].AddWriteBuffer(pleft, pright, xmtr_outsize);
+                                    WaveThing.wave_file_writer[id]
+                                        .AddWriteBuffer(
+                                            pleft, pright, xmtr_outsize);
                             }
                         }
                     }
@@ -1337,7 +1434,8 @@ namespace Thetis
             }
         }
 
-        unsafe private static void deswizzle(int n, double* C, float* I, float* Q)
+        unsafe private static void deswizzle(
+            int n, double* C, float* I, float* Q)
         {
             int i;
             for (i = 0; i < n; i++)
@@ -1359,38 +1457,37 @@ namespace Thetis
         unsafe public delegate void createscope(int id);
         unsafe private static createscope cscDel = createScope;
 
-        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateScope", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBCreateScope",
+            CallingConvention = CallingConvention.Cdecl)]
         unsafe public static extern void SendCBCreateScope(createscope del);
-        
+
         unsafe public delegate void Xscope(int state, double* data);
 
-        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBScope", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("ChannelMaster.dll", EntryPoint = "SendCBScope",
+            CallingConvention = CallingConvention.Cdecl)]
         unsafe public static extern void SendCBScope(int id, Xscope del);
 
         const int nscopes = 16;
         public static DoScope[] dscope = new DoScope[nscopes];
         static Xscope[] pscope = new Xscope[nscopes];
-        
+
         unsafe public static void createScope(int id)
         {
             dscope[id] = new DoScope();
             pscope[id] = new Xscope(dscope[id].xscope);
             SendCBScope(id, pscope[id]);
-            // Note:  This is set up to handle multiple scopes.  However, at present
-            // there is only one instance of DoScope() and DoScope2().
+            // Note:  This is set up to handle multiple scopes.  However, at
+            // present there is only one instance of DoScope() and DoScope2().
         }
 
-        unsafe public static void initScope()
-        {
-            SendCBCreateScope(cscDel);
-        }
+        unsafe public static void initScope() { SendCBCreateScope(cscDel); }
     }
 
     unsafe class DoScope
     {
         float[] left = new float[2048];
         float[] right = new float[2048];
-        
+
         int busy = 0;
 
         private bool run = false;
@@ -1406,7 +1503,7 @@ namespace Thetis
             get { return condx; }
             set { condx = value; }
         }
-        
+
         unsafe public void xscope(int state, double* data)
         {
             if (run && (condx == state))
@@ -1426,7 +1523,8 @@ namespace Thetis
             }
         }
 
-        unsafe private static void deswizzle(int n, double* C, float* I, float* Q)
+        unsafe private static void deswizzle(
+            int n, double* C, float* I, float* Q)
         {
             int i;
             for (i = 0; i < n; i++)
@@ -1437,6 +1535,6 @@ namespace Thetis
         }
     }
 
-#endregion
+    #endregion
 
 }

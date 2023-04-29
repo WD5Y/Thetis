@@ -23,10 +23,12 @@ namespace Thetis
         {
             InitializeComponent();
 
+            this.Owner = c;
+
             txtPSpeak.Text = "";
 
             console = c;    // MW0LGE moved above restore, so that we actaully have console when control events fire because of restore form
-            
+
             Common.RestoreForm(this, "PureSignal", false); // will also restore txtPSpeak //MW0LGE_21k9rc5
 
             _advancedON = chkAdvancedViewHidden.Checked; //MW0LGE_[2.9.0.6]
@@ -176,7 +178,7 @@ namespace Thetis
                     unsafe { cmaster.LoadRouterControlBit((void*)0, 0, 0, 0); }
                     console.radio.GetDSPTX(0).PSRunCal = false;
                 }
-               // console.EnableDup();
+                // console.EnableDup();
                 if (console.path_Illustrator != null)
                     console.path_Illustrator.pi_Changed();
             }
@@ -339,7 +341,7 @@ namespace Thetis
 
         private void PSForm_Closing(object sender, FormClosingEventArgs e)
         {
-            if (ampv != null)
+            if (console.AppQuitting)
             {
                 _dismissAmpv = true;
                 ampvThread.Join();
@@ -366,6 +368,7 @@ namespace Thetis
                 _dismissAmpv = false;
                 ampvThread = new Thread(RunAmpv);
                 ampvThread.SetApartmentState(ApartmentState.STA);
+                ampvThread.Priority = ThreadPriority.Lowest;
                 ampvThread.Name = "Ampv Thread";
                 ampvThread.Start();
             }
@@ -381,7 +384,7 @@ namespace Thetis
         //-W2PA Adds capability for CAT control via console
         public void SingleCalrun()
         {
-            btnPSCalibrate_Click(this, EventArgs.Empty); 
+            btnPSCalibrate_Click(this, EventArgs.Empty);
         }
 
         private void btnPSReset_Click(object sender, EventArgs e)
@@ -447,15 +450,20 @@ namespace Thetis
         }
         public void SetDefaultPeaks(bool bForce)
         {
-            if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
+            if (console.SetupForm.Hl2.HermesLite2)
             {
-                //protocol 1
-                PSdefpeak(bForce, 0.4072);
+                PSdefpeak(bForce, puresignal.PSPK_FOR_HERMES_LITE);
             }
             else
             {
-                //protocol 2
-                PSdefpeak(bForce, 0.2899);
+                if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
+                {
+                    PSdefpeak(bForce, puresignal.PSPK_FOR_PROTO1);
+                }
+                else
+                {
+                    PSdefpeak(bForce, puresignal.PSPK_FOR_PROTO2);
+                }
             }
         }
         #region PSLoops
@@ -599,7 +607,7 @@ namespace Thetis
                     break;
                 case eCMDState.TurnOFF://6:     // Turn-OFF
                     //autoON = false;
-                    if(!_autocal_enabled) _autoON = false; // only want to turn this off if autocal is off MW0LGE_21k9rc4
+                    if (!_autocal_enabled) _autoON = false; // only want to turn this off if autocal is off MW0LGE_21k9rc4
                     puresignal.SetPSControl(_txachannel, 1, 0, 0, 0);
                     if (!PSEnabled) PSEnabled = true;
                     btnPSCalibrate.BackColor = SystemColors.Control;
@@ -669,7 +677,7 @@ namespace Thetis
                     {
                         console.SetupForm.ATTOnTX = newAtten;
                         // give some additional time for the network msg to get to the radio before switching back on MW0LGE_21k9d5
-                        if(m_bQuckAttenuate) Thread.Sleep(100);
+                        if (m_bQuckAttenuate) Thread.Sleep(100);
                     }
                     break;
                 case eAAState.RestoreOperation:// 2: // restore operation
@@ -706,7 +714,7 @@ namespace Thetis
 
         private void checkLoopback_CheckedChanged(object sender, EventArgs e)
         {
-            if(checkLoopback.Checked && (console.SampleRateRX1 != 192000 || console.SampleRateRX2 != 192000))
+            if (checkLoopback.Checked && (console.SampleRateRX1 != 192000 || console.SampleRateRX2 != 192000))
             {
                 DialogResult dr = MessageBox.Show("This feature can only be used with sample rates set to 192KHz.",
                     "Sample Rate Issue",
@@ -789,12 +797,14 @@ namespace Thetis
 
             chkAdvancedViewHidden.Checked = _advancedON;
         }
+        /*/
         private void chkPSOnTop_CheckedChanged(object sender, EventArgs e)
         {
             _topmost = chkPSOnTop.Checked;
 
             this.TopMost = _topmost; //MW0LGE
         }
+        /*/
 
         #endregion
 
@@ -827,7 +837,7 @@ namespace Thetis
             chkPSMap_CheckedChanged(this, e);
             chkPSStbl_CheckedChanged(this, e);
             comboPSTint_SelectedIndexChanged(this, e);
-            chkPSOnTop_CheckedChanged(this, e);
+            // chkPSOnTop_CheckedChanged(this, e);
             chkQuickAttenuate_CheckedChanged(this, e);
         }
 
@@ -841,6 +851,16 @@ namespace Thetis
         private void btnDefaultPeaks_Click(object sender, EventArgs e)
         {
             SetDefaultPeaks(true);
+        }
+
+        private void chkPSManual_CheckedChanged(object sender, EventArgs e)
+        {
+            // puresignal.StaticEnabled = chkPSStaticHold.Checked;
+        }
+
+        private void cbPSManual_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void chkAmpV_CheckedChanged(object sender, EventArgs e)
@@ -867,6 +887,9 @@ namespace Thetis
 
     unsafe static class puresignal
     {
+
+
+
         #region DllImport - Main
 
         [DllImport("wdsp.dll", EntryPoint = "SetPSRunCal", CallingConvention = CallingConvention.Cdecl)]
@@ -943,14 +966,71 @@ namespace Thetis
 
         #endregion
 
+        /*/
+        public enum StaticCalState
+        {
+            Disabled = 0,
+            Enabled = 2,
+            WaitingForGoodFeedback = 4,
+            HaveGoodFeedback = 8,
+            FullySet = 16
+        }
+
+        
+        public class StaticCal
+        {
+            private float _freq;
+            private StaticCalState _state;
+            private int _feedback_value;
+
+            public void setState(StaticCalState newState)
+            {
+                _state = newState;
+            }
+            public StaticCalState state() { return _state; }
+            public void Reset(bool activate)
+            {
+                _freq = 0;
+                if (activate)
+                {
+                    setState(StaticCalState.Enabled);
+                }
+                else
+                {
+                    setState(StaticCalState.Disabled);
+                }
+            }
+
+            public bool Enabled
+            {
+                get { return (int)_state > 0; }
+            }
+        }
+        /*/
+
+
+
         #region public methods
+
+        // public static StaticCal PSMState = new StaticCal();
         public static int[] Info = new int[16];
         private static int[] oldInfo = new int[16];
         private static bool _bInvertRedBlue = false;
         private static bool _validGetInfo = false;
+        public const double PSPK_FOR_HERMES_LITE = 0.24;
+        public const double PSPK_FOR_PROTO1 = 0.4072;
+        public const double PSPK_FOR_PROTO2 = 0.2899;
+        /*/
+        static public bool StaticEnabled
+        {
+            get { return PSMState.Enabled; }
+            set { if (value) PSMState.Reset(true); else PSMState.Reset(false); }
+        }
+        /*/
+
         static puresignal()
         {
-            for(int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 Info[i] = 0;
                 oldInfo[i] = Info[i];
@@ -967,10 +1047,11 @@ namespace Thetis
                 GetPSInfo(txachannel, ptr);
 
             _validGetInfo = true;
-        }       
-        public static bool HasInfoChanged 
+        }
+        public static bool HasInfoChanged
         {
-            get {
+            get
+            {
                 for (int n = 0; n < 16; n++)
                 {
                     if (Info[n] != oldInfo[n])
@@ -979,30 +1060,39 @@ namespace Thetis
                 return false;
             }
         }
-        public static bool CalibrationAttemptsChanged {
+        public static bool CalibrationAttemptsChanged
+        {
             get { return Info[5] != oldInfo[5]; }
         }
-        public static bool CorrectionsBeingApplied {
+        public static bool CorrectionsBeingApplied
+        {
             get { return Info[14] == 1; }
         }
-        public static int CalibrationCount {
+        public static int CalibrationCount
+        {
             get { return Info[5]; }
         }
-        public static bool Correcting {
+        public static bool Correcting
+        {
             get { return FeedbackLevel > 90; }
         }
-        public static bool NeedToRecalibrate(int nCurrentATTonTX) {
+        public static bool NeedToRecalibrate(int nCurrentATTonTX)
+        {
             //note: for reference (puresignal.Info[4] > 181 || (puresignal.Info[4] <= 128 && console.SetupForm.ATTOnTX > 0))
-             return (FeedbackLevel > 181 || (FeedbackLevel <= 128 && nCurrentATTonTX > 0));            
+            return (FeedbackLevel > 181 || (FeedbackLevel <= 128 && nCurrentATTonTX > 0));
         }
-        public static bool IsFeedbackLevelOK {
+        public static bool IsFeedbackLevelOK
+        {
             get { return FeedbackLevel <= 256; }
         }
-        public static int FeedbackLevel {
+        public static int FeedbackLevel
+        {
             get { return Info[4]; }
         }
-        public static Color FeedbackColourLevel {
-            get {
+        public static Color FeedbackColourLevel
+        {
+            get
+            {
                 if (FeedbackLevel > 181)
                 {
                     if (_bInvertRedBlue) return Color.Red;
@@ -1031,7 +1121,8 @@ namespace Thetis
             LSTAYON,
             LTURNON
         };
-        public static EngineState State {
+        public static EngineState State
+        {
             get { return (EngineState)Info[15]; }
         }
         public static bool InvertRedBlue

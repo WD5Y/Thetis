@@ -41,7 +41,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyProduct("Thetis")]
 [assembly: AssemblyCopyright("2022")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]		
+[assembly: AssemblyCulture("")]
 
 //
 // Version information for an assembly consists of the following four values:
@@ -54,7 +54,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("2.9.0.7")]
+[assembly: AssemblyVersion("2.9.0.27")]
+
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
@@ -84,3 +85,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDelaySign(false)]
 [assembly: AssemblyKeyFile("")]
 [assembly: AssemblyKeyName("")]
+[assembly: AssemblyFileVersion("2.9.0.27")]
