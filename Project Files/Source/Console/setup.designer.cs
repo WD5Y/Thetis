@@ -263,7 +263,7 @@
             this.lblMetisIP = new System.Windows.Forms.LabelTS();
             this.lblMetisMAC = new System.Windows.Forms.LabelTS();
             this.groupBoxHPSDRHW = new System.Windows.Forms.GroupBoxTS();
-            this.chkN2ADR = new System.Windows.Forms.CheckBox();
+            this.chkN2ADR = new System.Windows.Forms.CheckBoxTS();
             this.chkHermesLite2 = new System.Windows.Forms.CheckBoxTS();
             this.chkApolloPresent = new System.Windows.Forms.CheckBoxTS();
             this.chkPennyLane = new System.Windows.Forms.CheckBoxTS();
@@ -1547,11 +1547,9 @@
             this.tpAudio = new System.Windows.Forms.TabPage();
             this.tcAudio = new System.Windows.Forms.TabControl();
             this.tpVAC = new System.Windows.Forms.TabPage();
-            this.lblBuffer = new System.Windows.Forms.Label();
             this.labelTS178 = new System.Windows.Forms.LabelTS();
             this.grpAudioVACAutoEnable = new System.Windows.Forms.GroupBoxTS();
             this.chkAudioVACAutoEnable = new System.Windows.Forms.CheckBoxTS();
-            this.lblSampleRate = new System.Windows.Forms.Label();
             this.grpAudioVACGain = new System.Windows.Forms.GroupBoxTS();
             this.lblAudioVACGainTX = new System.Windows.Forms.LabelTS();
             this.udAudioVACGainTX = new System.Windows.Forms.NumericUpDownTS();
@@ -1622,7 +1620,9 @@
             this.chkAudioLatencyManual2 = new System.Windows.Forms.CheckBoxTS();
             this.udAudioLatency2 = new System.Windows.Forms.NumericUpDownTS();
             this.grpAudioDetails2 = new System.Windows.Forms.GroupBoxTS();
+            this.lblBuffer = new System.Windows.Forms.Label();
             this.comboAudioSampleRate2 = new System.Windows.Forms.ComboBoxTS();
+            this.lblSampleRate = new System.Windows.Forms.Label();
             this.comboAudioBuffer2 = new System.Windows.Forms.ComboBoxTS();
             this.chkExclusive = new System.Windows.Forms.CheckBoxTS();
             this.lblAudioOutput2 = new System.Windows.Forms.LabelTS();
@@ -1634,6 +1634,7 @@
             this.chkAudioEnableVAC = new System.Windows.Forms.CheckBoxTS();
             this.chkMasterVolumeForVAC = new System.Windows.Forms.CheckBoxTS();
             this.tpVAC2 = new System.Windows.Forms.TabPage();
+            this.labelTS161 = new System.Windows.Forms.LabelTS();
             this.chkVAC2WillMute = new System.Windows.Forms.CheckBoxTS();
             this.chkVAC2GrapherAuto = new System.Windows.Forms.CheckBoxTS();
             this.udVAC2GrapherSwing = new System.Windows.Forms.NumericUpDownTS();
@@ -1803,7 +1804,6 @@
             this.udPeakBlobDropDBMs = new System.Windows.Forms.NumericUpDownTS();
             this.lblPeakBlobDropDBMs = new System.Windows.Forms.LabelTS();
             this.chkPeakHoldDrop = new System.Windows.Forms.CheckBoxTS();
-            this.lblBlobMS = new System.Windows.Forms.LabelTS();
             this.udBlobPeakHoldMS = new System.Windows.Forms.NumericUpDownTS();
             this.chkBlobPeakHold = new System.Windows.Forms.CheckBoxTS();
             this.chkPeakBlobInsideFilterOnly = new System.Windows.Forms.CheckBoxTS();
@@ -1822,7 +1822,6 @@
             this.comboDisplayThreadPriority = new System.Windows.Forms.ComboBoxTS();
             this.chkShowFPS = new System.Windows.Forms.CheckBoxTS();
             this.grpDisplayMultimeter = new System.Windows.Forms.GroupBoxTS();
-            this.lblSignalHistoryDurationMS = new System.Windows.Forms.LabelTS();
             this.udSignalHistoryDuration = new System.Windows.Forms.NumericUpDownTS();
             this.chkSignalHistory = new System.Windows.Forms.CheckBoxTS();
             this.radUV = new System.Windows.Forms.RadioButtonTS();
@@ -2539,18 +2538,6 @@
             this.chkAutoSaveTXProfile = new System.Windows.Forms.CheckBoxTS();
             this.udTXFilterLowSave = new System.Windows.Forms.NumericUpDownTS();
             this.udTXFilterHighSave = new System.Windows.Forms.NumericUpDownTS();
-            this.grpBoxMic = new System.Windows.Forms.GroupBoxTS();
-            this.labelTS617 = new System.Windows.Forms.LabelTS();
-            this.labelTS616 = new System.Windows.Forms.LabelTS();
-            this.radLineIn = new System.Windows.Forms.RadioButtonTS();
-            this.radMicIn = new System.Windows.Forms.RadioButtonTS();
-            this.udMicGainMin = new System.Windows.Forms.NumericUpDownTS();
-            this.udMicGainMax = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS21 = new System.Windows.Forms.LabelTS();
-            this.labelTS20 = new System.Windows.Forms.LabelTS();
-            this.udLineInBoost = new System.Windows.Forms.NumericUpDownTS();
-            this.chk20dbMicBoost = new System.Windows.Forms.CheckBoxTS();
-            this.lblLineInBoost = new System.Windows.Forms.LabelTS();
             this.chkTXExpert = new System.Windows.Forms.CheckBoxTS();
             this.grpTXProfileDef = new System.Windows.Forms.GroupBoxTS();
             this.btnTXProfileDefImport = new System.Windows.Forms.ButtonTS();
@@ -2580,6 +2567,18 @@
             this.udTXFilterLow = new System.Windows.Forms.NumericUpDownTS();
             this.lblTXFilterLow = new System.Windows.Forms.LabelTS();
             this.udTXFilterHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.grpBoxMic = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS617 = new System.Windows.Forms.LabelTS();
+            this.labelTS616 = new System.Windows.Forms.LabelTS();
+            this.radLineIn = new System.Windows.Forms.RadioButtonTS();
+            this.radMicIn = new System.Windows.Forms.RadioButtonTS();
+            this.udMicGainMin = new System.Windows.Forms.NumericUpDownTS();
+            this.udMicGainMax = new System.Windows.Forms.NumericUpDownTS();
+            this.labelTS21 = new System.Windows.Forms.LabelTS();
+            this.labelTS20 = new System.Windows.Forms.LabelTS();
+            this.udLineInBoost = new System.Windows.Forms.NumericUpDownTS();
+            this.chk20dbMicBoost = new System.Windows.Forms.CheckBoxTS();
+            this.lblLineInBoost = new System.Windows.Forms.LabelTS();
             this.tpPowerAmplifier = new System.Windows.Forms.TabPage();
             this.tcPowerAmplifier = new System.Windows.Forms.TabControl();
             this.tpGainByBand = new System.Windows.Forms.TabPage();
@@ -2848,9 +2847,9 @@
             this.labelTS605 = new System.Windows.Forms.LabelTS();
             this.labelTS604 = new System.Windows.Forms.LabelTS();
             this.chkNoiseFloorShowDBM = new System.Windows.Forms.CheckBoxTS();
-            this.chkPanadpatorGradient = new System.Windows.Forms.CheckBoxTS();
             this.grpPanadaptorGradient = new System.Windows.Forms.GroupBoxTS();
             this.btnLoadGradient = new System.Windows.Forms.ButtonTS();
+            this.chkPanadpatorGradient = new System.Windows.Forms.CheckBoxTS();
             this.btnSaveGradient = new System.Windows.Forms.ButtonTS();
             this.chkDataLineGradient = new System.Windows.Forms.CheckBoxTS();
             this.btnDefaultGradient = new System.Windows.Forms.ButtonTS();
@@ -2918,6 +2917,7 @@
             this.clrbtnPeakText = new Thetis.ColorButton();
             this.lblPeakText = new System.Windows.Forms.LabelTS();
             this.tpAppearanceMeter = new System.Windows.Forms.TabPage();
+            this.chkExpMHde = new System.Windows.Forms.CheckBoxTS();
             this.groupBoxTS14 = new System.Windows.Forms.GroupBoxTS();
             this.tbSignalHistoryAlpha = new System.Windows.Forms.TrackBarTS();
             this.clrbtnSignalHistoryColour = new Thetis.ColorButton();
@@ -2947,43 +2947,6 @@
             this.comboMeterType = new System.Windows.Forms.ComboBoxTS();
             this.tpAppearanceMeter2 = new System.Windows.Forms.TabPage();
             this.grpMultiMeterHolder = new System.Windows.Forms.GroupBoxTS();
-            this.btnMeterCopySettings = new System.Windows.Forms.ButtonTS();
-            this.btnMeterPasteSettings = new System.Windows.Forms.ButtonTS();
-            this.grpMeterItemVfoDisplaySettings = new System.Windows.Forms.GroupBoxTS();
-            this.labelTS177 = new System.Windows.Forms.LabelTS();
-            this.labelTS176 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayBackground = new Thetis.ColorButton();
-            this.labelTS175 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayFrequency = new Thetis.ColorButton();
-            this.labelTS174 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayBand = new Thetis.ColorButton();
-            this.labelTS173 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayFilter = new Thetis.ColorButton();
-            this.labelTS172 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayTx = new Thetis.ColorButton();
-            this.labelTS171 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayRx = new Thetis.ColorButton();
-            this.labelTS170 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplaySplit = new Thetis.ColorButton();
-            this.labelTS163 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplaySplitBack = new Thetis.ColorButton();
-            this.labelTS166 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMVfoDisplayMode = new Thetis.ColorButton();
-            this.clrbtnMMVfoDisplayTitle = new Thetis.ColorButton();
-            this.grpMeterItemClockSettings = new System.Windows.Forms.GroupBoxTS();
-            this.lblMMClockBackground = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMClockBackground = new Thetis.ColorButton();
-            this.labelTS164 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMDate = new Thetis.ColorButton();
-            this.labelTS162 = new System.Windows.Forms.LabelTS();
-            this.clrbtnMMTime = new Thetis.ColorButton();
-            this.clrbtnMMClockTitle = new Thetis.ColorButton();
-            this.chkMMClockTitle = new System.Windows.Forms.CheckBoxTS();
-            this.radMM24Clock = new System.Windows.Forms.RadioButtonTS();
-            this.radMM12Clock = new System.Windows.Forms.RadioButtonTS();
-            this.lblMMContainerBackground = new System.Windows.Forms.LabelTS();
-            this.clrbtnContainerBackground = new Thetis.ColorButton();
-            this.chkContainerBorder = new System.Windows.Forms.CheckBoxTS();
             this.grpMeterItemSettings = new System.Windows.Forms.GroupBoxTS();
             this.nudMeterItemIgnoreHistoryDuration = new System.Windows.Forms.NumericUpDownTS();
             this.lblMMHistoryIgnore = new System.Windows.Forms.LabelTS();
@@ -3034,6 +2997,43 @@
             this.chkMeterItemHistory = new System.Windows.Forms.CheckBoxTS();
             this.chkMeterItemFadeOnTx = new System.Windows.Forms.CheckBoxTS();
             this.chkMeterItemFadeOnRx = new System.Windows.Forms.CheckBoxTS();
+            this.grpMeterItemVfoDisplaySettings = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS177 = new System.Windows.Forms.LabelTS();
+            this.labelTS176 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayBackground = new Thetis.ColorButton();
+            this.labelTS175 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayFrequency = new Thetis.ColorButton();
+            this.labelTS174 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayBand = new Thetis.ColorButton();
+            this.labelTS173 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayFilter = new Thetis.ColorButton();
+            this.labelTS172 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayTx = new Thetis.ColorButton();
+            this.labelTS171 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayRx = new Thetis.ColorButton();
+            this.labelTS170 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplaySplit = new Thetis.ColorButton();
+            this.labelTS163 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplaySplitBack = new Thetis.ColorButton();
+            this.labelTS166 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMVfoDisplayMode = new Thetis.ColorButton();
+            this.clrbtnMMVfoDisplayTitle = new Thetis.ColorButton();
+            this.btnMeterCopySettings = new System.Windows.Forms.ButtonTS();
+            this.btnMeterPasteSettings = new System.Windows.Forms.ButtonTS();
+            this.grpMeterItemClockSettings = new System.Windows.Forms.GroupBoxTS();
+            this.lblMMClockBackground = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMClockBackground = new Thetis.ColorButton();
+            this.labelTS164 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMDate = new Thetis.ColorButton();
+            this.labelTS162 = new System.Windows.Forms.LabelTS();
+            this.clrbtnMMTime = new Thetis.ColorButton();
+            this.clrbtnMMClockTitle = new Thetis.ColorButton();
+            this.chkMMClockTitle = new System.Windows.Forms.CheckBoxTS();
+            this.radMM24Clock = new System.Windows.Forms.RadioButtonTS();
+            this.radMM12Clock = new System.Windows.Forms.RadioButtonTS();
+            this.lblMMContainerBackground = new System.Windows.Forms.LabelTS();
+            this.clrbtnContainerBackground = new Thetis.ColorButton();
+            this.chkContainerBorder = new System.Windows.Forms.CheckBoxTS();
             this.btnMeterUp = new System.Windows.Forms.ButtonTS();
             this.btnMeterDown = new System.Windows.Forms.ButtonTS();
             this.btnRemoveMeterItem = new System.Windows.Forms.ButtonTS();
@@ -3079,6 +3079,7 @@
             this.clrbtnTXText = new Thetis.ColorButton();
             this.lblTXTextColor = new System.Windows.Forms.LabelTS();
             this.tpAppearanceCollapsible = new System.Windows.Forms.TabPage();
+            this.chkColMHde = new System.Windows.Forms.CheckBoxTS();
             this.txtCollapsedHeight = new System.Windows.Forms.TextBoxTS();
             this.txtCollapsedWidth = new System.Windows.Forms.TextBoxTS();
             this.grpBoxCollapsible = new System.Windows.Forms.GroupBox();
@@ -3338,10 +3339,24 @@
             this.labelTSPort = new System.Windows.Forms.LabelTS();
             this.chkEnableAndromeda = new System.Windows.Forms.CheckBoxTS();
             this.tpTests = new System.Windows.Forms.TabPage();
-            this.chkShowDisplayDebug = new System.Windows.Forms.CheckBoxTS();
-            this.chkShowControlDebug = new System.Windows.Forms.CheckBoxTS();
-            this.btnShowSeqLog = new System.Windows.Forms.ButtonTS();
             this.grpBoxTS1 = new System.Windows.Forms.GroupBoxTS();
+            this.grpSigGenReceive = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS312 = new System.Windows.Forms.LabelTS();
+            this.chkSigGenRX1 = new System.Windows.Forms.CheckBoxTS();
+            this.grpRXGenSweep = new System.Windows.Forms.GroupBoxTS();
+            this.labelTS307 = new System.Windows.Forms.LabelTS();
+            this.udRXGenSweepRate = new System.Windows.Forms.NumericUpDownTS();
+            this.labelTS308 = new System.Windows.Forms.LabelTS();
+            this.udRXGenSweepHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.labelTS309 = new System.Windows.Forms.LabelTS();
+            this.udRXGenSweepLow = new System.Windows.Forms.NumericUpDownTS();
+            this.udRXGenFreq = new System.Windows.Forms.NumericUpDownTS();
+            this.labelTS310 = new System.Windows.Forms.LabelTS();
+            this.udRXGenScale = new System.Windows.Forms.NumericUpDownTS();
+            this.labelTS311 = new System.Windows.Forms.LabelTS();
+            this.chkSigGenRX2 = new System.Windows.Forms.CheckBoxTS();
+            this.lblSigGenRXMode = new System.Windows.Forms.LabelTS();
+            this.cmboSigGenRXMode = new System.Windows.Forms.ComboBoxTS();
             this.grpSigGenTransmit = new System.Windows.Forms.GroupBoxTS();
             this.grpPulse = new System.Windows.Forms.GroupBoxTS();
             this.udTXGenPulseTransition = new System.Windows.Forms.NumericUpDownTS();
@@ -3364,23 +3379,9 @@
             this.labelTS303 = new System.Windows.Forms.LabelTS();
             this.lblSigGenTXMode = new System.Windows.Forms.LabelTS();
             this.cmboSigGenTXMode = new System.Windows.Forms.ComboBoxTS();
-            this.grpSigGenReceive = new System.Windows.Forms.GroupBoxTS();
-            this.labelTS312 = new System.Windows.Forms.LabelTS();
-            this.chkSigGenRX1 = new System.Windows.Forms.CheckBoxTS();
-            this.grpRXGenSweep = new System.Windows.Forms.GroupBoxTS();
-            this.labelTS307 = new System.Windows.Forms.LabelTS();
-            this.udRXGenSweepRate = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS308 = new System.Windows.Forms.LabelTS();
-            this.udRXGenSweepHigh = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS309 = new System.Windows.Forms.LabelTS();
-            this.udRXGenSweepLow = new System.Windows.Forms.NumericUpDownTS();
-            this.udRXGenFreq = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS310 = new System.Windows.Forms.LabelTS();
-            this.udRXGenScale = new System.Windows.Forms.NumericUpDownTS();
-            this.labelTS311 = new System.Windows.Forms.LabelTS();
-            this.chkSigGenRX2 = new System.Windows.Forms.CheckBoxTS();
-            this.lblSigGenRXMode = new System.Windows.Forms.LabelTS();
-            this.cmboSigGenRXMode = new System.Windows.Forms.ComboBoxTS();
+            this.chkShowDisplayDebug = new System.Windows.Forms.CheckBoxTS();
+            this.chkShowControlDebug = new System.Windows.Forms.CheckBoxTS();
+            this.btnShowSeqLog = new System.Windows.Forms.ButtonTS();
             this.grpTestTXIMD = new System.Windows.Forms.GroupBoxTS();
             this.radUseFixedDrive2Tone = new System.Windows.Forms.RadioButtonTS();
             this.radUseDriveSlider2Tone = new System.Windows.Forms.RadioButtonTS();
@@ -3398,11 +3399,11 @@
             this.chkTestIMD = new System.Windows.Forms.CheckBoxTS();
             this.lblTestToneFreq1 = new System.Windows.Forms.LabelTS();
             this.udTestIMDFreq1 = new System.Windows.Forms.NumericUpDownTS();
+            this.grpTestAudioBalance = new System.Windows.Forms.GroupBoxTS();
+            this.btnTestAudioBalStart = new System.Windows.Forms.ButtonTS();
             this.grpImpulseTest = new System.Windows.Forms.GroupBoxTS();
             this.udImpulseNum = new System.Windows.Forms.NumericUpDownTS();
             this.btnImpulse = new System.Windows.Forms.ButtonTS();
-            this.grpTestAudioBalance = new System.Windows.Forms.GroupBoxTS();
-            this.btnTestAudioBalStart = new System.Windows.Forms.ButtonTS();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnExportDB = new System.Windows.Forms.ButtonTS();
@@ -4099,10 +4100,6 @@
             this.grpExtTXInhibit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLowSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHighSave)).BeginInit();
-            this.grpBoxMic.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMax)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udLineInBoost)).BeginInit();
             this.grpTXProfileDef.SuspendLayout();
             this.grpTXAM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXAMCarrierLevel)).BeginInit();
@@ -4114,6 +4111,10 @@
             this.grpTXFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).BeginInit();
+            this.grpBoxMic.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMax)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udLineInBoost)).BeginInit();
             this.tpPowerAmplifier.SuspendLayout();
             this.tcPowerAmplifier.SuspendLayout();
             this.tpGainByBand.SuspendLayout();
@@ -4239,8 +4240,6 @@
             this.grpAppearanceMeter.SuspendLayout();
             this.tpAppearanceMeter2.SuspendLayout();
             this.grpMultiMeterHolder.SuspendLayout();
-            this.grpMeterItemVfoDisplaySettings.SuspendLayout();
-            this.grpMeterItemClockSettings.SuspendLayout();
             this.grpMeterItemSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemIgnoreHistoryDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemEyeBezelScale)).BeginInit();
@@ -4251,6 +4250,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemUpdateRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbMeterItemHistoryAlpha)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemHistoryDuration)).BeginInit();
+            this.grpMeterItemVfoDisplaySettings.SuspendLayout();
+            this.grpMeterItemClockSettings.SuspendLayout();
             this.tcAppearanceTXDisplay.SuspendLayout();
             this.grpAppTXWaterfall.SuspendLayout();
             this.groupBoxTS3.SuspendLayout();
@@ -4316,6 +4317,13 @@
             this.grpAndr.SuspendLayout();
             this.tpTests.SuspendLayout();
             this.grpBoxTS1.SuspendLayout();
+            this.grpSigGenReceive.SuspendLayout();
+            this.grpRXGenSweep.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepRate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepHigh)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepLow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udRXGenFreq)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udRXGenScale)).BeginInit();
             this.grpSigGenTransmit.SuspendLayout();
             this.grpPulse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseTransition)).BeginInit();
@@ -4327,22 +4335,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepLow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXGenFreq)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXGenScale)).BeginInit();
-            this.grpSigGenReceive.SuspendLayout();
-            this.grpRXGenSweep.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepRate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepHigh)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepLow)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udRXGenFreq)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udRXGenScale)).BeginInit();
             this.grpTestTXIMD.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udFreq2Delay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTwoToneLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDFreq2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDPower)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDFreq1)).BeginInit();
+            this.grpTestAudioBalance.SuspendLayout();
             this.grpImpulseTest.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udImpulseNum)).BeginInit();
-            this.grpTestAudioBalance.SuspendLayout();
             this.grpDiagInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTS5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTS7)).BeginInit();
@@ -6748,9 +6749,9 @@
             this.grpInfo.Controls.Add(this.btnExplorer);
             this.grpInfo.Controls.Add(this.lblDataBase);
             this.grpInfo.Controls.Add(this.lblDBTitle);
-            this.grpInfo.Location = new System.Drawing.Point(28, 215);
+            this.grpInfo.Location = new System.Drawing.Point(8, 243);
             this.grpInfo.Name = "grpInfo";
-            this.grpInfo.Size = new System.Drawing.Size(348, 129);
+            this.grpInfo.Size = new System.Drawing.Size(350, 129);
             this.grpInfo.TabIndex = 41;
             this.grpInfo.TabStop = false;
             this.grpInfo.Text = "General Information:";
@@ -6758,7 +6759,7 @@
             // btnErrorLog
             // 
             this.btnErrorLog.Image = null;
-            this.btnErrorLog.Location = new System.Drawing.Point(11, 97);
+            this.btnErrorLog.Location = new System.Drawing.Point(8, 97);
             this.btnErrorLog.Name = "btnErrorLog";
             this.btnErrorLog.Selectable = true;
             this.btnErrorLog.Size = new System.Drawing.Size(130, 23);
@@ -6770,7 +6771,7 @@
             // btnExplorer
             // 
             this.btnExplorer.Image = null;
-            this.btnExplorer.Location = new System.Drawing.Point(11, 68);
+            this.btnExplorer.Location = new System.Drawing.Point(8, 68);
             this.btnExplorer.Name = "btnExplorer";
             this.btnExplorer.Selectable = true;
             this.btnExplorer.Size = new System.Drawing.Size(75, 23);
@@ -6805,8 +6806,8 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Thetis.Properties.Resources.ukraine_flag;
-            this.pictureBox1.Location = new System.Drawing.Point(25, 398);
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(19, 398);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(44, 28);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -6830,7 +6831,7 @@
             // lblTimeout
             // 
             this.lblTimeout.Image = null;
-            this.lblTimeout.Location = new System.Drawing.Point(286, 359);
+            this.lblTimeout.Location = new System.Drawing.Point(285, 379);
             this.lblTimeout.Name = "lblTimeout";
             this.lblTimeout.Size = new System.Drawing.Size(87, 13);
             this.lblTimeout.TabIndex = 38;
@@ -6839,7 +6840,7 @@
             // lblShowTimeoutText
             // 
             this.lblShowTimeoutText.Image = null;
-            this.lblShowTimeoutText.Location = new System.Drawing.Point(27, 359);
+            this.lblShowTimeoutText.Location = new System.Drawing.Point(26, 379);
             this.lblShowTimeoutText.Name = "lblShowTimeoutText";
             this.lblShowTimeoutText.Size = new System.Drawing.Size(253, 13);
             this.lblShowTimeoutText.TabIndex = 37;
@@ -6996,7 +6997,7 @@
             // chkNetworkThrottleIndexTweak
             // 
             this.chkNetworkThrottleIndexTweak.Image = null;
-            this.chkNetworkThrottleIndexTweak.Location = new System.Drawing.Point(28, 83);
+            this.chkNetworkThrottleIndexTweak.Location = new System.Drawing.Point(28, 80);
             this.chkNetworkThrottleIndexTweak.Name = "chkNetworkThrottleIndexTweak";
             this.chkNetworkThrottleIndexTweak.Size = new System.Drawing.Size(186, 16);
             this.chkNetworkThrottleIndexTweak.TabIndex = 3;
@@ -7012,7 +7013,7 @@
             this.chkNetworkWDT.Image = null;
             this.chkNetworkWDT.Location = new System.Drawing.Point(28, 60);
             this.chkNetworkWDT.Name = "chkNetworkWDT";
-            this.chkNetworkWDT.Size = new System.Drawing.Size(152, 22);
+            this.chkNetworkWDT.Size = new System.Drawing.Size(152, 16);
             this.chkNetworkWDT.TabIndex = 2;
             this.chkNetworkWDT.Text = "Network Watchdog";
             this.toolTip1.SetToolTip(this.chkNetworkWDT, "Resets software/firmware if network becomes inactive.");
@@ -7052,7 +7053,7 @@
             // 
             this.radStaticIP4.AutoSize = true;
             this.radStaticIP4.Image = null;
-            this.radStaticIP4.Location = new System.Drawing.Point(198, 90);
+            this.radStaticIP4.Location = new System.Drawing.Point(198, 93);
             this.radStaticIP4.Name = "radStaticIP4";
             this.radStaticIP4.Size = new System.Drawing.Size(14, 13);
             this.radStaticIP4.TabIndex = 19;
@@ -7178,7 +7179,7 @@
             // 
             this.radStaticIP3.AutoSize = true;
             this.radStaticIP3.Image = null;
-            this.radStaticIP3.Location = new System.Drawing.Point(198, 64);
+            this.radStaticIP3.Location = new System.Drawing.Point(198, 67);
             this.radStaticIP3.Name = "radStaticIP3";
             this.radStaticIP3.Size = new System.Drawing.Size(14, 13);
             this.radStaticIP3.TabIndex = 18;
@@ -7304,7 +7305,7 @@
             // 
             this.radStaticIP2.AutoSize = true;
             this.radStaticIP2.Image = null;
-            this.radStaticIP2.Location = new System.Drawing.Point(198, 38);
+            this.radStaticIP2.Location = new System.Drawing.Point(198, 41);
             this.radStaticIP2.Name = "radStaticIP2";
             this.radStaticIP2.Size = new System.Drawing.Size(14, 13);
             this.radStaticIP2.TabIndex = 17;
@@ -7316,7 +7317,7 @@
             this.radStaticIP1.Checked = true;
             this.radStaticIP1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.radStaticIP1.Image = null;
-            this.radStaticIP1.Location = new System.Drawing.Point(198, 13);
+            this.radStaticIP1.Location = new System.Drawing.Point(198, 15);
             this.radStaticIP1.Name = "radStaticIP1";
             this.radStaticIP1.Size = new System.Drawing.Size(14, 13);
             this.radStaticIP1.TabIndex = 16;
@@ -7596,25 +7597,28 @@
             this.grpFRSRegion.Controls.Add(this.picWarningRegionExtended);
             this.grpFRSRegion.Controls.Add(this.chkExtended);
             this.grpFRSRegion.Controls.Add(this.comboFRSRegion);
-            this.grpFRSRegion.Location = new System.Drawing.Point(28, 134);
+            this.grpFRSRegion.Location = new System.Drawing.Point(8, 108);
             this.grpFRSRegion.Name = "grpFRSRegion";
-            this.grpFRSRegion.Size = new System.Drawing.Size(150, 75);
+            this.grpFRSRegion.Size = new System.Drawing.Size(153, 94);
             this.grpFRSRegion.TabIndex = 33;
             this.grpFRSRegion.TabStop = false;
             this.grpFRSRegion.Text = "Region";
             // 
             // lblWarningRegionExtended
             // 
+            this.lblWarningRegionExtended.Enabled = false;
             this.lblWarningRegionExtended.Image = null;
-            this.lblWarningRegionExtended.Location = new System.Drawing.Point(41, 75);
+            this.lblWarningRegionExtended.Location = new System.Drawing.Point(22, 85);
             this.lblWarningRegionExtended.Name = "lblWarningRegionExtended";
-            this.lblWarningRegionExtended.Size = new System.Drawing.Size(100, 58);
+            this.lblWarningRegionExtended.Size = new System.Drawing.Size(125, 45);
             this.lblWarningRegionExtended.TabIndex = 38;
             this.lblWarningRegionExtended.Text = "Changing this setting will reset your band stack entries";
+            this.lblWarningRegionExtended.Click += new System.EventHandler(this.lblWarningRegionExtended_Click);
             // 
             // picWarningRegionExtended
             // 
-            this.picWarningRegionExtended.Location = new System.Drawing.Point(12, 75);
+            this.picWarningRegionExtended.Enabled = false;
+            this.picWarningRegionExtended.Location = new System.Drawing.Point(6, 87);
             this.picWarningRegionExtended.Name = "picWarningRegionExtended";
             this.picWarningRegionExtended.Size = new System.Drawing.Size(20, 20);
             this.picWarningRegionExtended.TabIndex = 37;
@@ -7622,14 +7626,14 @@
             // 
             // chkExtended
             // 
-            this.chkExtended.AutoSize = true;
             this.chkExtended.Image = null;
-            this.chkExtended.Location = new System.Drawing.Point(12, 52);
+            this.chkExtended.Location = new System.Drawing.Point(8, 60);
             this.chkExtended.Name = "chkExtended";
             this.chkExtended.Size = new System.Drawing.Size(74, 17);
             this.chkExtended.TabIndex = 1;
             this.chkExtended.Text = "Extended";
-            this.toolTip1.SetToolTip(this.chkExtended, "Enable extended TX (out of band)");
+            this.toolTip1.SetToolTip(this.chkExtended, "Enable extended TX (out of band) Changing this setting will reset your band stack" +
+        " entries");
             this.chkExtended.UseVisualStyleBackColor = true;
             this.chkExtended.CheckedChanged += new System.EventHandler(this.ChkExtended_CheckedChanged);
             this.chkExtended.MouseEnter += new System.EventHandler(this.chkExtended_MouseEnter);
@@ -7638,6 +7642,7 @@
             // comboFRSRegion
             // 
             this.comboFRSRegion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboFRSRegion.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboFRSRegion.FormattingEnabled = true;
             this.comboFRSRegion.Items.AddRange(new object[] {
             "Australia",
@@ -7664,9 +7669,9 @@
             "Region2",
             "Region3",
             "Germany"});
-            this.comboFRSRegion.Location = new System.Drawing.Point(12, 21);
+            this.comboFRSRegion.Location = new System.Drawing.Point(8, 25);
             this.comboFRSRegion.Name = "comboFRSRegion";
-            this.comboFRSRegion.Size = new System.Drawing.Size(113, 21);
+            this.comboFRSRegion.Size = new System.Drawing.Size(136, 23);
             this.comboFRSRegion.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboFRSRegion, "Select Region for your location");
             this.comboFRSRegion.SelectedIndexChanged += new System.EventHandler(this.comboFRSRegion_SelectedIndexChanged);
@@ -7679,7 +7684,7 @@
             // 
             this.grpGeneralModel.Controls.Add(this.comboRadioModel);
             this.grpGeneralModel.Controls.Add(this.chkGeneralRXOnly);
-            this.grpGeneralModel.Location = new System.Drawing.Point(25, 8);
+            this.grpGeneralModel.Location = new System.Drawing.Point(8, 8);
             this.grpGeneralModel.Name = "grpGeneralModel";
             this.grpGeneralModel.Size = new System.Drawing.Size(153, 94);
             this.grpGeneralModel.TabIndex = 25;
@@ -7701,7 +7706,7 @@
             "ANAN-200D",
             "ANAN-7000DLE",
             "ANAN-8000DLE"});
-            this.comboRadioModel.Location = new System.Drawing.Point(11, 25);
+            this.comboRadioModel.Location = new System.Drawing.Point(8, 25);
             this.comboRadioModel.Name = "comboRadioModel";
             this.comboRadioModel.Size = new System.Drawing.Size(136, 23);
             this.comboRadioModel.TabIndex = 36;
@@ -7710,7 +7715,7 @@
             // chkGeneralRXOnly
             // 
             this.chkGeneralRXOnly.Image = null;
-            this.chkGeneralRXOnly.Location = new System.Drawing.Point(11, 60);
+            this.chkGeneralRXOnly.Location = new System.Drawing.Point(8, 60);
             this.chkGeneralRXOnly.Name = "chkGeneralRXOnly";
             this.chkGeneralRXOnly.Size = new System.Drawing.Size(96, 16);
             this.chkGeneralRXOnly.TabIndex = 11;
@@ -7778,9 +7783,9 @@
             this.groupBoxHPSDRHW.Controls.Add(this.chkAlexPresent);
             this.groupBoxHPSDRHW.Controls.Add(this.chkMercuryPresent);
             this.groupBoxHPSDRHW.Controls.Add(this.chkPennyPresent);
-            this.groupBoxHPSDRHW.Location = new System.Drawing.Point(208, 8);
+            this.groupBoxHPSDRHW.Location = new System.Drawing.Point(198, 8);
             this.groupBoxHPSDRHW.Name = "groupBoxHPSDRHW";
-            this.groupBoxHPSDRHW.Size = new System.Drawing.Size(160, 188);
+            this.groupBoxHPSDRHW.Size = new System.Drawing.Size(160, 196);
             this.groupBoxHPSDRHW.TabIndex = 30;
             this.groupBoxHPSDRHW.TabStop = false;
             this.groupBoxHPSDRHW.Text = "Hardware Options";
@@ -7788,6 +7793,7 @@
             // chkN2ADR
             // 
             this.chkN2ADR.AutoSize = true;
+            this.chkN2ADR.Image = null;
             this.chkN2ADR.Location = new System.Drawing.Point(25, 160);
             this.chkN2ADR.Name = "chkN2ADR";
             this.chkN2ADR.Size = new System.Drawing.Size(124, 17);
@@ -7887,9 +7893,9 @@
             this.grpGeneralHardwareORION.Controls.Add(this.lblOrionBias);
             this.grpGeneralHardwareORION.Controls.Add(this.panelOrionMic);
             this.grpGeneralHardwareORION.Controls.Add(this.lblOrionMic);
-            this.grpGeneralHardwareORION.Location = new System.Drawing.Point(208, 8);
+            this.grpGeneralHardwareORION.Location = new System.Drawing.Point(198, 8);
             this.grpGeneralHardwareORION.Name = "grpGeneralHardwareORION";
-            this.grpGeneralHardwareORION.Size = new System.Drawing.Size(160, 171);
+            this.grpGeneralHardwareORION.Size = new System.Drawing.Size(160, 196);
             this.grpGeneralHardwareORION.TabIndex = 8;
             this.grpGeneralHardwareORION.TabStop = false;
             this.grpGeneralHardwareORION.Text = "Hardware Options";
@@ -8139,7 +8145,7 @@
             0,
             0,
             0});
-            this.udSpaceMoxDelay.Location = new System.Drawing.Point(84, 195);
+            this.udSpaceMoxDelay.Location = new System.Drawing.Point(93, 193);
             this.udSpaceMoxDelay.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -8165,12 +8171,12 @@
             // labelTS521
             // 
             this.labelTS521.Image = null;
-            this.labelTS521.Location = new System.Drawing.Point(0, 192);
+            this.labelTS521.Location = new System.Drawing.Point(8, 190);
             this.labelTS521.Name = "labelTS521";
             this.labelTS521.Size = new System.Drawing.Size(71, 23);
             this.labelTS521.TabIndex = 29;
             this.labelTS521.Text = "PTT Delay";
-            this.labelTS521.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelTS521.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udRFDelay
             // 
@@ -8180,7 +8186,7 @@
             0,
             0,
             0});
-            this.udRFDelay.Location = new System.Drawing.Point(84, 163);
+            this.udRFDelay.Location = new System.Drawing.Point(93, 163);
             this.udRFDelay.Maximum = new decimal(new int[] {
             500,
             0,
@@ -8212,7 +8218,7 @@
             0,
             0,
             0});
-            this.udMoxDelay.Location = new System.Drawing.Point(84, 133);
+            this.udMoxDelay.Location = new System.Drawing.Point(93, 133);
             this.udMoxDelay.Maximum = new decimal(new int[] {
             500,
             0,
@@ -8239,12 +8245,12 @@
             // lblRFDelay
             // 
             this.lblRFDelay.Image = null;
-            this.lblRFDelay.Location = new System.Drawing.Point(11, 160);
+            this.lblRFDelay.Location = new System.Drawing.Point(8, 160);
             this.lblRFDelay.Name = "lblRFDelay";
             this.lblRFDelay.Size = new System.Drawing.Size(60, 23);
             this.lblRFDelay.TabIndex = 23;
             this.lblRFDelay.Text = "RF Delay";
-            this.lblRFDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblRFDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblRFDelay.Visible = false;
             // 
             // udGenPTTOutDelay
@@ -8254,7 +8260,7 @@
             0,
             0,
             0});
-            this.udGenPTTOutDelay.Location = new System.Drawing.Point(84, 103);
+            this.udGenPTTOutDelay.Location = new System.Drawing.Point(93, 103);
             this.udGenPTTOutDelay.Maximum = new decimal(new int[] {
             500,
             0,
@@ -8280,12 +8286,12 @@
             // lblMoxDelay
             // 
             this.lblMoxDelay.Image = null;
-            this.lblMoxDelay.Location = new System.Drawing.Point(6, 130);
+            this.lblMoxDelay.Location = new System.Drawing.Point(8, 130);
             this.lblMoxDelay.Name = "lblMoxDelay";
             this.lblMoxDelay.Size = new System.Drawing.Size(65, 23);
             this.lblMoxDelay.TabIndex = 21;
             this.lblMoxDelay.Text = "MOX Delay";
-            this.lblMoxDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblMoxDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblMoxDelay.Visible = false;
             // 
             // chkGenAllModeMicPTT
@@ -8302,7 +8308,7 @@
             // chkGeneralDisablePTT
             // 
             this.chkGeneralDisablePTT.Image = null;
-            this.chkGeneralDisablePTT.Location = new System.Drawing.Point(9, 19);
+            this.chkGeneralDisablePTT.Location = new System.Drawing.Point(8, 19);
             this.chkGeneralDisablePTT.Name = "chkGeneralDisablePTT";
             this.chkGeneralDisablePTT.Size = new System.Drawing.Size(104, 24);
             this.chkGeneralDisablePTT.TabIndex = 4;
@@ -8313,7 +8319,7 @@
             // chkSplitOff
             // 
             this.chkSplitOff.Image = null;
-            this.chkSplitOff.Location = new System.Drawing.Point(9, 55);
+            this.chkSplitOff.Location = new System.Drawing.Point(8, 55);
             this.chkSplitOff.Name = "chkSplitOff";
             this.chkSplitOff.Size = new System.Drawing.Size(123, 32);
             this.chkSplitOff.TabIndex = 12;
@@ -8324,12 +8330,12 @@
             // lblPTTOutDelay
             // 
             this.lblPTTOutDelay.Image = null;
-            this.lblPTTOutDelay.Location = new System.Drawing.Point(6, 100);
+            this.lblPTTOutDelay.Location = new System.Drawing.Point(8, 100);
             this.lblPTTOutDelay.Name = "lblPTTOutDelay";
             this.lblPTTOutDelay.Size = new System.Drawing.Size(65, 23);
             this.lblPTTOutDelay.TabIndex = 18;
             this.lblPTTOutDelay.Text = "RX Delay";
-            this.lblPTTOutDelay.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblPTTOutDelay.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpHermesStepAttenuator
             // 
@@ -8455,23 +8461,23 @@
             // 
             // labelTS322
             // 
-            this.labelTS322.AutoSize = true;
             this.labelTS322.Image = null;
-            this.labelTS322.Location = new System.Drawing.Point(16, 22);
+            this.labelTS322.Location = new System.Drawing.Point(8, 16);
             this.labelTS322.Name = "labelTS322";
-            this.labelTS322.Size = new System.Drawing.Size(67, 13);
+            this.labelTS322.Size = new System.Drawing.Size(67, 23);
             this.labelTS322.TabIndex = 38;
             this.labelTS322.Text = "Key-Up (mS)";
+            this.labelTS322.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelTS325
             // 
-            this.labelTS325.AutoSize = true;
             this.labelTS325.Image = null;
-            this.labelTS325.Location = new System.Drawing.Point(3, 52);
+            this.labelTS325.Location = new System.Drawing.Point(8, 46);
             this.labelTS325.Name = "labelTS325";
-            this.labelTS325.Size = new System.Drawing.Size(83, 13);
+            this.labelTS325.Size = new System.Drawing.Size(83, 23);
             this.labelTS325.TabIndex = 31;
             this.labelTS325.Text = "Key-Down (mS)";
+            this.labelTS325.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udCWKeyUpDelay
             // 
@@ -8480,7 +8486,7 @@
             0,
             0,
             0});
-            this.udCWKeyUpDelay.Location = new System.Drawing.Point(104, 19);
+            this.udCWKeyUpDelay.Location = new System.Drawing.Point(93, 19);
             this.udCWKeyUpDelay.Maximum = new decimal(new int[] {
             500,
             0,
@@ -8510,7 +8516,7 @@
             0,
             0,
             0});
-            this.udHWKeyDownDelay.Location = new System.Drawing.Point(104, 50);
+            this.udHWKeyDownDelay.Location = new System.Drawing.Point(93, 49);
             this.udHWKeyDownDelay.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -8545,7 +8551,7 @@
             // 
             // txtGenCustomTitle
             // 
-            this.txtGenCustomTitle.Location = new System.Drawing.Point(16, 24);
+            this.txtGenCustomTitle.Location = new System.Drawing.Point(16, 21);
             this.txtGenCustomTitle.MaxLength = 50;
             this.txtGenCustomTitle.Name = "txtGenCustomTitle";
             this.txtGenCustomTitle.Size = new System.Drawing.Size(137, 22);
@@ -8586,7 +8592,7 @@
             // 
             this.chkCTUNignore0beat.AutoSize = true;
             this.chkCTUNignore0beat.Image = null;
-            this.chkCTUNignore0beat.Location = new System.Drawing.Point(145, 59);
+            this.chkCTUNignore0beat.Location = new System.Drawing.Point(145, 63);
             this.chkCTUNignore0beat.Name = "chkCTUNignore0beat";
             this.chkCTUNignore0beat.Size = new System.Drawing.Size(107, 17);
             this.chkCTUNignore0beat.TabIndex = 20;
@@ -8601,7 +8607,7 @@
             this.chkZTBstoreLock.AutoSize = true;
             this.chkZTBstoreLock.Enabled = false;
             this.chkZTBstoreLock.Image = null;
-            this.chkZTBstoreLock.Location = new System.Drawing.Point(162, 40);
+            this.chkZTBstoreLock.Location = new System.Drawing.Point(162, 43);
             this.chkZTBstoreLock.Name = "chkZTBstoreLock";
             this.chkZTBstoreLock.Size = new System.Drawing.Size(49, 17);
             this.chkZTBstoreLock.TabIndex = 19;
@@ -8614,7 +8620,7 @@
             // 
             this.chkZTBIsRecallStore.AutoSize = true;
             this.chkZTBIsRecallStore.Image = null;
-            this.chkZTBIsRecallStore.Location = new System.Drawing.Point(145, 20);
+            this.chkZTBIsRecallStore.Location = new System.Drawing.Point(145, 23);
             this.chkZTBIsRecallStore.Name = "chkZTBIsRecallStore";
             this.chkZTBIsRecallStore.Size = new System.Drawing.Size(119, 17);
             this.chkZTBIsRecallStore.TabIndex = 18;
@@ -8628,7 +8634,7 @@
             // 
             this.chkCTLimitDragMouseOnly.Enabled = false;
             this.chkCTLimitDragMouseOnly.Image = null;
-            this.chkCTLimitDragMouseOnly.Location = new System.Drawing.Point(147, 200);
+            this.chkCTLimitDragMouseOnly.Location = new System.Drawing.Point(145, 203);
             this.chkCTLimitDragMouseOnly.Name = "chkCTLimitDragMouseOnly";
             this.chkCTLimitDragMouseOnly.Size = new System.Drawing.Size(109, 16);
             this.chkCTLimitDragMouseOnly.TabIndex = 17;
@@ -8640,7 +8646,7 @@
             // 
             this.chkCTLimitDragToSpectral.Enabled = false;
             this.chkCTLimitDragToSpectral.Image = null;
-            this.chkCTLimitDragToSpectral.Location = new System.Drawing.Point(34, 200);
+            this.chkCTLimitDragToSpectral.Location = new System.Drawing.Point(34, 203);
             this.chkCTLimitDragToSpectral.Name = "chkCTLimitDragToSpectral";
             this.chkCTLimitDragToSpectral.Size = new System.Drawing.Size(107, 16);
             this.chkCTLimitDragToSpectral.TabIndex = 16;
@@ -8651,7 +8657,7 @@
             // chkTuneStepPerModeRX1
             // 
             this.chkTuneStepPerModeRX1.Image = null;
-            this.chkTuneStepPerModeRX1.Location = new System.Drawing.Point(16, 344);
+            this.chkTuneStepPerModeRX1.Location = new System.Drawing.Point(16, 343);
             this.chkTuneStepPerModeRX1.Name = "chkTuneStepPerModeRX1";
             this.chkTuneStepPerModeRX1.Size = new System.Drawing.Size(240, 16);
             this.chkTuneStepPerModeRX1.TabIndex = 15;
@@ -8664,7 +8670,7 @@
             // chkVFOSyncLinksCTUN
             // 
             this.chkVFOSyncLinksCTUN.Image = null;
-            this.chkVFOSyncLinksCTUN.Location = new System.Drawing.Point(16, 325);
+            this.chkVFOSyncLinksCTUN.Location = new System.Drawing.Point(16, 323);
             this.chkVFOSyncLinksCTUN.Name = "chkVFOSyncLinksCTUN";
             this.chkVFOSyncLinksCTUN.Size = new System.Drawing.Size(240, 16);
             this.chkVFOSyncLinksCTUN.TabIndex = 14;
@@ -8679,7 +8685,7 @@
             this.chkReverseShiftZoomModifier.AutoSize = true;
             this.chkReverseShiftZoomModifier.Enabled = false;
             this.chkReverseShiftZoomModifier.Image = null;
-            this.chkReverseShiftZoomModifier.Location = new System.Drawing.Point(34, 302);
+            this.chkReverseShiftZoomModifier.Location = new System.Drawing.Point(34, 303);
             this.chkReverseShiftZoomModifier.Name = "chkReverseShiftZoomModifier";
             this.chkReverseShiftZoomModifier.Size = new System.Drawing.Size(65, 17);
             this.chkReverseShiftZoomModifier.TabIndex = 13;
@@ -8691,7 +8697,7 @@
             // chkZoomShiftModifier
             // 
             this.chkZoomShiftModifier.Image = null;
-            this.chkZoomShiftModifier.Location = new System.Drawing.Point(16, 282);
+            this.chkZoomShiftModifier.Location = new System.Drawing.Point(16, 283);
             this.chkZoomShiftModifier.Name = "chkZoomShiftModifier";
             this.chkZoomShiftModifier.Size = new System.Drawing.Size(240, 16);
             this.chkZoomShiftModifier.TabIndex = 12;
@@ -8703,7 +8709,7 @@
             // chkITSync
             // 
             this.chkITSync.Image = null;
-            this.chkITSync.Location = new System.Drawing.Point(16, 262);
+            this.chkITSync.Location = new System.Drawing.Point(16, 263);
             this.chkITSync.Name = "chkITSync";
             this.chkITSync.Size = new System.Drawing.Size(240, 16);
             this.chkITSync.TabIndex = 11;
@@ -8715,7 +8721,7 @@
             // chkWheelTunesOutsideSpectral
             // 
             this.chkWheelTunesOutsideSpectral.Image = null;
-            this.chkWheelTunesOutsideSpectral.Location = new System.Drawing.Point(16, 242);
+            this.chkWheelTunesOutsideSpectral.Location = new System.Drawing.Point(16, 243);
             this.chkWheelTunesOutsideSpectral.Name = "chkWheelTunesOutsideSpectral";
             this.chkWheelTunesOutsideSpectral.Size = new System.Drawing.Size(240, 16);
             this.chkWheelTunesOutsideSpectral.TabIndex = 11;
@@ -8726,7 +8732,7 @@
             // chkWheelReverse
             // 
             this.chkWheelReverse.Image = null;
-            this.chkWheelReverse.Location = new System.Drawing.Point(16, 222);
+            this.chkWheelReverse.Location = new System.Drawing.Point(16, 223);
             this.chkWheelReverse.Name = "chkWheelReverse";
             this.chkWheelReverse.Size = new System.Drawing.Size(240, 16);
             this.chkWheelReverse.TabIndex = 10;
@@ -8737,7 +8743,7 @@
             // chkClickTuneDrag
             // 
             this.chkClickTuneDrag.Image = null;
-            this.chkClickTuneDrag.Location = new System.Drawing.Point(16, 180);
+            this.chkClickTuneDrag.Location = new System.Drawing.Point(16, 183);
             this.chkClickTuneDrag.Name = "chkClickTuneDrag";
             this.chkClickTuneDrag.Size = new System.Drawing.Size(240, 16);
             this.chkClickTuneDrag.TabIndex = 8;
@@ -8748,7 +8754,7 @@
             // chkShowCTHLine
             // 
             this.chkShowCTHLine.Image = null;
-            this.chkShowCTHLine.Location = new System.Drawing.Point(16, 160);
+            this.chkShowCTHLine.Location = new System.Drawing.Point(16, 163);
             this.chkShowCTHLine.Name = "chkShowCTHLine";
             this.chkShowCTHLine.Size = new System.Drawing.Size(240, 16);
             this.chkShowCTHLine.TabIndex = 7;
@@ -8759,7 +8765,7 @@
             // chkClickTuneFilter
             // 
             this.chkClickTuneFilter.Image = null;
-            this.chkClickTuneFilter.Location = new System.Drawing.Point(16, 140);
+            this.chkClickTuneFilter.Location = new System.Drawing.Point(16, 143);
             this.chkClickTuneFilter.Name = "chkClickTuneFilter";
             this.chkClickTuneFilter.Size = new System.Drawing.Size(240, 16);
             this.chkClickTuneFilter.TabIndex = 6;
@@ -8770,7 +8776,7 @@
             // chkWheelTuneVFOB
             // 
             this.chkWheelTuneVFOB.Image = null;
-            this.chkWheelTuneVFOB.Location = new System.Drawing.Point(16, 120);
+            this.chkWheelTuneVFOB.Location = new System.Drawing.Point(16, 123);
             this.chkWheelTuneVFOB.Name = "chkWheelTuneVFOB";
             this.chkWheelTuneVFOB.Size = new System.Drawing.Size(240, 16);
             this.chkWheelTuneVFOB.TabIndex = 5;
@@ -8782,7 +8788,7 @@
             // chkMouseTuneStep
             // 
             this.chkMouseTuneStep.Image = null;
-            this.chkMouseTuneStep.Location = new System.Drawing.Point(16, 100);
+            this.chkMouseTuneStep.Location = new System.Drawing.Point(16, 103);
             this.chkMouseTuneStep.Name = "chkMouseTuneStep";
             this.chkMouseTuneStep.Size = new System.Drawing.Size(240, 16);
             this.chkMouseTuneStep.TabIndex = 4;
@@ -8793,7 +8799,7 @@
             // chkZeroBeatRIT
             // 
             this.chkZeroBeatRIT.Image = null;
-            this.chkZeroBeatRIT.Location = new System.Drawing.Point(16, 80);
+            this.chkZeroBeatRIT.Location = new System.Drawing.Point(16, 83);
             this.chkZeroBeatRIT.Name = "chkZeroBeatRIT";
             this.chkZeroBeatRIT.Size = new System.Drawing.Size(240, 16);
             this.chkZeroBeatRIT.TabIndex = 3;
@@ -8805,7 +8811,7 @@
             // chkSnapClickTune
             // 
             this.chkSnapClickTune.Image = null;
-            this.chkSnapClickTune.Location = new System.Drawing.Point(16, 60);
+            this.chkSnapClickTune.Location = new System.Drawing.Point(16, 63);
             this.chkSnapClickTune.Name = "chkSnapClickTune";
             this.chkSnapClickTune.Size = new System.Drawing.Size(123, 16);
             this.chkSnapClickTune.TabIndex = 2;
@@ -8816,7 +8822,7 @@
             // chkDisableToolTips
             // 
             this.chkDisableToolTips.Image = null;
-            this.chkDisableToolTips.Location = new System.Drawing.Point(16, 40);
+            this.chkDisableToolTips.Location = new System.Drawing.Point(16, 43);
             this.chkDisableToolTips.Name = "chkDisableToolTips";
             this.chkDisableToolTips.Size = new System.Drawing.Size(123, 16);
             this.chkDisableToolTips.TabIndex = 1;
@@ -8827,7 +8833,7 @@
             // chkOptAlwaysOnTop
             // 
             this.chkOptAlwaysOnTop.Image = null;
-            this.chkOptAlwaysOnTop.Location = new System.Drawing.Point(16, 20);
+            this.chkOptAlwaysOnTop.Location = new System.Drawing.Point(16, 23);
             this.chkOptAlwaysOnTop.Name = "chkOptAlwaysOnTop";
             this.chkOptAlwaysOnTop.Size = new System.Drawing.Size(123, 16);
             this.chkOptAlwaysOnTop.TabIndex = 0;
@@ -8965,7 +8971,7 @@
             // btnResetNFShift
             // 
             this.btnResetNFShift.Image = null;
-            this.btnResetNFShift.Location = new System.Drawing.Point(164, 46);
+            this.btnResetNFShift.Location = new System.Drawing.Point(164, 42);
             this.btnResetNFShift.Name = "btnResetNFShift";
             this.btnResetNFShift.Selectable = true;
             this.btnResetNFShift.Size = new System.Drawing.Size(47, 23);
@@ -8978,7 +8984,7 @@
             // labelTS160
             // 
             this.labelTS160.Image = null;
-            this.labelTS160.Location = new System.Drawing.Point(13, 90);
+            this.labelTS160.Location = new System.Drawing.Point(6, 93);
             this.labelTS160.Name = "labelTS160";
             this.labelTS160.Size = new System.Drawing.Size(145, 35);
             this.labelTS160.TabIndex = 15;
@@ -8988,7 +8994,7 @@
             // btnRX2PBsnr
             // 
             this.btnRX2PBsnr.Image = null;
-            this.btnRX2PBsnr.Location = new System.Drawing.Point(164, 107);
+            this.btnRX2PBsnr.Location = new System.Drawing.Point(164, 111);
             this.btnRX2PBsnr.Name = "btnRX2PBsnr";
             this.btnRX2PBsnr.Selectable = true;
             this.btnRX2PBsnr.Size = new System.Drawing.Size(47, 23);
@@ -9001,7 +9007,7 @@
             // btnRX1PBsnr
             // 
             this.btnRX1PBsnr.Image = null;
-            this.btnRX1PBsnr.Location = new System.Drawing.Point(164, 78);
+            this.btnRX1PBsnr.Location = new System.Drawing.Point(164, 85);
             this.btnRX1PBsnr.Name = "btnRX1PBsnr";
             this.btnRX1PBsnr.Selectable = true;
             this.btnRX1PBsnr.Size = new System.Drawing.Size(47, 23);
@@ -9015,7 +9021,7 @@
             // 
             this.labelTS157.AutoSize = true;
             this.labelTS157.Image = null;
-            this.labelTS157.Location = new System.Drawing.Point(123, 49);
+            this.labelTS157.Location = new System.Drawing.Point(123, 47);
             this.labelTS157.Name = "labelTS157";
             this.labelTS157.Size = new System.Drawing.Size(29, 13);
             this.labelTS157.TabIndex = 12;
@@ -9025,11 +9031,12 @@
             // 
             this.labelTS156.AutoSize = true;
             this.labelTS156.Image = null;
-            this.labelTS156.Location = new System.Drawing.Point(38, 49);
+            this.labelTS156.Location = new System.Drawing.Point(6, 47);
             this.labelTS156.Name = "labelTS156";
-            this.labelTS156.Size = new System.Drawing.Size(30, 13);
+            this.labelTS156.Size = new System.Drawing.Size(31, 13);
             this.labelTS156.TabIndex = 11;
-            this.labelTS156.Text = "shift";
+            this.labelTS156.Text = "Shift";
+            this.labelTS156.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip1.SetToolTip(this.labelTS156, "All band shift to the NF");
             // 
             // nudNFshift
@@ -9040,7 +9047,7 @@
             0,
             0,
             65536});
-            this.nudNFshift.Location = new System.Drawing.Point(70, 47);
+            this.nudNFshift.Location = new System.Drawing.Point(70, 45);
             this.nudNFshift.Maximum = new decimal(new int[] {
             12,
             0,
@@ -9067,11 +9074,12 @@
             // 
             this.labelTS155.AutoSize = true;
             this.labelTS155.Image = null;
-            this.labelTS155.Location = new System.Drawing.Point(12, 23);
+            this.labelTS155.Location = new System.Drawing.Point(6, 24);
             this.labelTS155.Name = "labelTS155";
-            this.labelTS155.Size = new System.Drawing.Size(57, 13);
+            this.labelTS155.Size = new System.Drawing.Size(58, 13);
             this.labelTS155.TabIndex = 9;
-            this.labelTS155.Text = "sensitivity";
+            this.labelTS155.Text = "Sensitivity";
+            this.labelTS155.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // nudNFsensitivity
             // 
@@ -9080,7 +9088,7 @@
             0,
             0,
             0});
-            this.nudNFsensitivity.Location = new System.Drawing.Point(70, 21);
+            this.nudNFsensitivity.Location = new System.Drawing.Point(70, 22);
             this.nudNFsensitivity.Maximum = new decimal(new int[] {
             19,
             0,
@@ -9183,7 +9191,7 @@
             // 
             this.chkUseOutlinedCross.AutoSize = true;
             this.chkUseOutlinedCross.Image = null;
-            this.chkUseOutlinedCross.Location = new System.Drawing.Point(10, 29);
+            this.chkUseOutlinedCross.Location = new System.Drawing.Point(18, 35);
             this.chkUseOutlinedCross.Name = "chkUseOutlinedCross";
             this.chkUseOutlinedCross.Size = new System.Drawing.Size(147, 17);
             this.chkUseOutlinedCross.TabIndex = 34;
@@ -9427,7 +9435,7 @@
             this.groupBoxTS27.Controls.Add(this.udAmpVoff);
             this.groupBoxTS27.Location = new System.Drawing.Point(541, 8);
             this.groupBoxTS27.Name = "groupBoxTS27";
-            this.groupBoxTS27.Size = new System.Drawing.Size(175, 122);
+            this.groupBoxTS27.Size = new System.Drawing.Size(175, 112);
             this.groupBoxTS27.TabIndex = 15;
             this.groupBoxTS27.TabStop = false;
             this.groupBoxTS27.Text = "Current (A) calculation";
@@ -9435,7 +9443,7 @@
             // btnAmpDefault
             // 
             this.btnAmpDefault.Image = null;
-            this.btnAmpDefault.Location = new System.Drawing.Point(60, 86);
+            this.btnAmpDefault.Location = new System.Drawing.Point(48, 80);
             this.btnAmpDefault.Name = "btnAmpDefault";
             this.btnAmpDefault.Selectable = true;
             this.btnAmpDefault.Size = new System.Drawing.Size(75, 23);
@@ -9449,7 +9457,7 @@
             // 
             this.labelTS159.AutoSize = true;
             this.labelTS159.Image = null;
-            this.labelTS159.Location = new System.Drawing.Point(28, 54);
+            this.labelTS159.Location = new System.Drawing.Point(8, 52);
             this.labelTS159.Name = "labelTS159";
             this.labelTS159.Size = new System.Drawing.Size(61, 13);
             this.labelTS159.TabIndex = 3;
@@ -9459,7 +9467,7 @@
             // 
             this.labelTS158.AutoSize = true;
             this.labelTS158.Image = null;
-            this.labelTS158.Location = new System.Drawing.Point(47, 27);
+            this.labelTS158.Location = new System.Drawing.Point(8, 26);
             this.labelTS158.Name = "labelTS158";
             this.labelTS158.Size = new System.Drawing.Size(42, 13);
             this.labelTS158.TabIndex = 2;
@@ -9542,10 +9550,11 @@
             // 
             // labelTS135
             // 
+            this.labelTS135.AutoSize = true;
             this.labelTS135.Image = null;
             this.labelTS135.Location = new System.Drawing.Point(3, 13);
             this.labelTS135.Name = "labelTS135";
-            this.labelTS135.Size = new System.Drawing.Size(64, 23);
+            this.labelTS135.Size = new System.Drawing.Size(55, 13);
             this.labelTS135.TabIndex = 9;
             this.labelTS135.Text = "RX2 Freq:";
             // 
@@ -9624,13 +9633,13 @@
             // 
             // labelTS136
             // 
+            this.labelTS136.AutoSize = true;
             this.labelTS136.Image = null;
             this.labelTS136.Location = new System.Drawing.Point(3, 37);
             this.labelTS136.Name = "labelTS136";
-            this.labelTS136.Size = new System.Drawing.Size(68, 23);
+            this.labelTS136.Size = new System.Drawing.Size(66, 13);
             this.labelTS136.TabIndex = 11;
             this.labelTS136.Text = "Level (dBm):";
-            this.labelTS136.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // grpBoxTXDisplayCal
             // 
@@ -9638,20 +9647,20 @@
             this.grpBoxTXDisplayCal.Controls.Add(this.udTXDisplayCalOffset);
             this.grpBoxTXDisplayCal.Location = new System.Drawing.Point(360, 126);
             this.grpBoxTXDisplayCal.Name = "grpBoxTXDisplayCal";
-            this.grpBoxTXDisplayCal.Size = new System.Drawing.Size(168, 105);
+            this.grpBoxTXDisplayCal.Size = new System.Drawing.Size(168, 109);
             this.grpBoxTXDisplayCal.TabIndex = 13;
             this.grpBoxTXDisplayCal.TabStop = false;
             this.grpBoxTXDisplayCal.Text = "TX Display Cal";
             // 
             // labelTS55
             // 
+            this.labelTS55.AutoSize = true;
             this.labelTS55.Image = null;
-            this.labelTS55.Location = new System.Drawing.Point(32, 39);
+            this.labelTS55.Location = new System.Drawing.Point(8, 39);
             this.labelTS55.Name = "labelTS55";
-            this.labelTS55.Size = new System.Drawing.Size(54, 23);
+            this.labelTS55.Size = new System.Drawing.Size(42, 13);
             this.labelTS55.TabIndex = 13;
             this.labelTS55.Text = "Offset:";
-            this.labelTS55.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udTXDisplayCalOffset
             // 
@@ -9661,7 +9670,7 @@
             0,
             0,
             65536});
-            this.udTXDisplayCalOffset.Location = new System.Drawing.Point(92, 42);
+            this.udTXDisplayCalOffset.Location = new System.Drawing.Point(105, 37);
             this.udTXDisplayCalOffset.Maximum = new decimal(new int[] {
             100,
             0,
@@ -9693,9 +9702,9 @@
             this.grpHPSDRFreqCalDbg.Controls.Add(this.btnHPSDRFreqCalReset);
             this.grpHPSDRFreqCalDbg.Controls.Add(this.udHPSDRFreqCorrectFactor);
             this.grpHPSDRFreqCalDbg.Controls.Add(this.labelTS10);
-            this.grpHPSDRFreqCalDbg.Location = new System.Drawing.Point(12, 145);
+            this.grpHPSDRFreqCalDbg.Location = new System.Drawing.Point(8, 145);
             this.grpHPSDRFreqCalDbg.Name = "grpHPSDRFreqCalDbg";
-            this.grpHPSDRFreqCalDbg.Size = new System.Drawing.Size(164, 194);
+            this.grpHPSDRFreqCalDbg.Size = new System.Drawing.Size(168, 194);
             this.grpHPSDRFreqCalDbg.TabIndex = 11;
             this.grpHPSDRFreqCalDbg.TabStop = false;
             this.grpHPSDRFreqCalDbg.Text = "HPSDR Freq Cal Diagnostic";
@@ -9719,7 +9728,7 @@
             0,
             0,
             524288});
-            this.udHPSDRFreqCorrectFactor10MHz.Location = new System.Drawing.Point(35, 133);
+            this.udHPSDRFreqCorrectFactor10MHz.Location = new System.Drawing.Point(39, 133);
             this.udHPSDRFreqCorrectFactor10MHz.Maximum = new decimal(new int[] {
             65,
             0,
@@ -9774,7 +9783,7 @@
             0,
             0,
             524288});
-            this.udHPSDRFreqCorrectFactor.Location = new System.Drawing.Point(35, 41);
+            this.udHPSDRFreqCorrectFactor.Location = new System.Drawing.Point(39, 39);
             this.udHPSDRFreqCorrectFactor.Maximum = new decimal(new int[] {
             65,
             0,
@@ -9801,18 +9810,19 @@
             // 
             this.labelTS10.AutoSize = true;
             this.labelTS10.Image = null;
-            this.labelTS10.Location = new System.Drawing.Point(12, 25);
+            this.labelTS10.Location = new System.Drawing.Point(33, 20);
             this.labelTS10.Name = "labelTS10";
             this.labelTS10.Size = new System.Drawing.Size(96, 13);
             this.labelTS10.TabIndex = 0;
             this.labelTS10.Text = "Correction Factor";
+            this.labelTS10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkCalExpert
             // 
             this.chkCalExpert.Image = null;
             this.chkCalExpert.Location = new System.Drawing.Point(408, 237);
             this.chkCalExpert.Name = "chkCalExpert";
-            this.chkCalExpert.Size = new System.Drawing.Size(56, 24);
+            this.chkCalExpert.Size = new System.Drawing.Size(72, 24);
             this.chkCalExpert.TabIndex = 10;
             this.chkCalExpert.Text = "Expert";
             this.chkCalExpert.Visible = false;
@@ -9855,7 +9865,7 @@
             0,
             0,
             0});
-            this.ud6mRx2LNAGainOffset.Location = new System.Drawing.Point(101, 190);
+            this.ud6mRx2LNAGainOffset.Location = new System.Drawing.Point(105, 190);
             this.ud6mRx2LNAGainOffset.Maximum = new decimal(new int[] {
             25,
             0,
@@ -9881,13 +9891,13 @@
             // 
             // lblRx26mLNA
             // 
+            this.lblRx26mLNA.AutoSize = true;
             this.lblRx26mLNA.Image = null;
-            this.lblRx26mLNA.Location = new System.Drawing.Point(16, 187);
+            this.lblRx26mLNA.Location = new System.Drawing.Point(8, 192);
             this.lblRx26mLNA.Name = "lblRx26mLNA";
-            this.lblRx26mLNA.Size = new System.Drawing.Size(88, 23);
+            this.lblRx26mLNA.Size = new System.Drawing.Size(69, 13);
             this.lblRx26mLNA.TabIndex = 17;
             this.lblRx26mLNA.Text = "Rx2 6m LNA:";
-            this.lblRx26mLNA.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ud6mLNAGainOffset
             // 
@@ -9897,7 +9907,7 @@
             0,
             0,
             0});
-            this.ud6mLNAGainOffset.Location = new System.Drawing.Point(101, 155);
+            this.ud6mLNAGainOffset.Location = new System.Drawing.Point(105, 155);
             this.ud6mLNAGainOffset.Maximum = new decimal(new int[] {
             25,
             0,
@@ -9923,13 +9933,13 @@
             // 
             // labelTS324
             // 
+            this.labelTS324.AutoSize = true;
             this.labelTS324.Image = null;
-            this.labelTS324.Location = new System.Drawing.Point(16, 152);
+            this.labelTS324.Location = new System.Drawing.Point(8, 157);
             this.labelTS324.Name = "labelTS324";
-            this.labelTS324.Size = new System.Drawing.Size(88, 23);
+            this.labelTS324.Size = new System.Drawing.Size(69, 13);
             this.labelTS324.TabIndex = 13;
             this.labelTS324.Text = "Rx1 6m LNA:";
-            this.labelTS324.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // udGeneralCalLevel
             // 
@@ -9995,23 +10005,23 @@
             // 
             // lblGenCalLevelFreq
             // 
+            this.lblGenCalLevelFreq.AutoSize = true;
             this.lblGenCalLevelFreq.Image = null;
-            this.lblGenCalLevelFreq.Location = new System.Drawing.Point(16, 24);
+            this.lblGenCalLevelFreq.Location = new System.Drawing.Point(8, 26);
             this.lblGenCalLevelFreq.Name = "lblGenCalLevelFreq";
-            this.lblGenCalLevelFreq.Size = new System.Drawing.Size(64, 23);
+            this.lblGenCalLevelFreq.Size = new System.Drawing.Size(63, 13);
             this.lblGenCalLevelFreq.TabIndex = 0;
             this.lblGenCalLevelFreq.Text = "Frequency:";
-            this.lblGenCalLevelFreq.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblGeneralCalLevel
             // 
+            this.lblGeneralCalLevel.AutoSize = true;
             this.lblGeneralCalLevel.Image = null;
-            this.lblGeneralCalLevel.Location = new System.Drawing.Point(16, 48);
+            this.lblGeneralCalLevel.Location = new System.Drawing.Point(8, 52);
             this.lblGeneralCalLevel.Name = "lblGeneralCalLevel";
-            this.lblGeneralCalLevel.Size = new System.Drawing.Size(88, 23);
+            this.lblGeneralCalLevel.Size = new System.Drawing.Size(66, 13);
             this.lblGeneralCalLevel.TabIndex = 2;
             this.lblGeneralCalLevel.Text = "Level (dBm):";
-            this.lblGeneralCalLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // btnGeneralCalLevelStart
             // 
@@ -10053,7 +10063,7 @@
             // btnGeneralCalFreqStart
             // 
             this.btnGeneralCalFreqStart.Image = null;
-            this.btnGeneralCalFreqStart.Location = new System.Drawing.Point(48, 102);
+            this.btnGeneralCalFreqStart.Location = new System.Drawing.Point(44, 102);
             this.btnGeneralCalFreqStart.Name = "btnGeneralCalFreqStart";
             this.btnGeneralCalFreqStart.Selectable = true;
             this.btnGeneralCalFreqStart.Size = new System.Drawing.Size(75, 23);
@@ -10095,10 +10105,11 @@
             // 
             // lblGeneralCalFrequency
             // 
+            this.lblGeneralCalFrequency.AutoSize = true;
             this.lblGeneralCalFrequency.Image = null;
-            this.lblGeneralCalFrequency.Location = new System.Drawing.Point(16, 24);
+            this.lblGeneralCalFrequency.Location = new System.Drawing.Point(6, 26);
             this.lblGeneralCalFrequency.Name = "lblGeneralCalFrequency";
-            this.lblGeneralCalFrequency.Size = new System.Drawing.Size(64, 23);
+            this.lblGeneralCalFrequency.Size = new System.Drawing.Size(63, 13);
             this.lblGeneralCalFrequency.TabIndex = 0;
             this.lblGeneralCalFrequency.Text = "Frequency:";
             // 
@@ -10148,17 +10159,18 @@
             // 
             // lblGenCalRXImageFreq
             // 
+            this.lblGenCalRXImageFreq.AutoSize = true;
             this.lblGenCalRXImageFreq.Image = null;
-            this.lblGenCalRXImageFreq.Location = new System.Drawing.Point(16, 24);
+            this.lblGenCalRXImageFreq.Location = new System.Drawing.Point(8, 26);
             this.lblGenCalRXImageFreq.Name = "lblGenCalRXImageFreq";
-            this.lblGenCalRXImageFreq.Size = new System.Drawing.Size(64, 23);
+            this.lblGenCalRXImageFreq.Size = new System.Drawing.Size(63, 13);
             this.lblGenCalRXImageFreq.TabIndex = 0;
             this.lblGenCalRXImageFreq.Text = "Frequency:";
             // 
             // btnGeneralCalImageStart
             // 
             this.btnGeneralCalImageStart.Image = null;
-            this.btnGeneralCalImageStart.Location = new System.Drawing.Point(48, 80);
+            this.btnGeneralCalImageStart.Location = new System.Drawing.Point(45, 80);
             this.btnGeneralCalImageStart.Name = "btnGeneralCalImageStart";
             this.btnGeneralCalImageStart.Selectable = true;
             this.btnGeneralCalImageStart.Size = new System.Drawing.Size(75, 23);
@@ -10184,7 +10196,7 @@
             // 
             this.chkLimitFilterEdgesToSidebands.AutoSize = true;
             this.chkLimitFilterEdgesToSidebands.Image = null;
-            this.chkLimitFilterEdgesToSidebands.Location = new System.Drawing.Point(27, 185);
+            this.chkLimitFilterEdgesToSidebands.Location = new System.Drawing.Point(19, 182);
             this.chkLimitFilterEdgesToSidebands.Name = "chkLimitFilterEdgesToSidebands";
             this.chkLimitFilterEdgesToSidebands.Size = new System.Drawing.Size(181, 17);
             this.chkLimitFilterEdgesToSidebands.TabIndex = 31;
@@ -10218,7 +10230,7 @@
             0,
             0,
             0});
-            this.udRX2FilterDefaultLowCut.Location = new System.Drawing.Point(128, 120);
+            this.udRX2FilterDefaultLowCut.Location = new System.Drawing.Point(128, 119);
             this.udRX2FilterDefaultLowCut.Maximum = new decimal(new int[] {
             500,
             0,
@@ -10244,9 +10256,9 @@
             // labelTS39
             // 
             this.labelTS39.Image = null;
-            this.labelTS39.Location = new System.Drawing.Point(16, 120);
+            this.labelTS39.Location = new System.Drawing.Point(8, 122);
             this.labelTS39.Name = "labelTS39";
-            this.labelTS39.Size = new System.Drawing.Size(120, 23);
+            this.labelTS39.Size = new System.Drawing.Size(120, 13);
             this.labelTS39.TabIndex = 16;
             this.labelTS39.Text = "Default Low Cut (Hz):";
             // 
@@ -10257,7 +10269,7 @@
             0,
             0,
             0});
-            this.udRX2OptMaxFilterShift.Location = new System.Drawing.Point(128, 72);
+            this.udRX2OptMaxFilterShift.Location = new System.Drawing.Point(128, 73);
             this.udRX2OptMaxFilterShift.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -10284,9 +10296,9 @@
             // labelTS50
             // 
             this.labelTS50.Image = null;
-            this.labelTS50.Location = new System.Drawing.Point(16, 72);
+            this.labelTS50.Location = new System.Drawing.Point(8, 75);
             this.labelTS50.Name = "labelTS50";
-            this.labelTS50.Size = new System.Drawing.Size(120, 23);
+            this.labelTS50.Size = new System.Drawing.Size(120, 13);
             this.labelTS50.TabIndex = 14;
             this.labelTS50.Text = "Max Filter Shift (Hz):";
             this.labelTS50.Visible = false;
@@ -10299,7 +10311,7 @@
             "Linear",
             "Log",
             "Log10"});
-            this.comboRX2OptFilterWidthMode.Location = new System.Drawing.Point(120, 48);
+            this.comboRX2OptFilterWidthMode.Location = new System.Drawing.Point(120, 49);
             this.comboRX2OptFilterWidthMode.Name = "comboRX2OptFilterWidthMode";
             this.comboRX2OptFilterWidthMode.Size = new System.Drawing.Size(56, 21);
             this.comboRX2OptFilterWidthMode.TabIndex = 12;
@@ -10309,7 +10321,7 @@
             // labelTS86
             // 
             this.labelTS86.Image = null;
-            this.labelTS86.Location = new System.Drawing.Point(16, 48);
+            this.labelTS86.Location = new System.Drawing.Point(8, 52);
             this.labelTS86.Name = "labelTS86";
             this.labelTS86.Size = new System.Drawing.Size(104, 16);
             this.labelTS86.TabIndex = 11;
@@ -10349,9 +10361,9 @@
             // labelTS87
             // 
             this.labelTS87.Image = null;
-            this.labelTS87.Location = new System.Drawing.Point(16, 24);
+            this.labelTS87.Location = new System.Drawing.Point(8, 26);
             this.labelTS87.Name = "labelTS87";
-            this.labelTS87.Size = new System.Drawing.Size(120, 23);
+            this.labelTS87.Size = new System.Drawing.Size(120, 13);
             this.labelTS87.TabIndex = 10;
             this.labelTS87.Text = "Max Filter Width (Hz):";
             this.labelTS87.Visible = false;
@@ -10359,9 +10371,9 @@
             // checkBoxTS2
             // 
             this.checkBoxTS2.Image = null;
-            this.checkBoxTS2.Location = new System.Drawing.Point(16, 96);
+            this.checkBoxTS2.Location = new System.Drawing.Point(11, 97);
             this.checkBoxTS2.Name = "checkBoxTS2";
-            this.checkBoxTS2.Size = new System.Drawing.Size(176, 16);
+            this.checkBoxTS2.Size = new System.Drawing.Size(176, 17);
             this.checkBoxTS2.TabIndex = 15;
             this.checkBoxTS2.Text = "Save Slider/Display Changes";
             this.toolTip1.SetToolTip(this.checkBoxTS2, "If checked, changes made to the filters via the display or sliders will be saved " +
@@ -10393,7 +10405,7 @@
             0,
             0,
             0});
-            this.udFilterDefaultLowCut.Location = new System.Drawing.Point(128, 120);
+            this.udFilterDefaultLowCut.Location = new System.Drawing.Point(128, 119);
             this.udFilterDefaultLowCut.Maximum = new decimal(new int[] {
             500,
             0,
@@ -10420,9 +10432,9 @@
             // lblDefaultLowCut
             // 
             this.lblDefaultLowCut.Image = null;
-            this.lblDefaultLowCut.Location = new System.Drawing.Point(16, 120);
+            this.lblDefaultLowCut.Location = new System.Drawing.Point(8, 122);
             this.lblDefaultLowCut.Name = "lblDefaultLowCut";
-            this.lblDefaultLowCut.Size = new System.Drawing.Size(120, 23);
+            this.lblDefaultLowCut.Size = new System.Drawing.Size(120, 13);
             this.lblDefaultLowCut.TabIndex = 16;
             this.lblDefaultLowCut.Text = "Default Low Cut (Hz):";
             // 
@@ -10433,7 +10445,7 @@
             0,
             0,
             0});
-            this.udOptMaxFilterShift.Location = new System.Drawing.Point(128, 72);
+            this.udOptMaxFilterShift.Location = new System.Drawing.Point(128, 73);
             this.udOptMaxFilterShift.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -10461,9 +10473,9 @@
             // lblOptMaxFilterShift
             // 
             this.lblOptMaxFilterShift.Image = null;
-            this.lblOptMaxFilterShift.Location = new System.Drawing.Point(16, 72);
+            this.lblOptMaxFilterShift.Location = new System.Drawing.Point(8, 75);
             this.lblOptMaxFilterShift.Name = "lblOptMaxFilterShift";
-            this.lblOptMaxFilterShift.Size = new System.Drawing.Size(120, 23);
+            this.lblOptMaxFilterShift.Size = new System.Drawing.Size(120, 13);
             this.lblOptMaxFilterShift.TabIndex = 14;
             this.lblOptMaxFilterShift.Text = "Max Filter Shift (Hz):";
             // 
@@ -10475,7 +10487,7 @@
             "Linear",
             "Log",
             "Log10"});
-            this.comboOptFilterWidthMode.Location = new System.Drawing.Point(120, 48);
+            this.comboOptFilterWidthMode.Location = new System.Drawing.Point(120, 49);
             this.comboOptFilterWidthMode.Name = "comboOptFilterWidthMode";
             this.comboOptFilterWidthMode.Size = new System.Drawing.Size(56, 21);
             this.comboOptFilterWidthMode.TabIndex = 12;
@@ -10485,9 +10497,9 @@
             // lblOptWidthSliderMode
             // 
             this.lblOptWidthSliderMode.Image = null;
-            this.lblOptWidthSliderMode.Location = new System.Drawing.Point(16, 48);
+            this.lblOptWidthSliderMode.Location = new System.Drawing.Point(8, 52);
             this.lblOptWidthSliderMode.Name = "lblOptWidthSliderMode";
-            this.lblOptWidthSliderMode.Size = new System.Drawing.Size(104, 16);
+            this.lblOptWidthSliderMode.Size = new System.Drawing.Size(104, 13);
             this.lblOptWidthSliderMode.TabIndex = 11;
             this.lblOptWidthSliderMode.Text = "Width Slider Mode:";
             // 
@@ -10525,18 +10537,18 @@
             // lblOptMaxFilter
             // 
             this.lblOptMaxFilter.Image = null;
-            this.lblOptMaxFilter.Location = new System.Drawing.Point(16, 24);
+            this.lblOptMaxFilter.Location = new System.Drawing.Point(8, 26);
             this.lblOptMaxFilter.Name = "lblOptMaxFilter";
-            this.lblOptMaxFilter.Size = new System.Drawing.Size(120, 23);
+            this.lblOptMaxFilter.Size = new System.Drawing.Size(120, 13);
             this.lblOptMaxFilter.TabIndex = 10;
             this.lblOptMaxFilter.Text = "Max Filter Width (Hz):";
             // 
             // chkOptFilterSaveChanges
             // 
             this.chkOptFilterSaveChanges.Image = null;
-            this.chkOptFilterSaveChanges.Location = new System.Drawing.Point(16, 96);
+            this.chkOptFilterSaveChanges.Location = new System.Drawing.Point(11, 97);
             this.chkOptFilterSaveChanges.Name = "chkOptFilterSaveChanges";
-            this.chkOptFilterSaveChanges.Size = new System.Drawing.Size(176, 16);
+            this.chkOptFilterSaveChanges.Size = new System.Drawing.Size(176, 17);
             this.chkOptFilterSaveChanges.TabIndex = 15;
             this.chkOptFilterSaveChanges.Text = "Save Slider/Display Changes";
             this.toolTip1.SetToolTip(this.chkOptFilterSaveChanges, "If checked, changes made to the filters via the display or sliders will be saved " +
@@ -10598,7 +10610,7 @@
             this.grpP1DDC6ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC6ADC.TabIndex = 19;
             this.grpP1DDC6ADC.TabStop = false;
-            this.grpP1DDC6ADC.Text = "    DDC6";
+            this.grpP1DDC6ADC.Text = "DDC6";
             // 
             // radP1DDC6ADC2
             // 
@@ -10649,7 +10661,7 @@
             this.grpDDC6ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC6ADC.TabIndex = 13;
             this.grpDDC6ADC.TabStop = false;
-            this.grpDDC6ADC.Text = "    DDC6";
+            this.grpDDC6ADC.Text = "DDC6";
             // 
             // radDDC6ADC2
             // 
@@ -10710,7 +10722,7 @@
             this.grpP1DDC5ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC5ADC.TabIndex = 19;
             this.grpP1DDC5ADC.TabStop = false;
-            this.grpP1DDC5ADC.Text = "    DDC5";
+            this.grpP1DDC5ADC.Text = "DDC5";
             // 
             // radP1DDC5ADC2
             // 
@@ -10773,7 +10785,7 @@
             this.grpDDC0ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC0ADC.TabIndex = 7;
             this.grpDDC0ADC.TabStop = false;
-            this.grpDDC0ADC.Text = "    DDC0";
+            this.grpDDC0ADC.Text = "DDC0";
             // 
             // radDDC0ADC2
             // 
@@ -10824,7 +10836,7 @@
             this.grpP1DDC4ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC4ADC.TabIndex = 19;
             this.grpP1DDC4ADC.TabStop = false;
-            this.grpP1DDC4ADC.Text = "    DDC4";
+            this.grpP1DDC4ADC.Text = "DDC4";
             // 
             // radP1DDC4ADC2
             // 
@@ -10875,7 +10887,7 @@
             this.grpDDC1ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC1ADC.TabIndex = 8;
             this.grpDDC1ADC.TabStop = false;
-            this.grpDDC1ADC.Text = "    DDC1";
+            this.grpDDC1ADC.Text = "DDC1";
             // 
             // radDDC1ADC2
             // 
@@ -10926,7 +10938,7 @@
             this.grpDDC5ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC5ADC.TabIndex = 12;
             this.grpDDC5ADC.TabStop = false;
-            this.grpDDC5ADC.Text = "    DDC5";
+            this.grpDDC5ADC.Text = "DDC5";
             // 
             // radDDC5ADC2
             // 
@@ -10977,7 +10989,7 @@
             this.grpP1DDC3ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC3ADC.TabIndex = 21;
             this.grpP1DDC3ADC.TabStop = false;
-            this.grpP1DDC3ADC.Text = "    DDC3";
+            this.grpP1DDC3ADC.Text = "DDC3";
             // 
             // radP1DDC3ADC2
             // 
@@ -11028,7 +11040,7 @@
             this.grpDDC2ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC2ADC.TabIndex = 9;
             this.grpDDC2ADC.TabStop = false;
-            this.grpDDC2ADC.Text = "    DDC2";
+            this.grpDDC2ADC.Text = "DDC2";
             // 
             // radDDC2ADC2
             // 
@@ -11079,7 +11091,7 @@
             this.grpDDC3ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC3ADC.TabIndex = 10;
             this.grpDDC3ADC.TabStop = false;
-            this.grpDDC3ADC.Text = "    DDC3";
+            this.grpDDC3ADC.Text = "DDC3";
             // 
             // radDDC3ADC2
             // 
@@ -11130,7 +11142,7 @@
             this.grpP1DDC2ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC2ADC.TabIndex = 20;
             this.grpP1DDC2ADC.TabStop = false;
-            this.grpP1DDC2ADC.Text = "    DDC2";
+            this.grpP1DDC2ADC.Text = "DDC2";
             // 
             // radP1DDC2ADC2
             // 
@@ -11181,7 +11193,7 @@
             this.grpDDC4ADC.Size = new System.Drawing.Size(60, 136);
             this.grpDDC4ADC.TabIndex = 11;
             this.grpDDC4ADC.TabStop = false;
-            this.grpDDC4ADC.Text = "    DDC4";
+            this.grpDDC4ADC.Text = "DDC4";
             // 
             // radDDC4ADC2
             // 
@@ -11232,7 +11244,7 @@
             this.grpP1DDC0ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC0ADC.TabIndex = 18;
             this.grpP1DDC0ADC.TabStop = false;
-            this.grpP1DDC0ADC.Text = "    DDC0";
+            this.grpP1DDC0ADC.Text = "DDC0";
             // 
             // radP1DDC0ADC2
             // 
@@ -11283,7 +11295,7 @@
             this.grpP1DDC1ADC.Size = new System.Drawing.Size(60, 136);
             this.grpP1DDC1ADC.TabIndex = 19;
             this.grpP1DDC1ADC.TabStop = false;
-            this.grpP1DDC1ADC.Text = "    DDC1";
+            this.grpP1DDC1ADC.Text = "DDC1";
             // 
             // radP1DDC1ADC2
             // 
@@ -11481,9 +11493,9 @@
             this.grpExtPAControlHF.Controls.Add(this.chkPin2TXPAHF);
             this.grpExtPAControlHF.Controls.Add(this.chkPin4TXPAHF);
             this.grpExtPAControlHF.Controls.Add(this.chkPin3TXPAHF);
-            this.grpExtPAControlHF.Location = new System.Drawing.Point(579, 14);
+            this.grpExtPAControlHF.Location = new System.Drawing.Point(579, 6);
             this.grpExtPAControlHF.Name = "grpExtPAControlHF";
-            this.grpExtPAControlHF.Size = new System.Drawing.Size(118, 237);
+            this.grpExtPAControlHF.Size = new System.Drawing.Size(118, 245);
             this.grpExtPAControlHF.TabIndex = 14;
             this.grpExtPAControlHF.TabStop = false;
             this.grpExtPAControlHF.Text = "Ext PA Control (xPA)";
@@ -11886,9 +11898,9 @@
             this.grpTransmitPinActionHF.Controls.Add(this.labelTS549);
             this.grpTransmitPinActionHF.Controls.Add(this.comboPin1TXActionHF);
             this.grpTransmitPinActionHF.Controls.Add(this.labelTS548);
-            this.grpTransmitPinActionHF.Location = new System.Drawing.Point(338, 14);
+            this.grpTransmitPinActionHF.Location = new System.Drawing.Point(338, 6);
             this.grpTransmitPinActionHF.Name = "grpTransmitPinActionHF";
-            this.grpTransmitPinActionHF.Size = new System.Drawing.Size(235, 237);
+            this.grpTransmitPinActionHF.Size = new System.Drawing.Size(235, 245);
             this.grpTransmitPinActionHF.TabIndex = 11;
             this.grpTransmitPinActionHF.TabStop = false;
             this.grpTransmitPinActionHF.Text = "Transmit Pin Action";
@@ -14470,7 +14482,7 @@
             // 
             this.lblHFTxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHFTxControl.Image = null;
-            this.lblHFTxControl.Location = new System.Drawing.Point(189, 8);
+            this.lblHFTxControl.Location = new System.Drawing.Point(182, 8);
             this.lblHFTxControl.Name = "lblHFTxControl";
             this.lblHFTxControl.Size = new System.Drawing.Size(95, 16);
             this.lblHFTxControl.TabIndex = 1;
@@ -14481,7 +14493,7 @@
             // 
             this.lblHFRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHFRxControl.Image = null;
-            this.lblHFRxControl.Location = new System.Drawing.Point(60, 8);
+            this.lblHFRxControl.Location = new System.Drawing.Point(54, 8);
             this.lblHFRxControl.Name = "lblHFRxControl";
             this.lblHFRxControl.Size = new System.Drawing.Size(95, 16);
             this.lblHFRxControl.TabIndex = 0;
@@ -14581,9 +14593,9 @@
             this.grpExtPAControlVHF.Controls.Add(this.chkPin4RXPAVHF);
             this.grpExtPAControlVHF.Controls.Add(this.chkPin3RXPAVHF);
             this.grpExtPAControlVHF.Controls.Add(this.labelTS580);
-            this.grpExtPAControlVHF.Location = new System.Drawing.Point(579, 14);
+            this.grpExtPAControlVHF.Location = new System.Drawing.Point(579, 6);
             this.grpExtPAControlVHF.Name = "grpExtPAControlVHF";
-            this.grpExtPAControlVHF.Size = new System.Drawing.Size(118, 237);
+            this.grpExtPAControlVHF.Size = new System.Drawing.Size(118, 245);
             this.grpExtPAControlVHF.TabIndex = 15;
             this.grpExtPAControlVHF.TabStop = false;
             this.grpExtPAControlVHF.Text = "Ext PA Control (xPA)";
@@ -14876,9 +14888,9 @@
             this.grpTransmitPinActionVHF.Controls.Add(this.labelTS560);
             this.grpTransmitPinActionVHF.Controls.Add(this.comboPin1TXActionVHF);
             this.grpTransmitPinActionVHF.Controls.Add(this.labelTS561);
-            this.grpTransmitPinActionVHF.Location = new System.Drawing.Point(338, 14);
+            this.grpTransmitPinActionVHF.Location = new System.Drawing.Point(338, 6);
             this.grpTransmitPinActionVHF.Name = "grpTransmitPinActionVHF";
-            this.grpTransmitPinActionVHF.Size = new System.Drawing.Size(235, 237);
+            this.grpTransmitPinActionVHF.Size = new System.Drawing.Size(235, 245);
             this.grpTransmitPinActionVHF.TabIndex = 12;
             this.grpTransmitPinActionVHF.TabStop = false;
             this.grpTransmitPinActionVHF.Text = "Transmit Pin Action";
@@ -15280,7 +15292,7 @@
             this.grpPennyExtCtrlVHF.Controls.Add(this.chkPenOCrcvVHF01);
             this.grpPennyExtCtrlVHF.Location = new System.Drawing.Point(6, 6);
             this.grpPennyExtCtrlVHF.Name = "grpPennyExtCtrlVHF";
-            this.grpPennyExtCtrlVHF.Size = new System.Drawing.Size(285, 236);
+            this.grpPennyExtCtrlVHF.Size = new System.Drawing.Size(290, 245);
             this.grpPennyExtCtrlVHF.TabIndex = 5;
             this.grpPennyExtCtrlVHF.TabStop = false;
             // 
@@ -15288,7 +15300,7 @@
             // 
             this.labelTS71.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTS71.Image = null;
-            this.labelTS71.Location = new System.Drawing.Point(9, 24);
+            this.labelTS71.Location = new System.Drawing.Point(6, 24);
             this.labelTS71.Name = "labelTS71";
             this.labelTS71.Size = new System.Drawing.Size(32, 16);
             this.labelTS71.TabIndex = 395;
@@ -15297,7 +15309,7 @@
             // labelTS72
             // 
             this.labelTS72.Image = null;
-            this.labelTS72.Location = new System.Drawing.Point(262, 24);
+            this.labelTS72.Location = new System.Drawing.Point(269, 24);
             this.labelTS72.Name = "labelTS72";
             this.labelTS72.Size = new System.Drawing.Size(16, 16);
             this.labelTS72.TabIndex = 394;
@@ -15307,7 +15319,7 @@
             // labelTS73
             // 
             this.labelTS73.Image = null;
-            this.labelTS73.Location = new System.Drawing.Point(246, 24);
+            this.labelTS73.Location = new System.Drawing.Point(253, 24);
             this.labelTS73.Name = "labelTS73";
             this.labelTS73.Size = new System.Drawing.Size(16, 16);
             this.labelTS73.TabIndex = 393;
@@ -15317,7 +15329,7 @@
             // labelTS74
             // 
             this.labelTS74.Image = null;
-            this.labelTS74.Location = new System.Drawing.Point(230, 24);
+            this.labelTS74.Location = new System.Drawing.Point(237, 24);
             this.labelTS74.Name = "labelTS74";
             this.labelTS74.Size = new System.Drawing.Size(16, 16);
             this.labelTS74.TabIndex = 392;
@@ -15327,7 +15339,7 @@
             // labelTS75
             // 
             this.labelTS75.Image = null;
-            this.labelTS75.Location = new System.Drawing.Point(214, 24);
+            this.labelTS75.Location = new System.Drawing.Point(221, 24);
             this.labelTS75.Name = "labelTS75";
             this.labelTS75.Size = new System.Drawing.Size(16, 16);
             this.labelTS75.TabIndex = 391;
@@ -15337,7 +15349,7 @@
             // labelTS76
             // 
             this.labelTS76.Image = null;
-            this.labelTS76.Location = new System.Drawing.Point(198, 24);
+            this.labelTS76.Location = new System.Drawing.Point(205, 24);
             this.labelTS76.Name = "labelTS76";
             this.labelTS76.Size = new System.Drawing.Size(16, 16);
             this.labelTS76.TabIndex = 390;
@@ -15347,7 +15359,7 @@
             // labelTS77
             // 
             this.labelTS77.Image = null;
-            this.labelTS77.Location = new System.Drawing.Point(182, 24);
+            this.labelTS77.Location = new System.Drawing.Point(189, 24);
             this.labelTS77.Name = "labelTS77";
             this.labelTS77.Size = new System.Drawing.Size(16, 16);
             this.labelTS77.TabIndex = 389;
@@ -15357,7 +15369,7 @@
             // labelTS78
             // 
             this.labelTS78.Image = null;
-            this.labelTS78.Location = new System.Drawing.Point(166, 24);
+            this.labelTS78.Location = new System.Drawing.Point(173, 24);
             this.labelTS78.Name = "labelTS78";
             this.labelTS78.Size = new System.Drawing.Size(16, 16);
             this.labelTS78.TabIndex = 388;
@@ -15367,7 +15379,7 @@
             // labelTS79
             // 
             this.labelTS79.Image = null;
-            this.labelTS79.Location = new System.Drawing.Point(144, 24);
+            this.labelTS79.Location = new System.Drawing.Point(141, 24);
             this.labelTS79.Name = "labelTS79";
             this.labelTS79.Size = new System.Drawing.Size(16, 16);
             this.labelTS79.TabIndex = 387;
@@ -15377,7 +15389,7 @@
             // labelTS80
             // 
             this.labelTS80.Image = null;
-            this.labelTS80.Location = new System.Drawing.Point(128, 24);
+            this.labelTS80.Location = new System.Drawing.Point(125, 24);
             this.labelTS80.Name = "labelTS80";
             this.labelTS80.Size = new System.Drawing.Size(16, 16);
             this.labelTS80.TabIndex = 386;
@@ -15387,7 +15399,7 @@
             // labelTS81
             // 
             this.labelTS81.Image = null;
-            this.labelTS81.Location = new System.Drawing.Point(112, 24);
+            this.labelTS81.Location = new System.Drawing.Point(109, 24);
             this.labelTS81.Name = "labelTS81";
             this.labelTS81.Size = new System.Drawing.Size(16, 16);
             this.labelTS81.TabIndex = 385;
@@ -15397,7 +15409,7 @@
             // labelTS82
             // 
             this.labelTS82.Image = null;
-            this.labelTS82.Location = new System.Drawing.Point(96, 24);
+            this.labelTS82.Location = new System.Drawing.Point(93, 24);
             this.labelTS82.Name = "labelTS82";
             this.labelTS82.Size = new System.Drawing.Size(16, 16);
             this.labelTS82.TabIndex = 384;
@@ -15407,7 +15419,7 @@
             // labelTS83
             // 
             this.labelTS83.Image = null;
-            this.labelTS83.Location = new System.Drawing.Point(80, 24);
+            this.labelTS83.Location = new System.Drawing.Point(77, 24);
             this.labelTS83.Name = "labelTS83";
             this.labelTS83.Size = new System.Drawing.Size(16, 16);
             this.labelTS83.TabIndex = 383;
@@ -15417,7 +15429,7 @@
             // labelTS84
             // 
             this.labelTS84.Image = null;
-            this.labelTS84.Location = new System.Drawing.Point(64, 24);
+            this.labelTS84.Location = new System.Drawing.Point(61, 24);
             this.labelTS84.Name = "labelTS84";
             this.labelTS84.Size = new System.Drawing.Size(16, 16);
             this.labelTS84.TabIndex = 382;
@@ -15427,7 +15439,7 @@
             // labelTS85
             // 
             this.labelTS85.Image = null;
-            this.labelTS85.Location = new System.Drawing.Point(48, 24);
+            this.labelTS85.Location = new System.Drawing.Point(45, 24);
             this.labelTS85.Name = "labelTS85";
             this.labelTS85.Size = new System.Drawing.Size(16, 16);
             this.labelTS85.TabIndex = 381;
@@ -15449,7 +15461,7 @@
             // 
             this.lblVHFRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVHFRxControl.Image = null;
-            this.lblVHFRxControl.Location = new System.Drawing.Point(60, 8);
+            this.lblVHFRxControl.Location = new System.Drawing.Point(54, 8);
             this.lblVHFRxControl.Name = "lblVHFRxControl";
             this.lblVHFRxControl.Size = new System.Drawing.Size(95, 16);
             this.lblVHFRxControl.TabIndex = 379;
@@ -15459,7 +15471,7 @@
             // labelTS59
             // 
             this.labelTS59.Image = null;
-            this.labelTS59.Location = new System.Drawing.Point(5, 217);
+            this.labelTS59.Location = new System.Drawing.Point(3, 217);
             this.labelTS59.Name = "labelTS59";
             this.labelTS59.Size = new System.Drawing.Size(40, 16);
             this.labelTS59.TabIndex = 378;
@@ -15469,7 +15481,7 @@
             // labelTS60
             // 
             this.labelTS60.Image = null;
-            this.labelTS60.Location = new System.Drawing.Point(5, 201);
+            this.labelTS60.Location = new System.Drawing.Point(3, 201);
             this.labelTS60.Name = "labelTS60";
             this.labelTS60.Size = new System.Drawing.Size(40, 16);
             this.labelTS60.TabIndex = 377;
@@ -15479,7 +15491,7 @@
             // labelTS61
             // 
             this.labelTS61.Image = null;
-            this.labelTS61.Location = new System.Drawing.Point(6, 185);
+            this.labelTS61.Location = new System.Drawing.Point(3, 185);
             this.labelTS61.Name = "labelTS61";
             this.labelTS61.Size = new System.Drawing.Size(35, 16);
             this.labelTS61.TabIndex = 376;
@@ -15489,7 +15501,7 @@
             // labelTS62
             // 
             this.labelTS62.Image = null;
-            this.labelTS62.Location = new System.Drawing.Point(6, 169);
+            this.labelTS62.Location = new System.Drawing.Point(3, 169);
             this.labelTS62.Name = "labelTS62";
             this.labelTS62.Size = new System.Drawing.Size(35, 16);
             this.labelTS62.TabIndex = 375;
@@ -15499,7 +15511,7 @@
             // labelTS63
             // 
             this.labelTS63.Image = null;
-            this.labelTS63.Location = new System.Drawing.Point(6, 153);
+            this.labelTS63.Location = new System.Drawing.Point(3, 153);
             this.labelTS63.Name = "labelTS63";
             this.labelTS63.Size = new System.Drawing.Size(35, 16);
             this.labelTS63.TabIndex = 374;
@@ -15509,7 +15521,7 @@
             // labelTS64
             // 
             this.labelTS64.Image = null;
-            this.labelTS64.Location = new System.Drawing.Point(6, 137);
+            this.labelTS64.Location = new System.Drawing.Point(3, 137);
             this.labelTS64.Name = "labelTS64";
             this.labelTS64.Size = new System.Drawing.Size(35, 16);
             this.labelTS64.TabIndex = 373;
@@ -15519,7 +15531,7 @@
             // labelTS65
             // 
             this.labelTS65.Image = null;
-            this.labelTS65.Location = new System.Drawing.Point(6, 121);
+            this.labelTS65.Location = new System.Drawing.Point(3, 121);
             this.labelTS65.Name = "labelTS65";
             this.labelTS65.Size = new System.Drawing.Size(35, 16);
             this.labelTS65.TabIndex = 372;
@@ -15529,7 +15541,7 @@
             // labelTS66
             // 
             this.labelTS66.Image = null;
-            this.labelTS66.Location = new System.Drawing.Point(6, 105);
+            this.labelTS66.Location = new System.Drawing.Point(3, 105);
             this.labelTS66.Name = "labelTS66";
             this.labelTS66.Size = new System.Drawing.Size(35, 16);
             this.labelTS66.TabIndex = 371;
@@ -15539,7 +15551,7 @@
             // labelTS67
             // 
             this.labelTS67.Image = null;
-            this.labelTS67.Location = new System.Drawing.Point(6, 89);
+            this.labelTS67.Location = new System.Drawing.Point(3, 89);
             this.labelTS67.Name = "labelTS67";
             this.labelTS67.Size = new System.Drawing.Size(35, 16);
             this.labelTS67.TabIndex = 370;
@@ -15549,7 +15561,7 @@
             // labelTS68
             // 
             this.labelTS68.Image = null;
-            this.labelTS68.Location = new System.Drawing.Point(6, 73);
+            this.labelTS68.Location = new System.Drawing.Point(3, 73);
             this.labelTS68.Name = "labelTS68";
             this.labelTS68.Size = new System.Drawing.Size(35, 16);
             this.labelTS68.TabIndex = 369;
@@ -15559,7 +15571,7 @@
             // labelTS69
             // 
             this.labelTS69.Image = null;
-            this.labelTS69.Location = new System.Drawing.Point(6, 57);
+            this.labelTS69.Location = new System.Drawing.Point(3, 57);
             this.labelTS69.Name = "labelTS69";
             this.labelTS69.Size = new System.Drawing.Size(35, 16);
             this.labelTS69.TabIndex = 368;
@@ -15569,7 +15581,7 @@
             // labelTS70
             // 
             this.labelTS70.Image = null;
-            this.labelTS70.Location = new System.Drawing.Point(6, 41);
+            this.labelTS70.Location = new System.Drawing.Point(3, 41);
             this.labelTS70.Name = "labelTS70";
             this.labelTS70.Size = new System.Drawing.Size(35, 16);
             this.labelTS70.TabIndex = 367;
@@ -15580,7 +15592,7 @@
             // 
             this.chkPenOCxmitVHF117.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF117.Image = null;
-            this.chkPenOCxmitVHF117.Location = new System.Drawing.Point(262, 217);
+            this.chkPenOCxmitVHF117.Location = new System.Drawing.Point(269, 218);
             this.chkPenOCxmitVHF117.Name = "chkPenOCxmitVHF117";
             this.chkPenOCxmitVHF117.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF117.TabIndex = 366;
@@ -15591,7 +15603,7 @@
             // 
             this.chkPenOCxmitVHF116.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF116.Image = null;
-            this.chkPenOCxmitVHF116.Location = new System.Drawing.Point(246, 217);
+            this.chkPenOCxmitVHF116.Location = new System.Drawing.Point(253, 218);
             this.chkPenOCxmitVHF116.Name = "chkPenOCxmitVHF116";
             this.chkPenOCxmitVHF116.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF116.TabIndex = 365;
@@ -15602,7 +15614,7 @@
             // 
             this.chkPenOCxmitVHF115.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF115.Image = null;
-            this.chkPenOCxmitVHF115.Location = new System.Drawing.Point(230, 217);
+            this.chkPenOCxmitVHF115.Location = new System.Drawing.Point(237, 218);
             this.chkPenOCxmitVHF115.Name = "chkPenOCxmitVHF115";
             this.chkPenOCxmitVHF115.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF115.TabIndex = 364;
@@ -15613,7 +15625,7 @@
             // 
             this.chkPenOCxmitVHF114.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF114.Image = null;
-            this.chkPenOCxmitVHF114.Location = new System.Drawing.Point(214, 217);
+            this.chkPenOCxmitVHF114.Location = new System.Drawing.Point(221, 218);
             this.chkPenOCxmitVHF114.Name = "chkPenOCxmitVHF114";
             this.chkPenOCxmitVHF114.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF114.TabIndex = 363;
@@ -15624,7 +15636,7 @@
             // 
             this.chkPenOCxmitVHF113.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF113.Image = null;
-            this.chkPenOCxmitVHF113.Location = new System.Drawing.Point(198, 217);
+            this.chkPenOCxmitVHF113.Location = new System.Drawing.Point(205, 218);
             this.chkPenOCxmitVHF113.Name = "chkPenOCxmitVHF113";
             this.chkPenOCxmitVHF113.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF113.TabIndex = 362;
@@ -15635,7 +15647,7 @@
             // 
             this.chkPenOCxmitVHF112.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF112.Image = null;
-            this.chkPenOCxmitVHF112.Location = new System.Drawing.Point(182, 217);
+            this.chkPenOCxmitVHF112.Location = new System.Drawing.Point(189, 218);
             this.chkPenOCxmitVHF112.Name = "chkPenOCxmitVHF112";
             this.chkPenOCxmitVHF112.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF112.TabIndex = 361;
@@ -15646,7 +15658,7 @@
             // 
             this.chkPenOCxmitVHF111.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF111.Image = null;
-            this.chkPenOCxmitVHF111.Location = new System.Drawing.Point(166, 217);
+            this.chkPenOCxmitVHF111.Location = new System.Drawing.Point(173, 218);
             this.chkPenOCxmitVHF111.Name = "chkPenOCxmitVHF111";
             this.chkPenOCxmitVHF111.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF111.TabIndex = 360;
@@ -15657,7 +15669,7 @@
             // 
             this.chkPenOCrcvVHF117.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF117.Image = null;
-            this.chkPenOCrcvVHF117.Location = new System.Drawing.Point(144, 217);
+            this.chkPenOCrcvVHF117.Location = new System.Drawing.Point(141, 217);
             this.chkPenOCrcvVHF117.Name = "chkPenOCrcvVHF117";
             this.chkPenOCrcvVHF117.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF117.TabIndex = 359;
@@ -15668,7 +15680,7 @@
             // 
             this.chkPenOCrcvVHF116.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF116.Image = null;
-            this.chkPenOCrcvVHF116.Location = new System.Drawing.Point(128, 217);
+            this.chkPenOCrcvVHF116.Location = new System.Drawing.Point(125, 217);
             this.chkPenOCrcvVHF116.Name = "chkPenOCrcvVHF116";
             this.chkPenOCrcvVHF116.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF116.TabIndex = 358;
@@ -15679,7 +15691,7 @@
             // 
             this.chkPenOCrcvVHF115.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF115.Image = null;
-            this.chkPenOCrcvVHF115.Location = new System.Drawing.Point(112, 217);
+            this.chkPenOCrcvVHF115.Location = new System.Drawing.Point(109, 217);
             this.chkPenOCrcvVHF115.Name = "chkPenOCrcvVHF115";
             this.chkPenOCrcvVHF115.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF115.TabIndex = 357;
@@ -15690,7 +15702,7 @@
             // 
             this.chkPenOCrcvVHF114.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF114.Image = null;
-            this.chkPenOCrcvVHF114.Location = new System.Drawing.Point(96, 217);
+            this.chkPenOCrcvVHF114.Location = new System.Drawing.Point(93, 217);
             this.chkPenOCrcvVHF114.Name = "chkPenOCrcvVHF114";
             this.chkPenOCrcvVHF114.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF114.TabIndex = 356;
@@ -15701,7 +15713,7 @@
             // 
             this.chkPenOCrcvVHF113.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF113.Image = null;
-            this.chkPenOCrcvVHF113.Location = new System.Drawing.Point(80, 217);
+            this.chkPenOCrcvVHF113.Location = new System.Drawing.Point(77, 217);
             this.chkPenOCrcvVHF113.Name = "chkPenOCrcvVHF113";
             this.chkPenOCrcvVHF113.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF113.TabIndex = 355;
@@ -15712,7 +15724,7 @@
             // 
             this.chkPenOCrcvVHF112.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF112.Image = null;
-            this.chkPenOCrcvVHF112.Location = new System.Drawing.Point(64, 217);
+            this.chkPenOCrcvVHF112.Location = new System.Drawing.Point(61, 217);
             this.chkPenOCrcvVHF112.Name = "chkPenOCrcvVHF112";
             this.chkPenOCrcvVHF112.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF112.TabIndex = 354;
@@ -15723,7 +15735,7 @@
             // 
             this.chkPenOCrcvVHF111.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF111.Image = null;
-            this.chkPenOCrcvVHF111.Location = new System.Drawing.Point(48, 217);
+            this.chkPenOCrcvVHF111.Location = new System.Drawing.Point(45, 217);
             this.chkPenOCrcvVHF111.Name = "chkPenOCrcvVHF111";
             this.chkPenOCrcvVHF111.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF111.TabIndex = 353;
@@ -15734,7 +15746,7 @@
             // 
             this.chkPenOCxmitVHF107.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF107.Image = null;
-            this.chkPenOCxmitVHF107.Location = new System.Drawing.Point(262, 201);
+            this.chkPenOCxmitVHF107.Location = new System.Drawing.Point(269, 202);
             this.chkPenOCxmitVHF107.Name = "chkPenOCxmitVHF107";
             this.chkPenOCxmitVHF107.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF107.TabIndex = 352;
@@ -15745,7 +15757,7 @@
             // 
             this.chkPenOCxmitVHF106.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF106.Image = null;
-            this.chkPenOCxmitVHF106.Location = new System.Drawing.Point(246, 201);
+            this.chkPenOCxmitVHF106.Location = new System.Drawing.Point(253, 202);
             this.chkPenOCxmitVHF106.Name = "chkPenOCxmitVHF106";
             this.chkPenOCxmitVHF106.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF106.TabIndex = 351;
@@ -15756,7 +15768,7 @@
             // 
             this.chkPenOCxmitVHF105.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF105.Image = null;
-            this.chkPenOCxmitVHF105.Location = new System.Drawing.Point(230, 201);
+            this.chkPenOCxmitVHF105.Location = new System.Drawing.Point(237, 202);
             this.chkPenOCxmitVHF105.Name = "chkPenOCxmitVHF105";
             this.chkPenOCxmitVHF105.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF105.TabIndex = 350;
@@ -15767,7 +15779,7 @@
             // 
             this.chkPenOCxmitVHF104.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF104.Image = null;
-            this.chkPenOCxmitVHF104.Location = new System.Drawing.Point(214, 201);
+            this.chkPenOCxmitVHF104.Location = new System.Drawing.Point(221, 202);
             this.chkPenOCxmitVHF104.Name = "chkPenOCxmitVHF104";
             this.chkPenOCxmitVHF104.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF104.TabIndex = 349;
@@ -15778,7 +15790,7 @@
             // 
             this.chkPenOCxmitVHF103.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF103.Image = null;
-            this.chkPenOCxmitVHF103.Location = new System.Drawing.Point(198, 201);
+            this.chkPenOCxmitVHF103.Location = new System.Drawing.Point(205, 202);
             this.chkPenOCxmitVHF103.Name = "chkPenOCxmitVHF103";
             this.chkPenOCxmitVHF103.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF103.TabIndex = 348;
@@ -15789,7 +15801,7 @@
             // 
             this.chkPenOCxmitVHF102.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF102.Image = null;
-            this.chkPenOCxmitVHF102.Location = new System.Drawing.Point(182, 201);
+            this.chkPenOCxmitVHF102.Location = new System.Drawing.Point(189, 202);
             this.chkPenOCxmitVHF102.Name = "chkPenOCxmitVHF102";
             this.chkPenOCxmitVHF102.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF102.TabIndex = 347;
@@ -15800,7 +15812,7 @@
             // 
             this.chkPenOCxmitVHF101.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF101.Image = null;
-            this.chkPenOCxmitVHF101.Location = new System.Drawing.Point(166, 201);
+            this.chkPenOCxmitVHF101.Location = new System.Drawing.Point(173, 202);
             this.chkPenOCxmitVHF101.Name = "chkPenOCxmitVHF101";
             this.chkPenOCxmitVHF101.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF101.TabIndex = 346;
@@ -15811,7 +15823,7 @@
             // 
             this.chkPenOCrcvVHF107.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF107.Image = null;
-            this.chkPenOCrcvVHF107.Location = new System.Drawing.Point(144, 201);
+            this.chkPenOCrcvVHF107.Location = new System.Drawing.Point(141, 201);
             this.chkPenOCrcvVHF107.Name = "chkPenOCrcvVHF107";
             this.chkPenOCrcvVHF107.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF107.TabIndex = 345;
@@ -15822,7 +15834,7 @@
             // 
             this.chkPenOCrcvVHF106.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF106.Image = null;
-            this.chkPenOCrcvVHF106.Location = new System.Drawing.Point(128, 201);
+            this.chkPenOCrcvVHF106.Location = new System.Drawing.Point(125, 201);
             this.chkPenOCrcvVHF106.Name = "chkPenOCrcvVHF106";
             this.chkPenOCrcvVHF106.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF106.TabIndex = 344;
@@ -15833,7 +15845,7 @@
             // 
             this.chkPenOCrcvVHF105.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF105.Image = null;
-            this.chkPenOCrcvVHF105.Location = new System.Drawing.Point(112, 201);
+            this.chkPenOCrcvVHF105.Location = new System.Drawing.Point(109, 201);
             this.chkPenOCrcvVHF105.Name = "chkPenOCrcvVHF105";
             this.chkPenOCrcvVHF105.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF105.TabIndex = 343;
@@ -15844,7 +15856,7 @@
             // 
             this.chkPenOCrcvVHF104.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF104.Image = null;
-            this.chkPenOCrcvVHF104.Location = new System.Drawing.Point(96, 201);
+            this.chkPenOCrcvVHF104.Location = new System.Drawing.Point(93, 201);
             this.chkPenOCrcvVHF104.Name = "chkPenOCrcvVHF104";
             this.chkPenOCrcvVHF104.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF104.TabIndex = 342;
@@ -15855,7 +15867,7 @@
             // 
             this.chkPenOCrcvVHF103.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF103.Image = null;
-            this.chkPenOCrcvVHF103.Location = new System.Drawing.Point(80, 201);
+            this.chkPenOCrcvVHF103.Location = new System.Drawing.Point(77, 201);
             this.chkPenOCrcvVHF103.Name = "chkPenOCrcvVHF103";
             this.chkPenOCrcvVHF103.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF103.TabIndex = 341;
@@ -15866,7 +15878,7 @@
             // 
             this.chkPenOCrcvVHF102.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF102.Image = null;
-            this.chkPenOCrcvVHF102.Location = new System.Drawing.Point(64, 201);
+            this.chkPenOCrcvVHF102.Location = new System.Drawing.Point(61, 201);
             this.chkPenOCrcvVHF102.Name = "chkPenOCrcvVHF102";
             this.chkPenOCrcvVHF102.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF102.TabIndex = 340;
@@ -15877,7 +15889,7 @@
             // 
             this.chkPenOCrcvVHF101.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF101.Image = null;
-            this.chkPenOCrcvVHF101.Location = new System.Drawing.Point(48, 201);
+            this.chkPenOCrcvVHF101.Location = new System.Drawing.Point(45, 201);
             this.chkPenOCrcvVHF101.Name = "chkPenOCrcvVHF101";
             this.chkPenOCrcvVHF101.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF101.TabIndex = 339;
@@ -15888,7 +15900,7 @@
             // 
             this.chkPenOCxmitVHF97.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF97.Image = null;
-            this.chkPenOCxmitVHF97.Location = new System.Drawing.Point(262, 185);
+            this.chkPenOCxmitVHF97.Location = new System.Drawing.Point(269, 186);
             this.chkPenOCxmitVHF97.Name = "chkPenOCxmitVHF97";
             this.chkPenOCxmitVHF97.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF97.TabIndex = 338;
@@ -15899,7 +15911,7 @@
             // 
             this.chkPenOCxmitVHF96.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF96.Image = null;
-            this.chkPenOCxmitVHF96.Location = new System.Drawing.Point(246, 185);
+            this.chkPenOCxmitVHF96.Location = new System.Drawing.Point(253, 186);
             this.chkPenOCxmitVHF96.Name = "chkPenOCxmitVHF96";
             this.chkPenOCxmitVHF96.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF96.TabIndex = 337;
@@ -15910,7 +15922,7 @@
             // 
             this.chkPenOCxmitVHF95.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF95.Image = null;
-            this.chkPenOCxmitVHF95.Location = new System.Drawing.Point(230, 185);
+            this.chkPenOCxmitVHF95.Location = new System.Drawing.Point(237, 186);
             this.chkPenOCxmitVHF95.Name = "chkPenOCxmitVHF95";
             this.chkPenOCxmitVHF95.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF95.TabIndex = 336;
@@ -15921,7 +15933,7 @@
             // 
             this.chkPenOCxmitVHF94.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF94.Image = null;
-            this.chkPenOCxmitVHF94.Location = new System.Drawing.Point(214, 185);
+            this.chkPenOCxmitVHF94.Location = new System.Drawing.Point(221, 186);
             this.chkPenOCxmitVHF94.Name = "chkPenOCxmitVHF94";
             this.chkPenOCxmitVHF94.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF94.TabIndex = 335;
@@ -15932,7 +15944,7 @@
             // 
             this.chkPenOCxmitVHF93.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF93.Image = null;
-            this.chkPenOCxmitVHF93.Location = new System.Drawing.Point(198, 185);
+            this.chkPenOCxmitVHF93.Location = new System.Drawing.Point(205, 186);
             this.chkPenOCxmitVHF93.Name = "chkPenOCxmitVHF93";
             this.chkPenOCxmitVHF93.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF93.TabIndex = 334;
@@ -15943,7 +15955,7 @@
             // 
             this.chkPenOCxmitVHF92.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF92.Image = null;
-            this.chkPenOCxmitVHF92.Location = new System.Drawing.Point(182, 185);
+            this.chkPenOCxmitVHF92.Location = new System.Drawing.Point(189, 186);
             this.chkPenOCxmitVHF92.Name = "chkPenOCxmitVHF92";
             this.chkPenOCxmitVHF92.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF92.TabIndex = 333;
@@ -15954,7 +15966,7 @@
             // 
             this.chkPenOCxmitVHF91.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF91.Image = null;
-            this.chkPenOCxmitVHF91.Location = new System.Drawing.Point(166, 185);
+            this.chkPenOCxmitVHF91.Location = new System.Drawing.Point(173, 186);
             this.chkPenOCxmitVHF91.Name = "chkPenOCxmitVHF91";
             this.chkPenOCxmitVHF91.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF91.TabIndex = 332;
@@ -15965,7 +15977,7 @@
             // 
             this.chkPenOCrcvVHF97.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF97.Image = null;
-            this.chkPenOCrcvVHF97.Location = new System.Drawing.Point(144, 185);
+            this.chkPenOCrcvVHF97.Location = new System.Drawing.Point(141, 185);
             this.chkPenOCrcvVHF97.Name = "chkPenOCrcvVHF97";
             this.chkPenOCrcvVHF97.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF97.TabIndex = 331;
@@ -15976,7 +15988,7 @@
             // 
             this.chkPenOCrcvVHF96.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF96.Image = null;
-            this.chkPenOCrcvVHF96.Location = new System.Drawing.Point(128, 185);
+            this.chkPenOCrcvVHF96.Location = new System.Drawing.Point(125, 185);
             this.chkPenOCrcvVHF96.Name = "chkPenOCrcvVHF96";
             this.chkPenOCrcvVHF96.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF96.TabIndex = 330;
@@ -15987,7 +15999,7 @@
             // 
             this.chkPenOCrcvVHF95.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF95.Image = null;
-            this.chkPenOCrcvVHF95.Location = new System.Drawing.Point(112, 185);
+            this.chkPenOCrcvVHF95.Location = new System.Drawing.Point(109, 185);
             this.chkPenOCrcvVHF95.Name = "chkPenOCrcvVHF95";
             this.chkPenOCrcvVHF95.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF95.TabIndex = 329;
@@ -15998,7 +16010,7 @@
             // 
             this.chkPenOCrcvVHF94.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF94.Image = null;
-            this.chkPenOCrcvVHF94.Location = new System.Drawing.Point(96, 185);
+            this.chkPenOCrcvVHF94.Location = new System.Drawing.Point(93, 185);
             this.chkPenOCrcvVHF94.Name = "chkPenOCrcvVHF94";
             this.chkPenOCrcvVHF94.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF94.TabIndex = 328;
@@ -16009,7 +16021,7 @@
             // 
             this.chkPenOCrcvVHF93.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF93.Image = null;
-            this.chkPenOCrcvVHF93.Location = new System.Drawing.Point(80, 185);
+            this.chkPenOCrcvVHF93.Location = new System.Drawing.Point(77, 185);
             this.chkPenOCrcvVHF93.Name = "chkPenOCrcvVHF93";
             this.chkPenOCrcvVHF93.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF93.TabIndex = 327;
@@ -16020,7 +16032,7 @@
             // 
             this.chkPenOCrcvVHF92.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF92.Image = null;
-            this.chkPenOCrcvVHF92.Location = new System.Drawing.Point(64, 185);
+            this.chkPenOCrcvVHF92.Location = new System.Drawing.Point(61, 185);
             this.chkPenOCrcvVHF92.Name = "chkPenOCrcvVHF92";
             this.chkPenOCrcvVHF92.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF92.TabIndex = 326;
@@ -16031,7 +16043,7 @@
             // 
             this.chkPenOCrcvVHF91.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF91.Image = null;
-            this.chkPenOCrcvVHF91.Location = new System.Drawing.Point(48, 185);
+            this.chkPenOCrcvVHF91.Location = new System.Drawing.Point(45, 185);
             this.chkPenOCrcvVHF91.Name = "chkPenOCrcvVHF91";
             this.chkPenOCrcvVHF91.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF91.TabIndex = 325;
@@ -16042,7 +16054,7 @@
             // 
             this.chkPenOCxmitVHF87.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF87.Image = null;
-            this.chkPenOCxmitVHF87.Location = new System.Drawing.Point(262, 169);
+            this.chkPenOCxmitVHF87.Location = new System.Drawing.Point(269, 170);
             this.chkPenOCxmitVHF87.Name = "chkPenOCxmitVHF87";
             this.chkPenOCxmitVHF87.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF87.TabIndex = 324;
@@ -16053,7 +16065,7 @@
             // 
             this.chkPenOCxmitVHF86.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF86.Image = null;
-            this.chkPenOCxmitVHF86.Location = new System.Drawing.Point(246, 169);
+            this.chkPenOCxmitVHF86.Location = new System.Drawing.Point(253, 170);
             this.chkPenOCxmitVHF86.Name = "chkPenOCxmitVHF86";
             this.chkPenOCxmitVHF86.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF86.TabIndex = 323;
@@ -16064,7 +16076,7 @@
             // 
             this.chkPenOCxmitVHF85.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF85.Image = null;
-            this.chkPenOCxmitVHF85.Location = new System.Drawing.Point(230, 169);
+            this.chkPenOCxmitVHF85.Location = new System.Drawing.Point(237, 170);
             this.chkPenOCxmitVHF85.Name = "chkPenOCxmitVHF85";
             this.chkPenOCxmitVHF85.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF85.TabIndex = 322;
@@ -16075,7 +16087,7 @@
             // 
             this.chkPenOCxmitVHF84.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF84.Image = null;
-            this.chkPenOCxmitVHF84.Location = new System.Drawing.Point(214, 169);
+            this.chkPenOCxmitVHF84.Location = new System.Drawing.Point(221, 170);
             this.chkPenOCxmitVHF84.Name = "chkPenOCxmitVHF84";
             this.chkPenOCxmitVHF84.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF84.TabIndex = 321;
@@ -16086,7 +16098,7 @@
             // 
             this.chkPenOCxmitVHF83.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF83.Image = null;
-            this.chkPenOCxmitVHF83.Location = new System.Drawing.Point(198, 169);
+            this.chkPenOCxmitVHF83.Location = new System.Drawing.Point(205, 170);
             this.chkPenOCxmitVHF83.Name = "chkPenOCxmitVHF83";
             this.chkPenOCxmitVHF83.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF83.TabIndex = 320;
@@ -16097,7 +16109,7 @@
             // 
             this.chkPenOCxmitVHF82.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF82.Image = null;
-            this.chkPenOCxmitVHF82.Location = new System.Drawing.Point(182, 169);
+            this.chkPenOCxmitVHF82.Location = new System.Drawing.Point(189, 170);
             this.chkPenOCxmitVHF82.Name = "chkPenOCxmitVHF82";
             this.chkPenOCxmitVHF82.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF82.TabIndex = 319;
@@ -16108,7 +16120,7 @@
             // 
             this.chkPenOCxmitVHF81.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF81.Image = null;
-            this.chkPenOCxmitVHF81.Location = new System.Drawing.Point(166, 169);
+            this.chkPenOCxmitVHF81.Location = new System.Drawing.Point(173, 170);
             this.chkPenOCxmitVHF81.Name = "chkPenOCxmitVHF81";
             this.chkPenOCxmitVHF81.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF81.TabIndex = 318;
@@ -16119,7 +16131,7 @@
             // 
             this.chkPenOCrcvVHF87.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF87.Image = null;
-            this.chkPenOCrcvVHF87.Location = new System.Drawing.Point(144, 169);
+            this.chkPenOCrcvVHF87.Location = new System.Drawing.Point(141, 169);
             this.chkPenOCrcvVHF87.Name = "chkPenOCrcvVHF87";
             this.chkPenOCrcvVHF87.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF87.TabIndex = 317;
@@ -16130,7 +16142,7 @@
             // 
             this.chkPenOCrcvVHF86.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF86.Image = null;
-            this.chkPenOCrcvVHF86.Location = new System.Drawing.Point(128, 169);
+            this.chkPenOCrcvVHF86.Location = new System.Drawing.Point(125, 169);
             this.chkPenOCrcvVHF86.Name = "chkPenOCrcvVHF86";
             this.chkPenOCrcvVHF86.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF86.TabIndex = 316;
@@ -16141,7 +16153,7 @@
             // 
             this.chkPenOCrcvVHF85.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF85.Image = null;
-            this.chkPenOCrcvVHF85.Location = new System.Drawing.Point(112, 169);
+            this.chkPenOCrcvVHF85.Location = new System.Drawing.Point(109, 169);
             this.chkPenOCrcvVHF85.Name = "chkPenOCrcvVHF85";
             this.chkPenOCrcvVHF85.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF85.TabIndex = 315;
@@ -16152,7 +16164,7 @@
             // 
             this.chkPenOCrcvVHF84.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF84.Image = null;
-            this.chkPenOCrcvVHF84.Location = new System.Drawing.Point(96, 169);
+            this.chkPenOCrcvVHF84.Location = new System.Drawing.Point(93, 169);
             this.chkPenOCrcvVHF84.Name = "chkPenOCrcvVHF84";
             this.chkPenOCrcvVHF84.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF84.TabIndex = 314;
@@ -16163,7 +16175,7 @@
             // 
             this.chkPenOCrcvVHF83.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF83.Image = null;
-            this.chkPenOCrcvVHF83.Location = new System.Drawing.Point(80, 169);
+            this.chkPenOCrcvVHF83.Location = new System.Drawing.Point(77, 169);
             this.chkPenOCrcvVHF83.Name = "chkPenOCrcvVHF83";
             this.chkPenOCrcvVHF83.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF83.TabIndex = 313;
@@ -16174,7 +16186,7 @@
             // 
             this.chkPenOCrcvVHF82.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF82.Image = null;
-            this.chkPenOCrcvVHF82.Location = new System.Drawing.Point(64, 169);
+            this.chkPenOCrcvVHF82.Location = new System.Drawing.Point(61, 169);
             this.chkPenOCrcvVHF82.Name = "chkPenOCrcvVHF82";
             this.chkPenOCrcvVHF82.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF82.TabIndex = 312;
@@ -16185,7 +16197,7 @@
             // 
             this.chkPenOCrcvVHF81.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF81.Image = null;
-            this.chkPenOCrcvVHF81.Location = new System.Drawing.Point(48, 169);
+            this.chkPenOCrcvVHF81.Location = new System.Drawing.Point(45, 169);
             this.chkPenOCrcvVHF81.Name = "chkPenOCrcvVHF81";
             this.chkPenOCrcvVHF81.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF81.TabIndex = 311;
@@ -16196,7 +16208,7 @@
             // 
             this.chkPenOCxmitVHF77.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF77.Image = null;
-            this.chkPenOCxmitVHF77.Location = new System.Drawing.Point(262, 153);
+            this.chkPenOCxmitVHF77.Location = new System.Drawing.Point(269, 154);
             this.chkPenOCxmitVHF77.Name = "chkPenOCxmitVHF77";
             this.chkPenOCxmitVHF77.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF77.TabIndex = 310;
@@ -16207,7 +16219,7 @@
             // 
             this.chkPenOCxmitVHF76.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF76.Image = null;
-            this.chkPenOCxmitVHF76.Location = new System.Drawing.Point(246, 153);
+            this.chkPenOCxmitVHF76.Location = new System.Drawing.Point(253, 154);
             this.chkPenOCxmitVHF76.Name = "chkPenOCxmitVHF76";
             this.chkPenOCxmitVHF76.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF76.TabIndex = 309;
@@ -16218,7 +16230,7 @@
             // 
             this.chkPenOCxmitVHF75.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF75.Image = null;
-            this.chkPenOCxmitVHF75.Location = new System.Drawing.Point(230, 153);
+            this.chkPenOCxmitVHF75.Location = new System.Drawing.Point(237, 154);
             this.chkPenOCxmitVHF75.Name = "chkPenOCxmitVHF75";
             this.chkPenOCxmitVHF75.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF75.TabIndex = 308;
@@ -16229,7 +16241,7 @@
             // 
             this.chkPenOCxmitVHF74.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF74.Image = null;
-            this.chkPenOCxmitVHF74.Location = new System.Drawing.Point(214, 153);
+            this.chkPenOCxmitVHF74.Location = new System.Drawing.Point(221, 154);
             this.chkPenOCxmitVHF74.Name = "chkPenOCxmitVHF74";
             this.chkPenOCxmitVHF74.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF74.TabIndex = 307;
@@ -16240,7 +16252,7 @@
             // 
             this.chkPenOCxmitVHF73.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF73.Image = null;
-            this.chkPenOCxmitVHF73.Location = new System.Drawing.Point(198, 153);
+            this.chkPenOCxmitVHF73.Location = new System.Drawing.Point(205, 154);
             this.chkPenOCxmitVHF73.Name = "chkPenOCxmitVHF73";
             this.chkPenOCxmitVHF73.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF73.TabIndex = 306;
@@ -16251,7 +16263,7 @@
             // 
             this.chkPenOCxmitVHF72.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF72.Image = null;
-            this.chkPenOCxmitVHF72.Location = new System.Drawing.Point(182, 153);
+            this.chkPenOCxmitVHF72.Location = new System.Drawing.Point(189, 154);
             this.chkPenOCxmitVHF72.Name = "chkPenOCxmitVHF72";
             this.chkPenOCxmitVHF72.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF72.TabIndex = 305;
@@ -16262,7 +16274,7 @@
             // 
             this.chkPenOCxmitVHF71.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF71.Image = null;
-            this.chkPenOCxmitVHF71.Location = new System.Drawing.Point(166, 153);
+            this.chkPenOCxmitVHF71.Location = new System.Drawing.Point(173, 154);
             this.chkPenOCxmitVHF71.Name = "chkPenOCxmitVHF71";
             this.chkPenOCxmitVHF71.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF71.TabIndex = 304;
@@ -16273,7 +16285,7 @@
             // 
             this.chkPenOCrcvVHF77.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF77.Image = null;
-            this.chkPenOCrcvVHF77.Location = new System.Drawing.Point(144, 153);
+            this.chkPenOCrcvVHF77.Location = new System.Drawing.Point(141, 153);
             this.chkPenOCrcvVHF77.Name = "chkPenOCrcvVHF77";
             this.chkPenOCrcvVHF77.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF77.TabIndex = 303;
@@ -16284,7 +16296,7 @@
             // 
             this.chkPenOCrcvVHF76.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF76.Image = null;
-            this.chkPenOCrcvVHF76.Location = new System.Drawing.Point(128, 153);
+            this.chkPenOCrcvVHF76.Location = new System.Drawing.Point(125, 153);
             this.chkPenOCrcvVHF76.Name = "chkPenOCrcvVHF76";
             this.chkPenOCrcvVHF76.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF76.TabIndex = 302;
@@ -16295,7 +16307,7 @@
             // 
             this.chkPenOCrcvVHF75.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF75.Image = null;
-            this.chkPenOCrcvVHF75.Location = new System.Drawing.Point(112, 153);
+            this.chkPenOCrcvVHF75.Location = new System.Drawing.Point(109, 153);
             this.chkPenOCrcvVHF75.Name = "chkPenOCrcvVHF75";
             this.chkPenOCrcvVHF75.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF75.TabIndex = 301;
@@ -16306,7 +16318,7 @@
             // 
             this.chkPenOCrcvVHF74.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF74.Image = null;
-            this.chkPenOCrcvVHF74.Location = new System.Drawing.Point(96, 153);
+            this.chkPenOCrcvVHF74.Location = new System.Drawing.Point(93, 153);
             this.chkPenOCrcvVHF74.Name = "chkPenOCrcvVHF74";
             this.chkPenOCrcvVHF74.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF74.TabIndex = 300;
@@ -16317,7 +16329,7 @@
             // 
             this.chkPenOCrcvVHF73.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF73.Image = null;
-            this.chkPenOCrcvVHF73.Location = new System.Drawing.Point(80, 153);
+            this.chkPenOCrcvVHF73.Location = new System.Drawing.Point(77, 153);
             this.chkPenOCrcvVHF73.Name = "chkPenOCrcvVHF73";
             this.chkPenOCrcvVHF73.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF73.TabIndex = 299;
@@ -16328,7 +16340,7 @@
             // 
             this.chkPenOCrcvVHF72.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF72.Image = null;
-            this.chkPenOCrcvVHF72.Location = new System.Drawing.Point(64, 153);
+            this.chkPenOCrcvVHF72.Location = new System.Drawing.Point(61, 153);
             this.chkPenOCrcvVHF72.Name = "chkPenOCrcvVHF72";
             this.chkPenOCrcvVHF72.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF72.TabIndex = 298;
@@ -16339,7 +16351,7 @@
             // 
             this.chkPenOCrcvVHF71.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF71.Image = null;
-            this.chkPenOCrcvVHF71.Location = new System.Drawing.Point(48, 153);
+            this.chkPenOCrcvVHF71.Location = new System.Drawing.Point(45, 153);
             this.chkPenOCrcvVHF71.Name = "chkPenOCrcvVHF71";
             this.chkPenOCrcvVHF71.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF71.TabIndex = 297;
@@ -16350,7 +16362,7 @@
             // 
             this.chkPenOCxmitVHF67.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF67.Image = null;
-            this.chkPenOCxmitVHF67.Location = new System.Drawing.Point(262, 137);
+            this.chkPenOCxmitVHF67.Location = new System.Drawing.Point(269, 138);
             this.chkPenOCxmitVHF67.Name = "chkPenOCxmitVHF67";
             this.chkPenOCxmitVHF67.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF67.TabIndex = 296;
@@ -16361,7 +16373,7 @@
             // 
             this.chkPenOCxmitVHF66.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF66.Image = null;
-            this.chkPenOCxmitVHF66.Location = new System.Drawing.Point(246, 137);
+            this.chkPenOCxmitVHF66.Location = new System.Drawing.Point(253, 138);
             this.chkPenOCxmitVHF66.Name = "chkPenOCxmitVHF66";
             this.chkPenOCxmitVHF66.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF66.TabIndex = 295;
@@ -16372,7 +16384,7 @@
             // 
             this.chkPenOCxmitVHF65.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF65.Image = null;
-            this.chkPenOCxmitVHF65.Location = new System.Drawing.Point(230, 137);
+            this.chkPenOCxmitVHF65.Location = new System.Drawing.Point(237, 138);
             this.chkPenOCxmitVHF65.Name = "chkPenOCxmitVHF65";
             this.chkPenOCxmitVHF65.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF65.TabIndex = 294;
@@ -16383,7 +16395,7 @@
             // 
             this.chkPenOCxmitVHF64.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF64.Image = null;
-            this.chkPenOCxmitVHF64.Location = new System.Drawing.Point(214, 137);
+            this.chkPenOCxmitVHF64.Location = new System.Drawing.Point(221, 138);
             this.chkPenOCxmitVHF64.Name = "chkPenOCxmitVHF64";
             this.chkPenOCxmitVHF64.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF64.TabIndex = 293;
@@ -16394,7 +16406,7 @@
             // 
             this.chkPenOCxmitVHF63.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF63.Image = null;
-            this.chkPenOCxmitVHF63.Location = new System.Drawing.Point(198, 137);
+            this.chkPenOCxmitVHF63.Location = new System.Drawing.Point(205, 138);
             this.chkPenOCxmitVHF63.Name = "chkPenOCxmitVHF63";
             this.chkPenOCxmitVHF63.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF63.TabIndex = 292;
@@ -16405,7 +16417,7 @@
             // 
             this.chkPenOCxmitVHF62.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF62.Image = null;
-            this.chkPenOCxmitVHF62.Location = new System.Drawing.Point(182, 137);
+            this.chkPenOCxmitVHF62.Location = new System.Drawing.Point(189, 138);
             this.chkPenOCxmitVHF62.Name = "chkPenOCxmitVHF62";
             this.chkPenOCxmitVHF62.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF62.TabIndex = 291;
@@ -16416,7 +16428,7 @@
             // 
             this.chkPenOCxmitVHF61.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF61.Image = null;
-            this.chkPenOCxmitVHF61.Location = new System.Drawing.Point(166, 137);
+            this.chkPenOCxmitVHF61.Location = new System.Drawing.Point(173, 138);
             this.chkPenOCxmitVHF61.Name = "chkPenOCxmitVHF61";
             this.chkPenOCxmitVHF61.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF61.TabIndex = 290;
@@ -16427,7 +16439,7 @@
             // 
             this.chkPenOCrcvVHF67.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF67.Image = null;
-            this.chkPenOCrcvVHF67.Location = new System.Drawing.Point(144, 137);
+            this.chkPenOCrcvVHF67.Location = new System.Drawing.Point(141, 137);
             this.chkPenOCrcvVHF67.Name = "chkPenOCrcvVHF67";
             this.chkPenOCrcvVHF67.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF67.TabIndex = 289;
@@ -16438,7 +16450,7 @@
             // 
             this.chkPenOCrcvVHF66.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF66.Image = null;
-            this.chkPenOCrcvVHF66.Location = new System.Drawing.Point(128, 137);
+            this.chkPenOCrcvVHF66.Location = new System.Drawing.Point(125, 137);
             this.chkPenOCrcvVHF66.Name = "chkPenOCrcvVHF66";
             this.chkPenOCrcvVHF66.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF66.TabIndex = 288;
@@ -16449,7 +16461,7 @@
             // 
             this.chkPenOCrcvVHF65.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF65.Image = null;
-            this.chkPenOCrcvVHF65.Location = new System.Drawing.Point(112, 137);
+            this.chkPenOCrcvVHF65.Location = new System.Drawing.Point(109, 137);
             this.chkPenOCrcvVHF65.Name = "chkPenOCrcvVHF65";
             this.chkPenOCrcvVHF65.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF65.TabIndex = 287;
@@ -16460,7 +16472,7 @@
             // 
             this.chkPenOCrcvVHF64.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF64.Image = null;
-            this.chkPenOCrcvVHF64.Location = new System.Drawing.Point(96, 137);
+            this.chkPenOCrcvVHF64.Location = new System.Drawing.Point(93, 137);
             this.chkPenOCrcvVHF64.Name = "chkPenOCrcvVHF64";
             this.chkPenOCrcvVHF64.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF64.TabIndex = 286;
@@ -16471,7 +16483,7 @@
             // 
             this.chkPenOCrcvVHF63.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF63.Image = null;
-            this.chkPenOCrcvVHF63.Location = new System.Drawing.Point(80, 137);
+            this.chkPenOCrcvVHF63.Location = new System.Drawing.Point(77, 137);
             this.chkPenOCrcvVHF63.Name = "chkPenOCrcvVHF63";
             this.chkPenOCrcvVHF63.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF63.TabIndex = 285;
@@ -16482,7 +16494,7 @@
             // 
             this.chkPenOCrcvVHF62.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF62.Image = null;
-            this.chkPenOCrcvVHF62.Location = new System.Drawing.Point(64, 137);
+            this.chkPenOCrcvVHF62.Location = new System.Drawing.Point(61, 137);
             this.chkPenOCrcvVHF62.Name = "chkPenOCrcvVHF62";
             this.chkPenOCrcvVHF62.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF62.TabIndex = 284;
@@ -16493,7 +16505,7 @@
             // 
             this.chkPenOCrcvVHF61.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF61.Image = null;
-            this.chkPenOCrcvVHF61.Location = new System.Drawing.Point(48, 137);
+            this.chkPenOCrcvVHF61.Location = new System.Drawing.Point(45, 137);
             this.chkPenOCrcvVHF61.Name = "chkPenOCrcvVHF61";
             this.chkPenOCrcvVHF61.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF61.TabIndex = 283;
@@ -16504,7 +16516,7 @@
             // 
             this.chkPenOCxmitVHF57.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF57.Image = null;
-            this.chkPenOCxmitVHF57.Location = new System.Drawing.Point(262, 121);
+            this.chkPenOCxmitVHF57.Location = new System.Drawing.Point(269, 122);
             this.chkPenOCxmitVHF57.Name = "chkPenOCxmitVHF57";
             this.chkPenOCxmitVHF57.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF57.TabIndex = 282;
@@ -16515,7 +16527,7 @@
             // 
             this.chkPenOCxmitVHF56.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF56.Image = null;
-            this.chkPenOCxmitVHF56.Location = new System.Drawing.Point(246, 121);
+            this.chkPenOCxmitVHF56.Location = new System.Drawing.Point(253, 122);
             this.chkPenOCxmitVHF56.Name = "chkPenOCxmitVHF56";
             this.chkPenOCxmitVHF56.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF56.TabIndex = 281;
@@ -16526,7 +16538,7 @@
             // 
             this.chkPenOCxmitVHF55.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF55.Image = null;
-            this.chkPenOCxmitVHF55.Location = new System.Drawing.Point(230, 121);
+            this.chkPenOCxmitVHF55.Location = new System.Drawing.Point(237, 122);
             this.chkPenOCxmitVHF55.Name = "chkPenOCxmitVHF55";
             this.chkPenOCxmitVHF55.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF55.TabIndex = 280;
@@ -16537,7 +16549,7 @@
             // 
             this.chkPenOCxmitVHF54.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF54.Image = null;
-            this.chkPenOCxmitVHF54.Location = new System.Drawing.Point(214, 121);
+            this.chkPenOCxmitVHF54.Location = new System.Drawing.Point(221, 122);
             this.chkPenOCxmitVHF54.Name = "chkPenOCxmitVHF54";
             this.chkPenOCxmitVHF54.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF54.TabIndex = 279;
@@ -16548,7 +16560,7 @@
             // 
             this.chkPenOCxmitVHF53.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF53.Image = null;
-            this.chkPenOCxmitVHF53.Location = new System.Drawing.Point(198, 121);
+            this.chkPenOCxmitVHF53.Location = new System.Drawing.Point(205, 122);
             this.chkPenOCxmitVHF53.Name = "chkPenOCxmitVHF53";
             this.chkPenOCxmitVHF53.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF53.TabIndex = 278;
@@ -16559,7 +16571,7 @@
             // 
             this.chkPenOCxmitVHF52.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF52.Image = null;
-            this.chkPenOCxmitVHF52.Location = new System.Drawing.Point(182, 121);
+            this.chkPenOCxmitVHF52.Location = new System.Drawing.Point(189, 122);
             this.chkPenOCxmitVHF52.Name = "chkPenOCxmitVHF52";
             this.chkPenOCxmitVHF52.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF52.TabIndex = 277;
@@ -16570,7 +16582,7 @@
             // 
             this.chkPenOCxmitVHF51.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF51.Image = null;
-            this.chkPenOCxmitVHF51.Location = new System.Drawing.Point(166, 121);
+            this.chkPenOCxmitVHF51.Location = new System.Drawing.Point(173, 122);
             this.chkPenOCxmitVHF51.Name = "chkPenOCxmitVHF51";
             this.chkPenOCxmitVHF51.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF51.TabIndex = 276;
@@ -16581,7 +16593,7 @@
             // 
             this.chkPenOCrcvVHF57.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF57.Image = null;
-            this.chkPenOCrcvVHF57.Location = new System.Drawing.Point(144, 121);
+            this.chkPenOCrcvVHF57.Location = new System.Drawing.Point(141, 121);
             this.chkPenOCrcvVHF57.Name = "chkPenOCrcvVHF57";
             this.chkPenOCrcvVHF57.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF57.TabIndex = 275;
@@ -16592,7 +16604,7 @@
             // 
             this.chkPenOCrcvVHF56.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF56.Image = null;
-            this.chkPenOCrcvVHF56.Location = new System.Drawing.Point(128, 121);
+            this.chkPenOCrcvVHF56.Location = new System.Drawing.Point(125, 121);
             this.chkPenOCrcvVHF56.Name = "chkPenOCrcvVHF56";
             this.chkPenOCrcvVHF56.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF56.TabIndex = 274;
@@ -16603,7 +16615,7 @@
             // 
             this.chkPenOCrcvVHF55.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF55.Image = null;
-            this.chkPenOCrcvVHF55.Location = new System.Drawing.Point(112, 121);
+            this.chkPenOCrcvVHF55.Location = new System.Drawing.Point(109, 121);
             this.chkPenOCrcvVHF55.Name = "chkPenOCrcvVHF55";
             this.chkPenOCrcvVHF55.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF55.TabIndex = 273;
@@ -16614,7 +16626,7 @@
             // 
             this.chkPenOCrcvVHF54.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF54.Image = null;
-            this.chkPenOCrcvVHF54.Location = new System.Drawing.Point(96, 121);
+            this.chkPenOCrcvVHF54.Location = new System.Drawing.Point(93, 121);
             this.chkPenOCrcvVHF54.Name = "chkPenOCrcvVHF54";
             this.chkPenOCrcvVHF54.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF54.TabIndex = 272;
@@ -16625,7 +16637,7 @@
             // 
             this.chkPenOCrcvVHF53.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF53.Image = null;
-            this.chkPenOCrcvVHF53.Location = new System.Drawing.Point(80, 121);
+            this.chkPenOCrcvVHF53.Location = new System.Drawing.Point(77, 121);
             this.chkPenOCrcvVHF53.Name = "chkPenOCrcvVHF53";
             this.chkPenOCrcvVHF53.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF53.TabIndex = 271;
@@ -16636,7 +16648,7 @@
             // 
             this.chkPenOCrcvVHF52.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF52.Image = null;
-            this.chkPenOCrcvVHF52.Location = new System.Drawing.Point(64, 121);
+            this.chkPenOCrcvVHF52.Location = new System.Drawing.Point(61, 121);
             this.chkPenOCrcvVHF52.Name = "chkPenOCrcvVHF52";
             this.chkPenOCrcvVHF52.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF52.TabIndex = 270;
@@ -16647,7 +16659,7 @@
             // 
             this.chkPenOCrcvVHF51.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF51.Image = null;
-            this.chkPenOCrcvVHF51.Location = new System.Drawing.Point(48, 121);
+            this.chkPenOCrcvVHF51.Location = new System.Drawing.Point(45, 121);
             this.chkPenOCrcvVHF51.Name = "chkPenOCrcvVHF51";
             this.chkPenOCrcvVHF51.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF51.TabIndex = 269;
@@ -16658,7 +16670,7 @@
             // 
             this.chkPenOCxmitVHF47.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF47.Image = null;
-            this.chkPenOCxmitVHF47.Location = new System.Drawing.Point(262, 105);
+            this.chkPenOCxmitVHF47.Location = new System.Drawing.Point(269, 106);
             this.chkPenOCxmitVHF47.Name = "chkPenOCxmitVHF47";
             this.chkPenOCxmitVHF47.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF47.TabIndex = 268;
@@ -16669,7 +16681,7 @@
             // 
             this.chkPenOCxmitVHF46.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF46.Image = null;
-            this.chkPenOCxmitVHF46.Location = new System.Drawing.Point(246, 105);
+            this.chkPenOCxmitVHF46.Location = new System.Drawing.Point(253, 106);
             this.chkPenOCxmitVHF46.Name = "chkPenOCxmitVHF46";
             this.chkPenOCxmitVHF46.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF46.TabIndex = 267;
@@ -16680,7 +16692,7 @@
             // 
             this.chkPenOCxmitVHF45.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF45.Image = null;
-            this.chkPenOCxmitVHF45.Location = new System.Drawing.Point(230, 105);
+            this.chkPenOCxmitVHF45.Location = new System.Drawing.Point(237, 106);
             this.chkPenOCxmitVHF45.Name = "chkPenOCxmitVHF45";
             this.chkPenOCxmitVHF45.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF45.TabIndex = 266;
@@ -16691,7 +16703,7 @@
             // 
             this.chkPenOCxmitVHF44.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF44.Image = null;
-            this.chkPenOCxmitVHF44.Location = new System.Drawing.Point(214, 105);
+            this.chkPenOCxmitVHF44.Location = new System.Drawing.Point(221, 106);
             this.chkPenOCxmitVHF44.Name = "chkPenOCxmitVHF44";
             this.chkPenOCxmitVHF44.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF44.TabIndex = 265;
@@ -16702,7 +16714,7 @@
             // 
             this.chkPenOCxmitVHF43.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF43.Image = null;
-            this.chkPenOCxmitVHF43.Location = new System.Drawing.Point(198, 105);
+            this.chkPenOCxmitVHF43.Location = new System.Drawing.Point(205, 106);
             this.chkPenOCxmitVHF43.Name = "chkPenOCxmitVHF43";
             this.chkPenOCxmitVHF43.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF43.TabIndex = 264;
@@ -16713,7 +16725,7 @@
             // 
             this.chkPenOCxmitVHF42.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF42.Image = null;
-            this.chkPenOCxmitVHF42.Location = new System.Drawing.Point(182, 105);
+            this.chkPenOCxmitVHF42.Location = new System.Drawing.Point(189, 106);
             this.chkPenOCxmitVHF42.Name = "chkPenOCxmitVHF42";
             this.chkPenOCxmitVHF42.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF42.TabIndex = 263;
@@ -16724,7 +16736,7 @@
             // 
             this.chkPenOCxmitVHF41.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF41.Image = null;
-            this.chkPenOCxmitVHF41.Location = new System.Drawing.Point(166, 105);
+            this.chkPenOCxmitVHF41.Location = new System.Drawing.Point(173, 106);
             this.chkPenOCxmitVHF41.Name = "chkPenOCxmitVHF41";
             this.chkPenOCxmitVHF41.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF41.TabIndex = 262;
@@ -16735,7 +16747,7 @@
             // 
             this.chkPenOCrcvVHF47.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF47.Image = null;
-            this.chkPenOCrcvVHF47.Location = new System.Drawing.Point(144, 105);
+            this.chkPenOCrcvVHF47.Location = new System.Drawing.Point(141, 105);
             this.chkPenOCrcvVHF47.Name = "chkPenOCrcvVHF47";
             this.chkPenOCrcvVHF47.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF47.TabIndex = 261;
@@ -16746,7 +16758,7 @@
             // 
             this.chkPenOCrcvVHF46.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF46.Image = null;
-            this.chkPenOCrcvVHF46.Location = new System.Drawing.Point(128, 105);
+            this.chkPenOCrcvVHF46.Location = new System.Drawing.Point(125, 105);
             this.chkPenOCrcvVHF46.Name = "chkPenOCrcvVHF46";
             this.chkPenOCrcvVHF46.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF46.TabIndex = 260;
@@ -16757,7 +16769,7 @@
             // 
             this.chkPenOCrcvVHF45.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF45.Image = null;
-            this.chkPenOCrcvVHF45.Location = new System.Drawing.Point(112, 105);
+            this.chkPenOCrcvVHF45.Location = new System.Drawing.Point(109, 105);
             this.chkPenOCrcvVHF45.Name = "chkPenOCrcvVHF45";
             this.chkPenOCrcvVHF45.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF45.TabIndex = 259;
@@ -16768,7 +16780,7 @@
             // 
             this.chkPenOCrcvVHF44.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF44.Image = null;
-            this.chkPenOCrcvVHF44.Location = new System.Drawing.Point(96, 105);
+            this.chkPenOCrcvVHF44.Location = new System.Drawing.Point(93, 105);
             this.chkPenOCrcvVHF44.Name = "chkPenOCrcvVHF44";
             this.chkPenOCrcvVHF44.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF44.TabIndex = 258;
@@ -16779,7 +16791,7 @@
             // 
             this.chkPenOCrcvVHF43.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF43.Image = null;
-            this.chkPenOCrcvVHF43.Location = new System.Drawing.Point(80, 105);
+            this.chkPenOCrcvVHF43.Location = new System.Drawing.Point(77, 105);
             this.chkPenOCrcvVHF43.Name = "chkPenOCrcvVHF43";
             this.chkPenOCrcvVHF43.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF43.TabIndex = 257;
@@ -16790,7 +16802,7 @@
             // 
             this.chkPenOCrcvVHF42.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF42.Image = null;
-            this.chkPenOCrcvVHF42.Location = new System.Drawing.Point(64, 105);
+            this.chkPenOCrcvVHF42.Location = new System.Drawing.Point(61, 105);
             this.chkPenOCrcvVHF42.Name = "chkPenOCrcvVHF42";
             this.chkPenOCrcvVHF42.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF42.TabIndex = 256;
@@ -16801,7 +16813,7 @@
             // 
             this.chkPenOCrcvVHF41.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF41.Image = null;
-            this.chkPenOCrcvVHF41.Location = new System.Drawing.Point(48, 105);
+            this.chkPenOCrcvVHF41.Location = new System.Drawing.Point(45, 105);
             this.chkPenOCrcvVHF41.Name = "chkPenOCrcvVHF41";
             this.chkPenOCrcvVHF41.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF41.TabIndex = 255;
@@ -16812,7 +16824,7 @@
             // 
             this.chkPenOCxmitVHF37.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF37.Image = null;
-            this.chkPenOCxmitVHF37.Location = new System.Drawing.Point(262, 89);
+            this.chkPenOCxmitVHF37.Location = new System.Drawing.Point(269, 90);
             this.chkPenOCxmitVHF37.Name = "chkPenOCxmitVHF37";
             this.chkPenOCxmitVHF37.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF37.TabIndex = 254;
@@ -16823,7 +16835,7 @@
             // 
             this.chkPenOCxmitVHF36.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF36.Image = null;
-            this.chkPenOCxmitVHF36.Location = new System.Drawing.Point(246, 89);
+            this.chkPenOCxmitVHF36.Location = new System.Drawing.Point(253, 90);
             this.chkPenOCxmitVHF36.Name = "chkPenOCxmitVHF36";
             this.chkPenOCxmitVHF36.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF36.TabIndex = 253;
@@ -16834,7 +16846,7 @@
             // 
             this.chkPenOCxmitVHF35.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF35.Image = null;
-            this.chkPenOCxmitVHF35.Location = new System.Drawing.Point(230, 89);
+            this.chkPenOCxmitVHF35.Location = new System.Drawing.Point(237, 90);
             this.chkPenOCxmitVHF35.Name = "chkPenOCxmitVHF35";
             this.chkPenOCxmitVHF35.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF35.TabIndex = 252;
@@ -16845,7 +16857,7 @@
             // 
             this.chkPenOCxmitVHF34.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF34.Image = null;
-            this.chkPenOCxmitVHF34.Location = new System.Drawing.Point(214, 89);
+            this.chkPenOCxmitVHF34.Location = new System.Drawing.Point(221, 90);
             this.chkPenOCxmitVHF34.Name = "chkPenOCxmitVHF34";
             this.chkPenOCxmitVHF34.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF34.TabIndex = 251;
@@ -16856,7 +16868,7 @@
             // 
             this.chkPenOCxmitVHF33.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF33.Image = null;
-            this.chkPenOCxmitVHF33.Location = new System.Drawing.Point(198, 89);
+            this.chkPenOCxmitVHF33.Location = new System.Drawing.Point(205, 90);
             this.chkPenOCxmitVHF33.Name = "chkPenOCxmitVHF33";
             this.chkPenOCxmitVHF33.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF33.TabIndex = 250;
@@ -16867,7 +16879,7 @@
             // 
             this.chkPenOCxmitVHF32.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF32.Image = null;
-            this.chkPenOCxmitVHF32.Location = new System.Drawing.Point(182, 89);
+            this.chkPenOCxmitVHF32.Location = new System.Drawing.Point(189, 90);
             this.chkPenOCxmitVHF32.Name = "chkPenOCxmitVHF32";
             this.chkPenOCxmitVHF32.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF32.TabIndex = 249;
@@ -16878,7 +16890,7 @@
             // 
             this.chkPenOCxmitVHF31.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF31.Image = null;
-            this.chkPenOCxmitVHF31.Location = new System.Drawing.Point(166, 89);
+            this.chkPenOCxmitVHF31.Location = new System.Drawing.Point(173, 90);
             this.chkPenOCxmitVHF31.Name = "chkPenOCxmitVHF31";
             this.chkPenOCxmitVHF31.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF31.TabIndex = 248;
@@ -16889,7 +16901,7 @@
             // 
             this.chkPenOCrcvVHF37.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF37.Image = null;
-            this.chkPenOCrcvVHF37.Location = new System.Drawing.Point(144, 89);
+            this.chkPenOCrcvVHF37.Location = new System.Drawing.Point(141, 89);
             this.chkPenOCrcvVHF37.Name = "chkPenOCrcvVHF37";
             this.chkPenOCrcvVHF37.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF37.TabIndex = 247;
@@ -16900,7 +16912,7 @@
             // 
             this.chkPenOCrcvVHF36.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF36.Image = null;
-            this.chkPenOCrcvVHF36.Location = new System.Drawing.Point(128, 89);
+            this.chkPenOCrcvVHF36.Location = new System.Drawing.Point(125, 89);
             this.chkPenOCrcvVHF36.Name = "chkPenOCrcvVHF36";
             this.chkPenOCrcvVHF36.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF36.TabIndex = 246;
@@ -16911,7 +16923,7 @@
             // 
             this.chkPenOCrcvVHF35.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF35.Image = null;
-            this.chkPenOCrcvVHF35.Location = new System.Drawing.Point(112, 89);
+            this.chkPenOCrcvVHF35.Location = new System.Drawing.Point(109, 89);
             this.chkPenOCrcvVHF35.Name = "chkPenOCrcvVHF35";
             this.chkPenOCrcvVHF35.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF35.TabIndex = 245;
@@ -16922,7 +16934,7 @@
             // 
             this.chkPenOCrcvVHF34.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF34.Image = null;
-            this.chkPenOCrcvVHF34.Location = new System.Drawing.Point(96, 89);
+            this.chkPenOCrcvVHF34.Location = new System.Drawing.Point(93, 89);
             this.chkPenOCrcvVHF34.Name = "chkPenOCrcvVHF34";
             this.chkPenOCrcvVHF34.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF34.TabIndex = 244;
@@ -16933,7 +16945,7 @@
             // 
             this.chkPenOCrcvVHF33.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF33.Image = null;
-            this.chkPenOCrcvVHF33.Location = new System.Drawing.Point(80, 89);
+            this.chkPenOCrcvVHF33.Location = new System.Drawing.Point(77, 89);
             this.chkPenOCrcvVHF33.Name = "chkPenOCrcvVHF33";
             this.chkPenOCrcvVHF33.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF33.TabIndex = 243;
@@ -16944,7 +16956,7 @@
             // 
             this.chkPenOCrcvVHF32.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF32.Image = null;
-            this.chkPenOCrcvVHF32.Location = new System.Drawing.Point(64, 89);
+            this.chkPenOCrcvVHF32.Location = new System.Drawing.Point(61, 89);
             this.chkPenOCrcvVHF32.Name = "chkPenOCrcvVHF32";
             this.chkPenOCrcvVHF32.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF32.TabIndex = 242;
@@ -16955,7 +16967,7 @@
             // 
             this.chkPenOCrcvVHF31.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF31.Image = null;
-            this.chkPenOCrcvVHF31.Location = new System.Drawing.Point(48, 89);
+            this.chkPenOCrcvVHF31.Location = new System.Drawing.Point(45, 89);
             this.chkPenOCrcvVHF31.Name = "chkPenOCrcvVHF31";
             this.chkPenOCrcvVHF31.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF31.TabIndex = 241;
@@ -16966,7 +16978,7 @@
             // 
             this.chkPenOCxmitVHF27.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF27.Image = null;
-            this.chkPenOCxmitVHF27.Location = new System.Drawing.Point(262, 73);
+            this.chkPenOCxmitVHF27.Location = new System.Drawing.Point(269, 74);
             this.chkPenOCxmitVHF27.Name = "chkPenOCxmitVHF27";
             this.chkPenOCxmitVHF27.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF27.TabIndex = 240;
@@ -16977,7 +16989,7 @@
             // 
             this.chkPenOCxmitVHF26.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF26.Image = null;
-            this.chkPenOCxmitVHF26.Location = new System.Drawing.Point(246, 73);
+            this.chkPenOCxmitVHF26.Location = new System.Drawing.Point(253, 74);
             this.chkPenOCxmitVHF26.Name = "chkPenOCxmitVHF26";
             this.chkPenOCxmitVHF26.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF26.TabIndex = 239;
@@ -16988,7 +17000,7 @@
             // 
             this.chkPenOCxmitVHF25.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF25.Image = null;
-            this.chkPenOCxmitVHF25.Location = new System.Drawing.Point(230, 73);
+            this.chkPenOCxmitVHF25.Location = new System.Drawing.Point(237, 74);
             this.chkPenOCxmitVHF25.Name = "chkPenOCxmitVHF25";
             this.chkPenOCxmitVHF25.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF25.TabIndex = 238;
@@ -16999,7 +17011,7 @@
             // 
             this.chkPenOCxmitVHF24.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF24.Image = null;
-            this.chkPenOCxmitVHF24.Location = new System.Drawing.Point(214, 73);
+            this.chkPenOCxmitVHF24.Location = new System.Drawing.Point(221, 74);
             this.chkPenOCxmitVHF24.Name = "chkPenOCxmitVHF24";
             this.chkPenOCxmitVHF24.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF24.TabIndex = 237;
@@ -17010,7 +17022,7 @@
             // 
             this.chkPenOCxmitVHF23.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF23.Image = null;
-            this.chkPenOCxmitVHF23.Location = new System.Drawing.Point(198, 73);
+            this.chkPenOCxmitVHF23.Location = new System.Drawing.Point(205, 74);
             this.chkPenOCxmitVHF23.Name = "chkPenOCxmitVHF23";
             this.chkPenOCxmitVHF23.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF23.TabIndex = 236;
@@ -17021,7 +17033,7 @@
             // 
             this.chkPenOCxmitVHF22.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF22.Image = null;
-            this.chkPenOCxmitVHF22.Location = new System.Drawing.Point(182, 73);
+            this.chkPenOCxmitVHF22.Location = new System.Drawing.Point(189, 74);
             this.chkPenOCxmitVHF22.Name = "chkPenOCxmitVHF22";
             this.chkPenOCxmitVHF22.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF22.TabIndex = 235;
@@ -17032,7 +17044,7 @@
             // 
             this.chkPenOCxmitVHF21.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF21.Image = null;
-            this.chkPenOCxmitVHF21.Location = new System.Drawing.Point(166, 73);
+            this.chkPenOCxmitVHF21.Location = new System.Drawing.Point(173, 74);
             this.chkPenOCxmitVHF21.Name = "chkPenOCxmitVHF21";
             this.chkPenOCxmitVHF21.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF21.TabIndex = 234;
@@ -17043,7 +17055,7 @@
             // 
             this.chkPenOCrcvVHF27.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF27.Image = null;
-            this.chkPenOCrcvVHF27.Location = new System.Drawing.Point(144, 73);
+            this.chkPenOCrcvVHF27.Location = new System.Drawing.Point(141, 73);
             this.chkPenOCrcvVHF27.Name = "chkPenOCrcvVHF27";
             this.chkPenOCrcvVHF27.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF27.TabIndex = 233;
@@ -17054,7 +17066,7 @@
             // 
             this.chkPenOCrcvVHF26.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF26.Image = null;
-            this.chkPenOCrcvVHF26.Location = new System.Drawing.Point(128, 73);
+            this.chkPenOCrcvVHF26.Location = new System.Drawing.Point(125, 73);
             this.chkPenOCrcvVHF26.Name = "chkPenOCrcvVHF26";
             this.chkPenOCrcvVHF26.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF26.TabIndex = 232;
@@ -17065,7 +17077,7 @@
             // 
             this.chkPenOCrcvVHF25.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF25.Image = null;
-            this.chkPenOCrcvVHF25.Location = new System.Drawing.Point(112, 73);
+            this.chkPenOCrcvVHF25.Location = new System.Drawing.Point(109, 73);
             this.chkPenOCrcvVHF25.Name = "chkPenOCrcvVHF25";
             this.chkPenOCrcvVHF25.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF25.TabIndex = 231;
@@ -17076,7 +17088,7 @@
             // 
             this.chkPenOCrcvVHF24.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF24.Image = null;
-            this.chkPenOCrcvVHF24.Location = new System.Drawing.Point(96, 73);
+            this.chkPenOCrcvVHF24.Location = new System.Drawing.Point(93, 73);
             this.chkPenOCrcvVHF24.Name = "chkPenOCrcvVHF24";
             this.chkPenOCrcvVHF24.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF24.TabIndex = 230;
@@ -17087,7 +17099,7 @@
             // 
             this.chkPenOCrcvVHF23.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF23.Image = null;
-            this.chkPenOCrcvVHF23.Location = new System.Drawing.Point(80, 73);
+            this.chkPenOCrcvVHF23.Location = new System.Drawing.Point(77, 73);
             this.chkPenOCrcvVHF23.Name = "chkPenOCrcvVHF23";
             this.chkPenOCrcvVHF23.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF23.TabIndex = 229;
@@ -17098,7 +17110,7 @@
             // 
             this.chkPenOCrcvVHF22.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF22.Image = null;
-            this.chkPenOCrcvVHF22.Location = new System.Drawing.Point(64, 73);
+            this.chkPenOCrcvVHF22.Location = new System.Drawing.Point(61, 73);
             this.chkPenOCrcvVHF22.Name = "chkPenOCrcvVHF22";
             this.chkPenOCrcvVHF22.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF22.TabIndex = 228;
@@ -17109,7 +17121,7 @@
             // 
             this.chkPenOCrcvVHF21.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF21.Image = null;
-            this.chkPenOCrcvVHF21.Location = new System.Drawing.Point(48, 73);
+            this.chkPenOCrcvVHF21.Location = new System.Drawing.Point(45, 73);
             this.chkPenOCrcvVHF21.Name = "chkPenOCrcvVHF21";
             this.chkPenOCrcvVHF21.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF21.TabIndex = 227;
@@ -17120,7 +17132,7 @@
             // 
             this.chkPenOCxmitVHF17.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF17.Image = null;
-            this.chkPenOCxmitVHF17.Location = new System.Drawing.Point(262, 57);
+            this.chkPenOCxmitVHF17.Location = new System.Drawing.Point(269, 58);
             this.chkPenOCxmitVHF17.Name = "chkPenOCxmitVHF17";
             this.chkPenOCxmitVHF17.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF17.TabIndex = 226;
@@ -17131,7 +17143,7 @@
             // 
             this.chkPenOCxmitVHF16.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF16.Image = null;
-            this.chkPenOCxmitVHF16.Location = new System.Drawing.Point(246, 57);
+            this.chkPenOCxmitVHF16.Location = new System.Drawing.Point(253, 58);
             this.chkPenOCxmitVHF16.Name = "chkPenOCxmitVHF16";
             this.chkPenOCxmitVHF16.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF16.TabIndex = 225;
@@ -17142,7 +17154,7 @@
             // 
             this.chkPenOCxmitVHF15.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF15.Image = null;
-            this.chkPenOCxmitVHF15.Location = new System.Drawing.Point(230, 57);
+            this.chkPenOCxmitVHF15.Location = new System.Drawing.Point(237, 58);
             this.chkPenOCxmitVHF15.Name = "chkPenOCxmitVHF15";
             this.chkPenOCxmitVHF15.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF15.TabIndex = 224;
@@ -17153,7 +17165,7 @@
             // 
             this.chkPenOCxmitVHF14.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF14.Image = null;
-            this.chkPenOCxmitVHF14.Location = new System.Drawing.Point(214, 57);
+            this.chkPenOCxmitVHF14.Location = new System.Drawing.Point(221, 58);
             this.chkPenOCxmitVHF14.Name = "chkPenOCxmitVHF14";
             this.chkPenOCxmitVHF14.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF14.TabIndex = 223;
@@ -17164,7 +17176,7 @@
             // 
             this.chkPenOCxmitVHF13.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF13.Image = null;
-            this.chkPenOCxmitVHF13.Location = new System.Drawing.Point(198, 57);
+            this.chkPenOCxmitVHF13.Location = new System.Drawing.Point(205, 58);
             this.chkPenOCxmitVHF13.Name = "chkPenOCxmitVHF13";
             this.chkPenOCxmitVHF13.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF13.TabIndex = 222;
@@ -17175,7 +17187,7 @@
             // 
             this.chkPenOCxmitVHF12.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF12.Image = null;
-            this.chkPenOCxmitVHF12.Location = new System.Drawing.Point(182, 57);
+            this.chkPenOCxmitVHF12.Location = new System.Drawing.Point(189, 58);
             this.chkPenOCxmitVHF12.Name = "chkPenOCxmitVHF12";
             this.chkPenOCxmitVHF12.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF12.TabIndex = 221;
@@ -17186,7 +17198,7 @@
             // 
             this.chkPenOCxmitVHF11.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF11.Image = null;
-            this.chkPenOCxmitVHF11.Location = new System.Drawing.Point(166, 57);
+            this.chkPenOCxmitVHF11.Location = new System.Drawing.Point(173, 58);
             this.chkPenOCxmitVHF11.Name = "chkPenOCxmitVHF11";
             this.chkPenOCxmitVHF11.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF11.TabIndex = 220;
@@ -17197,7 +17209,7 @@
             // 
             this.chkPenOCrcvVHF17.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF17.Image = null;
-            this.chkPenOCrcvVHF17.Location = new System.Drawing.Point(144, 57);
+            this.chkPenOCrcvVHF17.Location = new System.Drawing.Point(141, 57);
             this.chkPenOCrcvVHF17.Name = "chkPenOCrcvVHF17";
             this.chkPenOCrcvVHF17.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF17.TabIndex = 219;
@@ -17208,7 +17220,7 @@
             // 
             this.chkPenOCrcvVHF16.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF16.Image = null;
-            this.chkPenOCrcvVHF16.Location = new System.Drawing.Point(128, 57);
+            this.chkPenOCrcvVHF16.Location = new System.Drawing.Point(125, 57);
             this.chkPenOCrcvVHF16.Name = "chkPenOCrcvVHF16";
             this.chkPenOCrcvVHF16.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF16.TabIndex = 218;
@@ -17219,7 +17231,7 @@
             // 
             this.chkPenOCrcvVHF15.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF15.Image = null;
-            this.chkPenOCrcvVHF15.Location = new System.Drawing.Point(112, 57);
+            this.chkPenOCrcvVHF15.Location = new System.Drawing.Point(109, 57);
             this.chkPenOCrcvVHF15.Name = "chkPenOCrcvVHF15";
             this.chkPenOCrcvVHF15.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF15.TabIndex = 217;
@@ -17230,7 +17242,7 @@
             // 
             this.chkPenOCrcvVHF14.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF14.Image = null;
-            this.chkPenOCrcvVHF14.Location = new System.Drawing.Point(96, 57);
+            this.chkPenOCrcvVHF14.Location = new System.Drawing.Point(93, 57);
             this.chkPenOCrcvVHF14.Name = "chkPenOCrcvVHF14";
             this.chkPenOCrcvVHF14.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF14.TabIndex = 216;
@@ -17241,7 +17253,7 @@
             // 
             this.chkPenOCrcvVHF13.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF13.Image = null;
-            this.chkPenOCrcvVHF13.Location = new System.Drawing.Point(80, 57);
+            this.chkPenOCrcvVHF13.Location = new System.Drawing.Point(77, 57);
             this.chkPenOCrcvVHF13.Name = "chkPenOCrcvVHF13";
             this.chkPenOCrcvVHF13.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF13.TabIndex = 215;
@@ -17252,7 +17264,7 @@
             // 
             this.chkPenOCrcvVHF12.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF12.Image = null;
-            this.chkPenOCrcvVHF12.Location = new System.Drawing.Point(64, 57);
+            this.chkPenOCrcvVHF12.Location = new System.Drawing.Point(61, 57);
             this.chkPenOCrcvVHF12.Name = "chkPenOCrcvVHF12";
             this.chkPenOCrcvVHF12.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF12.TabIndex = 214;
@@ -17263,7 +17275,7 @@
             // 
             this.chkPenOCrcvVHF11.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF11.Image = null;
-            this.chkPenOCrcvVHF11.Location = new System.Drawing.Point(48, 57);
+            this.chkPenOCrcvVHF11.Location = new System.Drawing.Point(45, 57);
             this.chkPenOCrcvVHF11.Name = "chkPenOCrcvVHF11";
             this.chkPenOCrcvVHF11.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF11.TabIndex = 213;
@@ -17274,7 +17286,7 @@
             // 
             this.chkPenOCxmitVHF07.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF07.Image = null;
-            this.chkPenOCxmitVHF07.Location = new System.Drawing.Point(262, 41);
+            this.chkPenOCxmitVHF07.Location = new System.Drawing.Point(269, 42);
             this.chkPenOCxmitVHF07.Name = "chkPenOCxmitVHF07";
             this.chkPenOCxmitVHF07.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF07.TabIndex = 212;
@@ -17285,7 +17297,7 @@
             // 
             this.chkPenOCxmitVHF06.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF06.Image = null;
-            this.chkPenOCxmitVHF06.Location = new System.Drawing.Point(246, 41);
+            this.chkPenOCxmitVHF06.Location = new System.Drawing.Point(253, 42);
             this.chkPenOCxmitVHF06.Name = "chkPenOCxmitVHF06";
             this.chkPenOCxmitVHF06.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF06.TabIndex = 211;
@@ -17296,7 +17308,7 @@
             // 
             this.chkPenOCxmitVHF05.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF05.Image = null;
-            this.chkPenOCxmitVHF05.Location = new System.Drawing.Point(230, 41);
+            this.chkPenOCxmitVHF05.Location = new System.Drawing.Point(237, 42);
             this.chkPenOCxmitVHF05.Name = "chkPenOCxmitVHF05";
             this.chkPenOCxmitVHF05.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF05.TabIndex = 210;
@@ -17307,7 +17319,7 @@
             // 
             this.chkPenOCxmitVHF04.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF04.Image = null;
-            this.chkPenOCxmitVHF04.Location = new System.Drawing.Point(214, 41);
+            this.chkPenOCxmitVHF04.Location = new System.Drawing.Point(221, 42);
             this.chkPenOCxmitVHF04.Name = "chkPenOCxmitVHF04";
             this.chkPenOCxmitVHF04.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF04.TabIndex = 209;
@@ -17318,7 +17330,7 @@
             // 
             this.chkPenOCxmitVHF03.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF03.Image = null;
-            this.chkPenOCxmitVHF03.Location = new System.Drawing.Point(198, 41);
+            this.chkPenOCxmitVHF03.Location = new System.Drawing.Point(205, 42);
             this.chkPenOCxmitVHF03.Name = "chkPenOCxmitVHF03";
             this.chkPenOCxmitVHF03.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF03.TabIndex = 208;
@@ -17329,7 +17341,7 @@
             // 
             this.chkPenOCxmitVHF02.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF02.Image = null;
-            this.chkPenOCxmitVHF02.Location = new System.Drawing.Point(182, 41);
+            this.chkPenOCxmitVHF02.Location = new System.Drawing.Point(189, 42);
             this.chkPenOCxmitVHF02.Name = "chkPenOCxmitVHF02";
             this.chkPenOCxmitVHF02.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF02.TabIndex = 207;
@@ -17340,7 +17352,7 @@
             // 
             this.chkPenOCxmitVHF01.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCxmitVHF01.Image = null;
-            this.chkPenOCxmitVHF01.Location = new System.Drawing.Point(166, 41);
+            this.chkPenOCxmitVHF01.Location = new System.Drawing.Point(173, 42);
             this.chkPenOCxmitVHF01.Name = "chkPenOCxmitVHF01";
             this.chkPenOCxmitVHF01.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCxmitVHF01.TabIndex = 206;
@@ -17351,7 +17363,7 @@
             // 
             this.chkPenOCrcvVHF07.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF07.Image = null;
-            this.chkPenOCrcvVHF07.Location = new System.Drawing.Point(144, 41);
+            this.chkPenOCrcvVHF07.Location = new System.Drawing.Point(141, 41);
             this.chkPenOCrcvVHF07.Name = "chkPenOCrcvVHF07";
             this.chkPenOCrcvVHF07.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF07.TabIndex = 205;
@@ -17362,7 +17374,7 @@
             // 
             this.chkPenOCrcvVHF06.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF06.Image = null;
-            this.chkPenOCrcvVHF06.Location = new System.Drawing.Point(128, 41);
+            this.chkPenOCrcvVHF06.Location = new System.Drawing.Point(125, 41);
             this.chkPenOCrcvVHF06.Name = "chkPenOCrcvVHF06";
             this.chkPenOCrcvVHF06.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF06.TabIndex = 204;
@@ -17373,7 +17385,7 @@
             // 
             this.chkPenOCrcvVHF05.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF05.Image = null;
-            this.chkPenOCrcvVHF05.Location = new System.Drawing.Point(112, 41);
+            this.chkPenOCrcvVHF05.Location = new System.Drawing.Point(109, 41);
             this.chkPenOCrcvVHF05.Name = "chkPenOCrcvVHF05";
             this.chkPenOCrcvVHF05.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF05.TabIndex = 203;
@@ -17384,7 +17396,7 @@
             // 
             this.chkPenOCrcvVHF04.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF04.Image = null;
-            this.chkPenOCrcvVHF04.Location = new System.Drawing.Point(96, 41);
+            this.chkPenOCrcvVHF04.Location = new System.Drawing.Point(93, 41);
             this.chkPenOCrcvVHF04.Name = "chkPenOCrcvVHF04";
             this.chkPenOCrcvVHF04.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF04.TabIndex = 202;
@@ -17395,7 +17407,7 @@
             // 
             this.chkPenOCrcvVHF03.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF03.Image = null;
-            this.chkPenOCrcvVHF03.Location = new System.Drawing.Point(80, 41);
+            this.chkPenOCrcvVHF03.Location = new System.Drawing.Point(77, 41);
             this.chkPenOCrcvVHF03.Name = "chkPenOCrcvVHF03";
             this.chkPenOCrcvVHF03.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF03.TabIndex = 201;
@@ -17406,7 +17418,7 @@
             // 
             this.chkPenOCrcvVHF02.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF02.Image = null;
-            this.chkPenOCrcvVHF02.Location = new System.Drawing.Point(64, 41);
+            this.chkPenOCrcvVHF02.Location = new System.Drawing.Point(61, 41);
             this.chkPenOCrcvVHF02.Name = "chkPenOCrcvVHF02";
             this.chkPenOCrcvVHF02.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF02.TabIndex = 200;
@@ -17418,7 +17430,7 @@
             this.chkPenOCrcvVHF01.BackColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF01.ForeColor = System.Drawing.SystemColors.Control;
             this.chkPenOCrcvVHF01.Image = null;
-            this.chkPenOCrcvVHF01.Location = new System.Drawing.Point(48, 41);
+            this.chkPenOCrcvVHF01.Location = new System.Drawing.Point(45, 41);
             this.chkPenOCrcvVHF01.Name = "chkPenOCrcvVHF01";
             this.chkPenOCrcvVHF01.Size = new System.Drawing.Size(16, 16);
             this.chkPenOCrcvVHF01.TabIndex = 199;
@@ -17430,7 +17442,7 @@
             this.btnPennyCtrlVHFReset.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnPennyCtrlVHFReset.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.btnPennyCtrlVHFReset.Image = null;
-            this.btnPennyCtrlVHFReset.Location = new System.Drawing.Point(221, 248);
+            this.btnPennyCtrlVHFReset.Location = new System.Drawing.Point(227, 257);
             this.btnPennyCtrlVHFReset.Name = "btnPennyCtrlVHFReset";
             this.btnPennyCtrlVHFReset.Selectable = true;
             this.btnPennyCtrlVHFReset.Size = new System.Drawing.Size(70, 23);
@@ -17479,9 +17491,9 @@
             this.grpExtPAControlSWL.Controls.Add(this.chkPin4RXPASWL);
             this.grpExtPAControlSWL.Controls.Add(this.chkPin3RXPASWL);
             this.grpExtPAControlSWL.Controls.Add(this.labelTS581);
-            this.grpExtPAControlSWL.Location = new System.Drawing.Point(579, 14);
+            this.grpExtPAControlSWL.Location = new System.Drawing.Point(579, 6);
             this.grpExtPAControlSWL.Name = "grpExtPAControlSWL";
-            this.grpExtPAControlSWL.Size = new System.Drawing.Size(118, 237);
+            this.grpExtPAControlSWL.Size = new System.Drawing.Size(118, 245);
             this.grpExtPAControlSWL.TabIndex = 15;
             this.grpExtPAControlSWL.TabStop = false;
             this.grpExtPAControlSWL.Text = "Ext PA Control (xPA)";
@@ -17774,9 +17786,9 @@
             this.groupBoxTS19.Controls.Add(this.labelTS567);
             this.groupBoxTS19.Controls.Add(this.comboPin1TXActionSWL);
             this.groupBoxTS19.Controls.Add(this.labelTS568);
-            this.groupBoxTS19.Location = new System.Drawing.Point(338, 14);
+            this.groupBoxTS19.Location = new System.Drawing.Point(338, 6);
             this.groupBoxTS19.Name = "groupBoxTS19";
-            this.groupBoxTS19.Size = new System.Drawing.Size(235, 237);
+            this.groupBoxTS19.Size = new System.Drawing.Size(235, 245);
             this.groupBoxTS19.TabIndex = 12;
             this.groupBoxTS19.TabStop = false;
             this.groupBoxTS19.Text = "Transmit Pin Action";
@@ -20678,7 +20690,7 @@
             // 
             this.lblSWLTxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSWLTxControl.Image = null;
-            this.lblSWLTxControl.Location = new System.Drawing.Point(189, 8);
+            this.lblSWLTxControl.Location = new System.Drawing.Point(182, 8);
             this.lblSWLTxControl.Name = "lblSWLTxControl";
             this.lblSWLTxControl.Size = new System.Drawing.Size(95, 16);
             this.lblSWLTxControl.TabIndex = 1;
@@ -20689,7 +20701,7 @@
             // 
             this.lblSWLRxControl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSWLRxControl.Image = null;
-            this.lblSWLRxControl.Location = new System.Drawing.Point(60, 8);
+            this.lblSWLRxControl.Location = new System.Drawing.Point(54, 8);
             this.lblSWLRxControl.Name = "lblSWLRxControl";
             this.lblSWLRxControl.Size = new System.Drawing.Size(95, 16);
             this.lblSWLRxControl.TabIndex = 0;
@@ -20737,7 +20749,7 @@
             // 
             // pbRXSRWarn
             // 
-            this.pbRXSRWarn.Image = global::Thetis.Properties.Resources.warning4;
+            this.pbRXSRWarn.Image = ((System.Drawing.Image)(resources.GetObject("pbRXSRWarn.Image")));
             this.pbRXSRWarn.Location = new System.Drawing.Point(11, 9);
             this.pbRXSRWarn.Name = "pbRXSRWarn";
             this.pbRXSRWarn.Size = new System.Drawing.Size(18, 16);
@@ -25278,10 +25290,8 @@
             // 
             // tpVAC
             // 
-            this.tpVAC.Controls.Add(this.lblBuffer);
             this.tpVAC.Controls.Add(this.labelTS178);
             this.tpVAC.Controls.Add(this.grpAudioVACAutoEnable);
-            this.tpVAC.Controls.Add(this.lblSampleRate);
             this.tpVAC.Controls.Add(this.grpAudioVACGain);
             this.tpVAC.Controls.Add(this.grpAudio2Stereo);
             this.tpVAC.Controls.Add(this.chkVAC1WillMute);
@@ -25307,20 +25317,11 @@
             this.tpVAC.TabIndex = 1;
             this.tpVAC.Text = "VAC 1";
             // 
-            // lblBuffer
-            // 
-            this.lblBuffer.AutoSize = true;
-            this.lblBuffer.Location = new System.Drawing.Point(227, 30);
-            this.lblBuffer.Name = "lblBuffer";
-            this.lblBuffer.Size = new System.Drawing.Size(61, 13);
-            this.lblBuffer.TabIndex = 93;
-            this.lblBuffer.Text = "Buffer Size";
-            // 
             // labelTS178
             // 
             this.labelTS178.AutoSize = true;
             this.labelTS178.Image = null;
-            this.labelTS178.Location = new System.Drawing.Point(525, 286);
+            this.labelTS178.Location = new System.Drawing.Point(527, 288);
             this.labelTS178.Name = "labelTS178";
             this.labelTS178.Size = new System.Drawing.Size(97, 13);
             this.labelTS178.TabIndex = 92;
@@ -25329,9 +25330,9 @@
             // grpAudioVACAutoEnable
             // 
             this.grpAudioVACAutoEnable.Controls.Add(this.chkAudioVACAutoEnable);
-            this.grpAudioVACAutoEnable.Location = new System.Drawing.Point(219, 243);
+            this.grpAudioVACAutoEnable.Location = new System.Drawing.Point(254, 218);
             this.grpAudioVACAutoEnable.Name = "grpAudioVACAutoEnable";
-            this.grpAudioVACAutoEnable.Size = new System.Drawing.Size(194, 63);
+            this.grpAudioVACAutoEnable.Size = new System.Drawing.Size(290, 49);
             this.grpAudioVACAutoEnable.TabIndex = 74;
             this.grpAudioVACAutoEnable.TabStop = false;
             this.grpAudioVACAutoEnable.Text = "Auto Enable";
@@ -25339,23 +25340,14 @@
             // chkAudioVACAutoEnable
             // 
             this.chkAudioVACAutoEnable.Image = null;
-            this.chkAudioVACAutoEnable.Location = new System.Drawing.Point(16, 16);
+            this.chkAudioVACAutoEnable.Location = new System.Drawing.Point(31, 18);
             this.chkAudioVACAutoEnable.Name = "chkAudioVACAutoEnable";
-            this.chkAudioVACAutoEnable.Size = new System.Drawing.Size(186, 36);
+            this.chkAudioVACAutoEnable.Size = new System.Drawing.Size(251, 17);
             this.chkAudioVACAutoEnable.TabIndex = 0;
-            this.chkAudioVACAutoEnable.Text = "Enable for Digital modes, Disable for all others";
+            this.chkAudioVACAutoEnable.Text = "Enable for Digital modes, Disable for others";
             this.toolTip1.SetToolTip(this.chkAudioVACAutoEnable, "Click this button to automatically enable VAC when in Digital modes (DIGL, DIGU, " +
         "DRM)");
             this.chkAudioVACAutoEnable.CheckedChanged += new System.EventHandler(this.chkAudioVACAutoEnable_CheckedChanged);
-            // 
-            // lblSampleRate
-            // 
-            this.lblSampleRate.AutoSize = true;
-            this.lblSampleRate.Location = new System.Drawing.Point(292, 30);
-            this.lblSampleRate.Name = "lblSampleRate";
-            this.lblSampleRate.Size = new System.Drawing.Size(67, 13);
-            this.lblSampleRate.TabIndex = 91;
-            this.lblSampleRate.Text = "SampleRate";
             // 
             // grpAudioVACGain
             // 
@@ -25363,7 +25355,7 @@
             this.grpAudioVACGain.Controls.Add(this.udAudioVACGainTX);
             this.grpAudioVACGain.Controls.Add(this.lblAudioVACGainRX);
             this.grpAudioVACGain.Controls.Add(this.udAudioVACGainRX);
-            this.grpAudioVACGain.Location = new System.Drawing.Point(369, 45);
+            this.grpAudioVACGain.Location = new System.Drawing.Point(369, 37);
             this.grpAudioVACGain.Name = "grpAudioVACGain";
             this.grpAudioVACGain.Size = new System.Drawing.Size(96, 72);
             this.grpAudioVACGain.TabIndex = 72;
@@ -25475,13 +25467,13 @@
             // 
             // chkVAC1WillMute
             // 
-            this.chkVAC1WillMute.AutoSize = true;
             this.chkVAC1WillMute.Image = null;
-            this.chkVAC1WillMute.Location = new System.Drawing.Point(303, 213);
+            this.chkVAC1WillMute.Location = new System.Drawing.Point(285, 202);
             this.chkVAC1WillMute.Name = "chkVAC1WillMute";
             this.chkVAC1WillMute.Size = new System.Drawing.Size(126, 17);
             this.chkVAC1WillMute.TabIndex = 89;
             this.chkVAC1WillMute.Text = "Mute will mute VAC";
+            this.toolTip1.SetToolTip(this.chkVAC1WillMute, "Mute will mute VAC");
             this.chkVAC1WillMute.UseVisualStyleBackColor = true;
             this.chkVAC1WillMute.CheckedChanged += new System.EventHandler(this.chkVAC1WillMute_CheckedChanged);
             // 
@@ -25489,7 +25481,7 @@
             // 
             this.chkVAC1GrapherAuto.AutoSize = true;
             this.chkVAC1GrapherAuto.Image = null;
-            this.chkVAC1GrapherAuto.Location = new System.Drawing.Point(410, 285);
+            this.chkVAC1GrapherAuto.Location = new System.Drawing.Point(416, 287);
             this.chkVAC1GrapherAuto.Name = "chkVAC1GrapherAuto";
             this.chkVAC1GrapherAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chkVAC1GrapherAuto.Size = new System.Drawing.Size(109, 17);
@@ -25507,7 +25499,7 @@
             0,
             0,
             327680});
-            this.udVAC1GrapherSwing.Location = new System.Drawing.Point(623, 284);
+            this.udVAC1GrapherSwing.Location = new System.Drawing.Point(628, 284);
             this.udVAC1GrapherSwing.Maximum = new decimal(new int[] {
             4,
             0,
@@ -25659,7 +25651,7 @@
             // 
             this.lblVAC1RingP2.AutoSize = true;
             this.lblVAC1RingP2.Image = null;
-            this.lblVAC1RingP2.Location = new System.Drawing.Point(231, 113);
+            this.lblVAC1RingP2.Location = new System.Drawing.Point(229, 113);
             this.lblVAC1RingP2.Name = "lblVAC1RingP2";
             this.lblVAC1RingP2.Size = new System.Drawing.Size(64, 13);
             this.lblVAC1RingP2.TabIndex = 30;
@@ -25683,7 +25675,7 @@
             // 
             this.lblVAC1RingP1.AutoSize = true;
             this.lblVAC1RingP1.Image = null;
-            this.lblVAC1RingP1.Location = new System.Drawing.Point(8, 113);
+            this.lblVAC1RingP1.Location = new System.Drawing.Point(6, 113);
             this.lblVAC1RingP1.Name = "lblVAC1RingP1";
             this.lblVAC1RingP1.Size = new System.Drawing.Size(64, 13);
             this.lblVAC1RingP1.TabIndex = 28;
@@ -25755,7 +25747,7 @@
             // 
             this.lblVAC1Ring2.AutoSize = true;
             this.lblVAC1Ring2.Image = null;
-            this.lblVAC1Ring2.Location = new System.Drawing.Point(231, 95);
+            this.lblVAC1Ring2.Location = new System.Drawing.Point(229, 95);
             this.lblVAC1Ring2.Name = "lblVAC1Ring2";
             this.lblVAC1Ring2.Size = new System.Drawing.Size(62, 13);
             this.lblVAC1Ring2.TabIndex = 20;
@@ -25779,7 +25771,7 @@
             // 
             this.lblVAC1Ring1.AutoSize = true;
             this.lblVAC1Ring1.Image = null;
-            this.lblVAC1Ring1.Location = new System.Drawing.Point(8, 95);
+            this.lblVAC1Ring1.Location = new System.Drawing.Point(6, 95);
             this.lblVAC1Ring1.Name = "lblVAC1Ring1";
             this.lblVAC1Ring1.Size = new System.Drawing.Size(62, 13);
             this.lblVAC1Ring1.TabIndex = 18;
@@ -25820,7 +25812,7 @@
             // 
             this.chkVAC1_Force2.AutoSize = true;
             this.chkVAC1_Force2.Image = null;
-            this.chkVAC1_Force2.Location = new System.Drawing.Point(332, 21);
+            this.chkVAC1_Force2.Location = new System.Drawing.Point(332, 18);
             this.chkVAC1_Force2.Name = "chkVAC1_Force2";
             this.chkVAC1_Force2.Size = new System.Drawing.Size(54, 17);
             this.chkVAC1_Force2.TabIndex = 16;
@@ -25858,7 +25850,7 @@
             // 
             this.lblVAC1VarRatio2.AutoSize = true;
             this.lblVAC1VarRatio2.Image = null;
-            this.lblVAC1VarRatio2.Location = new System.Drawing.Point(231, 76);
+            this.lblVAC1VarRatio2.Location = new System.Drawing.Point(229, 76);
             this.lblVAC1VarRatio2.Name = "lblVAC1VarRatio2";
             this.lblVAC1VarRatio2.Size = new System.Drawing.Size(53, 13);
             this.lblVAC1VarRatio2.TabIndex = 13;
@@ -25949,7 +25941,7 @@
             // 
             this.chkVAC1_Force.AutoSize = true;
             this.chkVAC1_Force.Image = null;
-            this.chkVAC1_Force.Location = new System.Drawing.Point(109, 21);
+            this.chkVAC1_Force.Location = new System.Drawing.Point(109, 18);
             this.chkVAC1_Force.Name = "chkVAC1_Force";
             this.chkVAC1_Force.Size = new System.Drawing.Size(54, 17);
             this.chkVAC1_Force.TabIndex = 7;
@@ -25987,7 +25979,7 @@
             // 
             this.lblVAC1varratio.AutoSize = true;
             this.lblVAC1varratio.Image = null;
-            this.lblVAC1varratio.Location = new System.Drawing.Point(8, 76);
+            this.lblVAC1varratio.Location = new System.Drawing.Point(6, 76);
             this.lblVAC1varratio.Name = "lblVAC1varratio";
             this.lblVAC1varratio.Size = new System.Drawing.Size(53, 13);
             this.lblVAC1varratio.TabIndex = 4;
@@ -26057,10 +26049,11 @@
             // 
             // chkSPACEAllowBypass
             // 
+            this.chkSPACEAllowBypass.AutoSize = true;
             this.chkSPACEAllowBypass.Image = null;
             this.chkSPACEAllowBypass.Location = new System.Drawing.Point(19, 168);
             this.chkSPACEAllowBypass.Name = "chkSPACEAllowBypass";
-            this.chkSPACEAllowBypass.Size = new System.Drawing.Size(269, 17);
+            this.chkSPACEAllowBypass.Size = new System.Drawing.Size(264, 17);
             this.chkSPACEAllowBypass.TabIndex = 81;
             this.chkSPACEAllowBypass.Text = "Allow SPACE to override/bypass VAC for Phone";
             this.toolTip1.SetToolTip(this.chkSPACEAllowBypass, "Using theSPACE BAR will override the PTT input to allow for easy phone operation " +
@@ -26072,7 +26065,7 @@
             this.grpDirectIQOutput.Controls.Add(this.chkAudioRX2toVAC);
             this.grpDirectIQOutput.Controls.Add(this.chkAudioCorrectIQ);
             this.grpDirectIQOutput.Controls.Add(this.chkAudioIQtoVAC);
-            this.grpDirectIQOutput.Location = new System.Drawing.Point(550, 12);
+            this.grpDirectIQOutput.Location = new System.Drawing.Point(550, 3);
             this.grpDirectIQOutput.Name = "grpDirectIQOutput";
             this.grpDirectIQOutput.Size = new System.Drawing.Size(149, 94);
             this.grpDirectIQOutput.TabIndex = 78;
@@ -26081,22 +26074,24 @@
             // 
             // chkAudioRX2toVAC
             // 
+            this.chkAudioRX2toVAC.AutoSize = true;
             this.chkAudioRX2toVAC.Enabled = false;
             this.chkAudioRX2toVAC.Image = null;
             this.chkAudioRX2toVAC.Location = new System.Drawing.Point(16, 68);
             this.chkAudioRX2toVAC.Name = "chkAudioRX2toVAC";
-            this.chkAudioRX2toVAC.Size = new System.Drawing.Size(88, 16);
+            this.chkAudioRX2toVAC.Size = new System.Drawing.Size(67, 17);
             this.chkAudioRX2toVAC.TabIndex = 2;
             this.chkAudioRX2toVAC.Text = "Use RX2";
             this.chkAudioRX2toVAC.CheckedChanged += new System.EventHandler(this.chkAudioRX2toVAC_CheckedChanged);
             // 
             // chkAudioCorrectIQ
             // 
+            this.chkAudioCorrectIQ.AutoSize = true;
             this.chkAudioCorrectIQ.Enabled = false;
             this.chkAudioCorrectIQ.Image = null;
             this.chkAudioCorrectIQ.Location = new System.Drawing.Point(16, 46);
             this.chkAudioCorrectIQ.Name = "chkAudioCorrectIQ";
-            this.chkAudioCorrectIQ.Size = new System.Drawing.Size(88, 16);
+            this.chkAudioCorrectIQ.Size = new System.Drawing.Size(90, 17);
             this.chkAudioCorrectIQ.TabIndex = 1;
             this.chkAudioCorrectIQ.Text = "Calibrate I/Q";
             this.chkAudioCorrectIQ.Visible = false;
@@ -26104,10 +26099,11 @@
             // 
             // chkAudioIQtoVAC
             // 
+            this.chkAudioIQtoVAC.AutoSize = true;
             this.chkAudioIQtoVAC.Image = null;
             this.chkAudioIQtoVAC.Location = new System.Drawing.Point(16, 24);
             this.chkAudioIQtoVAC.Name = "chkAudioIQtoVAC";
-            this.chkAudioIQtoVAC.Size = new System.Drawing.Size(96, 16);
+            this.chkAudioIQtoVAC.Size = new System.Drawing.Size(101, 17);
             this.chkAudioIQtoVAC.TabIndex = 0;
             this.chkAudioIQtoVAC.Text = "Output to VAC";
             this.chkAudioIQtoVAC.CheckedChanged += new System.EventHandler(this.chkAudioIQtoVAC_CheckedChanged);
@@ -26127,12 +26123,13 @@
             // 
             // chkVACAllowBypass
             // 
+            this.chkVACAllowBypass.AutoSize = true;
             this.chkVACAllowBypass.Checked = true;
             this.chkVACAllowBypass.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVACAllowBypass.Image = null;
-            this.chkVACAllowBypass.Location = new System.Drawing.Point(303, 168);
+            this.chkVACAllowBypass.Location = new System.Drawing.Point(285, 168);
             this.chkVACAllowBypass.Name = "chkVACAllowBypass";
-            this.chkVACAllowBypass.Size = new System.Drawing.Size(241, 33);
+            this.chkVACAllowBypass.Size = new System.Drawing.Size(251, 17);
             this.chkVACAllowBypass.TabIndex = 75;
             this.chkVACAllowBypass.Text = "Allow PTT to override/bypass VAC for Phone";
             this.toolTip1.SetToolTip(this.chkVACAllowBypass, "Using the hardware PTT inputs will override the PTT input to allow for easy phone" +
@@ -26155,9 +26152,9 @@
             this.grpAudioLatency2.Controls.Add(this.udAudioLatency2_Out);
             this.grpAudioLatency2.Controls.Add(this.chkAudioLatencyManual2);
             this.grpAudioLatency2.Controls.Add(this.udAudioLatency2);
-            this.grpAudioLatency2.Location = new System.Drawing.Point(550, 112);
+            this.grpAudioLatency2.Location = new System.Drawing.Point(550, 100);
             this.grpAudioLatency2.Name = "grpAudioLatency2";
-            this.grpAudioLatency2.Size = new System.Drawing.Size(150, 155);
+            this.grpAudioLatency2.Size = new System.Drawing.Size(150, 167);
             this.grpAudioLatency2.TabIndex = 67;
             this.grpAudioLatency2.TabStop = false;
             this.grpAudioLatency2.Text = "Buffer Latency (ms)";
@@ -26166,7 +26163,7 @@
             // 
             this.labelTS364.AutoSize = true;
             this.labelTS364.Image = null;
-            this.labelTS364.Location = new System.Drawing.Point(78, 105);
+            this.labelTS364.Location = new System.Drawing.Point(74, 108);
             this.labelTS364.Name = "labelTS364";
             this.labelTS364.Size = new System.Drawing.Size(30, 13);
             this.labelTS364.TabIndex = 48;
@@ -26176,7 +26173,7 @@
             // 
             this.labelTS365.AutoSize = true;
             this.labelTS365.Image = null;
-            this.labelTS365.Location = new System.Drawing.Point(5, 105);
+            this.labelTS365.Location = new System.Drawing.Point(5, 108);
             this.labelTS365.Name = "labelTS365";
             this.labelTS365.Size = new System.Drawing.Size(20, 13);
             this.labelTS365.TabIndex = 47;
@@ -26185,9 +26182,9 @@
             // chkAudioLatencyPAOutManual
             // 
             this.chkAudioLatencyPAOutManual.Image = null;
-            this.chkAudioLatencyPAOutManual.Location = new System.Drawing.Point(81, 131);
+            this.chkAudioLatencyPAOutManual.Location = new System.Drawing.Point(87, 136);
             this.chkAudioLatencyPAOutManual.Name = "chkAudioLatencyPAOutManual";
-            this.chkAudioLatencyPAOutManual.Size = new System.Drawing.Size(64, 16);
+            this.chkAudioLatencyPAOutManual.Size = new System.Drawing.Size(51, 16);
             this.chkAudioLatencyPAOutManual.TabIndex = 46;
             this.chkAudioLatencyPAOutManual.Text = "Man";
             this.chkAudioLatencyPAOutManual.CheckedChanged += new System.EventHandler(this.chkAudioLatencyPAOutManual_CheckedChanged);
@@ -26200,7 +26197,7 @@
             0,
             0,
             0});
-            this.udAudioLatencyPAOut.Location = new System.Drawing.Point(108, 103);
+            this.udAudioLatencyPAOut.Location = new System.Drawing.Point(105, 106);
             this.udAudioLatencyPAOut.Maximum = new decimal(new int[] {
             240,
             0,
@@ -26225,7 +26222,7 @@
             // chkAudioLatencyPAInManual
             // 
             this.chkAudioLatencyPAInManual.Image = null;
-            this.chkAudioLatencyPAInManual.Location = new System.Drawing.Point(8, 131);
+            this.chkAudioLatencyPAInManual.Location = new System.Drawing.Point(8, 136);
             this.chkAudioLatencyPAInManual.Name = "chkAudioLatencyPAInManual";
             this.chkAudioLatencyPAInManual.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyPAInManual.TabIndex = 43;
@@ -26240,7 +26237,7 @@
             0,
             0,
             0});
-            this.udAudioLatencyPAIn.Location = new System.Drawing.Point(25, 103);
+            this.udAudioLatencyPAIn.Location = new System.Drawing.Point(25, 106);
             this.udAudioLatencyPAIn.Maximum = new decimal(new int[] {
             240,
             0,
@@ -26266,7 +26263,7 @@
             // 
             this.labelTS363.AutoSize = true;
             this.labelTS363.Image = null;
-            this.labelTS363.Location = new System.Drawing.Point(45, 87);
+            this.labelTS363.Location = new System.Drawing.Point(45, 84);
             this.labelTS363.Name = "labelTS363";
             this.labelTS363.Size = new System.Drawing.Size(59, 13);
             this.labelTS363.TabIndex = 42;
@@ -26286,7 +26283,7 @@
             // 
             this.labelTS361.AutoSize = true;
             this.labelTS361.Image = null;
-            this.labelTS361.Location = new System.Drawing.Point(78, 37);
+            this.labelTS361.Location = new System.Drawing.Point(74, 40);
             this.labelTS361.Name = "labelTS361";
             this.labelTS361.Size = new System.Drawing.Size(30, 13);
             this.labelTS361.TabIndex = 40;
@@ -26296,7 +26293,7 @@
             // 
             this.labelTS360.AutoSize = true;
             this.labelTS360.Image = null;
-            this.labelTS360.Location = new System.Drawing.Point(5, 37);
+            this.labelTS360.Location = new System.Drawing.Point(5, 40);
             this.labelTS360.Name = "labelTS360";
             this.labelTS360.Size = new System.Drawing.Size(20, 13);
             this.labelTS360.TabIndex = 39;
@@ -26305,9 +26302,9 @@
             // chkAudioLatencyManual2_Out
             // 
             this.chkAudioLatencyManual2_Out.Image = null;
-            this.chkAudioLatencyManual2_Out.Location = new System.Drawing.Point(81, 60);
+            this.chkAudioLatencyManual2_Out.Location = new System.Drawing.Point(87, 68);
             this.chkAudioLatencyManual2_Out.Name = "chkAudioLatencyManual2_Out";
-            this.chkAudioLatencyManual2_Out.Size = new System.Drawing.Size(64, 16);
+            this.chkAudioLatencyManual2_Out.Size = new System.Drawing.Size(51, 16);
             this.chkAudioLatencyManual2_Out.TabIndex = 38;
             this.chkAudioLatencyManual2_Out.Text = "Man";
             this.chkAudioLatencyManual2_Out.CheckedChanged += new System.EventHandler(this.chkAudioLatencyManual2_Out_CheckedChanged);
@@ -26320,7 +26317,7 @@
             0,
             0,
             0});
-            this.udAudioLatency2_Out.Location = new System.Drawing.Point(108, 35);
+            this.udAudioLatency2_Out.Location = new System.Drawing.Point(105, 38);
             this.udAudioLatency2_Out.Maximum = new decimal(new int[] {
             240,
             0,
@@ -26345,7 +26342,7 @@
             // chkAudioLatencyManual2
             // 
             this.chkAudioLatencyManual2.Image = null;
-            this.chkAudioLatencyManual2.Location = new System.Drawing.Point(8, 60);
+            this.chkAudioLatencyManual2.Location = new System.Drawing.Point(8, 68);
             this.chkAudioLatencyManual2.Name = "chkAudioLatencyManual2";
             this.chkAudioLatencyManual2.Size = new System.Drawing.Size(64, 16);
             this.chkAudioLatencyManual2.TabIndex = 5;
@@ -26360,7 +26357,7 @@
             0,
             0,
             0});
-            this.udAudioLatency2.Location = new System.Drawing.Point(25, 35);
+            this.udAudioLatency2.Location = new System.Drawing.Point(25, 38);
             this.udAudioLatency2.Maximum = new decimal(new int[] {
             240,
             0,
@@ -26385,7 +26382,9 @@
             // 
             // grpAudioDetails2
             // 
+            this.grpAudioDetails2.Controls.Add(this.lblBuffer);
             this.grpAudioDetails2.Controls.Add(this.comboAudioSampleRate2);
+            this.grpAudioDetails2.Controls.Add(this.lblSampleRate);
             this.grpAudioDetails2.Controls.Add(this.comboAudioBuffer2);
             this.grpAudioDetails2.Controls.Add(this.chkExclusive);
             this.grpAudioDetails2.Controls.Add(this.lblAudioOutput2);
@@ -26400,6 +26399,14 @@
             this.grpAudioDetails2.TabIndex = 35;
             this.grpAudioDetails2.TabStop = false;
             this.grpAudioDetails2.Text = "Virtual Audio Cable Setup";
+            // 
+            // lblBuffer
+            // 
+            this.lblBuffer.Location = new System.Drawing.Point(219, 9);
+            this.lblBuffer.Name = "lblBuffer";
+            this.lblBuffer.Size = new System.Drawing.Size(61, 12);
+            this.lblBuffer.TabIndex = 93;
+            this.lblBuffer.Text = "Buffer Size";
             // 
             // comboAudioSampleRate2
             // 
@@ -26416,12 +26423,20 @@
             "48000",
             "96000",
             "192000"});
-            this.comboAudioSampleRate2.Location = new System.Drawing.Point(284, 18);
+            this.comboAudioSampleRate2.Location = new System.Drawing.Point(284, 26);
             this.comboAudioSampleRate2.Name = "comboAudioSampleRate2";
             this.comboAudioSampleRate2.Size = new System.Drawing.Size(64, 21);
             this.comboAudioSampleRate2.TabIndex = 60;
             this.toolTip1.SetToolTip(this.comboAudioSampleRate2, "Samples per second.  Set to match the third party software program.");
             this.comboAudioSampleRate2.SelectedIndexChanged += new System.EventHandler(this.comboAudioSampleRate2_SelectedIndexChanged);
+            // 
+            // lblSampleRate
+            // 
+            this.lblSampleRate.Location = new System.Drawing.Point(281, 9);
+            this.lblSampleRate.Name = "lblSampleRate";
+            this.lblSampleRate.Size = new System.Drawing.Size(67, 12);
+            this.lblSampleRate.TabIndex = 91;
+            this.lblSampleRate.Text = "SampleRate";
             // 
             // comboAudioBuffer2
             // 
@@ -26435,7 +26450,7 @@
             "1024",
             "2048",
             "4096"});
-            this.comboAudioBuffer2.Location = new System.Drawing.Point(222, 18);
+            this.comboAudioBuffer2.Location = new System.Drawing.Point(222, 26);
             this.comboAudioBuffer2.Name = "comboAudioBuffer2";
             this.comboAudioBuffer2.Size = new System.Drawing.Size(56, 21);
             this.comboAudioBuffer2.TabIndex = 58;
@@ -26446,7 +26461,7 @@
             // 
             this.chkExclusive.AutoSize = true;
             this.chkExclusive.Image = null;
-            this.chkExclusive.Location = new System.Drawing.Point(56, 95);
+            this.chkExclusive.Location = new System.Drawing.Point(56, 103);
             this.chkExclusive.Name = "chkExclusive";
             this.chkExclusive.Size = new System.Drawing.Size(142, 17);
             this.chkExclusive.TabIndex = 36;
@@ -26457,7 +26472,7 @@
             // lblAudioOutput2
             // 
             this.lblAudioOutput2.Image = null;
-            this.lblAudioOutput2.Location = new System.Drawing.Point(8, 70);
+            this.lblAudioOutput2.Location = new System.Drawing.Point(8, 78);
             this.lblAudioOutput2.Name = "lblAudioOutput2";
             this.lblAudioOutput2.Size = new System.Drawing.Size(48, 16);
             this.lblAudioOutput2.TabIndex = 35;
@@ -26469,7 +26484,7 @@
             this.comboAudioOutput2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioOutput2.DropDownWidth = 160;
             this.comboAudioOutput2.ItemHeight = 13;
-            this.comboAudioOutput2.Location = new System.Drawing.Point(56, 70);
+            this.comboAudioOutput2.Location = new System.Drawing.Point(56, 78);
             this.comboAudioOutput2.Name = "comboAudioOutput2";
             this.comboAudioOutput2.Size = new System.Drawing.Size(292, 21);
             this.comboAudioOutput2.TabIndex = 34;
@@ -26479,7 +26494,7 @@
             // lblAudioInput2
             // 
             this.lblAudioInput2.Image = null;
-            this.lblAudioInput2.Location = new System.Drawing.Point(8, 44);
+            this.lblAudioInput2.Location = new System.Drawing.Point(8, 52);
             this.lblAudioInput2.Name = "lblAudioInput2";
             this.lblAudioInput2.Size = new System.Drawing.Size(40, 16);
             this.lblAudioInput2.TabIndex = 33;
@@ -26488,7 +26503,7 @@
             // lblAudioDriver2
             // 
             this.lblAudioDriver2.Image = null;
-            this.lblAudioDriver2.Location = new System.Drawing.Point(8, 18);
+            this.lblAudioDriver2.Location = new System.Drawing.Point(8, 26);
             this.lblAudioDriver2.Name = "lblAudioDriver2";
             this.lblAudioDriver2.Size = new System.Drawing.Size(40, 16);
             this.lblAudioDriver2.TabIndex = 32;
@@ -26499,7 +26514,7 @@
             this.comboAudioInput2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioInput2.DropDownWidth = 160;
             this.comboAudioInput2.ItemHeight = 13;
-            this.comboAudioInput2.Location = new System.Drawing.Point(56, 44);
+            this.comboAudioInput2.Location = new System.Drawing.Point(56, 52);
             this.comboAudioInput2.Name = "comboAudioInput2";
             this.comboAudioInput2.Size = new System.Drawing.Size(292, 21);
             this.comboAudioInput2.TabIndex = 28;
@@ -26511,7 +26526,7 @@
             this.comboAudioDriver2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioDriver2.DropDownWidth = 160;
             this.comboAudioDriver2.ItemHeight = 13;
-            this.comboAudioDriver2.Location = new System.Drawing.Point(56, 18);
+            this.comboAudioDriver2.Location = new System.Drawing.Point(56, 26);
             this.comboAudioDriver2.Name = "comboAudioDriver2";
             this.comboAudioDriver2.Size = new System.Drawing.Size(160, 21);
             this.comboAudioDriver2.TabIndex = 26;
@@ -26532,16 +26547,17 @@
             // chkMasterVolumeForVAC
             // 
             this.chkMasterVolumeForVAC.Image = null;
-            this.chkMasterVolumeForVAC.Location = new System.Drawing.Point(369, 15);
+            this.chkMasterVolumeForVAC.Location = new System.Drawing.Point(369, 13);
             this.chkMasterVolumeForVAC.Name = "chkMasterVolumeForVAC";
-            this.chkMasterVolumeForVAC.Size = new System.Drawing.Size(191, 24);
+            this.chkMasterVolumeForVAC.Size = new System.Drawing.Size(178, 16);
             this.chkMasterVolumeForVAC.TabIndex = 94;
             this.chkMasterVolumeForVAC.Text = "Master Volume Controls VAC";
-            this.toolTip1.SetToolTip(this.chkMasterVolumeForVAC, "Enable Virtual Audio Cable Support using the settings on this form.");
+            this.toolTip1.SetToolTip(this.chkMasterVolumeForVAC, "Enable Master Volume for VAC");
             // 
             // tpVAC2
             // 
             this.tpVAC2.BackColor = System.Drawing.SystemColors.Control;
+            this.tpVAC2.Controls.Add(this.labelTS161);
             this.tpVAC2.Controls.Add(this.chkVAC2WillMute);
             this.tpVAC2.Controls.Add(this.chkVAC2GrapherAuto);
             this.tpVAC2.Controls.Add(this.udVAC2GrapherSwing);
@@ -26567,11 +26583,20 @@
             this.tpVAC2.TabIndex = 2;
             this.tpVAC2.Text = "VAC 2";
             // 
+            // labelTS161
+            // 
+            this.labelTS161.AutoSize = true;
+            this.labelTS161.Image = null;
+            this.labelTS161.Location = new System.Drawing.Point(527, 288);
+            this.labelTS161.Name = "labelTS161";
+            this.labelTS161.Size = new System.Drawing.Size(97, 13);
+            this.labelTS161.TabIndex = 97;
+            this.labelTS161.Text = "VAC Graph Swing";
+            // 
             // chkVAC2WillMute
             // 
-            this.chkVAC2WillMute.AutoSize = true;
             this.chkVAC2WillMute.Image = null;
-            this.chkVAC2WillMute.Location = new System.Drawing.Point(249, 245);
+            this.chkVAC2WillMute.Location = new System.Drawing.Point(285, 202);
             this.chkVAC2WillMute.Name = "chkVAC2WillMute";
             this.chkVAC2WillMute.Size = new System.Drawing.Size(126, 17);
             this.chkVAC2WillMute.TabIndex = 96;
@@ -26583,12 +26608,12 @@
             // 
             this.chkVAC2GrapherAuto.AutoSize = true;
             this.chkVAC2GrapherAuto.Image = null;
-            this.chkVAC2GrapherAuto.Location = new System.Drawing.Point(437, 291);
+            this.chkVAC2GrapherAuto.Location = new System.Drawing.Point(416, 287);
             this.chkVAC2GrapherAuto.Name = "chkVAC2GrapherAuto";
             this.chkVAC2GrapherAuto.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkVAC2GrapherAuto.Size = new System.Drawing.Size(51, 17);
+            this.chkVAC2GrapherAuto.Size = new System.Drawing.Size(109, 17);
             this.chkVAC2GrapherAuto.TabIndex = 95;
-            this.chkVAC2GrapherAuto.Text = "Auto";
+            this.chkVAC2GrapherAuto.Text = "VAC Graph Auto";
             this.toolTip1.SetToolTip(this.chkVAC2GrapherAuto, "Auto scale the Min/Max around the 0 point");
             this.chkVAC2GrapherAuto.UseVisualStyleBackColor = true;
             this.chkVAC2GrapherAuto.CheckedChanged += new System.EventHandler(this.chkVAC2GrapherAuto_CheckedChanged);
@@ -26601,7 +26626,7 @@
             0,
             0,
             327680});
-            this.udVAC2GrapherSwing.Location = new System.Drawing.Point(635, 286);
+            this.udVAC2GrapherSwing.Location = new System.Drawing.Point(628, 284);
             this.udVAC2GrapherSwing.Maximum = new decimal(new int[] {
             4,
             0,
@@ -26659,7 +26684,7 @@
             this.chkVAC2onSplit.Checked = true;
             this.chkVAC2onSplit.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVAC2onSplit.Image = null;
-            this.chkVAC2onSplit.Location = new System.Drawing.Point(249, 178);
+            this.chkVAC2onSplit.Location = new System.Drawing.Point(19, 236);
             this.chkVAC2onSplit.Name = "chkVAC2onSplit";
             this.chkVAC2onSplit.Size = new System.Drawing.Size(117, 16);
             this.chkVAC2onSplit.TabIndex = 91;
@@ -26754,7 +26779,7 @@
             // 
             this.lblVAC2RingP2.AutoSize = true;
             this.lblVAC2RingP2.Image = null;
-            this.lblVAC2RingP2.Location = new System.Drawing.Point(231, 113);
+            this.lblVAC2RingP2.Location = new System.Drawing.Point(229, 113);
             this.lblVAC2RingP2.Name = "lblVAC2RingP2";
             this.lblVAC2RingP2.Size = new System.Drawing.Size(64, 13);
             this.lblVAC2RingP2.TabIndex = 44;
@@ -26778,7 +26803,7 @@
             // 
             this.lblVAC2RingP1.AutoSize = true;
             this.lblVAC2RingP1.Image = null;
-            this.lblVAC2RingP1.Location = new System.Drawing.Point(8, 113);
+            this.lblVAC2RingP1.Location = new System.Drawing.Point(6, 113);
             this.lblVAC2RingP1.Name = "lblVAC2RingP1";
             this.lblVAC2RingP1.Size = new System.Drawing.Size(64, 13);
             this.lblVAC2RingP1.TabIndex = 42;
@@ -26850,7 +26875,7 @@
             // 
             this.lblVAC2Ring2.AutoSize = true;
             this.lblVAC2Ring2.Image = null;
-            this.lblVAC2Ring2.Location = new System.Drawing.Point(231, 95);
+            this.lblVAC2Ring2.Location = new System.Drawing.Point(229, 95);
             this.lblVAC2Ring2.Name = "lblVAC2Ring2";
             this.lblVAC2Ring2.Size = new System.Drawing.Size(62, 13);
             this.lblVAC2Ring2.TabIndex = 36;
@@ -26874,7 +26899,7 @@
             // 
             this.lblVAC2Ring1.AutoSize = true;
             this.lblVAC2Ring1.Image = null;
-            this.lblVAC2Ring1.Location = new System.Drawing.Point(8, 95);
+            this.lblVAC2Ring1.Location = new System.Drawing.Point(6, 95);
             this.lblVAC2Ring1.Name = "lblVAC2Ring1";
             this.lblVAC2Ring1.Size = new System.Drawing.Size(62, 13);
             this.lblVAC2Ring1.TabIndex = 34;
@@ -26915,7 +26940,7 @@
             // 
             this.chkVAC2_Force2.AutoSize = true;
             this.chkVAC2_Force2.Image = null;
-            this.chkVAC2_Force2.Location = new System.Drawing.Point(332, 21);
+            this.chkVAC2_Force2.Location = new System.Drawing.Point(332, 18);
             this.chkVAC2_Force2.Name = "chkVAC2_Force2";
             this.chkVAC2_Force2.Size = new System.Drawing.Size(54, 17);
             this.chkVAC2_Force2.TabIndex = 16;
@@ -26953,7 +26978,7 @@
             // 
             this.lblVAC2varratio2.AutoSize = true;
             this.lblVAC2varratio2.Image = null;
-            this.lblVAC2varratio2.Location = new System.Drawing.Point(231, 76);
+            this.lblVAC2varratio2.Location = new System.Drawing.Point(229, 76);
             this.lblVAC2varratio2.Name = "lblVAC2varratio2";
             this.lblVAC2varratio2.Size = new System.Drawing.Size(53, 13);
             this.lblVAC2varratio2.TabIndex = 13;
@@ -27044,7 +27069,7 @@
             // 
             this.chkVAC2_Force.AutoSize = true;
             this.chkVAC2_Force.Image = null;
-            this.chkVAC2_Force.Location = new System.Drawing.Point(109, 21);
+            this.chkVAC2_Force.Location = new System.Drawing.Point(109, 18);
             this.chkVAC2_Force.Name = "chkVAC2_Force";
             this.chkVAC2_Force.Size = new System.Drawing.Size(54, 17);
             this.chkVAC2_Force.TabIndex = 7;
@@ -27082,7 +27107,7 @@
             // 
             this.lblVAC2varratio.AutoSize = true;
             this.lblVAC2varratio.Image = null;
-            this.lblVAC2varratio.Location = new System.Drawing.Point(8, 76);
+            this.lblVAC2varratio.Location = new System.Drawing.Point(6, 76);
             this.lblVAC2varratio.Name = "lblVAC2varratio";
             this.lblVAC2varratio.Size = new System.Drawing.Size(53, 13);
             this.lblVAC2varratio.TabIndex = 4;
@@ -27144,7 +27169,7 @@
             this.chkVAC2UseRX2.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVAC2UseRX2.Enabled = false;
             this.chkVAC2UseRX2.Image = null;
-            this.chkVAC2UseRX2.Location = new System.Drawing.Point(249, 212);
+            this.chkVAC2UseRX2.Location = new System.Drawing.Point(19, 202);
             this.chkVAC2UseRX2.Name = "chkVAC2UseRX2";
             this.chkVAC2UseRX2.Size = new System.Drawing.Size(88, 16);
             this.chkVAC2UseRX2.TabIndex = 2;
@@ -27157,20 +27182,21 @@
             // 
             this.grpVAC2DirectIQ.Controls.Add(this.chkVAC2DirectIQCal);
             this.grpVAC2DirectIQ.Controls.Add(this.chkVAC2DirectIQ);
-            this.grpVAC2DirectIQ.Location = new System.Drawing.Point(550, 12);
+            this.grpVAC2DirectIQ.Location = new System.Drawing.Point(550, 3);
             this.grpVAC2DirectIQ.Name = "grpVAC2DirectIQ";
-            this.grpVAC2DirectIQ.Size = new System.Drawing.Size(149, 73);
+            this.grpVAC2DirectIQ.Size = new System.Drawing.Size(149, 94);
             this.grpVAC2DirectIQ.TabIndex = 89;
             this.grpVAC2DirectIQ.TabStop = false;
             this.grpVAC2DirectIQ.Text = "Direct I/Q";
             // 
             // chkVAC2DirectIQCal
             // 
+            this.chkVAC2DirectIQCal.AutoSize = true;
             this.chkVAC2DirectIQCal.Enabled = false;
             this.chkVAC2DirectIQCal.Image = null;
             this.chkVAC2DirectIQCal.Location = new System.Drawing.Point(16, 46);
             this.chkVAC2DirectIQCal.Name = "chkVAC2DirectIQCal";
-            this.chkVAC2DirectIQCal.Size = new System.Drawing.Size(88, 16);
+            this.chkVAC2DirectIQCal.Size = new System.Drawing.Size(90, 17);
             this.chkVAC2DirectIQCal.TabIndex = 1;
             this.chkVAC2DirectIQCal.Text = "Calibrate I/Q";
             this.chkVAC2DirectIQCal.Visible = false;
@@ -27178,10 +27204,11 @@
             // 
             // chkVAC2DirectIQ
             // 
+            this.chkVAC2DirectIQ.AutoSize = true;
             this.chkVAC2DirectIQ.Image = null;
             this.chkVAC2DirectIQ.Location = new System.Drawing.Point(16, 24);
             this.chkVAC2DirectIQ.Name = "chkVAC2DirectIQ";
-            this.chkVAC2DirectIQ.Size = new System.Drawing.Size(121, 16);
+            this.chkVAC2DirectIQ.Size = new System.Drawing.Size(101, 17);
             this.chkVAC2DirectIQ.TabIndex = 0;
             this.chkVAC2DirectIQ.Text = "Output to VAC";
             this.chkVAC2DirectIQ.CheckedChanged += new System.EventHandler(this.chkVAC2DirectIQ_CheckedChanged);
@@ -27190,9 +27217,9 @@
             // 
             this.chkVAC2Combine.Enabled = false;
             this.chkVAC2Combine.Image = null;
-            this.chkVAC2Combine.Location = new System.Drawing.Point(24, 200);
+            this.chkVAC2Combine.Location = new System.Drawing.Point(19, 270);
             this.chkVAC2Combine.Name = "chkVAC2Combine";
-            this.chkVAC2Combine.Size = new System.Drawing.Size(117, 40);
+            this.chkVAC2Combine.Size = new System.Drawing.Size(184, 17);
             this.chkVAC2Combine.TabIndex = 88;
             this.chkVAC2Combine.Text = "Combine VAC Input Channels";
             this.toolTip1.SetToolTip(this.chkVAC2Combine, "When this feature is enabled, the left and right VAC channels are combined into t" +
@@ -27201,9 +27228,9 @@
             // grpVAC2AutoEnable
             // 
             this.grpVAC2AutoEnable.Controls.Add(this.chkVAC2AutoEnable);
-            this.grpVAC2AutoEnable.Location = new System.Drawing.Point(8, 138);
+            this.grpVAC2AutoEnable.Location = new System.Drawing.Point(254, 218);
             this.grpVAC2AutoEnable.Name = "grpVAC2AutoEnable";
-            this.grpVAC2AutoEnable.Size = new System.Drawing.Size(224, 56);
+            this.grpVAC2AutoEnable.Size = new System.Drawing.Size(290, 49);
             this.grpVAC2AutoEnable.TabIndex = 86;
             this.grpVAC2AutoEnable.TabStop = false;
             this.grpVAC2AutoEnable.Text = "Auto Enable";
@@ -27211,11 +27238,11 @@
             // chkVAC2AutoEnable
             // 
             this.chkVAC2AutoEnable.Image = null;
-            this.chkVAC2AutoEnable.Location = new System.Drawing.Point(16, 16);
+            this.chkVAC2AutoEnable.Location = new System.Drawing.Point(31, 18);
             this.chkVAC2AutoEnable.Name = "chkVAC2AutoEnable";
-            this.chkVAC2AutoEnable.Size = new System.Drawing.Size(200, 32);
+            this.chkVAC2AutoEnable.Size = new System.Drawing.Size(251, 17);
             this.chkVAC2AutoEnable.TabIndex = 0;
-            this.chkVAC2AutoEnable.Text = "Enable for Digital modes, Disable for all others";
+            this.chkVAC2AutoEnable.Text = "Enable for Digital modes, Disable for others";
             this.toolTip1.SetToolTip(this.chkVAC2AutoEnable, "Click this button to automatically enable VAC when in Digital modes (DIGL, DIGU, " +
         "DRM)");
             this.chkVAC2AutoEnable.CheckedChanged += new System.EventHandler(this.chkVAC2AutoEnable_CheckedChanged);
@@ -27350,7 +27377,7 @@
             this.grpVAC2LatencyManual.Controls.Add(this.labelTS366);
             this.grpVAC2LatencyManual.Controls.Add(this.chkVAC2LatencyManual);
             this.grpVAC2LatencyManual.Controls.Add(this.udVAC2Latency);
-            this.grpVAC2LatencyManual.Location = new System.Drawing.Point(550, 112);
+            this.grpVAC2LatencyManual.Location = new System.Drawing.Point(550, 100);
             this.grpVAC2LatencyManual.Name = "grpVAC2LatencyManual";
             this.grpVAC2LatencyManual.Size = new System.Drawing.Size(150, 155);
             this.grpVAC2LatencyManual.TabIndex = 83;
@@ -27361,7 +27388,7 @@
             // 
             this.labelTS369.AutoSize = true;
             this.labelTS369.Image = null;
-            this.labelTS369.Location = new System.Drawing.Point(78, 105);
+            this.labelTS369.Location = new System.Drawing.Point(74, 108);
             this.labelTS369.Name = "labelTS369";
             this.labelTS369.Size = new System.Drawing.Size(30, 13);
             this.labelTS369.TabIndex = 55;
@@ -27371,7 +27398,7 @@
             // 
             this.labelTS370.AutoSize = true;
             this.labelTS370.Image = null;
-            this.labelTS370.Location = new System.Drawing.Point(5, 105);
+            this.labelTS370.Location = new System.Drawing.Point(5, 108);
             this.labelTS370.Name = "labelTS370";
             this.labelTS370.Size = new System.Drawing.Size(20, 13);
             this.labelTS370.TabIndex = 54;
@@ -27380,9 +27407,9 @@
             // chkVAC2LatencyPAOutManual
             // 
             this.chkVAC2LatencyPAOutManual.Image = null;
-            this.chkVAC2LatencyPAOutManual.Location = new System.Drawing.Point(81, 131);
+            this.chkVAC2LatencyPAOutManual.Location = new System.Drawing.Point(87, 136);
             this.chkVAC2LatencyPAOutManual.Name = "chkVAC2LatencyPAOutManual";
-            this.chkVAC2LatencyPAOutManual.Size = new System.Drawing.Size(64, 16);
+            this.chkVAC2LatencyPAOutManual.Size = new System.Drawing.Size(51, 16);
             this.chkVAC2LatencyPAOutManual.TabIndex = 53;
             this.chkVAC2LatencyPAOutManual.Text = "Man";
             this.chkVAC2LatencyPAOutManual.CheckedChanged += new System.EventHandler(this.chkVAC2LatencyPAOutManual_CheckedChanged);
@@ -27395,7 +27422,7 @@
             0,
             0,
             0});
-            this.udVAC2LatencyPAOut.Location = new System.Drawing.Point(108, 103);
+            this.udVAC2LatencyPAOut.Location = new System.Drawing.Point(105, 106);
             this.udVAC2LatencyPAOut.Maximum = new decimal(new int[] {
             240,
             0,
@@ -27420,7 +27447,7 @@
             // chkVAC2LatencyPAInManual
             // 
             this.chkVAC2LatencyPAInManual.Image = null;
-            this.chkVAC2LatencyPAInManual.Location = new System.Drawing.Point(8, 131);
+            this.chkVAC2LatencyPAInManual.Location = new System.Drawing.Point(8, 136);
             this.chkVAC2LatencyPAInManual.Name = "chkVAC2LatencyPAInManual";
             this.chkVAC2LatencyPAInManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyPAInManual.TabIndex = 50;
@@ -27435,7 +27462,7 @@
             0,
             0,
             0});
-            this.udVAC2LatencyPAIn.Location = new System.Drawing.Point(25, 103);
+            this.udVAC2LatencyPAIn.Location = new System.Drawing.Point(25, 106);
             this.udVAC2LatencyPAIn.Maximum = new decimal(new int[] {
             240,
             0,
@@ -27461,7 +27488,7 @@
             // 
             this.labelTS371.AutoSize = true;
             this.labelTS371.Image = null;
-            this.labelTS371.Location = new System.Drawing.Point(45, 87);
+            this.labelTS371.Location = new System.Drawing.Point(45, 84);
             this.labelTS371.Name = "labelTS371";
             this.labelTS371.Size = new System.Drawing.Size(59, 13);
             this.labelTS371.TabIndex = 49;
@@ -27470,9 +27497,9 @@
             // chkVAC2LatencyOutManual
             // 
             this.chkVAC2LatencyOutManual.Image = null;
-            this.chkVAC2LatencyOutManual.Location = new System.Drawing.Point(81, 60);
+            this.chkVAC2LatencyOutManual.Location = new System.Drawing.Point(87, 68);
             this.chkVAC2LatencyOutManual.Name = "chkVAC2LatencyOutManual";
-            this.chkVAC2LatencyOutManual.Size = new System.Drawing.Size(64, 16);
+            this.chkVAC2LatencyOutManual.Size = new System.Drawing.Size(51, 16);
             this.chkVAC2LatencyOutManual.TabIndex = 46;
             this.chkVAC2LatencyOutManual.Text = "Man";
             this.chkVAC2LatencyOutManual.CheckedChanged += new System.EventHandler(this.chkVAC2LatencyOutManual_CheckedChanged);
@@ -27485,7 +27512,7 @@
             0,
             0,
             0});
-            this.udVAC2LatencyOut.Location = new System.Drawing.Point(108, 35);
+            this.udVAC2LatencyOut.Location = new System.Drawing.Point(105, 38);
             this.udVAC2LatencyOut.Maximum = new decimal(new int[] {
             240,
             0,
@@ -27511,7 +27538,7 @@
             // 
             this.labelTS368.AutoSize = true;
             this.labelTS368.Image = null;
-            this.labelTS368.Location = new System.Drawing.Point(78, 37);
+            this.labelTS368.Location = new System.Drawing.Point(74, 40);
             this.labelTS368.Name = "labelTS368";
             this.labelTS368.Size = new System.Drawing.Size(30, 13);
             this.labelTS368.TabIndex = 44;
@@ -27521,7 +27548,7 @@
             // 
             this.labelTS367.AutoSize = true;
             this.labelTS367.Image = null;
-            this.labelTS367.Location = new System.Drawing.Point(5, 37);
+            this.labelTS367.Location = new System.Drawing.Point(5, 40);
             this.labelTS367.Name = "labelTS367";
             this.labelTS367.Size = new System.Drawing.Size(20, 13);
             this.labelTS367.TabIndex = 43;
@@ -27540,7 +27567,7 @@
             // chkVAC2LatencyManual
             // 
             this.chkVAC2LatencyManual.Image = null;
-            this.chkVAC2LatencyManual.Location = new System.Drawing.Point(8, 60);
+            this.chkVAC2LatencyManual.Location = new System.Drawing.Point(8, 68);
             this.chkVAC2LatencyManual.Name = "chkVAC2LatencyManual";
             this.chkVAC2LatencyManual.Size = new System.Drawing.Size(64, 16);
             this.chkVAC2LatencyManual.TabIndex = 5;
@@ -27555,7 +27582,7 @@
             0,
             0,
             0});
-            this.udVAC2Latency.Location = new System.Drawing.Point(25, 35);
+            this.udVAC2Latency.Location = new System.Drawing.Point(25, 38);
             this.udVAC2Latency.Maximum = new decimal(new int[] {
             240,
             0,
@@ -27646,9 +27673,9 @@
             this.grpAudioDetails3.Controls.Add(this.lblAudioDriver3);
             this.grpAudioDetails3.Controls.Add(this.comboAudioInput3);
             this.grpAudioDetails3.Controls.Add(this.comboAudioDriver3);
-            this.grpAudioDetails3.Location = new System.Drawing.Point(8, 28);
+            this.grpAudioDetails3.Location = new System.Drawing.Point(9, 36);
             this.grpAudioDetails3.Name = "grpAudioDetails3";
-            this.grpAudioDetails3.Size = new System.Drawing.Size(319, 100);
+            this.grpAudioDetails3.Size = new System.Drawing.Size(319, 126);
             this.grpAudioDetails3.TabIndex = 80;
             this.grpAudioDetails3.TabStop = false;
             this.grpAudioDetails3.Text = "Virtual Audio Cable Setup";
@@ -27656,7 +27683,7 @@
             // lblAudioOutput3
             // 
             this.lblAudioOutput3.Image = null;
-            this.lblAudioOutput3.Location = new System.Drawing.Point(8, 70);
+            this.lblAudioOutput3.Location = new System.Drawing.Point(8, 78);
             this.lblAudioOutput3.Name = "lblAudioOutput3";
             this.lblAudioOutput3.Size = new System.Drawing.Size(48, 16);
             this.lblAudioOutput3.TabIndex = 35;
@@ -27668,7 +27695,7 @@
             this.comboAudioOutput3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioOutput3.DropDownWidth = 160;
             this.comboAudioOutput3.ItemHeight = 13;
-            this.comboAudioOutput3.Location = new System.Drawing.Point(56, 70);
+            this.comboAudioOutput3.Location = new System.Drawing.Point(56, 78);
             this.comboAudioOutput3.Name = "comboAudioOutput3";
             this.comboAudioOutput3.Size = new System.Drawing.Size(255, 21);
             this.comboAudioOutput3.TabIndex = 34;
@@ -27678,7 +27705,7 @@
             // lblAudioInput3
             // 
             this.lblAudioInput3.Image = null;
-            this.lblAudioInput3.Location = new System.Drawing.Point(8, 44);
+            this.lblAudioInput3.Location = new System.Drawing.Point(8, 52);
             this.lblAudioInput3.Name = "lblAudioInput3";
             this.lblAudioInput3.Size = new System.Drawing.Size(40, 16);
             this.lblAudioInput3.TabIndex = 33;
@@ -27687,7 +27714,7 @@
             // lblAudioDriver3
             // 
             this.lblAudioDriver3.Image = null;
-            this.lblAudioDriver3.Location = new System.Drawing.Point(8, 18);
+            this.lblAudioDriver3.Location = new System.Drawing.Point(8, 26);
             this.lblAudioDriver3.Name = "lblAudioDriver3";
             this.lblAudioDriver3.Size = new System.Drawing.Size(40, 16);
             this.lblAudioDriver3.TabIndex = 32;
@@ -27698,7 +27725,7 @@
             this.comboAudioInput3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioInput3.DropDownWidth = 160;
             this.comboAudioInput3.ItemHeight = 13;
-            this.comboAudioInput3.Location = new System.Drawing.Point(56, 44);
+            this.comboAudioInput3.Location = new System.Drawing.Point(56, 52);
             this.comboAudioInput3.Name = "comboAudioInput3";
             this.comboAudioInput3.Size = new System.Drawing.Size(255, 21);
             this.comboAudioInput3.TabIndex = 28;
@@ -27710,7 +27737,7 @@
             this.comboAudioDriver3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAudioDriver3.DropDownWidth = 160;
             this.comboAudioDriver3.ItemHeight = 13;
-            this.comboAudioDriver3.Location = new System.Drawing.Point(56, 18);
+            this.comboAudioDriver3.Location = new System.Drawing.Point(56, 26);
             this.comboAudioDriver3.Name = "comboAudioDriver3";
             this.comboAudioDriver3.Size = new System.Drawing.Size(255, 21);
             this.comboAudioDriver3.TabIndex = 26;
@@ -27720,7 +27747,7 @@
             // chkVAC2Enable
             // 
             this.chkVAC2Enable.Image = null;
-            this.chkVAC2Enable.Location = new System.Drawing.Point(16, 4);
+            this.chkVAC2Enable.Location = new System.Drawing.Point(19, 9);
             this.chkVAC2Enable.Name = "chkVAC2Enable";
             this.chkVAC2Enable.Size = new System.Drawing.Size(99, 24);
             this.chkVAC2Enable.TabIndex = 79;
@@ -27745,7 +27772,7 @@
             // 
             this.chkDisableRearSpeakerJacksAudioAmplifier.AutoSize = true;
             this.chkDisableRearSpeakerJacksAudioAmplifier.Image = null;
-            this.chkDisableRearSpeakerJacksAudioAmplifier.Location = new System.Drawing.Point(20, 80);
+            this.chkDisableRearSpeakerJacksAudioAmplifier.Location = new System.Drawing.Point(19, 63);
             this.chkDisableRearSpeakerJacksAudioAmplifier.Name = "chkDisableRearSpeakerJacksAudioAmplifier";
             this.chkDisableRearSpeakerJacksAudioAmplifier.Size = new System.Drawing.Size(258, 17);
             this.chkDisableRearSpeakerJacksAudioAmplifier.TabIndex = 2;
@@ -27758,7 +27785,7 @@
             // 
             this.chkNoFadeOverUnderWarning.AutoSize = true;
             this.chkNoFadeOverUnderWarning.Image = null;
-            this.chkNoFadeOverUnderWarning.Location = new System.Drawing.Point(19, 42);
+            this.chkNoFadeOverUnderWarning.Location = new System.Drawing.Point(19, 41);
             this.chkNoFadeOverUnderWarning.Name = "chkNoFadeOverUnderWarning";
             this.chkNoFadeOverUnderWarning.Size = new System.Drawing.Size(198, 17);
             this.chkNoFadeOverUnderWarning.TabIndex = 1;
@@ -29243,9 +29270,9 @@
             // 
             this.grpSpectralWarningLeds.Controls.Add(this.chkSpecWarningLEDGetPixels);
             this.grpSpectralWarningLeds.Controls.Add(this.chkSpecWarningLEDRenderDelay);
-            this.grpSpectralWarningLeds.Location = new System.Drawing.Point(394, 312);
+            this.grpSpectralWarningLeds.Location = new System.Drawing.Point(359, 298);
             this.grpSpectralWarningLeds.Name = "grpSpectralWarningLeds";
-            this.grpSpectralWarningLeds.Size = new System.Drawing.Size(166, 72);
+            this.grpSpectralWarningLeds.Size = new System.Drawing.Size(166, 97);
             this.grpSpectralWarningLeds.TabIndex = 94;
             this.grpSpectralWarningLeds.TabStop = false;
             this.grpSpectralWarningLeds.Text = "Spectral Warning LEDs";
@@ -29254,7 +29281,7 @@
             // 
             this.chkSpecWarningLEDGetPixels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.chkSpecWarningLEDGetPixels.Image = null;
-            this.chkSpecWarningLEDGetPixels.Location = new System.Drawing.Point(6, 42);
+            this.chkSpecWarningLEDGetPixels.Location = new System.Drawing.Point(12, 46);
             this.chkSpecWarningLEDGetPixels.Name = "chkSpecWarningLEDGetPixels";
             this.chkSpecWarningLEDGetPixels.Size = new System.Drawing.Size(148, 17);
             this.chkSpecWarningLEDGetPixels.TabIndex = 52;
@@ -29269,7 +29296,7 @@
             this.chkSpecWarningLEDRenderDelay.Checked = true;
             this.chkSpecWarningLEDRenderDelay.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkSpecWarningLEDRenderDelay.Image = null;
-            this.chkSpecWarningLEDRenderDelay.Location = new System.Drawing.Point(6, 19);
+            this.chkSpecWarningLEDRenderDelay.Location = new System.Drawing.Point(12, 22);
             this.chkSpecWarningLEDRenderDelay.Name = "chkSpecWarningLEDRenderDelay";
             this.chkSpecWarningLEDRenderDelay.Size = new System.Drawing.Size(148, 17);
             this.chkSpecWarningLEDRenderDelay.TabIndex = 51;
@@ -29283,13 +29310,12 @@
             this.groupBoxTS13.Controls.Add(this.udPeakBlobDropDBMs);
             this.groupBoxTS13.Controls.Add(this.lblPeakBlobDropDBMs);
             this.groupBoxTS13.Controls.Add(this.chkPeakHoldDrop);
-            this.groupBoxTS13.Controls.Add(this.lblBlobMS);
             this.groupBoxTS13.Controls.Add(this.udBlobPeakHoldMS);
             this.groupBoxTS13.Controls.Add(this.chkBlobPeakHold);
             this.groupBoxTS13.Controls.Add(this.chkPeakBlobInsideFilterOnly);
             this.groupBoxTS13.Controls.Add(this.udPeakBlobs);
             this.groupBoxTS13.Controls.Add(this.chkPeakBlobsEnabled);
-            this.groupBoxTS13.Location = new System.Drawing.Point(6, 296);
+            this.groupBoxTS13.Location = new System.Drawing.Point(6, 298);
             this.groupBoxTS13.Name = "groupBoxTS13";
             this.groupBoxTS13.Size = new System.Drawing.Size(318, 97);
             this.groupBoxTS13.TabIndex = 48;
@@ -29304,7 +29330,7 @@
             0,
             0,
             65536});
-            this.udPeakBlobDropDBMs.Location = new System.Drawing.Point(262, 71);
+            this.udPeakBlobDropDBMs.Location = new System.Drawing.Point(136, 69);
             this.udPeakBlobDropDBMs.Maximum = new decimal(new int[] {
             60,
             0,
@@ -29330,18 +29356,18 @@
             // lblPeakBlobDropDBMs
             // 
             this.lblPeakBlobDropDBMs.Image = null;
-            this.lblPeakBlobDropDBMs.Location = new System.Drawing.Point(171, 75);
+            this.lblPeakBlobDropDBMs.Location = new System.Drawing.Point(8, 69);
             this.lblPeakBlobDropDBMs.Name = "lblPeakBlobDropDBMs";
             this.lblPeakBlobDropDBMs.Size = new System.Drawing.Size(85, 17);
             this.lblPeakBlobDropDBMs.TabIndex = 71;
             this.lblPeakBlobDropDBMs.Text = "Drop (dBm/s):";
-            this.lblPeakBlobDropDBMs.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblPeakBlobDropDBMs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkPeakHoldDrop
             // 
             this.chkPeakHoldDrop.AutoSize = true;
             this.chkPeakHoldDrop.Image = null;
-            this.chkPeakHoldDrop.Location = new System.Drawing.Point(207, 47);
+            this.chkPeakHoldDrop.Location = new System.Drawing.Point(200, 46);
             this.chkPeakHoldDrop.Name = "chkPeakHoldDrop";
             this.chkPeakHoldDrop.Size = new System.Drawing.Size(52, 17);
             this.chkPeakHoldDrop.TabIndex = 6;
@@ -29350,16 +29376,6 @@
             this.chkPeakHoldDrop.UseVisualStyleBackColor = true;
             this.chkPeakHoldDrop.CheckedChanged += new System.EventHandler(this.chkPeakHoldDrop_CheckedChanged);
             // 
-            // lblBlobMS
-            // 
-            this.lblBlobMS.AutoSize = true;
-            this.lblBlobMS.Image = null;
-            this.lblBlobMS.Location = new System.Drawing.Point(163, 50);
-            this.lblBlobMS.Name = "lblBlobMS";
-            this.lblBlobMS.Size = new System.Drawing.Size(27, 13);
-            this.lblBlobMS.TabIndex = 5;
-            this.lblBlobMS.Text = "(ms)";
-            // 
             // udBlobPeakHoldMS
             // 
             this.udBlobPeakHoldMS.Increment = new decimal(new int[] {
@@ -29367,7 +29383,7 @@
             0,
             0,
             0});
-            this.udBlobPeakHoldMS.Location = new System.Drawing.Point(101, 46);
+            this.udBlobPeakHoldMS.Location = new System.Drawing.Point(136, 45);
             this.udBlobPeakHoldMS.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -29394,11 +29410,11 @@
             // 
             this.chkBlobPeakHold.AutoSize = true;
             this.chkBlobPeakHold.Image = null;
-            this.chkBlobPeakHold.Location = new System.Drawing.Point(13, 49);
+            this.chkBlobPeakHold.Location = new System.Drawing.Point(12, 46);
             this.chkBlobPeakHold.Name = "chkBlobPeakHold";
-            this.chkBlobPeakHold.Size = new System.Drawing.Size(78, 17);
+            this.chkBlobPeakHold.Size = new System.Drawing.Size(101, 17);
             this.chkBlobPeakHold.TabIndex = 3;
-            this.chkBlobPeakHold.Text = "Peak Hold";
+            this.chkBlobPeakHold.Text = "Peak Hold (ms)";
             this.chkBlobPeakHold.UseVisualStyleBackColor = true;
             this.chkBlobPeakHold.CheckedChanged += new System.EventHandler(this.chkBlobPeakHold_CheckedChanged);
             // 
@@ -29406,7 +29422,7 @@
             // 
             this.chkPeakBlobInsideFilterOnly.AutoSize = true;
             this.chkPeakBlobInsideFilterOnly.Image = null;
-            this.chkPeakBlobInsideFilterOnly.Location = new System.Drawing.Point(207, 20);
+            this.chkPeakBlobInsideFilterOnly.Location = new System.Drawing.Point(200, 22);
             this.chkPeakBlobInsideFilterOnly.Name = "chkPeakBlobInsideFilterOnly";
             this.chkPeakBlobInsideFilterOnly.Size = new System.Drawing.Size(113, 17);
             this.chkPeakBlobInsideFilterOnly.TabIndex = 2;
@@ -29422,7 +29438,7 @@
             0,
             0,
             0});
-            this.udPeakBlobs.Location = new System.Drawing.Point(101, 20);
+            this.udPeakBlobs.Location = new System.Drawing.Point(136, 21);
             this.udPeakBlobs.Maximum = new decimal(new int[] {
             20,
             0,
@@ -29448,7 +29464,7 @@
             // 
             this.chkPeakBlobsEnabled.AutoSize = true;
             this.chkPeakBlobsEnabled.Image = null;
-            this.chkPeakBlobsEnabled.Location = new System.Drawing.Point(13, 22);
+            this.chkPeakBlobsEnabled.Location = new System.Drawing.Point(12, 22);
             this.chkPeakBlobsEnabled.Name = "chkPeakBlobsEnabled";
             this.chkPeakBlobsEnabled.Size = new System.Drawing.Size(68, 17);
             this.chkPeakBlobsEnabled.TabIndex = 0;
@@ -29460,7 +29476,7 @@
             // 
             this.groupBoxTS11.Controls.Add(this.chkShowMHzOnCursor);
             this.groupBoxTS11.Controls.Add(this.chkSmallModeFilteronVFOs);
-            this.groupBoxTS11.Location = new System.Drawing.Point(513, 78);
+            this.groupBoxTS11.Location = new System.Drawing.Point(513, 73);
             this.groupBoxTS11.Name = "groupBoxTS11";
             this.groupBoxTS11.Size = new System.Drawing.Size(200, 69);
             this.groupBoxTS11.TabIndex = 47;
@@ -29471,7 +29487,7 @@
             // 
             this.chkShowMHzOnCursor.AutoSize = true;
             this.chkShowMHzOnCursor.Image = null;
-            this.chkShowMHzOnCursor.Location = new System.Drawing.Point(10, 42);
+            this.chkShowMHzOnCursor.Location = new System.Drawing.Point(10, 47);
             this.chkShowMHzOnCursor.Name = "chkShowMHzOnCursor";
             this.chkShowMHzOnCursor.Size = new System.Drawing.Size(187, 17);
             this.chkShowMHzOnCursor.TabIndex = 2;
@@ -29485,7 +29501,7 @@
             // 
             this.chkSmallModeFilteronVFOs.AutoSize = true;
             this.chkSmallModeFilteronVFOs.Image = null;
-            this.chkSmallModeFilteronVFOs.Location = new System.Drawing.Point(10, 19);
+            this.chkSmallModeFilteronVFOs.Location = new System.Drawing.Point(10, 23);
             this.chkSmallModeFilteronVFOs.Name = "chkSmallModeFilteronVFOs";
             this.chkSmallModeFilteronVFOs.Size = new System.Drawing.Size(160, 17);
             this.chkSmallModeFilteronVFOs.TabIndex = 1;
@@ -29497,7 +29513,7 @@
             // grpDisplay8000DLE
             // 
             this.grpDisplay8000DLE.Controls.Add(this.chkANAN8000DLEDisplayVoltsAmps);
-            this.grpDisplay8000DLE.Location = new System.Drawing.Point(513, 11);
+            this.grpDisplay8000DLE.Location = new System.Drawing.Point(513, 6);
             this.grpDisplay8000DLE.Name = "grpDisplay8000DLE";
             this.grpDisplay8000DLE.Size = new System.Drawing.Size(200, 47);
             this.grpDisplay8000DLE.TabIndex = 44;
@@ -29526,9 +29542,9 @@
             this.grpDisplayDriverEngine.Controls.Add(this.chkAntiAlias);
             this.grpDisplayDriverEngine.Controls.Add(this.comboDisplayThreadPriority);
             this.grpDisplayDriverEngine.Controls.Add(this.chkShowFPS);
-            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(566, 186);
+            this.grpDisplayDriverEngine.Location = new System.Drawing.Point(566, 150);
             this.grpDisplayDriverEngine.Name = "grpDisplayDriverEngine";
-            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(147, 198);
+            this.grpDisplayDriverEngine.Size = new System.Drawing.Size(147, 207);
             this.grpDisplayDriverEngine.TabIndex = 46;
             this.grpDisplayDriverEngine.TabStop = false;
             this.grpDisplayDriverEngine.Text = "DirectX Display Settings";
@@ -29537,7 +29553,7 @@
             // 
             this.chkLegacyDXBuffers.AutoSize = true;
             this.chkLegacyDXBuffers.Image = null;
-            this.chkLegacyDXBuffers.Location = new System.Drawing.Point(7, 145);
+            this.chkLegacyDXBuffers.Location = new System.Drawing.Point(9, 151);
             this.chkLegacyDXBuffers.Name = "chkLegacyDXBuffers";
             this.chkLegacyDXBuffers.Size = new System.Drawing.Size(117, 17);
             this.chkLegacyDXBuffers.TabIndex = 51;
@@ -29551,7 +29567,7 @@
             // 
             this.chkVSyncDX.AutoSize = true;
             this.chkVSyncDX.Image = null;
-            this.chkVSyncDX.Location = new System.Drawing.Point(7, 105);
+            this.chkVSyncDX.Location = new System.Drawing.Point(9, 111);
             this.chkVSyncDX.Name = "chkVSyncDX";
             this.chkVSyncDX.Size = new System.Drawing.Size(56, 17);
             this.chkVSyncDX.TabIndex = 50;
@@ -29564,7 +29580,7 @@
             // 
             this.chkAccurateFrameTiming.AutoSize = true;
             this.chkAccurateFrameTiming.Image = null;
-            this.chkAccurateFrameTiming.Location = new System.Drawing.Point(7, 168);
+            this.chkAccurateFrameTiming.Location = new System.Drawing.Point(9, 174);
             this.chkAccurateFrameTiming.Name = "chkAccurateFrameTiming";
             this.chkAccurateFrameTiming.Size = new System.Drawing.Size(138, 17);
             this.chkAccurateFrameTiming.TabIndex = 49;
@@ -29577,7 +29593,7 @@
             // 
             this.chkAntiAlias.AutoSize = true;
             this.chkAntiAlias.Image = null;
-            this.chkAntiAlias.Location = new System.Drawing.Point(7, 82);
+            this.chkAntiAlias.Location = new System.Drawing.Point(9, 88);
             this.chkAntiAlias.Name = "chkAntiAlias";
             this.chkAntiAlias.Size = new System.Drawing.Size(87, 17);
             this.chkAntiAlias.TabIndex = 48;
@@ -29597,7 +29613,7 @@
             "Normal",
             "Above Normal",
             "High"});
-            this.comboDisplayThreadPriority.Location = new System.Drawing.Point(6, 26);
+            this.comboDisplayThreadPriority.Location = new System.Drawing.Point(9, 16);
             this.comboDisplayThreadPriority.Name = "comboDisplayThreadPriority";
             this.comboDisplayThreadPriority.Size = new System.Drawing.Size(128, 21);
             this.comboDisplayThreadPriority.TabIndex = 47;
@@ -29608,7 +29624,7 @@
             // 
             this.chkShowFPS.AutoSize = true;
             this.chkShowFPS.Image = null;
-            this.chkShowFPS.Location = new System.Drawing.Point(7, 59);
+            this.chkShowFPS.Location = new System.Drawing.Point(9, 65);
             this.chkShowFPS.Name = "chkShowFPS";
             this.chkShowFPS.Size = new System.Drawing.Size(76, 17);
             this.chkShowFPS.TabIndex = 46;
@@ -29619,7 +29635,6 @@
             // 
             // grpDisplayMultimeter
             // 
-            this.grpDisplayMultimeter.Controls.Add(this.lblSignalHistoryDurationMS);
             this.grpDisplayMultimeter.Controls.Add(this.udSignalHistoryDuration);
             this.grpDisplayMultimeter.Controls.Add(this.chkSignalHistory);
             this.grpDisplayMultimeter.Controls.Add(this.radUV);
@@ -29636,22 +29651,12 @@
             this.grpDisplayMultimeter.Controls.Add(this.lblDisplayMultiPeakHoldTime);
             this.grpDisplayMultimeter.Controls.Add(this.udDisplayMeterDelay);
             this.grpDisplayMultimeter.Controls.Add(this.lblDisplayMeterDelay);
-            this.grpDisplayMultimeter.Location = new System.Drawing.Point(6, 148);
+            this.grpDisplayMultimeter.Location = new System.Drawing.Point(6, 150);
             this.grpDisplayMultimeter.Name = "grpDisplayMultimeter";
             this.grpDisplayMultimeter.Size = new System.Drawing.Size(384, 142);
             this.grpDisplayMultimeter.TabIndex = 41;
             this.grpDisplayMultimeter.TabStop = false;
             this.grpDisplayMultimeter.Text = "Multimeter";
-            // 
-            // lblSignalHistoryDurationMS
-            // 
-            this.lblSignalHistoryDurationMS.AutoSize = true;
-            this.lblSignalHistoryDurationMS.Image = null;
-            this.lblSignalHistoryDurationMS.Location = new System.Drawing.Point(350, 42);
-            this.lblSignalHistoryDurationMS.Name = "lblSignalHistoryDurationMS";
-            this.lblSignalHistoryDurationMS.Size = new System.Drawing.Size(27, 13);
-            this.lblSignalHistoryDurationMS.TabIndex = 47;
-            this.lblSignalHistoryDurationMS.Text = "(ms)";
             // 
             // udSignalHistoryDuration
             // 
@@ -29660,7 +29665,7 @@
             0,
             0,
             0});
-            this.udSignalHistoryDuration.Location = new System.Drawing.Point(296, 38);
+            this.udSignalHistoryDuration.Location = new System.Drawing.Point(320, 40);
             this.udSignalHistoryDuration.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -29687,11 +29692,11 @@
             // 
             this.chkSignalHistory.AutoSize = true;
             this.chkSignalHistory.Image = null;
-            this.chkSignalHistory.Location = new System.Drawing.Point(200, 39);
+            this.chkSignalHistory.Location = new System.Drawing.Point(200, 41);
             this.chkSignalHistory.Name = "chkSignalHistory";
-            this.chkSignalHistory.Size = new System.Drawing.Size(97, 17);
+            this.chkSignalHistory.Size = new System.Drawing.Size(120, 17);
             this.chkSignalHistory.TabIndex = 45;
-            this.chkSignalHistory.Text = "Signal History";
+            this.chkSignalHistory.Text = "Signal History (ms)";
             this.toolTip1.SetToolTip(this.chkSignalHistory, "Show a history of SMeter reading on the SMeter");
             this.chkSignalHistory.UseVisualStyleBackColor = true;
             this.chkSignalHistory.CheckedChanged += new System.EventHandler(this.chkSignalHistory_CheckedChanged);
@@ -29726,7 +29731,7 @@
             // 
             this.radSReading.AutoSize = true;
             this.radSReading.Image = null;
-            this.radSReading.Location = new System.Drawing.Point(200, 67);
+            this.radSReading.Location = new System.Drawing.Point(200, 64);
             this.radSReading.Name = "radSReading";
             this.radSReading.Size = new System.Drawing.Size(77, 17);
             this.radSReading.TabIndex = 42;
@@ -29738,9 +29743,9 @@
             // chkDisplayMeterShowDecimal
             // 
             this.chkDisplayMeterShowDecimal.Image = null;
-            this.chkDisplayMeterShowDecimal.Location = new System.Drawing.Point(200, 16);
+            this.chkDisplayMeterShowDecimal.Location = new System.Drawing.Point(200, 17);
             this.chkDisplayMeterShowDecimal.Name = "chkDisplayMeterShowDecimal";
-            this.chkDisplayMeterShowDecimal.Size = new System.Drawing.Size(96, 16);
+            this.chkDisplayMeterShowDecimal.Size = new System.Drawing.Size(118, 16);
             this.chkDisplayMeterShowDecimal.TabIndex = 40;
             this.chkDisplayMeterShowDecimal.Text = "Show Decimal";
             this.toolTip1.SetToolTip(this.chkDisplayMeterShowDecimal, "Check to show detailed meter info");
@@ -29779,7 +29784,7 @@
             // lblMultimeterDigitalDelay
             // 
             this.lblMultimeterDigitalDelay.Image = null;
-            this.lblMultimeterDigitalDelay.Location = new System.Drawing.Point(16, 112);
+            this.lblMultimeterDigitalDelay.Location = new System.Drawing.Point(8, 114);
             this.lblMultimeterDigitalDelay.Name = "lblMultimeterDigitalDelay";
             this.lblMultimeterDigitalDelay.Size = new System.Drawing.Size(120, 16);
             this.lblMultimeterDigitalDelay.TabIndex = 35;
@@ -29819,7 +29824,7 @@
             // lblDisplayMeterAvg
             // 
             this.lblDisplayMeterAvg.Image = null;
-            this.lblDisplayMeterAvg.Location = new System.Drawing.Point(16, 64);
+            this.lblDisplayMeterAvg.Location = new System.Drawing.Point(8, 66);
             this.lblDisplayMeterAvg.Name = "lblDisplayMeterAvg";
             this.lblDisplayMeterAvg.Size = new System.Drawing.Size(112, 16);
             this.lblDisplayMeterAvg.TabIndex = 7;
@@ -29861,7 +29866,7 @@
             // lblDisplayMeterTextHoldTime
             // 
             this.lblDisplayMeterTextHoldTime.Image = null;
-            this.lblDisplayMeterTextHoldTime.Location = new System.Drawing.Point(16, 40);
+            this.lblDisplayMeterTextHoldTime.Location = new System.Drawing.Point(8, 42);
             this.lblDisplayMeterTextHoldTime.Name = "lblDisplayMeterTextHoldTime";
             this.lblDisplayMeterTextHoldTime.Size = new System.Drawing.Size(120, 16);
             this.lblDisplayMeterTextHoldTime.TabIndex = 3;
@@ -29901,9 +29906,9 @@
             // lblDisplayMultiPeakHoldTime
             // 
             this.lblDisplayMultiPeakHoldTime.Image = null;
-            this.lblDisplayMultiPeakHoldTime.Location = new System.Drawing.Point(16, 16);
+            this.lblDisplayMultiPeakHoldTime.Location = new System.Drawing.Point(8, 18);
             this.lblDisplayMultiPeakHoldTime.Name = "lblDisplayMultiPeakHoldTime";
-            this.lblDisplayMultiPeakHoldTime.Size = new System.Drawing.Size(128, 16);
+            this.lblDisplayMultiPeakHoldTime.Size = new System.Drawing.Size(126, 16);
             this.lblDisplayMultiPeakHoldTime.TabIndex = 0;
             this.lblDisplayMultiPeakHoldTime.Text = "Analog Peak Hold (ms):";
             // 
@@ -29941,7 +29946,7 @@
             // lblDisplayMeterDelay
             // 
             this.lblDisplayMeterDelay.Image = null;
-            this.lblDisplayMeterDelay.Location = new System.Drawing.Point(16, 88);
+            this.lblDisplayMeterDelay.Location = new System.Drawing.Point(8, 90);
             this.lblDisplayMeterDelay.Name = "lblDisplayMeterDelay";
             this.lblDisplayMeterDelay.Size = new System.Drawing.Size(128, 16);
             this.lblDisplayMeterDelay.TabIndex = 33;
@@ -29951,9 +29956,9 @@
             // 
             this.grpDisplayScopeMode.Controls.Add(this.udDisplayScopeTime);
             this.grpDisplayScopeMode.Controls.Add(this.lblDisplayScopeTime);
-            this.grpDisplayScopeMode.Location = new System.Drawing.Point(293, 95);
+            this.grpDisplayScopeMode.Location = new System.Drawing.Point(298, 78);
             this.grpDisplayScopeMode.Name = "grpDisplayScopeMode";
-            this.grpDisplayScopeMode.Size = new System.Drawing.Size(136, 47);
+            this.grpDisplayScopeMode.Size = new System.Drawing.Size(136, 64);
             this.grpDisplayScopeMode.TabIndex = 43;
             this.grpDisplayScopeMode.TabStop = false;
             this.grpDisplayScopeMode.Text = "Scope Mode";
@@ -29992,9 +29997,9 @@
             // lblDisplayScopeTime
             // 
             this.lblDisplayScopeTime.Image = null;
-            this.lblDisplayScopeTime.Location = new System.Drawing.Point(8, 17);
+            this.lblDisplayScopeTime.Location = new System.Drawing.Point(6, 19);
             this.lblDisplayScopeTime.Name = "lblDisplayScopeTime";
-            this.lblDisplayScopeTime.Size = new System.Drawing.Size(64, 23);
+            this.lblDisplayScopeTime.Size = new System.Drawing.Size(55, 16);
             this.lblDisplayScopeTime.TabIndex = 1;
             this.lblDisplayScopeTime.Text = "Time (us):";
             // 
@@ -30005,7 +30010,7 @@
             this.grpDisplayPhase.Controls.Add(this.udDisplayPhasePtSize);
             this.grpDisplayPhase.Controls.Add(this.lblDisplayPhasePts);
             this.grpDisplayPhase.Controls.Add(this.udDisplayPhasePts);
-            this.grpDisplayPhase.Location = new System.Drawing.Point(293, 6);
+            this.grpDisplayPhase.Location = new System.Drawing.Point(298, 6);
             this.grpDisplayPhase.Name = "grpDisplayPhase";
             this.grpDisplayPhase.Size = new System.Drawing.Size(199, 72);
             this.grpDisplayPhase.TabIndex = 37;
@@ -30016,7 +30021,7 @@
             // 
             this.chkShowPhaseAngularMean.AutoSize = true;
             this.chkShowPhaseAngularMean.Image = null;
-            this.chkShowPhaseAngularMean.Location = new System.Drawing.Point(127, 44);
+            this.chkShowPhaseAngularMean.Location = new System.Drawing.Point(129, 42);
             this.chkShowPhaseAngularMean.Name = "chkShowPhaseAngularMean";
             this.chkShowPhaseAngularMean.Size = new System.Drawing.Size(55, 17);
             this.chkShowPhaseAngularMean.TabIndex = 4;
@@ -30030,7 +30035,7 @@
             this.labelTS517.Image = null;
             this.labelTS517.Location = new System.Drawing.Point(8, 43);
             this.labelTS517.Name = "labelTS517";
-            this.labelTS517.Size = new System.Drawing.Size(56, 23);
+            this.labelTS517.Size = new System.Drawing.Size(56, 16);
             this.labelTS517.TabIndex = 3;
             this.labelTS517.Text = "Pt Size:";
             // 
@@ -30041,7 +30046,7 @@
             0,
             0,
             0});
-            this.udDisplayPhasePtSize.Location = new System.Drawing.Point(64, 43);
+            this.udDisplayPhasePtSize.Location = new System.Drawing.Point(64, 41);
             this.udDisplayPhasePtSize.Maximum = new decimal(new int[] {
             10,
             0,
@@ -30067,9 +30072,9 @@
             // lblDisplayPhasePts
             // 
             this.lblDisplayPhasePts.Image = null;
-            this.lblDisplayPhasePts.Location = new System.Drawing.Point(8, 17);
+            this.lblDisplayPhasePts.Location = new System.Drawing.Point(8, 19);
             this.lblDisplayPhasePts.Name = "lblDisplayPhasePts";
-            this.lblDisplayPhasePts.Size = new System.Drawing.Size(56, 23);
+            this.lblDisplayPhasePts.Size = new System.Drawing.Size(56, 16);
             this.lblDisplayPhasePts.TabIndex = 1;
             this.lblDisplayPhasePts.Text = "Num Pts:";
             // 
@@ -30124,10 +30129,11 @@
             // 
             // labelTS608
             // 
+            this.labelTS608.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTS608.Image = null;
-            this.labelTS608.Location = new System.Drawing.Point(185, 36);
+            this.labelTS608.Location = new System.Drawing.Point(8, 43);
             this.labelTS608.Name = "labelTS608";
-            this.labelTS608.Size = new System.Drawing.Size(78, 16);
+            this.labelTS608.Size = new System.Drawing.Size(69, 16);
             this.labelTS608.TabIndex = 96;
             this.labelTS608.Text = "Decimation:";
             // 
@@ -30138,7 +30144,7 @@
             0,
             0,
             0});
-            this.udDisplayDecimation.Location = new System.Drawing.Point(199, 55);
+            this.udDisplayDecimation.Location = new System.Drawing.Point(136, 41);
             this.udDisplayDecimation.Maximum = new decimal(new int[] {
             16,
             0,
@@ -30164,9 +30170,9 @@
             // chkDisplayPanFill
             // 
             this.chkDisplayPanFill.Image = null;
-            this.chkDisplayPanFill.Location = new System.Drawing.Point(19, 47);
+            this.chkDisplayPanFill.Location = new System.Drawing.Point(12, 114);
             this.chkDisplayPanFill.Name = "chkDisplayPanFill";
-            this.chkDisplayPanFill.Size = new System.Drawing.Size(101, 16);
+            this.chkDisplayPanFill.Size = new System.Drawing.Size(109, 16);
             this.chkDisplayPanFill.TabIndex = 40;
             this.chkDisplayPanFill.Text = "Fill Panadapter";
             this.toolTip1.SetToolTip(this.chkDisplayPanFill, "Check to fill the panadapter display line below the data.");
@@ -30179,7 +30185,7 @@
             0,
             0,
             0});
-            this.udDisplayCPUMeter.Location = new System.Drawing.Point(120, 96);
+            this.udDisplayCPUMeter.Location = new System.Drawing.Point(136, 89);
             this.udDisplayCPUMeter.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -30206,9 +30212,9 @@
             // lblDisplayCPUMeter
             // 
             this.lblDisplayCPUMeter.Image = null;
-            this.lblDisplayCPUMeter.Location = new System.Drawing.Point(16, 96);
+            this.lblDisplayCPUMeter.Location = new System.Drawing.Point(8, 91);
             this.lblDisplayCPUMeter.Name = "lblDisplayCPUMeter";
-            this.lblDisplayCPUMeter.Size = new System.Drawing.Size(100, 23);
+            this.lblDisplayCPUMeter.Size = new System.Drawing.Size(100, 16);
             this.lblDisplayCPUMeter.TabIndex = 37;
             this.lblDisplayCPUMeter.Text = "CPU Meter (ms)";
             // 
@@ -30219,7 +30225,7 @@
             0,
             0,
             0});
-            this.udDisplayPeakText.Location = new System.Drawing.Point(120, 72);
+            this.udDisplayPeakText.Location = new System.Drawing.Point(136, 65);
             this.udDisplayPeakText.Maximum = new decimal(new int[] {
             500,
             0,
@@ -30246,9 +30252,9 @@
             // lblDisplayPeakText
             // 
             this.lblDisplayPeakText.Image = null;
-            this.lblDisplayPeakText.Location = new System.Drawing.Point(16, 72);
+            this.lblDisplayPeakText.Location = new System.Drawing.Point(8, 67);
             this.lblDisplayPeakText.Name = "lblDisplayPeakText";
-            this.lblDisplayPeakText.Size = new System.Drawing.Size(100, 23);
+            this.lblDisplayPeakText.Size = new System.Drawing.Size(100, 16);
             this.lblDisplayPeakText.TabIndex = 35;
             this.lblDisplayPeakText.Text = "Peak Text (ms)";
             // 
@@ -30259,7 +30265,7 @@
             0,
             0,
             0});
-            this.udDisplayFPS.Location = new System.Drawing.Point(120, 24);
+            this.udDisplayFPS.Location = new System.Drawing.Point(136, 17);
             this.udDisplayFPS.Maximum = new decimal(new int[] {
             144,
             0,
@@ -30286,7 +30292,7 @@
             // lblDisplayFPS
             // 
             this.lblDisplayFPS.Image = null;
-            this.lblDisplayFPS.Location = new System.Drawing.Point(16, 24);
+            this.lblDisplayFPS.Location = new System.Drawing.Point(8, 19);
             this.lblDisplayFPS.Name = "lblDisplayFPS";
             this.lblDisplayFPS.Size = new System.Drawing.Size(104, 16);
             this.lblDisplayFPS.TabIndex = 31;
@@ -30314,7 +30320,7 @@
             // 
             this.chkAveraging.AutoSize = true;
             this.chkAveraging.Image = null;
-            this.chkAveraging.Location = new System.Drawing.Point(15, 399);
+            this.chkAveraging.Location = new System.Drawing.Point(17, 389);
             this.chkAveraging.Name = "chkAveraging";
             this.chkAveraging.Size = new System.Drawing.Size(116, 17);
             this.chkAveraging.TabIndex = 83;
@@ -30340,7 +30346,7 @@
             // 
             this.chkFillActivePeakHoldRX1.AutoSize = true;
             this.chkFillActivePeakHoldRX1.Image = null;
-            this.chkFillActivePeakHoldRX1.Location = new System.Drawing.Point(100, 73);
+            this.chkFillActivePeakHoldRX1.Location = new System.Drawing.Point(100, 77);
             this.chkFillActivePeakHoldRX1.Name = "chkFillActivePeakHoldRX1";
             this.chkFillActivePeakHoldRX1.Size = new System.Drawing.Size(41, 17);
             this.chkFillActivePeakHoldRX1.TabIndex = 75;
@@ -30357,7 +30363,7 @@
             0,
             0,
             65536});
-            this.udActivePeakHoldDropRX1.Location = new System.Drawing.Point(100, 47);
+            this.udActivePeakHoldDropRX1.Location = new System.Drawing.Point(100, 49);
             this.udActivePeakHoldDropRX1.Maximum = new decimal(new int[] {
             60,
             0,
@@ -30464,7 +30470,7 @@
             // 
             this.labelTS372.AutoSize = true;
             this.labelTS372.Image = null;
-            this.labelTS372.Location = new System.Drawing.Point(10, 78);
+            this.labelTS372.Location = new System.Drawing.Point(8, 78);
             this.labelTS372.Name = "labelTS372";
             this.labelTS372.Size = new System.Drawing.Size(62, 13);
             this.labelTS372.TabIndex = 59;
@@ -30483,7 +30489,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboDispWFAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboDispWFAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboDispWFAveraging.Name = "comboDispWFAveraging";
             this.comboDispWFAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboDispWFAveraging.TabIndex = 58;
@@ -30493,7 +30499,7 @@
             // 
             this.labelTS373.AutoSize = true;
             this.labelTS373.Image = null;
-            this.labelTS373.Location = new System.Drawing.Point(10, 19);
+            this.labelTS373.Location = new System.Drawing.Point(8, 19);
             this.labelTS373.Name = "labelTS373";
             this.labelTS373.Size = new System.Drawing.Size(54, 13);
             this.labelTS373.TabIndex = 57;
@@ -30508,7 +30514,7 @@
             "Rosenfell",
             "Average",
             "Sample"});
-            this.comboDispWFDetector.Location = new System.Drawing.Point(9, 45);
+            this.comboDispWFDetector.Location = new System.Drawing.Point(11, 45);
             this.comboDispWFDetector.Name = "comboDispWFDetector";
             this.comboDispWFDetector.Size = new System.Drawing.Size(104, 21);
             this.comboDispWFDetector.TabIndex = 56;
@@ -30521,7 +30527,7 @@
             0,
             0,
             0});
-            this.udDisplayAVTimeWF.Location = new System.Drawing.Point(65, 134);
+            this.udDisplayAVTimeWF.Location = new System.Drawing.Point(67, 133);
             this.udDisplayAVTimeWF.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -30547,7 +30553,7 @@
             // labelTS374
             // 
             this.labelTS374.Image = null;
-            this.labelTS374.Location = new System.Drawing.Point(10, 136);
+            this.labelTS374.Location = new System.Drawing.Point(8, 135);
             this.labelTS374.Name = "labelTS374";
             this.labelTS374.Size = new System.Drawing.Size(64, 20);
             this.labelTS374.TabIndex = 3;
@@ -30571,7 +30577,7 @@
             this.grpDisplaySpectrumGrid.Controls.Add(this.lblDisplayGridMax);
             this.grpDisplaySpectrumGrid.Location = new System.Drawing.Point(375, 232);
             this.grpDisplaySpectrumGrid.Name = "grpDisplaySpectrumGrid";
-            this.grpDisplaySpectrumGrid.Size = new System.Drawing.Size(304, 165);
+            this.grpDisplaySpectrumGrid.Size = new System.Drawing.Size(304, 184);
             this.grpDisplaySpectrumGrid.TabIndex = 47;
             this.grpDisplaySpectrumGrid.TabStop = false;
             this.grpDisplaySpectrumGrid.Text = "Spectrum Grid";
@@ -30579,7 +30585,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(236, 116);
+            this.label14.Location = new System.Drawing.Point(226, 116);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(62, 13);
             this.label14.TabIndex = 86;
@@ -30590,7 +30596,7 @@
             // 
             this.chkMaintainNFAdjustDeltaRX1.AutoSize = true;
             this.chkMaintainNFAdjustDeltaRX1.Image = null;
-            this.chkMaintainNFAdjustDeltaRX1.Location = new System.Drawing.Point(15, 142);
+            this.chkMaintainNFAdjustDeltaRX1.Location = new System.Drawing.Point(11, 142);
             this.chkMaintainNFAdjustDeltaRX1.Name = "chkMaintainNFAdjustDeltaRX1";
             this.chkMaintainNFAdjustDeltaRX1.Size = new System.Drawing.Size(101, 17);
             this.chkMaintainNFAdjustDeltaRX1.TabIndex = 85;
@@ -30608,7 +30614,7 @@
             0,
             0,
             0});
-            this.nudRX1NFoffsetGridFollow.Location = new System.Drawing.Point(180, 112);
+            this.nudRX1NFoffsetGridFollow.Location = new System.Drawing.Point(170, 114);
             this.nudRX1NFoffsetGridFollow.Maximum = new decimal(new int[] {
             30,
             0,
@@ -30634,7 +30640,7 @@
             // 
             this.chkAdjustGridMinToNFRX1.AutoSize = true;
             this.chkAdjustGridMinToNFRX1.Image = null;
-            this.chkAdjustGridMinToNFRX1.Location = new System.Drawing.Point(15, 115);
+            this.chkAdjustGridMinToNFRX1.Location = new System.Drawing.Point(11, 115);
             this.chkAdjustGridMinToNFRX1.Name = "chkAdjustGridMinToNFRX1";
             this.chkAdjustGridMinToNFRX1.Size = new System.Drawing.Size(158, 17);
             this.chkAdjustGridMinToNFRX1.TabIndex = 83;
@@ -30646,7 +30652,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(6, 84);
+            this.label15.Location = new System.Drawing.Point(8, 84);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(135, 13);
             this.label15.TabIndex = 82;
@@ -30655,7 +30661,7 @@
             // 
             // txtDisplayGridBandLevel
             // 
-            this.txtDisplayGridBandLevel.Location = new System.Drawing.Point(146, 80);
+            this.txtDisplayGridBandLevel.Location = new System.Drawing.Point(154, 81);
             this.txtDisplayGridBandLevel.Name = "txtDisplayGridBandLevel";
             this.txtDisplayGridBandLevel.ReadOnly = true;
             this.txtDisplayGridBandLevel.Size = new System.Drawing.Size(94, 22);
@@ -30673,7 +30679,7 @@
             "Right",
             "Auto",
             "Off"});
-            this.comboDisplayLabelAlign.Location = new System.Drawing.Point(148, 47);
+            this.comboDisplayLabelAlign.Location = new System.Drawing.Point(164, 45);
             this.comboDisplayLabelAlign.Name = "comboDisplayLabelAlign";
             this.comboDisplayLabelAlign.Size = new System.Drawing.Size(56, 21);
             this.comboDisplayLabelAlign.TabIndex = 30;
@@ -30683,7 +30689,7 @@
             // lblDisplayAlign
             // 
             this.lblDisplayAlign.Image = null;
-            this.lblDisplayAlign.Location = new System.Drawing.Point(110, 50);
+            this.lblDisplayAlign.Location = new System.Drawing.Point(118, 48);
             this.lblDisplayAlign.Name = "lblDisplayAlign";
             this.lblDisplayAlign.Size = new System.Drawing.Size(40, 16);
             this.lblDisplayAlign.TabIndex = 29;
@@ -30696,7 +30702,7 @@
             0,
             0,
             0});
-            this.udDisplayGridStep.Location = new System.Drawing.Point(48, 46);
+            this.udDisplayGridStep.Location = new System.Drawing.Point(49, 44);
             this.udDisplayGridStep.Maximum = new decimal(new int[] {
             40,
             0,
@@ -30727,7 +30733,7 @@
             0,
             0,
             0});
-            this.udDisplayGridMin.Location = new System.Drawing.Point(148, 18);
+            this.udDisplayGridMin.Location = new System.Drawing.Point(164, 18);
             this.udDisplayGridMin.Maximum = new decimal(new int[] {
             200,
             0,
@@ -30758,7 +30764,7 @@
             0,
             0,
             0});
-            this.udDisplayGridMax.Location = new System.Drawing.Point(48, 18);
+            this.udDisplayGridMax.Location = new System.Drawing.Point(49, 18);
             this.udDisplayGridMax.Maximum = new decimal(new int[] {
             200,
             0,
@@ -30785,16 +30791,16 @@
             // lblDisplayGridStep
             // 
             this.lblDisplayGridStep.Image = null;
-            this.lblDisplayGridStep.Location = new System.Drawing.Point(10, 48);
+            this.lblDisplayGridStep.Location = new System.Drawing.Point(8, 48);
             this.lblDisplayGridStep.Name = "lblDisplayGridStep";
-            this.lblDisplayGridStep.Size = new System.Drawing.Size(32, 16);
+            this.lblDisplayGridStep.Size = new System.Drawing.Size(33, 16);
             this.lblDisplayGridStep.TabIndex = 28;
             this.lblDisplayGridStep.Text = "Step:";
             // 
             // lblDisplayGridMin
             // 
             this.lblDisplayGridMin.Image = null;
-            this.lblDisplayGridMin.Location = new System.Drawing.Point(110, 20);
+            this.lblDisplayGridMin.Location = new System.Drawing.Point(117, 20);
             this.lblDisplayGridMin.Name = "lblDisplayGridMin";
             this.lblDisplayGridMin.Size = new System.Drawing.Size(32, 16);
             this.lblDisplayGridMin.TabIndex = 27;
@@ -30803,7 +30809,7 @@
             // lblDisplayGridMax
             // 
             this.lblDisplayGridMax.Image = null;
-            this.lblDisplayGridMax.Location = new System.Drawing.Point(10, 20);
+            this.lblDisplayGridMax.Location = new System.Drawing.Point(8, 20);
             this.lblDisplayGridMax.Name = "lblDisplayGridMax";
             this.lblDisplayGridMax.Size = new System.Drawing.Size(32, 16);
             this.lblDisplayGridMax.TabIndex = 26;
@@ -30822,7 +30828,7 @@
             this.grpDisplayAverage.Enabled = false;
             this.grpDisplayAverage.Location = new System.Drawing.Point(6, 140);
             this.grpDisplayAverage.Name = "grpDisplayAverage";
-            this.grpDisplayAverage.Size = new System.Drawing.Size(153, 251);
+            this.grpDisplayAverage.Size = new System.Drawing.Size(153, 240);
             this.grpDisplayAverage.TabIndex = 38;
             this.grpDisplayAverage.TabStop = false;
             this.grpDisplayAverage.Text = "Panadapter";
@@ -30833,7 +30839,7 @@
             this.chkDispNormalize.Checked = true;
             this.chkDispNormalize.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDispNormalize.Image = null;
-            this.chkDispNormalize.Location = new System.Drawing.Point(9, 172);
+            this.chkDispNormalize.Location = new System.Drawing.Point(11, 172);
             this.chkDispNormalize.Name = "chkDispNormalize";
             this.chkDispNormalize.Size = new System.Drawing.Size(108, 17);
             this.chkDispNormalize.TabIndex = 64;
@@ -30846,7 +30852,7 @@
             this.chkShowRX1NoiseFloor.AutoSize = true;
             this.chkShowRX1NoiseFloor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.chkShowRX1NoiseFloor.Image = null;
-            this.chkShowRX1NoiseFloor.Location = new System.Drawing.Point(9, 195);
+            this.chkShowRX1NoiseFloor.Location = new System.Drawing.Point(11, 194);
             this.chkShowRX1NoiseFloor.Name = "chkShowRX1NoiseFloor";
             this.chkShowRX1NoiseFloor.Size = new System.Drawing.Size(117, 17);
             this.chkShowRX1NoiseFloor.TabIndex = 81;
@@ -30859,7 +30865,7 @@
             // 
             this.lblDispAv.AutoSize = true;
             this.lblDispAv.Image = null;
-            this.lblDispAv.Location = new System.Drawing.Point(10, 78);
+            this.lblDispAv.Location = new System.Drawing.Point(8, 78);
             this.lblDispAv.Name = "lblDispAv";
             this.lblDispAv.Size = new System.Drawing.Size(62, 13);
             this.lblDispAv.TabIndex = 63;
@@ -30878,7 +30884,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboDispPanAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboDispPanAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboDispPanAveraging.Name = "comboDispPanAveraging";
             this.comboDispPanAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboDispPanAveraging.TabIndex = 62;
@@ -30888,7 +30894,7 @@
             // 
             this.lblDispDet.AutoSize = true;
             this.lblDispDet.Image = null;
-            this.lblDispDet.Location = new System.Drawing.Point(10, 19);
+            this.lblDispDet.Location = new System.Drawing.Point(8, 19);
             this.lblDispDet.Name = "lblDispDet";
             this.lblDispDet.Size = new System.Drawing.Size(54, 13);
             this.lblDispDet.TabIndex = 61;
@@ -30904,7 +30910,7 @@
             "Average",
             "Sample",
             "RMS"});
-            this.comboDispPanDetector.Location = new System.Drawing.Point(9, 45);
+            this.comboDispPanDetector.Location = new System.Drawing.Point(11, 45);
             this.comboDispPanDetector.Name = "comboDispPanDetector";
             this.comboDispPanDetector.Size = new System.Drawing.Size(104, 21);
             this.comboDispPanDetector.TabIndex = 60;
@@ -30917,7 +30923,7 @@
             0,
             0,
             0});
-            this.udDisplayAVGTime.Location = new System.Drawing.Point(65, 134);
+            this.udDisplayAVGTime.Location = new System.Drawing.Point(67, 133);
             this.udDisplayAVGTime.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -30944,7 +30950,7 @@
             // lblDisplayAVGTime
             // 
             this.lblDisplayAVGTime.Image = null;
-            this.lblDisplayAVGTime.Location = new System.Drawing.Point(10, 135);
+            this.lblDisplayAVGTime.Location = new System.Drawing.Point(8, 135);
             this.lblDisplayAVGTime.Name = "lblDisplayAVGTime";
             this.lblDisplayAVGTime.Size = new System.Drawing.Size(64, 20);
             this.lblDisplayAVGTime.TabIndex = 3;
@@ -30979,7 +30985,7 @@
             "Hamming",
             "Kaiser",
             "Blackman-Harris 7T"});
-            this.comboDispWinType.Location = new System.Drawing.Point(83, 101);
+            this.comboDispWinType.Location = new System.Drawing.Point(88, 98);
             this.comboDispWinType.Name = "comboDispWinType";
             this.comboDispWinType.Size = new System.Drawing.Size(121, 21);
             this.comboDispWinType.TabIndex = 55;
@@ -30989,7 +30995,7 @@
             // 
             this.labelTS147.AutoSize = true;
             this.labelTS147.Image = null;
-            this.labelTS147.Location = new System.Drawing.Point(6, 101);
+            this.labelTS147.Location = new System.Drawing.Point(8, 101);
             this.labelTS147.Name = "labelTS147";
             this.labelTS147.Size = new System.Drawing.Size(51, 13);
             this.labelTS147.TabIndex = 54;
@@ -30999,7 +31005,7 @@
             // 
             this.labelTS146.AutoSize = true;
             this.labelTS146.Image = null;
-            this.labelTS146.Location = new System.Drawing.Point(227, 41);
+            this.labelTS146.Location = new System.Drawing.Point(223, 41);
             this.labelTS146.Name = "labelTS146";
             this.labelTS146.Size = new System.Drawing.Size(28, 13);
             this.labelTS146.TabIndex = 53;
@@ -31009,7 +31015,7 @@
             // 
             this.labelTS145.AutoSize = true;
             this.labelTS145.Image = null;
-            this.labelTS145.Location = new System.Drawing.Point(6, 41);
+            this.labelTS145.Location = new System.Drawing.Point(8, 41);
             this.labelTS145.Name = "labelTS145";
             this.labelTS145.Size = new System.Drawing.Size(27, 13);
             this.labelTS145.TabIndex = 52;
@@ -31021,7 +31027,7 @@
             this.lblDisplayBinWidth.BackColor = System.Drawing.Color.Bisque;
             this.lblDisplayBinWidth.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblDisplayBinWidth.Image = null;
-            this.lblDisplayBinWidth.Location = new System.Drawing.Point(87, 79);
+            this.lblDisplayBinWidth.Location = new System.Drawing.Point(88, 75);
             this.lblDisplayBinWidth.MinimumSize = new System.Drawing.Size(35, 0);
             this.lblDisplayBinWidth.Name = "lblDisplayBinWidth";
             this.lblDisplayBinWidth.Size = new System.Drawing.Size(36, 15);
@@ -31032,7 +31038,7 @@
             // 
             this.labelTS142.AutoSize = true;
             this.labelTS142.Image = null;
-            this.labelTS142.Location = new System.Drawing.Point(6, 79);
+            this.labelTS142.Location = new System.Drawing.Point(8, 75);
             this.labelTS142.Name = "labelTS142";
             this.labelTS142.Size = new System.Drawing.Size(80, 13);
             this.labelTS142.TabIndex = 50;
@@ -31088,7 +31094,7 @@
             this.grpDisplayWaterfall.Controls.Add(this.udDisplayWaterfallLowLevel);
             this.grpDisplayWaterfall.Controls.Add(this.lblDisplayWaterfallHighLevel);
             this.grpDisplayWaterfall.Controls.Add(this.udDisplayWaterfallHighLevel);
-            this.grpDisplayWaterfall.Location = new System.Drawing.Point(375, 10);
+            this.grpDisplayWaterfall.Location = new System.Drawing.Point(375, 6);
             this.grpDisplayWaterfall.Name = "grpDisplayWaterfall";
             this.grpDisplayWaterfall.Size = new System.Drawing.Size(304, 216);
             this.grpDisplayWaterfall.TabIndex = 40;
@@ -31099,7 +31105,7 @@
             // 
             this.chkWaterfallUseNFForAGCRX1.AutoSize = true;
             this.chkWaterfallUseNFForAGCRX1.Image = null;
-            this.chkWaterfallUseNFForAGCRX1.Location = new System.Drawing.Point(139, 93);
+            this.chkWaterfallUseNFForAGCRX1.Location = new System.Drawing.Point(139, 97);
             this.chkWaterfallUseNFForAGCRX1.Name = "chkWaterfallUseNFForAGCRX1";
             this.chkWaterfallUseNFForAGCRX1.Size = new System.Drawing.Size(163, 17);
             this.chkWaterfallUseNFForAGCRX1.TabIndex = 92;
@@ -31111,7 +31117,7 @@
             // lblWaterfallAGCOffsetRX1
             // 
             this.lblWaterfallAGCOffsetRX1.Image = null;
-            this.lblWaterfallAGCOffsetRX1.Location = new System.Drawing.Point(8, 69);
+            this.lblWaterfallAGCOffsetRX1.Location = new System.Drawing.Point(8, 70);
             this.lblWaterfallAGCOffsetRX1.Name = "lblWaterfallAGCOffsetRX1";
             this.lblWaterfallAGCOffsetRX1.Size = new System.Drawing.Size(64, 16);
             this.lblWaterfallAGCOffsetRX1.TabIndex = 91;
@@ -31174,7 +31180,7 @@
             // 
             this.labelTS519.AutoSize = true;
             this.labelTS519.Image = null;
-            this.labelTS519.Location = new System.Drawing.Point(148, 124);
+            this.labelTS519.Location = new System.Drawing.Point(136, 122);
             this.labelTS519.Name = "labelTS519";
             this.labelTS519.Size = new System.Drawing.Size(36, 13);
             this.labelTS519.TabIndex = 84;
@@ -31184,7 +31190,7 @@
             // 
             this.lblRX1WaterFallCalulatedDelayMS.AutoSize = true;
             this.lblRX1WaterFallCalulatedDelayMS.Image = null;
-            this.lblRX1WaterFallCalulatedDelayMS.Location = new System.Drawing.Point(187, 124);
+            this.lblRX1WaterFallCalulatedDelayMS.Location = new System.Drawing.Point(175, 122);
             this.lblRX1WaterFallCalulatedDelayMS.Name = "lblRX1WaterFallCalulatedDelayMS";
             this.lblRX1WaterFallCalulatedDelayMS.Size = new System.Drawing.Size(45, 13);
             this.lblRX1WaterFallCalulatedDelayMS.TabIndex = 83;
@@ -31216,6 +31222,7 @@
             this.clrbtnWaterfallMid.TabIndex = 78;
             this.toolTip1.SetToolTip(this.clrbtnWaterfallMid, "The mid color used when the signal level is exactly between the low and high leve" +
         "ls shown above.  A gradient is used if it is not eactly in the middle.");
+            this.clrbtnWaterfallMid.Visible = false;
             this.clrbtnWaterfallMid.Changed += new System.EventHandler(this.clrbtnWaterfallMid_Changed);
             // 
             // chkRX1WaterfallAGC
@@ -31224,7 +31231,7 @@
             this.chkRX1WaterfallAGC.Checked = true;
             this.chkRX1WaterfallAGC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRX1WaterfallAGC.Image = null;
-            this.chkRX1WaterfallAGC.Location = new System.Drawing.Point(139, 47);
+            this.chkRX1WaterfallAGC.Location = new System.Drawing.Point(139, 43);
             this.chkRX1WaterfallAGC.Name = "chkRX1WaterfallAGC";
             this.chkRX1WaterfallAGC.Size = new System.Drawing.Size(98, 17);
             this.chkRX1WaterfallAGC.TabIndex = 81;
@@ -31246,12 +31253,13 @@
             this.clrbtnWaterfallHigh.TabIndex = 77;
             this.toolTip1.SetToolTip(this.clrbtnWaterfallHigh, "The color to display when the signal level is at or above the high level shown ab" +
         "ove.");
+            this.clrbtnWaterfallHigh.Visible = false;
             this.clrbtnWaterfallHigh.Changed += new System.EventHandler(this.clrbtnWaterfallHigh_Changed);
             // 
             // lblWaterfallLevels
             // 
             this.lblWaterfallLevels.AutoSize = true;
-            this.lblWaterfallLevels.Location = new System.Drawing.Point(8, 159);
+            this.lblWaterfallLevels.Location = new System.Drawing.Point(8, 149);
             this.lblWaterfallLevels.Name = "lblWaterfallLevels";
             this.lblWaterfallLevels.Size = new System.Drawing.Size(140, 13);
             this.lblWaterfallLevels.TabIndex = 80;
@@ -31261,7 +31269,7 @@
             // 
             // txtWaterFallBandLevel
             // 
-            this.txtWaterFallBandLevel.Location = new System.Drawing.Point(155, 156);
+            this.txtWaterFallBandLevel.Location = new System.Drawing.Point(154, 146);
             this.txtWaterFallBandLevel.Name = "txtWaterFallBandLevel";
             this.txtWaterFallBandLevel.ReadOnly = true;
             this.txtWaterFallBandLevel.Size = new System.Drawing.Size(94, 22);
@@ -31277,6 +31285,7 @@
             this.lblDisplayWaterfallMidColor.Size = new System.Drawing.Size(64, 16);
             this.lblDisplayWaterfallMidColor.TabIndex = 76;
             this.lblDisplayWaterfallMidColor.Text = "Mid Color:";
+            this.lblDisplayWaterfallMidColor.Visible = false;
             // 
             // comboColorPalette
             // 
@@ -31289,7 +31298,7 @@
             "LinLog",
             "LinRad",
             "LinAuto"});
-            this.comboColorPalette.Location = new System.Drawing.Point(49, 95);
+            this.comboColorPalette.Location = new System.Drawing.Point(49, 94);
             this.comboColorPalette.Name = "comboColorPalette";
             this.comboColorPalette.Size = new System.Drawing.Size(84, 21);
             this.comboColorPalette.TabIndex = 74;
@@ -31304,11 +31313,12 @@
             this.lblDisplayWaterfallHighColor.Size = new System.Drawing.Size(64, 16);
             this.lblDisplayWaterfallHighColor.TabIndex = 75;
             this.lblDisplayWaterfallHighColor.Text = "High Color:";
+            this.lblDisplayWaterfallHighColor.Visible = false;
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(8, 98);
+            this.label11.Location = new System.Drawing.Point(8, 97);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(42, 13);
             this.label11.TabIndex = 73;
@@ -31322,7 +31332,7 @@
             0,
             0,
             0});
-            this.udDisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(94, 122);
+            this.udDisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(85, 120);
             this.udDisplayWaterfallUpdatePeriod.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -31348,10 +31358,11 @@
             // 
             // lblDisplayWaterfallUpdatePeriod
             // 
+            this.lblDisplayWaterfallUpdatePeriod.AutoSize = true;
             this.lblDisplayWaterfallUpdatePeriod.Image = null;
-            this.lblDisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(8, 124);
+            this.lblDisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(8, 122);
             this.lblDisplayWaterfallUpdatePeriod.Name = "lblDisplayWaterfallUpdatePeriod";
-            this.lblDisplayWaterfallUpdatePeriod.Size = new System.Drawing.Size(76, 22);
+            this.lblDisplayWaterfallUpdatePeriod.Size = new System.Drawing.Size(74, 13);
             this.lblDisplayWaterfallUpdatePeriod.TabIndex = 72;
             this.lblDisplayWaterfallUpdatePeriod.Text = "Update every";
             this.toolTip1.SetToolTip(this.lblDisplayWaterfallUpdatePeriod, "How often to update (scroll another pixel line) on the waterfall display.  Note t" +
@@ -31362,7 +31373,7 @@
             this.clrbtnWaterfallLow.Automatic = "Automatic";
             this.clrbtnWaterfallLow.Color = System.Drawing.Color.Transparent;
             this.clrbtnWaterfallLow.Image = null;
-            this.clrbtnWaterfallLow.Location = new System.Drawing.Point(200, 16);
+            this.clrbtnWaterfallLow.Location = new System.Drawing.Point(200, 13);
             this.clrbtnWaterfallLow.MoreColors = "More Colors...";
             this.clrbtnWaterfallLow.Name = "clrbtnWaterfallLow";
             this.clrbtnWaterfallLow.Selectable = true;
@@ -31374,7 +31385,7 @@
             // lblDisplayWaterfallLowColor
             // 
             this.lblDisplayWaterfallLowColor.Image = null;
-            this.lblDisplayWaterfallLowColor.Location = new System.Drawing.Point(136, 20);
+            this.lblDisplayWaterfallLowColor.Location = new System.Drawing.Point(136, 18);
             this.lblDisplayWaterfallLowColor.Name = "lblDisplayWaterfallLowColor";
             this.lblDisplayWaterfallLowColor.Size = new System.Drawing.Size(64, 16);
             this.lblDisplayWaterfallLowColor.TabIndex = 57;
@@ -31383,7 +31394,7 @@
             // lblDisplayWaterfallLowLevel
             // 
             this.lblDisplayWaterfallLowLevel.Image = null;
-            this.lblDisplayWaterfallLowLevel.Location = new System.Drawing.Point(8, 20);
+            this.lblDisplayWaterfallLowLevel.Location = new System.Drawing.Point(8, 18);
             this.lblDisplayWaterfallLowLevel.Name = "lblDisplayWaterfallLowLevel";
             this.lblDisplayWaterfallLowLevel.Size = new System.Drawing.Size(64, 16);
             this.lblDisplayWaterfallLowLevel.TabIndex = 3;
@@ -31423,7 +31434,7 @@
             // lblDisplayWaterfallHighLevel
             // 
             this.lblDisplayWaterfallHighLevel.Image = null;
-            this.lblDisplayWaterfallHighLevel.Location = new System.Drawing.Point(8, 43);
+            this.lblDisplayWaterfallHighLevel.Location = new System.Drawing.Point(8, 44);
             this.lblDisplayWaterfallHighLevel.Name = "lblDisplayWaterfallHighLevel";
             this.lblDisplayWaterfallHighLevel.Size = new System.Drawing.Size(64, 16);
             this.lblDisplayWaterfallHighLevel.TabIndex = 1;
@@ -31481,7 +31492,7 @@
             // 
             this.chkAveragingRX2.AutoSize = true;
             this.chkAveragingRX2.Image = null;
-            this.chkAveragingRX2.Location = new System.Drawing.Point(15, 399);
+            this.chkAveragingRX2.Location = new System.Drawing.Point(17, 389);
             this.chkAveragingRX2.Name = "chkAveragingRX2";
             this.chkAveragingRX2.Size = new System.Drawing.Size(116, 17);
             this.chkAveragingRX2.TabIndex = 85;
@@ -31507,7 +31518,7 @@
             // 
             this.chkFillActivePeakHoldRX2.AutoSize = true;
             this.chkFillActivePeakHoldRX2.Image = null;
-            this.chkFillActivePeakHoldRX2.Location = new System.Drawing.Point(100, 73);
+            this.chkFillActivePeakHoldRX2.Location = new System.Drawing.Point(100, 77);
             this.chkFillActivePeakHoldRX2.Name = "chkFillActivePeakHoldRX2";
             this.chkFillActivePeakHoldRX2.Size = new System.Drawing.Size(41, 17);
             this.chkFillActivePeakHoldRX2.TabIndex = 74;
@@ -31524,7 +31535,7 @@
             0,
             0,
             65536});
-            this.udActivePeakHoldDropRX2.Location = new System.Drawing.Point(100, 47);
+            this.udActivePeakHoldDropRX2.Location = new System.Drawing.Point(100, 49);
             this.udActivePeakHoldDropRX2.Maximum = new decimal(new int[] {
             60,
             0,
@@ -31565,9 +31576,9 @@
             // lblActivePeakHoldDropRX2
             // 
             this.lblActivePeakHoldDropRX2.Image = null;
-            this.lblActivePeakHoldDropRX2.Location = new System.Drawing.Point(11, 51);
+            this.lblActivePeakHoldDropRX2.Location = new System.Drawing.Point(9, 51);
             this.lblActivePeakHoldDropRX2.Name = "lblActivePeakHoldDropRX2";
-            this.lblActivePeakHoldDropRX2.Size = new System.Drawing.Size(83, 20);
+            this.lblActivePeakHoldDropRX2.Size = new System.Drawing.Size(85, 17);
             this.lblActivePeakHoldDropRX2.TabIndex = 73;
             this.lblActivePeakHoldDropRX2.Text = "Drop (dBm/s):";
             this.lblActivePeakHoldDropRX2.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -31631,7 +31642,7 @@
             // 
             this.labelTS375.AutoSize = true;
             this.labelTS375.Image = null;
-            this.labelTS375.Location = new System.Drawing.Point(10, 78);
+            this.labelTS375.Location = new System.Drawing.Point(8, 78);
             this.labelTS375.Name = "labelTS375";
             this.labelTS375.Size = new System.Drawing.Size(62, 13);
             this.labelTS375.TabIndex = 63;
@@ -31650,7 +31661,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboRX2DispWFAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboRX2DispWFAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboRX2DispWFAveraging.Name = "comboRX2DispWFAveraging";
             this.comboRX2DispWFAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboRX2DispWFAveraging.TabIndex = 62;
@@ -31660,7 +31671,7 @@
             // 
             this.labelTS376.AutoSize = true;
             this.labelTS376.Image = null;
-            this.labelTS376.Location = new System.Drawing.Point(10, 19);
+            this.labelTS376.Location = new System.Drawing.Point(8, 19);
             this.labelTS376.Name = "labelTS376";
             this.labelTS376.Size = new System.Drawing.Size(54, 13);
             this.labelTS376.TabIndex = 61;
@@ -31675,7 +31686,7 @@
             "Rosenfell",
             "Average",
             "Sample"});
-            this.comboRX2DispWFDetector.Location = new System.Drawing.Point(9, 45);
+            this.comboRX2DispWFDetector.Location = new System.Drawing.Point(11, 45);
             this.comboRX2DispWFDetector.Name = "comboRX2DispWFDetector";
             this.comboRX2DispWFDetector.Size = new System.Drawing.Size(104, 21);
             this.comboRX2DispWFDetector.TabIndex = 60;
@@ -31688,7 +31699,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayWFAVTime.Location = new System.Drawing.Point(65, 134);
+            this.udRX2DisplayWFAVTime.Location = new System.Drawing.Point(67, 133);
             this.udRX2DisplayWFAVTime.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -31714,7 +31725,7 @@
             // labelTS377
             // 
             this.labelTS377.Image = null;
-            this.labelTS377.Location = new System.Drawing.Point(10, 136);
+            this.labelTS377.Location = new System.Drawing.Point(8, 135);
             this.labelTS377.Name = "labelTS377";
             this.labelTS377.Size = new System.Drawing.Size(64, 23);
             this.labelTS377.TabIndex = 3;
@@ -31747,7 +31758,7 @@
             this.grpRX2DisplayWaterfall.Controls.Add(this.udRX2DisplayWaterfallLowLevel);
             this.grpRX2DisplayWaterfall.Controls.Add(this.lblRX2DisplayWaterfallHighLevel);
             this.grpRX2DisplayWaterfall.Controls.Add(this.udRX2DisplayWaterfallHighLevel);
-            this.grpRX2DisplayWaterfall.Location = new System.Drawing.Point(375, 10);
+            this.grpRX2DisplayWaterfall.Location = new System.Drawing.Point(375, 6);
             this.grpRX2DisplayWaterfall.Name = "grpRX2DisplayWaterfall";
             this.grpRX2DisplayWaterfall.Size = new System.Drawing.Size(304, 216);
             this.grpRX2DisplayWaterfall.TabIndex = 50;
@@ -31758,7 +31769,7 @@
             // 
             this.chkWaterfallUseNFForAGCRX2.AutoSize = true;
             this.chkWaterfallUseNFForAGCRX2.Image = null;
-            this.chkWaterfallUseNFForAGCRX2.Location = new System.Drawing.Point(139, 93);
+            this.chkWaterfallUseNFForAGCRX2.Location = new System.Drawing.Point(139, 97);
             this.chkWaterfallUseNFForAGCRX2.Name = "chkWaterfallUseNFForAGCRX2";
             this.chkWaterfallUseNFForAGCRX2.Size = new System.Drawing.Size(163, 17);
             this.chkWaterfallUseNFForAGCRX2.TabIndex = 95;
@@ -31770,7 +31781,7 @@
             // lblWaterfallAGCOffsetRX2
             // 
             this.lblWaterfallAGCOffsetRX2.Image = null;
-            this.lblWaterfallAGCOffsetRX2.Location = new System.Drawing.Point(8, 69);
+            this.lblWaterfallAGCOffsetRX2.Location = new System.Drawing.Point(8, 70);
             this.lblWaterfallAGCOffsetRX2.Name = "lblWaterfallAGCOffsetRX2";
             this.lblWaterfallAGCOffsetRX2.Size = new System.Drawing.Size(64, 16);
             this.lblWaterfallAGCOffsetRX2.TabIndex = 94;
@@ -31833,7 +31844,7 @@
             // 
             this.labelTS520.AutoSize = true;
             this.labelTS520.Image = null;
-            this.labelTS520.Location = new System.Drawing.Point(148, 124);
+            this.labelTS520.Location = new System.Drawing.Point(136, 122);
             this.labelTS520.Name = "labelTS520";
             this.labelTS520.Size = new System.Drawing.Size(36, 13);
             this.labelTS520.TabIndex = 85;
@@ -31843,7 +31854,7 @@
             // 
             this.lblRX2WaterFallCalulatedDelayMS.AutoSize = true;
             this.lblRX2WaterFallCalulatedDelayMS.Image = null;
-            this.lblRX2WaterFallCalulatedDelayMS.Location = new System.Drawing.Point(187, 124);
+            this.lblRX2WaterFallCalulatedDelayMS.Location = new System.Drawing.Point(175, 122);
             this.lblRX2WaterFallCalulatedDelayMS.Name = "lblRX2WaterFallCalulatedDelayMS";
             this.lblRX2WaterFallCalulatedDelayMS.Size = new System.Drawing.Size(45, 13);
             this.lblRX2WaterFallCalulatedDelayMS.TabIndex = 84;
@@ -31883,7 +31894,7 @@
             this.chkRX2WaterfallAGC.Checked = true;
             this.chkRX2WaterfallAGC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkRX2WaterfallAGC.Image = null;
-            this.chkRX2WaterfallAGC.Location = new System.Drawing.Point(139, 47);
+            this.chkRX2WaterfallAGC.Location = new System.Drawing.Point(139, 43);
             this.chkRX2WaterfallAGC.Name = "chkRX2WaterfallAGC";
             this.chkRX2WaterfallAGC.Size = new System.Drawing.Size(98, 17);
             this.chkRX2WaterfallAGC.TabIndex = 82;
@@ -31910,7 +31921,7 @@
             // lblRX2WaterfallLevels
             // 
             this.lblRX2WaterfallLevels.AutoSize = true;
-            this.lblRX2WaterfallLevels.Location = new System.Drawing.Point(8, 159);
+            this.lblRX2WaterfallLevels.Location = new System.Drawing.Point(8, 149);
             this.lblRX2WaterfallLevels.Name = "lblRX2WaterfallLevels";
             this.lblRX2WaterfallLevels.Size = new System.Drawing.Size(140, 13);
             this.lblRX2WaterfallLevels.TabIndex = 80;
@@ -31929,7 +31940,7 @@
             // 
             // txtRX2WaterFallBandLevel
             // 
-            this.txtRX2WaterFallBandLevel.Location = new System.Drawing.Point(155, 156);
+            this.txtRX2WaterFallBandLevel.Location = new System.Drawing.Point(154, 146);
             this.txtRX2WaterFallBandLevel.Name = "txtRX2WaterFallBandLevel";
             this.txtRX2WaterFallBandLevel.ReadOnly = true;
             this.txtRX2WaterFallBandLevel.Size = new System.Drawing.Size(94, 22);
@@ -31957,7 +31968,7 @@
             "LinLog",
             "LinRad",
             "LinAuto"});
-            this.comboRX2ColorPalette.Location = new System.Drawing.Point(49, 95);
+            this.comboRX2ColorPalette.Location = new System.Drawing.Point(49, 94);
             this.comboRX2ColorPalette.Name = "comboRX2ColorPalette";
             this.comboRX2ColorPalette.Size = new System.Drawing.Size(84, 21);
             this.comboRX2ColorPalette.TabIndex = 74;
@@ -31967,7 +31978,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(8, 98);
+            this.label21.Location = new System.Drawing.Point(8, 97);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(42, 13);
             this.label21.TabIndex = 73;
@@ -31981,7 +31992,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(94, 122);
+            this.udRX2DisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(85, 120);
             this.udRX2DisplayWaterfallUpdatePeriod.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -32008,7 +32019,7 @@
             // lblRX2DisplayWaterfallUpdatePeriod
             // 
             this.lblRX2DisplayWaterfallUpdatePeriod.Image = null;
-            this.lblRX2DisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(8, 124);
+            this.lblRX2DisplayWaterfallUpdatePeriod.Location = new System.Drawing.Point(8, 122);
             this.lblRX2DisplayWaterfallUpdatePeriod.Name = "lblRX2DisplayWaterfallUpdatePeriod";
             this.lblRX2DisplayWaterfallUpdatePeriod.Size = new System.Drawing.Size(80, 20);
             this.lblRX2DisplayWaterfallUpdatePeriod.TabIndex = 72;
@@ -32021,7 +32032,7 @@
             this.clrbtnRX2WaterfallLow.Automatic = "Automatic";
             this.clrbtnRX2WaterfallLow.Color = System.Drawing.Color.Transparent;
             this.clrbtnRX2WaterfallLow.Image = null;
-            this.clrbtnRX2WaterfallLow.Location = new System.Drawing.Point(200, 16);
+            this.clrbtnRX2WaterfallLow.Location = new System.Drawing.Point(200, 13);
             this.clrbtnRX2WaterfallLow.MoreColors = "More Colors...";
             this.clrbtnRX2WaterfallLow.Name = "clrbtnRX2WaterfallLow";
             this.clrbtnRX2WaterfallLow.Selectable = true;
@@ -32033,7 +32044,7 @@
             // lblRX2DisplayWaterfallLowColor
             // 
             this.lblRX2DisplayWaterfallLowColor.Image = null;
-            this.lblRX2DisplayWaterfallLowColor.Location = new System.Drawing.Point(136, 20);
+            this.lblRX2DisplayWaterfallLowColor.Location = new System.Drawing.Point(136, 18);
             this.lblRX2DisplayWaterfallLowColor.Name = "lblRX2DisplayWaterfallLowColor";
             this.lblRX2DisplayWaterfallLowColor.Size = new System.Drawing.Size(64, 16);
             this.lblRX2DisplayWaterfallLowColor.TabIndex = 57;
@@ -32042,7 +32053,7 @@
             // lblRX2DisplayWaterfallLowLevel
             // 
             this.lblRX2DisplayWaterfallLowLevel.Image = null;
-            this.lblRX2DisplayWaterfallLowLevel.Location = new System.Drawing.Point(8, 20);
+            this.lblRX2DisplayWaterfallLowLevel.Location = new System.Drawing.Point(8, 18);
             this.lblRX2DisplayWaterfallLowLevel.Name = "lblRX2DisplayWaterfallLowLevel";
             this.lblRX2DisplayWaterfallLowLevel.Size = new System.Drawing.Size(64, 16);
             this.lblRX2DisplayWaterfallLowLevel.TabIndex = 3;
@@ -32081,7 +32092,7 @@
             // lblRX2DisplayWaterfallHighLevel
             // 
             this.lblRX2DisplayWaterfallHighLevel.Image = null;
-            this.lblRX2DisplayWaterfallHighLevel.Location = new System.Drawing.Point(8, 43);
+            this.lblRX2DisplayWaterfallHighLevel.Location = new System.Drawing.Point(8, 44);
             this.lblRX2DisplayWaterfallHighLevel.Name = "lblRX2DisplayWaterfallHighLevel";
             this.lblRX2DisplayWaterfallHighLevel.Size = new System.Drawing.Size(64, 16);
             this.lblRX2DisplayWaterfallHighLevel.TabIndex = 1;
@@ -32143,18 +32154,19 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(236, 116);
+            this.label20.Location = new System.Drawing.Point(226, 116);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(62, 13);
             this.label20.TabIndex = 88;
             this.label20.Text = "dBm offset";
             this.toolTip1.SetToolTip(this.label20, "Display Grid levels can be set by band. ");
+            this.label20.Click += new System.EventHandler(this.label20_Click);
             // 
             // chkMaintainNFAdjustDeltaRX2
             // 
             this.chkMaintainNFAdjustDeltaRX2.AutoSize = true;
             this.chkMaintainNFAdjustDeltaRX2.Image = null;
-            this.chkMaintainNFAdjustDeltaRX2.Location = new System.Drawing.Point(15, 142);
+            this.chkMaintainNFAdjustDeltaRX2.Location = new System.Drawing.Point(11, 142);
             this.chkMaintainNFAdjustDeltaRX2.Name = "chkMaintainNFAdjustDeltaRX2";
             this.chkMaintainNFAdjustDeltaRX2.Size = new System.Drawing.Size(101, 17);
             this.chkMaintainNFAdjustDeltaRX2.TabIndex = 87;
@@ -32172,7 +32184,7 @@
             0,
             0,
             0});
-            this.nudRX2NFoffsetGridFollow.Location = new System.Drawing.Point(180, 112);
+            this.nudRX2NFoffsetGridFollow.Location = new System.Drawing.Point(170, 114);
             this.nudRX2NFoffsetGridFollow.Maximum = new decimal(new int[] {
             30,
             0,
@@ -32198,7 +32210,7 @@
             // 
             this.chkAdjustGridMinToNFRX2.AutoSize = true;
             this.chkAdjustGridMinToNFRX2.Image = null;
-            this.chkAdjustGridMinToNFRX2.Location = new System.Drawing.Point(15, 115);
+            this.chkAdjustGridMinToNFRX2.Location = new System.Drawing.Point(11, 115);
             this.chkAdjustGridMinToNFRX2.Name = "chkAdjustGridMinToNFRX2";
             this.chkAdjustGridMinToNFRX2.Size = new System.Drawing.Size(158, 17);
             this.chkAdjustGridMinToNFRX2.TabIndex = 85;
@@ -32210,7 +32222,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(6, 84);
+            this.label16.Location = new System.Drawing.Point(8, 84);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(135, 13);
             this.label16.TabIndex = 84;
@@ -32219,7 +32231,7 @@
             // 
             // txtRX2DisplayGridBandLevel
             // 
-            this.txtRX2DisplayGridBandLevel.Location = new System.Drawing.Point(146, 80);
+            this.txtRX2DisplayGridBandLevel.Location = new System.Drawing.Point(154, 81);
             this.txtRX2DisplayGridBandLevel.Name = "txtRX2DisplayGridBandLevel";
             this.txtRX2DisplayGridBandLevel.ReadOnly = true;
             this.txtRX2DisplayGridBandLevel.Size = new System.Drawing.Size(94, 22);
@@ -32237,7 +32249,7 @@
             "Right",
             "Auto",
             "Off"});
-            this.comboBoxTS1.Location = new System.Drawing.Point(148, 47);
+            this.comboBoxTS1.Location = new System.Drawing.Point(164, 45);
             this.comboBoxTS1.Name = "comboBoxTS1";
             this.comboBoxTS1.Size = new System.Drawing.Size(56, 21);
             this.comboBoxTS1.TabIndex = 30;
@@ -32247,7 +32259,7 @@
             // labelTS133
             // 
             this.labelTS133.Image = null;
-            this.labelTS133.Location = new System.Drawing.Point(110, 50);
+            this.labelTS133.Location = new System.Drawing.Point(118, 48);
             this.labelTS133.Name = "labelTS133";
             this.labelTS133.Size = new System.Drawing.Size(40, 16);
             this.labelTS133.TabIndex = 29;
@@ -32261,7 +32273,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayGridStep.Location = new System.Drawing.Point(48, 46);
+            this.udRX2DisplayGridStep.Location = new System.Drawing.Point(49, 44);
             this.udRX2DisplayGridStep.Maximum = new decimal(new int[] {
             40,
             0,
@@ -32291,7 +32303,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayGridMin.Location = new System.Drawing.Point(148, 18);
+            this.udRX2DisplayGridMin.Location = new System.Drawing.Point(164, 18);
             this.udRX2DisplayGridMin.Maximum = new decimal(new int[] {
             200,
             0,
@@ -32321,7 +32333,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayGridMax.Location = new System.Drawing.Point(48, 18);
+            this.udRX2DisplayGridMax.Location = new System.Drawing.Point(49, 18);
             this.udRX2DisplayGridMax.Maximum = new decimal(new int[] {
             200,
             0,
@@ -32347,16 +32359,16 @@
             // lblRX2DisplayGridStep
             // 
             this.lblRX2DisplayGridStep.Image = null;
-            this.lblRX2DisplayGridStep.Location = new System.Drawing.Point(10, 48);
+            this.lblRX2DisplayGridStep.Location = new System.Drawing.Point(8, 48);
             this.lblRX2DisplayGridStep.Name = "lblRX2DisplayGridStep";
-            this.lblRX2DisplayGridStep.Size = new System.Drawing.Size(32, 16);
+            this.lblRX2DisplayGridStep.Size = new System.Drawing.Size(33, 16);
             this.lblRX2DisplayGridStep.TabIndex = 28;
             this.lblRX2DisplayGridStep.Text = "Step:";
             // 
             // lblRX2DisplayGridMin
             // 
             this.lblRX2DisplayGridMin.Image = null;
-            this.lblRX2DisplayGridMin.Location = new System.Drawing.Point(110, 20);
+            this.lblRX2DisplayGridMin.Location = new System.Drawing.Point(117, 20);
             this.lblRX2DisplayGridMin.Name = "lblRX2DisplayGridMin";
             this.lblRX2DisplayGridMin.Size = new System.Drawing.Size(32, 16);
             this.lblRX2DisplayGridMin.TabIndex = 27;
@@ -32365,7 +32377,7 @@
             // lblRX2DisplayGridMax
             // 
             this.lblRX2DisplayGridMax.Image = null;
-            this.lblRX2DisplayGridMax.Location = new System.Drawing.Point(10, 20);
+            this.lblRX2DisplayGridMax.Location = new System.Drawing.Point(8, 20);
             this.lblRX2DisplayGridMax.Name = "lblRX2DisplayGridMax";
             this.lblRX2DisplayGridMax.Size = new System.Drawing.Size(32, 16);
             this.lblRX2DisplayGridMax.TabIndex = 26;
@@ -32383,7 +32395,7 @@
             this.grpRX2DisplayAverage.Controls.Add(this.labelTS143);
             this.grpRX2DisplayAverage.Location = new System.Drawing.Point(6, 140);
             this.grpRX2DisplayAverage.Name = "grpRX2DisplayAverage";
-            this.grpRX2DisplayAverage.Size = new System.Drawing.Size(153, 251);
+            this.grpRX2DisplayAverage.Size = new System.Drawing.Size(153, 240);
             this.grpRX2DisplayAverage.TabIndex = 47;
             this.grpRX2DisplayAverage.TabStop = false;
             this.grpRX2DisplayAverage.Text = "Panadapter";
@@ -32394,7 +32406,7 @@
             this.chkDispRX2Normalize.Checked = true;
             this.chkDispRX2Normalize.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDispRX2Normalize.Image = null;
-            this.chkDispRX2Normalize.Location = new System.Drawing.Point(9, 172);
+            this.chkDispRX2Normalize.Location = new System.Drawing.Point(11, 172);
             this.chkDispRX2Normalize.Name = "chkDispRX2Normalize";
             this.chkDispRX2Normalize.Size = new System.Drawing.Size(108, 17);
             this.chkDispRX2Normalize.TabIndex = 68;
@@ -32406,7 +32418,7 @@
             // 
             this.chkShowRX2NoiseFloor.AutoSize = true;
             this.chkShowRX2NoiseFloor.Image = null;
-            this.chkShowRX2NoiseFloor.Location = new System.Drawing.Point(9, 195);
+            this.chkShowRX2NoiseFloor.Location = new System.Drawing.Point(11, 194);
             this.chkShowRX2NoiseFloor.Name = "chkShowRX2NoiseFloor";
             this.chkShowRX2NoiseFloor.Size = new System.Drawing.Size(117, 17);
             this.chkShowRX2NoiseFloor.TabIndex = 82;
@@ -32419,7 +32431,7 @@
             // 
             this.lblRX2PanAv.AutoSize = true;
             this.lblRX2PanAv.Image = null;
-            this.lblRX2PanAv.Location = new System.Drawing.Point(10, 78);
+            this.lblRX2PanAv.Location = new System.Drawing.Point(8, 78);
             this.lblRX2PanAv.Name = "lblRX2PanAv";
             this.lblRX2PanAv.Size = new System.Drawing.Size(62, 13);
             this.lblRX2PanAv.TabIndex = 67;
@@ -32438,7 +32450,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboRX2DispPanAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboRX2DispPanAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboRX2DispPanAveraging.Name = "comboRX2DispPanAveraging";
             this.comboRX2DispPanAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboRX2DispPanAveraging.TabIndex = 66;
@@ -32448,7 +32460,7 @@
             // 
             this.lblRX2PanDet.AutoSize = true;
             this.lblRX2PanDet.Image = null;
-            this.lblRX2PanDet.Location = new System.Drawing.Point(10, 19);
+            this.lblRX2PanDet.Location = new System.Drawing.Point(8, 19);
             this.lblRX2PanDet.Name = "lblRX2PanDet";
             this.lblRX2PanDet.Size = new System.Drawing.Size(54, 13);
             this.lblRX2PanDet.TabIndex = 65;
@@ -32464,7 +32476,7 @@
             "Average",
             "Sample",
             "RMS"});
-            this.comboRX2DispPanDetector.Location = new System.Drawing.Point(9, 45);
+            this.comboRX2DispPanDetector.Location = new System.Drawing.Point(11, 45);
             this.comboRX2DispPanDetector.Name = "comboRX2DispPanDetector";
             this.comboRX2DispPanDetector.Size = new System.Drawing.Size(104, 21);
             this.comboRX2DispPanDetector.TabIndex = 64;
@@ -32477,7 +32489,7 @@
             0,
             0,
             0});
-            this.udRX2DisplayAVGTime.Location = new System.Drawing.Point(65, 134);
+            this.udRX2DisplayAVGTime.Location = new System.Drawing.Point(67, 133);
             this.udRX2DisplayAVGTime.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -32503,7 +32515,7 @@
             // labelTS143
             // 
             this.labelTS143.Image = null;
-            this.labelTS143.Location = new System.Drawing.Point(10, 135);
+            this.labelTS143.Location = new System.Drawing.Point(8, 135);
             this.labelTS143.Name = "labelTS143";
             this.labelTS143.Size = new System.Drawing.Size(64, 23);
             this.labelTS143.TabIndex = 3;
@@ -32538,7 +32550,7 @@
             "Hamming",
             "Kaiser",
             "Blackman-Harris 7T"});
-            this.comboRX2DispWinType.Location = new System.Drawing.Point(83, 101);
+            this.comboRX2DispWinType.Location = new System.Drawing.Point(88, 98);
             this.comboRX2DispWinType.Name = "comboRX2DispWinType";
             this.comboRX2DispWinType.Size = new System.Drawing.Size(121, 21);
             this.comboRX2DispWinType.TabIndex = 57;
@@ -32548,7 +32560,7 @@
             // 
             this.labelTS150.AutoSize = true;
             this.labelTS150.Image = null;
-            this.labelTS150.Location = new System.Drawing.Point(6, 101);
+            this.labelTS150.Location = new System.Drawing.Point(8, 101);
             this.labelTS150.Name = "labelTS150";
             this.labelTS150.Size = new System.Drawing.Size(51, 13);
             this.labelTS150.TabIndex = 56;
@@ -32558,7 +32570,7 @@
             // 
             this.labelTS149.AutoSize = true;
             this.labelTS149.Image = null;
-            this.labelTS149.Location = new System.Drawing.Point(227, 41);
+            this.labelTS149.Location = new System.Drawing.Point(223, 41);
             this.labelTS149.Name = "labelTS149";
             this.labelTS149.Size = new System.Drawing.Size(28, 13);
             this.labelTS149.TabIndex = 53;
@@ -32568,7 +32580,7 @@
             // 
             this.labelTS148.AutoSize = true;
             this.labelTS148.Image = null;
-            this.labelTS148.Location = new System.Drawing.Point(6, 41);
+            this.labelTS148.Location = new System.Drawing.Point(8, 41);
             this.labelTS148.Name = "labelTS148";
             this.labelTS148.Size = new System.Drawing.Size(27, 13);
             this.labelTS148.TabIndex = 52;
@@ -32580,7 +32592,7 @@
             this.lblRX2DisplayBinWidth.BackColor = System.Drawing.Color.Bisque;
             this.lblRX2DisplayBinWidth.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblRX2DisplayBinWidth.Image = null;
-            this.lblRX2DisplayBinWidth.Location = new System.Drawing.Point(87, 79);
+            this.lblRX2DisplayBinWidth.Location = new System.Drawing.Point(88, 75);
             this.lblRX2DisplayBinWidth.MinimumSize = new System.Drawing.Size(35, 0);
             this.lblRX2DisplayBinWidth.Name = "lblRX2DisplayBinWidth";
             this.lblRX2DisplayBinWidth.Size = new System.Drawing.Size(36, 15);
@@ -32591,7 +32603,7 @@
             // 
             this.labelTS140.AutoSize = true;
             this.labelTS140.Image = null;
-            this.labelTS140.Location = new System.Drawing.Point(6, 79);
+            this.labelTS140.Location = new System.Drawing.Point(8, 75);
             this.labelTS140.Name = "labelTS140";
             this.labelTS140.Size = new System.Drawing.Size(80, 13);
             this.labelTS140.TabIndex = 50;
@@ -32714,7 +32726,7 @@
             // lblTXWFAmpMin
             // 
             this.lblTXWFAmpMin.Image = null;
-            this.lblTXWFAmpMin.Location = new System.Drawing.Point(2, 26);
+            this.lblTXWFAmpMin.Location = new System.Drawing.Point(2, 28);
             this.lblTXWFAmpMin.Margin = new System.Windows.Forms.Padding(16, 0, 16, 0);
             this.lblTXWFAmpMin.Name = "lblTXWFAmpMin";
             this.lblTXWFAmpMin.Size = new System.Drawing.Size(61, 18);
@@ -32724,10 +32736,10 @@
             // lblTXWFAmpMax
             // 
             this.lblTXWFAmpMax.Image = null;
-            this.lblTXWFAmpMax.Location = new System.Drawing.Point(2, 53);
+            this.lblTXWFAmpMax.Location = new System.Drawing.Point(2, 55);
             this.lblTXWFAmpMax.Margin = new System.Windows.Forms.Padding(16, 0, 16, 0);
             this.lblTXWFAmpMax.Name = "lblTXWFAmpMax";
-            this.lblTXWFAmpMax.Size = new System.Drawing.Size(61, 19);
+            this.lblTXWFAmpMax.Size = new System.Drawing.Size(70, 19);
             this.lblTXWFAmpMax.TabIndex = 30;
             this.lblTXWFAmpMax.Text = "High Level:";
             // 
@@ -32750,7 +32762,7 @@
             // 
             this.labelTS384.AutoSize = true;
             this.labelTS384.Image = null;
-            this.labelTS384.Location = new System.Drawing.Point(10, 78);
+            this.labelTS384.Location = new System.Drawing.Point(8, 78);
             this.labelTS384.Name = "labelTS384";
             this.labelTS384.Size = new System.Drawing.Size(62, 13);
             this.labelTS384.TabIndex = 63;
@@ -32769,7 +32781,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboTXDispWFAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboTXDispWFAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboTXDispWFAveraging.Name = "comboTXDispWFAveraging";
             this.comboTXDispWFAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboTXDispWFAveraging.TabIndex = 62;
@@ -32779,7 +32791,7 @@
             // 
             this.labelTS387.AutoSize = true;
             this.labelTS387.Image = null;
-            this.labelTS387.Location = new System.Drawing.Point(10, 19);
+            this.labelTS387.Location = new System.Drawing.Point(8, 19);
             this.labelTS387.Name = "labelTS387";
             this.labelTS387.Size = new System.Drawing.Size(54, 13);
             this.labelTS387.TabIndex = 61;
@@ -32794,7 +32806,7 @@
             "Rosenfell",
             "Average",
             "Sample"});
-            this.comboTXDispWFDetector.Location = new System.Drawing.Point(9, 44);
+            this.comboTXDispWFDetector.Location = new System.Drawing.Point(11, 45);
             this.comboTXDispWFDetector.Name = "comboTXDispWFDetector";
             this.comboTXDispWFDetector.Size = new System.Drawing.Size(104, 21);
             this.comboTXDispWFDetector.TabIndex = 60;
@@ -32807,7 +32819,7 @@
             0,
             0,
             0});
-            this.udTXDisplayAVTime.Location = new System.Drawing.Point(65, 134);
+            this.udTXDisplayAVTime.Location = new System.Drawing.Point(67, 133);
             this.udTXDisplayAVTime.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -32833,7 +32845,7 @@
             // labelTS388
             // 
             this.labelTS388.Image = null;
-            this.labelTS388.Location = new System.Drawing.Point(10, 136);
+            this.labelTS388.Location = new System.Drawing.Point(8, 135);
             this.labelTS388.Name = "labelTS388";
             this.labelTS388.Size = new System.Drawing.Size(64, 23);
             this.labelTS388.TabIndex = 3;
@@ -32868,7 +32880,7 @@
             "Hamming",
             "Kaiser",
             "Blackman-Harris 7T"});
-            this.comboTXDispWinType.Location = new System.Drawing.Point(83, 101);
+            this.comboTXDispWinType.Location = new System.Drawing.Point(88, 98);
             this.comboTXDispWinType.Name = "comboTXDispWinType";
             this.comboTXDispWinType.Size = new System.Drawing.Size(121, 21);
             this.comboTXDispWinType.TabIndex = 57;
@@ -32878,7 +32890,7 @@
             // 
             this.labelTS381.AutoSize = true;
             this.labelTS381.Image = null;
-            this.labelTS381.Location = new System.Drawing.Point(6, 101);
+            this.labelTS381.Location = new System.Drawing.Point(8, 101);
             this.labelTS381.Name = "labelTS381";
             this.labelTS381.Size = new System.Drawing.Size(51, 13);
             this.labelTS381.TabIndex = 56;
@@ -32888,7 +32900,7 @@
             // 
             this.labelTS382.AutoSize = true;
             this.labelTS382.Image = null;
-            this.labelTS382.Location = new System.Drawing.Point(227, 41);
+            this.labelTS382.Location = new System.Drawing.Point(223, 41);
             this.labelTS382.Name = "labelTS382";
             this.labelTS382.Size = new System.Drawing.Size(28, 13);
             this.labelTS382.TabIndex = 53;
@@ -32898,7 +32910,7 @@
             // 
             this.labelTS383.AutoSize = true;
             this.labelTS383.Image = null;
-            this.labelTS383.Location = new System.Drawing.Point(6, 41);
+            this.labelTS383.Location = new System.Drawing.Point(8, 41);
             this.labelTS383.Name = "labelTS383";
             this.labelTS383.Size = new System.Drawing.Size(27, 13);
             this.labelTS383.TabIndex = 52;
@@ -32910,7 +32922,7 @@
             this.lblTXDispBinWidth.BackColor = System.Drawing.Color.Bisque;
             this.lblTXDispBinWidth.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblTXDispBinWidth.Image = null;
-            this.lblTXDispBinWidth.Location = new System.Drawing.Point(87, 79);
+            this.lblTXDispBinWidth.Location = new System.Drawing.Point(88, 75);
             this.lblTXDispBinWidth.MinimumSize = new System.Drawing.Size(35, 0);
             this.lblTXDispBinWidth.Name = "lblTXDispBinWidth";
             this.lblTXDispBinWidth.Size = new System.Drawing.Size(36, 15);
@@ -32921,7 +32933,7 @@
             // 
             this.labelTS385.AutoSize = true;
             this.labelTS385.Image = null;
-            this.labelTS385.Location = new System.Drawing.Point(6, 79);
+            this.labelTS385.Location = new System.Drawing.Point(8, 75);
             this.labelTS385.Name = "labelTS385";
             this.labelTS385.Size = new System.Drawing.Size(80, 13);
             this.labelTS385.TabIndex = 50;
@@ -32961,7 +32973,7 @@
             this.groupBoxTS7.Controls.Add(this.labelTS380);
             this.groupBoxTS7.Location = new System.Drawing.Point(6, 140);
             this.groupBoxTS7.Name = "groupBoxTS7";
-            this.groupBoxTS7.Size = new System.Drawing.Size(153, 251);
+            this.groupBoxTS7.Size = new System.Drawing.Size(153, 240);
             this.groupBoxTS7.TabIndex = 82;
             this.groupBoxTS7.TabStop = false;
             this.groupBoxTS7.Text = "Panadapter";
@@ -32972,7 +32984,7 @@
             this.chkDispTXNormalize.Checked = true;
             this.chkDispTXNormalize.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDispTXNormalize.Image = null;
-            this.chkDispTXNormalize.Location = new System.Drawing.Point(9, 172);
+            this.chkDispTXNormalize.Location = new System.Drawing.Point(11, 172);
             this.chkDispTXNormalize.Name = "chkDispTXNormalize";
             this.chkDispTXNormalize.Size = new System.Drawing.Size(108, 17);
             this.chkDispTXNormalize.TabIndex = 68;
@@ -32984,7 +32996,7 @@
             // 
             this.labelTS378.AutoSize = true;
             this.labelTS378.Image = null;
-            this.labelTS378.Location = new System.Drawing.Point(10, 78);
+            this.labelTS378.Location = new System.Drawing.Point(8, 78);
             this.labelTS378.Name = "labelTS378";
             this.labelTS378.Size = new System.Drawing.Size(62, 13);
             this.labelTS378.TabIndex = 67;
@@ -33003,7 +33015,7 @@
             "Recursive",
             "Time Window",
             "Log Recursive"});
-            this.comboTXDispPanAveraging.Location = new System.Drawing.Point(9, 102);
+            this.comboTXDispPanAveraging.Location = new System.Drawing.Point(11, 102);
             this.comboTXDispPanAveraging.Name = "comboTXDispPanAveraging";
             this.comboTXDispPanAveraging.Size = new System.Drawing.Size(104, 21);
             this.comboTXDispPanAveraging.TabIndex = 66;
@@ -33013,7 +33025,7 @@
             // 
             this.labelTS379.AutoSize = true;
             this.labelTS379.Image = null;
-            this.labelTS379.Location = new System.Drawing.Point(10, 19);
+            this.labelTS379.Location = new System.Drawing.Point(8, 19);
             this.labelTS379.Name = "labelTS379";
             this.labelTS379.Size = new System.Drawing.Size(54, 13);
             this.labelTS379.TabIndex = 65;
@@ -33029,7 +33041,7 @@
             "Average",
             "Sample",
             "RMS"});
-            this.comboTXDispPanDetector.Location = new System.Drawing.Point(9, 45);
+            this.comboTXDispPanDetector.Location = new System.Drawing.Point(11, 45);
             this.comboTXDispPanDetector.Name = "comboTXDispPanDetector";
             this.comboTXDispPanDetector.Size = new System.Drawing.Size(104, 21);
             this.comboTXDispPanDetector.TabIndex = 64;
@@ -33042,7 +33054,7 @@
             0,
             0,
             0});
-            this.udTXDisplayAVGTime.Location = new System.Drawing.Point(65, 134);
+            this.udTXDisplayAVGTime.Location = new System.Drawing.Point(67, 133);
             this.udTXDisplayAVGTime.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -33068,7 +33080,7 @@
             // labelTS380
             // 
             this.labelTS380.Image = null;
-            this.labelTS380.Location = new System.Drawing.Point(10, 135);
+            this.labelTS380.Location = new System.Drawing.Point(8, 135);
             this.labelTS380.Name = "labelTS380";
             this.labelTS380.Size = new System.Drawing.Size(64, 23);
             this.labelTS380.TabIndex = 3;
@@ -33086,7 +33098,7 @@
             this.grpTXSpectrumGrid.Controls.Add(this.lblTXGridStep);
             this.grpTXSpectrumGrid.Controls.Add(this.lblTXGridMin);
             this.grpTXSpectrumGrid.Controls.Add(this.lblTXGridMax);
-            this.grpTXSpectrumGrid.Location = new System.Drawing.Point(461, 12);
+            this.grpTXSpectrumGrid.Location = new System.Drawing.Point(461, 6);
             this.grpTXSpectrumGrid.Name = "grpTXSpectrumGrid";
             this.grpTXSpectrumGrid.Size = new System.Drawing.Size(112, 216);
             this.grpTXSpectrumGrid.TabIndex = 81;
@@ -33098,7 +33110,7 @@
             this.chkTXGridControl.Checked = true;
             this.chkTXGridControl.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTXGridControl.Image = null;
-            this.chkTXGridControl.Location = new System.Drawing.Point(8, 161);
+            this.chkTXGridControl.Location = new System.Drawing.Point(11, 161);
             this.chkTXGridControl.Name = "chkTXGridControl";
             this.chkTXGridControl.Size = new System.Drawing.Size(98, 16);
             this.chkTXGridControl.TabIndex = 83;
@@ -33112,7 +33124,7 @@
             this.chkTXPanFill.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkTXPanFill.Enabled = false;
             this.chkTXPanFill.Image = null;
-            this.chkTXPanFill.Location = new System.Drawing.Point(8, 139);
+            this.chkTXPanFill.Location = new System.Drawing.Point(11, 139);
             this.chkTXPanFill.Name = "chkTXPanFill";
             this.chkTXPanFill.Size = new System.Drawing.Size(100, 16);
             this.chkTXPanFill.TabIndex = 41;
@@ -34616,7 +34628,7 @@
             0,
             0,
             0});
-            this.udNoiseFloorAttackRX2.Location = new System.Drawing.Point(204, 107);
+            this.udNoiseFloorAttackRX2.Location = new System.Drawing.Point(222, 107);
             this.udNoiseFloorAttackRX2.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -34641,10 +34653,11 @@
             // 
             // labelTS603
             // 
+            this.labelTS603.AutoSize = true;
             this.labelTS603.Image = null;
-            this.labelTS603.Location = new System.Drawing.Point(36, 107);
+            this.labelTS603.Location = new System.Drawing.Point(8, 109);
             this.labelTS603.Name = "labelTS603";
-            this.labelTS603.Size = new System.Drawing.Size(162, 16);
+            this.labelTS603.Size = new System.Drawing.Size(149, 13);
             this.labelTS603.TabIndex = 136;
             this.labelTS603.Text = "RX2 Noise Floor Attack (ms):";
             this.labelTS603.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -34656,7 +34669,7 @@
             0,
             0,
             0});
-            this.udNoiseFloorAttackRX1.Location = new System.Drawing.Point(204, 81);
+            this.udNoiseFloorAttackRX1.Location = new System.Drawing.Point(222, 81);
             this.udNoiseFloorAttackRX1.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -34681,10 +34694,11 @@
             // 
             // labelTS602
             // 
+            this.labelTS602.AutoSize = true;
             this.labelTS602.Image = null;
-            this.labelTS602.Location = new System.Drawing.Point(33, 81);
+            this.labelTS602.Location = new System.Drawing.Point(8, 83);
             this.labelTS602.Name = "labelTS602";
-            this.labelTS602.Size = new System.Drawing.Size(165, 16);
+            this.labelTS602.Size = new System.Drawing.Size(149, 13);
             this.labelTS602.TabIndex = 134;
             this.labelTS602.Text = "RX1 Noise Floor Attack (ms):";
             this.labelTS602.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -34762,7 +34776,7 @@
             // 
             this.chkAutoAGCRX2.AutoSize = true;
             this.chkAutoAGCRX2.Image = null;
-            this.chkAutoAGCRX2.Location = new System.Drawing.Point(16, 55);
+            this.chkAutoAGCRX2.Location = new System.Drawing.Point(11, 56);
             this.chkAutoAGCRX2.Name = "chkAutoAGCRX2";
             this.chkAutoAGCRX2.Size = new System.Drawing.Size(211, 17);
             this.chkAutoAGCRX2.TabIndex = 131;
@@ -34774,7 +34788,7 @@
             // 
             this.chkAutoAGCRX1.AutoSize = true;
             this.chkAutoAGCRX1.Image = null;
-            this.chkAutoAGCRX1.Location = new System.Drawing.Point(16, 32);
+            this.chkAutoAGCRX1.Location = new System.Drawing.Point(11, 30);
             this.chkAutoAGCRX1.Name = "chkAutoAGCRX1";
             this.chkAutoAGCRX1.Size = new System.Drawing.Size(211, 17);
             this.chkAutoAGCRX1.TabIndex = 130;
@@ -34806,12 +34820,13 @@
             // 
             // chkDSPLevelerEnabled
             // 
+            this.chkDSPLevelerEnabled.AutoSize = true;
             this.chkDSPLevelerEnabled.Checked = true;
             this.chkDSPLevelerEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDSPLevelerEnabled.Image = null;
-            this.chkDSPLevelerEnabled.Location = new System.Drawing.Point(16, 24);
+            this.chkDSPLevelerEnabled.Location = new System.Drawing.Point(11, 26);
             this.chkDSPLevelerEnabled.Name = "chkDSPLevelerEnabled";
-            this.chkDSPLevelerEnabled.Size = new System.Drawing.Size(104, 16);
+            this.chkDSPLevelerEnabled.Size = new System.Drawing.Size(68, 17);
             this.chkDSPLevelerEnabled.TabIndex = 42;
             this.chkDSPLevelerEnabled.Text = "Enabled";
             this.toolTip1.SetToolTip(this.chkDSPLevelerEnabled, "Check this box to Enable (activate) the leveler feature.");
@@ -34819,10 +34834,11 @@
             // 
             // lblDSPLevelerHangThreshold
             // 
+            this.lblDSPLevelerHangThreshold.AutoSize = true;
             this.lblDSPLevelerHangThreshold.Image = null;
             this.lblDSPLevelerHangThreshold.Location = new System.Drawing.Point(8, 168);
             this.lblDSPLevelerHangThreshold.Name = "lblDSPLevelerHangThreshold";
-            this.lblDSPLevelerHangThreshold.Size = new System.Drawing.Size(88, 16);
+            this.lblDSPLevelerHangThreshold.Size = new System.Drawing.Size(93, 13);
             this.lblDSPLevelerHangThreshold.TabIndex = 41;
             this.lblDSPLevelerHangThreshold.Text = "Hang Threshold:";
             this.lblDSPLevelerHangThreshold.Visible = false;
@@ -34860,10 +34876,11 @@
             // 
             // lblDSPLevelerHangTime
             // 
+            this.lblDSPLevelerHangTime.AutoSize = true;
             this.lblDSPLevelerHangTime.Image = null;
-            this.lblDSPLevelerHangTime.Location = new System.Drawing.Point(8, 144);
+            this.lblDSPLevelerHangTime.Location = new System.Drawing.Point(8, 146);
             this.lblDSPLevelerHangTime.Name = "lblDSPLevelerHangTime";
-            this.lblDSPLevelerHangTime.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPLevelerHangTime.Size = new System.Drawing.Size(61, 13);
             this.lblDSPLevelerHangTime.TabIndex = 14;
             this.lblDSPLevelerHangTime.Text = "Hang (ms):";
             this.lblDSPLevelerHangTime.Visible = false;
@@ -34963,11 +34980,12 @@
             // 
             // lblDSPLevelerSlope
             // 
+            this.lblDSPLevelerSlope.AutoSize = true;
             this.lblDSPLevelerSlope.Enabled = false;
             this.lblDSPLevelerSlope.Image = null;
-            this.lblDSPLevelerSlope.Location = new System.Drawing.Point(8, 48);
+            this.lblDSPLevelerSlope.Location = new System.Drawing.Point(8, 50);
             this.lblDSPLevelerSlope.Name = "lblDSPLevelerSlope";
-            this.lblDSPLevelerSlope.Size = new System.Drawing.Size(64, 16);
+            this.lblDSPLevelerSlope.Size = new System.Drawing.Size(61, 13);
             this.lblDSPLevelerSlope.TabIndex = 11;
             this.lblDSPLevelerSlope.Text = "Slope (dB):";
             this.lblDSPLevelerSlope.Visible = false;
@@ -35005,29 +35023,32 @@
             // 
             // lblDSPLevelerDecay
             // 
+            this.lblDSPLevelerDecay.AutoSize = true;
             this.lblDSPLevelerDecay.Image = null;
-            this.lblDSPLevelerDecay.Location = new System.Drawing.Point(8, 120);
+            this.lblDSPLevelerDecay.Location = new System.Drawing.Point(8, 122);
             this.lblDSPLevelerDecay.Name = "lblDSPLevelerDecay";
-            this.lblDSPLevelerDecay.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPLevelerDecay.Size = new System.Drawing.Size(63, 13);
             this.lblDSPLevelerDecay.TabIndex = 9;
             this.lblDSPLevelerDecay.Text = "Decay (ms):";
             // 
             // lblDSPLevelerAttack
             // 
+            this.lblDSPLevelerAttack.AutoSize = true;
             this.lblDSPLevelerAttack.Image = null;
-            this.lblDSPLevelerAttack.Location = new System.Drawing.Point(8, 96);
+            this.lblDSPLevelerAttack.Location = new System.Drawing.Point(8, 98);
             this.lblDSPLevelerAttack.Name = "lblDSPLevelerAttack";
-            this.lblDSPLevelerAttack.Size = new System.Drawing.Size(64, 16);
+            this.lblDSPLevelerAttack.Size = new System.Drawing.Size(65, 13);
             this.lblDSPLevelerAttack.TabIndex = 8;
             this.lblDSPLevelerAttack.Text = "Attack (ms):";
             this.lblDSPLevelerAttack.Visible = false;
             // 
             // lblDSPLevelerThreshold
             // 
+            this.lblDSPLevelerThreshold.AutoSize = true;
             this.lblDSPLevelerThreshold.Image = null;
-            this.lblDSPLevelerThreshold.Location = new System.Drawing.Point(8, 72);
+            this.lblDSPLevelerThreshold.Location = new System.Drawing.Point(8, 74);
             this.lblDSPLevelerThreshold.Name = "lblDSPLevelerThreshold";
-            this.lblDSPLevelerThreshold.Size = new System.Drawing.Size(88, 24);
+            this.lblDSPLevelerThreshold.Size = new System.Drawing.Size(80, 13);
             this.lblDSPLevelerThreshold.TabIndex = 7;
             this.lblDSPLevelerThreshold.Text = "Max.Gain (dB):";
             // 
@@ -35067,10 +35088,11 @@
             // 
             // lblDSPALCHangThreshold
             // 
+            this.lblDSPALCHangThreshold.AutoSize = true;
             this.lblDSPALCHangThreshold.Image = null;
             this.lblDSPALCHangThreshold.Location = new System.Drawing.Point(8, 168);
             this.lblDSPALCHangThreshold.Name = "lblDSPALCHangThreshold";
-            this.lblDSPALCHangThreshold.Size = new System.Drawing.Size(88, 16);
+            this.lblDSPALCHangThreshold.Size = new System.Drawing.Size(93, 13);
             this.lblDSPALCHangThreshold.TabIndex = 43;
             this.lblDSPALCHangThreshold.Text = "Hang Threshold:";
             this.lblDSPALCHangThreshold.Visible = false;
@@ -35090,6 +35112,7 @@
             // 
             // udDSPALCHangTime
             // 
+            this.udDSPALCHangTime.AutoSize = true;
             this.udDSPALCHangTime.Enabled = false;
             this.udDSPALCHangTime.Increment = new decimal(new int[] {
             1,
@@ -35121,16 +35144,18 @@
             // 
             // lblDSPALCHangTime
             // 
+            this.lblDSPALCHangTime.AutoSize = true;
             this.lblDSPALCHangTime.Image = null;
-            this.lblDSPALCHangTime.Location = new System.Drawing.Point(8, 144);
+            this.lblDSPALCHangTime.Location = new System.Drawing.Point(8, 146);
             this.lblDSPALCHangTime.Name = "lblDSPALCHangTime";
-            this.lblDSPALCHangTime.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPALCHangTime.Size = new System.Drawing.Size(61, 13);
             this.lblDSPALCHangTime.TabIndex = 16;
             this.lblDSPALCHangTime.Text = "Hang (ms):";
             this.lblDSPALCHangTime.Visible = false;
             // 
             // udDSPALCMaximumGain
             // 
+            this.udDSPALCMaximumGain.AutoSize = true;
             this.udDSPALCMaximumGain.Increment = new decimal(new int[] {
             1,
             0,
@@ -35163,6 +35188,7 @@
             // 
             // udDSPALCSlope
             // 
+            this.udDSPALCSlope.AutoSize = true;
             this.udDSPALCSlope.Enabled = false;
             this.udDSPALCSlope.Increment = new decimal(new int[] {
             1,
@@ -35181,7 +35207,7 @@
             0,
             0});
             this.udDSPALCSlope.Name = "udDSPALCSlope";
-            this.udDSPALCSlope.Size = new System.Drawing.Size(40, 22);
+            this.udDSPALCSlope.Size = new System.Drawing.Size(41, 22);
             this.udDSPALCSlope.TabIndex = 13;
             this.udDSPALCSlope.TinyStep = false;
             this.udDSPALCSlope.Value = new decimal(new int[] {
@@ -35194,6 +35220,7 @@
             // 
             // udDSPALCDecay
             // 
+            this.udDSPALCDecay.AutoSize = true;
             this.udDSPALCDecay.Increment = new decimal(new int[] {
             1,
             0,
@@ -35224,16 +35251,18 @@
             // 
             // lblDSPALCSlope
             // 
+            this.lblDSPALCSlope.AutoSize = true;
             this.lblDSPALCSlope.Image = null;
-            this.lblDSPALCSlope.Location = new System.Drawing.Point(8, 48);
+            this.lblDSPALCSlope.Location = new System.Drawing.Point(8, 50);
             this.lblDSPALCSlope.Name = "lblDSPALCSlope";
-            this.lblDSPALCSlope.Size = new System.Drawing.Size(64, 16);
+            this.lblDSPALCSlope.Size = new System.Drawing.Size(61, 13);
             this.lblDSPALCSlope.TabIndex = 11;
             this.lblDSPALCSlope.Text = "Slope (dB):";
             this.lblDSPALCSlope.Visible = false;
             // 
             // udDSPALCAttack
             // 
+            this.udDSPALCAttack.AutoSize = true;
             this.udDSPALCAttack.Enabled = false;
             this.udDSPALCAttack.Increment = new decimal(new int[] {
             1,
@@ -35265,29 +35294,32 @@
             // 
             // lblDSPALCDecay
             // 
+            this.lblDSPALCDecay.AutoSize = true;
             this.lblDSPALCDecay.Image = null;
-            this.lblDSPALCDecay.Location = new System.Drawing.Point(8, 120);
+            this.lblDSPALCDecay.Location = new System.Drawing.Point(8, 122);
             this.lblDSPALCDecay.Name = "lblDSPALCDecay";
-            this.lblDSPALCDecay.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPALCDecay.Size = new System.Drawing.Size(63, 13);
             this.lblDSPALCDecay.TabIndex = 9;
             this.lblDSPALCDecay.Text = "Decay (ms):";
             // 
             // lblDSPALCAttack
             // 
+            this.lblDSPALCAttack.AutoSize = true;
             this.lblDSPALCAttack.Image = null;
-            this.lblDSPALCAttack.Location = new System.Drawing.Point(8, 96);
+            this.lblDSPALCAttack.Location = new System.Drawing.Point(8, 98);
             this.lblDSPALCAttack.Name = "lblDSPALCAttack";
-            this.lblDSPALCAttack.Size = new System.Drawing.Size(64, 16);
+            this.lblDSPALCAttack.Size = new System.Drawing.Size(65, 13);
             this.lblDSPALCAttack.TabIndex = 8;
             this.lblDSPALCAttack.Text = "Attack (ms):";
             this.lblDSPALCAttack.Visible = false;
             // 
             // lblDSPALCThreshold
             // 
+            this.lblDSPALCThreshold.AutoSize = true;
             this.lblDSPALCThreshold.Image = null;
-            this.lblDSPALCThreshold.Location = new System.Drawing.Point(8, 72);
+            this.lblDSPALCThreshold.Location = new System.Drawing.Point(8, 74);
             this.lblDSPALCThreshold.Name = "lblDSPALCThreshold";
-            this.lblDSPALCThreshold.Size = new System.Drawing.Size(88, 24);
+            this.lblDSPALCThreshold.Size = new System.Drawing.Size(80, 13);
             this.lblDSPALCThreshold.TabIndex = 7;
             this.lblDSPALCThreshold.Text = "Max Gain (dB):";
             this.lblDSPALCThreshold.VisibleChanged += new System.EventHandler(this.udDSPALCMaximumGain_ValueChanged);
@@ -35603,7 +35635,7 @@
             this.tbDSPAGCRX2HangThreshold.AutoSize = false;
             this.tbDSPAGCRX2HangThreshold.BackColor = System.Drawing.Color.Black;
             this.tbDSPAGCRX2HangThreshold.LargeChange = 1;
-            this.tbDSPAGCRX2HangThreshold.Location = new System.Drawing.Point(8, 209);
+            this.tbDSPAGCRX2HangThreshold.Location = new System.Drawing.Point(11, 209);
             this.tbDSPAGCRX2HangThreshold.Maximum = 100;
             this.tbDSPAGCRX2HangThreshold.Name = "tbDSPAGCRX2HangThreshold";
             this.tbDSPAGCRX2HangThreshold.Size = new System.Drawing.Size(144, 16);
@@ -35649,7 +35681,7 @@
             0,
             0,
             0});
-            this.udDSPAGCRX2FixedGaindB.Location = new System.Drawing.Point(177, 146);
+            this.udDSPAGCRX2FixedGaindB.Location = new System.Drawing.Point(177, 144);
             this.udDSPAGCRX2FixedGaindB.Maximum = new decimal(new int[] {
             120,
             0,
@@ -35678,7 +35710,7 @@
             this.tbDSPAGCHangThreshold.AutoSize = false;
             this.tbDSPAGCHangThreshold.BackColor = System.Drawing.Color.Black;
             this.tbDSPAGCHangThreshold.LargeChange = 1;
-            this.tbDSPAGCHangThreshold.Location = new System.Drawing.Point(8, 182);
+            this.tbDSPAGCHangThreshold.Location = new System.Drawing.Point(11, 182);
             this.tbDSPAGCHangThreshold.Maximum = 100;
             this.tbDSPAGCHangThreshold.Name = "tbDSPAGCHangThreshold";
             this.tbDSPAGCHangThreshold.Size = new System.Drawing.Size(144, 16);
@@ -35688,19 +35720,21 @@
             // 
             // lblDSPAGCHangThreshold
             // 
+            this.lblDSPAGCHangThreshold.AutoSize = true;
             this.lblDSPAGCHangThreshold.Image = null;
             this.lblDSPAGCHangThreshold.Location = new System.Drawing.Point(8, 165);
             this.lblDSPAGCHangThreshold.Name = "lblDSPAGCHangThreshold";
-            this.lblDSPAGCHangThreshold.Size = new System.Drawing.Size(88, 16);
+            this.lblDSPAGCHangThreshold.Size = new System.Drawing.Size(93, 13);
             this.lblDSPAGCHangThreshold.TabIndex = 46;
             this.lblDSPAGCHangThreshold.Text = "Hang Threshold:";
             // 
             // lblDSPAGCHangTime
             // 
+            this.lblDSPAGCHangTime.AutoSize = true;
             this.lblDSPAGCHangTime.Image = null;
             this.lblDSPAGCHangTime.Location = new System.Drawing.Point(8, 122);
             this.lblDSPAGCHangTime.Name = "lblDSPAGCHangTime";
-            this.lblDSPAGCHangTime.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPAGCHangTime.Size = new System.Drawing.Size(61, 13);
             this.lblDSPAGCHangTime.TabIndex = 45;
             this.lblDSPAGCHangTime.Text = "Hang (ms):";
             // 
@@ -35831,10 +35865,11 @@
             // 
             // lblDSPAGCSlope
             // 
+            this.lblDSPAGCSlope.AutoSize = true;
             this.lblDSPAGCSlope.Image = null;
-            this.lblDSPAGCSlope.Location = new System.Drawing.Point(8, 26);
+            this.lblDSPAGCSlope.Location = new System.Drawing.Point(8, 27);
             this.lblDSPAGCSlope.Name = "lblDSPAGCSlope";
-            this.lblDSPAGCSlope.Size = new System.Drawing.Size(80, 16);
+            this.lblDSPAGCSlope.Size = new System.Drawing.Size(61, 13);
             this.lblDSPAGCSlope.TabIndex = 11;
             this.lblDSPAGCSlope.Text = "Slope (dB):";
             // 
@@ -35871,29 +35906,32 @@
             // 
             // lblDSPAGCDecay
             // 
+            this.lblDSPAGCDecay.AutoSize = true;
             this.lblDSPAGCDecay.Image = null;
             this.lblDSPAGCDecay.Location = new System.Drawing.Point(8, 98);
             this.lblDSPAGCDecay.Name = "lblDSPAGCDecay";
-            this.lblDSPAGCDecay.Size = new System.Drawing.Size(72, 16);
+            this.lblDSPAGCDecay.Size = new System.Drawing.Size(63, 13);
             this.lblDSPAGCDecay.TabIndex = 9;
             this.lblDSPAGCDecay.Text = "Decay (ms):";
             // 
             // lblDSPAGCAttack
             // 
+            this.lblDSPAGCAttack.AutoSize = true;
             this.lblDSPAGCAttack.Image = null;
             this.lblDSPAGCAttack.Location = new System.Drawing.Point(8, 74);
             this.lblDSPAGCAttack.Name = "lblDSPAGCAttack";
-            this.lblDSPAGCAttack.Size = new System.Drawing.Size(64, 16);
+            this.lblDSPAGCAttack.Size = new System.Drawing.Size(65, 13);
             this.lblDSPAGCAttack.TabIndex = 8;
             this.lblDSPAGCAttack.Text = "Attack (ms):";
             this.lblDSPAGCAttack.Visible = false;
             // 
             // lblDSPAGCMaxGain
             // 
+            this.lblDSPAGCMaxGain.AutoSize = true;
             this.lblDSPAGCMaxGain.Image = null;
             this.lblDSPAGCMaxGain.Location = new System.Drawing.Point(8, 50);
             this.lblDSPAGCMaxGain.Name = "lblDSPAGCMaxGain";
-            this.lblDSPAGCMaxGain.Size = new System.Drawing.Size(88, 24);
+            this.lblDSPAGCMaxGain.Size = new System.Drawing.Size(80, 13);
             this.lblDSPAGCMaxGain.TabIndex = 7;
             this.lblDSPAGCMaxGain.Text = "Max Gain (dB):";
             // 
@@ -35931,10 +35969,11 @@
             // 
             // lblDSPAGCFixed
             // 
+            this.lblDSPAGCFixed.AutoSize = true;
             this.lblDSPAGCFixed.Image = null;
             this.lblDSPAGCFixed.Location = new System.Drawing.Point(8, 146);
             this.lblDSPAGCFixed.Name = "lblDSPAGCFixed";
-            this.lblDSPAGCFixed.Size = new System.Drawing.Size(88, 16);
+            this.lblDSPAGCFixed.Size = new System.Drawing.Size(86, 13);
             this.lblDSPAGCFixed.TabIndex = 5;
             this.lblDSPAGCFixed.Text = "Fixed Gain (dB):";
             // 
@@ -38994,7 +39033,7 @@
             // 
             this.labelTS326.AutoSize = true;
             this.labelTS326.Image = null;
-            this.labelTS326.Location = new System.Drawing.Point(6, 161);
+            this.labelTS326.Location = new System.Drawing.Point(6, 159);
             this.labelTS326.Name = "labelTS326";
             this.labelTS326.Size = new System.Drawing.Size(63, 13);
             this.labelTS326.TabIndex = 18;
@@ -39020,7 +39059,7 @@
             // 
             this.labelTS154.AutoSize = true;
             this.labelTS154.Image = null;
-            this.labelTS154.Location = new System.Drawing.Point(6, 58);
+            this.labelTS154.Location = new System.Drawing.Point(6, 56);
             this.labelTS154.Name = "labelTS154";
             this.labelTS154.Size = new System.Drawing.Size(64, 13);
             this.labelTS154.TabIndex = 16;
@@ -39260,11 +39299,12 @@
             // 
             this.lblAntiVoxTau.AutoSize = true;
             this.lblAntiVoxTau.Image = null;
-            this.lblAntiVoxTau.Location = new System.Drawing.Point(5, 98);
+            this.lblAntiVoxTau.Location = new System.Drawing.Point(3, 98);
             this.lblAntiVoxTau.Name = "lblAntiVoxTau";
             this.lblAntiVoxTau.Size = new System.Drawing.Size(48, 13);
             this.lblAntiVoxTau.TabIndex = 18;
             this.lblAntiVoxTau.Text = "Tau (ms)";
+            this.lblAntiVoxTau.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udAntiVoxGain
             // 
@@ -39300,11 +39340,12 @@
             // 
             this.lblAntiVoxGain.AutoSize = true;
             this.lblAntiVoxGain.Image = null;
-            this.lblAntiVoxGain.Location = new System.Drawing.Point(6, 73);
+            this.lblAntiVoxGain.Location = new System.Drawing.Point(3, 73);
             this.lblAntiVoxGain.Name = "lblAntiVoxGain";
             this.lblAntiVoxGain.Size = new System.Drawing.Size(53, 13);
             this.lblAntiVoxGain.TabIndex = 16;
             this.lblAntiVoxGain.Text = "Gain (dB)";
+            this.lblAntiVoxGain.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkAntiVoxEnable
             // 
@@ -39337,7 +39378,7 @@
             0,
             0,
             0});
-            this.udDEXPLookAhead.Location = new System.Drawing.Point(93, 46);
+            this.udDEXPLookAhead.Location = new System.Drawing.Point(93, 42);
             this.udDEXPLookAhead.Maximum = new decimal(new int[] {
             999,
             0,
@@ -39363,11 +39404,12 @@
             // 
             this.lblDEXPAudioLookAhead.AutoSize = true;
             this.lblDEXPAudioLookAhead.Image = null;
-            this.lblDEXPAudioLookAhead.Location = new System.Drawing.Point(3, 48);
+            this.lblDEXPAudioLookAhead.Location = new System.Drawing.Point(3, 44);
             this.lblDEXPAudioLookAhead.Name = "lblDEXPAudioLookAhead";
             this.lblDEXPAudioLookAhead.Size = new System.Drawing.Size(91, 13);
             this.lblDEXPAudioLookAhead.TabIndex = 1;
             this.lblDEXPAudioLookAhead.Text = "Look Ahead (ms)";
+            this.lblDEXPAudioLookAhead.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkDEXPLookAheadEnable
             // 
@@ -39375,7 +39417,7 @@
             this.chkDEXPLookAheadEnable.Checked = true;
             this.chkDEXPLookAheadEnable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDEXPLookAheadEnable.Image = null;
-            this.chkDEXPLookAheadEnable.Location = new System.Drawing.Point(6, 19);
+            this.chkDEXPLookAheadEnable.Location = new System.Drawing.Point(6, 17);
             this.chkDEXPLookAheadEnable.Name = "chkDEXPLookAheadEnable";
             this.chkDEXPLookAheadEnable.Size = new System.Drawing.Size(61, 17);
             this.chkDEXPLookAheadEnable.TabIndex = 0;
@@ -39410,6 +39452,7 @@
             // 
             // udDEXPHysteresisRatio
             // 
+            this.udDEXPHysteresisRatio.AutoSize = true;
             this.udDEXPHysteresisRatio.DecimalPlaces = 1;
             this.udDEXPHysteresisRatio.Increment = new decimal(new int[] {
             1,
@@ -39440,6 +39483,7 @@
             // 
             // udDEXPExpansionRatio
             // 
+            this.udDEXPExpansionRatio.AutoSize = true;
             this.udDEXPExpansionRatio.DecimalPlaces = 1;
             this.udDEXPExpansionRatio.Increment = new decimal(new int[] {
             1,
@@ -39470,6 +39514,7 @@
             // 
             // udDEXPThreshold
             // 
+            this.udDEXPThreshold.AutoSize = true;
             this.udDEXPThreshold.Increment = new decimal(new int[] {
             1,
             0,
@@ -39501,34 +39546,38 @@
             // 
             this.lblDEXPThreshold.AutoSize = true;
             this.lblDEXPThreshold.Image = null;
-            this.lblDEXPThreshold.Location = new System.Drawing.Point(143, 20);
+            this.lblDEXPThreshold.Location = new System.Drawing.Point(147, 20);
             this.lblDEXPThreshold.Name = "lblDEXPThreshold";
             this.lblDEXPThreshold.Size = new System.Drawing.Size(88, 13);
             this.lblDEXPThreshold.TabIndex = 13;
             this.lblDEXPThreshold.Text = "Threshold (dBV)";
+            this.lblDEXPThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblDEXPHystRatio
             // 
             this.lblDEXPHystRatio.AutoSize = true;
             this.lblDEXPHystRatio.Image = null;
-            this.lblDEXPHystRatio.Location = new System.Drawing.Point(154, 102);
+            this.lblDEXPHystRatio.Location = new System.Drawing.Point(147, 102);
             this.lblDEXPHystRatio.Name = "lblDEXPHystRatio";
             this.lblDEXPHystRatio.Size = new System.Drawing.Size(81, 13);
             this.lblDEXPHystRatio.TabIndex = 12;
             this.lblDEXPHystRatio.Text = "Hyst.Ratio (dB)";
+            this.lblDEXPHystRatio.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblDEXPExpRatio
             // 
             this.lblDEXPExpRatio.AutoSize = true;
             this.lblDEXPExpRatio.Image = null;
-            this.lblDEXPExpRatio.Location = new System.Drawing.Point(154, 76);
+            this.lblDEXPExpRatio.Location = new System.Drawing.Point(147, 76);
             this.lblDEXPExpRatio.Name = "lblDEXPExpRatio";
             this.lblDEXPExpRatio.Size = new System.Drawing.Size(80, 13);
             this.lblDEXPExpRatio.TabIndex = 11;
             this.lblDEXPExpRatio.Text = "Exp. Ratio (dB)";
+            this.lblDEXPExpRatio.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udDEXPRelease
             // 
+            this.udDEXPRelease.AutoSize = true;
             this.udDEXPRelease.Increment = new decimal(new int[] {
             1,
             0,
@@ -39558,6 +39607,7 @@
             // 
             // udDEXPHold
             // 
+            this.udDEXPHold.AutoSize = true;
             this.udDEXPHold.Increment = new decimal(new int[] {
             10,
             0,
@@ -39587,6 +39637,7 @@
             // 
             // udDEXPAttack
             // 
+            this.udDEXPAttack.AutoSize = true;
             this.udDEXPAttack.Increment = new decimal(new int[] {
             1,
             0,
@@ -39628,6 +39679,7 @@
             // 
             // udDEXPDetTau
             // 
+            this.udDEXPDetTau.AutoSize = true;
             this.udDEXPDetTau.Increment = new decimal(new int[] {
             1,
             0,
@@ -39659,41 +39711,45 @@
             // 
             this.lblDEXPRelease.AutoSize = true;
             this.lblDEXPRelease.Image = null;
-            this.lblDEXPRelease.Location = new System.Drawing.Point(6, 128);
+            this.lblDEXPRelease.Location = new System.Drawing.Point(3, 128);
             this.lblDEXPRelease.Name = "lblDEXPRelease";
             this.lblDEXPRelease.Size = new System.Drawing.Size(69, 13);
             this.lblDEXPRelease.TabIndex = 5;
             this.lblDEXPRelease.Text = "Release (ms)";
+            this.lblDEXPRelease.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblDEXPHold
             // 
             this.lblDEXPHold.AutoSize = true;
             this.lblDEXPHold.Image = null;
-            this.lblDEXPHold.Location = new System.Drawing.Point(6, 102);
+            this.lblDEXPHold.Location = new System.Drawing.Point(3, 102);
             this.lblDEXPHold.Name = "lblDEXPHold";
             this.lblDEXPHold.Size = new System.Drawing.Size(55, 13);
             this.lblDEXPHold.TabIndex = 4;
             this.lblDEXPHold.Text = "Hold (ms)";
+            this.lblDEXPHold.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblDEXPAttack
             // 
             this.lblDEXPAttack.AutoSize = true;
             this.lblDEXPAttack.Image = null;
-            this.lblDEXPAttack.Location = new System.Drawing.Point(6, 76);
+            this.lblDEXPAttack.Location = new System.Drawing.Point(3, 76);
             this.lblDEXPAttack.Name = "lblDEXPAttack";
             this.lblDEXPAttack.Size = new System.Drawing.Size(62, 13);
             this.lblDEXPAttack.TabIndex = 3;
             this.lblDEXPAttack.Text = "Attack (ms)";
+            this.lblDEXPAttack.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblDetTau
             // 
             this.lblDetTau.AutoSize = true;
             this.lblDetTau.Image = null;
-            this.lblDetTau.Location = new System.Drawing.Point(152, 128);
+            this.lblDetTau.Location = new System.Drawing.Point(147, 128);
             this.lblDetTau.Name = "lblDetTau";
             this.lblDetTau.Size = new System.Drawing.Size(69, 13);
             this.lblDetTau.TabIndex = 2;
             this.lblDetTau.Text = "Det.Tau (ms)";
+            this.lblDetTau.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkDEXPEnable
             // 
@@ -39725,21 +39781,23 @@
             // 
             this.lblSCFHighCut.AutoSize = true;
             this.lblSCFHighCut.Image = null;
-            this.lblSCFHighCut.Location = new System.Drawing.Point(76, 46);
+            this.lblSCFHighCut.Location = new System.Drawing.Point(69, 43);
             this.lblSCFHighCut.Name = "lblSCFHighCut";
             this.lblSCFHighCut.Size = new System.Drawing.Size(75, 13);
             this.lblSCFHighCut.TabIndex = 4;
             this.lblSCFHighCut.Text = "High Cut (Hz)";
+            this.lblSCFHighCut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblSCFLowCut
             // 
             this.lblSCFLowCut.AutoSize = true;
             this.lblSCFLowCut.Image = null;
-            this.lblSCFLowCut.Location = new System.Drawing.Point(76, 20);
+            this.lblSCFLowCut.Location = new System.Drawing.Point(69, 20);
             this.lblSCFLowCut.Name = "lblSCFLowCut";
             this.lblSCFLowCut.Size = new System.Drawing.Size(74, 13);
             this.lblSCFLowCut.TabIndex = 3;
             this.lblSCFLowCut.Text = "Low  Cut (Hz)";
+            this.lblSCFLowCut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udSCFHighCut
             // 
@@ -39748,7 +39806,7 @@
             0,
             0,
             0});
-            this.udSCFHighCut.Location = new System.Drawing.Point(150, 44);
+            this.udSCFHighCut.Location = new System.Drawing.Point(150, 41);
             this.udSCFHighCut.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -40817,7 +40875,6 @@
             this.tpTransmit.Controls.Add(this.chkAutoSaveTXProfile);
             this.tpTransmit.Controls.Add(this.udTXFilterLowSave);
             this.tpTransmit.Controls.Add(this.udTXFilterHighSave);
-            this.tpTransmit.Controls.Add(this.grpBoxMic);
             this.tpTransmit.Controls.Add(this.chkTXExpert);
             this.tpTransmit.Controls.Add(this.grpTXProfileDef);
             this.tpTransmit.Controls.Add(this.grpTXAM);
@@ -40825,6 +40882,7 @@
             this.tpTransmit.Controls.Add(this.grpTXProfile);
             this.tpTransmit.Controls.Add(this.grpPATune);
             this.tpTransmit.Controls.Add(this.grpTXFilter);
+            this.tpTransmit.Controls.Add(this.grpBoxMic);
             this.tpTransmit.Location = new System.Drawing.Point(4, 22);
             this.tpTransmit.Name = "tpTransmit";
             this.tpTransmit.Size = new System.Drawing.Size(728, 468);
@@ -40835,7 +40893,7 @@
             // 
             this.chkHighlightTXProfileSaveItems.AutoSize = true;
             this.chkHighlightTXProfileSaveItems.Image = null;
-            this.chkHighlightTXProfileSaveItems.Location = new System.Drawing.Point(24, 434);
+            this.chkHighlightTXProfileSaveItems.Location = new System.Drawing.Point(19, 434);
             this.chkHighlightTXProfileSaveItems.Name = "chkHighlightTXProfileSaveItems";
             this.chkHighlightTXProfileSaveItems.Size = new System.Drawing.Size(186, 17);
             this.chkHighlightTXProfileSaveItems.TabIndex = 76;
@@ -40846,7 +40904,7 @@
             // chkRestoreVAC2DeviceDetailsFromTXProfile
             // 
             this.chkRestoreVAC2DeviceDetailsFromTXProfile.Image = null;
-            this.chkRestoreVAC2DeviceDetailsFromTXProfile.Location = new System.Drawing.Point(24, 316);
+            this.chkRestoreVAC2DeviceDetailsFromTXProfile.Location = new System.Drawing.Point(19, 316);
             this.chkRestoreVAC2DeviceDetailsFromTXProfile.Name = "chkRestoreVAC2DeviceDetailsFromTXProfile";
             this.chkRestoreVAC2DeviceDetailsFromTXProfile.Size = new System.Drawing.Size(321, 18);
             this.chkRestoreVAC2DeviceDetailsFromTXProfile.TabIndex = 75;
@@ -40856,7 +40914,7 @@
             // chkRestoreVAC1DeviceDetailsFromTXProfile
             // 
             this.chkRestoreVAC1DeviceDetailsFromTXProfile.Image = null;
-            this.chkRestoreVAC1DeviceDetailsFromTXProfile.Location = new System.Drawing.Point(24, 292);
+            this.chkRestoreVAC1DeviceDetailsFromTXProfile.Location = new System.Drawing.Point(19, 292);
             this.chkRestoreVAC1DeviceDetailsFromTXProfile.Name = "chkRestoreVAC1DeviceDetailsFromTXProfile";
             this.chkRestoreVAC1DeviceDetailsFromTXProfile.Size = new System.Drawing.Size(321, 18);
             this.chkRestoreVAC1DeviceDetailsFromTXProfile.TabIndex = 74;
@@ -40867,7 +40925,7 @@
             // 
             this.chkLimitExtAmpOnOverload.AutoSize = true;
             this.chkLimitExtAmpOnOverload.Image = null;
-            this.chkLimitExtAmpOnOverload.Location = new System.Drawing.Point(383, 305);
+            this.chkLimitExtAmpOnOverload.Location = new System.Drawing.Point(386, 293);
             this.chkLimitExtAmpOnOverload.Name = "chkLimitExtAmpOnOverload";
             this.chkLimitExtAmpOnOverload.Size = new System.Drawing.Size(196, 17);
             this.chkLimitExtAmpOnOverload.TabIndex = 72;
@@ -40878,7 +40936,7 @@
             // grpDSPSpeechProcessor
             // 
             this.grpDSPSpeechProcessor.Controls.Add(this.chkDSPCESSB);
-            this.grpDSPSpeechProcessor.Location = new System.Drawing.Point(376, 241);
+            this.grpDSPSpeechProcessor.Location = new System.Drawing.Point(375, 230);
             this.grpDSPSpeechProcessor.Name = "grpDSPSpeechProcessor";
             this.grpDSPSpeechProcessor.Size = new System.Drawing.Size(179, 48);
             this.grpDSPSpeechProcessor.TabIndex = 43;
@@ -40889,7 +40947,7 @@
             // 
             this.chkDSPCESSB.AutoSize = true;
             this.chkDSPCESSB.Image = null;
-            this.chkDSPCESSB.Location = new System.Drawing.Point(7, 20);
+            this.chkDSPCESSB.Location = new System.Drawing.Point(11, 20);
             this.chkDSPCESSB.Name = "chkDSPCESSB";
             this.chkDSPCESSB.Size = new System.Drawing.Size(156, 17);
             this.chkDSPCESSB.TabIndex = 0;
@@ -40901,7 +40959,7 @@
             // 
             this.grpExtTXInhibit.Controls.Add(this.chkTXInhibit);
             this.grpExtTXInhibit.Controls.Add(this.chkTXInhibitSense);
-            this.grpExtTXInhibit.Location = new System.Drawing.Point(375, 154);
+            this.grpExtTXInhibit.Location = new System.Drawing.Point(375, 152);
             this.grpExtTXInhibit.Name = "grpExtTXInhibit";
             this.grpExtTXInhibit.Size = new System.Drawing.Size(180, 72);
             this.grpExtTXInhibit.TabIndex = 71;
@@ -40934,7 +40992,7 @@
             // chkSaveTXProfileOnExit
             // 
             this.chkSaveTXProfileOnExit.Image = null;
-            this.chkSaveTXProfileOnExit.Location = new System.Drawing.Point(24, 351);
+            this.chkSaveTXProfileOnExit.Location = new System.Drawing.Point(19, 351);
             this.chkSaveTXProfileOnExit.Name = "chkSaveTXProfileOnExit";
             this.chkSaveTXProfileOnExit.Size = new System.Drawing.Size(235, 18);
             this.chkSaveTXProfileOnExit.TabIndex = 67;
@@ -40945,7 +41003,7 @@
             // chkAutoSaveTXProfile
             // 
             this.chkAutoSaveTXProfile.Image = null;
-            this.chkAutoSaveTXProfile.Location = new System.Drawing.Point(24, 375);
+            this.chkAutoSaveTXProfile.Location = new System.Drawing.Point(19, 375);
             this.chkAutoSaveTXProfile.Name = "chkAutoSaveTXProfile";
             this.chkAutoSaveTXProfile.Size = new System.Drawing.Size(189, 18);
             this.chkAutoSaveTXProfile.TabIndex = 66;
@@ -41012,212 +41070,6 @@
             0});
             this.udTXFilterHighSave.Visible = false;
             // 
-            // grpBoxMic
-            // 
-            this.grpBoxMic.Controls.Add(this.labelTS617);
-            this.grpBoxMic.Controls.Add(this.labelTS616);
-            this.grpBoxMic.Controls.Add(this.radLineIn);
-            this.grpBoxMic.Controls.Add(this.radMicIn);
-            this.grpBoxMic.Controls.Add(this.udMicGainMin);
-            this.grpBoxMic.Controls.Add(this.udMicGainMax);
-            this.grpBoxMic.Controls.Add(this.labelTS21);
-            this.grpBoxMic.Controls.Add(this.labelTS20);
-            this.grpBoxMic.Controls.Add(this.udLineInBoost);
-            this.grpBoxMic.Controls.Add(this.chk20dbMicBoost);
-            this.grpBoxMic.Controls.Add(this.lblLineInBoost);
-            this.grpBoxMic.Location = new System.Drawing.Point(164, 127);
-            this.grpBoxMic.Name = "grpBoxMic";
-            this.grpBoxMic.Size = new System.Drawing.Size(189, 137);
-            this.grpBoxMic.TabIndex = 58;
-            this.grpBoxMic.TabStop = false;
-            this.grpBoxMic.Text = "Mic";
-            // 
-            // labelTS617
-            // 
-            this.labelTS617.AutoSize = true;
-            this.labelTS617.Image = null;
-            this.labelTS617.Location = new System.Drawing.Point(124, 16);
-            this.labelTS617.Name = "labelTS617";
-            this.labelTS617.Size = new System.Drawing.Size(42, 13);
-            this.labelTS617.TabIndex = 15;
-            this.labelTS617.Text = "Source";
-            // 
-            // labelTS616
-            // 
-            this.labelTS616.AutoSize = true;
-            this.labelTS616.Image = null;
-            this.labelTS616.Location = new System.Drawing.Point(53, 16);
-            this.labelTS616.Name = "labelTS616";
-            this.labelTS616.Size = new System.Drawing.Size(31, 13);
-            this.labelTS616.TabIndex = 14;
-            this.labelTS616.Text = "Gain";
-            // 
-            // radLineIn
-            // 
-            this.radLineIn.Image = null;
-            this.radLineIn.Location = new System.Drawing.Point(111, 62);
-            this.radLineIn.Name = "radLineIn";
-            this.radLineIn.Size = new System.Drawing.Size(57, 16);
-            this.radLineIn.TabIndex = 13;
-            this.radLineIn.Text = "Line In";
-            this.radLineIn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.toolTip1.SetToolTip(this.radLineIn, "Enables Line Input to Penelope");
-            this.radLineIn.UseVisualStyleBackColor = true;
-            this.radLineIn.CheckedChanged += new System.EventHandler(this.radLineIn_CheckedChanged);
-            // 
-            // radMicIn
-            // 
-            this.radMicIn.Checked = true;
-            this.radMicIn.Image = null;
-            this.radMicIn.Location = new System.Drawing.Point(111, 37);
-            this.radMicIn.Name = "radMicIn";
-            this.radMicIn.Size = new System.Drawing.Size(55, 16);
-            this.radMicIn.TabIndex = 12;
-            this.radMicIn.TabStop = true;
-            this.radMicIn.Text = "Mic In";
-            this.radMicIn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.toolTip1.SetToolTip(this.radMicIn, "Enable Microphone Input on Penelope");
-            this.radMicIn.UseVisualStyleBackColor = true;
-            this.radMicIn.CheckedChanged += new System.EventHandler(this.radMicIn_CheckedChanged);
-            // 
-            // udMicGainMin
-            // 
-            this.udMicGainMin.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udMicGainMin.Location = new System.Drawing.Point(41, 59);
-            this.udMicGainMin.Maximum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udMicGainMin.Minimum = new decimal(new int[] {
-            96,
-            0,
-            0,
-            -2147483648});
-            this.udMicGainMin.Name = "udMicGainMin";
-            this.udMicGainMin.Size = new System.Drawing.Size(40, 22);
-            this.udMicGainMin.TabIndex = 10;
-            this.udMicGainMin.TinyStep = false;
-            this.udMicGainMin.Value = new decimal(new int[] {
-            40,
-            0,
-            0,
-            -2147483648});
-            this.udMicGainMin.ValueChanged += new System.EventHandler(this.udMicGainMin_ValueChanged);
-            this.udMicGainMin.LostFocus += new System.EventHandler(this.udMicGainMin_LostFocus);
-            // 
-            // udMicGainMax
-            // 
-            this.udMicGainMax.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udMicGainMax.Location = new System.Drawing.Point(41, 34);
-            this.udMicGainMax.Maximum = new decimal(new int[] {
-            70,
-            0,
-            0,
-            0});
-            this.udMicGainMax.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udMicGainMax.Name = "udMicGainMax";
-            this.udMicGainMax.Size = new System.Drawing.Size(40, 22);
-            this.udMicGainMax.TabIndex = 9;
-            this.udMicGainMax.TinyStep = false;
-            this.udMicGainMax.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udMicGainMax.ValueChanged += new System.EventHandler(this.udMicGainMax_ValueChanged);
-            this.udMicGainMax.LostFocus += new System.EventHandler(this.udMicGainMax_LostFocus);
-            // 
-            // labelTS21
-            // 
-            this.labelTS21.Image = null;
-            this.labelTS21.Location = new System.Drawing.Point(10, 62);
-            this.labelTS21.Name = "labelTS21";
-            this.labelTS21.Size = new System.Drawing.Size(30, 16);
-            this.labelTS21.TabIndex = 5;
-            this.labelTS21.Text = "Min:";
-            // 
-            // labelTS20
-            // 
-            this.labelTS20.Image = null;
-            this.labelTS20.Location = new System.Drawing.Point(10, 37);
-            this.labelTS20.Name = "labelTS20";
-            this.labelTS20.Size = new System.Drawing.Size(30, 16);
-            this.labelTS20.TabIndex = 4;
-            this.labelTS20.Text = "Max:";
-            // 
-            // udLineInBoost
-            // 
-            this.udLineInBoost.BackColor = System.Drawing.Color.White;
-            this.udLineInBoost.DecimalPlaces = 1;
-            this.udLineInBoost.Increment = new decimal(new int[] {
-            15,
-            0,
-            0,
-            65536});
-            this.udLineInBoost.InterceptArrowKeys = false;
-            this.udLineInBoost.Location = new System.Drawing.Point(120, 93);
-            this.udLineInBoost.Maximum = new decimal(new int[] {
-            12,
-            0,
-            0,
-            0});
-            this.udLineInBoost.Minimum = new decimal(new int[] {
-            345,
-            0,
-            0,
-            -2147418112});
-            this.udLineInBoost.Name = "udLineInBoost";
-            this.udLineInBoost.ReadOnly = true;
-            this.udLineInBoost.Size = new System.Drawing.Size(48, 22);
-            this.udLineInBoost.TabIndex = 10;
-            this.udLineInBoost.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.udLineInBoost.TinyStep = false;
-            this.udLineInBoost.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udLineInBoost.Visible = false;
-            this.udLineInBoost.ValueChanged += new System.EventHandler(this.udLineInBoost_ValueChanged);
-            // 
-            // chk20dbMicBoost
-            // 
-            this.chk20dbMicBoost.Checked = true;
-            this.chk20dbMicBoost.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chk20dbMicBoost.Image = null;
-            this.chk20dbMicBoost.Location = new System.Drawing.Point(13, 94);
-            this.chk20dbMicBoost.Name = "chk20dbMicBoost";
-            this.chk20dbMicBoost.Size = new System.Drawing.Size(110, 16);
-            this.chk20dbMicBoost.TabIndex = 11;
-            this.chk20dbMicBoost.Text = "20dB Mic Boost";
-            this.toolTip1.SetToolTip(this.chk20dbMicBoost, "Controls 20dB Hardware Preamp");
-            this.chk20dbMicBoost.CheckedChanged += new System.EventHandler(this.chk20dbMicBoost_CheckedChanged);
-            // 
-            // lblLineInBoost
-            // 
-            this.lblLineInBoost.Image = null;
-            this.lblLineInBoost.Location = new System.Drawing.Point(6, 94);
-            this.lblLineInBoost.Name = "lblLineInBoost";
-            this.lblLineInBoost.Size = new System.Drawing.Size(119, 16);
-            this.lblLineInBoost.TabIndex = 11;
-            this.lblLineInBoost.Text = "Line In Gain (dB)";
-            this.lblLineInBoost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip1.SetToolTip(this.lblLineInBoost, "Sets the hardware gain");
-            this.lblLineInBoost.Visible = false;
-            // 
             // chkTXExpert
             // 
             this.chkTXExpert.Checked = true;
@@ -41245,7 +41097,7 @@
             // btnTXProfileDefImport
             // 
             this.btnTXProfileDefImport.Image = null;
-            this.btnTXProfileDefImport.Location = new System.Drawing.Point(8, 214);
+            this.btnTXProfileDefImport.Location = new System.Drawing.Point(21, 214);
             this.btnTXProfileDefImport.Name = "btnTXProfileDefImport";
             this.btnTXProfileDefImport.Selectable = true;
             this.btnTXProfileDefImport.Size = new System.Drawing.Size(120, 28);
@@ -41265,7 +41117,7 @@
             // 
             this.grpTXAM.Controls.Add(this.lblTXAMCarrierLevel);
             this.grpTXAM.Controls.Add(this.udTXAMCarrierLevel);
-            this.grpTXAM.Location = new System.Drawing.Point(376, 94);
+            this.grpTXAM.Location = new System.Drawing.Point(375, 95);
             this.grpTXAM.Name = "grpTXAM";
             this.grpTXAM.Size = new System.Drawing.Size(179, 51);
             this.grpTXAM.TabIndex = 52;
@@ -41274,10 +41126,11 @@
             // 
             // lblTXAMCarrierLevel
             // 
+            this.lblTXAMCarrierLevel.AutoSize = true;
             this.lblTXAMCarrierLevel.Image = null;
-            this.lblTXAMCarrierLevel.Location = new System.Drawing.Point(12, 24);
+            this.lblTXAMCarrierLevel.Location = new System.Drawing.Point(8, 24);
             this.lblTXAMCarrierLevel.Name = "lblTXAMCarrierLevel";
-            this.lblTXAMCarrierLevel.Size = new System.Drawing.Size(77, 16);
+            this.lblTXAMCarrierLevel.Size = new System.Drawing.Size(72, 13);
             this.lblTXAMCarrierLevel.TabIndex = 5;
             this.lblTXAMCarrierLevel.Text = "Carrier Level:";
             // 
@@ -41329,7 +41182,7 @@
             // 
             this.chkIgnoreMasterAFChangeForMonitor.AutoSize = true;
             this.chkIgnoreMasterAFChangeForMonitor.Image = null;
-            this.chkIgnoreMasterAFChangeForMonitor.Location = new System.Drawing.Point(13, 52);
+            this.chkIgnoreMasterAFChangeForMonitor.Location = new System.Drawing.Point(11, 46);
             this.chkIgnoreMasterAFChangeForMonitor.Name = "chkIgnoreMasterAFChangeForMonitor";
             this.chkIgnoreMasterAFChangeForMonitor.Size = new System.Drawing.Size(157, 17);
             this.chkIgnoreMasterAFChangeForMonitor.TabIndex = 6;
@@ -41340,10 +41193,11 @@
             // 
             // lblTXAF
             // 
+            this.lblTXAF.AutoSize = true;
             this.lblTXAF.Image = null;
-            this.lblTXAF.Location = new System.Drawing.Point(8, 24);
+            this.lblTXAF.Location = new System.Drawing.Point(8, 22);
             this.lblTXAF.Name = "lblTXAF";
-            this.lblTXAF.Size = new System.Drawing.Size(40, 16);
+            this.lblTXAF.Size = new System.Drawing.Size(38, 13);
             this.lblTXAF.TabIndex = 5;
             this.lblTXAF.Text = "TX AF:";
             // 
@@ -41395,7 +41249,7 @@
             // button1
             // 
             this.button1.AutoSize = true;
-            this.button1.Location = new System.Drawing.Point(123, 80);
+            this.button1.Location = new System.Drawing.Point(123, 78);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(76, 23);
             this.button1.TabIndex = 74;
@@ -41407,7 +41261,7 @@
             // btnTXProfileDelete
             // 
             this.btnTXProfileDelete.Image = null;
-            this.btnTXProfileDelete.Location = new System.Drawing.Point(151, 50);
+            this.btnTXProfileDelete.Location = new System.Drawing.Point(151, 46);
             this.btnTXProfileDelete.Name = "btnTXProfileDelete";
             this.btnTXProfileDelete.Selectable = true;
             this.btnTXProfileDelete.Size = new System.Drawing.Size(48, 21);
@@ -41419,7 +41273,7 @@
             // btnTXProfileSave
             // 
             this.btnTXProfileSave.Image = null;
-            this.btnTXProfileSave.Location = new System.Drawing.Point(16, 50);
+            this.btnTXProfileSave.Location = new System.Drawing.Point(11, 47);
             this.btnTXProfileSave.Name = "btnTXProfileSave";
             this.btnTXProfileSave.Selectable = true;
             this.btnTXProfileSave.Size = new System.Drawing.Size(48, 21);
@@ -41430,10 +41284,9 @@
             // 
             // btnExportCurrentTXProfile
             // 
-            this.btnExportCurrentTXProfile.AutoSize = true;
-            this.btnExportCurrentTXProfile.Location = new System.Drawing.Point(16, 78);
+            this.btnExportCurrentTXProfile.Location = new System.Drawing.Point(11, 79);
             this.btnExportCurrentTXProfile.Name = "btnExportCurrentTXProfile";
-            this.btnExportCurrentTXProfile.Size = new System.Drawing.Size(50, 23);
+            this.btnExportCurrentTXProfile.Size = new System.Drawing.Size(48, 21);
             this.btnExportCurrentTXProfile.TabIndex = 73;
             this.btnExportCurrentTXProfile.Text = "&Export";
             this.toolTip1.SetToolTip(this.btnExportCurrentTXProfile, "Export the curent profile and save to a file.");
@@ -41444,9 +41297,9 @@
             // 
             this.comboTXProfileName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboTXProfileName.DropDownWidth = 104;
-            this.comboTXProfileName.Location = new System.Drawing.Point(16, 19);
+            this.comboTXProfileName.Location = new System.Drawing.Point(11, 19);
             this.comboTXProfileName.Name = "comboTXProfileName";
-            this.comboTXProfileName.Size = new System.Drawing.Size(183, 21);
+            this.comboTXProfileName.Size = new System.Drawing.Size(188, 21);
             this.comboTXProfileName.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboTXProfileName, "Sets the current Transmit Profile to be used.");
             this.comboTXProfileName.SelectedIndexChanged += new System.EventHandler(this.comboTXProfileName_SelectedIndexChanged);
@@ -41468,40 +41321,40 @@
             // 
             // radUseFixedDriveTune
             // 
-            this.radUseFixedDriveTune.AutoSize = true;
             this.radUseFixedDriveTune.Image = null;
-            this.radUseFixedDriveTune.Location = new System.Drawing.Point(17, 96);
+            this.radUseFixedDriveTune.Location = new System.Drawing.Point(11, 100);
             this.radUseFixedDriveTune.Name = "radUseFixedDriveTune";
             this.radUseFixedDriveTune.Size = new System.Drawing.Size(103, 17);
             this.radUseFixedDriveTune.TabIndex = 12;
             this.radUseFixedDriveTune.TabStop = true;
             this.radUseFixedDriveTune.Text = "Use Fixed Drive";
+            this.radUseFixedDriveTune.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.radUseFixedDriveTune.UseVisualStyleBackColor = true;
             this.radUseFixedDriveTune.CheckedChanged += new System.EventHandler(this.radUseFixedDriveTune_CheckedChanged);
             // 
             // radUseDriveSliderTune
             // 
-            this.radUseDriveSliderTune.AutoSize = true;
             this.radUseDriveSliderTune.Image = null;
-            this.radUseDriveSliderTune.Location = new System.Drawing.Point(17, 50);
+            this.radUseDriveSliderTune.Location = new System.Drawing.Point(11, 50);
             this.radUseDriveSliderTune.Name = "radUseDriveSliderTune";
             this.radUseDriveSliderTune.Size = new System.Drawing.Size(105, 17);
             this.radUseDriveSliderTune.TabIndex = 11;
             this.radUseDriveSliderTune.TabStop = true;
             this.radUseDriveSliderTune.Text = "Use Drive Slider";
+            this.radUseDriveSliderTune.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.radUseDriveSliderTune.UseVisualStyleBackColor = true;
             this.radUseDriveSliderTune.CheckedChanged += new System.EventHandler(this.radUseDriveSliderTune_CheckedChanged);
             // 
             // radUseTuneSliderTune
             // 
-            this.radUseTuneSliderTune.AutoSize = true;
             this.radUseTuneSliderTune.Image = null;
-            this.radUseTuneSliderTune.Location = new System.Drawing.Point(17, 73);
+            this.radUseTuneSliderTune.Location = new System.Drawing.Point(11, 75);
             this.radUseTuneSliderTune.Name = "radUseTuneSliderTune";
             this.radUseTuneSliderTune.Size = new System.Drawing.Size(105, 17);
             this.radUseTuneSliderTune.TabIndex = 10;
             this.radUseTuneSliderTune.TabStop = true;
             this.radUseTuneSliderTune.Text = "Use Tune Slider";
+            this.radUseTuneSliderTune.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             this.radUseTuneSliderTune.UseVisualStyleBackColor = true;
             this.radUseTuneSliderTune.CheckedChanged += new System.EventHandler(this.radUseTuneSliderTune_CheckedChanged);
             // 
@@ -41525,13 +41378,13 @@
             // 
             // lblTXTUNMeter
             // 
+            this.lblTXTUNMeter.AutoSize = true;
             this.lblTXTUNMeter.Image = null;
-            this.lblTXTUNMeter.Location = new System.Drawing.Point(8, 19);
+            this.lblTXTUNMeter.Location = new System.Drawing.Point(8, 22);
             this.lblTXTUNMeter.Name = "lblTXTUNMeter";
-            this.lblTXTUNMeter.Size = new System.Drawing.Size(56, 24);
+            this.lblTXTUNMeter.Size = new System.Drawing.Size(55, 13);
             this.lblTXTUNMeter.TabIndex = 8;
             this.lblTXTUNMeter.Text = "TX Meter:";
-            this.lblTXTUNMeter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udTXTunePower
             // 
@@ -41540,7 +41393,7 @@
             0,
             0,
             0});
-            this.udTXTunePower.Location = new System.Drawing.Point(64, 119);
+            this.udTXTunePower.Location = new System.Drawing.Point(30, 119);
             this.udTXTunePower.Maximum = new decimal(new int[] {
             100,
             0,
@@ -41570,7 +41423,7 @@
             this.grpTXFilter.Controls.Add(this.udTXFilterLow);
             this.grpTXFilter.Controls.Add(this.lblTXFilterLow);
             this.grpTXFilter.Controls.Add(this.udTXFilterHigh);
-            this.grpTXFilter.Location = new System.Drawing.Point(241, 8);
+            this.grpTXFilter.Location = new System.Drawing.Point(234, 8);
             this.grpTXFilter.Name = "grpTXFilter";
             this.grpTXFilter.Size = new System.Drawing.Size(128, 80);
             this.grpTXFilter.TabIndex = 19;
@@ -41579,10 +41432,11 @@
             // 
             // lblTXFilterHigh
             // 
+            this.lblTXFilterHigh.AutoSize = true;
             this.lblTXFilterHigh.Image = null;
-            this.lblTXFilterHigh.Location = new System.Drawing.Point(16, 24);
+            this.lblTXFilterHigh.Location = new System.Drawing.Point(15, 22);
             this.lblTXFilterHigh.Name = "lblTXFilterHigh";
-            this.lblTXFilterHigh.Size = new System.Drawing.Size(40, 23);
+            this.lblTXFilterHigh.Size = new System.Drawing.Size(35, 13);
             this.lblTXFilterHigh.TabIndex = 3;
             this.lblTXFilterHigh.Text = "High:";
             // 
@@ -41619,10 +41473,11 @@
             // 
             // lblTXFilterLow
             // 
+            this.lblTXFilterLow.AutoSize = true;
             this.lblTXFilterLow.Image = null;
-            this.lblTXFilterLow.Location = new System.Drawing.Point(16, 48);
+            this.lblTXFilterLow.Location = new System.Drawing.Point(15, 47);
             this.lblTXFilterLow.Name = "lblTXFilterLow";
-            this.lblTXFilterLow.Size = new System.Drawing.Size(40, 23);
+            this.lblTXFilterLow.Size = new System.Drawing.Size(31, 13);
             this.lblTXFilterLow.TabIndex = 1;
             this.lblTXFilterLow.Text = "Low:";
             // 
@@ -41656,6 +41511,217 @@
             0});
             this.udTXFilterHigh.ValueChanged += new System.EventHandler(this.udTXFilterHigh_ValueChanged);
             this.udTXFilterHigh.LostFocus += new System.EventHandler(this.udTXFilterHigh_LostFocus);
+            // 
+            // grpBoxMic
+            // 
+            this.grpBoxMic.Controls.Add(this.labelTS617);
+            this.grpBoxMic.Controls.Add(this.labelTS616);
+            this.grpBoxMic.Controls.Add(this.radLineIn);
+            this.grpBoxMic.Controls.Add(this.radMicIn);
+            this.grpBoxMic.Controls.Add(this.udMicGainMin);
+            this.grpBoxMic.Controls.Add(this.udMicGainMax);
+            this.grpBoxMic.Controls.Add(this.labelTS21);
+            this.grpBoxMic.Controls.Add(this.labelTS20);
+            this.grpBoxMic.Controls.Add(this.udLineInBoost);
+            this.grpBoxMic.Controls.Add(this.chk20dbMicBoost);
+            this.grpBoxMic.Controls.Add(this.lblLineInBoost);
+            this.grpBoxMic.Location = new System.Drawing.Point(164, 127);
+            this.grpBoxMic.Name = "grpBoxMic";
+            this.grpBoxMic.Size = new System.Drawing.Size(198, 151);
+            this.grpBoxMic.TabIndex = 58;
+            this.grpBoxMic.TabStop = false;
+            this.grpBoxMic.Text = "Mic";
+            // 
+            // labelTS617
+            // 
+            this.labelTS617.AutoSize = true;
+            this.labelTS617.Image = null;
+            this.labelTS617.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.labelTS617.Location = new System.Drawing.Point(119, 22);
+            this.labelTS617.Name = "labelTS617";
+            this.labelTS617.Size = new System.Drawing.Size(42, 13);
+            this.labelTS617.TabIndex = 15;
+            this.labelTS617.Text = "Source";
+            // 
+            // labelTS616
+            // 
+            this.labelTS616.AutoSize = true;
+            this.labelTS616.Image = null;
+            this.labelTS616.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.labelTS616.Location = new System.Drawing.Point(41, 22);
+            this.labelTS616.Name = "labelTS616";
+            this.labelTS616.Size = new System.Drawing.Size(31, 13);
+            this.labelTS616.TabIndex = 14;
+            this.labelTS616.Text = "Gain";
+            // 
+            // radLineIn
+            // 
+            this.radLineIn.Image = null;
+            this.radLineIn.Location = new System.Drawing.Point(122, 75);
+            this.radLineIn.Name = "radLineIn";
+            this.radLineIn.Size = new System.Drawing.Size(57, 16);
+            this.radLineIn.TabIndex = 13;
+            this.radLineIn.Text = "Line In";
+            this.radLineIn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.toolTip1.SetToolTip(this.radLineIn, "Enables Line Input to Penelope");
+            this.radLineIn.UseVisualStyleBackColor = true;
+            this.radLineIn.CheckedChanged += new System.EventHandler(this.radLineIn_CheckedChanged);
+            // 
+            // radMicIn
+            // 
+            this.radMicIn.Checked = true;
+            this.radMicIn.Image = null;
+            this.radMicIn.Location = new System.Drawing.Point(122, 50);
+            this.radMicIn.Name = "radMicIn";
+            this.radMicIn.Size = new System.Drawing.Size(55, 16);
+            this.radMicIn.TabIndex = 12;
+            this.radMicIn.TabStop = true;
+            this.radMicIn.Text = "Mic In";
+            this.radMicIn.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.toolTip1.SetToolTip(this.radMicIn, "Enable Microphone Input on Penelope");
+            this.radMicIn.UseVisualStyleBackColor = true;
+            this.radMicIn.CheckedChanged += new System.EventHandler(this.radMicIn_CheckedChanged);
+            // 
+            // udMicGainMin
+            // 
+            this.udMicGainMin.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udMicGainMin.Location = new System.Drawing.Point(44, 75);
+            this.udMicGainMin.Maximum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udMicGainMin.Minimum = new decimal(new int[] {
+            96,
+            0,
+            0,
+            -2147483648});
+            this.udMicGainMin.Name = "udMicGainMin";
+            this.udMicGainMin.Size = new System.Drawing.Size(40, 22);
+            this.udMicGainMin.TabIndex = 10;
+            this.udMicGainMin.TinyStep = false;
+            this.udMicGainMin.Value = new decimal(new int[] {
+            40,
+            0,
+            0,
+            -2147483648});
+            this.udMicGainMin.ValueChanged += new System.EventHandler(this.udMicGainMin_ValueChanged);
+            this.udMicGainMin.LostFocus += new System.EventHandler(this.udMicGainMin_LostFocus);
+            // 
+            // udMicGainMax
+            // 
+            this.udMicGainMax.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udMicGainMax.Location = new System.Drawing.Point(44, 50);
+            this.udMicGainMax.Maximum = new decimal(new int[] {
+            70,
+            0,
+            0,
+            0});
+            this.udMicGainMax.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udMicGainMax.Name = "udMicGainMax";
+            this.udMicGainMax.Size = new System.Drawing.Size(40, 22);
+            this.udMicGainMax.TabIndex = 9;
+            this.udMicGainMax.TinyStep = false;
+            this.udMicGainMax.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udMicGainMax.ValueChanged += new System.EventHandler(this.udMicGainMax_ValueChanged);
+            this.udMicGainMax.LostFocus += new System.EventHandler(this.udMicGainMax_LostFocus);
+            // 
+            // labelTS21
+            // 
+            this.labelTS21.AutoSize = true;
+            this.labelTS21.Image = null;
+            this.labelTS21.Location = new System.Drawing.Point(12, 77);
+            this.labelTS21.Name = "labelTS21";
+            this.labelTS21.Size = new System.Drawing.Size(30, 13);
+            this.labelTS21.TabIndex = 5;
+            this.labelTS21.Text = "Min:";
+            // 
+            // labelTS20
+            // 
+            this.labelTS20.AutoSize = true;
+            this.labelTS20.Image = null;
+            this.labelTS20.Location = new System.Drawing.Point(12, 52);
+            this.labelTS20.Name = "labelTS20";
+            this.labelTS20.Size = new System.Drawing.Size(31, 13);
+            this.labelTS20.TabIndex = 4;
+            this.labelTS20.Text = "Max:";
+            // 
+            // udLineInBoost
+            // 
+            this.udLineInBoost.BackColor = System.Drawing.Color.White;
+            this.udLineInBoost.DecimalPlaces = 1;
+            this.udLineInBoost.Increment = new decimal(new int[] {
+            15,
+            0,
+            0,
+            65536});
+            this.udLineInBoost.InterceptArrowKeys = false;
+            this.udLineInBoost.Location = new System.Drawing.Point(122, 119);
+            this.udLineInBoost.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.udLineInBoost.Minimum = new decimal(new int[] {
+            345,
+            0,
+            0,
+            -2147418112});
+            this.udLineInBoost.Name = "udLineInBoost";
+            this.udLineInBoost.ReadOnly = true;
+            this.udLineInBoost.Size = new System.Drawing.Size(48, 22);
+            this.udLineInBoost.TabIndex = 10;
+            this.udLineInBoost.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.udLineInBoost.TinyStep = false;
+            this.udLineInBoost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udLineInBoost.Visible = false;
+            this.udLineInBoost.ValueChanged += new System.EventHandler(this.udLineInBoost_ValueChanged);
+            // 
+            // chk20dbMicBoost
+            // 
+            this.chk20dbMicBoost.Checked = true;
+            this.chk20dbMicBoost.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chk20dbMicBoost.Image = null;
+            this.chk20dbMicBoost.Location = new System.Drawing.Point(15, 120);
+            this.chk20dbMicBoost.Name = "chk20dbMicBoost";
+            this.chk20dbMicBoost.Size = new System.Drawing.Size(110, 16);
+            this.chk20dbMicBoost.TabIndex = 11;
+            this.chk20dbMicBoost.Text = "20dB Mic Boost";
+            this.toolTip1.SetToolTip(this.chk20dbMicBoost, "Controls 20dB Hardware Preamp");
+            this.chk20dbMicBoost.CheckedChanged += new System.EventHandler(this.chk20dbMicBoost_CheckedChanged);
+            // 
+            // lblLineInBoost
+            // 
+            this.lblLineInBoost.Enabled = false;
+            this.lblLineInBoost.Image = null;
+            this.lblLineInBoost.Location = new System.Drawing.Point(6, 94);
+            this.lblLineInBoost.Name = "lblLineInBoost";
+            this.lblLineInBoost.Size = new System.Drawing.Size(119, 16);
+            this.lblLineInBoost.TabIndex = 11;
+            this.lblLineInBoost.Text = "Line In Gain (dB)";
+            this.lblLineInBoost.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip1.SetToolTip(this.lblLineInBoost, "Sets the hardware gain");
+            this.lblLineInBoost.Visible = false;
             // 
             // tpPowerAmplifier
             // 
@@ -42271,7 +42337,7 @@
             // btnCopyPAProfile
             // 
             this.btnCopyPAProfile.Image = null;
-            this.btnCopyPAProfile.Location = new System.Drawing.Point(319, 27);
+            this.btnCopyPAProfile.Location = new System.Drawing.Point(319, 28);
             this.btnCopyPAProfile.Name = "btnCopyPAProfile";
             this.btnCopyPAProfile.Selectable = true;
             this.btnCopyPAProfile.Size = new System.Drawing.Size(65, 23);
@@ -42284,7 +42350,7 @@
             // btnNewPAProfile
             // 
             this.btnNewPAProfile.Image = null;
-            this.btnNewPAProfile.Location = new System.Drawing.Point(177, 27);
+            this.btnNewPAProfile.Location = new System.Drawing.Point(177, 28);
             this.btnNewPAProfile.Name = "btnNewPAProfile";
             this.btnNewPAProfile.Selectable = true;
             this.btnNewPAProfile.Size = new System.Drawing.Size(65, 23);
@@ -43333,7 +43399,7 @@
             // btnDeletePAProfile
             // 
             this.btnDeletePAProfile.Image = null;
-            this.btnDeletePAProfile.Location = new System.Drawing.Point(248, 27);
+            this.btnDeletePAProfile.Location = new System.Drawing.Point(248, 28);
             this.btnDeletePAProfile.Name = "btnDeletePAProfile";
             this.btnDeletePAProfile.Selectable = true;
             this.btnDeletePAProfile.Size = new System.Drawing.Size(65, 23);
@@ -45769,20 +45835,21 @@
             // 
             // labelTS8
             // 
+            this.labelTS8.AutoSize = true;
             this.labelTS8.Image = null;
-            this.labelTS8.Location = new System.Drawing.Point(22, 223);
+            this.labelTS8.Location = new System.Drawing.Point(16, 223);
             this.labelTS8.Name = "labelTS8";
-            this.labelTS8.Size = new System.Drawing.Size(86, 23);
+            this.labelTS8.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelTS8.Size = new System.Drawing.Size(85, 13);
             this.labelTS8.TabIndex = 91;
             this.labelTS8.Text = "Slider Limit Bar:";
-            this.labelTS8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnSliderLimitBar
             // 
             this.clrbtnSliderLimitBar.Automatic = "Automatic";
             this.clrbtnSliderLimitBar.Color = System.Drawing.Color.Red;
             this.clrbtnSliderLimitBar.Image = null;
-            this.clrbtnSliderLimitBar.Location = new System.Drawing.Point(108, 223);
+            this.clrbtnSliderLimitBar.Location = new System.Drawing.Point(130, 218);
             this.clrbtnSliderLimitBar.MoreColors = "More Colors...";
             this.clrbtnSliderLimitBar.Name = "clrbtnSliderLimitBar";
             this.clrbtnSliderLimitBar.Selectable = true;
@@ -45809,7 +45876,7 @@
             this.clrbtnStatusBarText.Automatic = "Automatic";
             this.clrbtnStatusBarText.Color = System.Drawing.Color.White;
             this.clrbtnStatusBarText.Image = null;
-            this.clrbtnStatusBarText.Location = new System.Drawing.Point(78, 52);
+            this.clrbtnStatusBarText.Location = new System.Drawing.Point(88, 52);
             this.clrbtnStatusBarText.MoreColors = "More Colors...";
             this.clrbtnStatusBarText.Name = "clrbtnStatusBarText";
             this.clrbtnStatusBarText.Selectable = true;
@@ -45819,20 +45886,21 @@
             // 
             // nlblStatusBarTextColour
             // 
+            this.nlblStatusBarTextColour.AutoSize = true;
             this.nlblStatusBarTextColour.Image = null;
-            this.nlblStatusBarTextColour.Location = new System.Drawing.Point(6, 52);
+            this.nlblStatusBarTextColour.Location = new System.Drawing.Point(8, 57);
             this.nlblStatusBarTextColour.Name = "nlblStatusBarTextColour";
-            this.nlblStatusBarTextColour.Size = new System.Drawing.Size(72, 23);
+            this.nlblStatusBarTextColour.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.nlblStatusBarTextColour.Size = new System.Drawing.Size(30, 13);
             this.nlblStatusBarTextColour.TabIndex = 76;
             this.nlblStatusBarTextColour.Text = "Text:";
-            this.nlblStatusBarTextColour.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnStatusBarBackground
             // 
             this.clrbtnStatusBarBackground.Automatic = "Automatic";
             this.clrbtnStatusBarBackground.Color = System.Drawing.SystemColors.ControlDarkDark;
             this.clrbtnStatusBarBackground.Image = null;
-            this.clrbtnStatusBarBackground.Location = new System.Drawing.Point(78, 23);
+            this.clrbtnStatusBarBackground.Location = new System.Drawing.Point(88, 23);
             this.clrbtnStatusBarBackground.MoreColors = "More Colors...";
             this.clrbtnStatusBarBackground.Name = "clrbtnStatusBarBackground";
             this.clrbtnStatusBarBackground.Selectable = true;
@@ -45842,19 +45910,20 @@
             // 
             // nlblStatusBarBackground
             // 
+            this.nlblStatusBarBackground.AutoSize = true;
             this.nlblStatusBarBackground.Image = null;
-            this.nlblStatusBarBackground.Location = new System.Drawing.Point(6, 23);
+            this.nlblStatusBarBackground.Location = new System.Drawing.Point(8, 27);
             this.nlblStatusBarBackground.Name = "nlblStatusBarBackground";
-            this.nlblStatusBarBackground.Size = new System.Drawing.Size(72, 23);
+            this.nlblStatusBarBackground.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.nlblStatusBarBackground.Size = new System.Drawing.Size(72, 13);
             this.nlblStatusBarBackground.TabIndex = 74;
             this.nlblStatusBarBackground.Text = "Background:";
-            this.nlblStatusBarBackground.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // chkEnableLEDFont
             // 
             this.chkEnableLEDFont.AutoSize = true;
             this.chkEnableLEDFont.Image = null;
-            this.chkEnableLEDFont.Location = new System.Drawing.Point(616, 27);
+            this.chkEnableLEDFont.Location = new System.Drawing.Point(623, 36);
             this.chkEnableLEDFont.Name = "chkEnableLEDFont";
             this.chkEnableLEDFont.Size = new System.Drawing.Size(72, 17);
             this.chkEnableLEDFont.TabIndex = 88;
@@ -45880,7 +45949,7 @@
             // 
             this.grpAppSkins.Controls.Add(this.chkDisablePicDisplayBackgroundImage);
             this.grpAppSkins.Controls.Add(this.comboAppSkin);
-            this.grpAppSkins.Location = new System.Drawing.Point(30, 8);
+            this.grpAppSkins.Location = new System.Drawing.Point(16, 8);
             this.grpAppSkins.Name = "grpAppSkins";
             this.grpAppSkins.Size = new System.Drawing.Size(128, 77);
             this.grpAppSkins.TabIndex = 85;
@@ -45913,9 +45982,9 @@
             // lblGenBackground
             // 
             this.lblGenBackground.Image = null;
-            this.lblGenBackground.Location = new System.Drawing.Point(36, 162);
+            this.lblGenBackground.Location = new System.Drawing.Point(16, 192);
             this.lblGenBackground.Name = "lblGenBackground";
-            this.lblGenBackground.Size = new System.Drawing.Size(72, 32);
+            this.lblGenBackground.Size = new System.Drawing.Size(111, 16);
             this.lblGenBackground.TabIndex = 84;
             this.lblGenBackground.Text = "Overall Background:";
             this.lblGenBackground.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -45926,7 +45995,7 @@
             this.clrbtnGenBackground.Automatic = "Automatic";
             this.clrbtnGenBackground.Color = System.Drawing.SystemColors.ControlDark;
             this.clrbtnGenBackground.Image = null;
-            this.clrbtnGenBackground.Location = new System.Drawing.Point(108, 162);
+            this.clrbtnGenBackground.Location = new System.Drawing.Point(130, 188);
             this.clrbtnGenBackground.MoreColors = "More Colors...";
             this.clrbtnGenBackground.Name = "clrbtnGenBackground";
             this.clrbtnGenBackground.Selectable = true;
@@ -45967,10 +46036,12 @@
             // 
             // lblBandBackground
             // 
+            this.lblBandBackground.AutoSize = true;
             this.lblBandBackground.Image = null;
-            this.lblBandBackground.Location = new System.Drawing.Point(16, 120);
+            this.lblBandBackground.Location = new System.Drawing.Point(8, 125);
             this.lblBandBackground.Name = "lblBandBackground";
-            this.lblBandBackground.Size = new System.Drawing.Size(72, 24);
+            this.lblBandBackground.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblBandBackground.Size = new System.Drawing.Size(72, 13);
             this.lblBandBackground.TabIndex = 74;
             this.lblBandBackground.Text = "Background:";
             // 
@@ -46002,19 +46073,23 @@
             // 
             // lblBandLight
             // 
+            this.lblBandLight.AutoSize = true;
             this.lblBandLight.Image = null;
-            this.lblBandLight.Location = new System.Drawing.Point(16, 56);
+            this.lblBandLight.Location = new System.Drawing.Point(8, 61);
             this.lblBandLight.Name = "lblBandLight";
-            this.lblBandLight.Size = new System.Drawing.Size(64, 24);
+            this.lblBandLight.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblBandLight.Size = new System.Drawing.Size(40, 13);
             this.lblBandLight.TabIndex = 63;
             this.lblBandLight.Text = "Active:";
             // 
             // lblBandDark
             // 
+            this.lblBandDark.AutoSize = true;
             this.lblBandDark.Image = null;
-            this.lblBandDark.Location = new System.Drawing.Point(16, 24);
+            this.lblBandDark.Location = new System.Drawing.Point(8, 29);
             this.lblBandDark.Name = "lblBandDark";
-            this.lblBandDark.Size = new System.Drawing.Size(64, 24);
+            this.lblBandDark.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblBandDark.Size = new System.Drawing.Size(49, 13);
             this.lblBandDark.TabIndex = 61;
             this.lblBandDark.Text = "Inactive:";
             // 
@@ -46033,10 +46108,12 @@
             // 
             // lblOutOfBand
             // 
+            this.lblOutOfBand.AutoSize = true;
             this.lblOutOfBand.Image = null;
-            this.lblOutOfBand.Location = new System.Drawing.Point(16, 88);
+            this.lblOutOfBand.Location = new System.Drawing.Point(8, 93);
             this.lblOutOfBand.Name = "lblOutOfBand";
-            this.lblOutOfBand.Size = new System.Drawing.Size(72, 24);
+            this.lblOutOfBand.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblOutOfBand.Size = new System.Drawing.Size(75, 13);
             this.lblOutOfBand.TabIndex = 72;
             this.lblOutOfBand.Text = "Out Of Band:";
             // 
@@ -46055,7 +46132,7 @@
             this.grpAppearanceVFO.Controls.Add(this.lblVFOPowerOff);
             this.grpAppearanceVFO.Location = new System.Drawing.Point(223, 8);
             this.grpAppearanceVFO.Name = "grpAppearanceVFO";
-            this.grpAppearanceVFO.Size = new System.Drawing.Size(144, 231);
+            this.grpAppearanceVFO.Size = new System.Drawing.Size(144, 247);
             this.grpAppearanceVFO.TabIndex = 39;
             this.grpAppearanceVFO.TabStop = false;
             this.grpAppearanceVFO.Text = "VFO";
@@ -46065,7 +46142,7 @@
             this.clrbtnInfoButtonsColor.Automatic = "Automatic";
             this.clrbtnInfoButtonsColor.Color = System.Drawing.Color.DarkOrange;
             this.clrbtnInfoButtonsColor.Image = null;
-            this.clrbtnInfoButtonsColor.Location = new System.Drawing.Point(88, 189);
+            this.clrbtnInfoButtonsColor.Location = new System.Drawing.Point(88, 210);
             this.clrbtnInfoButtonsColor.MoreColors = "More Colors...";
             this.clrbtnInfoButtonsColor.Name = "clrbtnInfoButtonsColor";
             this.clrbtnInfoButtonsColor.Selectable = true;
@@ -46075,10 +46152,12 @@
             // 
             // labelTS58
             // 
+            this.labelTS58.AutoSize = true;
             this.labelTS58.Image = null;
-            this.labelTS58.Location = new System.Drawing.Point(18, 189);
+            this.labelTS58.Location = new System.Drawing.Point(8, 215);
             this.labelTS58.Name = "labelTS58";
-            this.labelTS58.Size = new System.Drawing.Size(60, 23);
+            this.labelTS58.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelTS58.Size = new System.Drawing.Size(62, 13);
             this.labelTS58.TabIndex = 74;
             this.labelTS58.Text = "Info Color:";
             // 
@@ -46097,10 +46176,12 @@
             // 
             // lblVFOBackground
             // 
+            this.lblVFOBackground.AutoSize = true;
             this.lblVFOBackground.Image = null;
-            this.lblVFOBackground.Location = new System.Drawing.Point(16, 88);
+            this.lblVFOBackground.Location = new System.Drawing.Point(8, 93);
             this.lblVFOBackground.Name = "lblVFOBackground";
-            this.lblVFOBackground.Size = new System.Drawing.Size(72, 24);
+            this.lblVFOBackground.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblVFOBackground.Size = new System.Drawing.Size(72, 13);
             this.lblVFOBackground.TabIndex = 72;
             this.lblVFOBackground.Text = "Background:";
             // 
@@ -46109,7 +46190,7 @@
             this.clrbtnVFOSmallColor.Automatic = "Automatic";
             this.clrbtnVFOSmallColor.Color = System.Drawing.Color.OrangeRed;
             this.clrbtnVFOSmallColor.Image = null;
-            this.clrbtnVFOSmallColor.Location = new System.Drawing.Point(88, 152);
+            this.clrbtnVFOSmallColor.Location = new System.Drawing.Point(88, 181);
             this.clrbtnVFOSmallColor.MoreColors = "More Colors...";
             this.clrbtnVFOSmallColor.Name = "clrbtnVFOSmallColor";
             this.clrbtnVFOSmallColor.Selectable = true;
@@ -46119,10 +46200,12 @@
             // 
             // lblVFOSmallColor
             // 
+            this.lblVFOSmallColor.AutoSize = true;
             this.lblVFOSmallColor.Image = null;
-            this.lblVFOSmallColor.Location = new System.Drawing.Point(16, 152);
+            this.lblVFOSmallColor.Location = new System.Drawing.Point(8, 186);
             this.lblVFOSmallColor.Name = "lblVFOSmallColor";
-            this.lblVFOSmallColor.Size = new System.Drawing.Size(72, 24);
+            this.lblVFOSmallColor.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblVFOSmallColor.Size = new System.Drawing.Size(68, 13);
             this.lblVFOSmallColor.TabIndex = 70;
             this.lblVFOSmallColor.Text = "Small Color:";
             // 
@@ -46131,7 +46214,7 @@
             this.chkVFOSmallLSD.Checked = true;
             this.chkVFOSmallLSD.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkVFOSmallLSD.Image = null;
-            this.chkVFOSmallLSD.Location = new System.Drawing.Point(16, 120);
+            this.chkVFOSmallLSD.Location = new System.Drawing.Point(11, 121);
             this.chkVFOSmallLSD.Name = "chkVFOSmallLSD";
             this.chkVFOSmallLSD.Size = new System.Drawing.Size(104, 24);
             this.chkVFOSmallLSD.TabIndex = 69;
@@ -46166,19 +46249,23 @@
             // 
             // lblVFOPowerOn
             // 
+            this.lblVFOPowerOn.AutoSize = true;
             this.lblVFOPowerOn.Image = null;
-            this.lblVFOPowerOn.Location = new System.Drawing.Point(16, 56);
+            this.lblVFOPowerOn.Location = new System.Drawing.Point(8, 61);
             this.lblVFOPowerOn.Name = "lblVFOPowerOn";
-            this.lblVFOPowerOn.Size = new System.Drawing.Size(64, 24);
+            this.lblVFOPowerOn.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblVFOPowerOn.Size = new System.Drawing.Size(40, 13);
             this.lblVFOPowerOn.TabIndex = 59;
             this.lblVFOPowerOn.Text = "Active:";
             // 
             // lblVFOPowerOff
             // 
+            this.lblVFOPowerOff.AutoSize = true;
             this.lblVFOPowerOff.Image = null;
-            this.lblVFOPowerOff.Location = new System.Drawing.Point(16, 24);
+            this.lblVFOPowerOff.Location = new System.Drawing.Point(8, 29);
             this.lblVFOPowerOff.Name = "lblVFOPowerOff";
-            this.lblVFOPowerOff.Size = new System.Drawing.Size(64, 24);
+            this.lblVFOPowerOff.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblVFOPowerOff.Size = new System.Drawing.Size(49, 13);
             this.lblVFOPowerOff.TabIndex = 57;
             this.lblVFOPowerOff.Text = "Inactive:";
             // 
@@ -46187,7 +46274,7 @@
             this.clrbtnBtnSel.Automatic = "Automatic";
             this.clrbtnBtnSel.Color = System.Drawing.Color.Yellow;
             this.clrbtnBtnSel.Image = null;
-            this.clrbtnBtnSel.Location = new System.Drawing.Point(108, 127);
+            this.clrbtnBtnSel.Location = new System.Drawing.Point(130, 128);
             this.clrbtnBtnSel.MoreColors = "More Colors...";
             this.clrbtnBtnSel.Name = "clrbtnBtnSel";
             this.clrbtnBtnSel.Selectable = true;
@@ -46197,10 +46284,12 @@
             // 
             // lblAppearanceGenBtnSel
             // 
+            this.lblAppearanceGenBtnSel.AutoSize = true;
             this.lblAppearanceGenBtnSel.Image = null;
-            this.lblAppearanceGenBtnSel.Location = new System.Drawing.Point(36, 127);
+            this.lblAppearanceGenBtnSel.Location = new System.Drawing.Point(16, 133);
             this.lblAppearanceGenBtnSel.Name = "lblAppearanceGenBtnSel";
-            this.lblAppearanceGenBtnSel.Size = new System.Drawing.Size(64, 32);
+            this.lblAppearanceGenBtnSel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblAppearanceGenBtnSel.Size = new System.Drawing.Size(91, 13);
             this.lblAppearanceGenBtnSel.TabIndex = 55;
             this.lblAppearanceGenBtnSel.Text = "Button Selected:";
             // 
@@ -46208,7 +46297,6 @@
             // 
             this.tpAppearanceDisplay.BackColor = System.Drawing.SystemColors.Control;
             this.tpAppearanceDisplay.Controls.Add(this.groupBoxTS18);
-            this.tpAppearanceDisplay.Controls.Add(this.chkPanadpatorGradient);
             this.tpAppearanceDisplay.Controls.Add(this.grpPanadaptorGradient);
             this.tpAppearanceDisplay.Controls.Add(this.grpAppRXWaterfall);
             this.tpAppearanceDisplay.Controls.Add(this.grpAppGrid);
@@ -46230,18 +46318,19 @@
             this.groupBoxTS18.Controls.Add(this.chkNoiseFloorShowDBM);
             this.groupBoxTS18.Location = new System.Drawing.Point(283, 201);
             this.groupBoxTS18.Name = "groupBoxTS18";
-            this.groupBoxTS18.Size = new System.Drawing.Size(254, 97);
+            this.groupBoxTS18.Size = new System.Drawing.Size(241, 97);
             this.groupBoxTS18.TabIndex = 97;
             this.groupBoxTS18.TabStop = false;
             this.groupBoxTS18.Text = "Panadapter Noise Floor";
             // 
             // chkNFShowDecimal
             // 
+            this.chkNFShowDecimal.AutoSize = true;
             this.chkNFShowDecimal.Image = null;
-            this.chkNFShowDecimal.Location = new System.Drawing.Point(145, 72);
+            this.chkNFShowDecimal.Location = new System.Drawing.Point(123, 74);
             this.chkNFShowDecimal.Name = "chkNFShowDecimal";
             this.chkNFShowDecimal.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkNFShowDecimal.Size = new System.Drawing.Size(96, 18);
+            this.chkNFShowDecimal.Size = new System.Drawing.Size(97, 17);
             this.chkNFShowDecimal.TabIndex = 97;
             this.chkNFShowDecimal.Text = "Show decimal";
             this.toolTip1.SetToolTip(this.chkNFShowDecimal, "Show the dBm reading and heading line");
@@ -46252,7 +46341,7 @@
             this.clrbtnNoiseFloor.Automatic = "Automatic";
             this.clrbtnNoiseFloor.Color = System.Drawing.Color.Red;
             this.clrbtnNoiseFloor.Image = null;
-            this.clrbtnNoiseFloor.Location = new System.Drawing.Point(116, 17);
+            this.clrbtnNoiseFloor.Location = new System.Drawing.Point(106, 19);
             this.clrbtnNoiseFloor.MoreColors = "More Colors...";
             this.clrbtnNoiseFloor.Name = "clrbtnNoiseFloor";
             this.clrbtnNoiseFloor.Selectable = true;
@@ -46268,7 +46357,7 @@
             0,
             0,
             65536});
-            this.udNoiseFloorLineWidth.Location = new System.Drawing.Point(116, 46);
+            this.udNoiseFloorLineWidth.Location = new System.Drawing.Point(106, 47);
             this.udNoiseFloorLineWidth.Maximum = new decimal(new int[] {
             6,
             0,
@@ -46292,53 +46381,43 @@
             // 
             // labelTS605
             // 
+            this.labelTS605.AutoSize = true;
             this.labelTS605.Image = null;
-            this.labelTS605.Location = new System.Drawing.Point(38, 46);
+            this.labelTS605.Location = new System.Drawing.Point(8, 52);
             this.labelTS605.Name = "labelTS605";
-            this.labelTS605.Size = new System.Drawing.Size(64, 20);
+            this.labelTS605.Size = new System.Drawing.Size(66, 13);
             this.labelTS605.TabIndex = 96;
             this.labelTS605.Text = "Line Width:";
-            this.labelTS605.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelTS604
             // 
+            this.labelTS604.AutoSize = true;
             this.labelTS604.Image = null;
-            this.labelTS604.Location = new System.Drawing.Point(10, 17);
+            this.labelTS604.Location = new System.Drawing.Point(8, 24);
             this.labelTS604.Name = "labelTS604";
-            this.labelTS604.Size = new System.Drawing.Size(100, 23);
+            this.labelTS604.Size = new System.Drawing.Size(93, 13);
             this.labelTS604.TabIndex = 92;
             this.labelTS604.Text = "Noise Floor Line:";
-            this.labelTS604.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // chkNoiseFloorShowDBM
             // 
+            this.chkNoiseFloorShowDBM.AutoSize = true;
             this.chkNoiseFloorShowDBM.Checked = true;
             this.chkNoiseFloorShowDBM.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkNoiseFloorShowDBM.Image = null;
-            this.chkNoiseFloorShowDBM.Location = new System.Drawing.Point(35, 72);
+            this.chkNoiseFloorShowDBM.Location = new System.Drawing.Point(8, 74);
             this.chkNoiseFloorShowDBM.Name = "chkNoiseFloorShowDBM";
             this.chkNoiseFloorShowDBM.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.chkNoiseFloorShowDBM.Size = new System.Drawing.Size(96, 18);
+            this.chkNoiseFloorShowDBM.Size = new System.Drawing.Size(80, 17);
             this.chkNoiseFloorShowDBM.TabIndex = 94;
             this.chkNoiseFloorShowDBM.Text = "Show dBm";
             this.toolTip1.SetToolTip(this.chkNoiseFloorShowDBM, "Show the dBm reading and heading line");
             this.chkNoiseFloorShowDBM.CheckedChanged += new System.EventHandler(this.chkNoiseFloorShowDBM_CheckedChanged);
             // 
-            // chkPanadpatorGradient
-            // 
-            this.chkPanadpatorGradient.AutoSize = true;
-            this.chkPanadpatorGradient.Image = null;
-            this.chkPanadpatorGradient.Location = new System.Drawing.Point(399, 304);
-            this.chkPanadpatorGradient.Name = "chkPanadpatorGradient";
-            this.chkPanadpatorGradient.Size = new System.Drawing.Size(15, 14);
-            this.chkPanadpatorGradient.TabIndex = 91;
-            this.toolTip1.SetToolTip(this.chkPanadpatorGradient, "Use gradient for data fill and dataline");
-            this.chkPanadpatorGradient.UseVisualStyleBackColor = true;
-            this.chkPanadpatorGradient.CheckedChanged += new System.EventHandler(this.chkPanadpatorGradient_CheckedChanged);
-            // 
             // grpPanadaptorGradient
             // 
             this.grpPanadaptorGradient.Controls.Add(this.btnLoadGradient);
+            this.grpPanadaptorGradient.Controls.Add(this.chkPanadpatorGradient);
             this.grpPanadaptorGradient.Controls.Add(this.btnSaveGradient);
             this.grpPanadaptorGradient.Controls.Add(this.chkDataLineGradient);
             this.grpPanadaptorGradient.Controls.Add(this.btnDefaultGradient);
@@ -46364,6 +46443,17 @@
             this.btnLoadGradient.Text = "L";
             this.toolTip1.SetToolTip(this.btnLoadGradient, "Load a gradient");
             this.btnLoadGradient.Click += new System.EventHandler(this.btnLoadGradient_Click);
+            // 
+            // chkPanadpatorGradient
+            // 
+            this.chkPanadpatorGradient.Image = null;
+            this.chkPanadpatorGradient.Location = new System.Drawing.Point(123, 0);
+            this.chkPanadpatorGradient.Name = "chkPanadpatorGradient";
+            this.chkPanadpatorGradient.Size = new System.Drawing.Size(15, 14);
+            this.chkPanadpatorGradient.TabIndex = 91;
+            this.toolTip1.SetToolTip(this.chkPanadpatorGradient, "Use gradient for data fill and dataline");
+            this.chkPanadpatorGradient.UseVisualStyleBackColor = true;
+            this.chkPanadpatorGradient.CheckedChanged += new System.EventHandler(this.chkPanadpatorGradient_CheckedChanged);
             // 
             // btnSaveGradient
             // 
@@ -46456,9 +46546,9 @@
             this.grpAppRXWaterfall.Controls.Add(this.chkShowTXFilterOnRXWaterfall);
             this.grpAppRXWaterfall.Controls.Add(this.chkShowRXZeroLineOnWaterfall);
             this.grpAppRXWaterfall.Controls.Add(this.chkShowRXFilterOnWaterfall);
-            this.grpAppRXWaterfall.Location = new System.Drawing.Point(551, 107);
+            this.grpAppRXWaterfall.Location = new System.Drawing.Point(548, 107);
             this.grpAppRXWaterfall.Name = "grpAppRXWaterfall";
-            this.grpAppRXWaterfall.Size = new System.Drawing.Size(132, 88);
+            this.grpAppRXWaterfall.Size = new System.Drawing.Size(136, 88);
             this.grpAppRXWaterfall.TabIndex = 84;
             this.grpAppRXWaterfall.TabStop = false;
             this.grpAppRXWaterfall.Text = "Waterfall";
@@ -46467,7 +46557,7 @@
             // 
             this.chkShowTXFilterOnRXWaterfall.AutoSize = true;
             this.chkShowTXFilterOnRXWaterfall.Image = null;
-            this.chkShowTXFilterOnRXWaterfall.Location = new System.Drawing.Point(6, 65);
+            this.chkShowTXFilterOnRXWaterfall.Location = new System.Drawing.Point(11, 67);
             this.chkShowTXFilterOnRXWaterfall.Name = "chkShowTXFilterOnRXWaterfall";
             this.chkShowTXFilterOnRXWaterfall.Size = new System.Drawing.Size(99, 17);
             this.chkShowTXFilterOnRXWaterfall.TabIndex = 2;
@@ -46479,7 +46569,7 @@
             // 
             this.chkShowRXZeroLineOnWaterfall.AutoSize = true;
             this.chkShowRXZeroLineOnWaterfall.Image = null;
-            this.chkShowRXZeroLineOnWaterfall.Location = new System.Drawing.Point(6, 42);
+            this.chkShowRXZeroLineOnWaterfall.Location = new System.Drawing.Point(11, 44);
             this.chkShowRXZeroLineOnWaterfall.Name = "chkShowRXZeroLineOnWaterfall";
             this.chkShowRXZeroLineOnWaterfall.Size = new System.Drawing.Size(105, 17);
             this.chkShowRXZeroLineOnWaterfall.TabIndex = 1;
@@ -46491,7 +46581,7 @@
             // 
             this.chkShowRXFilterOnWaterfall.AutoSize = true;
             this.chkShowRXFilterOnWaterfall.Image = null;
-            this.chkShowRXFilterOnWaterfall.Location = new System.Drawing.Point(6, 19);
+            this.chkShowRXFilterOnWaterfall.Location = new System.Drawing.Point(11, 21);
             this.chkShowRXFilterOnWaterfall.Name = "chkShowRXFilterOnWaterfall";
             this.chkShowRXFilterOnWaterfall.Size = new System.Drawing.Size(84, 17);
             this.chkShowRXFilterOnWaterfall.TabIndex = 0;
@@ -46527,7 +46617,7 @@
             // tbHGridColorAlpha
             // 
             this.tbHGridColorAlpha.AutoSize = false;
-            this.tbHGridColorAlpha.Location = new System.Drawing.Point(130, 104);
+            this.tbHGridColorAlpha.Location = new System.Drawing.Point(154, 103);
             this.tbHGridColorAlpha.Maximum = 255;
             this.tbHGridColorAlpha.Name = "tbHGridColorAlpha";
             this.tbHGridColorAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46541,7 +46631,7 @@
             this.clrbtnHGridColor.Automatic = "Automatic";
             this.clrbtnHGridColor.Color = System.Drawing.Color.White;
             this.clrbtnHGridColor.Image = null;
-            this.clrbtnHGridColor.Location = new System.Drawing.Point(82, 104);
+            this.clrbtnHGridColor.Location = new System.Drawing.Point(106, 103);
             this.clrbtnHGridColor.MoreColors = "More Colors...";
             this.clrbtnHGridColor.Name = "clrbtnHGridColor";
             this.clrbtnHGridColor.Selectable = true;
@@ -46551,18 +46641,18 @@
             // 
             // lblHGrid
             // 
+            this.lblHGrid.AutoSize = true;
             this.lblHGrid.Image = null;
-            this.lblHGrid.Location = new System.Drawing.Point(8, 104);
+            this.lblHGrid.Location = new System.Drawing.Point(8, 107);
             this.lblHGrid.Name = "lblHGrid";
-            this.lblHGrid.Size = new System.Drawing.Size(68, 20);
+            this.lblHGrid.Size = new System.Drawing.Size(44, 13);
             this.lblHGrid.TabIndex = 86;
             this.lblHGrid.Text = "H-Grid:";
-            this.lblHGrid.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tbGridFineAlpha
             // 
             this.tbGridFineAlpha.AutoSize = false;
-            this.tbGridFineAlpha.Location = new System.Drawing.Point(130, 76);
+            this.tbGridFineAlpha.Location = new System.Drawing.Point(154, 75);
             this.tbGridFineAlpha.Maximum = 255;
             this.tbGridFineAlpha.Name = "tbGridFineAlpha";
             this.tbGridFineAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46574,7 +46664,7 @@
             // tbGridCourseAlpha
             // 
             this.tbGridCourseAlpha.AutoSize = false;
-            this.tbGridCourseAlpha.Location = new System.Drawing.Point(130, 48);
+            this.tbGridCourseAlpha.Location = new System.Drawing.Point(154, 47);
             this.tbGridCourseAlpha.Maximum = 255;
             this.tbGridCourseAlpha.Name = "tbGridCourseAlpha";
             this.tbGridCourseAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46586,7 +46676,7 @@
             // tbBackgroundAlpha
             // 
             this.tbBackgroundAlpha.AutoSize = false;
-            this.tbBackgroundAlpha.Location = new System.Drawing.Point(130, 20);
+            this.tbBackgroundAlpha.Location = new System.Drawing.Point(154, 19);
             this.tbBackgroundAlpha.Maximum = 255;
             this.tbBackgroundAlpha.Name = "tbBackgroundAlpha";
             this.tbBackgroundAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46600,7 +46690,7 @@
             this.clrbtnGridFine.Automatic = "Automatic";
             this.clrbtnGridFine.Color = System.Drawing.Color.White;
             this.clrbtnGridFine.Image = null;
-            this.clrbtnGridFine.Location = new System.Drawing.Point(82, 76);
+            this.clrbtnGridFine.Location = new System.Drawing.Point(106, 75);
             this.clrbtnGridFine.MoreColors = "More Colors...";
             this.clrbtnGridFine.Name = "clrbtnGridFine";
             this.clrbtnGridFine.Selectable = true;
@@ -46610,30 +46700,30 @@
             // 
             // lblGridFine
             // 
+            this.lblGridFine.AutoSize = true;
             this.lblGridFine.Image = null;
-            this.lblGridFine.Location = new System.Drawing.Point(8, 76);
+            this.lblGridFine.Location = new System.Drawing.Point(8, 79);
             this.lblGridFine.Name = "lblGridFine";
-            this.lblGridFine.Size = new System.Drawing.Size(72, 20);
+            this.lblGridFine.Size = new System.Drawing.Size(68, 13);
             this.lblGridFine.TabIndex = 74;
             this.lblGridFine.Text = "V-Grid Fine:";
-            this.lblGridFine.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDisplayGridColor
             // 
+            this.lblDisplayGridColor.AutoSize = true;
             this.lblDisplayGridColor.Image = null;
-            this.lblDisplayGridColor.Location = new System.Drawing.Point(8, 48);
+            this.lblDisplayGridColor.Location = new System.Drawing.Point(8, 51);
             this.lblDisplayGridColor.Name = "lblDisplayGridColor";
-            this.lblDisplayGridColor.Size = new System.Drawing.Size(72, 20);
+            this.lblDisplayGridColor.Size = new System.Drawing.Size(43, 13);
             this.lblDisplayGridColor.TabIndex = 35;
             this.lblDisplayGridColor.Text = "V-Grid:";
-            this.lblDisplayGridColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnBackground
             // 
             this.clrbtnBackground.Automatic = "Automatic";
             this.clrbtnBackground.Color = System.Drawing.Color.Black;
             this.clrbtnBackground.Image = null;
-            this.clrbtnBackground.Location = new System.Drawing.Point(82, 20);
+            this.clrbtnBackground.Location = new System.Drawing.Point(106, 19);
             this.clrbtnBackground.MoreColors = "More Colors...";
             this.clrbtnBackground.Name = "clrbtnBackground";
             this.clrbtnBackground.Selectable = true;
@@ -46646,7 +46736,7 @@
             this.clrbtnGrid.Automatic = "Automatic";
             this.clrbtnGrid.Color = System.Drawing.Color.White;
             this.clrbtnGrid.Image = null;
-            this.clrbtnGrid.Location = new System.Drawing.Point(82, 48);
+            this.clrbtnGrid.Location = new System.Drawing.Point(106, 47);
             this.clrbtnGrid.MoreColors = "More Colors...";
             this.clrbtnGrid.Name = "clrbtnGrid";
             this.clrbtnGrid.Selectable = true;
@@ -46656,20 +46746,20 @@
             // 
             // lblDisplayBackgroundColor
             // 
+            this.lblDisplayBackgroundColor.AutoSize = true;
             this.lblDisplayBackgroundColor.Image = null;
             this.lblDisplayBackgroundColor.Location = new System.Drawing.Point(8, 23);
             this.lblDisplayBackgroundColor.Name = "lblDisplayBackgroundColor";
-            this.lblDisplayBackgroundColor.Size = new System.Drawing.Size(72, 20);
+            this.lblDisplayBackgroundColor.Size = new System.Drawing.Size(72, 13);
             this.lblDisplayBackgroundColor.TabIndex = 34;
             this.lblDisplayBackgroundColor.Text = "Background:";
-            this.lblDisplayBackgroundColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnZeroLine
             // 
             this.clrbtnZeroLine.Automatic = "Automatic";
             this.clrbtnZeroLine.Color = System.Drawing.Color.Red;
             this.clrbtnZeroLine.Image = null;
-            this.clrbtnZeroLine.Location = new System.Drawing.Point(82, 132);
+            this.clrbtnZeroLine.Location = new System.Drawing.Point(106, 131);
             this.clrbtnZeroLine.MoreColors = "More Colors...";
             this.clrbtnZeroLine.Name = "clrbtnZeroLine";
             this.clrbtnZeroLine.Selectable = true;
@@ -46679,20 +46769,20 @@
             // 
             // lblDisplayZeroLineColor
             // 
+            this.lblDisplayZeroLineColor.AutoSize = true;
             this.lblDisplayZeroLineColor.Image = null;
-            this.lblDisplayZeroLineColor.Location = new System.Drawing.Point(8, 132);
+            this.lblDisplayZeroLineColor.Location = new System.Drawing.Point(8, 135);
             this.lblDisplayZeroLineColor.Name = "lblDisplayZeroLineColor";
-            this.lblDisplayZeroLineColor.Size = new System.Drawing.Size(68, 20);
+            this.lblDisplayZeroLineColor.Size = new System.Drawing.Size(57, 13);
             this.lblDisplayZeroLineColor.TabIndex = 36;
             this.lblDisplayZeroLineColor.Text = "Zero Line:";
-            this.lblDisplayZeroLineColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnText
             // 
             this.clrbtnText.Automatic = "Automatic";
             this.clrbtnText.Color = System.Drawing.Color.Yellow;
             this.clrbtnText.Image = null;
-            this.clrbtnText.Location = new System.Drawing.Point(82, 160);
+            this.clrbtnText.Location = new System.Drawing.Point(106, 159);
             this.clrbtnText.MoreColors = "More Colors...";
             this.clrbtnText.Name = "clrbtnText";
             this.clrbtnText.Selectable = true;
@@ -46702,13 +46792,13 @@
             // 
             // lblDisplayTextColor
             // 
+            this.lblDisplayTextColor.AutoSize = true;
             this.lblDisplayTextColor.Image = null;
-            this.lblDisplayTextColor.Location = new System.Drawing.Point(8, 160);
+            this.lblDisplayTextColor.Location = new System.Drawing.Point(8, 163);
             this.lblDisplayTextColor.Name = "lblDisplayTextColor";
-            this.lblDisplayTextColor.Size = new System.Drawing.Size(68, 20);
+            this.lblDisplayTextColor.Size = new System.Drawing.Size(30, 13);
             this.lblDisplayTextColor.TabIndex = 39;
             this.lblDisplayTextColor.Text = "Text:";
-            this.lblDisplayTextColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // grpAppPanadapter
             // 
@@ -46754,7 +46844,7 @@
             // tbBandstackOverlayAlpha
             // 
             this.tbBandstackOverlayAlpha.AutoSize = false;
-            this.tbBandstackOverlayAlpha.Location = new System.Drawing.Point(176, 306);
+            this.tbBandstackOverlayAlpha.Location = new System.Drawing.Point(180, 299);
             this.tbBandstackOverlayAlpha.Maximum = 192;
             this.tbBandstackOverlayAlpha.Name = "tbBandstackOverlayAlpha";
             this.tbBandstackOverlayAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46768,7 +46858,7 @@
             this.clrbtnBandstackOverlay.Automatic = "Automatic";
             this.clrbtnBandstackOverlay.Color = System.Drawing.Color.Orange;
             this.clrbtnBandstackOverlay.Image = null;
-            this.clrbtnBandstackOverlay.Location = new System.Drawing.Point(130, 304);
+            this.clrbtnBandstackOverlay.Location = new System.Drawing.Point(130, 299);
             this.clrbtnBandstackOverlay.MoreColors = "More Colors...";
             this.clrbtnBandstackOverlay.Name = "clrbtnBandstackOverlay";
             this.clrbtnBandstackOverlay.Selectable = true;
@@ -46778,18 +46868,18 @@
             // 
             // labelTS532
             // 
+            this.labelTS532.AutoSize = true;
             this.labelTS532.Image = null;
-            this.labelTS532.Location = new System.Drawing.Point(15, 304);
+            this.labelTS532.Location = new System.Drawing.Point(6, 304);
             this.labelTS532.Name = "labelTS532";
-            this.labelTS532.Size = new System.Drawing.Size(105, 23);
+            this.labelTS532.Size = new System.Drawing.Size(103, 13);
             this.labelTS532.TabIndex = 97;
             this.labelTS532.Text = "Bandstack Overlay:";
-            this.labelTS532.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tbDataLineAlpha
             // 
             this.tbDataLineAlpha.AutoSize = false;
-            this.tbDataLineAlpha.Location = new System.Drawing.Point(176, 222);
+            this.tbDataLineAlpha.Location = new System.Drawing.Point(180, 215);
             this.tbDataLineAlpha.Maximum = 255;
             this.tbDataLineAlpha.Name = "tbDataLineAlpha";
             this.tbDataLineAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46801,7 +46891,7 @@
             // tbDataFillAlpha
             // 
             this.tbDataFillAlpha.AutoSize = false;
-            this.tbDataFillAlpha.Location = new System.Drawing.Point(176, 277);
+            this.tbDataFillAlpha.Location = new System.Drawing.Point(180, 271);
             this.tbDataFillAlpha.Maximum = 255;
             this.tbDataFillAlpha.Name = "tbDataFillAlpha";
             this.tbDataFillAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46813,7 +46903,7 @@
             // tbActiveSpectralPeakAlpha
             // 
             this.tbActiveSpectralPeakAlpha.AutoSize = false;
-            this.tbActiveSpectralPeakAlpha.Location = new System.Drawing.Point(180, 190);
+            this.tbActiveSpectralPeakAlpha.Location = new System.Drawing.Point(180, 187);
             this.tbActiveSpectralPeakAlpha.Maximum = 255;
             this.tbActiveSpectralPeakAlpha.Name = "tbActiveSpectralPeakAlpha";
             this.tbActiveSpectralPeakAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46828,7 +46918,7 @@
             this.clrbtnDataFill.Automatic = "Automatic";
             this.clrbtnDataFill.Color = System.Drawing.Color.Blue;
             this.clrbtnDataFill.Image = null;
-            this.clrbtnDataFill.Location = new System.Drawing.Point(130, 275);
+            this.clrbtnDataFill.Location = new System.Drawing.Point(130, 271);
             this.clrbtnDataFill.MoreColors = "More Colors...";
             this.clrbtnDataFill.Name = "clrbtnDataFill";
             this.clrbtnDataFill.Selectable = true;
@@ -46841,7 +46931,7 @@
             this.clrbtnActiveSpectralPeak.Automatic = "Automatic";
             this.clrbtnActiveSpectralPeak.Color = System.Drawing.Color.Gray;
             this.clrbtnActiveSpectralPeak.Image = null;
-            this.clrbtnActiveSpectralPeak.Location = new System.Drawing.Point(130, 190);
+            this.clrbtnActiveSpectralPeak.Location = new System.Drawing.Point(130, 187);
             this.clrbtnActiveSpectralPeak.MoreColors = "More Colors...";
             this.clrbtnActiveSpectralPeak.Name = "clrbtnActiveSpectralPeak";
             this.clrbtnActiveSpectralPeak.Selectable = true;
@@ -46851,29 +46941,29 @@
             // 
             // lblDisplayDataFill
             // 
+            this.lblDisplayDataFill.AutoSize = true;
             this.lblDisplayDataFill.Image = null;
-            this.lblDisplayDataFill.Location = new System.Drawing.Point(52, 275);
+            this.lblDisplayDataFill.Location = new System.Drawing.Point(6, 276);
             this.lblDisplayDataFill.Name = "lblDisplayDataFill";
-            this.lblDisplayDataFill.Size = new System.Drawing.Size(64, 20);
+            this.lblDisplayDataFill.Size = new System.Drawing.Size(52, 13);
             this.lblDisplayDataFill.TabIndex = 89;
             this.lblDisplayDataFill.Text = "Data Fill:";
-            this.lblDisplayDataFill.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblActiveSpectralPeakColour
             // 
+            this.lblActiveSpectralPeakColour.AutoSize = true;
             this.lblActiveSpectralPeakColour.Image = null;
-            this.lblActiveSpectralPeakColour.Location = new System.Drawing.Point(33, 190);
+            this.lblActiveSpectralPeakColour.Location = new System.Drawing.Point(6, 192);
             this.lblActiveSpectralPeakColour.Name = "lblActiveSpectralPeakColour";
-            this.lblActiveSpectralPeakColour.Size = new System.Drawing.Size(83, 23);
+            this.lblActiveSpectralPeakColour.Size = new System.Drawing.Size(67, 13);
             this.lblActiveSpectralPeakColour.TabIndex = 93;
             this.lblActiveSpectralPeakColour.Text = "Active Peak:";
-            this.lblActiveSpectralPeakColour.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // chkShowZeroLine
             // 
             this.chkShowZeroLine.AutoSize = true;
             this.chkShowZeroLine.Image = null;
-            this.chkShowZeroLine.Location = new System.Drawing.Point(23, 363);
+            this.chkShowZeroLine.Location = new System.Drawing.Point(8, 363);
             this.chkShowZeroLine.Name = "chkShowZeroLine";
             this.chkShowZeroLine.Size = new System.Drawing.Size(105, 17);
             this.chkShowZeroLine.TabIndex = 84;
@@ -46884,7 +46974,7 @@
             // tbGrayLineAlpha
             // 
             this.tbGrayLineAlpha.AutoSize = false;
-            this.tbGrayLineAlpha.Location = new System.Drawing.Point(180, 160);
+            this.tbGrayLineAlpha.Location = new System.Drawing.Point(180, 159);
             this.tbGrayLineAlpha.Maximum = 200;
             this.tbGrayLineAlpha.Name = "tbGrayLineAlpha";
             this.tbGrayLineAlpha.Size = new System.Drawing.Size(66, 18);
@@ -46899,7 +46989,7 @@
             this.clrbtnGrayLine.Automatic = "Automatic";
             this.clrbtnGrayLine.Color = System.Drawing.Color.Black;
             this.clrbtnGrayLine.Image = null;
-            this.clrbtnGrayLine.Location = new System.Drawing.Point(130, 160);
+            this.clrbtnGrayLine.Location = new System.Drawing.Point(130, 159);
             this.clrbtnGrayLine.MoreColors = "More Colors...";
             this.clrbtnGrayLine.Name = "clrbtnGrayLine";
             this.clrbtnGrayLine.Selectable = true;
@@ -46909,13 +46999,13 @@
             // 
             // labelgrayline
             // 
+            this.labelgrayline.AutoSize = true;
             this.labelgrayline.Image = null;
-            this.labelgrayline.Location = new System.Drawing.Point(52, 167);
+            this.labelgrayline.Location = new System.Drawing.Point(6, 164);
             this.labelgrayline.Name = "labelgrayline";
-            this.labelgrayline.Size = new System.Drawing.Size(64, 23);
+            this.labelgrayline.Size = new System.Drawing.Size(54, 13);
             this.labelgrayline.TabIndex = 89;
             this.labelgrayline.Text = "GrayLine:\r\n";
-            this.labelgrayline.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // chkGridControl
             // 
@@ -46956,7 +47046,7 @@
             // chkShowFreqOffset
             // 
             this.chkShowFreqOffset.Image = null;
-            this.chkShowFreqOffset.Location = new System.Drawing.Point(23, 338);
+            this.chkShowFreqOffset.Location = new System.Drawing.Point(8, 338);
             this.chkShowFreqOffset.Name = "chkShowFreqOffset";
             this.chkShowFreqOffset.Size = new System.Drawing.Size(120, 18);
             this.chkShowFreqOffset.TabIndex = 77;
@@ -46979,13 +47069,13 @@
             // 
             // lblSubRXZeroLine
             // 
+            this.lblSubRXZeroLine.AutoSize = true;
             this.lblSubRXZeroLine.Image = null;
-            this.lblSubRXZeroLine.Location = new System.Drawing.Point(33, 131);
+            this.lblSubRXZeroLine.Location = new System.Drawing.Point(6, 135);
             this.lblSubRXZeroLine.Name = "lblSubRXZeroLine";
-            this.lblSubRXZeroLine.Size = new System.Drawing.Size(83, 23);
+            this.lblSubRXZeroLine.Size = new System.Drawing.Size(83, 13);
             this.lblSubRXZeroLine.TabIndex = 80;
             this.lblSubRXZeroLine.Text = "MultiRX 0 Line:";
-            this.lblSubRXZeroLine.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // udDisplayLineWidth
             // 
@@ -46995,7 +47085,7 @@
             0,
             0,
             65536});
-            this.udDisplayLineWidth.Location = new System.Drawing.Point(130, 250);
+            this.udDisplayLineWidth.Location = new System.Drawing.Point(130, 243);
             this.udDisplayLineWidth.Maximum = new decimal(new int[] {
             50,
             0,
@@ -47033,23 +47123,23 @@
             // 
             // lblSubRXFilterColor
             // 
+            this.lblSubRXFilterColor.AutoSize = true;
             this.lblSubRXFilterColor.Image = null;
-            this.lblSubRXFilterColor.Location = new System.Drawing.Point(33, 103);
+            this.lblSubRXFilterColor.Location = new System.Drawing.Point(6, 107);
             this.lblSubRXFilterColor.Name = "lblSubRXFilterColor";
-            this.lblSubRXFilterColor.Size = new System.Drawing.Size(83, 23);
+            this.lblSubRXFilterColor.Size = new System.Drawing.Size(79, 13);
             this.lblSubRXFilterColor.TabIndex = 78;
             this.lblSubRXFilterColor.Text = "MultiRX Filter:";
-            this.lblSubRXFilterColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDisplayLineWidth
             // 
+            this.lblDisplayLineWidth.AutoSize = true;
             this.lblDisplayLineWidth.Image = null;
-            this.lblDisplayLineWidth.Location = new System.Drawing.Point(52, 250);
+            this.lblDisplayLineWidth.Location = new System.Drawing.Point(6, 248);
             this.lblDisplayLineWidth.Name = "lblDisplayLineWidth";
-            this.lblDisplayLineWidth.Size = new System.Drawing.Size(64, 20);
+            this.lblDisplayLineWidth.Size = new System.Drawing.Size(66, 13);
             this.lblDisplayLineWidth.TabIndex = 43;
             this.lblDisplayLineWidth.Text = "Line Width:";
-            this.lblDisplayLineWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnBandEdge
             // 
@@ -47066,20 +47156,21 @@
             // 
             // lblBandEdge
             // 
+            this.lblBandEdge.AutoSize = true;
             this.lblBandEdge.Image = null;
-            this.lblBandEdge.Location = new System.Drawing.Point(52, 75);
+            this.lblBandEdge.Location = new System.Drawing.Point(6, 79);
             this.lblBandEdge.Name = "lblBandEdge";
-            this.lblBandEdge.Size = new System.Drawing.Size(64, 23);
+            this.lblBandEdge.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblBandEdge.Size = new System.Drawing.Size(65, 13);
             this.lblBandEdge.TabIndex = 65;
             this.lblBandEdge.Text = "Band Edge:";
-            this.lblBandEdge.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnDataLine
             // 
             this.clrbtnDataLine.Automatic = "Automatic";
             this.clrbtnDataLine.Color = System.Drawing.Color.White;
             this.clrbtnDataLine.Image = null;
-            this.clrbtnDataLine.Location = new System.Drawing.Point(130, 220);
+            this.clrbtnDataLine.Location = new System.Drawing.Point(130, 215);
             this.clrbtnDataLine.MoreColors = "More Colors...";
             this.clrbtnDataLine.Name = "clrbtnDataLine";
             this.clrbtnDataLine.Selectable = true;
@@ -47102,33 +47193,33 @@
             // 
             // lblDisplayDataLineColor
             // 
+            this.lblDisplayDataLineColor.AutoSize = true;
             this.lblDisplayDataLineColor.Image = null;
-            this.lblDisplayDataLineColor.Location = new System.Drawing.Point(52, 220);
+            this.lblDisplayDataLineColor.Location = new System.Drawing.Point(6, 220);
             this.lblDisplayDataLineColor.Name = "lblDisplayDataLineColor";
-            this.lblDisplayDataLineColor.Size = new System.Drawing.Size(64, 20);
+            this.lblDisplayDataLineColor.Size = new System.Drawing.Size(58, 13);
             this.lblDisplayDataLineColor.TabIndex = 41;
             this.lblDisplayDataLineColor.Text = "Data Line:";
-            this.lblDisplayDataLineColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblTXFilterColor
             // 
+            this.lblTXFilterColor.AutoSize = true;
             this.lblTXFilterColor.Image = null;
-            this.lblTXFilterColor.Location = new System.Drawing.Point(52, 47);
+            this.lblTXFilterColor.Location = new System.Drawing.Point(6, 51);
             this.lblTXFilterColor.Name = "lblTXFilterColor";
-            this.lblTXFilterColor.Size = new System.Drawing.Size(64, 23);
+            this.lblTXFilterColor.Size = new System.Drawing.Size(51, 13);
             this.lblTXFilterColor.TabIndex = 75;
             this.lblTXFilterColor.Text = "TX Filter:";
-            this.lblTXFilterColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDisplayFilterColor
             // 
+            this.lblDisplayFilterColor.AutoSize = true;
             this.lblDisplayFilterColor.Image = null;
-            this.lblDisplayFilterColor.Location = new System.Drawing.Point(33, 19);
+            this.lblDisplayFilterColor.Location = new System.Drawing.Point(6, 23);
             this.lblDisplayFilterColor.Name = "lblDisplayFilterColor";
-            this.lblDisplayFilterColor.Size = new System.Drawing.Size(83, 23);
+            this.lblDisplayFilterColor.Size = new System.Drawing.Size(81, 13);
             this.lblDisplayFilterColor.TabIndex = 45;
             this.lblDisplayFilterColor.Text = "Main RX Filter:";
-            this.lblDisplayFilterColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // clrbtnFilter
             // 
@@ -47159,9 +47250,10 @@
             // clrbtnPeakBackground
             // 
             this.clrbtnPeakBackground.Automatic = "Automatic";
+            this.clrbtnPeakBackground.AutoSize = true;
             this.clrbtnPeakBackground.Color = System.Drawing.Color.Black;
             this.clrbtnPeakBackground.Image = null;
-            this.clrbtnPeakBackground.Location = new System.Drawing.Point(80, 56);
+            this.clrbtnPeakBackground.Location = new System.Drawing.Point(80, 46);
             this.clrbtnPeakBackground.MoreColors = "More Colors...";
             this.clrbtnPeakBackground.Name = "clrbtnPeakBackground";
             this.clrbtnPeakBackground.Selectable = true;
@@ -47171,20 +47263,21 @@
             // 
             // lblPeakBackground
             // 
+            this.lblPeakBackground.AutoSize = true;
             this.lblPeakBackground.Image = null;
-            this.lblPeakBackground.Location = new System.Drawing.Point(8, 56);
+            this.lblPeakBackground.Location = new System.Drawing.Point(8, 51);
             this.lblPeakBackground.Name = "lblPeakBackground";
-            this.lblPeakBackground.Size = new System.Drawing.Size(72, 20);
+            this.lblPeakBackground.Size = new System.Drawing.Size(72, 13);
             this.lblPeakBackground.TabIndex = 72;
             this.lblPeakBackground.Text = "Background:";
-            this.lblPeakBackground.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnPeakText
             // 
             this.clrbtnPeakText.Automatic = "Automatic";
+            this.clrbtnPeakText.AutoSize = true;
             this.clrbtnPeakText.Color = System.Drawing.Color.DodgerBlue;
             this.clrbtnPeakText.Image = null;
-            this.clrbtnPeakText.Location = new System.Drawing.Point(80, 24);
+            this.clrbtnPeakText.Location = new System.Drawing.Point(80, 18);
             this.clrbtnPeakText.MoreColors = "More Colors...";
             this.clrbtnPeakText.Name = "clrbtnPeakText";
             this.clrbtnPeakText.Selectable = true;
@@ -47194,17 +47287,18 @@
             // 
             // lblPeakText
             // 
+            this.lblPeakText.AutoSize = true;
             this.lblPeakText.Image = null;
-            this.lblPeakText.Location = new System.Drawing.Point(8, 24);
+            this.lblPeakText.Location = new System.Drawing.Point(8, 23);
             this.lblPeakText.Name = "lblPeakText";
-            this.lblPeakText.Size = new System.Drawing.Size(64, 20);
+            this.lblPeakText.Size = new System.Drawing.Size(57, 13);
             this.lblPeakText.TabIndex = 65;
             this.lblPeakText.Text = "Peak Text:";
-            this.lblPeakText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tpAppearanceMeter
             // 
             this.tpAppearanceMeter.BackColor = System.Drawing.SystemColors.Control;
+            this.tpAppearanceMeter.Controls.Add(this.chkExpMHde);
             this.tpAppearanceMeter.Controls.Add(this.groupBoxTS14);
             this.tpAppearanceMeter.Controls.Add(this.labelTS2);
             this.tpAppearanceMeter.Controls.Add(this.clrbtnMeterDigBackground);
@@ -47220,14 +47314,26 @@
             this.tpAppearanceMeter.TabIndex = 2;
             this.tpAppearanceMeter.Text = "Meter";
             // 
+            // chkExpMHde
+            // 
+            this.chkExpMHde.AutoSize = true;
+            this.chkExpMHde.Image = null;
+            this.chkExpMHde.Location = new System.Drawing.Point(11, 116);
+            this.chkExpMHde.Name = "chkExpMHde";
+            this.chkExpMHde.Size = new System.Drawing.Size(155, 17);
+            this.chkExpMHde.TabIndex = 87;
+            this.chkExpMHde.Text = "Hide Expand Multi-Meter";
+            this.chkExpMHde.UseVisualStyleBackColor = true;
+            this.chkExpMHde.CheckedChanged += new System.EventHandler(this.chkExpMHde_CheckedChanged);
+            // 
             // groupBoxTS14
             // 
             this.groupBoxTS14.Controls.Add(this.tbSignalHistoryAlpha);
             this.groupBoxTS14.Controls.Add(this.clrbtnSignalHistoryColour);
             this.groupBoxTS14.Controls.Add(this.labelTS518);
-            this.groupBoxTS14.Location = new System.Drawing.Point(19, 300);
+            this.groupBoxTS14.Location = new System.Drawing.Point(3, 300);
             this.groupBoxTS14.Name = "groupBoxTS14";
-            this.groupBoxTS14.Size = new System.Drawing.Size(206, 67);
+            this.groupBoxTS14.Size = new System.Drawing.Size(316, 67);
             this.groupBoxTS14.TabIndex = 85;
             this.groupBoxTS14.TabStop = false;
             this.groupBoxTS14.Text = "Signal History";
@@ -47235,7 +47341,7 @@
             // tbSignalHistoryAlpha
             // 
             this.tbSignalHistoryAlpha.AutoSize = false;
-            this.tbSignalHistoryAlpha.Location = new System.Drawing.Point(126, 27);
+            this.tbSignalHistoryAlpha.Location = new System.Drawing.Point(163, 25);
             this.tbSignalHistoryAlpha.Maximum = 255;
             this.tbSignalHistoryAlpha.Name = "tbSignalHistoryAlpha";
             this.tbSignalHistoryAlpha.Size = new System.Drawing.Size(66, 18);
@@ -47250,7 +47356,7 @@
             this.clrbtnSignalHistoryColour.Color = System.Drawing.Color.LimeGreen;
             this.clrbtnSignalHistoryColour.ForeColor = System.Drawing.Color.Black;
             this.clrbtnSignalHistoryColour.Image = null;
-            this.clrbtnSignalHistoryColour.Location = new System.Drawing.Point(78, 27);
+            this.clrbtnSignalHistoryColour.Location = new System.Drawing.Point(117, 25);
             this.clrbtnSignalHistoryColour.MoreColors = "More Colors...";
             this.clrbtnSignalHistoryColour.Name = "clrbtnSignalHistoryColour";
             this.clrbtnSignalHistoryColour.Selectable = true;
@@ -47261,28 +47367,32 @@
             // 
             // labelTS518
             // 
+            this.labelTS518.AutoSize = true;
             this.labelTS518.Image = null;
-            this.labelTS518.Location = new System.Drawing.Point(6, 27);
+            this.labelTS518.Location = new System.Drawing.Point(8, 30);
             this.labelTS518.Name = "labelTS518";
-            this.labelTS518.Size = new System.Drawing.Size(72, 18);
+            this.labelTS518.Size = new System.Drawing.Size(72, 13);
             this.labelTS518.TabIndex = 90;
             this.labelTS518.Text = "Background:";
+            this.labelTS518.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelTS2
             // 
+            this.labelTS2.AutoSize = true;
             this.labelTS2.Image = null;
-            this.labelTS2.Location = new System.Drawing.Point(24, 80);
+            this.labelTS2.Location = new System.Drawing.Point(8, 85);
             this.labelTS2.Name = "labelTS2";
-            this.labelTS2.Size = new System.Drawing.Size(72, 32);
+            this.labelTS2.Size = new System.Drawing.Size(109, 13);
             this.labelTS2.TabIndex = 83;
             this.labelTS2.Text = "Digital Background:";
+            this.labelTS2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnMeterDigBackground
             // 
             this.clrbtnMeterDigBackground.Automatic = "Automatic";
             this.clrbtnMeterDigBackground.Color = System.Drawing.Color.Black;
             this.clrbtnMeterDigBackground.Image = null;
-            this.clrbtnMeterDigBackground.Location = new System.Drawing.Point(96, 80);
+            this.clrbtnMeterDigBackground.Location = new System.Drawing.Point(120, 80);
             this.clrbtnMeterDigBackground.MoreColors = "More Colors...";
             this.clrbtnMeterDigBackground.Name = "clrbtnMeterDigBackground";
             this.clrbtnMeterDigBackground.Selectable = true;
@@ -47292,19 +47402,21 @@
             // 
             // lblMeterDigitalText
             // 
+            this.lblMeterDigitalText.AutoSize = true;
             this.lblMeterDigitalText.Image = null;
-            this.lblMeterDigitalText.Location = new System.Drawing.Point(24, 48);
+            this.lblMeterDigitalText.Location = new System.Drawing.Point(8, 54);
             this.lblMeterDigitalText.Name = "lblMeterDigitalText";
-            this.lblMeterDigitalText.Size = new System.Drawing.Size(72, 24);
+            this.lblMeterDigitalText.Size = new System.Drawing.Size(67, 13);
             this.lblMeterDigitalText.TabIndex = 81;
             this.lblMeterDigitalText.Text = "Digital Text:";
+            this.lblMeterDigitalText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnMeterDigText
             // 
             this.clrbtnMeterDigText.Automatic = "Automatic";
             this.clrbtnMeterDigText.Color = System.Drawing.Color.Yellow;
             this.clrbtnMeterDigText.Image = null;
-            this.clrbtnMeterDigText.Location = new System.Drawing.Point(96, 48);
+            this.clrbtnMeterDigText.Location = new System.Drawing.Point(120, 49);
             this.clrbtnMeterDigText.MoreColors = "More Colors...";
             this.clrbtnMeterDigText.Name = "clrbtnMeterDigText";
             this.clrbtnMeterDigText.Selectable = true;
@@ -47323,9 +47435,9 @@
             this.grpMeterEdge.Controls.Add(this.lblMeterEdgeHigh);
             this.grpMeterEdge.Controls.Add(this.lblMeterEdgeLow);
             this.grpMeterEdge.Controls.Add(this.clrbtnMeterEdgeLow);
-            this.grpMeterEdge.Location = new System.Drawing.Point(19, 134);
+            this.grpMeterEdge.Location = new System.Drawing.Point(3, 142);
             this.grpMeterEdge.Name = "grpMeterEdge";
-            this.grpMeterEdge.Size = new System.Drawing.Size(206, 160);
+            this.grpMeterEdge.Size = new System.Drawing.Size(317, 152);
             this.grpMeterEdge.TabIndex = 80;
             this.grpMeterEdge.TabStop = false;
             this.grpMeterEdge.Text = "Edge Style";
@@ -47333,7 +47445,7 @@
             // tbMeterEdgeBackgroundAlpha
             // 
             this.tbMeterEdgeBackgroundAlpha.AutoSize = false;
-            this.tbMeterEdgeBackgroundAlpha.Location = new System.Drawing.Point(128, 88);
+            this.tbMeterEdgeBackgroundAlpha.Location = new System.Drawing.Point(163, 88);
             this.tbMeterEdgeBackgroundAlpha.Maximum = 255;
             this.tbMeterEdgeBackgroundAlpha.Name = "tbMeterEdgeBackgroundAlpha";
             this.tbMeterEdgeBackgroundAlpha.Size = new System.Drawing.Size(66, 18);
@@ -47348,7 +47460,7 @@
             this.clrbtnEdgeIndicator.Color = System.Drawing.Color.Yellow;
             this.clrbtnEdgeIndicator.ForeColor = System.Drawing.Color.Black;
             this.clrbtnEdgeIndicator.Image = null;
-            this.clrbtnEdgeIndicator.Location = new System.Drawing.Point(80, 120);
+            this.clrbtnEdgeIndicator.Location = new System.Drawing.Point(117, 120);
             this.clrbtnEdgeIndicator.MoreColors = "More Colors...";
             this.clrbtnEdgeIndicator.Name = "clrbtnEdgeIndicator";
             this.clrbtnEdgeIndicator.Selectable = true;
@@ -47358,12 +47470,14 @@
             // 
             // labelTS1
             // 
+            this.labelTS1.AutoSize = true;
             this.labelTS1.Image = null;
-            this.labelTS1.Location = new System.Drawing.Point(8, 120);
+            this.labelTS1.Location = new System.Drawing.Point(5, 125);
             this.labelTS1.Name = "labelTS1";
-            this.labelTS1.Size = new System.Drawing.Size(56, 24);
+            this.labelTS1.Size = new System.Drawing.Size(56, 13);
             this.labelTS1.TabIndex = 78;
             this.labelTS1.Text = "Indicator:";
+            this.labelTS1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnMeterEdgeBackground
             // 
@@ -47371,7 +47485,7 @@
             this.clrbtnMeterEdgeBackground.Color = System.Drawing.Color.Black;
             this.clrbtnMeterEdgeBackground.ForeColor = System.Drawing.Color.Black;
             this.clrbtnMeterEdgeBackground.Image = null;
-            this.clrbtnMeterEdgeBackground.Location = new System.Drawing.Point(80, 88);
+            this.clrbtnMeterEdgeBackground.Location = new System.Drawing.Point(117, 88);
             this.clrbtnMeterEdgeBackground.MoreColors = "More Colors...";
             this.clrbtnMeterEdgeBackground.Name = "clrbtnMeterEdgeBackground";
             this.clrbtnMeterEdgeBackground.Selectable = true;
@@ -47381,19 +47495,21 @@
             // 
             // lblMeterEdgeBackground
             // 
+            this.lblMeterEdgeBackground.AutoSize = true;
             this.lblMeterEdgeBackground.Image = null;
-            this.lblMeterEdgeBackground.Location = new System.Drawing.Point(8, 88);
+            this.lblMeterEdgeBackground.Location = new System.Drawing.Point(5, 93);
             this.lblMeterEdgeBackground.Name = "lblMeterEdgeBackground";
-            this.lblMeterEdgeBackground.Size = new System.Drawing.Size(72, 24);
+            this.lblMeterEdgeBackground.Size = new System.Drawing.Size(72, 13);
             this.lblMeterEdgeBackground.TabIndex = 76;
             this.lblMeterEdgeBackground.Text = "Background:";
+            this.lblMeterEdgeBackground.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnMeterEdgeHigh
             // 
             this.clrbtnMeterEdgeHigh.Automatic = "Automatic";
             this.clrbtnMeterEdgeHigh.Color = System.Drawing.Color.Red;
             this.clrbtnMeterEdgeHigh.Image = null;
-            this.clrbtnMeterEdgeHigh.Location = new System.Drawing.Point(80, 56);
+            this.clrbtnMeterEdgeHigh.Location = new System.Drawing.Point(117, 56);
             this.clrbtnMeterEdgeHigh.MoreColors = "More Colors...";
             this.clrbtnMeterEdgeHigh.Name = "clrbtnMeterEdgeHigh";
             this.clrbtnMeterEdgeHigh.Selectable = true;
@@ -47403,28 +47519,32 @@
             // 
             // lblMeterEdgeHigh
             // 
+            this.lblMeterEdgeHigh.AutoSize = true;
             this.lblMeterEdgeHigh.Image = null;
-            this.lblMeterEdgeHigh.Location = new System.Drawing.Point(8, 56);
+            this.lblMeterEdgeHigh.Location = new System.Drawing.Point(5, 61);
             this.lblMeterEdgeHigh.Name = "lblMeterEdgeHigh";
-            this.lblMeterEdgeHigh.Size = new System.Drawing.Size(72, 24);
+            this.lblMeterEdgeHigh.Size = new System.Drawing.Size(66, 13);
             this.lblMeterEdgeHigh.TabIndex = 53;
             this.lblMeterEdgeHigh.Text = "High Color:";
+            this.lblMeterEdgeHigh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblMeterEdgeLow
             // 
+            this.lblMeterEdgeLow.AutoSize = true;
             this.lblMeterEdgeLow.Image = null;
-            this.lblMeterEdgeLow.Location = new System.Drawing.Point(8, 24);
+            this.lblMeterEdgeLow.Location = new System.Drawing.Point(5, 29);
             this.lblMeterEdgeLow.Name = "lblMeterEdgeLow";
-            this.lblMeterEdgeLow.Size = new System.Drawing.Size(72, 24);
+            this.lblMeterEdgeLow.Size = new System.Drawing.Size(62, 13);
             this.lblMeterEdgeLow.TabIndex = 51;
             this.lblMeterEdgeLow.Text = "Low Color:";
+            this.lblMeterEdgeLow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnMeterEdgeLow
             // 
             this.clrbtnMeterEdgeLow.Automatic = "Automatic";
             this.clrbtnMeterEdgeLow.Color = System.Drawing.Color.White;
             this.clrbtnMeterEdgeLow.Image = null;
-            this.clrbtnMeterEdgeLow.Location = new System.Drawing.Point(80, 24);
+            this.clrbtnMeterEdgeLow.Location = new System.Drawing.Point(117, 24);
             this.clrbtnMeterEdgeLow.MoreColors = "More Colors...";
             this.clrbtnMeterEdgeLow.Name = "clrbtnMeterEdgeLow";
             this.clrbtnMeterEdgeLow.Selectable = true;
@@ -47442,7 +47562,7 @@
             this.grpAppearanceMeter.Controls.Add(this.clrbtnMeterLeft);
             this.grpAppearanceMeter.Location = new System.Drawing.Point(184, 16);
             this.grpAppearanceMeter.Name = "grpAppearanceMeter";
-            this.grpAppearanceMeter.Size = new System.Drawing.Size(136, 120);
+            this.grpAppearanceMeter.Size = new System.Drawing.Size(136, 127);
             this.grpAppearanceMeter.TabIndex = 38;
             this.grpAppearanceMeter.TabStop = false;
             this.grpAppearanceMeter.Text = "Original Style";
@@ -47450,9 +47570,10 @@
             // clrbtnMeterBackground
             // 
             this.clrbtnMeterBackground.Automatic = "Automatic";
+            this.clrbtnMeterBackground.AutoSize = true;
             this.clrbtnMeterBackground.Color = System.Drawing.Color.Black;
             this.clrbtnMeterBackground.Image = null;
-            this.clrbtnMeterBackground.Location = new System.Drawing.Point(80, 88);
+            this.clrbtnMeterBackground.Location = new System.Drawing.Point(80, 95);
             this.clrbtnMeterBackground.MoreColors = "More Colors...";
             this.clrbtnMeterBackground.Name = "clrbtnMeterBackground";
             this.clrbtnMeterBackground.Selectable = true;
@@ -47462,19 +47583,21 @@
             // 
             // lblMeterBackground
             // 
+            this.lblMeterBackground.AutoSize = true;
             this.lblMeterBackground.Image = null;
-            this.lblMeterBackground.Location = new System.Drawing.Point(8, 88);
+            this.lblMeterBackground.Location = new System.Drawing.Point(8, 100);
             this.lblMeterBackground.Name = "lblMeterBackground";
-            this.lblMeterBackground.Size = new System.Drawing.Size(72, 24);
+            this.lblMeterBackground.Size = new System.Drawing.Size(72, 13);
             this.lblMeterBackground.TabIndex = 76;
             this.lblMeterBackground.Text = "Background:";
             // 
             // clrbtnMeterRight
             // 
             this.clrbtnMeterRight.Automatic = "Automatic";
+            this.clrbtnMeterRight.AutoSize = true;
             this.clrbtnMeterRight.Color = System.Drawing.Color.Lime;
             this.clrbtnMeterRight.Image = null;
-            this.clrbtnMeterRight.Location = new System.Drawing.Point(80, 56);
+            this.clrbtnMeterRight.Location = new System.Drawing.Point(80, 64);
             this.clrbtnMeterRight.MoreColors = "More Colors...";
             this.clrbtnMeterRight.Name = "clrbtnMeterRight";
             this.clrbtnMeterRight.Selectable = true;
@@ -47484,28 +47607,31 @@
             // 
             // lblAppearanceMeterRight
             // 
+            this.lblAppearanceMeterRight.AutoSize = true;
             this.lblAppearanceMeterRight.Image = null;
-            this.lblAppearanceMeterRight.Location = new System.Drawing.Point(8, 56);
+            this.lblAppearanceMeterRight.Location = new System.Drawing.Point(8, 69);
             this.lblAppearanceMeterRight.Name = "lblAppearanceMeterRight";
-            this.lblAppearanceMeterRight.Size = new System.Drawing.Size(72, 24);
+            this.lblAppearanceMeterRight.Size = new System.Drawing.Size(69, 13);
             this.lblAppearanceMeterRight.TabIndex = 53;
             this.lblAppearanceMeterRight.Text = "Right Color:";
             // 
             // lblAppearanceMeterLeft
             // 
+            this.lblAppearanceMeterLeft.AutoSize = true;
             this.lblAppearanceMeterLeft.Image = null;
-            this.lblAppearanceMeterLeft.Location = new System.Drawing.Point(8, 24);
+            this.lblAppearanceMeterLeft.Location = new System.Drawing.Point(8, 38);
             this.lblAppearanceMeterLeft.Name = "lblAppearanceMeterLeft";
-            this.lblAppearanceMeterLeft.Size = new System.Drawing.Size(72, 24);
+            this.lblAppearanceMeterLeft.Size = new System.Drawing.Size(60, 13);
             this.lblAppearanceMeterLeft.TabIndex = 51;
             this.lblAppearanceMeterLeft.Text = "Left Color:";
             // 
             // clrbtnMeterLeft
             // 
             this.clrbtnMeterLeft.Automatic = "Automatic";
+            this.clrbtnMeterLeft.AutoSize = true;
             this.clrbtnMeterLeft.Color = System.Drawing.Color.Green;
             this.clrbtnMeterLeft.Image = null;
-            this.clrbtnMeterLeft.Location = new System.Drawing.Point(80, 24);
+            this.clrbtnMeterLeft.Location = new System.Drawing.Point(80, 33);
             this.clrbtnMeterLeft.MoreColors = "More Colors...";
             this.clrbtnMeterLeft.Name = "clrbtnMeterLeft";
             this.clrbtnMeterLeft.Selectable = true;
@@ -47515,10 +47641,11 @@
             // 
             // lblMeterType
             // 
+            this.lblMeterType.AutoSize = true;
             this.lblMeterType.Image = null;
-            this.lblMeterType.Location = new System.Drawing.Point(16, 16);
+            this.lblMeterType.Location = new System.Drawing.Point(8, 19);
             this.lblMeterType.Name = "lblMeterType";
-            this.lblMeterType.Size = new System.Drawing.Size(64, 24);
+            this.lblMeterType.Size = new System.Drawing.Size(66, 13);
             this.lblMeterType.TabIndex = 79;
             this.lblMeterType.Text = "Meter Type:";
             // 
@@ -47548,14 +47675,14 @@
             // 
             // grpMultiMeterHolder
             // 
+            this.grpMultiMeterHolder.Controls.Add(this.grpMeterItemSettings);
+            this.grpMultiMeterHolder.Controls.Add(this.grpMeterItemVfoDisplaySettings);
             this.grpMultiMeterHolder.Controls.Add(this.btnMeterCopySettings);
             this.grpMultiMeterHolder.Controls.Add(this.btnMeterPasteSettings);
-            this.grpMultiMeterHolder.Controls.Add(this.grpMeterItemVfoDisplaySettings);
             this.grpMultiMeterHolder.Controls.Add(this.grpMeterItemClockSettings);
             this.grpMultiMeterHolder.Controls.Add(this.lblMMContainerBackground);
             this.grpMultiMeterHolder.Controls.Add(this.clrbtnContainerBackground);
             this.grpMultiMeterHolder.Controls.Add(this.chkContainerBorder);
-            this.grpMultiMeterHolder.Controls.Add(this.grpMeterItemSettings);
             this.grpMultiMeterHolder.Controls.Add(this.btnMeterUp);
             this.grpMultiMeterHolder.Controls.Add(this.btnMeterDown);
             this.grpMultiMeterHolder.Controls.Add(this.btnRemoveMeterItem);
@@ -47573,29 +47700,811 @@
             this.grpMultiMeterHolder.TabIndex = 86;
             this.grpMultiMeterHolder.TabStop = false;
             // 
-            // btnMeterCopySettings
+            // grpMeterItemSettings
             // 
-            this.btnMeterCopySettings.Image = global::Thetis.Properties.Resources.pipette32;
-            this.btnMeterCopySettings.Location = new System.Drawing.Point(336, 293);
-            this.btnMeterCopySettings.Name = "btnMeterCopySettings";
-            this.btnMeterCopySettings.Selectable = true;
-            this.btnMeterCopySettings.Size = new System.Drawing.Size(32, 32);
-            this.btnMeterCopySettings.TabIndex = 103;
-            this.toolTip1.SetToolTip(this.btnMeterCopySettings, "Copy settings and colours");
-            this.btnMeterCopySettings.UseVisualStyleBackColor = true;
-            this.btnMeterCopySettings.Click += new System.EventHandler(this.btnMeterCopySettings_Click);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemIgnoreHistoryDuration);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMHistoryIgnore);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPowerScale);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemEyeBezelScale);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMEyeBezelSize);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShowSubIndicator);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMIndicatorSub);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSubIndiciator);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShowIndicator);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMsegSolHigh);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMsegSolLow);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSegmentedSolidColourHigh);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSolid);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemsPowerLimit);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMPowerLimit);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemDarkMode);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSignalAverage);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemEyeScale);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMEyeSize);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemMeterTitle);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPeakValueColour);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSegmentedSolidColourLow);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemDecayRate);
+            this.grpMeterItemSettings.Controls.Add(this.labelTS169);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemAttackRate);
+            this.grpMeterItemSettings.Controls.Add(this.labelTS168);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemUpdateRate);
+            this.grpMeterItemSettings.Controls.Add(this.labelTS167);
+            this.grpMeterItemSettings.Controls.Add(this.tbMeterItemHistoryAlpha);
+            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemHistoryDuration);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMHistory);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemPeakValue);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemTitle);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSegmented);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMBackground);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHBackground);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHistory);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPeakHold);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMIndicator);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemIndiciator);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMHigh);
+            this.grpMeterItemSettings.Controls.Add(this.lblMMLow);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHigh);
+            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemLow);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShadow);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemPeakHold);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemHistory);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemFadeOnTx);
+            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemFadeOnRx);
+            this.grpMeterItemSettings.Location = new System.Drawing.Point(374, 15);
+            this.grpMeterItemSettings.Name = "grpMeterItemSettings";
+            this.grpMeterItemSettings.Size = new System.Drawing.Size(323, 364);
+            this.grpMeterItemSettings.TabIndex = 96;
+            this.grpMeterItemSettings.TabStop = false;
+            this.grpMeterItemSettings.Text = "Settings";
+            this.grpMeterItemSettings.Visible = false;
             // 
-            // btnMeterPasteSettings
+            // nudMeterItemIgnoreHistoryDuration
             // 
-            this.btnMeterPasteSettings.Image = global::Thetis.Properties.Resources.brush32;
-            this.btnMeterPasteSettings.Location = new System.Drawing.Point(336, 340);
-            this.btnMeterPasteSettings.Name = "btnMeterPasteSettings";
-            this.btnMeterPasteSettings.Selectable = true;
-            this.btnMeterPasteSettings.Size = new System.Drawing.Size(32, 32);
-            this.btnMeterPasteSettings.TabIndex = 102;
-            this.toolTip1.SetToolTip(this.btnMeterPasteSettings, "Paste settings and colours into suitable meter item");
-            this.btnMeterPasteSettings.UseVisualStyleBackColor = true;
-            this.btnMeterPasteSettings.Click += new System.EventHandler(this.btnMeterPasteSettings_Click);
+            this.nudMeterItemIgnoreHistoryDuration.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemIgnoreHistoryDuration.Location = new System.Drawing.Point(247, 161);
+            this.nudMeterItemIgnoreHistoryDuration.Maximum = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.nudMeterItemIgnoreHistoryDuration.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMeterItemIgnoreHistoryDuration.Name = "nudMeterItemIgnoreHistoryDuration";
+            this.nudMeterItemIgnoreHistoryDuration.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemIgnoreHistoryDuration.TabIndex = 127;
+            this.nudMeterItemIgnoreHistoryDuration.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemIgnoreHistoryDuration, "When rx/tx transition or band change let meters settle before gathering history/p" +
+        "eak values");
+            this.nudMeterItemIgnoreHistoryDuration.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.nudMeterItemIgnoreHistoryDuration.ValueChanged += new System.EventHandler(this.nudMeterItemIgnoreHistoryDuration_ValueChanged);
+            // 
+            // lblMMHistoryIgnore
+            // 
+            this.lblMMHistoryIgnore.Image = null;
+            this.lblMMHistoryIgnore.Location = new System.Drawing.Point(107, 163);
+            this.lblMMHistoryIgnore.Name = "lblMMHistoryIgnore";
+            this.lblMMHistoryIgnore.Size = new System.Drawing.Size(134, 16);
+            this.lblMMHistoryIgnore.TabIndex = 126;
+            this.lblMMHistoryIgnore.Text = "Ignore History/Peak (ms):";
+            this.lblMMHistoryIgnore.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // clrbtnMeterItemPowerScale
+            // 
+            this.clrbtnMeterItemPowerScale.Automatic = "Automatic";
+            this.clrbtnMeterItemPowerScale.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemPowerScale.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemPowerScale.Image = null;
+            this.clrbtnMeterItemPowerScale.Location = new System.Drawing.Point(272, 335);
+            this.clrbtnMeterItemPowerScale.MoreColors = "More Colors...";
+            this.clrbtnMeterItemPowerScale.Name = "clrbtnMeterItemPowerScale";
+            this.clrbtnMeterItemPowerScale.Selectable = true;
+            this.clrbtnMeterItemPowerScale.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemPowerScale.TabIndex = 125;
+            this.clrbtnMeterItemPowerScale.Changed += new System.EventHandler(this.clrbtnMeterItemPowerScale_Changed);
+            // 
+            // nudMeterItemEyeBezelScale
+            // 
+            this.nudMeterItemEyeBezelScale.DecimalPlaces = 2;
+            this.nudMeterItemEyeBezelScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMeterItemEyeBezelScale.Location = new System.Drawing.Point(83, 336);
+            this.nudMeterItemEyeBezelScale.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemEyeBezelScale.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMeterItemEyeBezelScale.Name = "nudMeterItemEyeBezelScale";
+            this.nudMeterItemEyeBezelScale.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemEyeBezelScale.TabIndex = 124;
+            this.nudMeterItemEyeBezelScale.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemEyeBezelScale, "Size of the eye bezel, 1.0 is full width of container");
+            this.nudMeterItemEyeBezelScale.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemEyeBezelScale.ValueChanged += new System.EventHandler(this.nudMeterItemEyeBezelScale_ValueChanged);
+            // 
+            // lblMMEyeBezelSize
+            // 
+            this.lblMMEyeBezelSize.Image = null;
+            this.lblMMEyeBezelSize.Location = new System.Drawing.Point(13, 338);
+            this.lblMMEyeBezelSize.Name = "lblMMEyeBezelSize";
+            this.lblMMEyeBezelSize.Size = new System.Drawing.Size(64, 16);
+            this.lblMMEyeBezelSize.TabIndex = 123;
+            this.lblMMEyeBezelSize.Text = "Bezel Size:";
+            this.lblMMEyeBezelSize.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // chkMeterItemShowSubIndicator
+            // 
+            this.chkMeterItemShowSubIndicator.AutoSize = true;
+            this.chkMeterItemShowSubIndicator.Image = null;
+            this.chkMeterItemShowSubIndicator.Location = new System.Drawing.Point(264, 107);
+            this.chkMeterItemShowSubIndicator.Name = "chkMeterItemShowSubIndicator";
+            this.chkMeterItemShowSubIndicator.Size = new System.Drawing.Size(55, 17);
+            this.chkMeterItemShowSubIndicator.TabIndex = 122;
+            this.chkMeterItemShowSubIndicator.Text = "Show";
+            this.toolTip1.SetToolTip(this.chkMeterItemShowSubIndicator, "Show sub indicators");
+            this.chkMeterItemShowSubIndicator.UseVisualStyleBackColor = true;
+            this.chkMeterItemShowSubIndicator.CheckedChanged += new System.EventHandler(this.chkMeterItemShowSubIndicator_CheckedChanged);
+            // 
+            // lblMMIndicatorSub
+            // 
+            this.lblMMIndicatorSub.AutoSize = true;
+            this.lblMMIndicatorSub.Image = null;
+            this.lblMMIndicatorSub.Location = new System.Drawing.Point(178, 108);
+            this.lblMMIndicatorSub.Name = "lblMMIndicatorSub";
+            this.lblMMIndicatorSub.Size = new System.Drawing.Size(41, 13);
+            this.lblMMIndicatorSub.TabIndex = 121;
+            this.lblMMIndicatorSub.Text = "Sub(s):";
+            // 
+            // clrbtnMeterItemSubIndiciator
+            // 
+            this.clrbtnMeterItemSubIndiciator.Automatic = "Automatic";
+            this.clrbtnMeterItemSubIndiciator.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemSubIndiciator.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemSubIndiciator.Image = null;
+            this.clrbtnMeterItemSubIndiciator.Location = new System.Drawing.Point(222, 104);
+            this.clrbtnMeterItemSubIndiciator.MoreColors = "More Colors...";
+            this.clrbtnMeterItemSubIndiciator.Name = "clrbtnMeterItemSubIndiciator";
+            this.clrbtnMeterItemSubIndiciator.Selectable = true;
+            this.clrbtnMeterItemSubIndiciator.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemSubIndiciator.TabIndex = 120;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemSubIndiciator, "Sub Indicator colour for sub needles and avg markers on some horizontal meters");
+            this.clrbtnMeterItemSubIndiciator.Changed += new System.EventHandler(this.clrbtnMeterItemSubIndiciator_Changed);
+            // 
+            // chkMeterItemShowIndicator
+            // 
+            this.chkMeterItemShowIndicator.AutoSize = true;
+            this.chkMeterItemShowIndicator.Image = null;
+            this.chkMeterItemShowIndicator.Location = new System.Drawing.Point(128, 107);
+            this.chkMeterItemShowIndicator.Name = "chkMeterItemShowIndicator";
+            this.chkMeterItemShowIndicator.Size = new System.Drawing.Size(55, 17);
+            this.chkMeterItemShowIndicator.TabIndex = 119;
+            this.chkMeterItemShowIndicator.Text = "Show";
+            this.toolTip1.SetToolTip(this.chkMeterItemShowIndicator, "Show the indicator line on horizontal bar meters");
+            this.chkMeterItemShowIndicator.UseVisualStyleBackColor = true;
+            this.chkMeterItemShowIndicator.CheckedChanged += new System.EventHandler(this.chkMeterItemShowIndicator_CheckedChanged);
+            // 
+            // lblMMsegSolHigh
+            // 
+            this.lblMMsegSolHigh.AutoSize = true;
+            this.lblMMsegSolHigh.Image = null;
+            this.lblMMsegSolHigh.Location = new System.Drawing.Point(145, 207);
+            this.lblMMsegSolHigh.Name = "lblMMsegSolHigh";
+            this.lblMMsegSolHigh.Size = new System.Drawing.Size(31, 13);
+            this.lblMMsegSolHigh.TabIndex = 118;
+            this.lblMMsegSolHigh.Text = "high";
+            // 
+            // lblMMsegSolLow
+            // 
+            this.lblMMsegSolLow.AutoSize = true;
+            this.lblMMsegSolLow.Image = null;
+            this.lblMMsegSolLow.Location = new System.Drawing.Point(103, 207);
+            this.lblMMsegSolLow.Name = "lblMMsegSolLow";
+            this.lblMMsegSolLow.Size = new System.Drawing.Size(26, 13);
+            this.lblMMsegSolLow.TabIndex = 117;
+            this.lblMMsegSolLow.Text = "low";
+            // 
+            // clrbtnMeterItemSegmentedSolidColourHigh
+            // 
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Automatic = "Automatic";
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemSegmentedSolidColourHigh.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Image = null;
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Location = new System.Drawing.Point(141, 226);
+            this.clrbtnMeterItemSegmentedSolidColourHigh.MoreColors = "More Colors...";
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Name = "clrbtnMeterItemSegmentedSolidColourHigh";
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Selectable = true;
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemSegmentedSolidColourHigh.TabIndex = 116;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemSegmentedSolidColourHigh, "High section colour");
+            this.clrbtnMeterItemSegmentedSolidColourHigh.Changed += new System.EventHandler(this.clrbtnMeterItemSegmentedSolidColourHigh_Changed);
+            // 
+            // chkMeterItemSolid
+            // 
+            this.chkMeterItemSolid.AutoSize = true;
+            this.chkMeterItemSolid.Image = null;
+            this.chkMeterItemSolid.Location = new System.Drawing.Point(18, 240);
+            this.chkMeterItemSolid.Name = "chkMeterItemSolid";
+            this.chkMeterItemSolid.Size = new System.Drawing.Size(52, 17);
+            this.chkMeterItemSolid.TabIndex = 115;
+            this.chkMeterItemSolid.Text = "Solid";
+            this.toolTip1.SetToolTip(this.chkMeterItemSolid, "Solid bar");
+            this.chkMeterItemSolid.UseVisualStyleBackColor = true;
+            this.chkMeterItemSolid.CheckedChanged += new System.EventHandler(this.chkMeterItemSolid_CheckedChanged);
+            // 
+            // nudMeterItemsPowerLimit
+            // 
+            this.nudMeterItemsPowerLimit.DecimalPlaces = 1;
+            this.nudMeterItemsPowerLimit.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nudMeterItemsPowerLimit.Location = new System.Drawing.Point(214, 336);
+            this.nudMeterItemsPowerLimit.Maximum = new decimal(new int[] {
+            2500,
+            0,
+            0,
+            0});
+            this.nudMeterItemsPowerLimit.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.nudMeterItemsPowerLimit.Name = "nudMeterItemsPowerLimit";
+            this.nudMeterItemsPowerLimit.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemsPowerLimit.TabIndex = 114;
+            this.nudMeterItemsPowerLimit.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemsPowerLimit, "Power limit of scale");
+            this.nudMeterItemsPowerLimit.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudMeterItemsPowerLimit.ValueChanged += new System.EventHandler(this.nudMeterItemsPowerLimit_ValueChanged);
+            // 
+            // lblMMPowerLimit
+            // 
+            this.lblMMPowerLimit.Image = null;
+            this.lblMMPowerLimit.Location = new System.Drawing.Point(164, 338);
+            this.lblMMPowerLimit.Name = "lblMMPowerLimit";
+            this.lblMMPowerLimit.Size = new System.Drawing.Size(44, 16);
+            this.lblMMPowerLimit.TabIndex = 113;
+            this.lblMMPowerLimit.Text = "Power:";
+            this.lblMMPowerLimit.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // chkMeterItemDarkMode
+            // 
+            this.chkMeterItemDarkMode.AutoSize = true;
+            this.chkMeterItemDarkMode.Image = null;
+            this.chkMeterItemDarkMode.Location = new System.Drawing.Point(197, 309);
+            this.chkMeterItemDarkMode.Name = "chkMeterItemDarkMode";
+            this.chkMeterItemDarkMode.Size = new System.Drawing.Size(83, 17);
+            this.chkMeterItemDarkMode.TabIndex = 112;
+            this.chkMeterItemDarkMode.Text = "Dark Mode";
+            this.chkMeterItemDarkMode.UseVisualStyleBackColor = true;
+            this.chkMeterItemDarkMode.CheckedChanged += new System.EventHandler(this.chkMeterItemDarkMode_CheckedChanged);
+            // 
+            // chkMeterItemSignalAverage
+            // 
+            this.chkMeterItemSignalAverage.AutoSize = true;
+            this.chkMeterItemSignalAverage.Image = null;
+            this.chkMeterItemSignalAverage.Location = new System.Drawing.Point(197, 286);
+            this.chkMeterItemSignalAverage.Name = "chkMeterItemSignalAverage";
+            this.chkMeterItemSignalAverage.Size = new System.Drawing.Size(102, 17);
+            this.chkMeterItemSignalAverage.TabIndex = 111;
+            this.chkMeterItemSignalAverage.Text = "Signal Average";
+            this.toolTip1.SetToolTip(this.chkMeterItemSignalAverage, "Use sig average instead of sig");
+            this.chkMeterItemSignalAverage.UseVisualStyleBackColor = true;
+            this.chkMeterItemSignalAverage.CheckedChanged += new System.EventHandler(this.chkMeterItemSignalAverage_CheckedChanged);
+            // 
+            // nudMeterItemEyeScale
+            // 
+            this.nudMeterItemEyeScale.DecimalPlaces = 2;
+            this.nudMeterItemEyeScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMeterItemEyeScale.Location = new System.Drawing.Point(83, 312);
+            this.nudMeterItemEyeScale.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemEyeScale.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudMeterItemEyeScale.Name = "nudMeterItemEyeScale";
+            this.nudMeterItemEyeScale.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemEyeScale.TabIndex = 110;
+            this.nudMeterItemEyeScale.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemEyeScale, "Size of the eye, 1.0 is full width of container");
+            this.nudMeterItemEyeScale.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemEyeScale.ValueChanged += new System.EventHandler(this.nudMeterItemEyeScale_ValueChanged);
+            // 
+            // lblMMEyeSize
+            // 
+            this.lblMMEyeSize.Image = null;
+            this.lblMMEyeSize.Location = new System.Drawing.Point(13, 314);
+            this.lblMMEyeSize.Name = "lblMMEyeSize";
+            this.lblMMEyeSize.Size = new System.Drawing.Size(64, 16);
+            this.lblMMEyeSize.TabIndex = 109;
+            this.lblMMEyeSize.Text = "Eye Size:";
+            this.lblMMEyeSize.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // clrbtnMeterItemMeterTitle
+            // 
+            this.clrbtnMeterItemMeterTitle.Automatic = "Automatic";
+            this.clrbtnMeterItemMeterTitle.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemMeterTitle.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemMeterTitle.Image = null;
+            this.clrbtnMeterItemMeterTitle.Location = new System.Drawing.Point(99, 258);
+            this.clrbtnMeterItemMeterTitle.MoreColors = "More Colors...";
+            this.clrbtnMeterItemMeterTitle.Name = "clrbtnMeterItemMeterTitle";
+            this.clrbtnMeterItemMeterTitle.Selectable = true;
+            this.clrbtnMeterItemMeterTitle.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemMeterTitle.TabIndex = 108;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemMeterTitle, "Meter title colour");
+            this.clrbtnMeterItemMeterTitle.Changed += new System.EventHandler(this.clrbtnMeterItemMeterTitle_Changed);
+            // 
+            // clrbtnMeterItemPeakValueColour
+            // 
+            this.clrbtnMeterItemPeakValueColour.Automatic = "Automatic";
+            this.clrbtnMeterItemPeakValueColour.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemPeakValueColour.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemPeakValueColour.Image = null;
+            this.clrbtnMeterItemPeakValueColour.Location = new System.Drawing.Point(99, 281);
+            this.clrbtnMeterItemPeakValueColour.MoreColors = "More Colors...";
+            this.clrbtnMeterItemPeakValueColour.Name = "clrbtnMeterItemPeakValueColour";
+            this.clrbtnMeterItemPeakValueColour.Selectable = true;
+            this.clrbtnMeterItemPeakValueColour.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemPeakValueColour.TabIndex = 107;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemPeakValueColour, "Peak value colour");
+            this.clrbtnMeterItemPeakValueColour.Changed += new System.EventHandler(this.clrbtnMeterItemPeakValueColour_Changed);
+            // 
+            // clrbtnMeterItemSegmentedSolidColourLow
+            // 
+            this.clrbtnMeterItemSegmentedSolidColourLow.Automatic = "Automatic";
+            this.clrbtnMeterItemSegmentedSolidColourLow.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemSegmentedSolidColourLow.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemSegmentedSolidColourLow.Image = null;
+            this.clrbtnMeterItemSegmentedSolidColourLow.Location = new System.Drawing.Point(99, 226);
+            this.clrbtnMeterItemSegmentedSolidColourLow.MoreColors = "More Colors...";
+            this.clrbtnMeterItemSegmentedSolidColourLow.Name = "clrbtnMeterItemSegmentedSolidColourLow";
+            this.clrbtnMeterItemSegmentedSolidColourLow.Selectable = true;
+            this.clrbtnMeterItemSegmentedSolidColourLow.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemSegmentedSolidColourLow.TabIndex = 106;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemSegmentedSolidColourLow, "Low section colour");
+            this.clrbtnMeterItemSegmentedSolidColourLow.Changed += new System.EventHandler(this.clrbtnMeterItemSegmentedSolidColourLow_Changed);
+            // 
+            // nudMeterItemDecayRate
+            // 
+            this.nudMeterItemDecayRate.DecimalPlaces = 2;
+            this.nudMeterItemDecayRate.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.nudMeterItemDecayRate.Location = new System.Drawing.Point(225, 45);
+            this.nudMeterItemDecayRate.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemDecayRate.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMeterItemDecayRate.Name = "nudMeterItemDecayRate";
+            this.nudMeterItemDecayRate.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemDecayRate.TabIndex = 105;
+            this.nudMeterItemDecayRate.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemDecayRate, "The \'speed of fall\' to the new value if below current");
+            this.nudMeterItemDecayRate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemDecayRate.ValueChanged += new System.EventHandler(this.nudMeterItemDecayRate_ValueChanged);
+            // 
+            // labelTS169
+            // 
+            this.labelTS169.Image = null;
+            this.labelTS169.Location = new System.Drawing.Point(169, 47);
+            this.labelTS169.Name = "labelTS169";
+            this.labelTS169.Size = new System.Drawing.Size(50, 16);
+            this.labelTS169.TabIndex = 104;
+            this.labelTS169.Text = "Decay:";
+            this.labelTS169.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // nudMeterItemAttackRate
+            // 
+            this.nudMeterItemAttackRate.DecimalPlaces = 2;
+            this.nudMeterItemAttackRate.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            131072});
+            this.nudMeterItemAttackRate.Location = new System.Drawing.Point(107, 45);
+            this.nudMeterItemAttackRate.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemAttackRate.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMeterItemAttackRate.Name = "nudMeterItemAttackRate";
+            this.nudMeterItemAttackRate.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemAttackRate.TabIndex = 103;
+            this.nudMeterItemAttackRate.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemAttackRate, "The \'speed of rise\' to the new value if above current");
+            this.nudMeterItemAttackRate.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemAttackRate.ValueChanged += new System.EventHandler(this.nudMeterItemAttackRate_ValueChanged);
+            // 
+            // labelTS168
+            // 
+            this.labelTS168.Image = null;
+            this.labelTS168.Location = new System.Drawing.Point(22, 47);
+            this.labelTS168.Name = "labelTS168";
+            this.labelTS168.Size = new System.Drawing.Size(79, 16);
+            this.labelTS168.TabIndex = 102;
+            this.labelTS168.Text = "Attack:";
+            this.labelTS168.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // nudMeterItemUpdateRate
+            // 
+            this.nudMeterItemUpdateRate.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemUpdateRate.Location = new System.Drawing.Point(107, 20);
+            this.nudMeterItemUpdateRate.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.nudMeterItemUpdateRate.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudMeterItemUpdateRate.Name = "nudMeterItemUpdateRate";
+            this.nudMeterItemUpdateRate.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemUpdateRate.TabIndex = 101;
+            this.nudMeterItemUpdateRate.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemUpdateRate, "Reading update and is related to screen update");
+            this.nudMeterItemUpdateRate.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudMeterItemUpdateRate.ValueChanged += new System.EventHandler(this.nudMeterItemUpdateRate_ValueChanged);
+            // 
+            // labelTS167
+            // 
+            this.labelTS167.Image = null;
+            this.labelTS167.Location = new System.Drawing.Point(22, 22);
+            this.labelTS167.Name = "labelTS167";
+            this.labelTS167.Size = new System.Drawing.Size(79, 16);
+            this.labelTS167.TabIndex = 100;
+            this.labelTS167.Text = "Update (ms):";
+            this.labelTS167.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // tbMeterItemHistoryAlpha
+            // 
+            this.tbMeterItemHistoryAlpha.AutoSize = false;
+            this.tbMeterItemHistoryAlpha.Location = new System.Drawing.Point(254, 213);
+            this.tbMeterItemHistoryAlpha.Maximum = 255;
+            this.tbMeterItemHistoryAlpha.Name = "tbMeterItemHistoryAlpha";
+            this.tbMeterItemHistoryAlpha.Size = new System.Drawing.Size(66, 18);
+            this.tbMeterItemHistoryAlpha.TabIndex = 99;
+            this.tbMeterItemHistoryAlpha.TickFrequency = 64;
+            this.tbMeterItemHistoryAlpha.Value = 255;
+            this.tbMeterItemHistoryAlpha.Scroll += new System.EventHandler(this.tbMeterItemHistoryAlpha_Scroll);
+            // 
+            // nudMeterItemHistoryDuration
+            // 
+            this.nudMeterItemHistoryDuration.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMeterItemHistoryDuration.Location = new System.Drawing.Point(247, 136);
+            this.nudMeterItemHistoryDuration.Maximum = new decimal(new int[] {
+            30000,
+            0,
+            0,
+            0});
+            this.nudMeterItemHistoryDuration.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudMeterItemHistoryDuration.Name = "nudMeterItemHistoryDuration";
+            this.nudMeterItemHistoryDuration.Size = new System.Drawing.Size(56, 22);
+            this.nudMeterItemHistoryDuration.TabIndex = 98;
+            this.nudMeterItemHistoryDuration.TinyStep = false;
+            this.toolTip1.SetToolTip(this.nudMeterItemHistoryDuration, "History duration for history display and peak hold");
+            this.nudMeterItemHistoryDuration.Value = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+            this.nudMeterItemHistoryDuration.ValueChanged += new System.EventHandler(this.nudMeterItemHistoryDuration_ValueChanged);
+            // 
+            // lblMMHistory
+            // 
+            this.lblMMHistory.Image = null;
+            this.lblMMHistory.Location = new System.Drawing.Point(162, 138);
+            this.lblMMHistory.Name = "lblMMHistory";
+            this.lblMMHistory.Size = new System.Drawing.Size(79, 16);
+            this.lblMMHistory.TabIndex = 97;
+            this.lblMMHistory.Text = "History (ms):";
+            this.lblMMHistory.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // chkMeterItemPeakValue
+            // 
+            this.chkMeterItemPeakValue.AutoSize = true;
+            this.chkMeterItemPeakValue.Image = null;
+            this.chkMeterItemPeakValue.Location = new System.Drawing.Point(18, 286);
+            this.chkMeterItemPeakValue.Name = "chkMeterItemPeakValue";
+            this.chkMeterItemPeakValue.Size = new System.Drawing.Size(81, 17);
+            this.chkMeterItemPeakValue.TabIndex = 96;
+            this.chkMeterItemPeakValue.Text = "Peak Value";
+            this.toolTip1.SetToolTip(this.chkMeterItemPeakValue, "Show peak value");
+            this.chkMeterItemPeakValue.UseVisualStyleBackColor = true;
+            this.chkMeterItemPeakValue.CheckedChanged += new System.EventHandler(this.chkMeterItemPeakValue_CheckedChanged);
+            // 
+            // chkMeterItemTitle
+            // 
+            this.chkMeterItemTitle.AutoSize = true;
+            this.chkMeterItemTitle.Image = null;
+            this.chkMeterItemTitle.Location = new System.Drawing.Point(18, 263);
+            this.chkMeterItemTitle.Name = "chkMeterItemTitle";
+            this.chkMeterItemTitle.Size = new System.Drawing.Size(81, 17);
+            this.chkMeterItemTitle.TabIndex = 95;
+            this.chkMeterItemTitle.Text = "Meter Title";
+            this.toolTip1.SetToolTip(this.chkMeterItemTitle, "Show meter title");
+            this.chkMeterItemTitle.UseVisualStyleBackColor = true;
+            this.chkMeterItemTitle.CheckedChanged += new System.EventHandler(this.chkMeterItemTitle_CheckedChanged);
+            // 
+            // chkMeterItemSegmented
+            // 
+            this.chkMeterItemSegmented.AutoSize = true;
+            this.chkMeterItemSegmented.Image = null;
+            this.chkMeterItemSegmented.Location = new System.Drawing.Point(18, 217);
+            this.chkMeterItemSegmented.Name = "chkMeterItemSegmented";
+            this.chkMeterItemSegmented.Size = new System.Drawing.Size(84, 17);
+            this.chkMeterItemSegmented.TabIndex = 94;
+            this.chkMeterItemSegmented.Text = "Segmented";
+            this.toolTip1.SetToolTip(this.chkMeterItemSegmented, "Segmented bar");
+            this.chkMeterItemSegmented.UseVisualStyleBackColor = true;
+            this.chkMeterItemSegmented.CheckedChanged += new System.EventHandler(this.chkMeterItemSegmented_CheckedChanged);
+            // 
+            // lblMMBackground
+            // 
+            this.lblMMBackground.AutoSize = true;
+            this.lblMMBackground.Image = null;
+            this.lblMMBackground.Location = new System.Drawing.Point(196, 22);
+            this.lblMMBackground.Name = "lblMMBackground";
+            this.lblMMBackground.Size = new System.Drawing.Size(72, 13);
+            this.lblMMBackground.TabIndex = 93;
+            this.lblMMBackground.Text = "Background:";
+            // 
+            // clrbtnMeterItemHBackground
+            // 
+            this.clrbtnMeterItemHBackground.Automatic = "Automatic";
+            this.clrbtnMeterItemHBackground.Color = System.Drawing.Color.LimeGreen;
+            this.clrbtnMeterItemHBackground.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemHBackground.Image = null;
+            this.clrbtnMeterItemHBackground.Location = new System.Drawing.Point(272, 19);
+            this.clrbtnMeterItemHBackground.MoreColors = "More Colors...";
+            this.clrbtnMeterItemHBackground.Name = "clrbtnMeterItemHBackground";
+            this.clrbtnMeterItemHBackground.Selectable = true;
+            this.clrbtnMeterItemHBackground.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemHBackground.TabIndex = 92;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemHBackground, "Background colour");
+            this.clrbtnMeterItemHBackground.Changed += new System.EventHandler(this.clrbtnMeterItemHBackground_Changed);
+            // 
+            // clrbtnMeterItemHistory
+            // 
+            this.clrbtnMeterItemHistory.Automatic = "Automatic";
+            this.clrbtnMeterItemHistory.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemHistory.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemHistory.Image = null;
+            this.clrbtnMeterItemHistory.Location = new System.Drawing.Point(212, 211);
+            this.clrbtnMeterItemHistory.MoreColors = "More Colors...";
+            this.clrbtnMeterItemHistory.Name = "clrbtnMeterItemHistory";
+            this.clrbtnMeterItemHistory.Selectable = true;
+            this.clrbtnMeterItemHistory.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemHistory.TabIndex = 83;
+            this.clrbtnMeterItemHistory.Changed += new System.EventHandler(this.clrbtnMeterItemHistory_Changed);
+            // 
+            // clrbtnMeterItemPeakHold
+            // 
+            this.clrbtnMeterItemPeakHold.Automatic = "Automatic";
+            this.clrbtnMeterItemPeakHold.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemPeakHold.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemPeakHold.Image = null;
+            this.clrbtnMeterItemPeakHold.Location = new System.Drawing.Point(212, 258);
+            this.clrbtnMeterItemPeakHold.MoreColors = "More Colors...";
+            this.clrbtnMeterItemPeakHold.Name = "clrbtnMeterItemPeakHold";
+            this.clrbtnMeterItemPeakHold.Selectable = true;
+            this.clrbtnMeterItemPeakHold.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemPeakHold.TabIndex = 82;
+            this.clrbtnMeterItemPeakHold.Changed += new System.EventHandler(this.clrbtnMeterItemPeakHold_Changed);
+            // 
+            // lblMMIndicator
+            // 
+            this.lblMMIndicator.AutoSize = true;
+            this.lblMMIndicator.Image = null;
+            this.lblMMIndicator.Location = new System.Drawing.Point(26, 108);
+            this.lblMMIndicator.Name = "lblMMIndicator";
+            this.lblMMIndicator.Size = new System.Drawing.Size(56, 13);
+            this.lblMMIndicator.TabIndex = 81;
+            this.lblMMIndicator.Text = "Indicator:";
+            // 
+            // clrbtnMeterItemIndiciator
+            // 
+            this.clrbtnMeterItemIndiciator.Automatic = "Automatic";
+            this.clrbtnMeterItemIndiciator.Color = System.Drawing.Color.Yellow;
+            this.clrbtnMeterItemIndiciator.ForeColor = System.Drawing.Color.Black;
+            this.clrbtnMeterItemIndiciator.Image = null;
+            this.clrbtnMeterItemIndiciator.Location = new System.Drawing.Point(83, 104);
+            this.clrbtnMeterItemIndiciator.MoreColors = "More Colors...";
+            this.clrbtnMeterItemIndiciator.Name = "clrbtnMeterItemIndiciator";
+            this.clrbtnMeterItemIndiciator.Selectable = true;
+            this.clrbtnMeterItemIndiciator.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemIndiciator.TabIndex = 80;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemIndiciator, "Indicator colour");
+            this.clrbtnMeterItemIndiciator.Changed += new System.EventHandler(this.clrbtnMeterItemIndiciator_Changed);
+            // 
+            // lblMMHigh
+            // 
+            this.lblMMHigh.AutoSize = true;
+            this.lblMMHigh.Image = null;
+            this.lblMMHigh.Location = new System.Drawing.Point(126, 79);
+            this.lblMMHigh.Name = "lblMMHigh";
+            this.lblMMHigh.Size = new System.Drawing.Size(35, 13);
+            this.lblMMHigh.TabIndex = 79;
+            this.lblMMHigh.Text = "High:";
+            // 
+            // lblMMLow
+            // 
+            this.lblMMLow.AutoSize = true;
+            this.lblMMLow.Image = null;
+            this.lblMMLow.Location = new System.Drawing.Point(47, 79);
+            this.lblMMLow.Name = "lblMMLow";
+            this.lblMMLow.Size = new System.Drawing.Size(31, 13);
+            this.lblMMLow.TabIndex = 78;
+            this.lblMMLow.Text = "Low:";
+            // 
+            // clrbtnMeterItemHigh
+            // 
+            this.clrbtnMeterItemHigh.Automatic = "Automatic";
+            this.clrbtnMeterItemHigh.Color = System.Drawing.Color.Red;
+            this.clrbtnMeterItemHigh.Image = null;
+            this.clrbtnMeterItemHigh.Location = new System.Drawing.Point(164, 74);
+            this.clrbtnMeterItemHigh.MoreColors = "More Colors...";
+            this.clrbtnMeterItemHigh.Name = "clrbtnMeterItemHigh";
+            this.clrbtnMeterItemHigh.Selectable = true;
+            this.clrbtnMeterItemHigh.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemHigh.TabIndex = 77;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemHigh, "High scale colour");
+            this.clrbtnMeterItemHigh.Changed += new System.EventHandler(this.clrbtnMeterItemHigh_Changed);
+            // 
+            // clrbtnMeterItemLow
+            // 
+            this.clrbtnMeterItemLow.Automatic = "Automatic";
+            this.clrbtnMeterItemLow.Color = System.Drawing.Color.White;
+            this.clrbtnMeterItemLow.Image = null;
+            this.clrbtnMeterItemLow.Location = new System.Drawing.Point(83, 74);
+            this.clrbtnMeterItemLow.MoreColors = "More Colors...";
+            this.clrbtnMeterItemLow.Name = "clrbtnMeterItemLow";
+            this.clrbtnMeterItemLow.Selectable = true;
+            this.clrbtnMeterItemLow.Size = new System.Drawing.Size(40, 23);
+            this.clrbtnMeterItemLow.TabIndex = 76;
+            this.toolTip1.SetToolTip(this.clrbtnMeterItemLow, "Low scale colour and value");
+            this.clrbtnMeterItemLow.Changed += new System.EventHandler(this.clrbtnMeterItemLow_Changed);
+            // 
+            // chkMeterItemShadow
+            // 
+            this.chkMeterItemShadow.AutoSize = true;
+            this.chkMeterItemShadow.Image = null;
+            this.chkMeterItemShadow.Location = new System.Drawing.Point(18, 194);
+            this.chkMeterItemShadow.Name = "chkMeterItemShadow";
+            this.chkMeterItemShadow.Size = new System.Drawing.Size(68, 17);
+            this.chkMeterItemShadow.TabIndex = 4;
+            this.chkMeterItemShadow.Text = "Shadow";
+            this.toolTip1.SetToolTip(this.chkMeterItemShadow, "Show shadow on needles");
+            this.chkMeterItemShadow.UseVisualStyleBackColor = true;
+            this.chkMeterItemShadow.CheckedChanged += new System.EventHandler(this.chkMeterItemShadow_CheckedChanged);
+            // 
+            // chkMeterItemPeakHold
+            // 
+            this.chkMeterItemPeakHold.AutoSize = true;
+            this.chkMeterItemPeakHold.Image = null;
+            this.chkMeterItemPeakHold.Location = new System.Drawing.Point(197, 240);
+            this.chkMeterItemPeakHold.Name = "chkMeterItemPeakHold";
+            this.chkMeterItemPeakHold.Size = new System.Drawing.Size(110, 17);
+            this.chkMeterItemPeakHold.TabIndex = 3;
+            this.chkMeterItemPeakHold.Text = "Show Peak Hold";
+            this.chkMeterItemPeakHold.UseVisualStyleBackColor = true;
+            this.chkMeterItemPeakHold.CheckedChanged += new System.EventHandler(this.chkMeterItemPeakHold_CheckedChanged);
+            // 
+            // chkMeterItemHistory
+            // 
+            this.chkMeterItemHistory.AutoSize = true;
+            this.chkMeterItemHistory.Image = null;
+            this.chkMeterItemHistory.Location = new System.Drawing.Point(197, 194);
+            this.chkMeterItemHistory.Name = "chkMeterItemHistory";
+            this.chkMeterItemHistory.Size = new System.Drawing.Size(94, 17);
+            this.chkMeterItemHistory.TabIndex = 2;
+            this.chkMeterItemHistory.Text = "Show History";
+            this.chkMeterItemHistory.UseVisualStyleBackColor = true;
+            this.chkMeterItemHistory.CheckedChanged += new System.EventHandler(this.chkMeterItemHistory_CheckedChanged);
+            // 
+            // chkMeterItemFadeOnTx
+            // 
+            this.chkMeterItemFadeOnTx.AutoSize = true;
+            this.chkMeterItemFadeOnTx.Image = null;
+            this.chkMeterItemFadeOnTx.Location = new System.Drawing.Point(18, 171);
+            this.chkMeterItemFadeOnTx.Name = "chkMeterItemFadeOnTx";
+            this.chkMeterItemFadeOnTx.Size = new System.Drawing.Size(83, 17);
+            this.chkMeterItemFadeOnTx.TabIndex = 1;
+            this.chkMeterItemFadeOnTx.Text = "Fade on TX";
+            this.chkMeterItemFadeOnTx.UseVisualStyleBackColor = true;
+            this.chkMeterItemFadeOnTx.CheckedChanged += new System.EventHandler(this.chkMeterItemFadeOnTx_CheckedChanged);
+            // 
+            // chkMeterItemFadeOnRx
+            // 
+            this.chkMeterItemFadeOnRx.AutoSize = true;
+            this.chkMeterItemFadeOnRx.Image = null;
+            this.chkMeterItemFadeOnRx.Location = new System.Drawing.Point(18, 148);
+            this.chkMeterItemFadeOnRx.Name = "chkMeterItemFadeOnRx";
+            this.chkMeterItemFadeOnRx.Size = new System.Drawing.Size(84, 17);
+            this.chkMeterItemFadeOnRx.TabIndex = 0;
+            this.chkMeterItemFadeOnRx.Text = "Fade on RX";
+            this.chkMeterItemFadeOnRx.UseVisualStyleBackColor = true;
+            this.chkMeterItemFadeOnRx.CheckedChanged += new System.EventHandler(this.chkMeterItemFadeOnRx_CheckedChanged);
             // 
             // grpMeterItemVfoDisplaySettings
             // 
@@ -47877,6 +48786,30 @@
             this.toolTip1.SetToolTip(this.clrbtnMMVfoDisplayTitle, "Titles colour");
             this.clrbtnMMVfoDisplayTitle.Changed += new System.EventHandler(this.clrbtnMMVfoDisplayTitle_Changed);
             // 
+            // btnMeterCopySettings
+            // 
+            this.btnMeterCopySettings.Image = ((System.Drawing.Image)(resources.GetObject("btnMeterCopySettings.Image")));
+            this.btnMeterCopySettings.Location = new System.Drawing.Point(336, 293);
+            this.btnMeterCopySettings.Name = "btnMeterCopySettings";
+            this.btnMeterCopySettings.Selectable = true;
+            this.btnMeterCopySettings.Size = new System.Drawing.Size(32, 32);
+            this.btnMeterCopySettings.TabIndex = 103;
+            this.toolTip1.SetToolTip(this.btnMeterCopySettings, "Copy settings and colours");
+            this.btnMeterCopySettings.UseVisualStyleBackColor = true;
+            this.btnMeterCopySettings.Click += new System.EventHandler(this.btnMeterCopySettings_Click);
+            // 
+            // btnMeterPasteSettings
+            // 
+            this.btnMeterPasteSettings.Image = ((System.Drawing.Image)(resources.GetObject("btnMeterPasteSettings.Image")));
+            this.btnMeterPasteSettings.Location = new System.Drawing.Point(336, 340);
+            this.btnMeterPasteSettings.Name = "btnMeterPasteSettings";
+            this.btnMeterPasteSettings.Selectable = true;
+            this.btnMeterPasteSettings.Size = new System.Drawing.Size(32, 32);
+            this.btnMeterPasteSettings.TabIndex = 102;
+            this.toolTip1.SetToolTip(this.btnMeterPasteSettings, "Paste settings and colours into suitable meter item");
+            this.btnMeterPasteSettings.UseVisualStyleBackColor = true;
+            this.btnMeterPasteSettings.Click += new System.EventHandler(this.btnMeterPasteSettings_Click);
+            // 
             // grpMeterItemClockSettings
             // 
             this.grpMeterItemClockSettings.Controls.Add(this.lblMMClockBackground);
@@ -48030,20 +48963,20 @@
             // 
             // lblMMContainerBackground
             // 
-            this.lblMMContainerBackground.AutoSize = true;
             this.lblMMContainerBackground.Image = null;
-            this.lblMMContainerBackground.Location = new System.Drawing.Point(170, 61);
+            this.lblMMContainerBackground.Location = new System.Drawing.Point(169, 59);
             this.lblMMContainerBackground.Name = "lblMMContainerBackground";
-            this.lblMMContainerBackground.Size = new System.Drawing.Size(40, 13);
+            this.lblMMContainerBackground.Size = new System.Drawing.Size(40, 16);
             this.lblMMContainerBackground.TabIndex = 99;
             this.lblMMContainerBackground.Text = "Backg:";
+            this.lblMMContainerBackground.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // clrbtnContainerBackground
             // 
             this.clrbtnContainerBackground.Automatic = "Automatic";
             this.clrbtnContainerBackground.Color = System.Drawing.Color.Black;
             this.clrbtnContainerBackground.Image = null;
-            this.clrbtnContainerBackground.Location = new System.Drawing.Point(169, 77);
+            this.clrbtnContainerBackground.Location = new System.Drawing.Point(169, 79);
             this.clrbtnContainerBackground.MoreColors = "More Colors...";
             this.clrbtnContainerBackground.Name = "clrbtnContainerBackground";
             this.clrbtnContainerBackground.Selectable = true;
@@ -48054,9 +48987,8 @@
             // 
             // chkContainerBorder
             // 
-            this.chkContainerBorder.AutoSize = true;
             this.chkContainerBorder.Image = null;
-            this.chkContainerBorder.Location = new System.Drawing.Point(100, 83);
+            this.chkContainerBorder.Location = new System.Drawing.Point(105, 83);
             this.chkContainerBorder.Name = "chkContainerBorder";
             this.chkContainerBorder.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.chkContainerBorder.Size = new System.Drawing.Size(60, 17);
@@ -48066,815 +48998,9 @@
             this.chkContainerBorder.UseVisualStyleBackColor = true;
             this.chkContainerBorder.CheckedChanged += new System.EventHandler(this.chkContainerBorder_CheckedChanged);
             // 
-            // grpMeterItemSettings
-            // 
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemIgnoreHistoryDuration);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMHistoryIgnore);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPowerScale);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemEyeBezelScale);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMEyeBezelSize);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShowSubIndicator);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMIndicatorSub);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSubIndiciator);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShowIndicator);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMsegSolHigh);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMsegSolLow);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSegmentedSolidColourHigh);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSolid);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemsPowerLimit);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMPowerLimit);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemDarkMode);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSignalAverage);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemEyeScale);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMEyeSize);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemMeterTitle);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPeakValueColour);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemSegmentedSolidColourLow);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemDecayRate);
-            this.grpMeterItemSettings.Controls.Add(this.labelTS169);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemAttackRate);
-            this.grpMeterItemSettings.Controls.Add(this.labelTS168);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemUpdateRate);
-            this.grpMeterItemSettings.Controls.Add(this.labelTS167);
-            this.grpMeterItemSettings.Controls.Add(this.tbMeterItemHistoryAlpha);
-            this.grpMeterItemSettings.Controls.Add(this.nudMeterItemHistoryDuration);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMHistory);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemPeakValue);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemTitle);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemSegmented);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMBackground);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHBackground);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHistory);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemPeakHold);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMIndicator);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemIndiciator);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMHigh);
-            this.grpMeterItemSettings.Controls.Add(this.lblMMLow);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemHigh);
-            this.grpMeterItemSettings.Controls.Add(this.clrbtnMeterItemLow);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemShadow);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemPeakHold);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemHistory);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemFadeOnTx);
-            this.grpMeterItemSettings.Controls.Add(this.chkMeterItemFadeOnRx);
-            this.grpMeterItemSettings.Location = new System.Drawing.Point(374, 15);
-            this.grpMeterItemSettings.Name = "grpMeterItemSettings";
-            this.grpMeterItemSettings.Size = new System.Drawing.Size(323, 364);
-            this.grpMeterItemSettings.TabIndex = 96;
-            this.grpMeterItemSettings.TabStop = false;
-            this.grpMeterItemSettings.Text = "Settings";
-            this.grpMeterItemSettings.Visible = false;
-            // 
-            // nudMeterItemIgnoreHistoryDuration
-            // 
-            this.nudMeterItemIgnoreHistoryDuration.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemIgnoreHistoryDuration.Location = new System.Drawing.Point(247, 161);
-            this.nudMeterItemIgnoreHistoryDuration.Maximum = new decimal(new int[] {
-            4000,
-            0,
-            0,
-            0});
-            this.nudMeterItemIgnoreHistoryDuration.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMeterItemIgnoreHistoryDuration.Name = "nudMeterItemIgnoreHistoryDuration";
-            this.nudMeterItemIgnoreHistoryDuration.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemIgnoreHistoryDuration.TabIndex = 127;
-            this.nudMeterItemIgnoreHistoryDuration.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemIgnoreHistoryDuration, "When rx/tx transition or band change let meters settle before gathering history/p" +
-        "eak values");
-            this.nudMeterItemIgnoreHistoryDuration.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.nudMeterItemIgnoreHistoryDuration.ValueChanged += new System.EventHandler(this.nudMeterItemIgnoreHistoryDuration_ValueChanged);
-            // 
-            // lblMMHistoryIgnore
-            // 
-            this.lblMMHistoryIgnore.Image = null;
-            this.lblMMHistoryIgnore.Location = new System.Drawing.Point(107, 163);
-            this.lblMMHistoryIgnore.Name = "lblMMHistoryIgnore";
-            this.lblMMHistoryIgnore.Size = new System.Drawing.Size(134, 16);
-            this.lblMMHistoryIgnore.TabIndex = 126;
-            this.lblMMHistoryIgnore.Text = "Ignore History/Peak (ms):";
-            this.lblMMHistoryIgnore.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // clrbtnMeterItemPowerScale
-            // 
-            this.clrbtnMeterItemPowerScale.Automatic = "Automatic";
-            this.clrbtnMeterItemPowerScale.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemPowerScale.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemPowerScale.Image = null;
-            this.clrbtnMeterItemPowerScale.Location = new System.Drawing.Point(272, 333);
-            this.clrbtnMeterItemPowerScale.MoreColors = "More Colors...";
-            this.clrbtnMeterItemPowerScale.Name = "clrbtnMeterItemPowerScale";
-            this.clrbtnMeterItemPowerScale.Selectable = true;
-            this.clrbtnMeterItemPowerScale.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemPowerScale.TabIndex = 125;
-            this.clrbtnMeterItemPowerScale.Changed += new System.EventHandler(this.clrbtnMeterItemPowerScale_Changed);
-            // 
-            // nudMeterItemEyeBezelScale
-            // 
-            this.nudMeterItemEyeBezelScale.DecimalPlaces = 2;
-            this.nudMeterItemEyeBezelScale.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMeterItemEyeBezelScale.Location = new System.Drawing.Point(83, 336);
-            this.nudMeterItemEyeBezelScale.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemEyeBezelScale.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMeterItemEyeBezelScale.Name = "nudMeterItemEyeBezelScale";
-            this.nudMeterItemEyeBezelScale.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemEyeBezelScale.TabIndex = 124;
-            this.nudMeterItemEyeBezelScale.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemEyeBezelScale, "Size of the eye bezel, 1.0 is full width of container");
-            this.nudMeterItemEyeBezelScale.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemEyeBezelScale.ValueChanged += new System.EventHandler(this.nudMeterItemEyeBezelScale_ValueChanged);
-            // 
-            // lblMMEyeBezelSize
-            // 
-            this.lblMMEyeBezelSize.Image = null;
-            this.lblMMEyeBezelSize.Location = new System.Drawing.Point(13, 338);
-            this.lblMMEyeBezelSize.Name = "lblMMEyeBezelSize";
-            this.lblMMEyeBezelSize.Size = new System.Drawing.Size(64, 16);
-            this.lblMMEyeBezelSize.TabIndex = 123;
-            this.lblMMEyeBezelSize.Text = "Bezel Size:";
-            this.lblMMEyeBezelSize.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // chkMeterItemShowSubIndicator
-            // 
-            this.chkMeterItemShowSubIndicator.AutoSize = true;
-            this.chkMeterItemShowSubIndicator.Image = null;
-            this.chkMeterItemShowSubIndicator.Location = new System.Drawing.Point(264, 108);
-            this.chkMeterItemShowSubIndicator.Name = "chkMeterItemShowSubIndicator";
-            this.chkMeterItemShowSubIndicator.Size = new System.Drawing.Size(55, 17);
-            this.chkMeterItemShowSubIndicator.TabIndex = 122;
-            this.chkMeterItemShowSubIndicator.Text = "Show";
-            this.toolTip1.SetToolTip(this.chkMeterItemShowSubIndicator, "Show sub indicators");
-            this.chkMeterItemShowSubIndicator.UseVisualStyleBackColor = true;
-            this.chkMeterItemShowSubIndicator.CheckedChanged += new System.EventHandler(this.chkMeterItemShowSubIndicator_CheckedChanged);
-            // 
-            // lblMMIndicatorSub
-            // 
-            this.lblMMIndicatorSub.AutoSize = true;
-            this.lblMMIndicatorSub.Image = null;
-            this.lblMMIndicatorSub.Location = new System.Drawing.Point(182, 109);
-            this.lblMMIndicatorSub.Name = "lblMMIndicatorSub";
-            this.lblMMIndicatorSub.Size = new System.Drawing.Size(41, 13);
-            this.lblMMIndicatorSub.TabIndex = 121;
-            this.lblMMIndicatorSub.Text = "Sub(s):";
-            // 
-            // clrbtnMeterItemSubIndiciator
-            // 
-            this.clrbtnMeterItemSubIndiciator.Automatic = "Automatic";
-            this.clrbtnMeterItemSubIndiciator.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemSubIndiciator.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemSubIndiciator.Image = null;
-            this.clrbtnMeterItemSubIndiciator.Location = new System.Drawing.Point(222, 104);
-            this.clrbtnMeterItemSubIndiciator.MoreColors = "More Colors...";
-            this.clrbtnMeterItemSubIndiciator.Name = "clrbtnMeterItemSubIndiciator";
-            this.clrbtnMeterItemSubIndiciator.Selectable = true;
-            this.clrbtnMeterItemSubIndiciator.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemSubIndiciator.TabIndex = 120;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemSubIndiciator, "Sub Indicator colour for sub needles and avg markers on some horizontal meters");
-            this.clrbtnMeterItemSubIndiciator.Changed += new System.EventHandler(this.clrbtnMeterItemSubIndiciator_Changed);
-            // 
-            // chkMeterItemShowIndicator
-            // 
-            this.chkMeterItemShowIndicator.AutoSize = true;
-            this.chkMeterItemShowIndicator.Image = null;
-            this.chkMeterItemShowIndicator.Location = new System.Drawing.Point(128, 107);
-            this.chkMeterItemShowIndicator.Name = "chkMeterItemShowIndicator";
-            this.chkMeterItemShowIndicator.Size = new System.Drawing.Size(55, 17);
-            this.chkMeterItemShowIndicator.TabIndex = 119;
-            this.chkMeterItemShowIndicator.Text = "Show";
-            this.toolTip1.SetToolTip(this.chkMeterItemShowIndicator, "Show the indicator line on horizontal bar meters");
-            this.chkMeterItemShowIndicator.UseVisualStyleBackColor = true;
-            this.chkMeterItemShowIndicator.CheckedChanged += new System.EventHandler(this.chkMeterItemShowIndicator_CheckedChanged);
-            // 
-            // lblMMsegSolHigh
-            // 
-            this.lblMMsegSolHigh.AutoSize = true;
-            this.lblMMsegSolHigh.Image = null;
-            this.lblMMsegSolHigh.Location = new System.Drawing.Point(145, 212);
-            this.lblMMsegSolHigh.Name = "lblMMsegSolHigh";
-            this.lblMMsegSolHigh.Size = new System.Drawing.Size(31, 13);
-            this.lblMMsegSolHigh.TabIndex = 118;
-            this.lblMMsegSolHigh.Text = "high";
-            // 
-            // lblMMsegSolLow
-            // 
-            this.lblMMsegSolLow.AutoSize = true;
-            this.lblMMsegSolLow.Image = null;
-            this.lblMMsegSolLow.Location = new System.Drawing.Point(104, 212);
-            this.lblMMsegSolLow.Name = "lblMMsegSolLow";
-            this.lblMMsegSolLow.Size = new System.Drawing.Size(26, 13);
-            this.lblMMsegSolLow.TabIndex = 117;
-            this.lblMMsegSolLow.Text = "low";
-            // 
-            // clrbtnMeterItemSegmentedSolidColourHigh
-            // 
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Automatic = "Automatic";
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemSegmentedSolidColourHigh.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Image = null;
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Location = new System.Drawing.Point(141, 227);
-            this.clrbtnMeterItemSegmentedSolidColourHigh.MoreColors = "More Colors...";
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Name = "clrbtnMeterItemSegmentedSolidColourHigh";
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Selectable = true;
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemSegmentedSolidColourHigh.TabIndex = 116;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemSegmentedSolidColourHigh, "High section colour");
-            this.clrbtnMeterItemSegmentedSolidColourHigh.Changed += new System.EventHandler(this.clrbtnMeterItemSegmentedSolidColourHigh_Changed);
-            // 
-            // chkMeterItemSolid
-            // 
-            this.chkMeterItemSolid.AutoSize = true;
-            this.chkMeterItemSolid.Image = null;
-            this.chkMeterItemSolid.Location = new System.Drawing.Point(18, 236);
-            this.chkMeterItemSolid.Name = "chkMeterItemSolid";
-            this.chkMeterItemSolid.Size = new System.Drawing.Size(52, 17);
-            this.chkMeterItemSolid.TabIndex = 115;
-            this.chkMeterItemSolid.Text = "Solid";
-            this.toolTip1.SetToolTip(this.chkMeterItemSolid, "Solid bar");
-            this.chkMeterItemSolid.UseVisualStyleBackColor = true;
-            this.chkMeterItemSolid.CheckedChanged += new System.EventHandler(this.chkMeterItemSolid_CheckedChanged);
-            // 
-            // nudMeterItemsPowerLimit
-            // 
-            this.nudMeterItemsPowerLimit.DecimalPlaces = 1;
-            this.nudMeterItemsPowerLimit.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.nudMeterItemsPowerLimit.Location = new System.Drawing.Point(214, 336);
-            this.nudMeterItemsPowerLimit.Maximum = new decimal(new int[] {
-            2500,
-            0,
-            0,
-            0});
-            this.nudMeterItemsPowerLimit.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.nudMeterItemsPowerLimit.Name = "nudMeterItemsPowerLimit";
-            this.nudMeterItemsPowerLimit.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemsPowerLimit.TabIndex = 114;
-            this.nudMeterItemsPowerLimit.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemsPowerLimit, "Power limit of scale");
-            this.nudMeterItemsPowerLimit.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudMeterItemsPowerLimit.ValueChanged += new System.EventHandler(this.nudMeterItemsPowerLimit_ValueChanged);
-            // 
-            // lblMMPowerLimit
-            // 
-            this.lblMMPowerLimit.Image = null;
-            this.lblMMPowerLimit.Location = new System.Drawing.Point(164, 338);
-            this.lblMMPowerLimit.Name = "lblMMPowerLimit";
-            this.lblMMPowerLimit.Size = new System.Drawing.Size(44, 16);
-            this.lblMMPowerLimit.TabIndex = 113;
-            this.lblMMPowerLimit.Text = "Power:";
-            this.lblMMPowerLimit.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // chkMeterItemDarkMode
-            // 
-            this.chkMeterItemDarkMode.AutoSize = true;
-            this.chkMeterItemDarkMode.Image = null;
-            this.chkMeterItemDarkMode.Location = new System.Drawing.Point(197, 310);
-            this.chkMeterItemDarkMode.Name = "chkMeterItemDarkMode";
-            this.chkMeterItemDarkMode.Size = new System.Drawing.Size(83, 17);
-            this.chkMeterItemDarkMode.TabIndex = 112;
-            this.chkMeterItemDarkMode.Text = "Dark Mode";
-            this.chkMeterItemDarkMode.UseVisualStyleBackColor = true;
-            this.chkMeterItemDarkMode.CheckedChanged += new System.EventHandler(this.chkMeterItemDarkMode_CheckedChanged);
-            // 
-            // chkMeterItemSignalAverage
-            // 
-            this.chkMeterItemSignalAverage.AutoSize = true;
-            this.chkMeterItemSignalAverage.Image = null;
-            this.chkMeterItemSignalAverage.Location = new System.Drawing.Point(197, 287);
-            this.chkMeterItemSignalAverage.Name = "chkMeterItemSignalAverage";
-            this.chkMeterItemSignalAverage.Size = new System.Drawing.Size(102, 17);
-            this.chkMeterItemSignalAverage.TabIndex = 111;
-            this.chkMeterItemSignalAverage.Text = "Signal Average";
-            this.toolTip1.SetToolTip(this.chkMeterItemSignalAverage, "Use sig average instead of sig");
-            this.chkMeterItemSignalAverage.UseVisualStyleBackColor = true;
-            this.chkMeterItemSignalAverage.CheckedChanged += new System.EventHandler(this.chkMeterItemSignalAverage_CheckedChanged);
-            // 
-            // nudMeterItemEyeScale
-            // 
-            this.nudMeterItemEyeScale.DecimalPlaces = 2;
-            this.nudMeterItemEyeScale.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMeterItemEyeScale.Location = new System.Drawing.Point(83, 312);
-            this.nudMeterItemEyeScale.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemEyeScale.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudMeterItemEyeScale.Name = "nudMeterItemEyeScale";
-            this.nudMeterItemEyeScale.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemEyeScale.TabIndex = 110;
-            this.nudMeterItemEyeScale.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemEyeScale, "Size of the eye, 1.0 is full width of container");
-            this.nudMeterItemEyeScale.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemEyeScale.ValueChanged += new System.EventHandler(this.nudMeterItemEyeScale_ValueChanged);
-            // 
-            // lblMMEyeSize
-            // 
-            this.lblMMEyeSize.Image = null;
-            this.lblMMEyeSize.Location = new System.Drawing.Point(13, 314);
-            this.lblMMEyeSize.Name = "lblMMEyeSize";
-            this.lblMMEyeSize.Size = new System.Drawing.Size(64, 16);
-            this.lblMMEyeSize.TabIndex = 109;
-            this.lblMMEyeSize.Text = "Eye Size:";
-            this.lblMMEyeSize.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // clrbtnMeterItemMeterTitle
-            // 
-            this.clrbtnMeterItemMeterTitle.Automatic = "Automatic";
-            this.clrbtnMeterItemMeterTitle.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemMeterTitle.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemMeterTitle.Image = null;
-            this.clrbtnMeterItemMeterTitle.Location = new System.Drawing.Point(99, 256);
-            this.clrbtnMeterItemMeterTitle.MoreColors = "More Colors...";
-            this.clrbtnMeterItemMeterTitle.Name = "clrbtnMeterItemMeterTitle";
-            this.clrbtnMeterItemMeterTitle.Selectable = true;
-            this.clrbtnMeterItemMeterTitle.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemMeterTitle.TabIndex = 108;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemMeterTitle, "Meter title colour");
-            this.clrbtnMeterItemMeterTitle.Changed += new System.EventHandler(this.clrbtnMeterItemMeterTitle_Changed);
-            // 
-            // clrbtnMeterItemPeakValueColour
-            // 
-            this.clrbtnMeterItemPeakValueColour.Automatic = "Automatic";
-            this.clrbtnMeterItemPeakValueColour.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemPeakValueColour.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemPeakValueColour.Image = null;
-            this.clrbtnMeterItemPeakValueColour.Location = new System.Drawing.Point(99, 283);
-            this.clrbtnMeterItemPeakValueColour.MoreColors = "More Colors...";
-            this.clrbtnMeterItemPeakValueColour.Name = "clrbtnMeterItemPeakValueColour";
-            this.clrbtnMeterItemPeakValueColour.Selectable = true;
-            this.clrbtnMeterItemPeakValueColour.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemPeakValueColour.TabIndex = 107;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemPeakValueColour, "Peak value colour");
-            this.clrbtnMeterItemPeakValueColour.Changed += new System.EventHandler(this.clrbtnMeterItemPeakValueColour_Changed);
-            // 
-            // clrbtnMeterItemSegmentedSolidColourLow
-            // 
-            this.clrbtnMeterItemSegmentedSolidColourLow.Automatic = "Automatic";
-            this.clrbtnMeterItemSegmentedSolidColourLow.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemSegmentedSolidColourLow.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemSegmentedSolidColourLow.Image = null;
-            this.clrbtnMeterItemSegmentedSolidColourLow.Location = new System.Drawing.Point(99, 227);
-            this.clrbtnMeterItemSegmentedSolidColourLow.MoreColors = "More Colors...";
-            this.clrbtnMeterItemSegmentedSolidColourLow.Name = "clrbtnMeterItemSegmentedSolidColourLow";
-            this.clrbtnMeterItemSegmentedSolidColourLow.Selectable = true;
-            this.clrbtnMeterItemSegmentedSolidColourLow.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemSegmentedSolidColourLow.TabIndex = 106;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemSegmentedSolidColourLow, "Low section colour");
-            this.clrbtnMeterItemSegmentedSolidColourLow.Changed += new System.EventHandler(this.clrbtnMeterItemSegmentedSolidColourLow_Changed);
-            // 
-            // nudMeterItemDecayRate
-            // 
-            this.nudMeterItemDecayRate.DecimalPlaces = 2;
-            this.nudMeterItemDecayRate.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
-            this.nudMeterItemDecayRate.Location = new System.Drawing.Point(225, 45);
-            this.nudMeterItemDecayRate.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemDecayRate.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMeterItemDecayRate.Name = "nudMeterItemDecayRate";
-            this.nudMeterItemDecayRate.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemDecayRate.TabIndex = 105;
-            this.nudMeterItemDecayRate.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemDecayRate, "The \'speed of fall\' to the new value if below current");
-            this.nudMeterItemDecayRate.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemDecayRate.ValueChanged += new System.EventHandler(this.nudMeterItemDecayRate_ValueChanged);
-            // 
-            // labelTS169
-            // 
-            this.labelTS169.Image = null;
-            this.labelTS169.Location = new System.Drawing.Point(169, 47);
-            this.labelTS169.Name = "labelTS169";
-            this.labelTS169.Size = new System.Drawing.Size(50, 16);
-            this.labelTS169.TabIndex = 104;
-            this.labelTS169.Text = "Decay:";
-            this.labelTS169.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // nudMeterItemAttackRate
-            // 
-            this.nudMeterItemAttackRate.DecimalPlaces = 2;
-            this.nudMeterItemAttackRate.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            131072});
-            this.nudMeterItemAttackRate.Location = new System.Drawing.Point(107, 45);
-            this.nudMeterItemAttackRate.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemAttackRate.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudMeterItemAttackRate.Name = "nudMeterItemAttackRate";
-            this.nudMeterItemAttackRate.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemAttackRate.TabIndex = 103;
-            this.nudMeterItemAttackRate.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemAttackRate, "The \'speed of rise\' to the new value if above current");
-            this.nudMeterItemAttackRate.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemAttackRate.ValueChanged += new System.EventHandler(this.nudMeterItemAttackRate_ValueChanged);
-            // 
-            // labelTS168
-            // 
-            this.labelTS168.Image = null;
-            this.labelTS168.Location = new System.Drawing.Point(22, 47);
-            this.labelTS168.Name = "labelTS168";
-            this.labelTS168.Size = new System.Drawing.Size(79, 16);
-            this.labelTS168.TabIndex = 102;
-            this.labelTS168.Text = "Attack:";
-            this.labelTS168.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // nudMeterItemUpdateRate
-            // 
-            this.nudMeterItemUpdateRate.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemUpdateRate.Location = new System.Drawing.Point(107, 20);
-            this.nudMeterItemUpdateRate.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.nudMeterItemUpdateRate.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.nudMeterItemUpdateRate.Name = "nudMeterItemUpdateRate";
-            this.nudMeterItemUpdateRate.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemUpdateRate.TabIndex = 101;
-            this.nudMeterItemUpdateRate.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemUpdateRate, "Reading update and is related to screen update");
-            this.nudMeterItemUpdateRate.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudMeterItemUpdateRate.ValueChanged += new System.EventHandler(this.nudMeterItemUpdateRate_ValueChanged);
-            // 
-            // labelTS167
-            // 
-            this.labelTS167.Image = null;
-            this.labelTS167.Location = new System.Drawing.Point(22, 22);
-            this.labelTS167.Name = "labelTS167";
-            this.labelTS167.Size = new System.Drawing.Size(79, 16);
-            this.labelTS167.TabIndex = 100;
-            this.labelTS167.Text = "Update (ms):";
-            this.labelTS167.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // tbMeterItemHistoryAlpha
-            // 
-            this.tbMeterItemHistoryAlpha.AutoSize = false;
-            this.tbMeterItemHistoryAlpha.Location = new System.Drawing.Point(254, 212);
-            this.tbMeterItemHistoryAlpha.Maximum = 255;
-            this.tbMeterItemHistoryAlpha.Name = "tbMeterItemHistoryAlpha";
-            this.tbMeterItemHistoryAlpha.Size = new System.Drawing.Size(66, 18);
-            this.tbMeterItemHistoryAlpha.TabIndex = 99;
-            this.tbMeterItemHistoryAlpha.TickFrequency = 64;
-            this.tbMeterItemHistoryAlpha.Value = 255;
-            this.tbMeterItemHistoryAlpha.Scroll += new System.EventHandler(this.tbMeterItemHistoryAlpha_Scroll);
-            // 
-            // nudMeterItemHistoryDuration
-            // 
-            this.nudMeterItemHistoryDuration.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMeterItemHistoryDuration.Location = new System.Drawing.Point(247, 136);
-            this.nudMeterItemHistoryDuration.Maximum = new decimal(new int[] {
-            30000,
-            0,
-            0,
-            0});
-            this.nudMeterItemHistoryDuration.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.nudMeterItemHistoryDuration.Name = "nudMeterItemHistoryDuration";
-            this.nudMeterItemHistoryDuration.Size = new System.Drawing.Size(56, 22);
-            this.nudMeterItemHistoryDuration.TabIndex = 98;
-            this.nudMeterItemHistoryDuration.TinyStep = false;
-            this.toolTip1.SetToolTip(this.nudMeterItemHistoryDuration, "History duration for history display and peak hold");
-            this.nudMeterItemHistoryDuration.Value = new decimal(new int[] {
-            2000,
-            0,
-            0,
-            0});
-            this.nudMeterItemHistoryDuration.ValueChanged += new System.EventHandler(this.nudMeterItemHistoryDuration_ValueChanged);
-            // 
-            // lblMMHistory
-            // 
-            this.lblMMHistory.Image = null;
-            this.lblMMHistory.Location = new System.Drawing.Point(162, 138);
-            this.lblMMHistory.Name = "lblMMHistory";
-            this.lblMMHistory.Size = new System.Drawing.Size(79, 16);
-            this.lblMMHistory.TabIndex = 97;
-            this.lblMMHistory.Text = "History (ms):";
-            this.lblMMHistory.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // chkMeterItemPeakValue
-            // 
-            this.chkMeterItemPeakValue.AutoSize = true;
-            this.chkMeterItemPeakValue.Image = null;
-            this.chkMeterItemPeakValue.Location = new System.Drawing.Point(17, 285);
-            this.chkMeterItemPeakValue.Name = "chkMeterItemPeakValue";
-            this.chkMeterItemPeakValue.Size = new System.Drawing.Size(81, 17);
-            this.chkMeterItemPeakValue.TabIndex = 96;
-            this.chkMeterItemPeakValue.Text = "Peak Value";
-            this.toolTip1.SetToolTip(this.chkMeterItemPeakValue, "Show peak value");
-            this.chkMeterItemPeakValue.UseVisualStyleBackColor = true;
-            this.chkMeterItemPeakValue.CheckedChanged += new System.EventHandler(this.chkMeterItemPeakValue_CheckedChanged);
-            // 
-            // chkMeterItemTitle
-            // 
-            this.chkMeterItemTitle.AutoSize = true;
-            this.chkMeterItemTitle.Image = null;
-            this.chkMeterItemTitle.Location = new System.Drawing.Point(18, 259);
-            this.chkMeterItemTitle.Name = "chkMeterItemTitle";
-            this.chkMeterItemTitle.Size = new System.Drawing.Size(81, 17);
-            this.chkMeterItemTitle.TabIndex = 95;
-            this.chkMeterItemTitle.Text = "Meter Title";
-            this.toolTip1.SetToolTip(this.chkMeterItemTitle, "Show meter title");
-            this.chkMeterItemTitle.UseVisualStyleBackColor = true;
-            this.chkMeterItemTitle.CheckedChanged += new System.EventHandler(this.chkMeterItemTitle_CheckedChanged);
-            // 
-            // chkMeterItemSegmented
-            // 
-            this.chkMeterItemSegmented.AutoSize = true;
-            this.chkMeterItemSegmented.Image = null;
-            this.chkMeterItemSegmented.Location = new System.Drawing.Point(18, 217);
-            this.chkMeterItemSegmented.Name = "chkMeterItemSegmented";
-            this.chkMeterItemSegmented.Size = new System.Drawing.Size(84, 17);
-            this.chkMeterItemSegmented.TabIndex = 94;
-            this.chkMeterItemSegmented.Text = "Segmented";
-            this.toolTip1.SetToolTip(this.chkMeterItemSegmented, "Segmented bar");
-            this.chkMeterItemSegmented.UseVisualStyleBackColor = true;
-            this.chkMeterItemSegmented.CheckedChanged += new System.EventHandler(this.chkMeterItemSegmented_CheckedChanged);
-            // 
-            // lblMMBackground
-            // 
-            this.lblMMBackground.AutoSize = true;
-            this.lblMMBackground.Image = null;
-            this.lblMMBackground.Location = new System.Drawing.Point(194, 22);
-            this.lblMMBackground.Name = "lblMMBackground";
-            this.lblMMBackground.Size = new System.Drawing.Size(72, 13);
-            this.lblMMBackground.TabIndex = 93;
-            this.lblMMBackground.Text = "Background:";
-            // 
-            // clrbtnMeterItemHBackground
-            // 
-            this.clrbtnMeterItemHBackground.Automatic = "Automatic";
-            this.clrbtnMeterItemHBackground.Color = System.Drawing.Color.LimeGreen;
-            this.clrbtnMeterItemHBackground.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemHBackground.Image = null;
-            this.clrbtnMeterItemHBackground.Location = new System.Drawing.Point(268, 17);
-            this.clrbtnMeterItemHBackground.MoreColors = "More Colors...";
-            this.clrbtnMeterItemHBackground.Name = "clrbtnMeterItemHBackground";
-            this.clrbtnMeterItemHBackground.Selectable = true;
-            this.clrbtnMeterItemHBackground.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemHBackground.TabIndex = 92;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemHBackground, "Background colour");
-            this.clrbtnMeterItemHBackground.Changed += new System.EventHandler(this.clrbtnMeterItemHBackground_Changed);
-            // 
-            // clrbtnMeterItemHistory
-            // 
-            this.clrbtnMeterItemHistory.Automatic = "Automatic";
-            this.clrbtnMeterItemHistory.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemHistory.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemHistory.Image = null;
-            this.clrbtnMeterItemHistory.Location = new System.Drawing.Point(212, 207);
-            this.clrbtnMeterItemHistory.MoreColors = "More Colors...";
-            this.clrbtnMeterItemHistory.Name = "clrbtnMeterItemHistory";
-            this.clrbtnMeterItemHistory.Selectable = true;
-            this.clrbtnMeterItemHistory.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemHistory.TabIndex = 83;
-            this.clrbtnMeterItemHistory.Changed += new System.EventHandler(this.clrbtnMeterItemHistory_Changed);
-            // 
-            // clrbtnMeterItemPeakHold
-            // 
-            this.clrbtnMeterItemPeakHold.Automatic = "Automatic";
-            this.clrbtnMeterItemPeakHold.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemPeakHold.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemPeakHold.Image = null;
-            this.clrbtnMeterItemPeakHold.Location = new System.Drawing.Point(212, 257);
-            this.clrbtnMeterItemPeakHold.MoreColors = "More Colors...";
-            this.clrbtnMeterItemPeakHold.Name = "clrbtnMeterItemPeakHold";
-            this.clrbtnMeterItemPeakHold.Selectable = true;
-            this.clrbtnMeterItemPeakHold.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemPeakHold.TabIndex = 82;
-            this.clrbtnMeterItemPeakHold.Changed += new System.EventHandler(this.clrbtnMeterItemPeakHold_Changed);
-            // 
-            // lblMMIndicator
-            // 
-            this.lblMMIndicator.AutoSize = true;
-            this.lblMMIndicator.Image = null;
-            this.lblMMIndicator.Location = new System.Drawing.Point(26, 108);
-            this.lblMMIndicator.Name = "lblMMIndicator";
-            this.lblMMIndicator.Size = new System.Drawing.Size(56, 13);
-            this.lblMMIndicator.TabIndex = 81;
-            this.lblMMIndicator.Text = "Indicator:";
-            // 
-            // clrbtnMeterItemIndiciator
-            // 
-            this.clrbtnMeterItemIndiciator.Automatic = "Automatic";
-            this.clrbtnMeterItemIndiciator.Color = System.Drawing.Color.Yellow;
-            this.clrbtnMeterItemIndiciator.ForeColor = System.Drawing.Color.Black;
-            this.clrbtnMeterItemIndiciator.Image = null;
-            this.clrbtnMeterItemIndiciator.Location = new System.Drawing.Point(83, 104);
-            this.clrbtnMeterItemIndiciator.MoreColors = "More Colors...";
-            this.clrbtnMeterItemIndiciator.Name = "clrbtnMeterItemIndiciator";
-            this.clrbtnMeterItemIndiciator.Selectable = true;
-            this.clrbtnMeterItemIndiciator.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemIndiciator.TabIndex = 80;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemIndiciator, "Indicator colour");
-            this.clrbtnMeterItemIndiciator.Changed += new System.EventHandler(this.clrbtnMeterItemIndiciator_Changed);
-            // 
-            // lblMMHigh
-            // 
-            this.lblMMHigh.AutoSize = true;
-            this.lblMMHigh.Image = null;
-            this.lblMMHigh.Location = new System.Drawing.Point(126, 79);
-            this.lblMMHigh.Name = "lblMMHigh";
-            this.lblMMHigh.Size = new System.Drawing.Size(35, 13);
-            this.lblMMHigh.TabIndex = 79;
-            this.lblMMHigh.Text = "High:";
-            // 
-            // lblMMLow
-            // 
-            this.lblMMLow.AutoSize = true;
-            this.lblMMLow.Image = null;
-            this.lblMMLow.Location = new System.Drawing.Point(47, 79);
-            this.lblMMLow.Name = "lblMMLow";
-            this.lblMMLow.Size = new System.Drawing.Size(31, 13);
-            this.lblMMLow.TabIndex = 78;
-            this.lblMMLow.Text = "Low:";
-            // 
-            // clrbtnMeterItemHigh
-            // 
-            this.clrbtnMeterItemHigh.Automatic = "Automatic";
-            this.clrbtnMeterItemHigh.Color = System.Drawing.Color.Red;
-            this.clrbtnMeterItemHigh.Image = null;
-            this.clrbtnMeterItemHigh.Location = new System.Drawing.Point(164, 74);
-            this.clrbtnMeterItemHigh.MoreColors = "More Colors...";
-            this.clrbtnMeterItemHigh.Name = "clrbtnMeterItemHigh";
-            this.clrbtnMeterItemHigh.Selectable = true;
-            this.clrbtnMeterItemHigh.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemHigh.TabIndex = 77;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemHigh, "High scale colour");
-            this.clrbtnMeterItemHigh.Changed += new System.EventHandler(this.clrbtnMeterItemHigh_Changed);
-            // 
-            // clrbtnMeterItemLow
-            // 
-            this.clrbtnMeterItemLow.Automatic = "Automatic";
-            this.clrbtnMeterItemLow.Color = System.Drawing.Color.White;
-            this.clrbtnMeterItemLow.Image = null;
-            this.clrbtnMeterItemLow.Location = new System.Drawing.Point(83, 74);
-            this.clrbtnMeterItemLow.MoreColors = "More Colors...";
-            this.clrbtnMeterItemLow.Name = "clrbtnMeterItemLow";
-            this.clrbtnMeterItemLow.Selectable = true;
-            this.clrbtnMeterItemLow.Size = new System.Drawing.Size(40, 23);
-            this.clrbtnMeterItemLow.TabIndex = 76;
-            this.toolTip1.SetToolTip(this.clrbtnMeterItemLow, "Low scale colour and value");
-            this.clrbtnMeterItemLow.Changed += new System.EventHandler(this.clrbtnMeterItemLow_Changed);
-            // 
-            // chkMeterItemShadow
-            // 
-            this.chkMeterItemShadow.AutoSize = true;
-            this.chkMeterItemShadow.Image = null;
-            this.chkMeterItemShadow.Location = new System.Drawing.Point(18, 194);
-            this.chkMeterItemShadow.Name = "chkMeterItemShadow";
-            this.chkMeterItemShadow.Size = new System.Drawing.Size(68, 17);
-            this.chkMeterItemShadow.TabIndex = 4;
-            this.chkMeterItemShadow.Text = "Shadow";
-            this.toolTip1.SetToolTip(this.chkMeterItemShadow, "Show shadow on needles");
-            this.chkMeterItemShadow.UseVisualStyleBackColor = true;
-            this.chkMeterItemShadow.CheckedChanged += new System.EventHandler(this.chkMeterItemShadow_CheckedChanged);
-            // 
-            // chkMeterItemPeakHold
-            // 
-            this.chkMeterItemPeakHold.AutoSize = true;
-            this.chkMeterItemPeakHold.Image = null;
-            this.chkMeterItemPeakHold.Location = new System.Drawing.Point(197, 236);
-            this.chkMeterItemPeakHold.Name = "chkMeterItemPeakHold";
-            this.chkMeterItemPeakHold.Size = new System.Drawing.Size(110, 17);
-            this.chkMeterItemPeakHold.TabIndex = 3;
-            this.chkMeterItemPeakHold.Text = "Show Peak Hold";
-            this.chkMeterItemPeakHold.UseVisualStyleBackColor = true;
-            this.chkMeterItemPeakHold.CheckedChanged += new System.EventHandler(this.chkMeterItemPeakHold_CheckedChanged);
-            // 
-            // chkMeterItemHistory
-            // 
-            this.chkMeterItemHistory.AutoSize = true;
-            this.chkMeterItemHistory.Image = null;
-            this.chkMeterItemHistory.Location = new System.Drawing.Point(197, 189);
-            this.chkMeterItemHistory.Name = "chkMeterItemHistory";
-            this.chkMeterItemHistory.Size = new System.Drawing.Size(94, 17);
-            this.chkMeterItemHistory.TabIndex = 2;
-            this.chkMeterItemHistory.Text = "Show History";
-            this.chkMeterItemHistory.UseVisualStyleBackColor = true;
-            this.chkMeterItemHistory.CheckedChanged += new System.EventHandler(this.chkMeterItemHistory_CheckedChanged);
-            // 
-            // chkMeterItemFadeOnTx
-            // 
-            this.chkMeterItemFadeOnTx.AutoSize = true;
-            this.chkMeterItemFadeOnTx.Image = null;
-            this.chkMeterItemFadeOnTx.Location = new System.Drawing.Point(18, 171);
-            this.chkMeterItemFadeOnTx.Name = "chkMeterItemFadeOnTx";
-            this.chkMeterItemFadeOnTx.Size = new System.Drawing.Size(83, 17);
-            this.chkMeterItemFadeOnTx.TabIndex = 1;
-            this.chkMeterItemFadeOnTx.Text = "Fade on TX";
-            this.chkMeterItemFadeOnTx.UseVisualStyleBackColor = true;
-            this.chkMeterItemFadeOnTx.CheckedChanged += new System.EventHandler(this.chkMeterItemFadeOnTx_CheckedChanged);
-            // 
-            // chkMeterItemFadeOnRx
-            // 
-            this.chkMeterItemFadeOnRx.AutoSize = true;
-            this.chkMeterItemFadeOnRx.Image = null;
-            this.chkMeterItemFadeOnRx.Location = new System.Drawing.Point(18, 148);
-            this.chkMeterItemFadeOnRx.Name = "chkMeterItemFadeOnRx";
-            this.chkMeterItemFadeOnRx.Size = new System.Drawing.Size(84, 17);
-            this.chkMeterItemFadeOnRx.TabIndex = 0;
-            this.chkMeterItemFadeOnRx.Text = "Fade on RX";
-            this.chkMeterItemFadeOnRx.UseVisualStyleBackColor = true;
-            this.chkMeterItemFadeOnRx.CheckedChanged += new System.EventHandler(this.chkMeterItemFadeOnRx_CheckedChanged);
-            // 
             // btnMeterUp
             // 
-            this.btnMeterUp.Image = global::Thetis.Properties.Resources.arrow_up_black;
+            this.btnMeterUp.Image = ((System.Drawing.Image)(resources.GetObject("btnMeterUp.Image")));
             this.btnMeterUp.Location = new System.Drawing.Point(336, 121);
             this.btnMeterUp.Name = "btnMeterUp";
             this.btnMeterUp.Selectable = true;
@@ -48886,7 +49012,7 @@
             // 
             // btnMeterDown
             // 
-            this.btnMeterDown.Image = global::Thetis.Properties.Resources.down_black;
+            this.btnMeterDown.Image = ((System.Drawing.Image)(resources.GetObject("btnMeterDown.Image")));
             this.btnMeterDown.Location = new System.Drawing.Point(336, 168);
             this.btnMeterDown.Name = "btnMeterDown";
             this.btnMeterDown.Selectable = true;
@@ -48898,7 +49024,7 @@
             // 
             // btnRemoveMeterItem
             // 
-            this.btnRemoveMeterItem.Image = global::Thetis.Properties.Resources.arrow_left_black;
+            this.btnRemoveMeterItem.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveMeterItem.Image")));
             this.btnRemoveMeterItem.Location = new System.Drawing.Point(152, 168);
             this.btnRemoveMeterItem.Name = "btnRemoveMeterItem";
             this.btnRemoveMeterItem.Selectable = true;
@@ -48910,7 +49036,7 @@
             // 
             // btnAddMeterItem
             // 
-            this.btnAddMeterItem.Image = global::Thetis.Properties.Resources.arrow_right_black;
+            this.btnAddMeterItem.Image = ((System.Drawing.Image)(resources.GetObject("btnAddMeterItem.Image")));
             this.btnAddMeterItem.Location = new System.Drawing.Point(152, 121);
             this.btnAddMeterItem.Name = "btnAddMeterItem";
             this.btnAddMeterItem.Selectable = true;
@@ -48946,7 +49072,6 @@
             // 
             // chkContainerHighlight
             // 
-            this.chkContainerHighlight.AutoSize = true;
             this.chkContainerHighlight.Image = null;
             this.chkContainerHighlight.Location = new System.Drawing.Point(90, 60);
             this.chkContainerHighlight.Name = "chkContainerHighlight";
@@ -49435,6 +49560,7 @@
             // tpAppearanceCollapsible
             // 
             this.tpAppearanceCollapsible.BackColor = System.Drawing.SystemColors.Control;
+            this.tpAppearanceCollapsible.Controls.Add(this.chkColMHde);
             this.tpAppearanceCollapsible.Controls.Add(this.txtCollapsedHeight);
             this.tpAppearanceCollapsible.Controls.Add(this.txtCollapsedWidth);
             this.tpAppearanceCollapsible.Controls.Add(this.grpBoxCollapsible);
@@ -49444,6 +49570,18 @@
             this.tpAppearanceCollapsible.Size = new System.Drawing.Size(724, 410);
             this.tpAppearanceCollapsible.TabIndex = 4;
             this.tpAppearanceCollapsible.Text = "Collapsible Display";
+            // 
+            // chkColMHde
+            // 
+            this.chkColMHde.AutoSize = true;
+            this.chkColMHde.Image = null;
+            this.chkColMHde.Location = new System.Drawing.Point(15, 181);
+            this.chkColMHde.Name = "chkColMHde";
+            this.chkColMHde.Size = new System.Drawing.Size(168, 17);
+            this.chkColMHde.TabIndex = 18;
+            this.chkColMHde.Text = "Hide Collapsed Multi-Meter";
+            this.chkColMHde.UseVisualStyleBackColor = true;
+            this.chkColMHde.CheckedChanged += new System.EventHandler(this.chkColMHde_CheckedChanged);
             // 
             // txtCollapsedHeight
             // 
@@ -49625,7 +49763,7 @@
             this.grpBoxSpaceBarPTT.Controls.Add(this.radSpaceBarPTT);
             this.grpBoxSpaceBarPTT.Location = new System.Drawing.Point(525, 8);
             this.grpBoxSpaceBarPTT.Name = "grpBoxSpaceBarPTT";
-            this.grpBoxSpaceBarPTT.Size = new System.Drawing.Size(168, 127);
+            this.grpBoxSpaceBarPTT.Size = new System.Drawing.Size(168, 124);
             this.grpBoxSpaceBarPTT.TabIndex = 41;
             this.grpBoxSpaceBarPTT.TabStop = false;
             this.grpBoxSpaceBarPTT.Text = "SpaceBar Control";
@@ -49863,7 +50001,7 @@
             // chkOptEnableKBShortcuts
             // 
             this.chkOptEnableKBShortcuts.Image = null;
-            this.chkOptEnableKBShortcuts.Location = new System.Drawing.Point(16, 24);
+            this.chkOptEnableKBShortcuts.Location = new System.Drawing.Point(6, 24);
             this.chkOptEnableKBShortcuts.Name = "chkOptEnableKBShortcuts";
             this.chkOptEnableKBShortcuts.Size = new System.Drawing.Size(109, 16);
             this.chkOptEnableKBShortcuts.TabIndex = 1;
@@ -49875,7 +50013,7 @@
             // chkOptQuickQSY
             // 
             this.chkOptQuickQSY.Image = null;
-            this.chkOptQuickQSY.Location = new System.Drawing.Point(16, 48);
+            this.chkOptQuickQSY.Location = new System.Drawing.Point(6, 44);
             this.chkOptQuickQSY.Name = "chkOptQuickQSY";
             this.chkOptQuickQSY.Size = new System.Drawing.Size(80, 16);
             this.chkOptQuickQSY.TabIndex = 0;
@@ -50436,7 +50574,7 @@
             // 
             this.comboCATPTTPort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboCATPTTPort.DropDownWidth = 56;
-            this.comboCATPTTPort.Location = new System.Drawing.Point(40, 42);
+            this.comboCATPTTPort.Location = new System.Drawing.Point(51, 47);
             this.comboCATPTTPort.Name = "comboCATPTTPort";
             this.comboCATPTTPort.Size = new System.Drawing.Size(95, 21);
             this.comboCATPTTPort.TabIndex = 96;
@@ -50446,17 +50584,19 @@
             // 
             // lblCATPTTPort
             // 
+            this.lblCATPTTPort.AutoSize = true;
             this.lblCATPTTPort.Image = null;
-            this.lblCATPTTPort.Location = new System.Drawing.Point(8, 42);
+            this.lblCATPTTPort.Location = new System.Drawing.Point(8, 50);
             this.lblCATPTTPort.Name = "lblCATPTTPort";
-            this.lblCATPTTPort.Size = new System.Drawing.Size(40, 23);
+            this.lblCATPTTPort.Size = new System.Drawing.Size(31, 13);
             this.lblCATPTTPort.TabIndex = 6;
             this.lblCATPTTPort.Text = "Port:";
+            this.lblCATPTTPort.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkCATPTT_RTS
             // 
             this.chkCATPTT_RTS.Image = null;
-            this.chkCATPTT_RTS.Location = new System.Drawing.Point(16, 74);
+            this.chkCATPTT_RTS.Location = new System.Drawing.Point(11, 74);
             this.chkCATPTT_RTS.Name = "chkCATPTT_RTS";
             this.chkCATPTT_RTS.Size = new System.Drawing.Size(56, 24);
             this.chkCATPTT_RTS.TabIndex = 0;
@@ -50476,7 +50616,7 @@
             // chkCATPTTEnabled
             // 
             this.chkCATPTTEnabled.Image = null;
-            this.chkCATPTTEnabled.Location = new System.Drawing.Point(8, 16);
+            this.chkCATPTTEnabled.Location = new System.Drawing.Point(11, 15);
             this.chkCATPTTEnabled.Name = "chkCATPTTEnabled";
             this.chkCATPTTEnabled.Size = new System.Drawing.Size(104, 24);
             this.chkCATPTTEnabled.TabIndex = 4;
@@ -51162,7 +51302,7 @@
             // btnIPv4TCI
             // 
             this.btnIPv4TCI.Image = null;
-            this.btnIPv4TCI.Location = new System.Drawing.Point(219, 54);
+            this.btnIPv4TCI.Location = new System.Drawing.Point(219, 57);
             this.btnIPv4TCI.Name = "btnIPv4TCI";
             this.btnIPv4TCI.Selectable = true;
             this.btnIPv4TCI.Size = new System.Drawing.Size(42, 26);
@@ -51202,7 +51342,7 @@
             this.clrbtnOwnCallApearance.Automatic = "Automatic";
             this.clrbtnOwnCallApearance.Color = System.Drawing.Color.Yellow;
             this.clrbtnOwnCallApearance.Image = null;
-            this.clrbtnOwnCallApearance.Location = new System.Drawing.Point(312, 304);
+            this.clrbtnOwnCallApearance.Location = new System.Drawing.Point(262, 304);
             this.clrbtnOwnCallApearance.MoreColors = "More Colors...";
             this.clrbtnOwnCallApearance.Name = "clrbtnOwnCallApearance";
             this.clrbtnOwnCallApearance.Selectable = true;
@@ -51213,7 +51353,7 @@
             // 
             // txtOwnCallsign
             // 
-            this.txtOwnCallsign.Location = new System.Drawing.Point(206, 304);
+            this.txtOwnCallsign.Location = new System.Drawing.Point(156, 304);
             this.txtOwnCallsign.Name = "txtOwnCallsign";
             this.txtOwnCallsign.Size = new System.Drawing.Size(100, 22);
             this.txtOwnCallsign.TabIndex = 28;
@@ -51224,7 +51364,7 @@
             // 
             this.chkSpotOwnCallAppearance.AutoSize = true;
             this.chkSpotOwnCallAppearance.Image = null;
-            this.chkSpotOwnCallAppearance.Location = new System.Drawing.Point(72, 306);
+            this.chkSpotOwnCallAppearance.Location = new System.Drawing.Point(22, 306);
             this.chkSpotOwnCallAppearance.Name = "chkSpotOwnCallAppearance";
             this.chkSpotOwnCallAppearance.Size = new System.Drawing.Size(137, 17);
             this.chkSpotOwnCallAppearance.TabIndex = 27;
@@ -51419,7 +51559,7 @@
             this.lblToggleToUseTCI.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblToggleToUseTCI.ForeColor = System.Drawing.Color.Red;
             this.lblToggleToUseTCI.Image = null;
-            this.lblToggleToUseTCI.Location = new System.Drawing.Point(141, 331);
+            this.lblToggleToUseTCI.Location = new System.Drawing.Point(136, 330);
             this.lblToggleToUseTCI.Name = "lblToggleToUseTCI";
             this.lblToggleToUseTCI.Size = new System.Drawing.Size(120, 13);
             this.lblToggleToUseTCI.TabIndex = 15;
@@ -51441,7 +51581,7 @@
             this.chkTCIServerListening.AutoSize = true;
             this.chkTCIServerListening.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkTCIServerListening.Image = null;
-            this.chkTCIServerListening.Location = new System.Drawing.Point(22, 330);
+            this.chkTCIServerListening.Location = new System.Drawing.Point(22, 329);
             this.chkTCIServerListening.Name = "chkTCIServerListening";
             this.chkTCIServerListening.Size = new System.Drawing.Size(114, 17);
             this.chkTCIServerListening.TabIndex = 13;
@@ -51453,7 +51593,7 @@
             // btnDefaultBindPortForTCI
             // 
             this.btnDefaultBindPortForTCI.Image = null;
-            this.btnDefaultBindPortForTCI.Location = new System.Drawing.Point(176, 54);
+            this.btnDefaultBindPortForTCI.Location = new System.Drawing.Point(176, 57);
             this.btnDefaultBindPortForTCI.Name = "btnDefaultBindPortForTCI";
             this.btnDefaultBindPortForTCI.Selectable = true;
             this.btnDefaultBindPortForTCI.Size = new System.Drawing.Size(37, 26);
@@ -51493,7 +51633,7 @@
             // btnIPv4TCPCat
             // 
             this.btnIPv4TCPCat.Image = null;
-            this.btnIPv4TCPCat.Location = new System.Drawing.Point(270, 21);
+            this.btnIPv4TCPCat.Location = new System.Drawing.Point(270, 23);
             this.btnIPv4TCPCat.Name = "btnIPv4TCPCat";
             this.btnIPv4TCPCat.Selectable = true;
             this.btnIPv4TCPCat.Size = new System.Drawing.Size(42, 26);
@@ -51519,7 +51659,7 @@
             // 
             this.chkWelcomeMessageTCPIPCat.AutoSize = true;
             this.chkWelcomeMessageTCPIPCat.Image = null;
-            this.chkWelcomeMessageTCPIPCat.Location = new System.Drawing.Point(28, 55);
+            this.chkWelcomeMessageTCPIPCat.Location = new System.Drawing.Point(23, 55);
             this.chkWelcomeMessageTCPIPCat.Name = "chkWelcomeMessageTCPIPCat";
             this.chkWelcomeMessageTCPIPCat.Size = new System.Drawing.Size(184, 17);
             this.chkWelcomeMessageTCPIPCat.TabIndex = 16;
@@ -51557,7 +51697,7 @@
             this.chkTCPIPCatServerListening.AutoSize = true;
             this.chkTCPIPCatServerListening.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkTCPIPCatServerListening.Image = null;
-            this.chkTCPIPCatServerListening.Location = new System.Drawing.Point(27, 78);
+            this.chkTCPIPCatServerListening.Location = new System.Drawing.Point(23, 78);
             this.chkTCPIPCatServerListening.Name = "chkTCPIPCatServerListening";
             this.chkTCPIPCatServerListening.Size = new System.Drawing.Size(114, 17);
             this.chkTCPIPCatServerListening.TabIndex = 13;
@@ -51569,7 +51709,7 @@
             // btnDefaultBindPortForTCPIPCat
             // 
             this.btnDefaultBindPortForTCPIPCat.Image = null;
-            this.btnDefaultBindPortForTCPIPCat.Location = new System.Drawing.Point(227, 21);
+            this.btnDefaultBindPortForTCPIPCat.Location = new System.Drawing.Point(227, 23);
             this.btnDefaultBindPortForTCPIPCat.Name = "btnDefaultBindPortForTCPIPCat";
             this.btnDefaultBindPortForTCPIPCat.Selectable = true;
             this.btnDefaultBindPortForTCPIPCat.Size = new System.Drawing.Size(37, 26);
@@ -51612,7 +51752,7 @@
             // btnIPv4N1MM
             // 
             this.btnIPv4N1MM.Image = null;
-            this.btnIPv4N1MM.Location = new System.Drawing.Point(267, 86);
+            this.btnIPv4N1MM.Location = new System.Drawing.Point(270, 87);
             this.btnIPv4N1MM.Name = "btnIPv4N1MM";
             this.btnIPv4N1MM.Selectable = true;
             this.btnIPv4N1MM.Size = new System.Drawing.Size(42, 26);
@@ -51625,7 +51765,7 @@
             // btnN1MMDefault
             // 
             this.btnN1MMDefault.Image = null;
-            this.btnN1MMDefault.Location = new System.Drawing.Point(224, 86);
+            this.btnN1MMDefault.Location = new System.Drawing.Point(227, 87);
             this.btnN1MMDefault.Name = "btnN1MMDefault";
             this.btnN1MMDefault.Selectable = true;
             this.btnN1MMDefault.Size = new System.Drawing.Size(37, 26);
@@ -51636,9 +51776,8 @@
             // 
             // labelTS90
             // 
-            this.labelTS90.AutoSize = true;
             this.labelTS90.Image = null;
-            this.labelTS90.Location = new System.Drawing.Point(32, 117);
+            this.labelTS90.Location = new System.Drawing.Point(23, 122);
             this.labelTS90.Name = "labelTS90";
             this.labelTS90.Size = new System.Drawing.Size(62, 13);
             this.labelTS90.TabIndex = 9;
@@ -51651,7 +51790,7 @@
             0,
             0,
             0});
-            this.udN1MMSendRate.Location = new System.Drawing.Point(98, 115);
+            this.udN1MMSendRate.Location = new System.Drawing.Point(91, 117);
             this.udN1MMSendRate.Maximum = new decimal(new int[] {
             8,
             0,
@@ -51745,17 +51884,17 @@
             // 
             // labelTS19
             // 
-            this.labelTS19.AutoSize = true;
             this.labelTS19.Image = null;
-            this.labelTS19.Location = new System.Drawing.Point(20, 92);
+            this.labelTS19.Location = new System.Drawing.Point(10, 92);
             this.labelTS19.Name = "labelTS19";
             this.labelTS19.Size = new System.Drawing.Size(75, 13);
             this.labelTS19.TabIndex = 3;
             this.labelTS19.Text = "Send UDP to:";
+            this.labelTS19.Click += new System.EventHandler(this.labelTS19_Click);
             // 
             // txtN1MMSendTo
             // 
-            this.txtN1MMSendTo.Location = new System.Drawing.Point(98, 89);
+            this.txtN1MMSendTo.Location = new System.Drawing.Point(91, 89);
             this.txtN1MMSendTo.Name = "txtN1MMSendTo";
             this.txtN1MMSendTo.Size = new System.Drawing.Size(122, 22);
             this.txtN1MMSendTo.TabIndex = 2;
@@ -52206,7 +52345,7 @@
             // labelTS459
             // 
             this.labelTS459.Image = null;
-            this.labelTS459.Location = new System.Drawing.Point(6, 42);
+            this.labelTS459.Location = new System.Drawing.Point(6, 43);
             this.labelTS459.Name = "labelTS459";
             this.labelTS459.Size = new System.Drawing.Size(32, 23);
             this.labelTS459.TabIndex = 80;
@@ -52276,7 +52415,7 @@
             // 
             // txtHttpUser
             // 
-            this.txtHttpUser.Location = new System.Drawing.Point(7, 164);
+            this.txtHttpUser.Location = new System.Drawing.Point(7, 165);
             this.txtHttpUser.MaxLength = 50;
             this.txtHttpUser.Name = "txtHttpUser";
             this.txtHttpUser.Size = new System.Drawing.Size(90, 22);
@@ -52320,7 +52459,7 @@
             0,
             0,
             65536});
-            this.udHttpPort.Location = new System.Drawing.Point(9, 109);
+            this.udHttpPort.Location = new System.Drawing.Point(9, 111);
             this.udHttpPort.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -52498,7 +52637,7 @@
             // 
             // txtFocusMasterDelay
             // 
-            this.txtFocusMasterDelay.Location = new System.Drawing.Point(184, 42);
+            this.txtFocusMasterDelay.Location = new System.Drawing.Point(189, 42);
             this.txtFocusMasterDelay.Name = "txtFocusMasterDelay";
             this.txtFocusMasterDelay.Size = new System.Drawing.Size(40, 22);
             this.txtFocusMasterDelay.TabIndex = 106;
@@ -52510,7 +52649,7 @@
             // 
             this.labelTS359.AutoSize = true;
             this.labelTS359.Image = null;
-            this.labelTS359.Location = new System.Drawing.Point(126, 45);
+            this.labelTS359.Location = new System.Drawing.Point(132, 45);
             this.labelTS359.Name = "labelTS359";
             this.labelTS359.Size = new System.Drawing.Size(59, 13);
             this.labelTS359.TabIndex = 105;
@@ -52548,7 +52687,7 @@
             // 
             // txtFocusMasterWinTitle
             // 
-            this.txtFocusMasterWinTitle.Location = new System.Drawing.Point(76, 68);
+            this.txtFocusMasterWinTitle.Location = new System.Drawing.Point(82, 68);
             this.txtFocusMasterWinTitle.Name = "txtFocusMasterWinTitle";
             this.txtFocusMasterWinTitle.Size = new System.Drawing.Size(224, 22);
             this.txtFocusMasterWinTitle.TabIndex = 104;
@@ -52556,7 +52695,7 @@
             // 
             // txtFocusMasterUDPPort
             // 
-            this.txtFocusMasterUDPPort.Location = new System.Drawing.Point(72, 42);
+            this.txtFocusMasterUDPPort.Location = new System.Drawing.Point(82, 42);
             this.txtFocusMasterUDPPort.Name = "txtFocusMasterUDPPort";
             this.txtFocusMasterUDPPort.Size = new System.Drawing.Size(48, 22);
             this.txtFocusMasterUDPPort.TabIndex = 104;
@@ -52572,7 +52711,7 @@
             "N1MM+ Logger",
             "Select by Click",
             "Enter Window Title"});
-            this.comboFocusMasterMode.Location = new System.Drawing.Point(72, 15);
+            this.comboFocusMasterMode.Location = new System.Drawing.Point(82, 15);
             this.comboFocusMasterMode.Name = "comboFocusMasterMode";
             this.comboFocusMasterMode.Size = new System.Drawing.Size(121, 21);
             this.comboFocusMasterMode.TabIndex = 104;
@@ -52764,468 +52903,29 @@
             // 
             // tpTests
             // 
+            this.tpTests.Controls.Add(this.grpBoxTS1);
             this.tpTests.Controls.Add(this.chkShowDisplayDebug);
             this.tpTests.Controls.Add(this.chkShowControlDebug);
             this.tpTests.Controls.Add(this.btnShowSeqLog);
-            this.tpTests.Controls.Add(this.grpBoxTS1);
             this.tpTests.Controls.Add(this.grpTestTXIMD);
-            this.tpTests.Controls.Add(this.grpImpulseTest);
             this.tpTests.Controls.Add(this.grpTestAudioBalance);
+            this.tpTests.Controls.Add(this.grpImpulseTest);
             this.tpTests.Location = new System.Drawing.Point(4, 22);
             this.tpTests.Name = "tpTests";
             this.tpTests.Size = new System.Drawing.Size(728, 468);
             this.tpTests.TabIndex = 7;
             this.tpTests.Text = "Tests";
             // 
-            // chkShowDisplayDebug
-            // 
-            this.chkShowDisplayDebug.Image = null;
-            this.chkShowDisplayDebug.Location = new System.Drawing.Point(529, 398);
-            this.chkShowDisplayDebug.Name = "chkShowDisplayDebug";
-            this.chkShowDisplayDebug.Size = new System.Drawing.Size(131, 24);
-            this.chkShowDisplayDebug.TabIndex = 119;
-            this.chkShowDisplayDebug.Text = "Show Display Debug";
-            this.toolTip1.SetToolTip(this.chkShowDisplayDebug, "Show some debug info in the spectral area");
-            this.chkShowDisplayDebug.CheckedChanged += new System.EventHandler(this.chkShowDisplayDebug_CheckedChanged);
-            // 
-            // chkShowControlDebug
-            // 
-            this.chkShowControlDebug.Image = null;
-            this.chkShowControlDebug.Location = new System.Drawing.Point(529, 375);
-            this.chkShowControlDebug.Name = "chkShowControlDebug";
-            this.chkShowControlDebug.Size = new System.Drawing.Size(131, 24);
-            this.chkShowControlDebug.TabIndex = 118;
-            this.chkShowControlDebug.Text = "Show Control Debug";
-            this.toolTip1.SetToolTip(this.chkShowControlDebug, "Show the control name that is being hovered over with the mouse as debug in the s" +
-        "pectrum display area");
-            this.chkShowControlDebug.CheckedChanged += new System.EventHandler(this.chkShowControlDebug_CheckedChanged);
-            // 
-            // btnShowSeqLog
-            // 
-            this.btnShowSeqLog.Image = null;
-            this.btnShowSeqLog.Location = new System.Drawing.Point(420, 376);
-            this.btnShowSeqLog.Name = "btnShowSeqLog";
-            this.btnShowSeqLog.Selectable = true;
-            this.btnShowSeqLog.Size = new System.Drawing.Size(97, 46);
-            this.btnShowSeqLog.TabIndex = 92;
-            this.btnShowSeqLog.Text = "Show SEQ log";
-            this.btnShowSeqLog.UseVisualStyleBackColor = true;
-            this.btnShowSeqLog.Click += new System.EventHandler(this.btnShowSeqLog_Click);
-            // 
             // grpBoxTS1
             // 
-            this.grpBoxTS1.Controls.Add(this.grpSigGenTransmit);
             this.grpBoxTS1.Controls.Add(this.grpSigGenReceive);
+            this.grpBoxTS1.Controls.Add(this.grpSigGenTransmit);
             this.grpBoxTS1.Location = new System.Drawing.Point(228, 8);
             this.grpBoxTS1.Name = "grpBoxTS1";
-            this.grpBoxTS1.Size = new System.Drawing.Size(432, 350);
+            this.grpBoxTS1.Size = new System.Drawing.Size(432, 362);
             this.grpBoxTS1.TabIndex = 88;
             this.grpBoxTS1.TabStop = false;
             this.grpBoxTS1.Text = "Signal Generator";
-            // 
-            // grpSigGenTransmit
-            // 
-            this.grpSigGenTransmit.Controls.Add(this.grpPulse);
-            this.grpSigGenTransmit.Controls.Add(this.labelTS313);
-            this.grpSigGenTransmit.Controls.Add(this.grpTXGenSweep);
-            this.grpSigGenTransmit.Controls.Add(this.udTXGenFreq);
-            this.grpSigGenTransmit.Controls.Add(this.labelTS304);
-            this.grpSigGenTransmit.Controls.Add(this.udTXGenScale);
-            this.grpSigGenTransmit.Controls.Add(this.labelTS303);
-            this.grpSigGenTransmit.Controls.Add(this.lblSigGenTXMode);
-            this.grpSigGenTransmit.Controls.Add(this.cmboSigGenTXMode);
-            this.grpSigGenTransmit.Location = new System.Drawing.Point(221, 18);
-            this.grpSigGenTransmit.Name = "grpSigGenTransmit";
-            this.grpSigGenTransmit.Size = new System.Drawing.Size(176, 326);
-            this.grpSigGenTransmit.TabIndex = 102;
-            this.grpSigGenTransmit.TabStop = false;
-            this.grpSigGenTransmit.Text = "Transmit";
-            // 
-            // grpPulse
-            // 
-            this.grpPulse.Controls.Add(this.udTXGenPulseTransition);
-            this.grpPulse.Controls.Add(this.labelTS317);
-            this.grpPulse.Controls.Add(this.udTXGenPulseDutyCycle);
-            this.grpPulse.Controls.Add(this.labelTS316);
-            this.grpPulse.Controls.Add(this.udTXGenPulseFreq);
-            this.grpPulse.Controls.Add(this.labelTS315);
-            this.grpPulse.Location = new System.Drawing.Point(7, 220);
-            this.grpPulse.Name = "grpPulse";
-            this.grpPulse.Size = new System.Drawing.Size(152, 100);
-            this.grpPulse.TabIndex = 119;
-            this.grpPulse.TabStop = false;
-            this.grpPulse.Text = "Pulse";
-            // 
-            // udTXGenPulseTransition
-            // 
-            this.udTXGenPulseTransition.DecimalPlaces = 4;
-            this.udTXGenPulseTransition.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            262144});
-            this.udTXGenPulseTransition.Location = new System.Drawing.Point(90, 69);
-            this.udTXGenPulseTransition.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenPulseTransition.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            262144});
-            this.udTXGenPulseTransition.Name = "udTXGenPulseTransition";
-            this.udTXGenPulseTransition.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenPulseTransition.TabIndex = 115;
-            this.udTXGenPulseTransition.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenPulseTransition, "Tone Frequency.");
-            this.udTXGenPulseTransition.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            196608});
-            this.udTXGenPulseTransition.ValueChanged += new System.EventHandler(this.udTXGenPulseTransition_ValueChanged);
-            // 
-            // labelTS317
-            // 
-            this.labelTS317.Image = null;
-            this.labelTS317.Location = new System.Drawing.Point(6, 72);
-            this.labelTS317.Name = "labelTS317";
-            this.labelTS317.Size = new System.Drawing.Size(78, 16);
-            this.labelTS317.TabIndex = 114;
-            this.labelTS317.Text = "Trans. (sec)";
-            // 
-            // udTXGenPulseDutyCycle
-            // 
-            this.udTXGenPulseDutyCycle.DecimalPlaces = 2;
-            this.udTXGenPulseDutyCycle.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.udTXGenPulseDutyCycle.Location = new System.Drawing.Point(90, 42);
-            this.udTXGenPulseDutyCycle.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenPulseDutyCycle.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.udTXGenPulseDutyCycle.Name = "udTXGenPulseDutyCycle";
-            this.udTXGenPulseDutyCycle.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenPulseDutyCycle.TabIndex = 113;
-            this.udTXGenPulseDutyCycle.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenPulseDutyCycle, "Tone Frequency.");
-            this.udTXGenPulseDutyCycle.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udTXGenPulseDutyCycle.ValueChanged += new System.EventHandler(this.udTXGenPulseDutyCycle_ValueChanged);
-            // 
-            // labelTS316
-            // 
-            this.labelTS316.Image = null;
-            this.labelTS316.Location = new System.Drawing.Point(6, 45);
-            this.labelTS316.Name = "labelTS316";
-            this.labelTS316.Size = new System.Drawing.Size(64, 16);
-            this.labelTS316.TabIndex = 112;
-            this.labelTS316.Text = "Duty Cycle";
-            // 
-            // udTXGenPulseFreq
-            // 
-            this.udTXGenPulseFreq.DecimalPlaces = 2;
-            this.udTXGenPulseFreq.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udTXGenPulseFreq.Location = new System.Drawing.Point(90, 16);
-            this.udTXGenPulseFreq.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udTXGenPulseFreq.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udTXGenPulseFreq.Name = "udTXGenPulseFreq";
-            this.udTXGenPulseFreq.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenPulseFreq.TabIndex = 111;
-            this.udTXGenPulseFreq.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenPulseFreq, "Tone Frequency.");
-            this.udTXGenPulseFreq.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udTXGenPulseFreq.ValueChanged += new System.EventHandler(this.udTXGenPulseFreq_ValueChanged);
-            // 
-            // labelTS315
-            // 
-            this.labelTS315.Image = null;
-            this.labelTS315.Location = new System.Drawing.Point(6, 18);
-            this.labelTS315.Name = "labelTS315";
-            this.labelTS315.Size = new System.Drawing.Size(55, 16);
-            this.labelTS315.TabIndex = 110;
-            this.labelTS315.Text = "Freq (Hz):";
-            // 
-            // labelTS313
-            // 
-            this.labelTS313.AutoSize = true;
-            this.labelTS313.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTS313.Image = null;
-            this.labelTS313.Location = new System.Drawing.Point(17, 15);
-            this.labelTS313.Name = "labelTS313";
-            this.labelTS313.Size = new System.Drawing.Size(119, 13);
-            this.labelTS313.TabIndex = 118;
-            this.labelTS313.Text = "Applied:  DSP Input";
-            // 
-            // grpTXGenSweep
-            // 
-            this.grpTXGenSweep.Controls.Add(this.labelTS306);
-            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepRate);
-            this.grpTXGenSweep.Controls.Add(this.labelTS305);
-            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepHigh);
-            this.grpTXGenSweep.Controls.Add(this.labelTS52);
-            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepLow);
-            this.grpTXGenSweep.Location = new System.Drawing.Point(7, 115);
-            this.grpTXGenSweep.Name = "grpTXGenSweep";
-            this.grpTXGenSweep.Size = new System.Drawing.Size(152, 102);
-            this.grpTXGenSweep.TabIndex = 110;
-            this.grpTXGenSweep.TabStop = false;
-            this.grpTXGenSweep.Text = "Sweep";
-            // 
-            // labelTS306
-            // 
-            this.labelTS306.Image = null;
-            this.labelTS306.Location = new System.Drawing.Point(3, 70);
-            this.labelTS306.Name = "labelTS306";
-            this.labelTS306.Size = new System.Drawing.Size(81, 16);
-            this.labelTS306.TabIndex = 90;
-            this.labelTS306.Text = "Rate (Hz/s):";
-            // 
-            // udTXGenSweepRate
-            // 
-            this.udTXGenSweepRate.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenSweepRate.Location = new System.Drawing.Point(90, 70);
-            this.udTXGenSweepRate.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXGenSweepRate.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenSweepRate.Name = "udTXGenSweepRate";
-            this.udTXGenSweepRate.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenSweepRate.TabIndex = 89;
-            this.udTXGenSweepRate.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenSweepRate, "See the Sweep Button to the right.");
-            this.udTXGenSweepRate.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.udTXGenSweepRate.ValueChanged += new System.EventHandler(this.udTXGenSweepRate_ValueChanged);
-            // 
-            // labelTS305
-            // 
-            this.labelTS305.Image = null;
-            this.labelTS305.Location = new System.Drawing.Point(3, 43);
-            this.labelTS305.Name = "labelTS305";
-            this.labelTS305.Size = new System.Drawing.Size(60, 16);
-            this.labelTS305.TabIndex = 88;
-            this.labelTS305.Text = "High (Hz):";
-            // 
-            // udTXGenSweepHigh
-            // 
-            this.udTXGenSweepHigh.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenSweepHigh.Location = new System.Drawing.Point(90, 42);
-            this.udTXGenSweepHigh.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXGenSweepHigh.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenSweepHigh.Name = "udTXGenSweepHigh";
-            this.udTXGenSweepHigh.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenSweepHigh.TabIndex = 87;
-            this.udTXGenSweepHigh.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenSweepHigh, "See the Sweep Button to the right.");
-            this.udTXGenSweepHigh.Value = new decimal(new int[] {
-            4000,
-            0,
-            0,
-            0});
-            this.udTXGenSweepHigh.ValueChanged += new System.EventHandler(this.udTXGenSweepHigh_ValueChanged);
-            // 
-            // labelTS52
-            // 
-            this.labelTS52.Image = null;
-            this.labelTS52.Location = new System.Drawing.Point(3, 18);
-            this.labelTS52.Name = "labelTS52";
-            this.labelTS52.Size = new System.Drawing.Size(60, 16);
-            this.labelTS52.TabIndex = 86;
-            this.labelTS52.Text = "Low (Hz):";
-            // 
-            // udTXGenSweepLow
-            // 
-            this.udTXGenSweepLow.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenSweepLow.Location = new System.Drawing.Point(90, 16);
-            this.udTXGenSweepLow.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXGenSweepLow.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenSweepLow.Name = "udTXGenSweepLow";
-            this.udTXGenSweepLow.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenSweepLow.TabIndex = 85;
-            this.udTXGenSweepLow.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenSweepLow, "See the Sweep Button to the right.");
-            this.udTXGenSweepLow.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenSweepLow.ValueChanged += new System.EventHandler(this.udTXGenSweepLow_ValueChanged);
-            // 
-            // udTXGenFreq
-            // 
-            this.udTXGenFreq.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.udTXGenFreq.Location = new System.Drawing.Point(83, 91);
-            this.udTXGenFreq.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXGenFreq.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenFreq.Name = "udTXGenFreq";
-            this.udTXGenFreq.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenFreq.TabIndex = 109;
-            this.udTXGenFreq.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenFreq, "Tone Frequency.");
-            this.udTXGenFreq.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.udTXGenFreq.ValueChanged += new System.EventHandler(this.udTXGenFreq_ValueChanged);
-            // 
-            // labelTS304
-            // 
-            this.labelTS304.Image = null;
-            this.labelTS304.Location = new System.Drawing.Point(10, 91);
-            this.labelTS304.Name = "labelTS304";
-            this.labelTS304.Size = new System.Drawing.Size(55, 16);
-            this.labelTS304.TabIndex = 108;
-            this.labelTS304.Text = "Freq (Hz):";
-            // 
-            // udTXGenScale
-            // 
-            this.udTXGenScale.DecimalPlaces = 1;
-            this.udTXGenScale.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.udTXGenScale.Location = new System.Drawing.Point(83, 64);
-            this.udTXGenScale.Maximum = new decimal(new int[] {
-            13,
-            0,
-            0,
-            0});
-            this.udTXGenScale.Minimum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            -2147352576});
-            this.udTXGenScale.Name = "udTXGenScale";
-            this.udTXGenScale.Size = new System.Drawing.Size(56, 22);
-            this.udTXGenScale.TabIndex = 102;
-            this.udTXGenScale.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXGenScale, "Sets the amplitude of the signal (typically between 0 and 1.0)");
-            this.udTXGenScale.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXGenScale.ValueChanged += new System.EventHandler(this.udTXGenScale_ValueChanged);
-            // 
-            // labelTS303
-            // 
-            this.labelTS303.Image = null;
-            this.labelTS303.Location = new System.Drawing.Point(10, 66);
-            this.labelTS303.Name = "labelTS303";
-            this.labelTS303.Size = new System.Drawing.Size(60, 16);
-            this.labelTS303.TabIndex = 101;
-            this.labelTS303.Text = "Level (dB):";
-            // 
-            // lblSigGenTXMode
-            // 
-            this.lblSigGenTXMode.Image = null;
-            this.lblSigGenTXMode.Location = new System.Drawing.Point(17, 34);
-            this.lblSigGenTXMode.Name = "lblSigGenTXMode";
-            this.lblSigGenTXMode.Size = new System.Drawing.Size(40, 16);
-            this.lblSigGenTXMode.TabIndex = 96;
-            this.lblSigGenTXMode.Text = "Mode:";
-            // 
-            // cmboSigGenTXMode
-            // 
-            this.cmboSigGenTXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmboSigGenTXMode.DropDownWidth = 121;
-            this.cmboSigGenTXMode.Items.AddRange(new object[] {
-            "Radio",
-            "Tone",
-            "Noise",
-            "Sweep",
-            "Sawtooth",
-            "Triangle",
-            "Pulse",
-            "Silence"});
-            this.cmboSigGenTXMode.Location = new System.Drawing.Point(57, 34);
-            this.cmboSigGenTXMode.Name = "cmboSigGenTXMode";
-            this.cmboSigGenTXMode.Size = new System.Drawing.Size(88, 21);
-            this.cmboSigGenTXMode.TabIndex = 91;
-            this.toolTip1.SetToolTip(this.cmboSigGenTXMode, "Select the signal type.");
-            this.cmboSigGenTXMode.SelectedIndexChanged += new System.EventHandler(this.cmboSigGenTXMode_SelectedIndexChanged);
             // 
             // grpSigGenReceive
             // 
@@ -53241,7 +52941,7 @@
             this.grpSigGenReceive.Controls.Add(this.cmboSigGenRXMode);
             this.grpSigGenReceive.Location = new System.Drawing.Point(8, 16);
             this.grpSigGenReceive.Name = "grpSigGenReceive";
-            this.grpSigGenReceive.Size = new System.Drawing.Size(189, 326);
+            this.grpSigGenReceive.Size = new System.Drawing.Size(189, 334);
             this.grpSigGenReceive.TabIndex = 101;
             this.grpSigGenReceive.TabStop = false;
             this.grpSigGenReceive.Text = "Receive";
@@ -53251,7 +52951,7 @@
             this.labelTS312.AutoSize = true;
             this.labelTS312.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTS312.Image = null;
-            this.labelTS312.Location = new System.Drawing.Point(15, 15);
+            this.labelTS312.Location = new System.Drawing.Point(8, 15);
             this.labelTS312.Name = "labelTS312";
             this.labelTS312.Size = new System.Drawing.Size(119, 13);
             this.labelTS312.TabIndex = 117;
@@ -53277,7 +52977,7 @@
             this.grpRXGenSweep.Controls.Add(this.udRXGenSweepHigh);
             this.grpRXGenSweep.Controls.Add(this.labelTS309);
             this.grpRXGenSweep.Controls.Add(this.udRXGenSweepLow);
-            this.grpRXGenSweep.Location = new System.Drawing.Point(7, 115);
+            this.grpRXGenSweep.Location = new System.Drawing.Point(7, 121);
             this.grpRXGenSweep.Name = "grpRXGenSweep";
             this.grpRXGenSweep.Size = new System.Drawing.Size(163, 102);
             this.grpRXGenSweep.TabIndex = 115;
@@ -53286,10 +52986,11 @@
             // 
             // labelTS307
             // 
+            this.labelTS307.AutoSize = true;
             this.labelTS307.Image = null;
-            this.labelTS307.Location = new System.Drawing.Point(3, 70);
+            this.labelTS307.Location = new System.Drawing.Point(1, 65);
             this.labelTS307.Name = "labelTS307";
-            this.labelTS307.Size = new System.Drawing.Size(85, 16);
+            this.labelTS307.Size = new System.Drawing.Size(64, 13);
             this.labelTS307.TabIndex = 90;
             this.labelTS307.Text = "Rate (Hz/s):";
             // 
@@ -53300,7 +53001,7 @@
             0,
             0,
             0});
-            this.udRXGenSweepRate.Location = new System.Drawing.Point(94, 69);
+            this.udRXGenSweepRate.Location = new System.Drawing.Point(94, 63);
             this.udRXGenSweepRate.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -53325,10 +53026,11 @@
             // 
             // labelTS308
             // 
+            this.labelTS308.AutoSize = true;
             this.labelTS308.Image = null;
-            this.labelTS308.Location = new System.Drawing.Point(3, 43);
+            this.labelTS308.Location = new System.Drawing.Point(1, 41);
             this.labelTS308.Name = "labelTS308";
-            this.labelTS308.Size = new System.Drawing.Size(60, 16);
+            this.labelTS308.Size = new System.Drawing.Size(57, 13);
             this.labelTS308.TabIndex = 88;
             this.labelTS308.Text = "High (Hz):";
             // 
@@ -53339,7 +53041,7 @@
             0,
             0,
             0});
-            this.udRXGenSweepHigh.Location = new System.Drawing.Point(94, 43);
+            this.udRXGenSweepHigh.Location = new System.Drawing.Point(94, 39);
             this.udRXGenSweepHigh.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -53364,10 +53066,11 @@
             // 
             // labelTS309
             // 
+            this.labelTS309.AutoSize = true;
             this.labelTS309.Image = null;
-            this.labelTS309.Location = new System.Drawing.Point(3, 18);
+            this.labelTS309.Location = new System.Drawing.Point(1, 17);
             this.labelTS309.Name = "labelTS309";
-            this.labelTS309.Size = new System.Drawing.Size(60, 16);
+            this.labelTS309.Size = new System.Drawing.Size(53, 13);
             this.labelTS309.TabIndex = 86;
             this.labelTS309.Text = "Low (Hz):";
             // 
@@ -53408,7 +53111,7 @@
             0,
             0,
             0});
-            this.udRXGenFreq.Location = new System.Drawing.Point(101, 91);
+            this.udRXGenFreq.Location = new System.Drawing.Point(101, 81);
             this.udRXGenFreq.Maximum = new decimal(new int[] {
             20000,
             0,
@@ -53433,12 +53136,14 @@
             // 
             // labelTS310
             // 
+            this.labelTS310.AutoSize = true;
             this.labelTS310.Image = null;
-            this.labelTS310.Location = new System.Drawing.Point(10, 91);
+            this.labelTS310.Location = new System.Drawing.Point(8, 83);
             this.labelTS310.Name = "labelTS310";
-            this.labelTS310.Size = new System.Drawing.Size(55, 16);
+            this.labelTS310.Size = new System.Drawing.Size(55, 13);
             this.labelTS310.TabIndex = 113;
             this.labelTS310.Text = "Freq (Hz):";
+            this.labelTS310.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udRXGenScale
             // 
@@ -53448,7 +53153,7 @@
             0,
             0,
             65536});
-            this.udRXGenScale.Location = new System.Drawing.Point(101, 64);
+            this.udRXGenScale.Location = new System.Drawing.Point(101, 57);
             this.udRXGenScale.Maximum = new decimal(new int[] {
             13,
             0,
@@ -53473,12 +53178,14 @@
             // 
             // labelTS311
             // 
+            this.labelTS311.AutoSize = true;
             this.labelTS311.Image = null;
-            this.labelTS311.Location = new System.Drawing.Point(10, 66);
+            this.labelTS311.Location = new System.Drawing.Point(8, 59);
             this.labelTS311.Name = "labelTS311";
-            this.labelTS311.Size = new System.Drawing.Size(60, 16);
+            this.labelTS311.Size = new System.Drawing.Size(57, 13);
             this.labelTS311.TabIndex = 111;
             this.labelTS311.Text = "Level (dB):";
+            this.labelTS311.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // chkSigGenRX2
             // 
@@ -53492,12 +53199,14 @@
             // 
             // lblSigGenRXMode
             // 
+            this.lblSigGenRXMode.AutoSize = true;
             this.lblSigGenRXMode.Image = null;
-            this.lblSigGenRXMode.Location = new System.Drawing.Point(16, 34);
+            this.lblSigGenRXMode.Location = new System.Drawing.Point(8, 36);
             this.lblSigGenRXMode.Name = "lblSigGenRXMode";
-            this.lblSigGenRXMode.Size = new System.Drawing.Size(40, 16);
+            this.lblSigGenRXMode.Size = new System.Drawing.Size(40, 13);
             this.lblSigGenRXMode.TabIndex = 96;
             this.lblSigGenRXMode.Text = "Mode:";
+            this.lblSigGenRXMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmboSigGenRXMode
             // 
@@ -53509,12 +53218,469 @@
             "Noise",
             "Sweep",
             "Silence"});
-            this.cmboSigGenRXMode.Location = new System.Drawing.Point(57, 34);
+            this.cmboSigGenRXMode.Location = new System.Drawing.Point(69, 34);
             this.cmboSigGenRXMode.Name = "cmboSigGenRXMode";
             this.cmboSigGenRXMode.Size = new System.Drawing.Size(88, 21);
             this.cmboSigGenRXMode.TabIndex = 91;
             this.toolTip1.SetToolTip(this.cmboSigGenRXMode, "Select the signal type.");
             this.cmboSigGenRXMode.SelectedIndexChanged += new System.EventHandler(this.cmboSigGenRXMode_SelectedIndexChanged);
+            // 
+            // grpSigGenTransmit
+            // 
+            this.grpSigGenTransmit.Controls.Add(this.grpPulse);
+            this.grpSigGenTransmit.Controls.Add(this.labelTS313);
+            this.grpSigGenTransmit.Controls.Add(this.grpTXGenSweep);
+            this.grpSigGenTransmit.Controls.Add(this.udTXGenFreq);
+            this.grpSigGenTransmit.Controls.Add(this.labelTS304);
+            this.grpSigGenTransmit.Controls.Add(this.udTXGenScale);
+            this.grpSigGenTransmit.Controls.Add(this.labelTS303);
+            this.grpSigGenTransmit.Controls.Add(this.lblSigGenTXMode);
+            this.grpSigGenTransmit.Controls.Add(this.cmboSigGenTXMode);
+            this.grpSigGenTransmit.Location = new System.Drawing.Point(221, 16);
+            this.grpSigGenTransmit.Name = "grpSigGenTransmit";
+            this.grpSigGenTransmit.Size = new System.Drawing.Size(189, 334);
+            this.grpSigGenTransmit.TabIndex = 102;
+            this.grpSigGenTransmit.TabStop = false;
+            this.grpSigGenTransmit.Text = "Transmit";
+            // 
+            // grpPulse
+            // 
+            this.grpPulse.Controls.Add(this.udTXGenPulseTransition);
+            this.grpPulse.Controls.Add(this.labelTS317);
+            this.grpPulse.Controls.Add(this.udTXGenPulseDutyCycle);
+            this.grpPulse.Controls.Add(this.labelTS316);
+            this.grpPulse.Controls.Add(this.udTXGenPulseFreq);
+            this.grpPulse.Controls.Add(this.labelTS315);
+            this.grpPulse.Location = new System.Drawing.Point(7, 226);
+            this.grpPulse.Name = "grpPulse";
+            this.grpPulse.Size = new System.Drawing.Size(163, 100);
+            this.grpPulse.TabIndex = 119;
+            this.grpPulse.TabStop = false;
+            this.grpPulse.Text = "Pulse";
+            // 
+            // udTXGenPulseTransition
+            // 
+            this.udTXGenPulseTransition.DecimalPlaces = 4;
+            this.udTXGenPulseTransition.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.udTXGenPulseTransition.Location = new System.Drawing.Point(94, 64);
+            this.udTXGenPulseTransition.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenPulseTransition.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            262144});
+            this.udTXGenPulseTransition.Name = "udTXGenPulseTransition";
+            this.udTXGenPulseTransition.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenPulseTransition.TabIndex = 115;
+            this.udTXGenPulseTransition.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenPulseTransition, "Tone Frequency.");
+            this.udTXGenPulseTransition.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            196608});
+            this.udTXGenPulseTransition.ValueChanged += new System.EventHandler(this.udTXGenPulseTransition_ValueChanged);
+            // 
+            // labelTS317
+            // 
+            this.labelTS317.AutoSize = true;
+            this.labelTS317.Image = null;
+            this.labelTS317.Location = new System.Drawing.Point(1, 66);
+            this.labelTS317.Name = "labelTS317";
+            this.labelTS317.Size = new System.Drawing.Size(62, 13);
+            this.labelTS317.TabIndex = 114;
+            this.labelTS317.Text = "Trans. (sec)";
+            this.labelTS317.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenPulseDutyCycle
+            // 
+            this.udTXGenPulseDutyCycle.DecimalPlaces = 2;
+            this.udTXGenPulseDutyCycle.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.udTXGenPulseDutyCycle.Location = new System.Drawing.Point(94, 40);
+            this.udTXGenPulseDutyCycle.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenPulseDutyCycle.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.udTXGenPulseDutyCycle.Name = "udTXGenPulseDutyCycle";
+            this.udTXGenPulseDutyCycle.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenPulseDutyCycle.TabIndex = 113;
+            this.udTXGenPulseDutyCycle.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenPulseDutyCycle, "Tone Frequency.");
+            this.udTXGenPulseDutyCycle.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.udTXGenPulseDutyCycle.ValueChanged += new System.EventHandler(this.udTXGenPulseDutyCycle_ValueChanged);
+            // 
+            // labelTS316
+            // 
+            this.labelTS316.AutoSize = true;
+            this.labelTS316.Image = null;
+            this.labelTS316.Location = new System.Drawing.Point(1, 42);
+            this.labelTS316.Name = "labelTS316";
+            this.labelTS316.Size = new System.Drawing.Size(60, 13);
+            this.labelTS316.TabIndex = 112;
+            this.labelTS316.Text = "Duty Cycle";
+            this.labelTS316.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenPulseFreq
+            // 
+            this.udTXGenPulseFreq.DecimalPlaces = 2;
+            this.udTXGenPulseFreq.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.udTXGenPulseFreq.Location = new System.Drawing.Point(94, 16);
+            this.udTXGenPulseFreq.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.udTXGenPulseFreq.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.udTXGenPulseFreq.Name = "udTXGenPulseFreq";
+            this.udTXGenPulseFreq.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenPulseFreq.TabIndex = 111;
+            this.udTXGenPulseFreq.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenPulseFreq, "Tone Frequency.");
+            this.udTXGenPulseFreq.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTXGenPulseFreq.ValueChanged += new System.EventHandler(this.udTXGenPulseFreq_ValueChanged);
+            // 
+            // labelTS315
+            // 
+            this.labelTS315.AutoSize = true;
+            this.labelTS315.Image = null;
+            this.labelTS315.Location = new System.Drawing.Point(1, 18);
+            this.labelTS315.Name = "labelTS315";
+            this.labelTS315.Size = new System.Drawing.Size(55, 13);
+            this.labelTS315.TabIndex = 110;
+            this.labelTS315.Text = "Freq (Hz):";
+            this.labelTS315.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelTS313
+            // 
+            this.labelTS313.AutoSize = true;
+            this.labelTS313.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTS313.Image = null;
+            this.labelTS313.Location = new System.Drawing.Point(8, 15);
+            this.labelTS313.Name = "labelTS313";
+            this.labelTS313.Size = new System.Drawing.Size(119, 13);
+            this.labelTS313.TabIndex = 118;
+            this.labelTS313.Text = "Applied:  DSP Input";
+            // 
+            // grpTXGenSweep
+            // 
+            this.grpTXGenSweep.Controls.Add(this.labelTS306);
+            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepRate);
+            this.grpTXGenSweep.Controls.Add(this.labelTS305);
+            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepHigh);
+            this.grpTXGenSweep.Controls.Add(this.labelTS52);
+            this.grpTXGenSweep.Controls.Add(this.udTXGenSweepLow);
+            this.grpTXGenSweep.Location = new System.Drawing.Point(7, 121);
+            this.grpTXGenSweep.Name = "grpTXGenSweep";
+            this.grpTXGenSweep.Size = new System.Drawing.Size(163, 102);
+            this.grpTXGenSweep.TabIndex = 110;
+            this.grpTXGenSweep.TabStop = false;
+            this.grpTXGenSweep.Text = "Sweep";
+            // 
+            // labelTS306
+            // 
+            this.labelTS306.AutoSize = true;
+            this.labelTS306.Image = null;
+            this.labelTS306.Location = new System.Drawing.Point(1, 65);
+            this.labelTS306.Name = "labelTS306";
+            this.labelTS306.Size = new System.Drawing.Size(64, 13);
+            this.labelTS306.TabIndex = 90;
+            this.labelTS306.Text = "Rate (Hz/s):";
+            this.labelTS306.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenSweepRate
+            // 
+            this.udTXGenSweepRate.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenSweepRate.Location = new System.Drawing.Point(94, 63);
+            this.udTXGenSweepRate.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXGenSweepRate.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenSweepRate.Name = "udTXGenSweepRate";
+            this.udTXGenSweepRate.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenSweepRate.TabIndex = 89;
+            this.udTXGenSweepRate.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenSweepRate, "See the Sweep Button to the right.");
+            this.udTXGenSweepRate.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.udTXGenSweepRate.ValueChanged += new System.EventHandler(this.udTXGenSweepRate_ValueChanged);
+            // 
+            // labelTS305
+            // 
+            this.labelTS305.AutoSize = true;
+            this.labelTS305.Image = null;
+            this.labelTS305.Location = new System.Drawing.Point(1, 41);
+            this.labelTS305.Name = "labelTS305";
+            this.labelTS305.Size = new System.Drawing.Size(57, 13);
+            this.labelTS305.TabIndex = 88;
+            this.labelTS305.Text = "High (Hz):";
+            this.labelTS305.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenSweepHigh
+            // 
+            this.udTXGenSweepHigh.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenSweepHigh.Location = new System.Drawing.Point(94, 39);
+            this.udTXGenSweepHigh.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXGenSweepHigh.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenSweepHigh.Name = "udTXGenSweepHigh";
+            this.udTXGenSweepHigh.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenSweepHigh.TabIndex = 87;
+            this.udTXGenSweepHigh.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenSweepHigh, "See the Sweep Button to the right.");
+            this.udTXGenSweepHigh.Value = new decimal(new int[] {
+            4000,
+            0,
+            0,
+            0});
+            this.udTXGenSweepHigh.ValueChanged += new System.EventHandler(this.udTXGenSweepHigh_ValueChanged);
+            // 
+            // labelTS52
+            // 
+            this.labelTS52.AutoSize = true;
+            this.labelTS52.Image = null;
+            this.labelTS52.Location = new System.Drawing.Point(1, 17);
+            this.labelTS52.Name = "labelTS52";
+            this.labelTS52.Size = new System.Drawing.Size(53, 13);
+            this.labelTS52.TabIndex = 86;
+            this.labelTS52.Text = "Low (Hz):";
+            this.labelTS52.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenSweepLow
+            // 
+            this.udTXGenSweepLow.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenSweepLow.Location = new System.Drawing.Point(94, 15);
+            this.udTXGenSweepLow.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXGenSweepLow.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenSweepLow.Name = "udTXGenSweepLow";
+            this.udTXGenSweepLow.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenSweepLow.TabIndex = 85;
+            this.udTXGenSweepLow.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenSweepLow, "See the Sweep Button to the right.");
+            this.udTXGenSweepLow.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenSweepLow.ValueChanged += new System.EventHandler(this.udTXGenSweepLow_ValueChanged);
+            // 
+            // udTXGenFreq
+            // 
+            this.udTXGenFreq.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.udTXGenFreq.Location = new System.Drawing.Point(101, 81);
+            this.udTXGenFreq.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXGenFreq.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenFreq.Name = "udTXGenFreq";
+            this.udTXGenFreq.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenFreq.TabIndex = 109;
+            this.udTXGenFreq.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenFreq, "Tone Frequency.");
+            this.udTXGenFreq.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udTXGenFreq.ValueChanged += new System.EventHandler(this.udTXGenFreq_ValueChanged);
+            // 
+            // labelTS304
+            // 
+            this.labelTS304.AutoSize = true;
+            this.labelTS304.Image = null;
+            this.labelTS304.Location = new System.Drawing.Point(8, 83);
+            this.labelTS304.Name = "labelTS304";
+            this.labelTS304.Size = new System.Drawing.Size(55, 13);
+            this.labelTS304.TabIndex = 108;
+            this.labelTS304.Text = "Freq (Hz):";
+            this.labelTS304.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // udTXGenScale
+            // 
+            this.udTXGenScale.DecimalPlaces = 1;
+            this.udTXGenScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.udTXGenScale.Location = new System.Drawing.Point(101, 57);
+            this.udTXGenScale.Maximum = new decimal(new int[] {
+            13,
+            0,
+            0,
+            0});
+            this.udTXGenScale.Minimum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            -2147352576});
+            this.udTXGenScale.Name = "udTXGenScale";
+            this.udTXGenScale.Size = new System.Drawing.Size(56, 22);
+            this.udTXGenScale.TabIndex = 102;
+            this.udTXGenScale.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXGenScale, "Sets the amplitude of the signal (typically between 0 and 1.0)");
+            this.udTXGenScale.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXGenScale.ValueChanged += new System.EventHandler(this.udTXGenScale_ValueChanged);
+            // 
+            // labelTS303
+            // 
+            this.labelTS303.AutoSize = true;
+            this.labelTS303.Image = null;
+            this.labelTS303.Location = new System.Drawing.Point(8, 59);
+            this.labelTS303.Name = "labelTS303";
+            this.labelTS303.Size = new System.Drawing.Size(57, 13);
+            this.labelTS303.TabIndex = 101;
+            this.labelTS303.Text = "Level (dB):";
+            this.labelTS303.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblSigGenTXMode
+            // 
+            this.lblSigGenTXMode.AutoSize = true;
+            this.lblSigGenTXMode.Image = null;
+            this.lblSigGenTXMode.Location = new System.Drawing.Point(8, 36);
+            this.lblSigGenTXMode.Name = "lblSigGenTXMode";
+            this.lblSigGenTXMode.Size = new System.Drawing.Size(40, 13);
+            this.lblSigGenTXMode.TabIndex = 96;
+            this.lblSigGenTXMode.Text = "Mode:";
+            this.lblSigGenTXMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cmboSigGenTXMode
+            // 
+            this.cmboSigGenTXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmboSigGenTXMode.DropDownWidth = 121;
+            this.cmboSigGenTXMode.Items.AddRange(new object[] {
+            "Radio",
+            "Tone",
+            "Noise",
+            "Sweep",
+            "Sawtooth",
+            "Triangle",
+            "Pulse",
+            "Silence"});
+            this.cmboSigGenTXMode.Location = new System.Drawing.Point(69, 34);
+            this.cmboSigGenTXMode.Name = "cmboSigGenTXMode";
+            this.cmboSigGenTXMode.Size = new System.Drawing.Size(88, 21);
+            this.cmboSigGenTXMode.TabIndex = 91;
+            this.toolTip1.SetToolTip(this.cmboSigGenTXMode, "Select the signal type.");
+            this.cmboSigGenTXMode.SelectedIndexChanged += new System.EventHandler(this.cmboSigGenTXMode_SelectedIndexChanged);
+            // 
+            // chkShowDisplayDebug
+            // 
+            this.chkShowDisplayDebug.Image = null;
+            this.chkShowDisplayDebug.Location = new System.Drawing.Point(529, 398);
+            this.chkShowDisplayDebug.Name = "chkShowDisplayDebug";
+            this.chkShowDisplayDebug.Size = new System.Drawing.Size(131, 24);
+            this.chkShowDisplayDebug.TabIndex = 119;
+            this.chkShowDisplayDebug.Text = "Show Display Debug";
+            this.toolTip1.SetToolTip(this.chkShowDisplayDebug, "Show some debug info in the spectral area");
+            this.chkShowDisplayDebug.CheckedChanged += new System.EventHandler(this.chkShowDisplayDebug_CheckedChanged);
+            // 
+            // chkShowControlDebug
+            // 
+            this.chkShowControlDebug.Image = null;
+            this.chkShowControlDebug.Location = new System.Drawing.Point(529, 375);
+            this.chkShowControlDebug.Name = "chkShowControlDebug";
+            this.chkShowControlDebug.Size = new System.Drawing.Size(131, 24);
+            this.chkShowControlDebug.TabIndex = 118;
+            this.chkShowControlDebug.Text = "Show Control Debug";
+            this.toolTip1.SetToolTip(this.chkShowControlDebug, "Show the control name that is being hovered over with the mouse as debug in the s" +
+        "pectrum display area");
+            this.chkShowControlDebug.CheckedChanged += new System.EventHandler(this.chkShowControlDebug_CheckedChanged);
+            // 
+            // btnShowSeqLog
+            // 
+            this.btnShowSeqLog.Image = null;
+            this.btnShowSeqLog.Location = new System.Drawing.Point(420, 376);
+            this.btnShowSeqLog.Name = "btnShowSeqLog";
+            this.btnShowSeqLog.Selectable = true;
+            this.btnShowSeqLog.Size = new System.Drawing.Size(97, 46);
+            this.btnShowSeqLog.TabIndex = 92;
+            this.btnShowSeqLog.Text = "Show SEQ log";
+            this.btnShowSeqLog.UseVisualStyleBackColor = true;
+            this.btnShowSeqLog.Click += new System.EventHandler(this.btnShowSeqLog_Click);
             // 
             // grpTestTXIMD
             // 
@@ -53545,7 +53711,7 @@
             // 
             this.radUseFixedDrive2Tone.AutoSize = true;
             this.radUseFixedDrive2Tone.Image = null;
-            this.radUseFixedDrive2Tone.Location = new System.Drawing.Point(25, 198);
+            this.radUseFixedDrive2Tone.Location = new System.Drawing.Point(8, 200);
             this.radUseFixedDrive2Tone.Name = "radUseFixedDrive2Tone";
             this.radUseFixedDrive2Tone.Size = new System.Drawing.Size(103, 17);
             this.radUseFixedDrive2Tone.TabIndex = 125;
@@ -53558,7 +53724,7 @@
             // 
             this.radUseDriveSlider2Tone.AutoSize = true;
             this.radUseDriveSlider2Tone.Image = null;
-            this.radUseDriveSlider2Tone.Location = new System.Drawing.Point(25, 152);
+            this.radUseDriveSlider2Tone.Location = new System.Drawing.Point(8, 152);
             this.radUseDriveSlider2Tone.Name = "radUseDriveSlider2Tone";
             this.radUseDriveSlider2Tone.Size = new System.Drawing.Size(105, 17);
             this.radUseDriveSlider2Tone.TabIndex = 124;
@@ -53571,7 +53737,7 @@
             // 
             this.radUseTuneSlider2Tone.AutoSize = true;
             this.radUseTuneSlider2Tone.Image = null;
-            this.radUseTuneSlider2Tone.Location = new System.Drawing.Point(25, 175);
+            this.radUseTuneSlider2Tone.Location = new System.Drawing.Point(8, 176);
             this.radUseTuneSlider2Tone.Name = "radUseTuneSlider2Tone";
             this.radUseTuneSlider2Tone.Size = new System.Drawing.Size(105, 17);
             this.radUseTuneSlider2Tone.TabIndex = 123;
@@ -53582,20 +53748,23 @@
             // 
             // labelTS18
             // 
+            this.labelTS18.AutoSize = true;
             this.labelTS18.Image = null;
-            this.labelTS18.Location = new System.Drawing.Point(10, 120);
+            this.labelTS18.Location = new System.Drawing.Point(8, 123);
             this.labelTS18.Name = "labelTS18";
-            this.labelTS18.Size = new System.Drawing.Size(60, 20);
+            this.labelTS18.Size = new System.Drawing.Size(59, 13);
             this.labelTS18.TabIndex = 121;
             this.labelTS18.Text = "F#2 delay:";
-            this.labelTS18.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.labelTS18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelTS17
             // 
+            this.labelTS17.AutoSize = true;
             this.labelTS17.Image = null;
-            this.labelTS17.Location = new System.Drawing.Point(132, 125);
+            this.labelTS17.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelTS17.Location = new System.Drawing.Point(132, 123);
             this.labelTS17.Name = "labelTS17";
-            this.labelTS17.Size = new System.Drawing.Size(24, 18);
+            this.labelTS17.Size = new System.Drawing.Size(21, 13);
             this.labelTS17.TabIndex = 91;
             this.labelTS17.Text = "ms";
             // 
@@ -53606,7 +53775,7 @@
             0,
             0,
             0});
-            this.udFreq2Delay.Location = new System.Drawing.Point(70, 123);
+            this.udFreq2Delay.Location = new System.Drawing.Point(70, 121);
             this.udFreq2Delay.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -53633,7 +53802,7 @@
             this.labelTS314.AutoSize = true;
             this.labelTS314.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelTS314.Image = null;
-            this.labelTS314.Location = new System.Drawing.Point(13, 24);
+            this.labelTS314.Location = new System.Drawing.Point(8, 31);
             this.labelTS314.Name = "labelTS314";
             this.labelTS314.Size = new System.Drawing.Size(128, 13);
             this.labelTS314.TabIndex = 118;
@@ -53645,7 +53814,7 @@
             this.chkInvertTones.Checked = true;
             this.chkInvertTones.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkInvertTones.Image = null;
-            this.chkInvertTones.Location = new System.Drawing.Point(13, 247);
+            this.chkInvertTones.Location = new System.Drawing.Point(11, 247);
             this.chkInvertTones.Name = "chkInvertTones";
             this.chkInvertTones.Size = new System.Drawing.Size(125, 17);
             this.chkInvertTones.TabIndex = 97;
@@ -53654,13 +53823,14 @@
             // 
             // lblTwoToneLevel
             // 
+            this.lblTwoToneLevel.AutoSize = true;
             this.lblTwoToneLevel.Image = null;
-            this.lblTwoToneLevel.Location = new System.Drawing.Point(9, 97);
+            this.lblTwoToneLevel.Location = new System.Drawing.Point(8, 99);
             this.lblTwoToneLevel.Name = "lblTwoToneLevel";
-            this.lblTwoToneLevel.Size = new System.Drawing.Size(60, 16);
+            this.lblTwoToneLevel.Size = new System.Drawing.Size(57, 13);
             this.lblTwoToneLevel.TabIndex = 96;
             this.lblTwoToneLevel.Text = "Level (dB):";
-            this.lblTwoToneLevel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.lblTwoToneLevel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udTwoToneLevel
             // 
@@ -53695,13 +53865,14 @@
             // 
             // lblTestToneFreq2
             // 
+            this.lblTestToneFreq2.AutoSize = true;
             this.lblTestToneFreq2.Image = null;
-            this.lblTestToneFreq2.Location = new System.Drawing.Point(10, 73);
+            this.lblTestToneFreq2.Location = new System.Drawing.Point(8, 75);
             this.lblTestToneFreq2.Name = "lblTestToneFreq2";
-            this.lblTestToneFreq2.Size = new System.Drawing.Size(50, 16);
+            this.lblTestToneFreq2.Size = new System.Drawing.Size(49, 13);
             this.lblTestToneFreq2.TabIndex = 88;
             this.lblTestToneFreq2.Text = "Freq #2:";
-            this.lblTestToneFreq2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblTestToneFreq2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udTestIMDFreq2
             // 
@@ -53739,7 +53910,7 @@
             0,
             0,
             0});
-            this.udTestIMDPower.Location = new System.Drawing.Point(68, 221);
+            this.udTestIMDPower.Location = new System.Drawing.Point(70, 221);
             this.udTestIMDPower.Maximum = new decimal(new int[] {
             100,
             0,
@@ -53766,7 +53937,7 @@
             // 
             this.chkTestIMD.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkTestIMD.Image = null;
-            this.chkTestIMD.Location = new System.Drawing.Point(72, 281);
+            this.chkTestIMD.Location = new System.Drawing.Point(41, 278);
             this.chkTestIMD.Name = "chkTestIMD";
             this.chkTestIMD.Size = new System.Drawing.Size(76, 31);
             this.chkTestIMD.TabIndex = 84;
@@ -53776,13 +53947,14 @@
             // 
             // lblTestToneFreq1
             // 
+            this.lblTestToneFreq1.AutoSize = true;
             this.lblTestToneFreq1.Image = null;
-            this.lblTestToneFreq1.Location = new System.Drawing.Point(10, 49);
+            this.lblTestToneFreq1.Location = new System.Drawing.Point(8, 52);
             this.lblTestToneFreq1.Name = "lblTestToneFreq1";
-            this.lblTestToneFreq1.Size = new System.Drawing.Size(50, 16);
+            this.lblTestToneFreq1.Size = new System.Drawing.Size(49, 13);
             this.lblTestToneFreq1.TabIndex = 83;
             this.lblTestToneFreq1.Text = "Freq #1:";
-            this.lblTestToneFreq1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.lblTestToneFreq1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // udTestIMDFreq1
             // 
@@ -53813,12 +53985,33 @@
             0});
             this.udTestIMDFreq1.LostFocus += new System.EventHandler(this.udTestIMDFreq1_LostFocus);
             // 
+            // grpTestAudioBalance
+            // 
+            this.grpTestAudioBalance.Controls.Add(this.btnTestAudioBalStart);
+            this.grpTestAudioBalance.Location = new System.Drawing.Point(344, 8);
+            this.grpTestAudioBalance.Name = "grpTestAudioBalance";
+            this.grpTestAudioBalance.Size = new System.Drawing.Size(120, 64);
+            this.grpTestAudioBalance.TabIndex = 86;
+            this.grpTestAudioBalance.TabStop = false;
+            this.grpTestAudioBalance.Text = "Audio Balance Test";
+            this.grpTestAudioBalance.Visible = false;
+            // 
+            // btnTestAudioBalStart
+            // 
+            this.btnTestAudioBalStart.Image = null;
+            this.btnTestAudioBalStart.Location = new System.Drawing.Point(24, 24);
+            this.btnTestAudioBalStart.Name = "btnTestAudioBalStart";
+            this.btnTestAudioBalStart.Selectable = true;
+            this.btnTestAudioBalStart.Size = new System.Drawing.Size(75, 23);
+            this.btnTestAudioBalStart.TabIndex = 0;
+            this.btnTestAudioBalStart.Text = "Start";
+            // 
             // grpImpulseTest
             // 
             this.grpImpulseTest.Controls.Add(this.udImpulseNum);
             this.grpImpulseTest.Controls.Add(this.btnImpulse);
             this.grpImpulseTest.Enabled = false;
-            this.grpImpulseTest.Location = new System.Drawing.Point(220, 8);
+            this.grpImpulseTest.Location = new System.Drawing.Point(228, 8);
             this.grpImpulseTest.Name = "grpImpulseTest";
             this.grpImpulseTest.Size = new System.Drawing.Size(160, 64);
             this.grpImpulseTest.TabIndex = 91;
@@ -53867,27 +54060,6 @@
             this.btnImpulse.TabIndex = 90;
             this.btnImpulse.Text = "Impulse";
             this.btnImpulse.Click += new System.EventHandler(this.btnImpulse_Click);
-            // 
-            // grpTestAudioBalance
-            // 
-            this.grpTestAudioBalance.Controls.Add(this.btnTestAudioBalStart);
-            this.grpTestAudioBalance.Location = new System.Drawing.Point(344, 8);
-            this.grpTestAudioBalance.Name = "grpTestAudioBalance";
-            this.grpTestAudioBalance.Size = new System.Drawing.Size(120, 64);
-            this.grpTestAudioBalance.TabIndex = 86;
-            this.grpTestAudioBalance.TabStop = false;
-            this.grpTestAudioBalance.Text = "Audio Balance Test";
-            this.grpTestAudioBalance.Visible = false;
-            // 
-            // btnTestAudioBalStart
-            // 
-            this.btnTestAudioBalStart.Image = null;
-            this.btnTestAudioBalStart.Location = new System.Drawing.Point(24, 24);
-            this.btnTestAudioBalStart.Name = "btnTestAudioBalStart";
-            this.btnTestAudioBalStart.Selectable = true;
-            this.btnTestAudioBalStart.Size = new System.Drawing.Size(75, 23);
-            this.btnTestAudioBalStart.TabIndex = 0;
-            this.btnTestAudioBalStart.Text = "Start";
             // 
             // openFileDialog1
             // 
@@ -55055,10 +55227,10 @@
             // 
             this.radSpaceBarVFOBTX.AutoSize = true;
             this.radSpaceBarVFOBTX.Image = null;
-            this.radSpaceBarVFOBTX.Location = new System.Drawing.Point(6, 104);
+            this.radSpaceBarVFOBTX.Location = new System.Drawing.Point(6, 101);
             this.radSpaceBarVFOBTX.Name = "radSpaceBarVFOBTX";
             this.radSpaceBarVFOBTX.Size = new System.Drawing.Size(115, 17);
-            this.radSpaceBarVFOBTX.TabIndex = 60;
+            this.radSpaceBarVFOBTX.TabIndex = 63;
             this.radSpaceBarVFOBTX.Text = "VFOB_TX - Toggle";
             this.toolTip1.SetToolTip(this.radSpaceBarVFOBTX, "SpaceBar Toggles To VFOB-TX");
             this.radSpaceBarVFOBTX.UseVisualStyleBackColor = true;
@@ -55160,7 +55332,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udStaticIP2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udStaticIP1)).EndInit();
             this.grpFRSRegion.ResumeLayout(false);
-            this.grpFRSRegion.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picWarningRegionExtended)).EndInit();
             this.grpGeneralModel.ResumeLayout(false);
             this.grpMetisAddr.ResumeLayout(false);
@@ -55187,7 +55358,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udHermesStepAttenuatorDataRX2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udHermesStepAttenuatorData)).EndInit();
             this.grpCWDelay.ResumeLayout(false);
-            this.grpCWDelay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udCWKeyUpDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udHWKeyDownDelay)).EndInit();
             this.grpGenCustomTitleText.ResumeLayout(false);
@@ -55216,15 +55386,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.udAmpSens)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udAmpVoff)).EndInit();
             this.panelRX2LevelCal.ResumeLayout(false);
+            this.panelRX2LevelCal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalRX2Level)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalRX2Freq2)).EndInit();
             this.grpBoxTXDisplayCal.ResumeLayout(false);
+            this.grpBoxTXDisplayCal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXDisplayCalOffset)).EndInit();
             this.grpHPSDRFreqCalDbg.ResumeLayout(false);
             this.grpHPSDRFreqCalDbg.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udHPSDRFreqCorrectFactor10MHz)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udHPSDRFreqCorrectFactor)).EndInit();
             this.grpGenCalLevel.ResumeLayout(false);
+            this.grpGenCalLevel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ud6mRx2LNAGainOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ud6mLNAGainOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalLevel)).EndInit();
@@ -55233,6 +55406,7 @@
             this.grpGeneralCalibration.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalFreq1)).EndInit();
             this.grpGenCalRXImage.ResumeLayout(false);
+            this.grpGenCalRXImage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udGeneralCalFreq3)).EndInit();
             this.tpFilters.ResumeLayout(false);
             this.tpFilters.PerformLayout();
@@ -55426,6 +55600,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udVAC1_Force)).EndInit();
             this.grpDirectIQOutput.ResumeLayout(false);
+            this.grpDirectIQOutput.PerformLayout();
             this.grpAudioLatency2.ResumeLayout(false);
             this.grpAudioLatency2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udAudioLatencyPAOut)).EndInit();
@@ -55442,6 +55617,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udVAC2_Force)).EndInit();
             this.grpVAC2DirectIQ.ResumeLayout(false);
+            this.grpVAC2DirectIQ.PerformLayout();
             this.grpVAC2AutoEnable.ResumeLayout(false);
             this.grpVAC2Gain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udVAC2GainTX)).EndInit();
@@ -55646,6 +55822,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udRX2AutoAGCOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX1AutoAGCOffset)).EndInit();
             this.grpDSPLeveler.ResumeLayout(false);
+            this.grpDSPLeveler.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPLevelerHangTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPLevelerThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPLevelerSlope)).EndInit();
@@ -55653,6 +55830,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPLevelerAttack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDSPLevelerHangThreshold)).EndInit();
             this.grpDSPALC.ResumeLayout(false);
+            this.grpDSPALC.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbDSPALCHangThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCHangTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCMaximumGain)).EndInit();
@@ -55660,6 +55838,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCDecay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPALCAttack)).EndInit();
             this.grpDSPAGC.ResumeLayout(false);
+            this.grpDSPAGC.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCRX2HangTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCRX2Decay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDSPAGCRX2Attack)).EndInit();
@@ -55855,13 +56034,9 @@
             this.grpExtTXInhibit.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLowSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHighSave)).EndInit();
-            this.grpBoxMic.ResumeLayout(false);
-            this.grpBoxMic.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMax)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udLineInBoost)).EndInit();
             this.grpTXProfileDef.ResumeLayout(false);
             this.grpTXAM.ResumeLayout(false);
+            this.grpTXAM.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXAMCarrierLevel)).EndInit();
             this.grpTXMonitor.ResumeLayout(false);
             this.grpTXMonitor.PerformLayout();
@@ -55872,8 +56047,14 @@
             this.grpPATune.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXTunePower)).EndInit();
             this.grpTXFilter.ResumeLayout(false);
+            this.grpTXFilter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).EndInit();
+            this.grpBoxMic.ResumeLayout(false);
+            this.grpBoxMic.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udMicGainMax)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udLineInBoost)).EndInit();
             this.tpPowerAmplifier.ResumeLayout(false);
             this.tcPowerAmplifier.ResumeLayout(false);
             this.tpGainByBand.ResumeLayout(false);
@@ -55973,18 +56154,22 @@
             this.tpAppearanceGeneral.ResumeLayout(false);
             this.tpAppearanceGeneral.PerformLayout();
             this.groupBoxTS12.ResumeLayout(false);
+            this.groupBoxTS12.PerformLayout();
             this.grpAppSkins.ResumeLayout(false);
             this.grpAppSkins.PerformLayout();
             this.grpAppearanceBand.ResumeLayout(false);
+            this.grpAppearanceBand.PerformLayout();
             this.grpAppearanceVFO.ResumeLayout(false);
+            this.grpAppearanceVFO.PerformLayout();
             this.tpAppearanceDisplay.ResumeLayout(false);
-            this.tpAppearanceDisplay.PerformLayout();
             this.groupBoxTS18.ResumeLayout(false);
+            this.groupBoxTS18.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udNoiseFloorLineWidth)).EndInit();
             this.grpPanadaptorGradient.ResumeLayout(false);
             this.grpAppRXWaterfall.ResumeLayout(false);
             this.grpAppRXWaterfall.PerformLayout();
             this.grpAppGrid.ResumeLayout(false);
+            this.grpAppGrid.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbHGridColorAlpha)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbGridFineAlpha)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbGridCourseAlpha)).EndInit();
@@ -56000,19 +56185,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1FilterAlpha)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayLineWidth)).EndInit();
             this.grpDisplayPeakCursor.ResumeLayout(false);
+            this.grpDisplayPeakCursor.PerformLayout();
             this.tpAppearanceMeter.ResumeLayout(false);
+            this.tpAppearanceMeter.PerformLayout();
             this.groupBoxTS14.ResumeLayout(false);
+            this.groupBoxTS14.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSignalHistoryAlpha)).EndInit();
             this.grpMeterEdge.ResumeLayout(false);
+            this.grpMeterEdge.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMeterEdgeBackgroundAlpha)).EndInit();
             this.grpAppearanceMeter.ResumeLayout(false);
+            this.grpAppearanceMeter.PerformLayout();
             this.tpAppearanceMeter2.ResumeLayout(false);
             this.grpMultiMeterHolder.ResumeLayout(false);
-            this.grpMultiMeterHolder.PerformLayout();
-            this.grpMeterItemVfoDisplaySettings.ResumeLayout(false);
-            this.grpMeterItemVfoDisplaySettings.PerformLayout();
-            this.grpMeterItemClockSettings.ResumeLayout(false);
-            this.grpMeterItemClockSettings.PerformLayout();
             this.grpMeterItemSettings.ResumeLayout(false);
             this.grpMeterItemSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemIgnoreHistoryDuration)).EndInit();
@@ -56024,6 +56209,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemUpdateRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbMeterItemHistoryAlpha)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMeterItemHistoryDuration)).EndInit();
+            this.grpMeterItemVfoDisplaySettings.ResumeLayout(false);
+            this.grpMeterItemVfoDisplaySettings.PerformLayout();
+            this.grpMeterItemClockSettings.ResumeLayout(false);
+            this.grpMeterItemClockSettings.PerformLayout();
             this.tcAppearanceTXDisplay.ResumeLayout(false);
             this.grpAppTXWaterfall.ResumeLayout(false);
             this.grpAppTXWaterfall.PerformLayout();
@@ -56058,6 +56247,7 @@
             this.tpCATSerialPorts.ResumeLayout(false);
             this.tpCATSerialPorts.PerformLayout();
             this.grpPTTBitBang.ResumeLayout(false);
+            this.grpPTTBitBang.PerformLayout();
             this.grpCat4ControlBox.ResumeLayout(false);
             this.grpCat3ControlBox.ResumeLayout(false);
             this.grpCat2ControlBox.ResumeLayout(false);
@@ -56104,26 +56294,29 @@
             this.grpAndr.PerformLayout();
             this.tpTests.ResumeLayout(false);
             this.grpBoxTS1.ResumeLayout(false);
-            this.grpSigGenTransmit.ResumeLayout(false);
-            this.grpSigGenTransmit.PerformLayout();
-            this.grpPulse.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseTransition)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseDutyCycle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseFreq)).EndInit();
-            this.grpTXGenSweep.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepRate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepHigh)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepLow)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenFreq)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXGenScale)).EndInit();
             this.grpSigGenReceive.ResumeLayout(false);
             this.grpSigGenReceive.PerformLayout();
             this.grpRXGenSweep.ResumeLayout(false);
+            this.grpRXGenSweep.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepRate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXGenSweepLow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXGenFreq)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXGenScale)).EndInit();
+            this.grpSigGenTransmit.ResumeLayout(false);
+            this.grpSigGenTransmit.PerformLayout();
+            this.grpPulse.ResumeLayout(false);
+            this.grpPulse.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseTransition)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseDutyCycle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenPulseFreq)).EndInit();
+            this.grpTXGenSweep.ResumeLayout(false);
+            this.grpTXGenSweep.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepRate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepHigh)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenSweepLow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenFreq)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXGenScale)).EndInit();
             this.grpTestTXIMD.ResumeLayout(false);
             this.grpTestTXIMD.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udFreq2Delay)).EndInit();
@@ -56131,9 +56324,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDFreq2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDPower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTestIMDFreq1)).EndInit();
+            this.grpTestAudioBalance.ResumeLayout(false);
             this.grpImpulseTest.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udImpulseNum)).EndInit();
-            this.grpTestAudioBalance.ResumeLayout(false);
             this.grpDiagInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTS5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTS7)).EndInit();
@@ -58840,13 +59033,11 @@
         private ColorButton clrbtnSignalHistoryColour;
         private LabelTS labelTS518;
         private CheckBoxTS chkVSyncDX;
-        private LabelTS lblBlobMS;
         private NumericUpDownTS udBlobPeakHoldMS;
         private CheckBoxTS chkBlobPeakHold;
         private CheckBoxTS chkPeakHoldDrop;
         private LabelTS lblRX1WaterFallCalulatedDelayMS;
         private LabelTS lblRX2WaterFallCalulatedDelayMS;
-        private LabelTS lblSignalHistoryDurationMS;
         private NumericUpDownTS udSignalHistoryDuration;
         private LabelTS labelTS519;
         private LabelTS labelTS520;
@@ -59611,7 +59802,7 @@
         private LabelTS labelTS178;
         private Label lblBuffer;
         private CheckBoxTS chkHermesLite2;
-        private CheckBox chkN2ADR;
+        private CheckBoxTS chkN2ADR;
         private ButtonTS btnExplorer;
         private ButtonTS btnErrorLog;
         public CheckBoxTS chkMasterVolumeForVAC;
@@ -59633,6 +59824,9 @@
         private Label lblRadioSamplerateWarn;
         private PictureBox pbRXSRWarn;
         private CheckBoxTS chkAveragingRX2;
+        private LabelTS labelTS161;
+        private CheckBoxTS chkExpMHde;
+        private CheckBoxTS chkColMHde;
         public ComboBoxTS comboAudioBuffer2;
         public ComboBoxTS comboAudioBuffer3;
         private RadioButtonTS radSpaceBarVFOBTX;
