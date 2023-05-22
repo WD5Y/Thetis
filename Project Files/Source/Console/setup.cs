@@ -29243,59 +29243,66 @@ namespace Thetis
         }
 
         private void chkExpMHde_CheckedChanged(object sender, EventArgs e)
-        {
-            if (console.collapsedDisplay == false)
-            {
+        {           
                 if (chkExpMHde.Checked == true)
                 {
                     console.ExpMeter = true;
-                    console.grpMultimeter.Hide();
-                    console.grpMultimeterMenus.Hide();
-                    console.grpRX2Meter.Hide();
-                    console.comboMeterRXMode.Hide();
-                    console.comboRX2MeterMode.Hide();
-                    console.comboMeterTXMode.Hide();
+                    if (console.collapsedDisplay == false)
+                    {
+                        console.grpMultimeter.Hide();
+                        console.grpMultimeterMenus.Hide();
+                        console.grpRX2Meter.Hide();
+                        console.comboMeterRXMode.Hide();
+                        console.comboRX2MeterMode.Hide();
+                        console.comboMeterTXMode.Hide();
+                    }
                 }
                 if (chkExpMHde.Checked == false)
                 {
                     console.ExpMeter = false;
-                    console.grpMultimeter.Show();
-                    console.grpMultimeterMenus.Show();
-                    console.grpRX2Meter.Show();
-                    console.comboMeterRXMode.Show();
-                    console.comboRX2MeterMode.Show();
-                    console.comboMeterTXMode.Show();
-                }
-            }
+                    if (console.collapsedDisplay == false)
+                    {
+                        console.grpMultimeter.Show();
+                        console.grpMultimeterMenus.Show();
+                        console.grpRX2Meter.Show();
+                        console.comboMeterRXMode.Show();
+                        console.comboRX2MeterMode.Show();
+                        console.comboMeterTXMode.Show();
+                    }
+                }            
         }
 
         private void chkColMHde_CheckedChanged(object sender, EventArgs e)
-        {
-            if (console.collapsedDisplay == true)
-            {
+        {            
                 if (chkColMHde.Checked == true)
                 {
                     console.ColMeter = true;
-                    console.comboMeterRXMode.Hide();
-                    console.comboRX2MeterMode.Hide();
-                    console.comboMeterTXMode.Hide();
-                    console.picMultiMeterDigital.Hide();
-                    console.txtMultiText.Hide();
-                    console.picRX2Meter.Hide();
-                    console.txtRX2Meter.Hide();
+                    if (console.collapsedDisplay == true)
+                    {
+                        console.comboMeterRXMode.Hide();
+                        console.comboRX2MeterMode.Hide();
+                        console.comboMeterTXMode.Hide();
+                        console.picMultiMeterDigital.Hide();
+                        console.txtMultiText.Hide();
+                        console.picRX2Meter.Hide();
+                        console.txtRX2Meter.Hide();
+                    }
                 }
                 if (chkColMHde.Checked == false)
                 {
                     console.ColMeter = false;
-                    console.comboMeterRXMode.Show();
-                    console.comboRX2MeterMode.Show();
-                    console.comboMeterTXMode.Show();
-                    console.picMultiMeterDigital.Show();
-                    console.txtMultiText.Show();
-                    console.picRX2Meter.Show();
-                    console.txtRX2Meter.Show();
-                }
-            }
+                    if (console.collapsedDisplay == true)
+                    {
+                       console.comboMeterRXMode.Show();
+                       console.comboRX2MeterMode.Show();
+                       console.comboMeterTXMode.Show();
+                       console.picMultiMeterDigital.Show();
+                       console.txtMultiText.Show();
+                       console.picRX2Meter.Show();
+                       console.txtRX2Meter.Show();
+                    }
+
+                }            
         }
 
         private void radSpaceBarVFOBTX_CheckedChanged(object sender, EventArgs e)

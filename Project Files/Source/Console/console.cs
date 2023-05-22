@@ -53695,7 +53695,7 @@ console_basis_size.Height - (panelRX2Filter.Height + 8) :*/
 
             //wd5y
             if (collapsedDisplay == true)
-            {
+           {
                 if (ColMeter == true)
                 {
                     comboMeterRXMode.Hide();
