@@ -25,23 +25,7 @@
   asiodrivers.cpp
   asiolist.cpp
   pa_asio.cpp
-     Creating library C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\Source\..\bin\x64\Release\portaudio.lib and object C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\Source\..\bin\x64\Release\portaudio.exp
+     Creating library C:\Users\User\Documents\Thetis-2.9.0\WD5Y_Thetis_New_2023\Thetis_WD5Y_May_2023\Thetis-2.9.0-master_WD5Y-5.21.23\Thetis-2.9.0-master\Project Files\Source\..\bin\x64\Release\portaudio.lib and object C:\Users\User\Documents\Thetis-2.9.0\WD5Y_Thetis_New_2023\Thetis_WD5Y_May_2023\Thetis-2.9.0-master_WD5Y-5.21.23\Thetis-2.9.0-master\Project Files\Source\..\bin\x64\Release\portaudio.exp
   Generating code
-  
-  --- Analyzing function: AllocateLinks
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\common\pa_allocation.c(91) : info C5001: loop vectorized
-  
-  --- Analyzing function: TerminateWaveHeaders
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\hostapi\wmme\pa_win_wmme.c(2104) : info C5004: loop unswitched
-  
-  --- Analyzing function: CalculateMaxHostSampleFrameSizeBytes
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\hostapi\wmme\pa_win_wmme.c(1541) : info C5001: loop vectorized
-  
-  --- Analyzing function: InitializeWaveHandles
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\hostapi\wmme\pa_win_wmme.c(1827) : info C5004: loop unswitched
-  
-  --- Analyzing function: int __cdecl OpenStream(struct PaUtilHostApiRepresentation * __ptr64,void * __ptr64 * __ptr64,struct PaStreamParameters const * __ptr64,struct PaStreamParameters const * __ptr64,double,unsigned long,unsigned long,int (__cdecl*)(void const * __ptr64,void * __ptr64,unsigned long,struct PaStreamCallbackTimeInfo const * __ptr64,unsigned long,void * __ptr64),void * __ptr64)
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\hostapi\asio\pa_asio.cpp(2222) : info C5004: loop unswitched
-  C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\lib\portaudio\src\hostapi\asio\pa_asio.cpp(2239) : info C5004: loop unswitched
   Finished generating code
-  portaudio.vcxproj -> C:\Users\User\Documents\Thetis-2.9.0\WD5Y-Thetis\Thetis\Project Files\bin\x64\Release\portaudio.dll
+  portaudio.vcxproj -> C:\Users\User\Documents\Thetis-2.9.0\WD5Y_Thetis_New_2023\Thetis_WD5Y_May_2023\Thetis-2.9.0-master_WD5Y-5.21.23\Thetis-2.9.0-master\Project Files\bin\x64\Release\portaudio.dll
