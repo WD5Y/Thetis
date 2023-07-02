@@ -23,7 +23,6 @@ namespace Thetis
             GetWideBand();
         }
 
-
         public wbDisplay WBdisplay
         {
             get { return wbdisplay; }

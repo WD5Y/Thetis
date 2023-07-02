@@ -1,4 +1,3 @@
-
 //=================================================================
 // pandisplay.cs
 //=================================================================
@@ -21,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 // You may contact us via email at: sales@flex-radio.com.
-// Paper mail may be sent to:
+// Paper mail may be sent to: 
 //    FlexRadio Systems
 //    8900 Marybank Dr.
 //    Austin, TX 78750
@@ -30,15 +29,18 @@
 //
 // Waterfall AGC Modifications Copyright (C) 2013 Phil Harman (VK6APH)
 //
-#if (USE_PANDISPLAY)
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.Drawing.Drawing2D;
+    using System.Diagnostics;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Linq;
 
 namespace Thetis
 {
@@ -46,28 +48,23 @@ namespace Thetis
     {
         #region Variable Declaration
 
-        public const float CLEAR_FLAG = -999.999F; // for resetting buffers
+        public const float CLEAR_FLAG = -999.999F;				// for resetting buffers
         public const int BUFFER_SIZE = 4096;
 
-        // private  Mutex background_image_mutex;			// used to lock the base
-        // display image private  Bitmap background_bmp;					// saved
-        // background picture for display
-        // private  Bitmap display_bmp;					// Bitmap for use when
-        // drawing
+        //private  Mutex background_image_mutex;			// used to lock the base display image
+        //private  Bitmap background_bmp;					// saved background picture for display
+        //private  Bitmap display_bmp;					// Bitmap for use when drawing
         public string background_image = null;
 
-        //  private int[] histogram_data = null;					// histogram
-        //  display buffer
-        // private int[] histogram_history;					// histogram counter
+      //  private int[] histogram_data = null;					// histogram display buffer
+       // private int[] histogram_history;					// histogram counter
 
-        public float[] new_display_data; // Buffer used to store the new data from
-                                         // the DSP for the display
-        public float[] current_display_data; // Buffer used to store the current
-                                             // data for the display
-                                             // public float[] new_display_data_bottom;
-                                             //  public float[] current_display_data;
+        public float[] new_display_data;					// Buffer used to store the new data from the DSP for the display
+        public float[] current_display_data;				// Buffer used to store the current data for the display
+        // public float[] new_display_data_bottom;
+        //  public float[] current_display_data;
 
-        // public float[] new_waterfall_data;
+       // public float[] new_waterfall_data;
         //  public float[] current_waterfall_data;
         // public float[] waterfall_display_data;
         //  public float[] average_waterfall_buffer;
@@ -75,23 +72,23 @@ namespace Thetis
         //  public float[] new_scope_data;
         //  public float[] current_scope_data;
 
-        // public float[] rx1_average_buffer;					// Averaged display
-        // data buffer public float[] rx2_average_buffer; public float[]
-        // rx1_peak_buffer;
-        // // Peak hold display data buffer public float[] rx2_peak_buffer;
+        //public float[] rx1_average_buffer;					// Averaged display data buffer
+        //public float[] rx2_average_buffer;
+        //public float[] rx1_peak_buffer;						// Peak hold display data buffer
+        //public float[] rx2_peak_buffer;
 
         // public Mutex render_mutex = new Mutex();
         private Point[] points = null;
 
-        // waterfall
+        //waterfall
         private int waterfall_counter;
-        private Bitmap waterfall_bmp = null; // saved waterfall picture for display
-                                             //  private Bitmap waterfall_bmp2 = null;
-                                             // private Bitmap panadapter_bmp;
+        private Bitmap waterfall_bmp = null;					// saved waterfall picture for display
+        //  private Bitmap waterfall_bmp2 = null;
+        // private Bitmap panadapter_bmp;
 
         private float[] waterfall_data;
 
-        private Task draw_display_task; // draws the main display
+        private Task draw_display_task;					// draws the main display 
         private Bitmap pDisplay_buffer;
         public bool pauseDisplayThread = false;
         #endregion
@@ -99,14 +96,10 @@ namespace Thetis
         public PanDisplay()
         {
             this.MouseEnter += new System.EventHandler(this.PanDisplay_MouseEnter);
-            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(
-                this.PanDisplay_MouseWheel);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(
-                this.PanDisplay_MouseMove);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(
-                this.PanDisplay_MouseDown);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(
-                this.PanDisplay_MouseUp);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PanDisplay_MouseWheel);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PanDisplay_MouseMove);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanDisplay_MouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PanDisplay_MouseUp);
         }
 
         #region Properties
@@ -124,8 +117,8 @@ namespace Thetis
         public float FreqRulerPosition
         {
             get { return freq_ruler_position; }
-            set
-            {
+            set 
+            { 
                 freq_ruler_position = value;
                 CreateDisplayRegions();
             }
@@ -135,17 +128,17 @@ namespace Thetis
         public int NReceivers
         {
             get { return nreceivers; }
-            set { nreceivers = value; }
+            set { nreceivers = value;}
         }
 
         private Console console;
         public Console cOnsole
         {
-            get { return console; }
+            get { return console; } 
             set { console = value; }
         }
-
-        private bool refresh_panadapter_grid = true; // yt7pwr
+        
+        private bool refresh_panadapter_grid = true;                 // yt7pwr
         public bool RefreshPanadapterGrid
         {
             set { refresh_panadapter_grid = value; }
@@ -177,15 +170,14 @@ namespace Thetis
         private int filterTop;
         private int filterBottom;
 
-        // Color notch_on_color = Color.DarkGreen;
-        // Color notch_highlight_color = Color.Chartreuse;
-        // Color notch_perm_on_color = Color.DarkRed;
-        // Color notch_perm_highlight_color = Color.DeepPink;
+        //Color notch_on_color = Color.DarkGreen;
+        //Color notch_highlight_color = Color.Chartreuse;
+        //Color notch_perm_on_color = Color.DarkRed;
+        //Color notch_perm_highlight_color = Color.DeepPink;
         private Color notch_on_color = Color.Olive;
         private Color notch_on_color_zoomed = Color.FromArgb(190, 128, 128, 0);
         private Color notch_highlight_color = Color.YellowGreen;
-        private Color notch_highlight_color_zoomed
-            = Color.FromArgb(190, 154, 205, 50);
+        private Color notch_highlight_color_zoomed = Color.FromArgb(190, 154, 205, 50);
         private Color notch_perm_on_color = Color.DarkGreen;
         private Color notch_perm_highlight_color = Color.Chartreuse;
         private Color notch_off_color = Color.Gray;
@@ -271,7 +263,11 @@ namespace Thetis
         public bool SplitEnabled
         {
             get { return split_enabled; }
-            set { split_enabled = value; }
+            set
+            {
+                split_enabled = value;
+               
+            }
         }
 
         private bool show_freq_offset = false;
@@ -290,7 +286,10 @@ namespace Thetis
         public double FREQ
         {
             get { return freq; }
-            set { freq = value; }
+            set
+            {
+                freq = value;
+            }
         }
 
         private long _vfo_hz = 10000000;
@@ -306,7 +305,7 @@ namespace Thetis
         }
 
         private long vfoa_sub_hz;
-        public long VFOASub // multi-rx freq
+        public long VFOASub //multi-rx freq
         {
             get { return vfoa_sub_hz; }
             set
@@ -333,7 +332,10 @@ namespace Thetis
         public int FreqDiff
         {
             get { return freq_diff; }
-            set { freq_diff = value; }
+            set
+            {
+                freq_diff = value;
+            }
         }
 
         private int cw_pitch = 600;
@@ -356,9 +358,9 @@ namespace Thetis
             {
                 target = value;
                 // H = target.Height;
-                // int W = target.Width;
-                // Audio.ScopeDisplayWidth = W;
-                // if (specready)
+                //int W = target.Width;
+                //Audio.ScopeDisplayWidth = W;
+                //if (specready)
                 //{
                 //    // if (rx_dsp_mode == DSPMode.DRM)
                 //    //   console.specRX.GetSpecRX(0).Pixels = 4096;
@@ -369,19 +371,19 @@ namespace Thetis
             }
         }
 
-        // private int rx_display_low =  -4000;//-23197;
-        // public int RXDisplayLow
+        //private int rx_display_low =  -4000;//-23197;
+        //public int RXDisplayLow
         //{
-        //     get { return rx_display_low; }
-        //     set { rx_display_low = value; }
-        // }
+        //    get { return rx_display_low; }
+        //    set { rx_display_low = value; }
+        //}
 
-        // private int rx_display_high =  4000;//23185;
-        // public int RXDisplayHigh
+        //private int rx_display_high =  4000;//23185;
+        //public int RXDisplayHigh
         //{
-        //     get { return rx_display_high; }
-        //     set { rx_display_high = value; }
-        // }
+        //    get { return rx_display_high; }
+        //    set { rx_display_high = value; }
+        //}
 
         private float alex_preamp_offset = 0.0f;
         public float AlexPreampOffset
@@ -397,19 +399,24 @@ namespace Thetis
             set { preamp_offset = value; }
         }
 
-        private float rx_display_cal_offset
-            = -2.1f; // display calibration offset in dB
+        private float rx_display_cal_offset = -2.1f;					// display calibration offset in dB
         public float RXDisplayCalOffset
         {
             get { return rx_display_cal_offset; }
-            set { rx_display_cal_offset = value; }
+            set
+            {
+                rx_display_cal_offset = value;
+            }
         }
 
-        private float rx_fft_size_offset; // display calibration offset in dB
+        private float rx_fft_size_offset;					// display calibration offset in dB
         public float RXFFTSizeOffset
         {
             get { return rx_fft_size_offset; }
-            set { rx_fft_size_offset = value; }
+            set
+            {
+                rx_fft_size_offset = value;
+            }
         }
 
         private Model current_model = Model.HERMES;
@@ -419,14 +426,14 @@ namespace Thetis
             set { current_model = value; }
         }
 
-        private int display_cursor_x; // x-coord of the cursor when over the display
+        private int display_cursor_x;						// x-coord of the cursor when over the display
         public int DisplayCursorX
         {
             get { return display_cursor_x; }
             set { display_cursor_x = value; }
         }
 
-        private int display_cursor_y; // y-coord of the cursor when over the display
+        private int display_cursor_y;						// y-coord of the cursor when over the display
         public int DisplayCursorY
         {
             get { return display_cursor_y; }
@@ -475,12 +482,12 @@ namespace Thetis
             set { current_click_tune_mode = value; }
         }
 
-        // private int sample_rate = 48000;
-        // public int SampleRate
+        //private int sample_rate = 48000;
+        //public int SampleRate
         //{
-        //     get { return sample_rate; }
-        //     set { sample_rate = value; }
-        // }
+        //    get { return sample_rate; }
+        //    set { sample_rate = value; }
+        //}
 
         private bool high_swr = false;
         public bool HighSWR
@@ -509,15 +516,15 @@ namespace Thetis
             get { return current_display_mode; }
             set
             {
-                // PrepareDisplayVars(value);
+                //PrepareDisplayVars(value);
 
                 current_display_mode = value;
 
-                // if (console.PowerOn)
+                //if (console.PowerOn)
                 //{
-                //     //console.pause_DisplayThread = true;
-                //    // console.pause_DisplayThread2 = true;
-                // }
+                //    //console.pause_DisplayThread = true;
+                //   // console.pause_DisplayThread2 = true;
+                //}
 
                 /*switch(current_display_mode)
                 {
@@ -532,24 +539,24 @@ namespace Thetis
                         break;
                 }*/
 
-                // switch (current_display_mode)
+                //switch (current_display_mode)
                 //{
-                //     case DisplayMode.PHASE2:
-                //         Audio.phase = true;
-                //         break;
-                //     case DisplayMode.SCOPE:
-                //     case DisplayMode.SCOPE2:
-                //     case DisplayMode.PANASCOPE:
-                //     case DisplayMode.SPECTRASCOPE:
-                //         Audio.scope = true;
-                //         break;
-                //     default:
-                //         Audio.phase = false;
-                //         Audio.scope = false;
-                //         break;
-                // }
-                // if (average_on) ResetRX1DisplayAverage();
-                // if (peak_on) ResetRX1DisplayPeak();
+                //    case DisplayMode.PHASE2:
+                //        Audio.phase = true;
+                //        break;
+                //    case DisplayMode.SCOPE:
+                //    case DisplayMode.SCOPE2:
+                //    case DisplayMode.PANASCOPE:
+                //    case DisplayMode.SPECTRASCOPE:
+                //        Audio.scope = true;
+                //        break;
+                //    default:
+                //        Audio.phase = false;
+                //        Audio.scope = false;
+                //        break;
+                //}
+                //if (average_on) ResetRX1DisplayAverage();
+                //if (peak_on) ResetRX1DisplayPeak();
 
                 // if (draw_display_thread != null)
                 //   draw_display_thread.Abort();
@@ -561,57 +568,55 @@ namespace Thetis
                 // if (PowerOn)
                 // {
                 //   Thread.Sleep(100);
-                //   draw_display_thread = new Thread(new
-                //   ThreadStart(RunDisplay_DirectX)); draw_display_thread.Name =
-                //   "Draw Display Thread";
+                //   draw_display_thread = new Thread(new ThreadStart(RunDisplay_DirectX));
+                //   draw_display_thread.Name = "Draw Display Thread";
                 //  draw_display_thread.Priority = ThreadPriority.Normal;
                 //  draw_display_thread.IsBackground = true;
                 // draw_display_thread.Start();
                 //  }
                 refresh_panadapter_grid = true;
-                // console.pause_DisplayThread = false;
-                // console.pause_DisplayThread2 = false;
+               // console.pause_DisplayThread = false;
+               // console.pause_DisplayThread2 = false;
             }
         }
 
-        private float max_x; // x-coord of maxmimum over one display pass
+        private float max_x;								// x-coord of maxmimum over one display pass
         public float MaxX
         {
             get { return max_x; }
             set { max_x = value; }
         }
 
-        private float max_y; // y-coord of maxmimum over one display pass
+        private float max_y;								// y-coord of maxmimum over one display pass
         public float MaxY
         {
             get { return max_y; }
             set { max_y = value; }
         }
 
-        // private bool average_on;							// True if the Average
-        // button is pressed public bool AverageOn
+        //private bool average_on;							// True if the Average button is pressed
+        //public bool AverageOn
         //{
-        //     get { return average_on; }
-        //     set
-        //     {
-        //         average_on = value;
-        //         if (!average_on) ResetRX1DisplayAverage();
-        //     }
-        // }
+        //    get { return average_on; }
+        //    set
+        //    {
+        //        average_on = value;
+        //        if (!average_on) ResetRX1DisplayAverage();
+        //    }
+        //}
 
-        // private bool peak_on;							// True if the Peak
-        // button is pressed public bool PeakOn
+        //private bool peak_on;							// True if the Peak button is pressed
+        //public bool PeakOn
         //{
-        //     get { return peak_on; }
-        //     set
-        //     {
-        //         peak_on = value;
-        //         if (!peak_on) ResetRX1DisplayPeak();
-        //     }
-        // }
+        //    get { return peak_on; }
+        //    set
+        //    {
+        //        peak_on = value;
+        //        if (!peak_on) ResetRX1DisplayPeak();
+        //    }
+        //}
 
-        private bool
-            data_ready; // True when there is new display data ready from the DSP
+        private bool data_ready;					// True when there is new display data ready from the DSP
         public bool DataReady
         {
             get { return data_ready; }
@@ -711,15 +716,13 @@ namespace Thetis
             {
                 sub_rx_zero_line_color = value;
                 sub_rx_zero_line_pen.Color = sub_rx_zero_line_color;
-                if (current_display_mode == DisplayMode.PANADAPTER
-                    && sub_rx1_enabled)
+                if (current_display_mode == DisplayMode.PANADAPTER && sub_rx1_enabled)
                     refresh_panadapter_grid = true;
             }
         }
 
         private static Color sub_rx_filter_color = Color.Blue;
-        private SolidBrush sub_rx_filter_brush
-            = new SolidBrush(sub_rx_filter_color);
+        private SolidBrush sub_rx_filter_brush = new SolidBrush(sub_rx_filter_color);
         public Color SubRXFilterColor
         {
             get { return sub_rx_filter_color; }
@@ -727,8 +730,7 @@ namespace Thetis
             {
                 sub_rx_filter_color = value;
                 sub_rx_filter_brush.Color = sub_rx_filter_color;
-                if (current_display_mode == DisplayMode.PANADAPTER
-                    && sub_rx1_enabled)
+                if (current_display_mode == DisplayMode.PANADAPTER && sub_rx1_enabled)
                     refresh_panadapter_grid = true;
             }
         }
@@ -815,12 +817,9 @@ namespace Thetis
             }
         }
 
-        private static Color display_filter_color
-            = Color.FromArgb(65, 255, 255, 255);
-        private SolidBrush display_filter_brush
-            = new SolidBrush(display_filter_color);
-        private Pen cw_zero_pen
-            = new Pen(Color.FromArgb(255, display_filter_color));
+        private static Color display_filter_color = Color.FromArgb(65, 255, 255, 255);
+        private SolidBrush display_filter_brush = new SolidBrush(display_filter_color);
+        private Pen cw_zero_pen = new Pen(Color.FromArgb(255, display_filter_color));
         public Color DisplayFilterColor
         {
             get { return display_filter_color; }
@@ -834,8 +833,7 @@ namespace Thetis
         }
 
         private static Color display_background_color = Color.Black;
-        private SolidBrush display_background_brush
-            = new SolidBrush(display_background_color);
+        private SolidBrush display_background_brush = new SolidBrush(display_background_color);
         public Color DisplayBackgroundColor
         {
             get { return display_background_color; }
@@ -851,7 +849,10 @@ namespace Thetis
         public bool ShowCWZeroLine
         {
             get { return show_cwzero_line; }
-            set { show_cwzero_line = value; }
+            set
+            {
+                show_cwzero_line = value;
+            }
         }
 
         private Color waterfall_low_color = Color.Black;
@@ -900,8 +901,7 @@ namespace Thetis
             }
         }
 
-        private DisplayLabelAlignment display_label_align
-            = DisplayLabelAlignment.LEFT;
+        private DisplayLabelAlignment display_label_align = DisplayLabelAlignment.LEFT;
         public DisplayLabelAlignment DisplayLabelAlign
         {
             get { return display_label_align; }
@@ -926,16 +926,16 @@ namespace Thetis
             set { show_cth_line = value; }
         }
 
-        // private double f_center = _vfo_hz;
-        // public double F_Center
+        //private double f_center = _vfo_hz;
+        //public double F_Center
         //{
-        //     get { return f_center; }
-        //     set
-        //     {
-        //         // if(current_click_tune_mode == ClickTuneMode.VFOA)
-        //         f_center = value;
-        //         // else
-        //         //    f_center = vfoa_hz;
+        //    get { return f_center; }
+        //    set
+        //    {
+        //        // if(current_click_tune_mode == ClickTuneMode.VFOA)
+        //        f_center = value;
+        //        // else
+        //        //    f_center = vfoa_hz;
 
         //    }
         //}
@@ -950,39 +950,51 @@ namespace Thetis
         private int _lin_corr = 2;
         public int LinCor
         {
-            get { return _lin_corr; }
-            set { _lin_corr = value; }
+            get
+            {
+                return _lin_corr;
+            }
+            set
+            {
+                _lin_corr = value;
+            }
         }
 
         private int _linlog_corr = -14;
         public int LinLogCor
         {
-            get { return _linlog_corr; }
-            set { _linlog_corr = value; }
+            get
+            {
+                return _linlog_corr;
+            }
+            set
+            {
+                _linlog_corr = value;
+            }
         }
 
         private SolidBrush pana_text_brush = new SolidBrush(Color.Khaki);
-        private System.Drawing.Font pana_font = new System.Drawing.Font(
-            "Tahoma", 7F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+        private System.Drawing.Font pana_font = new System.Drawing.Font("Tahoma", 7F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
 
         private Pen dhp = new Pen(Color.FromArgb(0, 255, 0)),
-                    dhp1 = new Pen(Color.FromArgb(150, 0, 0, 255)),
-                    dhp2 = new Pen(Color.FromArgb(150, 255, 0, 0));
+                           dhp1 = new Pen(Color.FromArgb(150, 0, 0, 255)),
+                           dhp2 = new Pen(Color.FromArgb(150, 255, 0, 0));
 
-        private System.Drawing.Font font14
-            = new System.Drawing.Font("Arial", 14, FontStyle.Bold),
-            font9 = new System.Drawing.Font("Arial", 9);
+        private System.Drawing.Font font14 = new System.Drawing.Font("Arial", 14, FontStyle.Bold),
+                            font9 = new System.Drawing.Font("Arial", 9);
+
 
         #endregion
 
         #region General Routines
+
 
         #region Drawing Routines
         // ======================================================
         // Drawing Routines
         // ======================================================
 
-        #region GDI + General Routines
+        #region GDI+ General Routines
 
         public void Init()
         {
@@ -994,12 +1006,12 @@ namespace Thetis
             new_display_data = new float[BUFFER_SIZE];
             current_display_data = new float[BUFFER_SIZE];
             // new_display_data_bottom = new float[BUFFER_SIZE];
-            // current_display_data = new float[BUFFER_SIZE];
+            //current_display_data = new float[BUFFER_SIZE];
 
             for (int i = 0; i < BUFFER_SIZE; i++)
             {
                 new_display_data[i] = -200.0f;
-                current_display_data[i] = -200.0f;
+                current_display_data[i] = -200.0f;               
             }
 
             Pixels = W;
@@ -1010,7 +1022,7 @@ namespace Thetis
             // draws the background image for the display based
             // on the current selected display mode.
 
-            this.Invalidate();
+                this.Invalidate();
         }
 
         /// <summary>
@@ -1024,59 +1036,61 @@ namespace Thetis
         /// <param name="H">height of bar</param>
         /// <param name="on">color for notch on</param>
         /// <param name="off">color for notch off</param>
-        /// <param name="highlight">highlight color to draw highlights on
-        /// bar</param> <param name="active">true if notches are turned on</param>
-        void drawChannelBar(Graphics g, Channel chan, int left, int right, int top,
-            int height, Color c, Color h)
+        /// <param name="highlight">highlight color to draw highlights on bar</param>
+        /// <param name="active">true if notches are turned on</param>
+        void drawChannelBar(Graphics g, Channel chan, int left, int right, int top, int height, Color c, Color h)
         {
             int width = right - left;
 
-            // get a purty pen to draw with
+            // get a purty pen to draw with 
             Pen p = new Pen(h, 1);
 
             // shade in the notch
             g.FillRectangle(new SolidBrush(c), left, top, width, height);
 
-            // draw a left and right line on the side of the rectancle if wide
-            // enough
+            // draw a left and right line on the side of the rectancle if wide enough
             if (width > 2)
             {
-                // g.DrawLine(p, left - 1, top, left - 1, top + height - 1);
+                //g.DrawLine(p, left - 1, top, left - 1, top + height - 1);
                 g.DrawLine(p, left, top, left, top + height - 1);
                 g.DrawLine(p, right, top, right, top + height - 1);
-                // g.DrawLine(p, right+1, top, right+1, top + height - 1);
+                //g.DrawLine(p, right+1, top, right+1, top + height - 1);
             }
         }
 
         #endregion
 
-        #region GDI +
+        #region GDI+
 
         unsafe public void RenderGDIPlus(int rx, Graphics e)
         {
             try
-            {
-                DrawPanadapter(e, rx);
-                if (waterfallRect.Height >= 10) DrawWaterfall(e, rx);
+            {                            
+                        DrawPanadapter(e, rx);
+                        if (waterfallRect.Height >= 10)
+                            DrawWaterfall(e, rx);               
             }
             catch (Exception ex)
             {
                 Debug.Write(ex.ToString());
             }
+
         }
 
         private void UpdateDisplayPeak(float[] buffer, float[] new_data)
         {
             if (buffer[0] == CLEAR_FLAG)
             {
-                // Debug.WriteLine("Clearing peak buf");
-                for (int i = 0; i < BUFFER_SIZE; i++) buffer[i] = new_data[i];
+                //Debug.WriteLine("Clearing peak buf"); 
+                for (int i = 0; i < BUFFER_SIZE; i++)
+                    buffer[i] = new_data[i];
             }
             else
             {
                 for (int i = 0; i < BUFFER_SIZE; i++)
                 {
-                    if (new_data[i] > buffer[i]) buffer[i] = new_data[i];
+                    if (new_data[i] > buffer[i])
+                        buffer[i] = new_data[i];
                     new_data[i] = buffer[i];
                 }
             }
@@ -1087,7 +1101,7 @@ namespace Thetis
         // Drawing Routines
         // ======================================================
 
-        float zoom_height = 1.5f; // Should be > 1.  H = H/zoom_height
+        float zoom_height = 1.5f;   // Should be > 1.  H = H/zoom_height
         unsafe private void DrawPanadapterGrid(Graphics g, int rx)
         {
             int W = panRect.Width;
@@ -1099,13 +1113,12 @@ namespace Thetis
             // g.FillRectangle(display_background_brush, 0, bottom ? H : 0, W, H);
 
             bool local_mox = false;
-            // bool displayduplex = false;
-            // if (mox && rx == 1 && !tx_on_vfob) local_mox = true;
-            // if (mox && rx == 2 && tx_on_vfob) local_mox = true;
-            // if (rx == 1 && tx_on_vfob && mox && !rx2_enabled) local_mox = true;
-            int Low
-                = 0; // = rx_display_low;					// initialize variables
-            int High = 0; // = rx_display_high;
+            bool displayduplex = false;
+           // if (mox && rx == 1 && !tx_on_vfob) local_mox = true;
+           // if (mox && rx == 2 && tx_on_vfob) local_mox = true;
+            //if (rx == 1 && tx_on_vfob && mox && !rx2_enabled) local_mox = true;
+            int Low = 0;// = rx_display_low;					// initialize variables
+            int High = 0;// = rx_display_high;
             int mid_w = W / 2;
             int[] step_list = { 10, 20, 25, 50 };
             int step_power = 1;
@@ -1116,34 +1129,30 @@ namespace Thetis
             int grid_min = 0;
             int grid_step = 0; // spectrum_grid_step;
             int f_diff = 0;
-            long vfo_hz = _vfo_hz; // cmaster.Getrxa(display_id + 2).RXFreq;//
+            long vfo_hz = _vfo_hz; //cmaster.Getrxa(display_id + 2).RXFreq;// 
 
-            /*/
-        if ((CurrentDisplayMode == DisplayMode.PANAFALL
-                && (nreceivers <= 2 && display_duplex))
-            || (CurrentDisplayMode == DisplayMode.PANAFALL && nreceivers > 2)
-            || (CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex))
-            displayduplex = true;
-            /*/
+            if ((CurrentDisplayMode == DisplayMode.PANAFALL && (nreceivers <= 2 && display_duplex)) ||
+                (CurrentDisplayMode == DisplayMode.PANAFALL && nreceivers > 2) ||
+               (CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex)) displayduplex = true;
 
-            // if (local_mox && !displayduplex)// || (mox && tx_on_vfob))
+            //if (local_mox && !displayduplex)// || (mox && tx_on_vfob))
             //{
-            //     Low = tx_display_low;
-            //     High = tx_display_high;
-            //     grid_max = tx_spectrum_grid_max;
-            //     grid_min = tx_spectrum_grid_min;
-            //     grid_step = tx_spectrum_grid_step;
-            //     g.FillRectangle(tx_display_background_brush, 0, 0, W, H);
-            // }
-            // else
+            //    Low = tx_display_low;
+            //    High = tx_display_high;
+            //    grid_max = tx_spectrum_grid_max;
+            //    grid_min = tx_spectrum_grid_min;
+            //    grid_step = tx_spectrum_grid_step;
+            //    g.FillRectangle(tx_display_background_brush, 0, 0, W, H);
+            //}
+            //else
             //{
-            Low = low_freq;
-            High = high_freq;
-            grid_max = spectrum_grid_max;
-            grid_min = spectrum_grid_min;
-            grid_step = spectrum_grid_step;
-            g.FillRectangle(display_background_brush, 0, 0, W, H);
-            // }
+                Low = low_freq;
+                High = high_freq;
+                grid_max = spectrum_grid_max;
+                grid_min = spectrum_grid_min;
+                grid_step = spectrum_grid_step;
+                g.FillRectangle(display_background_brush, 0, 0, W, H);
+           // }
             f_diff = freq_diff;
 
             int y_range = grid_max - grid_min;
@@ -1152,9 +1161,9 @@ namespace Thetis
             int filter_low, filter_high;
             int center_line_x;
             int[] band_edge_list;
-
-            filter_low = rx_filter_low;
-            filter_high = rx_filter_high;
+        
+                filter_low = rx_filter_low;
+                filter_high = rx_filter_high;
 
             if (rx_dsp_mode == DSPMode.DRM)
             {
@@ -1167,8 +1176,7 @@ namespace Thetis
             // Calculate horizontal step size
             while (width / freq_step_size > 10)
             {
-                freq_step_size
-                    = step_list[step_index] * (int)Math.Pow(10.0, step_power);
+                freq_step_size = step_list[step_index] * (int)Math.Pow(10.0, step_power);
                 step_index = (step_index + 1) % 4;
                 if (step_index == 0) step_power++;
             }
@@ -1178,25 +1186,20 @@ namespace Thetis
             // calculate vertical step size
             int h_steps = (grid_max - grid_min) / grid_step;
             double h_pixel_step = (double)H / h_steps;
-            int top = 0; // (int)((double)grid_step * H / y_range);
+            int top = 0;// (int)((double)grid_step * H / y_range);
 
-            if (!local_mox && sub_rx1_enabled && rx == 1) // multi-rx
+            if (!local_mox && sub_rx1_enabled && rx == 1) //multi-rx
             {
                 // draw Sub RX filter
                 // get filter screen coordinates
-                int filter_left_x = (int)((float)(filter_low - Low + vfoa_sub_hz
-                                              - vfo_hz - rit_hz)
-                    / width * W);
-                int filter_right_x = (int)((float)(filter_high - Low + vfoa_sub_hz
-                                               - vfo_hz - rit_hz)
-                    / width * W);
+                int filter_left_x = (int)((float)(filter_low - Low + vfoa_sub_hz - vfo_hz - rit_hz) / width * W);
+                int filter_right_x = (int)((float)(filter_high - Low + vfoa_sub_hz - vfo_hz - rit_hz) / width * W);
 
                 // make the filter display at least one pixel wide.
-                if (filter_left_x == filter_right_x)
-                    filter_right_x = filter_left_x + 1;
+                if (filter_left_x == filter_right_x) filter_right_x = filter_left_x + 1;
 
-                g.FillRectangle(sub_rx_filter_brush, // draw filter overlay
-                    filter_left_x, top, filter_right_x - filter_left_x, H - top);
+                g.FillRectangle(sub_rx_filter_brush,	// draw filter overlay
+                  filter_left_x, top, filter_right_x - filter_left_x, H - top);
 
                 // draw Sub RX 0Hz line
                 int x = (int)((float)(vfoa_sub_hz - vfo_hz - Low) / width * W);
@@ -1205,135 +1208,119 @@ namespace Thetis
                 g.DrawLine(sub_rx_zero_line_pen, x - 1, top, x - 1, H);
             }
             // draw RX filter
-            if (!local_mox) // && (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode ==
-                            // DSPMode.CWU))
+            if (!local_mox)// && (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
             {
                 filterLeft = (int)((float)(filter_low - Low - f_diff) / width * W);
-                filterRight
-                    = (int)((float)(filter_high - Low - f_diff) / width * W);
+                filterRight = (int)((float)(filter_high - Low - f_diff) / width * W);
                 filterTop = (int)panRect.Top + 1;
                 filterBottom = (int)(panRect.Top + panRect.Height - 1);
 
                 if (filterLeft == filterRight) filterRight = filterLeft + 1;
                 // make the filter display at least one pixel wide.
-                filterRect = new Rectangle(filterLeft, filterTop,
-                    filterRight - filterLeft, filterBottom - filterTop);
+                filterRect = new Rectangle(filterLeft,
+                                           filterTop,
+                                           filterRight - filterLeft,
+                                           filterBottom - filterTop);
 
-                if ((filterLeft >= panRect.Left && filterLeft <= panRect.Right)
-                    || (filterRight >= panRect.Left && filterRight <= panRect.Right)
-                    || (filterLeft < panRect.Left && filterRight > panRect.Right))
+                if ((filterLeft >= panRect.Left && filterLeft <= panRect.Right) ||
+                   (filterRight >= panRect.Left && filterRight <= panRect.Right) ||
+                   (filterLeft < panRect.Left && filterRight > panRect.Right))
                 {
-                    g.FillRectangle(display_filter_brush, // draw filter overlay
-                        filterLeft, top, filterRight - filterLeft, H - top);
+                    g.FillRectangle(display_filter_brush,	// draw filter overlay
+                                     filterLeft,
+                                     top,
+                                     filterRight - filterLeft,
+                                     H - top);
                 }
             }
 
-            // if (local_mox && (rx_dsp_mode != DSPMode.CWL && rx_dsp_mode !=
-            // DSPMode.CWU))
+            //if (local_mox && (rx_dsp_mode != DSPMode.CWL && rx_dsp_mode != DSPMode.CWU))
             //{
-            //     int filter_left_x = (int)((float)(filter_low - Low - f_diff) /
-            //     width * W); int filter_right_x = (int)((float)(filter_high - Low
-            //     - f_diff) / width * W);
+            //    int filter_left_x = (int)((float)(filter_low - Low - f_diff) / width * W);
+            //    int filter_right_x = (int)((float)(filter_high - Low - f_diff) / width * W);
 
             //    // make the filter display at least one pixel wide.
-            //    if (filter_left_x == filter_right_x) filter_right_x =
-            //    filter_left_x + 1;
+            //    if (filter_left_x == filter_right_x) filter_right_x = filter_left_x + 1;
 
             //    if (vfoa_tx || (!displayduplex && vfob_tx))
             //    {
             //        g.FillRectangle(tx_filter_brush,	// draw filter overlay
-            //          filter_left_x, top, filter_right_x - filter_left_x, H -
-            //          top);
+            //          filter_left_x, top, filter_right_x - filter_left_x, H - top);
             //    }
             //}
 
-            // if (!mox && draw_tx_filter &&
-            //     (rx_dsp_mode != DSPMode.CWL && rx_dsp_mode != DSPMode.CWU))
+            //if (!mox && draw_tx_filter &&
+            //    (rx_dsp_mode != DSPMode.CWL && rx_dsp_mode != DSPMode.CWU))
             //{
-            //     // get tx filter limits
-            //     int filter_left_x;
-            //     int filter_right_x;
+            //    // get tx filter limits
+            //    int filter_left_x;
+            //    int filter_right_x;
 
             //    if (tx_on_vfob)
             //    {
             //        if (!split_enabled)
             //        {
-            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz
-            //            - rit_hz) / width * W); filter_right_x =
-            //            (int)((float)(tx_filter_high - Low + xit_hz - rit_hz) /
-            //            width * W);
+            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz) / width * W);
+            //            filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz) / width * W);
             //        }
             //        else
             //        {
-            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz
-            //            - rit_hz + (vfob_sub_hz - vfoa_hz)) / width * W);
-            //            filter_right_x = (int)((float)(tx_filter_high - Low +
-            //            xit_hz - rit_hz + (vfob_sub_hz - vfoa_hz)) / width * W);
+            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz + (vfob_sub_hz - vfoa_hz)) / width * W);
+            //            filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz + (vfob_sub_hz - vfoa_hz)) / width * W);
             //        }
             //    }
             //    else
             //    {
             //        if (!split_enabled)
             //        {
-            //            filter_left_x = (int)((float)(tx_filter_low - Low - f_diff
-            //            + xit_hz - rit_hz) / width * W); filter_right_x =
-            //            (int)((float)(tx_filter_high - Low - f_diff + xit_hz -
-            //            rit_hz) / width * W);
+            //            filter_left_x = (int)((float)(tx_filter_low - Low - f_diff + xit_hz - rit_hz) / width * W);
+            //            filter_right_x = (int)((float)(tx_filter_high - Low - f_diff + xit_hz - rit_hz) / width * W);
             //        }
             //        else
             //        {
-            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz
-            //            - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
-            //            filter_right_x = (int)((float)(tx_filter_high - Low +
-            //            xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //            filter_left_x = (int)((float)(tx_filter_low - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //            filter_right_x = (int)((float)(tx_filter_high - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
             //        }
             //    }
 
-            //    g.DrawLine(tx_filter_pen, filter_left_x, top, filter_left_x, H);
-            //    // draw tx filter overlay g.DrawLine(tx_filter_pen, filter_left_x
-            //    + 1, top, filter_left_x + 1, H);	// draw tx filter overlay
-            //    g.DrawLine(tx_filter_pen, filter_right_x, top, filter_right_x, H);
-            //    // draw tx filter overlay g.DrawLine(tx_filter_pen, filter_right_x
-            //    + 1, top, filter_right_x + 1, H);// draw tx filter overlay
+            //    g.DrawLine(tx_filter_pen, filter_left_x, top, filter_left_x, H);		// draw tx filter overlay
+            //    g.DrawLine(tx_filter_pen, filter_left_x + 1, top, filter_left_x + 1, H);	// draw tx filter overlay
+            //    g.DrawLine(tx_filter_pen, filter_right_x, top, filter_right_x, H);	// draw tx filter overlay
+            //    g.DrawLine(tx_filter_pen, filter_right_x + 1, top, filter_right_x + 1, H);// draw tx filter overlay
             //}
 
-            // if (!local_mox && !tx_on_vfob && draw_tx_cw_freq &&
-            //     (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
+            //if (!local_mox && !tx_on_vfob && draw_tx_cw_freq &&
+            //    (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
             //{
-            //     int pitch = cw_pitch;
-            //     if (rx_dsp_mode == DSPMode.CWL)
-            //         pitch = -cw_pitch;
+            //    int pitch = cw_pitch;
+            //    if (rx_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
             //    int cw_line_x;
             //    if (!split_enabled)
-            //        cw_line_x = (int)((float)(pitch - Low - f_diff + xit_hz -
-            //        rit_hz) / width * W);
+            //        cw_line_x = (int)((float)(pitch - Low - f_diff + xit_hz - rit_hz) / width * W);
             //    else
-            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz +
-            //        (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
             //    g.DrawLine(tx_filter_pen, cw_line_x, top, cw_line_x, H);
             //    g.DrawLine(tx_filter_pen, cw_line_x + 1, top, cw_line_x + 1, H);
             //}
 
-            // if (!local_mox && tx_on_vfob && draw_tx_cw_freq &&
-            //     (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
+            //if (!local_mox && tx_on_vfob && draw_tx_cw_freq &&
+            //    (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
             //{
-            //     int pitch = cw_pitch;
-            //     if (rx_dsp_mode == DSPMode.CWL)
-            //         pitch = -cw_pitch;
+            //    int pitch = cw_pitch;
+            //    if (rx_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
             //    int cw_line_x;
             //    if (!split_enabled)
-            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz) /
-            //        width * W);
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz) / width * W);
             //    else
-            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz +
-            //        (vfoa_sub_hz - vfoa_hz)) / width * W);
+            //        cw_line_x = (int)((float)(pitch - Low + xit_hz - rit_hz + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
             //    g.DrawLine(tx_filter_pen, cw_line_x, H + top, cw_line_x, H + H);
-            //    g.DrawLine(tx_filter_pen, cw_line_x + 1, H + top, cw_line_x + 1, H
-            //    + H);
+            //    g.DrawLine(tx_filter_pen, cw_line_x + 1, H + top, cw_line_x + 1, H + H);
 
             //}
 
@@ -1344,13 +1331,10 @@ namespace Thetis
                 {
                     long rf_freq = vfo_hz;
                     int rit = rit_hz;
-
-                    if (c.InBW((rf_freq + Low) * 1e-6,
-                            (rf_freq + High) * 1e-6)) // is channel visible?
+                    
+                    if (c.InBW((rf_freq + Low) * 1e-6, (rf_freq + High) * 1e-6)) // is channel visible?
                     {
-                        bool on_channel = console.RX1IsIn60mChannel(
-                            c); // only true if you are on channel and are in an
-                                // acceptable mode
+                        bool on_channel = console.RX1IsIn60mChannel(c); // only true if you are on channel and are in an acceptable mode
                         if (rx == 2) on_channel = console.RX2IsIn60mChannel(c);
 
                         DSPMode mode = rx_dsp_mode;
@@ -1361,27 +1345,26 @@ namespace Thetis
                             case DSPMode.CWL:
                             case DSPMode.CWU:
                             case DSPMode.AM:
-                            case DSPMode.SAM: break;
+                            case DSPMode.SAM:
+                                break;
                             default:
-                                on_channel
-                                    = false; // make sure other modes do not look as
-                                             // if they could transmit
+                                on_channel = false; // make sure other modes do not look as if they could transmit
                                 break;
                         }
 
                         // offset for CW Pitch to align display
                         switch (rx_dsp_mode)
                         {
-                            case (DSPMode.CWL): rf_freq += cw_pitch; break;
-                            case (DSPMode.CWU): rf_freq -= cw_pitch; break;
+                            case (DSPMode.CWL):
+                                rf_freq += cw_pitch;
+                                break;
+                            case (DSPMode.CWU):
+                                rf_freq -= cw_pitch;
+                                break;
                         }
 
-                        int chan_left_x = (int)((float)(c.Freq * 1e6 - rf_freq
-                                                    - c.BW / 2 - Low - rit)
-                            / width * W);
-                        int chan_right_x = (int)((float)(c.Freq * 1e6 - rf_freq
-                                                     + c.BW / 2 - Low - rit)
-                            / width * W);
+                        int chan_left_x = (int)((float)(c.Freq * 1e6 - rf_freq - c.BW / 2 - Low - rit) / width * W);
+                        int chan_right_x = (int)((float)(c.Freq * 1e6 - rf_freq + c.BW / 2 - Low - rit) / width * W);
 
                         if (chan_right_x == chan_left_x)
                             chan_right_x = chan_left_x + 1;
@@ -1395,80 +1378,83 @@ namespace Thetis
                             c1 = channel_background_on;
                         }
 
-                        drawChannelBar(
-                            g, c, chan_left_x, chan_right_x, top, H - top, c1, c2);
+                        drawChannelBar(g, c, chan_left_x, chan_right_x, top, H - top, c1, c2);
                     }
                 }
             }
 
             // Draw a Zero Beat line on CW filter
-            if (!local_mox && show_cwzero_line
-                && (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
+            if (!local_mox && show_cwzero_line &&
+                (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
             {
                 int pitch = cw_pitch;
-                if (rx_dsp_mode == DSPMode.CWL) pitch = -cw_pitch;
+                if (rx_dsp_mode == DSPMode.CWL)
+                    pitch = -cw_pitch;
 
                 int cw_line_x1;
                 if (!split_enabled)
                     cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
                 else
-                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfo_hz))
-                        / width * W);
+                    cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfo_hz)) / width * W);
 
                 g.DrawLine(cw_zero_pen, cw_line_x1, top, cw_line_x1, H);
                 g.DrawLine(cw_zero_pen, cw_line_x1 + 1, top, cw_line_x1 + 1, H);
+
             }
 
-            // if (!local_mox && show_cwzero_line &&
-            //     (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
+            //if (!local_mox && show_cwzero_line &&
+            //    (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
             //{
-            //     int pitch = cw_pitch;
-            //     if (rx_dsp_mode == DSPMode.CWL)
-            //         pitch = -cw_pitch;
+            //    int pitch = cw_pitch;
+            //    if (rx_dsp_mode == DSPMode.CWL)
+            //        pitch = -cw_pitch;
 
             //    int cw_line_x1;
             //    if (!split_enabled)
             //        cw_line_x1 = (int)((float)(pitch - Low - f_diff) / width * W);
             //    else
-            //        cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz -
-            //        vfoa_hz)) / width * W);
+            //        cw_line_x1 = (int)((float)(pitch - Low + (vfoa_sub_hz - vfoa_hz)) / width * W);
 
             //    g.DrawLine(tx_filter_pen, cw_line_x1, H + top, cw_line_x1, H + H);
-            //    g.DrawLine(tx_filter_pen, cw_line_x1 + 1, H + top, cw_line_x1 + 1,
-            //    H + H);
+            //    g.DrawLine(tx_filter_pen, cw_line_x1 + 1, H + top, cw_line_x1 + 1, H + H);
             //}
 
             // Draw 0Hz vertical line if visible
-            center_line_x
-                = (int)((float)(-f_diff - Low) / width * W); // locked 0 line
+            center_line_x = (int)((float)(-f_diff - Low) / width * W); // locked 0 line
 
             if (center_line_x >= 0 && center_line_x <= W)
-            {
-                g.DrawLine(grid_zero_pen, center_line_x, top, center_line_x, H);
-                g.DrawLine(
-                    grid_zero_pen, center_line_x + 1, top, center_line_x + 1, H);
+            {            
+                    g.DrawLine(grid_zero_pen, center_line_x, top, center_line_x, H);
+                    g.DrawLine(grid_zero_pen, center_line_x + 1, top, center_line_x + 1, H);
             }
 
             if (show_freq_offset)
-            {
-                g.DrawString("0", font9, grid_zero_pen.Brush, center_line_x - 5,
-                    (float)Math.Floor(H * .01));
+            {               
+                    g.DrawString("0", font9, grid_zero_pen.Brush, center_line_x - 5, (float)Math.Floor(H * .01));
             }
 
             double vfo;
             vfo = vfo_hz + rit_hz;
             int rxn = rx;
-            /*/ int rn = 0;
-            if (rx == 4) rn = 4;
-            if (rx == 5) rn = 5;
-            if (rx == 6) rn = 6;
-            /*/
+            int rn = 0;
+            if (rx == 4)
+                rn = 4;
+            if (rx == 5)
+                rn = 5;
+            if (rx == 6)
+                rn = 6;
+
 
             switch (rx_dsp_mode)
             {
-                case DSPMode.CWL: vfo += cw_pitch; break;
-                case DSPMode.CWU: vfo -= cw_pitch; break;
-                default: break;
+                case DSPMode.CWL:
+                    vfo += cw_pitch;
+                    break;
+                case DSPMode.CWU:
+                    vfo -= cw_pitch;
+                    break;
+                default:
+                    break;
             }
 
             long vfo_round = ((long)(vfo / freq_step_size)) * freq_step_size;
@@ -1483,8 +1469,7 @@ namespace Thetis
                 int offsetL;
                 int offsetR;
 
-                int fgrid
-                    = i * freq_step_size + (Low / freq_step_size) * freq_step_size;
+                int fgrid = i * freq_step_size + (Low / freq_step_size) * freq_step_size;
                 double actual_fgrid = ((double)(vfo_round + fgrid)) / 1000000;
                 int vgrid = (int)((double)(fgrid - vfo_delta - Low) / width * W);
                 string freq_num = actual_fgrid.ToString();
@@ -1499,23 +1484,14 @@ namespace Thetis
                                 g.DrawLine(band_edge_pen, vgrid, top, vgrid, H);
 
                                 label = actual_fgrid.ToString("f3");
-                                if (actual_fgrid < 10)
-                                    offsetL = (int)((label.Length + 1) * 4.1) - 14;
-                                else if (actual_fgrid < 100.0)
-                                    offsetL = (int)((label.Length + 1) * 4.1) - 11;
-                                else
-                                    offsetL = (int)((label.Length + 1) * 4.1) - 8;
+                                if (actual_fgrid < 10) offsetL = (int)((label.Length + 1) * 4.1) - 14;
+                                else if (actual_fgrid < 100.0) offsetL = (int)((label.Length + 1) * 4.1) - 11;
+                                else offsetL = (int)((label.Length + 1) * 4.1) - 8;
 
-                                g.DrawString(label, font9, band_edge_pen.Brush,
-                                    vgrid - offsetL,
-                                    freqScalePanRect.Top
-                                        + 3); //(float)Math.Floor(H * .01));
+                                g.DrawString(label, font9, band_edge_pen.Brush, vgrid - offsetL, freqScalePanRect.Top + 3);//(float)Math.Floor(H * .01));
 
-                                int fgrid_2 = ((i + 1) * freq_step_size)
-                                    + (int)((Low / freq_step_size)
-                                        * freq_step_size);
-                                int x_2 = (int)(((float)(fgrid_2 - vfo_delta - Low)
-                                    / width * W));
+                                int fgrid_2 = ((i + 1) * freq_step_size) + (int)((Low / freq_step_size) * freq_step_size);
+                                int x_2 = (int)(((float)(fgrid_2 - vfo_delta - Low) / width * W));
                                 float scale = (float)(x_2 - vgrid) / inbetweenies;
 
                                 for (int j = 1; j < inbetweenies; j++)
@@ -1528,19 +1504,19 @@ namespace Thetis
                             break;
                         case FRSRegion.US:
                         case FRSRegion.Extended:
-                            if (actual_fgrid == 0.1357 || actual_fgrid == 0.1378
-                                || actual_fgrid == 0.472 || actual_fgrid == 0.479
-                                || actual_fgrid == 1.8 || actual_fgrid == 2.0
-                                || actual_fgrid == 3.5 || actual_fgrid == 4.0
-                                || actual_fgrid == 7.0 || actual_fgrid == 7.3
-                                || actual_fgrid == 10.1 || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0 || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068 || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0 || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89 || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0 || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0 || actual_fgrid == 54.0
-                                || actual_fgrid == 144.0 || actual_fgrid == 148.0)
+                            if (actual_fgrid == 0.1357 || actual_fgrid == 0.1378 ||
+                                actual_fgrid == 0.472 || actual_fgrid == 0.479 ||
+                                actual_fgrid == 1.8 || actual_fgrid == 2.0 ||
+                                         actual_fgrid == 3.5 || actual_fgrid == 4.0 ||
+                                         actual_fgrid == 7.0 || actual_fgrid == 7.3 ||
+                                         actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                         actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                         actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                         actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                         actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 54.0 ||
+                                actual_fgrid == 144.0 || actual_fgrid == 148.0)
                             {
 
                                 goto case FRSRegion.LAST;
@@ -1548,344 +1524,210 @@ namespace Thetis
                             else goto default;
 
                         case FRSRegion.Spain:
-                            if (actual_fgrid == 1.81
-                                || actual_fgrid == 2.0
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 54.0)
+                            if (actual_fgrid == 1.81 || actual_fgrid == 2.0 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.2 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 54.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.India:
-                            if (actual_fgrid == 1.81
-                                || actual_fgrid == 1.86
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.9
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 54.0)
+                            if (actual_fgrid == 1.81 || actual_fgrid == 1.86 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.9 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.2 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 54.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.Europe:
-                            if (actual_fgrid == 1.81
-                                || actual_fgrid == 2.0
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.08
-                                || actual_fgrid == 51.0)
+                            if (actual_fgrid == 1.81 || actual_fgrid == 2.0 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.2 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.08 || actual_fgrid == 51.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.UK:
-                            if (actual_fgrid == 0.472
-                                || actual_fgrid == 0.479
-                                || actual_fgrid == 1.81
-                                || actual_fgrid == 2.0
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 5.2585
-                                || actual_fgrid == 5.4065
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 52.0)
+                            if (actual_fgrid == 0.472 || actual_fgrid == 0.479 ||
+                                actual_fgrid == 1.81 || actual_fgrid == 2.0 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 5.2585 || actual_fgrid == 5.4065 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.2 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 52.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.Italy_Plus:
-                            if (actual_fgrid == 1.81
-                                || actual_fgrid == 2.0
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 6.975
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.08
-                                || actual_fgrid == 51.0)
+                            if (actual_fgrid == 1.81 || actual_fgrid == 2.0 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 6.975 || actual_fgrid == 7.2 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.08 || actual_fgrid == 51.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.Japan:
-                            if (actual_fgrid == .1357
-                                || actual_fgrid == .1378
-                                || actual_fgrid == 1.81
-                                || actual_fgrid == 1.825
-                                || actual_fgrid == 1.9075
-                                || actual_fgrid == 1.9125
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.575
-                                || actual_fgrid == 3.599
-                                || actual_fgrid == 3.612
-                                || actual_fgrid == 3.68
-                                || actual_fgrid == 3.687
-                                || actual_fgrid == 3.702
-                                || actual_fgrid == 3.716
-                                || actual_fgrid == 3.745
-                                || actual_fgrid == 3.77
-                                || actual_fgrid == 3.791
-                                || actual_fgrid == 3.805
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.2
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 54.0)
+                            if (actual_fgrid == .1357 || actual_fgrid == .1378 ||
+                            actual_fgrid == 1.81 || actual_fgrid == 1.825 ||
+                            actual_fgrid == 1.9075 || actual_fgrid == 1.9125 ||
+                            actual_fgrid == 3.5 || actual_fgrid == 3.575 ||
+                            actual_fgrid == 3.599 || actual_fgrid == 3.612 ||
+                            actual_fgrid == 3.68 || actual_fgrid == 3.687 ||
+                            actual_fgrid == 3.702 || actual_fgrid == 3.716 ||
+                            actual_fgrid == 3.745 || actual_fgrid == 3.77 ||
+                            actual_fgrid == 3.791 || actual_fgrid == 3.805 ||
+                            actual_fgrid == 7.0 || actual_fgrid == 7.2 ||
+                            actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                            actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                            actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                            actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                            actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                            actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                            actual_fgrid == 50.0 || actual_fgrid == 54.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.Australia:
-                            if (actual_fgrid == .1357
-                                || actual_fgrid == .1378
-                                || actual_fgrid == 0.472
-                                || actual_fgrid == 0.479
-                                || actual_fgrid == 1.8
-                                || actual_fgrid == 1.875
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.7
-                                || actual_fgrid == 3.776
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.3
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 54.0)
+                            if (actual_fgrid == .1357 || actual_fgrid == .1378 ||
+                                actual_fgrid == 0.472 || actual_fgrid == 0.479 ||
+                                actual_fgrid == 1.8 || actual_fgrid == 1.875 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.7 ||
+                                actual_fgrid == 3.776 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.3 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 54.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
 
                         case FRSRegion.Norway:
-                            if (actual_fgrid == 1.8
-                                || actual_fgrid == 1.875
-                                || actual_fgrid == 3.5
-                                || actual_fgrid == 3.7
-                                || actual_fgrid == 3.776
-                                || actual_fgrid == 3.8
-                                || actual_fgrid == 5.26
-                                || actual_fgrid == 5.41
-                                || actual_fgrid == 7.0
-                                || actual_fgrid == 7.3
-                                || actual_fgrid == 10.1
-                                || actual_fgrid == 10.15
-                                || actual_fgrid == 14.0
-                                || actual_fgrid == 14.35
-                                || actual_fgrid == 18.068
-                                || actual_fgrid == 18.168
-                                || actual_fgrid == 21.0
-                                || actual_fgrid == 21.45
-                                || actual_fgrid == 24.89
-                                || actual_fgrid == 24.99
-                                || actual_fgrid == 28.0
-                                || actual_fgrid == 29.7
-                                || actual_fgrid == 50.0
-                                || actual_fgrid == 54.0)
+                            if (actual_fgrid == 1.8 || actual_fgrid == 1.875 ||
+                                actual_fgrid == 3.5 || actual_fgrid == 3.7 ||
+                                actual_fgrid == 3.776 || actual_fgrid == 3.8 ||
+                                actual_fgrid == 5.26 || actual_fgrid == 5.41 ||
+                                actual_fgrid == 7.0 || actual_fgrid == 7.3 ||
+                                actual_fgrid == 10.1 || actual_fgrid == 10.15 ||
+                                actual_fgrid == 14.0 || actual_fgrid == 14.35 ||
+                                actual_fgrid == 18.068 || actual_fgrid == 18.168 ||
+                                actual_fgrid == 21.0 || actual_fgrid == 21.45 ||
+                                actual_fgrid == 24.89 || actual_fgrid == 24.99 ||
+                                actual_fgrid == 28.0 || actual_fgrid == 29.7 ||
+                                actual_fgrid == 50.0 || actual_fgrid == 54.0)
                             {
                                 goto case FRSRegion.LAST;
                             }
                             else goto default;
                         default:
-                            // draw vertical in between lines
+                            //draw vertical in between lines
                             if (grid_control)
                             {
 
-                                g.DrawLine(grid_pen, vgrid, top, vgrid,
-                                    H); // wa6ahl
+                                g.DrawLine(grid_pen, vgrid, top, vgrid, H);			//wa6ahl
 
-                                int fgrid_2 = ((i + 1) * freq_step_size)
-                                    + (int)((Low / freq_step_size)
-                                        * freq_step_size);
-                                int x_2 = (int)((
-                                    (float)(fgrid_2 - vfo_delta - Low)
-                                    / width * W));
-                                float scale = (float)(x_2 - vgrid)
-                                    / inbetweenies;
+                                int fgrid_2 = ((i + 1) * freq_step_size) + (int)((Low / freq_step_size) * freq_step_size);
+                                int x_2 = (int)(((float)(fgrid_2 - vfo_delta - Low) / width * W));
+                                float scale = (float)(x_2 - vgrid) / inbetweenies;
 
                                 for (int j = 1; j < inbetweenies; j++)
                                 {
-                                    float x3
-                                        = (float)vgrid + (j * scale);
-                                    g.DrawLine(
-                                        grid_pen_inb, x3, top, x3, H);
+                                    float x3 = (float)vgrid + (j * scale);
+                                    g.DrawLine(grid_pen_inb, x3, top, x3, H);
                                 }
                             }
 
-                            if (((double)((int)(actual_fgrid * 1000)))
-                                == actual_fgrid * 1000)
+                            if (((double)((int)(actual_fgrid * 1000))) == actual_fgrid * 1000)
                             {
-                                label = actual_fgrid.ToString(
-                                    "f3"); // wa6ahl
+                                label = actual_fgrid.ToString("f3"); //wa6ahl
 
                                 // if(actual_fgrid > 1300.0)
-                                // label =
-                                // label.Substring(label.Length-4);
+                                //label = label.Substring(label.Length-4);
 
-                                if (actual_fgrid < 10)
-                                    offsetL = (int)((label.Length + 1)
-                                                  * 4.1)
-                                        - 14;
-                                else if (actual_fgrid < 100.0)
-                                    offsetL = (int)((label.Length + 1)
-                                                  * 4.1)
-                                        - 11;
-                                else
-                                    offsetL = (int)((label.Length + 1)
-                                                  * 4.1)
-                                        - 8;
+                                if (actual_fgrid < 10) offsetL = (int)((label.Length + 1) * 4.1) - 14;
+                                else if (actual_fgrid < 100.0) offsetL = (int)((label.Length + 1) * 4.1) - 11;
+                                else offsetL = (int)((label.Length + 1) * 4.1) - 8;
                             }
                             else
                             {
-                                // display freqencies
+                                //display freqencies
                                 string temp_string;
                                 int jper;
-                                // label = actual_fgrid.ToString("f5");
-                                // //x100
+                                //label = actual_fgrid.ToString("f5"); //x100
                                 label = actual_fgrid.ToString("f4");
                                 temp_string = label;
                                 jper = label.IndexOf('.') + 4;
                                 label = label.Insert(jper, " ");
 
-                                // if(actual_fgrid > 1300.0)
-                                //	label =
-                                // label.Substring(label.Length-4);
+                                //if(actual_fgrid > 1300.0)
+                                //	label = label.Substring(label.Length-4);
 
-                                if (actual_fgrid < 10)
-                                    offsetL
-                                        = (int)((label.Length) * 4.1)
-                                        - 14;
-                                else if (actual_fgrid < 100.0)
-                                    offsetL
-                                        = (int)((label.Length) * 4.1)
-                                        - 11;
-                                else
-                                    offsetL
-                                        = (int)((label.Length) * 4.1)
-                                        - 8;
+                                if (actual_fgrid < 10) offsetL = (int)((label.Length) * 4.1) - 14;
+                                else if (actual_fgrid < 100.0) offsetL = (int)((label.Length) * 4.1) - 11;
+                                else offsetL = (int)((label.Length) * 4.1) - 8;
                             }
 
-                            g.DrawString(label, font9, grid_text_brush,
-                                vgrid - offsetL,
-                                freqScalePanRect.Top
-                                    + 3); //(float)Math.Floor(H * .01));
+                            g.DrawString(label, font9, grid_text_brush, vgrid - offsetL, freqScalePanRect.Top + 3);//(float)Math.Floor(H * .01));
 
                             break;
                     }
                 }
                 else
                 {
-                    vgrid = Convert.ToInt32((double)-(fgrid - Low)
-                        / (Low - High) * W); // wa6ahl
-                    g.DrawLine(
-                        grid_pen, vgrid, top, vgrid, H); // wa6ahl
+                    vgrid = Convert.ToInt32((double)-(fgrid - Low) / (Low - High) * W);	//wa6ahl
+                    g.DrawLine(grid_pen, vgrid, top, vgrid, H);			//wa6ahl
 
                     label = fgrid.ToString();
                     offsetL = (int)((label.Length + 1) * 4.1);
                     offsetR = (int)(label.Length * 4.1);
-                    if ((vgrid - offsetL >= 0)
-                        && (vgrid + offsetR < W) && (fgrid != 0))
+                    if ((vgrid - offsetL >= 0) && (vgrid + offsetR < W) && (fgrid != 0))
                     {
-                        g.DrawString(label, font9, grid_text_brush,
-                            vgrid - offsetL,
-                            freqScalePanRect.Top
-                                + 3); //(float)Math.Floor(H * .01));
+                        g.DrawString(label, font9, grid_text_brush, vgrid - offsetL, freqScalePanRect.Top + 3);//(float)Math.Floor(H * .01));
                     }
                 }
             }
@@ -1893,208 +1735,151 @@ namespace Thetis
             switch (current_region)
             {
                 case FRSRegion.Australia:
-                    band_edge_list = new int[] { 135700, 137800,
-                                    472000, 479000, 1800000, 1875000, 3500000,
-                                    3800000, 7000000, 7300000, 10100000,
-                                    10150000, 14000000, 14350000, 18068000,
-                                    18168000, 21000000, 21450000, 28000000,
-                                    29700000, 50000000, 54000000, 144000000,
-                                    148000000 };
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000, 
+				 3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 
+				 18168000, 21000000, 21450000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.UK:
-                    band_edge_list = new int[] { 472000, 479000,
-                                    1810000, 2000000, 3500000, 3800000, 5258500,
-                                    5406500, 7000000, 7200000, 10100000,
-                                    10150000, 14000000, 14350000, 18068000,
-                                    18168000, 21000000, 21450000, 24890000,
-                                    24990000, 28000000, 29700000, 50000000,
-                                    52000000, 144000000, 148000000 };
+                    band_edge_list = new int[] { 472000, 479000, 1810000, 2000000, 3500000, 3800000,
+				5258500, 5406500, 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000,
+				21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.India:
-                    band_edge_list = new int[] { 1810000, 1860000,
-                                    3500000, 3900000, 7000000, 7200000,
-                                    10100000, 10150000, 14000000, 14350000,
-                                    18068000, 18168000, 21000000, 21450000,
-                                    24890000, 24990000, 28000000, 29700000,
-                                    50000000, 54000000, 144000000, 148000000 };
+                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000, 
+				10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+				24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.Norway:
-                    band_edge_list = new int[] { 1800000, 2000000,
-                                    3500000, 4000000, 5260000, 5410000, 7000000,
-                                    7300000, 10100000, 10150000, 14000000,
-                                    14350000, 18068000, 18168000, 21000000,
-                                    21450000, 24890000, 24990000, 28000000,
-                                    29700000, 50000000, 54000000, 144000000,
-                                    148000000 };
+                    band_edge_list = new int[]{ 1800000, 2000000, 3500000, 4000000, 5260000, 5410000,
+				7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+				24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.US:
-                    band_edge_list = new int[] { 135700, 137800,
-                                    472000, 479000, 1800000, 2000000, 3500000,
-                                    4000000, 7000000, 7300000, 10100000,
-                                    10150000, 14000000, 14350000, 18068000,
-                                    18168000, 21000000, 21450000, 24890000,
-                                    24990000, 28000000, 29700000, 50000000,
-                                    54000000, 144000000, 148000000 };
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 2000000, 3500000, 4000000,
+				7000000, 7300000, 10100000, 10150000, 14000000, 14350000,  18068000, 18168000, 21000000, 21450000,
+				24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.Japan:
-                    band_edge_list = new int[] { 135700, 137800,
-                                    472000, 479000, 1810000, 1810000, 1907500,
-                                    1912500, 3500000, 3575000, 3599000, 3612000,
-                                    3687000, 3702000, 3716000, 3745000, 3770000,
-                                    3791000, 3805000, 7000000, 7200000,
-                                    10100000, 10150000, 14000000, 14350000,
-                                    18068000, 18168000, 21000000, 21450000,
-                                    24890000, 24990000, 28000000, 29700000,
-                                    50000000, 54000000, 144000000, 148000000 };
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1810000, 1907500, 1912500, 
+                3500000, 3575000, 3599000, 3612000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
+				7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+				24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 default:
-                    band_edge_list = new int[] { 1800000, 2000000,
-                                    3500000, 4000000, 7000000, 7300000,
-                                    10100000, 10150000, 14000000, 14350000,
-                                    18068000, 18168000, 21000000, 21450000,
-                                    24890000, 24990000, 28000000, 29700000,
-                                    50000000, 54000000, 144000000, 148000000 };
+                    band_edge_list = new int[]{1800000, 2000000, 3500000, 4000000, 7000000, 7300000, 
+				10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
+				24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
             }
 
-            for (int i = 0; i < band_edge_list.Length;
-                 i++)
+            for (int i = 0; i < band_edge_list.Length; i++)
             {
-                double band_edge_offset
-                    = band_edge_list[i] - vfo;
-                if (band_edge_offset >= Low
-                    && band_edge_offset <= High)
+                double band_edge_offset = band_edge_list[i] - vfo;
+                if (band_edge_offset >= Low && band_edge_offset <= High)
                 {
-                    int temp_vline
-                        = (int)((double)(band_edge_offset - Low)
-                            / width * W); // wa6ahl
+                    int temp_vline = (int)((double)(band_edge_offset - Low) / width * W);//wa6ahl
 
-                    g.DrawLine(band_edge_pen, temp_vline, top,
-                        temp_vline, H); // wa6ahl
+                    g.DrawLine(band_edge_pen, temp_vline, top, temp_vline, H);//wa6ahl
                 }
+
             }
 
-            // if (grid_control)
-            // {
-            // Draw horizontal lines
-            for (int i = 1; i < h_steps; i++)
-            {
-                int xOffset = 0;
-                int num = grid_max - i * grid_step;
-                int y = (int)((double)(grid_max - num) * H
-                    / y_range);
-
-                g.DrawLine(hgrid_pen, 0, y, W, y);
-
-                // Draw horizontal line labels
-                if (i != 0) // avoid intersecting vertical and
-                            // horizontal labels
+           // if (grid_control)
+           // {
+                // Draw horizontal lines
+                for (int i = 1; i < h_steps; i++)
                 {
-                    num = grid_max - i * grid_step;
-                    string label = num.ToString();
-                    if (label.Length == 3)
-                        xOffset
-                            = (int)g.MeasureString("-", font9).Width
-                            - 2;
-                    // int offset = (int)(label.Length * 4.1);
-                    SizeF size = g.MeasureString(label, font9);
+                    int xOffset = 0;
+                    int num = grid_max - i * grid_step;
+                    int y = (int)((double)(grid_max - num) * H / y_range);
 
-                    int x = 0;
-                    switch (display_label_align)
-                    {
-                        case DisplayLabelAlignment.LEFT:
-                            x = xOffset + 3;
-                            break;
-                        case DisplayLabelAlignment.CENTER:
-                            x = center_line_x + xOffset;
-                            break;
-                        case DisplayLabelAlignment.RIGHT:
-                            x = (int)(W - size.Width - 3);
-                            break;
-                        case DisplayLabelAlignment.AUTO:
-                            x = xOffset + 3;
-                            break;
-                        case DisplayLabelAlignment.OFF:
-                            x = W;
-                            break;
-                    }
-                    // console.DisplayGridX = x;
-                    // console.DisplayGridW = (int)(x + size.Width);
+                    g.DrawLine(hgrid_pen, 0, y, W, y);
 
-                    y -= 8;
-                    if (y + 9 < H)
+                    // Draw horizontal line labels
+                    if (i != 0) // avoid intersecting vertical and horizontal labels
                     {
-                        g.DrawString(
-                            label, font9, grid_text_brush, x, y);
+                        num = grid_max - i * grid_step;
+                        string label = num.ToString();
+                        if (label.Length == 3)
+                            xOffset = (int)g.MeasureString("-", font9).Width - 2;
+                        // int offset = (int)(label.Length * 4.1);
+                        SizeF size = g.MeasureString(label, font9);
+
+                        int x = 0;
+                        switch (display_label_align)
+                        {
+                            case DisplayLabelAlignment.LEFT:
+                                x = xOffset + 3;
+                                break;
+                            case DisplayLabelAlignment.CENTER:
+                                x = center_line_x + xOffset;
+                                break;
+                            case DisplayLabelAlignment.RIGHT:
+                                x = (int)(W - size.Width - 3);
+                                break;
+                            case DisplayLabelAlignment.AUTO:
+                                x = xOffset + 3;
+                                break;
+                            case DisplayLabelAlignment.OFF:
+                                x = W;
+                                break;
+                        }
+                       // console.DisplayGridX = x;
+                       // console.DisplayGridW = (int)(x + size.Width);
+
+                        y -= 8;
+                        if (y + 9 < H)
+                        {                           
+                                g.DrawString(label, font9, grid_text_brush, x, y);
+                        }
                     }
                 }
-            }
-            //  }
+          //  }
 
             // draw long cursor & filter overlay
-            // if (current_click_tune_mode !=
-            // ClickTuneMode.Off)
+            //if (current_click_tune_mode != ClickTuneMode.Off)
             //{
             //    Pen p;
-            //    p = current_click_tune_mode ==
-            //    ClickTuneMode.VFOA ? grid_text_pen :
-            //    Pens.Red;
+            //    p = current_click_tune_mode == ClickTuneMode.VFOA ? grid_text_pen : Pens.Red;
 
             //    if (ClickTuneFilter)
             //    {
             //        if (display_cursor_y <= H)
             //        {
-            //            double freq_low = freq +
-            //            filter_low; double freq_high =
-            //            freq + filter_high; int x1 =
-            //            (int)((freq_low - Low) / width *
-            //            W); int x2 = (int)((freq_high -
-            //            Low) / width * W);
-            //            //g.FillRectangle(display_filter_brush,
-            //            x1, top, x2 - x1, H - top);
+            //            double freq_low = freq + filter_low;
+            //            double freq_high = freq + filter_high;
+            //            int x1 = (int)((freq_low - Low) / width * W);
+            //            int x2 = (int)((freq_high - Low) / width * W);
+            //            //g.FillRectangle(display_filter_brush, x1, top, x2 - x1, H - top);
 
-            //            if (rx_dsp_mode == DSPMode.CWL ||
-            //            rx_dsp_mode == DSPMode.CWU)
+            //            if (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU)
             //            {
-            //                g.FillRectangle(display_filter_brush,
-            //                display_cursor_x -
-            //                    ((x2 - x1) / 2), top, x2 -
-            //                    x1, H - top);
+            //                g.FillRectangle(display_filter_brush, display_cursor_x -
+            //                    ((x2 - x1) / 2), top, x2 - x1, H - top);
             //            }
             //            else
             //            {
-            //                g.FillRectangle(display_filter_brush,
-            //                x1, top, x2 - x1, H - top);
+            //                g.FillRectangle(display_filter_brush, x1, top, x2 - x1, H - top);
             //            }
             //        }
 
             //        if (display_cursor_y <= H)
             //        {
-            //            g.DrawLine(p, display_cursor_x,
-            //            top, display_cursor_x, H); if
-            //            (ShowCTHLine) g.DrawLine(p, 0,
-            //            display_cursor_y, W,
-            //            display_cursor_y);
+            //            g.DrawLine(p, display_cursor_x, top, display_cursor_x, H);
+            //            if (ShowCTHLine) g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
             //        }
             //    }
             //    //}
             //}
 
-            // if (console.PowerOn && current_display_mode
-            // == DisplayMode.PANADAPTER)
+            //if (console.PowerOn && current_display_mode == DisplayMode.PANADAPTER)
             //{
-            //     // get filter screen coordinates
-            //     int filter_left_x =
-            //     (int)((float)(filter_low - Low) / width *
-            //     W); int filter_right_x =
-            //     (int)((float)(filter_high - Low) / width
-            //     * W); if (filter_left_x ==
-            //     filter_right_x) filter_right_x =
-            //     filter_left_x + 1;
+            //    // get filter screen coordinates
+            //    int filter_left_x = (int)((float)(filter_low - Low) / width * W);
+            //    int filter_right_x = (int)((float)(filter_high - Low) / width * W);
+            //    if (filter_left_x == filter_right_x) filter_right_x = filter_left_x + 1;
 
-            //    int x1_rx_gain = 0, x2_rx_gain = 0,
-            //    x3_rx_gain = 0, x1_rx_hang = 0, x2_rx_hang
-            //    = 0, x3_rx_hang = 0;
+            //    int x1_rx_gain = 0, x2_rx_gain = 0, x3_rx_gain = 0, x1_rx_hang = 0, x2_rx_hang = 0, x3_rx_hang = 0;
 
             //    if (spectrum_line)
             //    {
@@ -2135,24 +1920,16 @@ namespace Thetis
             //        if (rx == 1)
             //        {
             //            mode = console.RX1AGCMode;
-            //            rx_agc_fixed_gain =
-            //            console.SetupForm.AGCFixedGain;
-            //            WDSP.GetRXAAGCThresh(WDSP.id(0,
-            //            0), &rx_thresh, 4096.0,
-            //            sample_rate);
-            //            WDSP.GetRXAAGCHangLevel(WDSP.id(0,
-            //            0), &rx_hang);
+            //            rx_agc_fixed_gain = console.SetupForm.AGCFixedGain;
+            //            WDSP.GetRXAAGCThresh(WDSP.id(0, 0), &rx_thresh, 4096.0, sample_rate);
+            //            WDSP.GetRXAAGCHangLevel(WDSP.id(0, 0), &rx_hang);
             //        }
             //        else
             //        {
             //            mode = console.RX2AGCMode;
-            //            rx_agc_fixed_gain =
-            //            console.SetupForm.AGCRX2FixedGain;
-            //            WDSP.GetRXAAGCThresh(WDSP.id(2,
-            //            0), &rx_thresh, 4096.0,
-            //            sample_rate);
-            //            WDSP.GetRXAAGCHangLevel(WDSP.id(2,
-            //            0), &rx_hang);
+            //            rx_agc_fixed_gain = console.SetupForm.AGCRX2FixedGain;
+            //            WDSP.GetRXAAGCThresh(WDSP.id(2, 0), &rx_thresh, 4096.0, sample_rate);
+            //            WDSP.GetRXAAGCHangLevel(WDSP.id(2, 0), &rx_hang);
             //        }
             //        rx_thresh = Math.Round(rx_thresh);
 
@@ -2162,11 +1939,8 @@ namespace Thetis
             //                rx_cal_offset = -18.0f;
             //                break;
             //            default:
-            //                rx_cal_offset = 2.0f +
-            //                (rx_display_cal_offset +
-            //                    (preamp_offset -
-            //                    alex_preamp_offset) -
-            //                    rx_fft_size_offset);
+            //                rx_cal_offset = 2.0f + (rx_display_cal_offset +
+            //                    (preamp_offset - alex_preamp_offset) - rx_fft_size_offset);
             //                break;
             //        }
 
@@ -2175,46 +1949,25 @@ namespace Thetis
             //        switch (mode)
             //        {
             //            case AGCMode.FIXD:
-            //                rx_agcknee_y_value =
-            //                dBToPixel(-(float)rx_agc_fixed_gain
-            //                + rx_cal_offset); rx_agc =
-            //                "-F"; break;
+            //                rx_agcknee_y_value = dBToPixel(-(float)rx_agc_fixed_gain + rx_cal_offset);
+            //                rx_agc = "-F";
+            //                break;
             //            default:
-            //                rx_agcknee_y_value =
-            //                dBToPixel((float)rx_thresh +
-            //                rx_cal_offset); rx_agc_hang_y
-            //                = dBToPixel((float)rx_hang +
-            //                rx_cal_offset);
+            //                rx_agcknee_y_value = dBToPixel((float)rx_thresh + rx_cal_offset);
+            //                rx_agc_hang_y = dBToPixel((float)rx_hang + rx_cal_offset);
 
             //                //show hang line
-            //                if (display_agc_hang_line &&
-            //                mode != AGCMode.MED && mode !=
-            //                AGCMode.FAST)
+            //                if (display_agc_hang_line && mode != AGCMode.MED && mode != AGCMode.FAST)
             //                {
             //                    agcHang = new Rectangle();
-            //                    agcHang.Height = 8;
-            //                    agcHang.Width = 8;
-            //                    agcHang.X = 40; agcHang.Y
-            //                    = (int)rx_agc_hang_y -
-            //                    agcHang.Height;
-            //                    g.FillRectangle(Brushes.Yellow,
-            //                    agcHang); using (Pen p =
-            //                    new Pen(Color.Yellow))
+            //                    agcHang.Height = 8; agcHang.Width = 8; agcHang.X = 40;
+            //                    agcHang.Y = (int)rx_agc_hang_y - agcHang.Height;
+            //                    g.FillRectangle(Brushes.Yellow, agcHang);
+            //                    using (Pen p = new Pen(Color.Yellow))
             //                    {
-            //                        p.DashStyle =
-            //                        DashStyle.Dot;
-            //                        g.DrawLine(p,
-            //                        x3_rx_hang,
-            //                        rx_agc_hang_y,
-            //                        x2_rx_hang,
-            //                        rx_agc_hang_y);
-            //                        g.DrawString("-H",
-            //                        pana_font,
-            //                        pana_text_brush,
-            //                        agcKnee.X +
-            //                        agcHang.Width,
-            //                        agcHang.Y -
-            //                        (agcHang.Height));
+            //                        p.DashStyle = DashStyle.Dot;
+            //                        g.DrawLine(p, x3_rx_hang, rx_agc_hang_y, x2_rx_hang, rx_agc_hang_y);
+            //                        g.DrawString("-H", pana_font, pana_text_brush, agcKnee.X + agcHang.Width, agcHang.Y - (agcHang.Height));
             //                    }
             //                }
             //                rx_agc = "-G";
@@ -2225,56 +1978,40 @@ namespace Thetis
             //        if (show_agc)
             //        {
             //            agcKnee = new Rectangle();
-            //            agcKnee.Height = 8; agcKnee.Width
-            //            = 8; agcKnee.X = 40; agcKnee.Y =
-            //            (int)rx_agcknee_y_value -
-            //            agcKnee.Height;
-            //            g.FillRectangle(Brushes.YellowGreen,
-            //            agcKnee);
+            //            agcKnee.Height = 8; agcKnee.Width = 8; agcKnee.X = 40;
+            //            agcKnee.Y = (int)rx_agcknee_y_value - agcKnee.Height;
+            //            g.FillRectangle(Brushes.YellowGreen, agcKnee);
 
-            //            using (Pen p = new
-            //            Pen(Color.YellowGreen))
+            //            using (Pen p = new Pen(Color.YellowGreen))
             //            {
             //                p.DashStyle = DashStyle.Dot;
-            //                g.DrawLine(p, x1_rx_gain,
-            //                rx_agcknee_y_value,
-            //                x2_rx_gain,
-            //                rx_agcknee_y_value);
-            //                g.DrawString(rx_agc,
-            //                pana_font, pana_text_brush,
-            //                agcKnee.X + agcKnee.Width,
-            //                agcKnee.Y - (agcKnee.Height));
+            //                g.DrawLine(p, x1_rx_gain, rx_agcknee_y_value, x2_rx_gain, rx_agcknee_y_value);
+            //                g.DrawString(rx_agc, pana_font, pana_text_brush, agcKnee.X + agcKnee.Width, agcKnee.Y - (agcKnee.Height));
             //            }
             //        }
             //    }
 
             //}
-            // if (high_swr && rx == 1)
-            //    g.DrawString("High SWR", font14,
-            //    Brushes.Red, 245, 20);
+            //if (high_swr && rx == 1)
+            //    g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
+
         }
 
         private float dBToPixel(float dB)
         {
-            return (float)(spectrum_grid_max - dB)
-                * panRect.Height
-                / (spectrum_grid_max - spectrum_grid_min);
+            return (float)(spectrum_grid_max - dB) * panRect.Height / (spectrum_grid_max - spectrum_grid_min);
         }
 
-        private void DrawOffBackground(
-            Graphics g, int W, int H, bool bottom)
+        private void DrawOffBackground(Graphics g, int W, int H, bool bottom)
         {
             // draw background
-            g.FillRectangle(display_background_brush, 0,
-                bottom ? H : 0, W, H);
+            g.FillRectangle(display_background_brush, 0, bottom ? H : 0, W, H);
 
             if (high_swr && !bottom)
-                g.DrawString(
-                    "High SWR", font14, Brushes.Red, 245, 20);
+                g.DrawString("High SWR", font14, Brushes.Red, 245, 20);
         }
 
-        unsafe private bool DrawPanadapter(
-            Graphics g, int rx)
+        unsafe private bool DrawPanadapter(Graphics g, int rx)
         {
             int W = panRect.Width;
             int H = panRect.Height;
@@ -2289,19 +2026,14 @@ namespace Thetis
             else
             {
                 if (points == null || points.Length < W)
-                    points = new Point[W]; // array of points to
-                                           // display
+                    points = new Point[W];			// array of points to display
             }
-            float slope
-                = 0.0F; // samples to process per pixel
-                        // int num_samples
-                        //    = 0; // number of samples to process
-            int start_sample_index
-                = 0; // index to begin looking at samples
-            int Low = 0; // rx_display_low;
-            int High = 0; // rx_display_high;
-                          // int yRange = spectrum_grid_max -
-                          // spectrum_grid_min;
+            float slope = 0.0F;						// samples to process per pixel
+            int num_samples = 0;					// number of samples to process
+            int start_sample_index = 0;				// index to begin looking at samples
+            int Low = 0;// rx_display_low;
+            int High = 0;// rx_display_high;
+            // int yRange = spectrum_grid_max - spectrum_grid_min;
             float local_max_y = float.MinValue;
             bool local_mox = false;
             bool displayduplex = false;
@@ -2309,36 +2041,28 @@ namespace Thetis
             int grid_max = 0;
             int grid_min = 0;
 
-            // if (rx == 1 && !tx_on_vfob && mox) local_mox
-            // = true; if (rx == 2 && tx_on_vfob && mox)
-            // local_mox = true; if (rx == 1 && tx_on_vfob
-            // && mox && !rx2_enabled) local_mox = true;
+            //if (rx == 1 && !tx_on_vfob && mox) local_mox = true;
+            //if (rx == 2 && tx_on_vfob && mox) local_mox = true;
+            //if (rx == 1 && tx_on_vfob && mox && !rx2_enabled) local_mox = true;
 
-            if ((CurrentDisplayMode == DisplayMode.PANAFALL
-                    && (nreceivers <= 2 && display_duplex))
-                || (CurrentDisplayMode
-                        == DisplayMode.PANAFALL
-                    && nreceivers > 2)
-                || (CurrentDisplayMode
-                        == DisplayMode.PANADAPTER
-                    && display_duplex))
-                displayduplex = true;
+            if ((CurrentDisplayMode == DisplayMode.PANAFALL && (nreceivers <= 2 && display_duplex)) ||
+                (CurrentDisplayMode == DisplayMode.PANAFALL && nreceivers > 2) ||
+               (CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex)) displayduplex = true;
 
-            // if (local_mox && !displayduplex) // &&
-            // !tx_on_vfob)
+            //if (local_mox && !displayduplex) // && !tx_on_vfob)
             //{
-            //     Low = tx_display_low;
-            //     High = tx_display_high;
-            //     grid_max = tx_spectrum_grid_max;
-            //     grid_min = tx_spectrum_grid_min;
-            // }
-            // else
+            //    Low = tx_display_low;
+            //    High = tx_display_high;
+            //    grid_max = tx_spectrum_grid_max;
+            //    grid_min = tx_spectrum_grid_min;
+            //}
+            //else
             //{
-            //     Low = rx_display_low;
-            High = high_freq;
-            grid_max = spectrum_grid_max;
-            grid_min = spectrum_grid_min;
-            // }
+            //    Low = rx_display_low;
+                High = high_freq;
+                grid_max = spectrum_grid_max;
+                grid_min = spectrum_grid_min;
+           // }
 
             if (rx_dsp_mode == DSPMode.DRM)
             {
@@ -2351,59 +2075,43 @@ namespace Thetis
 
             if (data_ready)
             {
-                // if (!displayduplex && (local_mox || (mox &&
-                // tx_on_vfob)) && (rx_dsp_mode == DSPMode.CWL
-                // || rx_dsp_mode == DSPMode.CWU))
+                //if (!displayduplex && (local_mox || (mox && tx_on_vfob)) && (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
                 //{
-                //     for (int i = 0; i <
-                //     current_display_data.Length; i++)
-                //         current_display_data[i] = grid_min -
-                //         rx_display_cal_offset;
-                // }
-                // else
+                //    for (int i = 0; i < current_display_data.Length; i++)
+                //        current_display_data[i] = grid_min - rx_display_cal_offset;
+                //}
+                //else
                 //{
-                fixed (void* rptr = &new_display_data[0])
-                fixed (void* wptr = &current_display_data[0])
-                    Win32.memcpy(wptr, rptr,
-                        BUFFER_SIZE * sizeof(float));
-                // }
+                    fixed (void* rptr = &new_display_data[0])
+                    fixed (void* wptr = &current_display_data[0])
+                        Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+               // }
                 data_ready = false;
             }
 
-            // if (average_on && local_mox &&
-            // !displayduplex)
+            //if (average_on && local_mox && !displayduplex)
             //{
-            //     console.UpdateRX1DisplayAverage(rx1_average_buffer,
-            //     current_display_data);
-            // }
-            // else if (rx == 2 && rx2_avg_on && local_mox)
-            //     console.UpdateRX2DisplayAverage(rx2_average_buffer,
-            //     current_display_data);
+            //    console.UpdateRX1DisplayAverage(rx1_average_buffer, current_display_data);
+            //}
+            //else if (rx == 2 && rx2_avg_on && local_mox)
+            //    console.UpdateRX2DisplayAverage(rx2_average_buffer, current_display_data);
 
-            // if (peak_on && local_mox && !displayduplex)
-            //     UpdateDisplayPeak(rx1_peak_buffer,
-            //     current_display_data);
-            // else
-            //     if (rx == 2 && rx2_peak_on && local_mox)
-            //         UpdateDisplayPeak(rx2_peak_buffer,
-            //         current_display_data);
+            //if (peak_on && local_mox && !displayduplex)
+            //    UpdateDisplayPeak(rx1_peak_buffer, current_display_data);
+            //else
+            //    if (rx == 2 && rx2_peak_on && local_mox)
+            //        UpdateDisplayPeak(rx2_peak_buffer, current_display_data);
 
-            // if (local_mox && !displayduplex)// ||
-            // rx_dsp_mode == DSPMode.DRM)
+            //if (local_mox && !displayduplex)// || rx_dsp_mode == DSPMode.DRM)
             //{
-            //     start_sample_index = (BUFFER_SIZE >> 1) +
-            //     ((Low * BUFFER_SIZE) / sample_rate);
-            //     num_samples = (width * BUFFER_SIZE /
-            //     sample_rate); if (start_sample_index < 0)
-            //     start_sample_index += 4096; if
-            //     ((num_samples - start_sample_index) >
-            //     (BUFFER_SIZE + 1))
-            //         num_samples = (BUFFER_SIZE -
-            //         start_sample_index);
+            //    start_sample_index = (BUFFER_SIZE >> 1) + ((Low * BUFFER_SIZE) / sample_rate);
+            //    num_samples = (width * BUFFER_SIZE / sample_rate);
+            //    if (start_sample_index < 0) start_sample_index += 4096;
+            //    if ((num_samples - start_sample_index) > (BUFFER_SIZE + 1))
+            //        num_samples = (BUFFER_SIZE - start_sample_index);
 
-            //    //Debug.WriteLine("start_sample_index:
-            //    "+start_sample_index); slope =
-            //    (float)num_samples / (float)W;
+            //    //Debug.WriteLine("start_sample_index: "+start_sample_index);
+            //    slope = (float)num_samples / (float)W;
             //}
 
             try
@@ -2417,40 +2125,29 @@ namespace Thetis
 
                     //  if (rx == 1)
                     //  {
-                    if (local_mox
-                        && !displayduplex) // || rx_dsp_mode ==
-                                           // DSPMode.DRM)
+                    if (local_mox && !displayduplex)// || rx_dsp_mode == DSPMode.DRM)
                     {
                         if (slope <= 1.0 || lindex == rindex)
                         {
-                            max = current_display_data[lindex
-                                      % 4096]
-                                    * ((float)lindex - dval + 1)
-                                + current_display_data[(lindex + 1)
-                                      % 4096]
-                                    * (dval - (float)lindex);
+                            max = current_display_data[lindex % 4096] * ((float)lindex - dval + 1) + current_display_data[(lindex + 1) % 4096] * (dval - (float)lindex);
                         }
                         else
                         {
                             for (int j = lindex; j < rindex; j++)
-                                if (current_display_data[j % 4096]
-                                    > max)
-                                    max = current_display_data[j
-                                        % 4096];
+                                if (current_display_data[j % 4096] > max) max = current_display_data[j % 4096];
                         }
                     }
 
-                    else
-                        max = current_display_data[i];
+                    else max = current_display_data[i];
 
                     max += rx_display_cal_offset;
+                    
 
-                    if (!local_mox
-                        || (local_mox && displayduplex))
+                    if (!local_mox || (local_mox && displayduplex))
                     {
-                        // if (rx == 1)
-                        max += preamp_offset;
-                        // else if (rx == 2) max += preamp_offset;
+                       // if (rx == 1) 
+                            max += preamp_offset;
+                       // else if (rx == 2) max += preamp_offset;
                     }
 
                     if (max > local_max_y)
@@ -2460,17 +2157,11 @@ namespace Thetis
                     }
 
                     points[i].X = i;
-                    points[i].Y = (int)(Math.Floor(
-                        (grid_max - max) * H / yRange));
+                    points[i].Y = (int)(Math.Floor((grid_max - max) * H / yRange));
                     /* if (points[i].Y < 0)
                      {
-                        // Trace.WriteLine(i + " " +
-                     max.ToString("f2") +
-                     points[i].Y.ToString("f2"));
-                        //
-                     Trace.WriteLine(new_display_data[i].ToString("f2")
-                     + " " +
-                     current_display_data[i].ToString("f2"));
+                        // Trace.WriteLine(i + " " + max.ToString("f2") + points[i].Y.ToString("f2"));
+                        // Trace.WriteLine(new_display_data[i].ToString("f2") + " " + current_display_data[i].ToString("f2"));
 
                          points[i].Y = H;
                      }*/
@@ -2490,10 +2181,8 @@ namespace Thetis
             {
                 if (pan_fill)
                 {
-                    points[W].X = W;
-                    points[W].Y = H;
-                    points[W + 1].X = 0;
-                    points[W + 1].Y = H;
+                    points[W].X = W; points[W].Y = H;
+                    points[W + 1].X = 0; points[W + 1].Y = H;
 
                     g.FillPolygon(data_line_fpen.Brush, points);
 
@@ -2507,7 +2196,7 @@ namespace Thetis
                     g.DrawLines(data_line_pen, points);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Trace.WriteLine(ex);
             }
@@ -2517,26 +2206,21 @@ namespace Thetis
             // draw long cursor
             try
             {
-                if (current_click_tune_mode
-                    != ClickTuneMode.Off)
+                if (current_click_tune_mode != ClickTuneMode.Off)
                 {
                     Pen p;
-                    if (current_click_tune_mode
-                        == ClickTuneMode.VFOA)
+                    if (current_click_tune_mode == ClickTuneMode.VFOA)
                         p = new Pen(grid_text_color);
-                    else
-                        p = new Pen(Color.Red);
+                    else p = new Pen(Color.Red);
 
                     if (display_cursor_y <= H)
                     {
-                        g.DrawLine(p, display_cursor_x, 0,
-                            display_cursor_x, H);
-                        g.DrawLine(p, 0, display_cursor_y, W,
-                            display_cursor_y);
+                        g.DrawLine(p, display_cursor_x, 0, display_cursor_x, H);
+                        g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
 
@@ -2550,55 +2234,40 @@ namespace Thetis
             set { waterfall_agc = value; }
         }
 
-        private int waterfall_update_period
-            = 100; // in ms
+        private int waterfall_update_period = 100; // in ms
         public int WaterfallUpdatePeriod
         {
             get { return waterfall_update_period; }
             set { waterfall_update_period = value; }
         }
 
-        private readonly HiPerfTimer timer_waterfall
-            = new HiPerfTimer();
-        //  private readonly HiPerfTimer
-        //  timer_waterfall2 = new HiPerfTimer();
+        private readonly HiPerfTimer timer_waterfall = new HiPerfTimer();
+        //  private readonly HiPerfTimer timer_waterfall2 = new HiPerfTimer();
         private float waterfallPreviousMinValue = 0.0f;
-        unsafe private bool DrawWaterfall(
-            Graphics g, int rx)
+        unsafe private bool DrawWaterfall(Graphics g, int rx)
         {
             int W = waterfallRect.Width;
             int H = waterfallRect.Height;
 
-            // if (grid_control) DrawWaterfallGrid(ref g,
-            // rx, bottom);
+            // if (grid_control) DrawWaterfallGrid(ref g, rx, bottom);
 
-            if (waterfall_data == null
-                || waterfall_data.Length < W)
+            if (waterfall_data == null || waterfall_data.Length < W)
             {
-                waterfall_data
-                    = new float[W]; // array of points to
-                                    // display
+                waterfall_data = new float[W];		// array of points to display
             }
-            float slope
-                = 0.0F; // samples to process per pixel
-            int num_samples
-                = 0; // number of samples to process
-            int start_sample_index
-                = 0; // index to begin looking at samples
+            float slope = 0.0F;						// samples to process per pixel
+            int num_samples = 0;					// number of samples to process
+            int start_sample_index = 0;				// index to begin looking at samples
             int Low = 0;
             int High = 0;
             float local_max_y = float.MinValue;
             bool local_mox = false;
-            // if (rx == 1 && !tx_on_vfob && mox) local_mox
-            // = true; if (rx == 2 && tx_on_vfob && mox)
-            // local_mox = true;
-            float local_min_y_w3sz
-                = float.MaxValue; // added by w3sz
-            float display_min_w3sz
-                = float.MaxValue; // added by w3sz
-            float display_max_w3sz
-                = float.MinValue; // added by w3sz
-            float min_y_w3sz = float.MaxValue; // w3sz
+            //if (rx == 1 && !tx_on_vfob && mox) local_mox = true;
+            //if (rx == 2 && tx_on_vfob && mox) local_mox = true;
+            float local_min_y_w3sz = float.MaxValue;  //added by w3sz
+            float display_min_w3sz = float.MaxValue; //added by w3sz
+            float display_max_w3sz = float.MinValue; //added by w3sz
+            float min_y_w3sz = float.MaxValue;  //w3sz
             int R = 0, G = 0, B = 0;
             int grid_max = 0;
             int grid_min = 0;
@@ -2613,15 +2282,9 @@ namespace Thetis
             Color mid_color = Color.Red;
             Color high_color = Color.Blue;
 
-            if ((CurrentDisplayMode == DisplayMode.PANAFALL
-                    && (nreceivers <= 2 && display_duplex))
-                || (CurrentDisplayMode
-                        == DisplayMode.PANAFALL
-                    && nreceivers > 2)
-                || (CurrentDisplayMode
-                        == DisplayMode.PANADAPTER
-                    && display_duplex))
-                displayduplex = true;
+            if ((CurrentDisplayMode == DisplayMode.PANAFALL && (nreceivers <= 2 && display_duplex)) ||
+                (CurrentDisplayMode == DisplayMode.PANAFALL && nreceivers > 2) ||
+               (CurrentDisplayMode == DisplayMode.PANADAPTER && display_duplex)) displayduplex = true;
 
             cSheme = color_sheme;
             low_color = waterfall_low_color;
@@ -2644,7 +2307,7 @@ namespace Thetis
             if (console.PowerOn)
             {
                 if (rx_dsp_mode == DSPMode.DRM) //||
-                                                // (rx_dsp_mode == DSPMode.DRM && rx == 2))
+                // (rx_dsp_mode == DSPMode.DRM && rx == 2))
                 {
                     Low += 12000;
                     High += 12000;
@@ -2652,53 +2315,40 @@ namespace Thetis
 
                 if (data_ready)
                 {
-                    if (!displayduplex && local_mox
-                        && (rx_dsp_mode == DSPMode.CWL
-                            || rx_dsp_mode == DSPMode.CWU))
+                    if (!displayduplex && local_mox && (rx_dsp_mode == DSPMode.CWL || rx_dsp_mode == DSPMode.CWU))
                     {
-                        for (int i = 0;
-                             i < current_display_data.Length; i++)
+                        for (int i = 0; i < current_display_data.Length; i++)
                             current_display_data[i] = -200.0f;
                     }
                     else
                     {
                         fixed (void* rptr = &new_display_data[0])
-                        fixed (void* wptr
-                            = &current_display_data[0])
-                            Win32.memcpy(wptr, rptr,
-                                BUFFER_SIZE * sizeof(float));
+                        fixed (void* wptr = &current_display_data[0])
+                            Win32.memcpy(wptr, rptr, BUFFER_SIZE * sizeof(float));
+
                     }
                     data_ready = false;
                 }
 
-                // if (average_on && local_mox &&
-                // !displayduplex)
-                //     console.UpdateRX1DisplayAverage(rx1_average_buffer,
-                //     current_display_data);
+                //if (average_on && local_mox && !displayduplex)
+                //    console.UpdateRX1DisplayAverage(rx1_average_buffer, current_display_data);               
 
-                // if (peak_on && local_mox && !displayduplex)
-                //     UpdateDisplayPeak(rx1_peak_buffer,
-                //     current_display_data);
-
+                //if (peak_on && local_mox && !displayduplex)
+                //    UpdateDisplayPeak(rx1_peak_buffer, current_display_data);
+                
                 int duration = 0;
                 timer_waterfall.Stop();
                 duration = (int)timer_waterfall.DurationMsec;
 
-                if (duration > waterfall_update_period
-                    || duration < 0)
+                if (duration > waterfall_update_period || duration < 0)
                 {
                     timer_waterfall.Start();
                     num_samples = (High - Low);
-                    start_sample_index = (BUFFER_SIZE >> 1)
-                        + ((Low * BUFFER_SIZE) / sample_rate);
-                    num_samples = ((High - Low) * BUFFER_SIZE
-                        / sample_rate);
-                    if (start_sample_index < 0)
-                        start_sample_index += 4096;
-                    if ((num_samples - start_sample_index)
-                        > (BUFFER_SIZE + 1))
-                        num_samples
-                            = BUFFER_SIZE - start_sample_index;
+                    start_sample_index = (BUFFER_SIZE >> 1) + ((Low * BUFFER_SIZE) / sample_rate);
+                    num_samples = ((High - Low) * BUFFER_SIZE / sample_rate);
+                    if (start_sample_index < 0) start_sample_index += 4096;
+                    if ((num_samples - start_sample_index) > (BUFFER_SIZE + 1))
+                        num_samples = BUFFER_SIZE - start_sample_index;
 
                     slope = (float)num_samples / (float)W;
 
@@ -2715,23 +2365,12 @@ namespace Thetis
                         {
                             if (slope <= 1.0 || lindex == rindex)
                             {
-                                max = current_display_data[lindex
-                                          % 4096]
-                                        * ((float)lindex - dval + 1)
-                                    + current_display_data[(lindex
-                                                               + 1)
-                                          % 4096]
-                                        * (dval - (float)lindex);
+                                max = current_display_data[lindex % 4096] * ((float)lindex - dval + 1) + current_display_data[(lindex + 1) % 4096] * (dval - (float)lindex);
                             }
                             else
                             {
-                                for (int j = lindex; j < rindex;
-                                     j++)
-                                    if (current_display_data[j
-                                            % 4096]
-                                        > max)
-                                        max = current_display_data[j
-                                            % 4096];
+                                for (int j = lindex; j < rindex; j++)
+                                    if (current_display_data[j % 4096] > max) max = current_display_data[j % 4096];
                             }
                         }
                         else
@@ -2747,12 +2386,12 @@ namespace Thetis
                             max_x = i;
                         }
 
-                        // below added by w3sz
+                        //below added by w3sz
                         if (max < local_min_y_w3sz)
                         {
                             local_min_y_w3sz = max;
                         }
-                        // end of addition by w3sz
+                        //end of addition by w3sz
 
                         waterfall_data[i] = max;
                     }
@@ -2762,8 +2401,7 @@ namespace Thetis
 
                     BitmapData bitmapData;
                     bitmapData = waterfall_bmp.LockBits(
-                        new Rectangle(0, 0, waterfall_bmp.Width,
-                            waterfall_bmp.Height),
+                        new Rectangle(0, 0, waterfall_bmp.Width, waterfall_bmp.Height),
                         ImageLockMode.ReadWrite,
                         waterfall_bmp.PixelFormat);
 
@@ -2771,259 +2409,143 @@ namespace Thetis
                     byte* row = null;
 
                     // first scroll image
-                    int total_size = bitmapData.Stride
-                        * bitmapData.Height; // find buffer size
-                    Win32.memcpy(new IntPtr((int)bitmapData.Scan0
-                                     + bitmapData.Stride)
-                                     .ToPointer(),
+                    int total_size = bitmapData.Stride * bitmapData.Height;		// find buffer size
+                    Win32.memcpy(new IntPtr((int)bitmapData.Scan0 + bitmapData.Stride).ToPointer(),
                         bitmapData.Scan0.ToPointer(),
                         total_size - bitmapData.Stride);
 
                     row = (byte*)bitmapData.Scan0;
 
-                    // int i = 0;
+                    //int i = 0;
                     switch (cSheme)
                     {
                         case (ColorSheme.original):
                             {
                                 // draw new data
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    // int R, G, B;		// variables to
-                                    // save Red, Green and Blue
-                                    // component values
+                                    //int R, G, B;		// variables to save Red, Green and Blue component values
 
-                                    if (waterfall_data[i]
-                                        <= low_threshold) // if less
-                                                          // than low
-                                                          // threshold,
-                                                          // just use
-                                                          // low color
+                                    if (waterfall_data[i] <= low_threshold)		// if less than low threshold, just use low color
                                     {
                                         R = low_color.R;
                                         G = low_color.G;
                                         B = low_color.B;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= high_threshold) // if more
-                                                           // than high
-                                                           // threshold,
-                                                           // just use
-                                                           // high color
+                                    else if (waterfall_data[i] >= high_threshold)// if more than high threshold, just use high color
                                     {
                                         R = high_color.R;
                                         G = high_color.G;
                                         B = high_color.B;
                                     }
-                                    else // use a color between high
-                                         // and low
+                                    else // use a color between high and low
                                     {
-                                        float percent
-                                            = (waterfall_data[i]
-                                                  - low_threshold)
-                                            / (high_threshold
-                                                - low_threshold);
-                                        if (percent
-                                            <= 0.5) // use a gradient
-                                                    // between low and
-                                                    // mid colors
+                                        float percent = (waterfall_data[i] - low_threshold) / (high_threshold - low_threshold);
+                                        if (percent <= 0.5)	// use a gradient between low and mid colors
                                         {
                                             percent *= 2;
 
-                                            R = (int)((1 - percent)
-                                                    * low_color.R
-                                                + percent
-                                                    * mid_color.R);
-                                            G = (int)((1 - percent)
-                                                    * low_color.G
-                                                + percent
-                                                    * mid_color.G);
-                                            B = (int)((1 - percent)
-                                                    * low_color.B
-                                                + percent
-                                                    * mid_color.B);
+                                            R = (int)((1 - percent) * low_color.R + percent * mid_color.R);
+                                            G = (int)((1 - percent) * low_color.G + percent * mid_color.G);
+                                            B = (int)((1 - percent) * low_color.B + percent * mid_color.B);
                                         }
-                                        else // use a gradient between
-                                             // mid and high colors
+                                        else				// use a gradient between mid and high colors
                                         {
-                                            percent
-                                                = (float)(percent - 0.5)
-                                                * 2;
+                                            percent = (float)(percent - 0.5) * 2;
 
-                                            R = (int)((1 - percent)
-                                                    * mid_color.R
-                                                + percent
-                                                    * high_color.R);
-                                            G = (int)((1 - percent)
-                                                    * mid_color.G
-                                                + percent
-                                                    * high_color.G);
-                                            B = (int)((1 - percent)
-                                                    * mid_color.B
-                                                + percent
-                                                    * high_color.B);
+                                            R = (int)((1 - percent) * mid_color.R + percent * high_color.R);
+                                            G = (int)((1 - percent) * mid_color.G + percent * high_color.G);
+                                            B = (int)((1 - percent) * mid_color.B + percent * high_color.B);
                                         }
                                     }
                                     // set pixel color
-                                    row[i * pixel_size + 0] = (byte)
-                                        B; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)B;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)R;
                                 }
                             }
-                            // waterfall_data[i] =
-                            // (float)i/W*(high_threshold -
-                            // low_threshold) + low_threshold;
+                            //waterfall_data[i] = (float)i/W*(high_threshold - low_threshold) + low_threshold;
                             break;
 
                         case (ColorSheme.enhanced):
                             {
                                 // draw new data
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    if (waterfall_data[i]
-                                        <= low_threshold)
+                                    if (waterfall_data[i] <= low_threshold)
                                     {
                                         R = low_color.R;
                                         G = low_color.G;
                                         B = low_color.B;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= high_threshold)
+                                    else if (waterfall_data[i] >= high_threshold)
                                     {
                                         R = 192;
                                         G = 124;
                                         B = 255;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range = high_threshold
-                                            - low_threshold;
-                                        float offset = waterfall_data[i]
-                                            - low_threshold;
-                                        float overall_percent = offset
-                                            / range; // value from 0.0
-                                                     // to 1.0 where 1.0
-                                                     // is high and 0.0
-                                                     // is low.
+                                        float range = high_threshold - low_threshold;
+                                        float offset = waterfall_data[i] - low_threshold;
+                                        float overall_percent = offset / range; // value from 0.0 to 1.0 where 1.0 is high and 0.0 is low.
 
-                                        if (overall_percent < (float)2
-                                                / 9) // background
-                                                     // to blue
+                                        if (overall_percent < (float)2 / 9) // background to blue
                                         {
-                                            float local_percent
-                                                = overall_percent
-                                                / ((float)2 / 9);
-                                            R = (int)((1.0
-                                                          - local_percent)
-                                                * low_color.R);
-                                            G = (int)((1.0
-                                                          - local_percent)
-                                                * low_color.G);
-                                            B = (int)(low_color.B
-                                                + local_percent
-                                                    * (255
-                                                        - low_color.B));
+                                            float local_percent = overall_percent / ((float)2 / 9);
+                                            R = (int)((1.0 - local_percent) * low_color.R);
+                                            G = (int)((1.0 - local_percent) * low_color.G);
+                                            B = (int)(low_color.B + local_percent * (255 - low_color.B));
                                         }
-                                        else if (overall_percent
-                                            < (float)3
-                                                / 9) // blue to
-                                                     // blue-green
+                                        else if (overall_percent < (float)3 / 9) // blue to blue-green
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)2 / 9)
-                                                / ((float)1 / 9);
+                                            float local_percent = (overall_percent - (float)2 / 9) / ((float)1 / 9);
                                             R = 0;
-                                            G = (int)(local_percent
-                                                * 255);
+                                            G = (int)(local_percent * 255);
                                             B = 255;
                                         }
-                                        else if (overall_percent
-                                            < (float)4
-                                                / 9) // blue-green
-                                                     // to green
+                                        else if (overall_percent < (float)4 / 9) // blue-green to green
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)3 / 9)
-                                                / ((float)1 / 9);
+                                            float local_percent = (overall_percent - (float)3 / 9) / ((float)1 / 9);
                                             R = 0;
                                             G = 255;
-                                            B = (int)((1.0
-                                                          - local_percent)
-                                                * 255);
+                                            B = (int)((1.0 - local_percent) * 255);
                                         }
-                                        else if (overall_percent
-                                            < (float)5 / 9) // green to
-                                                            // red-green
+                                        else if (overall_percent < (float)5 / 9) // green to red-green
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)4 / 9)
-                                                / ((float)1 / 9);
-                                            R = (int)(local_percent
-                                                * 255);
+                                            float local_percent = (overall_percent - (float)4 / 9) / ((float)1 / 9);
+                                            R = (int)(local_percent * 255);
                                             G = 255;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)7
-                                                / 9) // red-green to red
+                                        else if (overall_percent < (float)7 / 9) // red-green to red
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)5 / 9)
-                                                / ((float)2 / 9);
+                                            float local_percent = (overall_percent - (float)5 / 9) / ((float)2 / 9);
                                             R = 255;
-                                            G = (int)((1.0
-                                                          - local_percent)
-                                                * 255);
+                                            G = (int)((1.0 - local_percent) * 255);
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)8
-                                                / 9) // red to red-blue
+                                        else if (overall_percent < (float)8 / 9) // red to red-blue
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)7 / 9)
-                                                / ((float)1 / 9);
+                                            float local_percent = (overall_percent - (float)7 / 9) / ((float)1 / 9);
                                             R = 255;
                                             G = 0;
-                                            B = (int)(local_percent
-                                                * 255);
+                                            B = (int)(local_percent * 255);
                                         }
                                         else // red-blue to purple end
                                         {
-                                            float local_percent
-                                                = (overall_percent
-                                                      - (float)8 / 9)
-                                                / ((float)1 / 9);
-                                            R = (int)((0.75
-                                                          + 0.25
-                                                              * (1.0
-                                                                  - local_percent))
-                                                * 255);
-                                            G = (int)(local_percent
-                                                * 255 * 0.5);
+                                            float local_percent = (overall_percent - (float)8 / 9) / ((float)1 / 9);
+                                            R = (int)((0.75 + 0.25 * (1.0 - local_percent)) * 255);
+                                            G = (int)(local_percent * 255 * 0.5);
                                             B = 255;
                                         }
                                     }
 
-                                    if (waterfall_minimum
-                                        > waterfall_data[i]) // wfagc
-                                        waterfall_minimum
-                                            = waterfall_data[i];
+                                    if (waterfall_minimum > waterfall_data[i]) //wfagc
+                                        waterfall_minimum = waterfall_data[i];
 
                                     // set pixel color
-                                    row[i * pixel_size + 0] = (byte)
-                                        B; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)B;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)R;
                                 }
@@ -3033,107 +2555,78 @@ namespace Thetis
                         case (ColorSheme.SPECTRAN):
                             {
                                 // draw new data
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    if (waterfall_data[i]
-                                        <= low_threshold)
+                                    if (waterfall_data[i] <= low_threshold)
                                     {
                                         R = 0;
                                         G = 0;
                                         B = 0;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= WaterfallHighThreshold) // white
+                                    else if (waterfall_data[i] >= WaterfallHighThreshold) // white
                                     {
                                         R = 240;
                                         G = 240;
                                         B = 240;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range
-                                            = WaterfallHighThreshold
-                                            - low_threshold;
-                                        float offset = waterfall_data[i]
-                                            - low_threshold;
-                                        float local_percent
-                                            = ((100.0f * offset)
-                                                / range);
+                                        float range = WaterfallHighThreshold - low_threshold;
+                                        float offset = waterfall_data[i] - low_threshold;
+                                        float local_percent = ((100.0f * offset) / range);
 
                                         if (local_percent < 5.0f)
                                         {
                                             R = G = 0;
                                             B = (int)local_percent * 5;
                                         }
-                                        else if (local_percent
-                                            < 11.0f)
+                                        else if (local_percent < 11.0f)
                                         {
                                             R = G = 0;
                                             B = (int)local_percent * 5;
                                         }
-                                        else if (local_percent
-                                            < 22.0f)
+                                        else if (local_percent < 22.0f)
                                         {
                                             R = G = 0;
                                             B = (int)local_percent * 5;
                                         }
-                                        else if (local_percent
-                                            < 44.0f)
+                                        else if (local_percent < 44.0f)
                                         {
                                             R = G = 0;
                                             B = (int)local_percent * 5;
                                         }
-                                        else if (local_percent
-                                            < 51.0f)
+                                        else if (local_percent < 51.0f)
                                         {
                                             R = G = 0;
                                             B = (int)local_percent * 5;
                                         }
-                                        else if (local_percent
-                                            < 66.0f)
+                                        else if (local_percent < 66.0f)
                                         {
-                                            R = G = (int)(local_percent
-                                                        - 50)
-                                                * 2;
+                                            R = G = (int)(local_percent - 50) * 2;
                                             B = 255;
                                         }
-                                        else if (local_percent
-                                            < 77.0f)
+                                        else if (local_percent < 77.0f)
                                         {
-                                            R = G = (int)(local_percent
-                                                        - 50)
-                                                * 3;
+                                            R = G = (int)(local_percent - 50) * 3;
                                             B = 255;
                                         }
-                                        else if (local_percent
-                                            < 88.0f)
+                                        else if (local_percent < 88.0f)
                                         {
-                                            R = G = (int)(local_percent
-                                                        - 50)
-                                                * 4;
+                                            R = G = (int)(local_percent - 50) * 4;
                                             B = 255;
                                         }
-                                        else if (local_percent
-                                            < 99.0f)
+                                        else if (local_percent < 99.0f)
                                         {
-                                            R = G = (int)(local_percent
-                                                        - 50)
-                                                * 5;
+                                            R = G = (int)(local_percent - 50) * 5;
                                             B = 255;
                                         }
                                     }
 
-                                    if (waterfall_minimum
-                                        > waterfall_data[i]) // wfagc
-                                        waterfall_minimum
-                                            = waterfall_data[i];
+                                    if (waterfall_minimum > waterfall_data[i]) //wfagc
+                                        waterfall_minimum = waterfall_data[i];
 
                                     // set pixel color
-                                    row[i * pixel_size + 0] = (byte)
-                                        B; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)B;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)R;
                                 }
@@ -3143,49 +2636,35 @@ namespace Thetis
                         case (ColorSheme.BLACKWHITE):
                             {
                                 // draw new data
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    if (waterfall_data[i]
-                                        <= low_threshold)
+                                    if (waterfall_data[i] <= low_threshold)
                                     {
                                         R = 0;
                                         G = 0;
                                         B = 0;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= WaterfallHighThreshold) // white
+                                    else if (waterfall_data[i] >= WaterfallHighThreshold) // white
                                     {
                                         R = 255;
                                         G = 255;
                                         B = 255;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range
-                                            = WaterfallHighThreshold
-                                            - low_threshold;
-                                        float offset = waterfall_data[i]
-                                            - low_threshold;
-                                        float local_percent
-                                            = ((100.0f * offset)
-                                                / range);
-                                        R = (int)((local_percent / 100)
-                                            * 255);
+                                        float range = WaterfallHighThreshold - low_threshold;
+                                        float offset = waterfall_data[i] - low_threshold;
+                                        float local_percent = ((100.0f * offset) / range);
+                                        R = (int)((local_percent / 100) * 255);
                                         G = R;
                                         B = R;
                                     }
 
-                                    if (waterfall_minimum
-                                        > waterfall_data[i]) // wfagc
-                                        waterfall_minimum
-                                            = waterfall_data[i];
+                                    if (waterfall_minimum > waterfall_data[i]) //wfagc
+                                        waterfall_minimum = waterfall_data[i];
 
                                     // set pixel color
-                                    row[i * pixel_size + 0] = (byte)
-                                        B; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)B;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)R;
                                 }
@@ -3194,335 +2673,189 @@ namespace Thetis
 
                         case (ColorSheme.LinLog):
                             {
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    if (waterfall_data[i]
-                                        <= low_threshold)
+                                    if (waterfall_data[i] <= low_threshold)
                                     {
                                         R = 0;
                                         G = 0;
                                         B = 0;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= high_threshold)
+                                    else if (waterfall_data[i] >= high_threshold)
                                     {
                                         R = 252;
                                         G = 252;
                                         B = 252;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range = high_threshold
-                                            - low_threshold;
-                                        float offset = waterfall_data[i]
-                                            - low_threshold + LinLogCor;
+                                        float range = high_threshold - low_threshold;
+                                        float offset = waterfall_data[i] - low_threshold + LinLogCor;
                                         float spec_bits = 1024;
-                                        float overall_percent
-                                            = (spec_bits * offset)
-                                            / range; // value from 0.0
-                                                     // to 1.0 where 1.0
-                                                     // is high and 0.0
-                                                     // is low.
-                                        float log_fract
-                                            = (float)(Math.Log10(
-                                                spec_bits));
+                                        float overall_percent = (spec_bits * offset) / range; // value from 0.0 to 1.0 where 1.0 is high and 0.0 is low.
+                                        float log_fract = (float)(Math.Log10(spec_bits));
                                         if (overall_percent == 0)
                                         {
-                                            overall_percent
-                                                = (float)0.001;
+                                            overall_percent = (float)0.001;
                                         }
-                                        overall_percent
-                                            = (float)(Math.Log10(
-                                                overall_percent));
+                                        overall_percent = (float)(Math.Log10(overall_percent));
 
-                                        if (overall_percent
-                                            < log_fract / 23)
+                                        if (overall_percent < log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            // overall_percent /
-                                            //((float)1/23);
+                                            //			float local_percent = overall_percent / ((float)1/23);
                                             R = 0;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)2 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)2 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)1/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)1/23) / ((float)1/23);
                                             R = 32;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)3 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)3 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)2/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)2/23) / ((float)1/23);
                                             R = 64;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)4 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)4 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)3/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)3/23) / ((float)1/23);
                                             R = 96;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)5 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)5 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)4/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)4/23) / ((float)1/23);
                                             R = 104;
                                             G = 40;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)6 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)6 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)5/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)5/23) / ((float)1/23);
                                             R = 112;
                                             G = 60;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)7 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)7 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)6/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)6/23) / ((float)1/23);
                                             R = 116;
                                             G = 88;
                                             B = 0;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)8 * log_fract
-                                                / 23)
+
+                                        else if (overall_percent < (float)8 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)7/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)7/23) / ((float)1/23);
                                             R = 92;
                                             G = 112;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)9 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)9 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)8/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)8/23) / ((float)1/23);
                                             R = 80;
                                             G = 132;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)10 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)10 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)9/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)9/23) / ((float)1/23);
                                             R = 20;
                                             G = 140;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)11 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)11 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)10/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)10/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 40;
                                         }
-                                        else if (overall_percent
-                                            < (float)12 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)12 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)11/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)11/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 120;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)13 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)13 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)12/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)12/23) / ((float)1/23);
                                             R = 0;
                                             G = 140;
                                             B = 148;
                                         }
-                                        else if (overall_percent
-                                            < (float)14 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)14 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)13/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)13/23) / ((float)1/23);
                                             R = 0;
                                             G = 132;
                                             B = 192;
                                         }
-                                        else if (overall_percent
-                                            < (float)15 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)15 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)14/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)14/23) / ((float)1/23);
                                             R = 0;
                                             G = 112;
                                             B = 200;
                                         }
-                                        else if (overall_percent
-                                            < (float)16 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)16 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)15/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)15/23) / ((float)1/23);
                                             R = 0;
                                             G = 88;
                                             B = 208;
                                         }
-                                        else if (overall_percent
-                                            < (float)17 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)17 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)16/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)16/23) / ((float)1/23);
                                             R = 0;
                                             G = 60;
                                             B = 232;
                                         }
-                                        else if (overall_percent
-                                            < (float)18 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)18 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)17/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)17/23) / ((float)1/23);
                                             R = 0;
                                             G = 40;
                                             B = 252;
                                         }
-                                        else if (overall_percent
-                                            < (float)19 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)19 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)18/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)18/23) / ((float)1/23);
                                             R = 80;
                                             G = 80;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)20 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)20 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)19/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)19/23) / ((float)1/23);
                                             R = 124;
                                             G = 124;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)21 * log_fract
-                                                / 23)
+                                        else if (overall_percent < (float)21 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)20/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)20/23) / ((float)1/23);
                                             R = 172;
                                             G = 172;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            >= (float)21 * log_fract
-                                                / 23)
+                                        else if (overall_percent >= (float)21 * log_fract / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)22/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)22/23) / ((float)1/23);
                                             R = 252;
                                             G = 252;
                                             B = 252;
@@ -3535,15 +2868,12 @@ namespace Thetis
                                         }
                                     }
 
-                                    if (waterfall_minimum
-                                        > waterfall_data[i]) // wfagc
-                                        waterfall_minimum
-                                            = waterfall_data[i];
+                                    if (waterfall_minimum > waterfall_data[i]) //wfagc
+                                        waterfall_minimum = waterfall_data[i];
 
                                     // set pixel color changed by w3sz
 
-                                    row[i * pixel_size + 0] = (byte)
-                                        R; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)R;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)B;
                                 }
@@ -3554,301 +2884,183 @@ namespace Thetis
 
                         case (ColorSheme.LinRad):
                             {
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    if (waterfall_data[i]
-                                        <= low_threshold)
+                                    if (waterfall_data[i] <= low_threshold)
                                     {
                                         R = 0;
                                         G = 0;
                                         B = 0;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= high_threshold)
+                                    else if (waterfall_data[i] >= high_threshold)
                                     {
                                         R = 252;
                                         G = 252;
                                         B = 252;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range = high_threshold
-                                            - low_threshold;
-                                        float offset = waterfall_data[i]
-                                            - low_threshold + LinCor;
-                                        float overall_percent = (offset)
-                                            / range; // value from 0.0
-                                                     // to 1.0 where 1.0
-                                                     // is high and 0.0
-                                                     // is low.
+                                        float range = high_threshold - low_threshold;
+                                        float offset = waterfall_data[i] - low_threshold + LinCor;
+                                        float overall_percent = (offset) / range; // value from 0.0 to 1.0 where 1.0 is high and 0.0 is low.
 
-                                        if (overall_percent
-                                            < (float)1 / 23)
+
+                                        if (overall_percent < (float)1 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            // overall_percent /
-                                            //((float)1/23);
+                                            //			float local_percent = overall_percent / ((float)1/23);
                                             R = 0;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)2 / 23)
+                                        else if (overall_percent < (float)2 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)1/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)1/23) / ((float)1/23);
                                             R = 32;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)3 / 23)
+                                        else if (overall_percent < (float)3 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)2/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)2/23) / ((float)1/23);
                                             R = 64;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)4 / 23)
+                                        else if (overall_percent < (float)4 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)3/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)3/23) / ((float)1/23);
                                             R = 96;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)5 / 23)
+                                        else if (overall_percent < (float)5 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)4/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)4/23) / ((float)1/23);
                                             R = 104;
                                             G = 40;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)6 / 23)
+                                        else if (overall_percent < (float)6 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)5/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)5/23) / ((float)1/23);
                                             R = 112;
                                             G = 60;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)7 / 23)
+                                        else if (overall_percent < (float)7 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)6/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)6/23) / ((float)1/23);
                                             R = 116;
                                             G = 88;
                                             B = 0;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)8 / 23)
+
+                                        else if (overall_percent < (float)8 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)7/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)7/23) / ((float)1/23);
                                             R = 92;
                                             G = 112;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)9 / 23)
+                                        else if (overall_percent < (float)9 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)8/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)8/23) / ((float)1/23);
                                             R = 80;
                                             G = 132;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)10 / 23)
+                                        else if (overall_percent < (float)10 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)9/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)9/23) / ((float)1/23);
                                             R = 20;
                                             G = 140;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)11 / 23)
+                                        else if (overall_percent < (float)11 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)10/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)10/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 40;
                                         }
-                                        else if (overall_percent
-                                            < (float)12 / 23)
+                                        else if (overall_percent < (float)12 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)11/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)11/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 120;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)13 / 23)
+                                        else if (overall_percent < (float)13 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)12/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)12/23) / ((float)1/23);
                                             R = 0;
                                             G = 140;
                                             B = 148;
                                         }
-                                        else if (overall_percent
-                                            < (float)14 / 23)
+                                        else if (overall_percent < (float)14 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)13/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)13/23) / ((float)1/23);
                                             R = 0;
                                             G = 132;
                                             B = 192;
                                         }
-                                        else if (overall_percent
-                                            < (float)15 / 23)
+                                        else if (overall_percent < (float)15 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)14/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)14/23) / ((float)1/23);
                                             R = 0;
                                             G = 112;
                                             B = 200;
                                         }
-                                        else if (overall_percent
-                                            < (float)16 / 23)
+                                        else if (overall_percent < (float)16 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)15/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)15/23) / ((float)1/23);
                                             R = 0;
                                             G = 88;
                                             B = 208;
                                         }
-                                        else if (overall_percent
-                                            < (float)17 / 23)
+                                        else if (overall_percent < (float)17 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)16/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)16/23) / ((float)1/23);
                                             R = 0;
                                             G = 60;
                                             B = 232;
                                         }
-                                        else if (overall_percent
-                                            < (float)18 / 23)
+                                        else if (overall_percent < (float)18 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)17/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)17/23) / ((float)1/23);
                                             R = 0;
                                             G = 40;
                                             B = 252;
                                         }
-                                        else if (overall_percent
-                                            < (float)19 / 23)
+                                        else if (overall_percent < (float)19 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)18/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)18/23) / ((float)1/23);
                                             R = 80;
                                             G = 80;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)20 / 23)
+                                        else if (overall_percent < (float)20 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)19/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)19/23) / ((float)1/23);
                                             R = 124;
                                             G = 124;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)21 / 23)
+                                        else if (overall_percent < (float)21 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)20/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)20/23) / ((float)1/23);
                                             R = 172;
                                             G = 172;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            >= (float)21 / 23)
+                                        else if (overall_percent >= (float)21 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)22/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)22/23) / ((float)1/23);
                                             R = 252;
                                             G = 252;
                                             B = 252;
@@ -3861,14 +3073,11 @@ namespace Thetis
                                         }
                                     }
 
-                                    if (waterfall_minimum
-                                        > waterfall_data[i]) // wfagc
-                                        waterfall_minimum
-                                            = waterfall_data[i];
+                                    if (waterfall_minimum > waterfall_data[i]) //wfagc
+                                        waterfall_minimum = waterfall_data[i];
 
                                     // set pixel color changed by w3sz
-                                    row[i * pixel_size + 0] = (byte)
-                                        R; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)R;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)B;
                                 }
@@ -3879,319 +3088,192 @@ namespace Thetis
 
                         case (ColorSheme.LinAuto):
                             {
-                                for (int i = 0; i < W;
-                                     i++) // for each pixel in the new
-                                          // line
+                                for (int i = 0; i < W; i++)	// for each pixel in the new line
                                 {
-                                    display_min_w3sz = min_y_w3sz
-                                        - 5; // w3sz for histogram
-                                             // equilization
-                                    display_max_w3sz
-                                        = max_y; // w3sz for histogram
-                                                 // equalization
-                                                 //	if (i == (W - 1))
-                                                 //	{
-                                                 //		System.Console.WriteLine("Low
-                                                 // is" + low_threshold + "   " +
-                                                 // display_min_w3sz);
-                                                 //
-                                                 //		System.Console.WriteLine("High
-                                                 // is" + high_threshold + "   " +
-                                                 // max_y);
-                                                 //}
+                                    display_min_w3sz = min_y_w3sz - 5; //w3sz for histogram equilization
+                                    display_max_w3sz = max_y; //w3sz for histogram equalization
+                                    //	if (i == (W - 1))
+                                    //	{
+                                    //		System.Console.WriteLine("Low is" + low_threshold + "   " + display_min_w3sz);
+                                    //	
+                                    //		System.Console.WriteLine("High is" + high_threshold + "   " + max_y);
+                                    //}	
 
-                                    if (waterfall_data[i]
-                                        <= display_min_w3sz)
+                                    if (waterfall_data[i] <= display_min_w3sz)
                                     {
                                         R = 0;
                                         G = 0;
                                         B = 0;
                                     }
-                                    else if (waterfall_data[i]
-                                        >= display_max_w3sz)
+                                    else if (waterfall_data[i] >= display_max_w3sz)
                                     {
                                         R = 252;
                                         G = 252;
                                         B = 252;
                                     }
-                                    else // value is between low and
-                                         // high
+                                    else // value is between low and high
                                     {
-                                        float range = display_max_w3sz
-                                            - display_min_w3sz;
-                                        float offset = waterfall_data[i]
-                                            - display_min_w3sz; // +
-                                                                // GlobalClass.LinCor;
-                                        float overall_percent = (offset)
-                                            / range; // value from 0.0
-                                                     // to 1.0 where 1.0
-                                                     // is high and 0.0
-                                                     // is low.
+                                        float range = display_max_w3sz - display_min_w3sz;
+                                        float offset = waterfall_data[i] - display_min_w3sz; // + GlobalClass.LinCor;
+                                        float overall_percent = (offset) / range; // value from 0.0 to 1.0 where 1.0 is high and 0.0 is low.
 
-                                        if (overall_percent
-                                            < (float)1 / 23)
+
+                                        if (overall_percent < (float)1 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            // overall_percent /
-                                            //((float)1/23);
+                                            //			float local_percent = overall_percent / ((float)1/23);
                                             R = 0;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)2 / 23)
+                                        else if (overall_percent < (float)2 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)1/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)1/23) / ((float)1/23);
                                             R = 32;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)3 / 23)
+                                        else if (overall_percent < (float)3 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)2/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)2/23) / ((float)1/23);
                                             R = 64;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)4 / 23)
+                                        else if (overall_percent < (float)4 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)3/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)3/23) / ((float)1/23);
                                             R = 96;
                                             G = 0;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)5 / 23)
+                                        else if (overall_percent < (float)5 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)4/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)4/23) / ((float)1/23);
                                             R = 104;
                                             G = 40;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)6 / 23)
+                                        else if (overall_percent < (float)6 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)5/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)5/23) / ((float)1/23);
                                             R = 112;
                                             G = 60;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)7 / 23)
+                                        else if (overall_percent < (float)7 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)6/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)6/23) / ((float)1/23);
                                             R = 116;
                                             G = 88;
                                             B = 0;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)8 / 23)
+
+                                        else if (overall_percent < (float)8 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)7/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)7/23) / ((float)1/23);
                                             R = 92;
                                             G = 112;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)9 / 23)
+                                        else if (overall_percent < (float)9 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)8/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)8/23) / ((float)1/23);
                                             R = 80;
                                             G = 132;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)10 / 23)
+                                        else if (overall_percent < (float)10 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)9/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)9/23) / ((float)1/23);
                                             R = 20;
                                             G = 140;
                                             B = 0;
                                         }
-                                        else if (overall_percent
-                                            < (float)11 / 23)
+                                        else if (overall_percent < (float)11 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)10/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)10/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 40;
                                         }
-                                        else if (overall_percent
-                                            < (float)12 / 23)
+                                        else if (overall_percent < (float)12 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)11/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)11/23) / ((float)1/23);
                                             R = 0;
                                             G = 160;
                                             B = 120;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)13 / 23)
+                                        else if (overall_percent < (float)13 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)12/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)12/23) / ((float)1/23);
                                             R = 0;
                                             G = 140;
                                             B = 148;
                                         }
-                                        else if (overall_percent
-                                            < (float)14 / 23)
+                                        else if (overall_percent < (float)14 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)13/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)13/23) / ((float)1/23);
                                             R = 0;
                                             G = 132;
                                             B = 192;
                                         }
-                                        else if (overall_percent
-                                            < (float)15 / 23)
+                                        else if (overall_percent < (float)15 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)14/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)14/23) / ((float)1/23);
                                             R = 0;
                                             G = 112;
                                             B = 200;
                                         }
-                                        else if (overall_percent
-                                            < (float)16 / 23)
+                                        else if (overall_percent < (float)16 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)15/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)15/23) / ((float)1/23);
                                             R = 0;
                                             G = 88;
                                             B = 208;
                                         }
-                                        else if (overall_percent
-                                            < (float)17 / 23)
+                                        else if (overall_percent < (float)17 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)16/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)16/23) / ((float)1/23);
                                             R = 0;
                                             G = 60;
                                             B = 232;
                                         }
-                                        else if (overall_percent
-                                            < (float)18 / 23)
+                                        else if (overall_percent < (float)18 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)17/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)17/23) / ((float)1/23);
                                             R = 0;
                                             G = 40;
                                             B = 252;
                                         }
-                                        else if (overall_percent
-                                            < (float)19 / 23)
+                                        else if (overall_percent < (float)19 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)18/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)18/23) / ((float)1/23);
                                             R = 80;
                                             G = 80;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)20 / 23)
+                                        else if (overall_percent < (float)20 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)19/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)19/23) / ((float)1/23);
                                             R = 124;
                                             G = 124;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            < (float)21 / 23)
+                                        else if (overall_percent < (float)21 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)20/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)20/23) / ((float)1/23);
                                             R = 172;
                                             G = 172;
                                             B = 252;
                                         }
 
-                                        else if (overall_percent
-                                            >= (float)21 / 23)
+                                        else if (overall_percent >= (float)21 / 23)
                                         {
-                                            //			float
-                                            // local_percent =
-                                            //(overall_percent -
-                                            //(float)22/23) /
-                                            //((float)1/23);
+                                            //			float local_percent = (overall_percent - (float)22/23) / ((float)1/23);
                                             R = 252;
                                             G = 252;
                                             B = 252;
@@ -4205,8 +3287,7 @@ namespace Thetis
                                     }
 
                                     // set pixel color changed by w3sz
-                                    row[i * pixel_size + 0] = (byte)
-                                        R; // set color in memory
+                                    row[i * pixel_size + 0] = (byte)R;	// set color in memory
                                     row[i * pixel_size + 1] = (byte)G;
                                     row[i * pixel_size + 2] = (byte)B;
                                 }
@@ -4217,72 +3298,54 @@ namespace Thetis
                     waterfall_bmp.UnlockBits(bitmapData);
 
                     // if (rx == 1)
-                    waterfallPreviousMinValue
-                        = (((waterfallPreviousMinValue * 8)
-                               + (waterfall_minimum * 2))
-                              / 10)
-                        + 1; // wfagc
-                             // else
-                             //  RX2waterfallPreviousMinValue =
-                             //  ((RX2waterfallPreviousMinValue * 8) +
-                             //  (waterfall_minimum * 2)) / 10 + 1; //wfagc
+                    waterfallPreviousMinValue = (((waterfallPreviousMinValue * 8) + (waterfall_minimum * 2)) / 10) + 1; //wfagc
+                    // else
+                    //  RX2waterfallPreviousMinValue = ((RX2waterfallPreviousMinValue * 8) + (waterfall_minimum * 2)) / 10 + 1; //wfagc
                 }
 
-                g.DrawImageUnscaled(waterfall_bmp, 0,
-                    waterfallRect.Top); // draw the image on the
-                                        // background
+                g.DrawImageUnscaled(waterfall_bmp, 0, waterfallRect.Top);	// draw the image on the background	
             }
             waterfall_counter++;
 
             // draw long cursor
-            if (current_click_tune_mode
-                != ClickTuneMode.Off)
+            if (current_click_tune_mode != ClickTuneMode.Off)
             {
-                Pen p = current_click_tune_mode
-                        == ClickTuneMode.VFOA
-                    ? grid_text_pen
-                    : Pens.Red;
+                Pen p = current_click_tune_mode == ClickTuneMode.VFOA ? grid_text_pen : Pens.Red;
 
                 if (display_cursor_y <= H)
                 {
-                    g.DrawLine(p, display_cursor_x, 0,
-                        display_cursor_x, H);
-                    if (ShowCTHLine)
-                        g.DrawLine(p, 0, display_cursor_y, W,
-                            display_cursor_y);
+                    g.DrawLine(p, display_cursor_x, 0, display_cursor_x, H);
+                    if (ShowCTHLine) g.DrawLine(p, 0, display_cursor_y, W, display_cursor_y);
                 }
+
             }
 
             return true;
         }
 
-        // public void ResetRX1DisplayAverage()
+        //public void ResetRX1DisplayAverage()
         //{
-        //     if (rx1_average_buffer != null)
-        //         rx1_average_buffer[0] = CLEAR_FLAG;
-        //         // set reset flag
-        // }
+        //    if (rx1_average_buffer != null)
+        //        rx1_average_buffer[0] = CLEAR_FLAG;	// set reset flag
+        //}
 
-        // public void ResetRX2DisplayAverage()
+        //public void ResetRX2DisplayAverage()
         //{
-        //     if (rx2_average_buffer != null)
-        //         rx2_average_buffer[0] = CLEAR_FLAG;
-        //         // set reset flag
-        // }
+        //    if (rx2_average_buffer != null)
+        //        rx2_average_buffer[0] = CLEAR_FLAG;	// set reset flag
+        //}
 
-        // public void ResetRX1DisplayPeak()
+        //public void ResetRX1DisplayPeak()
         //{
-        //     if (rx1_peak_buffer != null)
-        //         rx1_peak_buffer[0] = CLEAR_FLAG; //
-        //         set reset flag
-        // }
+        //    if (rx1_peak_buffer != null)
+        //        rx1_peak_buffer[0] = CLEAR_FLAG; // set reset flag
+        //}
 
-        // public void ResetRX2DisplayPeak()
+        //public void ResetRX2DisplayPeak()
         //{
-        //     if (rx2_peak_buffer != null)
-        //         rx2_peak_buffer[0] = CLEAR_FLAG; //
-        //         set reset flag
-        // }
+        //    if (rx2_peak_buffer != null)
+        //        rx2_peak_buffer[0] = CLEAR_FLAG; // set reset flag
+        //}
 
         private Rectangle freqScalePanRect;
         public Rectangle FreqScalePanRect
@@ -4323,50 +3386,46 @@ namespace Thetis
 
         public void CreateDisplayRegions()
         {
-            int width = this.Width; // target.Width;
-            int height = this.Height; // target.Height;
+            int width = this.Width; //target.Width;
+            int height = this.Height; //target.Height;
 
             displayTop = 0;
             int freqScaleRectHeight = 20;
 
-            freqScalePanRect = new Rectangle(0,
-                displayTop
-                    + (int)Math.Round(
-                        (height - displayTop
-                            - freqScaleRectHeight)
-                        * freq_ruler_position),
-                width, freqScaleRectHeight);
+            freqScalePanRect = new Rectangle(
+                    0,
+                    displayTop + 
+                    (int)Math.Round((height - displayTop - freqScaleRectHeight) * freq_ruler_position),
+                    width,
+                    freqScaleRectHeight);
 
-            panRect = new Rectangle(0, displayTop, width,
-                freqScalePanRect.Top - displayTop);
+            panRect = new Rectangle(
+                    0,
+                    displayTop,
+                    width,
+                    freqScalePanRect.Top - displayTop);
 
-            waterfallRect
-                = new Rectangle(freqScalePanRect.Left,
-                    freqScalePanRect.Top
-                        + freqScalePanRect.Height,
+            waterfallRect = new Rectangle(
+                    freqScalePanRect.Left,
+                    freqScalePanRect.Top + freqScalePanRect.Height,
                     freqScalePanRect.Width,
-                    height - freqScalePanRect.Top
-                        - freqScalePanRect.Height);
+                    height - freqScalePanRect.Top - freqScalePanRect.Height);
 
-            dBmScalePanRect = new Rectangle(panRect.Left,
-                displayTop, 35, panRect.Height);
+            dBmScalePanRect = new Rectangle(
+                    panRect.Left,
+                    displayTop,
+                    35,
+                    panRect.Height);
 
-            secScaleWaterfallRect
-                = new Rectangle(waterfallRect.Left,
-                    freqScalePanRect.Top
-                        + freqScalePanRect.Height,
-                    45, waterfallRect.Height);
+            secScaleWaterfallRect = new Rectangle(
+                    waterfallRect.Left,
+                    freqScalePanRect.Top + freqScalePanRect.Height,
+                    45,
+                    waterfallRect.Height);
 
-            if (waterfallRect.Height == 0)
-                waterfallRect.Height = 1;
-            waterfall_bmp = new Bitmap(waterfallRect.Width,
-                waterfallRect.Height,
-                PixelFormat
-                    .Format24bppRgb); // initialize
-                                      // waterfall display
-                                      // panadapter_bmp = new Bitmap(panRect.Width,
-                                      // panRect.Height, PixelFormat.Format24bppRgb);
-                                      // // initialize waterfall display
+            if (waterfallRect.Height == 0) waterfallRect.Height = 1;
+            waterfall_bmp = new Bitmap(waterfallRect.Width, waterfallRect.Height, PixelFormat.Format24bppRgb);	// initialize waterfall display
+            // panadapter_bmp = new Bitmap(panRect.Width, panRect.Height, PixelFormat.Format24bppRgb);	// initialize waterfall display
         }
 
         private int snapMouse = 3;
@@ -4388,15 +3447,12 @@ namespace Thetis
         private bool rx1_click_tune_drag = false;
         private bool rx2_click_tune_drag = false;
 
-        private Point grid_minmax_drag_start_point
-            = new Point(0, 0);
-        //  private int grid_minmax_drag_max_delta_x =
-        //  0;
+        private Point grid_minmax_drag_start_point = new Point(0, 0);
+        //  private int grid_minmax_drag_max_delta_x = 0;
         private decimal grid_minmax_max_y = 0;
         private decimal grid_minmax_min_y = 0;
-        // private Cursor grab = new Cursor(msgrab);
-        // private Cursor grabbing = new
-        // Cursor(msgrabbing);
+       // private Cursor grab = new Cursor(msgrab);
+       // private Cursor grabbing = new Cursor(msgrabbing);
         private bool moveX = false;
         private bool moveY = false;
 
@@ -4410,29 +3466,21 @@ namespace Thetis
         {
             if (this.FreqScalePanRect.Contains(p))
             {
-                mouseRegion
-                    = DisplayRegion.freqScalePanadapterRegion;
+                mouseRegion = DisplayRegion.freqScalePanadapterRegion;
             }
             else if (this.DBMScalePanRect.Contains(p))
             {
-                mouseRegion
-                    = DisplayRegion.dBmScalePanadapterRegion;
+                mouseRegion = DisplayRegion.dBmScalePanadapterRegion;
             }
-            else if (Math.Abs(p.X - this.FilterRect.Left)
-                    < snapMouse
-                && this.PanRect.Contains(p))
+            else if (Math.Abs(p.X - this.FilterRect.Left) < snapMouse && this.PanRect.Contains(p))
             {
                 mouseRegion = DisplayRegion.filterRegionLow;
-                // mouseDownFilterFrequencyLo =
-                // filterLowerFrequency;
+                // mouseDownFilterFrequencyLo = filterLowerFrequency;
             }
-            else if (Math.Abs(p.X - this.FilterRect.Right)
-                    < snapMouse
-                && this.PanRect.Contains(p))
+            else if (Math.Abs(p.X - this.FilterRect.Right) < snapMouse && this.PanRect.Contains(p))
             {
                 mouseRegion = DisplayRegion.filterRegionHigh;
-                //  mouseDownFilterFrequencyHi =
-                //  filterUpperFrequency;
+                //  mouseDownFilterFrequencyHi = filterUpperFrequency;
             }
             else if (this.FilterRect.Contains(p))
             {
@@ -4440,10 +3488,8 @@ namespace Thetis
 
                 //    if (!wholeFilterDrag)
                 //    {
-                //        mouseDownFilterFrequencyLo =
-                //        filterLowerFrequency;
-                //        mouseDownFilterFrequencyHi =
-                //        filterUpperFrequency;
+                //        mouseDownFilterFrequencyLo = filterLowerFrequency;
+                //        mouseDownFilterFrequencyHi = filterUpperFrequency;
                 //    }
             }
             else if (this.PanRect.Contains(p))
@@ -4456,11 +3502,10 @@ namespace Thetis
             }
             else
                 mouseRegion = DisplayRegion.elsewhere;
+
         }
 
-        private CancellationTokenSource
-            cancelTokenSource1
-            = new CancellationTokenSource();
+        private CancellationTokenSource cancelTokenSource1 = new CancellationTokenSource();
 
         public void UpdateGraphicsBuffer()
         {
@@ -4470,8 +3515,7 @@ namespace Thetis
                 this.Image.Dispose();
             }
 
-            pDisplay_buffer
-                = new Bitmap(this.Width, this.Height);
+            pDisplay_buffer = new Bitmap(this.Width, this.Height);
             this.Image = pDisplay_buffer;
         }
 
@@ -4485,283 +3529,228 @@ namespace Thetis
         {
             UpdateGraphicsBuffer();
 
-            draw_display_task = Task.Factory.StartNew(
-                () =>
+            draw_display_task = Task.Factory.StartNew(() =>
+            {
+                while (!cancelTokenSource1.IsCancellationRequested)
                 {
-                    while (!cancelTokenSource1
-                                .IsCancellationRequested)
+                    if (!pauseDisplayThread)
                     {
-                        if (!pauseDisplayThread)
+                        RunDisplay(rx); // get pixels
+
+                        using (Graphics grSrc = Graphics.FromImage(pDisplay_buffer))
                         {
-                            RunDisplay(rx); // get pixels
-
-                            using (Graphics grSrc
-                                = Graphics.FromImage(
-                                    pDisplay_buffer))
-                            {
-                                grSrc.Clear(
-                                    Color.Transparent);
-                                this.RenderGDIPlus(
-                                    rx, grSrc);
-                            }
-
-                            this.Invoke(new Action(() =>
-                            {
-                                this.Image
-                                    = pDisplay_buffer;
-                                this.Refresh();
-                            }));
+                            grSrc.Clear(Color.Transparent);
+                            this.RenderGDIPlus(rx, grSrc);
                         }
-                        Thread.Sleep(60);
+
+                        this.Invoke(new Action(() =>
+                        {
+                            this.Image = pDisplay_buffer;
+                            this.Refresh();
+                        }));
                     }
-                },
-                cancelTokenSource1.Token,
-                TaskCreationOptions.LongRunning,
-                TaskScheduler.Default);
+                    Thread.Sleep(60);
+                }
+
+            }, cancelTokenSource1.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
         }
 
         unsafe private void RunDisplay(int rx)
         {
             int flag;
 
-            if (!this.DataReady
-                || !this.WaterfallDataReady)
+            if (!this.DataReady || !this.WaterfallDataReady)
             {
                 if //(!pause_DisplayThread &&
-                    (!this.DataReady
-                        || !this.WaterfallDataReady) // &&
-                                                     // pDisplay.CurrentDisplayMode !=
-                                                     // DisplayMode.OFF)
+                    (!this.DataReady || !this.WaterfallDataReady)// &&
+                //pDisplay.CurrentDisplayMode != DisplayMode.OFF)
                 {
                     flag = 0;
 
                     fixed (float* ptr = &new_display_data[0])
-                        SpecHPSDRDLL.GetPixels(
-                            rx - 2, 0, ptr, ref flag);
+                        SpecHPSDRDLL.GetPixels(rx-2, 0, ptr, ref flag);
 
                     this.DataReady = true;
                 }
+                
             }
         }
 
         private Point mousePos;
         private Point mouseDownPos;
         private Point rulerMouseDownPos;
-
-        private void PanDisplay_MouseMove(
-            object sender, MouseEventArgs e)
+        
+        private void PanDisplay_MouseMove(object sender, MouseEventArgs e)
         {
             Size pos = new Size(-1, -1);
             pos = new Size(e.X, e.Y);
             mousePos = new Point(pos);
 
-            if (e.Button != MouseButtons.Left
-                && e.Button != MouseButtons.Right
-                && e.Button != MouseButtons.Middle)
+            if (e.Button != MouseButtons.Left &&
+                e.Button != MouseButtons.Right &&
+                e.Button != MouseButtons.Middle)
                 getRegion(mousePos);
 
-            // Cursor next_cursor = null;
+           // Cursor next_cursor = null;
 
             switch (mouseRegion)
             {
-                case DisplayRegion.freqScalePanadapterRegion:
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        Point dPos
-                            = Point.Subtract(mouseDownPos, pos);
+                            case DisplayRegion.freqScalePanadapterRegion:
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                    Point dPos = Point.Subtract(mouseDownPos, pos);
 
-                        if (dPos.Y != 0 && !moveY && !moveX)
-                        {
-                            moveY = true;
-                            moveX = false;
+                                    if (dPos.Y != 0 && !moveY && !moveX)
+                                    {
+                                        moveY = true;
+                                        moveX = false;
+                                    }
+
+                                    if (moveY)
+                                    {
+                                        int bottom_y = (int)(this.Height - this.FreqScalePanRect.Height);
+                                        int new_y = (int)(rulerMouseDownPos.Y - dPos.Y);
+
+                                        if (new_y < (int)(this.PanRect.Top))// + picDisplay.panSpectrumMinimumHeight))
+                                            new_y = (int)(this.PanRect.Top);// + picDisplay.panSpectrumMinimumHeight);
+                                        if (new_y > bottom_y)
+                                            new_y = bottom_y;
+
+                                        FreqRulerPosition = (float)(new_y - this.PanRect.Top) / (bottom_y - this.PanRect.Top);
+                                        // picDisplay.Init();
+                                        //picDisplay.CreateDisplayRegions();
+                                    }
+                                    //  }
+                                    //  else if (e.Button == System.Windows.Forms.MouseButtons.Left)
+                                    // {
+                                    //  Point dPos = Point.Subtract(m_mouseDownPos, pos);
+                                    if (dPos.X != 0 && !moveY && !moveX)
+                                    {
+                                        moveX = true;
+                                        moveY = false;
+                                    }
+
+                                    if (moveX)
+                                    {
+                                        int displaySpan = HighFreq - LowFreq;
+                                        double unit = (double)(displaySpan / (double)FreqScalePanRect.Width);
+                                        double deltaFreq = unit * dPos.X;
+
+                                        //if (rx1_spectrum_tune_drag)
+                                        //{
+                                        //    // if (!mox || (rx2_enabled && chkVFOBTX.Checked))
+                                        //    // {
+                                        //    float start_freq = PixelToHz(spectrum_drag_last_x);
+                                        //    float end_freq = PixelToHz(e.X);
+                                        //    spectrum_drag_last_x = e.X;
+                                        //    float delta = end_freq - start_freq;
+                                        //    CenterFrequency -= delta * 0.0000010;
+                                        //    txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                                        //    // }
+                                        //}
+                                        //else
+                                           // VFOFreq += deltaFreq * 0.0000010;
+                                        cmaster.Getrxa(display_id + 2).RXFreq += (long)deltaFreq;
+                                        // cmaster.Getrxa(display_id + 2).RXFreq += (deltaFreq * 0.0000010);
+                                        //VFOHz += (long)deltaFreq;
+                                        //JanusAudio.SetVFOfreq(display_id+2, JanusAudio.Freq2PW((int)VFOHz), 0);
+                                        mouseDownPos = mousePos;
+                                    }
+                                }
+
+                                if (e.Button == MouseButtons.Right)
+                                {
+                                    Point dPos = (Point)Point.Subtract(mouseDownPos, pos);
+                                    if (dPos.X > 0)
+                                        ZoomFactor += 0.01;
+                                    else if (dPos.X < 0)
+                                        ZoomFactor -= 0.01;
+
+                                     // if (freqScaleZoomFactor > 1.0) freqScaleZoomFactor = 1.0;
+                                     // if (freqScaleZoomFactor < 0.05) freqScaleZoomFactor = 0.05;
+
+                                    //  specRX.GetSpecRX(0).ZoomSlider = freqScaleZoomFactor;
+                                   // rx1_zoom_factor_by_band[(int)rx1_band] = rx1_zoom_factor;
+
+                                    mouseDownPos = mousePos;
+                                    //CalcDisplayFreq();
+                                }
+
+                                break;
+
+                            case DisplayRegion.dBmScalePanadapterRegion:                              
+
+                                if (gridminmaxadjust)
+                                {                                  
+                                    int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                                    double delta_db = ((double)delta_y / 10) * 5;
+                                    decimal val = grid_minmax_max_y;
+                                    val += (decimal)delta_db;
+                                    decimal min_val = grid_minmax_min_y;
+                                    min_val += (decimal)delta_db;
+
+                                    if (val > 200) val = 200;
+                                    if (min_val < -200) min_val = -200;
+
+                                    SpectrumGridMax = (int)val;
+                                    SpectrumGridMin = (int)min_val;                                  
+                                }
+
+                                if (gridmaxadjust)
+                                {                                  
+                                    int delta_y = e.Y - grid_minmax_drag_start_point.Y;
+                                    double delta_db = ((double)delta_y / 10) * 5;
+                                    decimal val = grid_minmax_max_y;
+                                    val += (decimal)delta_db;
+
+                                    if (val > 200) val = 200;
+
+                                    SpectrumGridMax = (int)val;
+                                }                        
+                                break;
+                            case DisplayRegion.filterRegionLow:
+                               // next_cursor = Cursors.SizeWE;
+                                //  m_showFilterLeftBoundary = true;
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                    // Point dPos = Point.Subtract(mouseDownPos, pos);
+                                    // double dFreq = (double)(dPos.X * displaySpan) / (double)panRect.Width;
+
+                                    // filterLowerFrequency = Math.Round(mouseDownFilterFrequencyLo - dFreq);
+                                    //settings.setRXFilter(this, receiver, filterLowerFrequency, filterUpperFrequency);
+                                   // SelectRX1VarFilter();
+                                   // int new_low = (int)Math.Min(PixelToHz(e.X), radio.GetDSPRX(0, 0).RXFilterHigh - 10);
+                                   // UpdateRX1Filters(new_low, radio.GetDSPRX(0, 0).RXFilterHigh);
+                                }
+
+                                // m_highlightFilter = false;
+                                break;
+                            case DisplayRegion.filterRegionHigh:
+                               // next_cursor = Cursors.SizeWE;
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                   // SelectRX1VarFilter();
+                                   // int new_high = (int)Math.Max(PixelToHz(e.X), radio.GetDSPRX(0, 0).RXFilterLow + 10);
+                                    //UpdateRX1Filters(radio.GetDSPRX(0, 0).RXFilterLow, new_high);
+                                }
+                                break;
+                            case DisplayRegion.filterRegion:
+                               // next_cursor = Cursors.NoMoveHoriz;
+                                if (e.Button == MouseButtons.Left)
+                                {
+                                   // SelectRX1VarFilter();
+                                   // int diff = (int)(PixelToHz(e.X) - PixelToHz(whole_filter_start_x));
+                                    //UpdateRX1Filters(whole_filter_start_low + diff, whole_filter_start_high + diff);
+                                }
+                                break;
+
                         }
-
-                        if (moveY)
-                        {
-                            int bottom_y = (int)(this.Height
-                                - this.FreqScalePanRect.Height);
-                            int new_y = (int)(rulerMouseDownPos.Y
-                                - dPos.Y);
-
-                            if (new_y
-                                < (int)(this.PanRect
-                                            .Top)) // +
-                                                   // picDisplay.panSpectrumMinimumHeight))
-                                new_y
-                                    = (int)(this.PanRect
-                                                .Top); // +
-                                                       // picDisplay.panSpectrumMinimumHeight);
-                            if (new_y > bottom_y) new_y = bottom_y;
-
-                            FreqRulerPosition
-                                = (float)(new_y - this.PanRect.Top)
-                                / (bottom_y - this.PanRect.Top);
-                            // picDisplay.Init();
-                            // picDisplay.CreateDisplayRegions();
-                        }
-                        //  }
-                        //  else if (e.Button ==
-                        //  System.Windows.Forms.MouseButtons.Left)
-                        // {
-                        //  Point dPos =
-                        //  Point.Subtract(m_mouseDownPos, pos);
-                        if (dPos.X != 0 && !moveY && !moveX)
-                        {
-                            moveX = true;
-                            moveY = false;
-                        }
-
-                        if (moveX)
-                        {
-                            int displaySpan = HighFreq - LowFreq;
-                            double unit = (double)(displaySpan
-                                / (double)FreqScalePanRect.Width);
-                            double deltaFreq = unit * dPos.X;
-
-                            // if (rx1_spectrum_tune_drag)
-                            //{
-                            //     // if (!mox || (rx2_enabled &&
-                            //     chkVFOBTX.Checked))
-                            //     // {
-                            //     float start_freq =
-                            //     PixelToHz(spectrum_drag_last_x);
-                            //     float end_freq = PixelToHz(e.X);
-                            //     spectrum_drag_last_x = e.X;
-                            //     float delta = end_freq -
-                            //     start_freq; CenterFrequency -=
-                            //     delta * 0.0000010;
-                            //     txtVFOAFreq_LostFocus(this,
-                            //     EventArgs.Empty);
-                            //     // }
-                            // }
-                            // else
-                            //  VFOFreq += deltaFreq * 0.0000010;
-                            cmaster.Getrxa(display_id + 2).RXFreq
-                                += (long)deltaFreq;
-                            // cmaster.Getrxa(display_id + 2).RXFreq
-                            // += (deltaFreq * 0.0000010);
-                            // VFOHz += (long)deltaFreq;
-                            // JanusAudio.SetVFOfreq(display_id+2,
-                            // JanusAudio.Freq2PW((int)VFOHz), 0);
-                            mouseDownPos = mousePos;
-                        }
-                    }
-
-                    if (e.Button == MouseButtons.Right)
-                    {
-                        Point dPos = (Point)Point.Subtract(
-                            mouseDownPos, pos);
-                        if (dPos.X > 0)
-                            ZoomFactor += 0.01;
-                        else if (dPos.X < 0)
-                            ZoomFactor -= 0.01;
-
-                        // if (freqScaleZoomFactor > 1.0)
-                        // freqScaleZoomFactor = 1.0; if
-                        // (freqScaleZoomFactor < 0.05)
-                        // freqScaleZoomFactor = 0.05;
-
-                        //  specRX.GetSpecRX(0).ZoomSlider =
-                        //  freqScaleZoomFactor;
-                        // rx1_zoom_factor_by_band[(int)rx1_band] =
-                        // rx1_zoom_factor;
-
-                        mouseDownPos = mousePos;
-                        // CalcDisplayFreq();
-                    }
-
-                    break;
-
-                case DisplayRegion.dBmScalePanadapterRegion:
-
-                    if (gridminmaxadjust)
-                    {
-                        int delta_y
-                            = e.Y - grid_minmax_drag_start_point.Y;
-                        double delta_db
-                            = ((double)delta_y / 10) * 5;
-                        decimal val = grid_minmax_max_y;
-                        val += (decimal)delta_db;
-                        decimal min_val = grid_minmax_min_y;
-                        min_val += (decimal)delta_db;
-
-                        if (val > 200) val = 200;
-                        if (min_val < -200) min_val = -200;
-
-                        SpectrumGridMax = (int)val;
-                        SpectrumGridMin = (int)min_val;
-                    }
-
-                    if (gridmaxadjust)
-                    {
-                        int delta_y
-                            = e.Y - grid_minmax_drag_start_point.Y;
-                        double delta_db
-                            = ((double)delta_y / 10) * 5;
-                        decimal val = grid_minmax_max_y;
-                        val += (decimal)delta_db;
-
-                        if (val > 200) val = 200;
-
-                        SpectrumGridMax = (int)val;
-                    }
-                    break;
-                case DisplayRegion.filterRegionLow:
-                    // next_cursor = Cursors.SizeWE;
-                    //  m_showFilterLeftBoundary = true;
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        // Point dPos = Point.Subtract(mouseDownPos,
-                        // pos); double dFreq = (double)(dPos.X *
-                        // displaySpan) / (double)panRect.Width;
-
-                        // filterLowerFrequency =
-                        // Math.Round(mouseDownFilterFrequencyLo -
-                        // dFreq);
-                        // settings.setRXFilter(this, receiver,
-                        // filterLowerFrequency,
-                        // filterUpperFrequency);
-                        // SelectRX1VarFilter();
-                        // int new_low =
-                        // (int)Math.Min(PixelToHz(e.X),
-                        // radio.GetDSPRX(0, 0).RXFilterHigh - 10);
-                        // UpdateRX1Filters(new_low,
-                        // radio.GetDSPRX(0, 0).RXFilterHigh);
-                    }
-
-                    // m_highlightFilter = false;
-                    break;
-                case DisplayRegion.filterRegionHigh:
-                    // next_cursor = Cursors.SizeWE;
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        // SelectRX1VarFilter();
-                        // int new_high =
-                        // (int)Math.Max(PixelToHz(e.X),
-                        // radio.GetDSPRX(0, 0).RXFilterLow + 10);
-                        // UpdateRX1Filters(radio.GetDSPRX(0,
-                        // 0).RXFilterLow, new_high);
-                    }
-                    break;
-                case DisplayRegion.filterRegion:
-                    // next_cursor = Cursors.NoMoveHoriz;
-                    if (e.Button == MouseButtons.Left)
-                    {
-                        // SelectRX1VarFilter();
-                        // int diff = (int)(PixelToHz(e.X) -
-                        // PixelToHz(whole_filter_start_x));
-                        // UpdateRX1Filters(whole_filter_start_low +
-                        // diff, whole_filter_start_high + diff);
-                    }
-                    break;
-            }
         }
 
-        private void PanDisplay_MouseUp(
-            object sender, MouseEventArgs e)
+        private void PanDisplay_MouseUp(object sender, MouseEventArgs e)
         {
-            Point pos = new Point(-1,
-                -1); // = e.GetPosition(console.openGLRX1);
+            Point pos = new Point(-1, -1); // = e.GetPosition(console.openGLRX1);
             pos = new Point(e.X, e.Y);
 
             mousePos = pos;
@@ -4771,244 +3760,215 @@ namespace Thetis
 
             if (e.Button == MouseButtons.Left)
             {
-                // switch (picDisplay.CurrentDisplayMode)
+                //switch (picDisplay.CurrentDisplayMode)
                 //{
-                //     case DisplayMode.SPECTRUM:
-                //     case DisplayMode.PANADAPTER:
-                //     case DisplayMode.WATERFALL:
-                //     case DisplayMode.PANAFALL:
-                //     case DisplayMode.PANASCOPE:
-                //     case DisplayMode.HISTOGRAM:
-                rx1_low_filter_drag = false;
-                rx1_high_filter_drag = false;
-                rx1_whole_filter_drag = false;
-                // rx2_low_filter_drag = false;
-                // rx2_high_filter_drag = false;
-                // rx2_whole_filter_drag = false;
-                // tx_low_filter_drag = false;
-                // tx_high_filter_drag = false;
-                // tx_whole_filter_drag = false;
-                // rx1_click_tune_drag = false;
-                // rx1_spectrum_tune_drag = false;
+                //    case DisplayMode.SPECTRUM:
+                //    case DisplayMode.PANADAPTER:
+                //    case DisplayMode.WATERFALL:
+                //    case DisplayMode.PANAFALL:
+                //    case DisplayMode.PANASCOPE:
+                //    case DisplayMode.HISTOGRAM:
+                        rx1_low_filter_drag = false;
+                        rx1_high_filter_drag = false;
+                        rx1_whole_filter_drag = false;
+                        // rx2_low_filter_drag = false;
+                        // rx2_high_filter_drag = false;
+                        // rx2_whole_filter_drag = false;
+                        //tx_low_filter_drag = false;
+                        //tx_high_filter_drag = false;
+                        //tx_whole_filter_drag = false;
+                        //rx1_click_tune_drag = false;
+                        //rx1_spectrum_tune_drag = false;
 
-                // agc_knee_drag = false;
-                // agc_hang_drag = false;
-                //  agc_knee_drag_max_delta_x = 0;
-                //  agc_knee_drag_max_delta_y = 0;
-                gridminmaxadjust = false;
-                rx1_grid_adjust = false;
-                // rx2_grid_adjust = false;
-                // tx1_grid_adjust = false;
-                // tx2_grid_adjust = false;
+                        //agc_knee_drag = false;
+                        //agc_hang_drag = false;
+                        // agc_knee_drag_max_delta_x = 0;
+                        // agc_knee_drag_max_delta_y = 0;
+                        gridminmaxadjust = false;
+                        rx1_grid_adjust = false;
+                        // rx2_grid_adjust = false;
+                       // tx1_grid_adjust = false;
+                        // tx2_grid_adjust = false;
 
-                // grid_minmax_drag_max_delta_y = 0;
+                        // grid_minmax_drag_max_delta_y = 0;
 
-                // notch_drag = false;
-                // notch_drag_max_delta_x = 0;
-                //  notch_drag_max_delta_y = 0;
-                // timerNotchZoom.Enabled = false;
-                // notch_zoom = false;
-                // if (picDisplay.TNFZoom)
-                // {
-                //    picDisplay.TNFZoom = false;
-                //  }
-                // stop showing details for this notch in the
-                // panadapter
-                //  if (notch_drag_active != null)
-                //  {
-                //   notch_drag_active.Details = false;
-                //   notch_drag_active = null;
-                // }
-                // rx2_sub_drag = false;
+                        // notch_drag = false;
+                        // notch_drag_max_delta_x = 0;
+                        //  notch_drag_max_delta_y = 0;
+                        // timerNotchZoom.Enabled = false;
+                        // notch_zoom = false;
+                        // if (picDisplay.TNFZoom)
+                        // {
+                        //    picDisplay.TNFZoom = false;
+                        //  }
+                        // stop showing details for this notch in the panadapter
+                        //  if (notch_drag_active != null)
+                        //  {
+                        //   notch_drag_active.Details = false;
+                        //   notch_drag_active = null;
+                        // }
+                        //rx2_sub_drag = false;
 
-                moveX = false;
-                moveY = false;
+                        moveX = false;
+                        moveY = false;
 
-                // break;
+                       // break;
                 //}
 
                 if (rx1_sub_drag)
                 {
                     rx1_sub_drag = false;
-                    // if (rx2_enabled) txtVFOABand_LostFocus(this,
-                    // EventArgs.Empty); else
-                    // txtVFOBFreq_LostFocus(this, EventArgs.Empty);
+                    // if (rx2_enabled) txtVFOABand_LostFocus(this, EventArgs.Empty);
+                    // else 
+                   // txtVFOBFreq_LostFocus(this, EventArgs.Empty);
                 }
 
                 if (rx1_spectrum_drag)
                 {
                     rx1_spectrum_drag = false;
-                    // txtVFOAFreq_LostFocus(this, EventArgs.Empty);
+                   // txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                 }
                 // rx2_spectrum_drag = false;
-                // Cursor = Cursors.Default;
+                //Cursor = Cursors.Default;
             }
 
             if (e.Button == MouseButtons.Right)
             {
-                // switch (picDisplay.CurrentDisplayMode)
+                //switch (picDisplay.CurrentDisplayMode)
                 //{
-                //     case DisplayMode.PANADAPTER:
-                //     case DisplayMode.PANAFALL:
-                //     case DisplayMode.HISTOGRAM:
-                //     case DisplayMode.SPECTRUM:
-                gridminmaxadjust = false;
-                gridmaxadjust = false;
-                rx1_grid_adjust = false;
-                // rx2_grid_adjust = false;
-                // tx1_grid_adjust = false;
-                // tx2_grid_adjust = false;
-                // break;
+                //    case DisplayMode.PANADAPTER:
+                //    case DisplayMode.PANAFALL:
+                //    case DisplayMode.HISTOGRAM:
+                //    case DisplayMode.SPECTRUM:
+                        gridminmaxadjust = false;
+                        gridmaxadjust = false;
+                        rx1_grid_adjust = false;
+                        // rx2_grid_adjust = false;
+                       // tx1_grid_adjust = false;
+                        // tx2_grid_adjust = false;
+                       // break;
                 //}
             }
+
         }
 
-        // private void picDisplay_DoubleClick(object
-        // sender, EventArgs e)
+        //private void picDisplay_DoubleClick(object sender, EventArgs e)
         //{
-        //     int new_val =
-        //     (int)PixelToDb(display_cursor_y); if
-        //     (!(rx1_grid_adjust || gridmaxadjust))
-        //     {
-        //         if (!mox) //RX1
-        //         {
-        //             if (rx1_dsp_mode == DSPMode.FM)
-        //                 return;
+        //    int new_val = (int)PixelToDb(display_cursor_y);
+        //    if (!(rx1_grid_adjust || gridmaxadjust))
+        //    {
+        //        if (!mox) //RX1
+        //        {
+        //            if (rx1_dsp_mode == DSPMode.FM)
+        //                return;
 
-        //            if (new_val > ptbSquelch.Maximum)
-        //            new_val = ptbSquelch.Maximum; if
-        //            (new_val < ptbSquelch.Minimum)
-        //            new_val = ptbSquelch.Minimum;
+        //            if (new_val > ptbSquelch.Maximum) new_val = ptbSquelch.Maximum;
+        //            if (new_val < ptbSquelch.Minimum) new_val = ptbSquelch.Minimum;
         //            ptbSquelch.Value = new_val;
-        //            ptbSquelch_Scroll(this,
-        //            EventArgs.Empty);
+        //            ptbSquelch_Scroll(this, EventArgs.Empty);
         //        }
         //        else // TX
         //        {
         //            new_val += 24;
-        //            if (new_val >
-        //            ptbNoiseGate.Maximum) new_val =
-        //            ptbNoiseGate.Maximum; if (new_val
-        //            < ptbNoiseGate.Minimum) new_val =
-        //            ptbNoiseGate.Minimum;
+        //            if (new_val > ptbNoiseGate.Maximum) new_val = ptbNoiseGate.Maximum;
+        //            if (new_val < ptbNoiseGate.Minimum) new_val = ptbNoiseGate.Minimum;
         //            ptbNoiseGate.Value = new_val;
-        //            ptbNoiseGate_Scroll(this,
-        //            EventArgs.Empty);
+        //            ptbNoiseGate_Scroll(this, EventArgs.Empty);
         //        }
         //    }
 
         //}
 
-        private void PanDisplay_MouseEnter(
-            object sender, EventArgs e)
+        private void PanDisplay_MouseEnter(object sender, EventArgs e)
         {
-            // if (!this.Focused)
-            //   this.Focus();
+           // if (!this.Focused)
+             //   this.Focus();
         }
 
-        private void PanDisplay_MouseWheel(
-            object sender, MouseEventArgs e)
+        private void PanDisplay_MouseWheel(object sender, MouseEventArgs e)
         {
-            //			if(this.ActiveControl is TextBoxTS
-            //&& this.ActiveControl != txtVFOAFreq
-            //				&& this.ActiveControl !=
-            // txtVFOBFreq)
-            // return; 			if(this.ActiveControl is
-            // NumericUpDownTS) return; if
-            // (console.ActiveControl is TextBoxTS ||
-            //    console.ActiveControl is NumericUpDownTS
-            //    || console.ActiveControl is TrackBarTS)
+            //			if(this.ActiveControl is TextBoxTS && this.ActiveControl != txtVFOAFreq
+            //				&& this.ActiveControl != txtVFOBFreq) return;
+            //			if(this.ActiveControl is NumericUpDownTS) return;
+            //if (console.ActiveControl is TextBoxTS ||
+            //    console.ActiveControl is NumericUpDownTS ||
+            //    console.ActiveControl is TrackBarTS)
             //{
-            //    console.Console_KeyPress(this, new
-            //    KeyPressEventArgs((char)Keys.Enter));
+            //    console.Console_KeyPress(this, new KeyPressEventArgs((char)Keys.Enter));
             //    return;
             //}
 
             if (e.Delta == 0) return;
 
-            // int num_steps = (e.Delta > 0 ? 1 : -1);	// 1
-            // per click
-            ////int numberToMove = e.Delta / 120;	// 1 per
-            /// click
+            //int num_steps = (e.Delta > 0 ? 1 : -1);	// 1 per click
+            ////int numberToMove = e.Delta / 120;	// 1 per click
 
-            // if (console.vfo_char_width == 0)
-            //     console.GetVFOCharWidth();
+            //if (console.vfo_char_width == 0)
+            //    console.GetVFOCharWidth();
 
-            // if (num_steps == 0) return;
-            // int step = console.CurrentTuneStepHz;
-            // if (console.shift_down && step >= 10) step /=
-            // 10;
+            //if (num_steps == 0) return;
+            //int step = console.CurrentTuneStepHz;
+            //if (console.shift_down && step >= 10) step /= 10;
 
-            //   if (current_click_tune_mode ==
-            //   ClickTuneMode.VFOB && wheel_tunes_vfob)
+            //   if (current_click_tune_mode == ClickTuneMode.VFOB && wheel_tunes_vfob)
             //  {
             //  if (rx2_enabled && chkVFOSplit.Checked)
-            //    VFOASubFreq = SnapTune(VFOASubFreq, step,
-            //    num_steps);
+            //    VFOASubFreq = SnapTune(VFOASubFreq, step, num_steps);
             // else
-            //    VFOBFreq = SnapTune(VFOBFreq, step,
-            //    num_steps);
+            //    VFOBFreq = SnapTune(VFOBFreq, step, num_steps);
             // }
-            // else
+            // else 
 
-            // switch (receiver)
+            //switch (receiver)
             //{
-            //     case 0:
-            //         console.VFOAFreq =
-            //         console.SnapTune(console.VFOAFreq,
-            //         step, num_steps); break;
-            //     case 1:
-            //         console.VFOBFreq =
-            //         console.SnapTune(console.VFOBFreq,
-            //         step, num_steps); break;
-            // }
+            //    case 0:
+            //        console.VFOAFreq = console.SnapTune(console.VFOAFreq, step, num_steps);
+            //        break;
+            //    case 1:
+            //        console.VFOBFreq = console.SnapTune(console.VFOBFreq, step, num_steps);
+            //        break;
+            //}
 
-            // switch (TuneHitTest(e.X, e.Y))
+
+            //switch (TuneHitTest(e.X, e.Y))
             //{
-            //     case TuneLocation.VFOA:
-            //         double freq =
-            //         double.Parse(txtVFOAFreq.Text);
-            //         double mult = 1000.0;
-            //         int right = grpVFOA.Left +
-            //         txtVFOAFreq.Left + txtVFOAFreq.Width;
-            //         if (vfoa_hover_digit < 0)
-            //         {
-            //             int x = right + 2 -
-            //             (vfo_pixel_offset - 5); while (x
-            //             < e.X && mult > 0.0000011)
-            //             {
-            //                 mult /= 10.0;
-            //                 x += vfo_char_width;
-            //                 if (mult == 1.0)
-            //                     x += vfo_decimal_space;
-            //                 else x += vfo_char_space;
-            //             }
-            //         }
-            //         else
-            //         {
-            //             mult = Math.Pow(10,
-            //             -vfoa_hover_digit) * 1000.0;
-            //         }
+            //    case TuneLocation.VFOA:
+            //        double freq = double.Parse(txtVFOAFreq.Text);
+            //        double mult = 1000.0;
+            //        int right = grpVFOA.Left + txtVFOAFreq.Left + txtVFOAFreq.Width;
+            //        if (vfoa_hover_digit < 0)
+            //        {
+            //            int x = right + 2 - (vfo_pixel_offset - 5);
+            //            while (x < e.X && mult > 0.0000011)
+            //            {
+            //                mult /= 10.0;
+            //                x += vfo_char_width;
+            //                if (mult == 1.0)
+            //                    x += vfo_decimal_space;
+            //                else x += vfo_char_space;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            mult = Math.Pow(10, -vfoa_hover_digit) * 1000.0;
+            //        }
 
             //        if (mult <= 1.0)
             //        {
             //            freq += mult * num_steps;
-            //            //Debug.WriteLine("freq:
-            //            "+freq.ToString("f6")); VFOAFreq =
-            //            freq;
+            //            //Debug.WriteLine("freq: "+freq.ToString("f6"));
+            //            VFOAFreq = freq;
             //        }
             //        break;
 
             //    case TuneLocation.VFOB:
             //        freq = double.Parse(txtVFOBFreq.Text);
             //        mult = 1000.0;
-            //        right = grpVFOB.Left +
-            //        txtVFOBFreq.Left + txtVFOBFreq.Width;
+            //        right = grpVFOB.Left + txtVFOBFreq.Left + txtVFOBFreq.Width;
             //        if (vfob_hover_digit < 0)
             //        {
-            //            int x = right + 2 -
-            //            (vfo_pixel_offset - 5); while (x <
-            //            e.X && mult > 0.0000011)
+            //            int x = right + 2 - (vfo_pixel_offset - 5);
+            //            while (x < e.X && mult > 0.0000011)
             //            {
             //                mult /= 10;
             //                x += vfo_char_width;
@@ -5019,8 +3979,7 @@ namespace Thetis
             //        }
             //        else
             //        {
-            //            mult = Math.Pow(10,
-            //            -vfob_hover_digit) * 1000.0;
+            //            mult = Math.Pow(10, -vfob_hover_digit) * 1000.0;
             //        }
 
             //        if (mult <= 1.0)
@@ -5031,36 +3990,26 @@ namespace Thetis
             //        break;
 
             //    case TuneLocation.VFOASub:
-            //        if (rx2_enabled &&
-            //        (chkEnableMultiRX.Checked ||
-            //        chkVFOSplit.Checked))
+            //        if (rx2_enabled && (chkEnableMultiRX.Checked || chkVFOSplit.Checked))
             //        {
             //            freq = VFOASubFreq;
             //            mult = 1000.0;
-            //            right = grpVFOA.Left +
-            //            txtVFOABand.Left +
-            //            txtVFOABand.Width; if
-            //            (vfoa_sub_hover_digit < 0)
+            //            right = grpVFOA.Left + txtVFOABand.Left + txtVFOABand.Width;
+            //            if (vfoa_sub_hover_digit < 0)
             //            {
-            //                int x = right + 2 -
-            //                (vfo_sub_pixel_offset - 5);
-            //                while (x < e.X && mult >
-            //                0.0000011)
+            //                int x = right + 2 - (vfo_sub_pixel_offset - 5);
+            //                while (x < e.X && mult > 0.0000011)
             //                {
             //                    mult /= 10;
             //                    x += vfo_sub_char_width;
             //                    if (mult == 1.0)
-            //                        x +=
-            //                        vfo_sub_decimal_space;
-            //                    else x +=
-            //                    vfo_sub_char_space;
+            //                        x += vfo_sub_decimal_space;
+            //                    else x += vfo_sub_char_space;
             //                }
             //            }
             //            else
             //            {
-            //                mult = Math.Pow(10,
-            //                -vfoa_sub_hover_digit) *
-            //                1000.0;
+            //                mult = Math.Pow(10, -vfoa_sub_hover_digit) * 1000.0;
             //            }
 
             //            if (mult <= 1.0)
@@ -5071,51 +4020,33 @@ namespace Thetis
             //        }
             //        else
             //        {
-            //            VFOAFreq = SnapTune(VFOAFreq,
-            //            step, num_steps);
+            //            VFOAFreq = SnapTune(VFOAFreq, step, num_steps);
             //        }
             //        break;
 
             //    case TuneLocation.DisplayBottom:
-            //        //if (rx2_enabled &&
-            //        chkVFOSplit.Checked &&
-            //        current_click_tune_mode ==
-            //        ClickTuneMode.VFOB &&
-            //        wheel_tunes_vfob)
-            //        //    VFOASubFreq =
-            //        SnapTune(VFOASubFreq, step,
-            //        num_steps);
-            //        //else if (rx2_enabled ||
-            //        (current_click_tune_mode ==
-            //        ClickTuneMode.VFOB &&
-            //        wheel_tunes_vfob))
-            //        //    VFOBFreq = SnapTune(VFOBFreq,
-            //        step, num_steps);
+            //        //if (rx2_enabled && chkVFOSplit.Checked && current_click_tune_mode == ClickTuneMode.VFOB && wheel_tunes_vfob)
+            //        //    VFOASubFreq = SnapTune(VFOASubFreq, step, num_steps);
+            //        //else if (rx2_enabled || (current_click_tune_mode == ClickTuneMode.VFOB && wheel_tunes_vfob))
+            //        //    VFOBFreq = SnapTune(VFOBFreq, step, num_steps);
             //        //else
-            //        //    VFOAFreq = SnapTune(VFOAFreq,
-            //        step, num_steps); break;
+            //        //    VFOAFreq = SnapTune(VFOAFreq, step, num_steps);
+            //        break;
 
             //    case TuneLocation.Other:
-            //        if (current_click_tune_mode ==
-            //        ClickTuneMode.VFOB &&
-            //        wheel_tunes_vfob)
+            //        if (current_click_tune_mode == ClickTuneMode.VFOB && wheel_tunes_vfob)
             //        {
-            //            if (rx2_enabled &&
-            //            chkVFOSplit.Checked)
-            //                VFOASubFreq =
-            //                SnapTune(VFOASubFreq, step,
-            //                num_steps);
+            //            if (rx2_enabled && chkVFOSplit.Checked)
+            //                VFOASubFreq = SnapTune(VFOASubFreq, step, num_steps);
             //            else
-            //                VFOBFreq = SnapTune(VFOBFreq,
-            //                step, num_steps);
+            //                VFOBFreq = SnapTune(VFOBFreq, step, num_steps);
             //        }
-            //        else VFOAFreq = SnapTune(VFOAFreq,
-            //        step, num_steps); break;
+            //        else VFOAFreq = SnapTune(VFOAFreq, step, num_steps);
+            //        break;
             //}
         }
 
-        private void PanDisplay_MouseDown(
-            object sender, MouseEventArgs e)
+        private void PanDisplay_MouseDown(object sender, MouseEventArgs e)
         {
             Point pos = new Point(-1, -1);
             pos = new Point(e.X, e.Y);
@@ -5128,171 +4059,132 @@ namespace Thetis
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    // switch (CurrentDisplayMode)
+                    //switch (CurrentDisplayMode)
                     //{
-                    //     case DisplayMode.PANADAPTER:
-                    //     case DisplayMode.PANAFALL:
-                    //     case DisplayMode.HISTOGRAM:
-                    //     case DisplayMode.SPECTRUM:
-                    if (mouseRegion == DisplayRegion.filterRegion)
-                    {
-                        //  m_highlightFilter = true;
-                        // wholeFilterDrag = true;
+                    //    case DisplayMode.PANADAPTER:
+                    //    case DisplayMode.PANAFALL:
+                    //    case DisplayMode.HISTOGRAM:
+                    //    case DisplayMode.SPECTRUM:
+                            if (mouseRegion == DisplayRegion.filterRegion)
+                            {
+                                //  m_highlightFilter = true;
+                                // wholeFilterDrag = true;
 
-                        // whole_filter_start_x = e.X;
+                                //whole_filter_start_x = e.X;
 
-                        // if (!mox)
-                        //{
-                        //     rx1_whole_filter_drag = true;
-                        //     whole_filter_start_low =
-                        //     radio.GetDSPRX(0, 0).RXFilterLow;
-                        //     whole_filter_start_high =
-                        //     radio.GetDSPRX(0, 0).RXFilterHigh;
-                        // }
-                        // else
-                        //{
-                        //     tx_whole_filter_drag = true;
-                        //     whole_filter_start_low =
-                        //     SetupForm.TXFilterLow;
-                        //     whole_filter_start_high =
-                        //     SetupForm.TXFilterHigh;
-                        // }
-                    }
-                    else if (mouseRegion
-                        == DisplayRegion
-                               .freqScalePanadapterRegion)
-                    {
-                        rulerMouseDownPos
-                            = new Point(FreqScalePanRect.Left,
-                                FreqScalePanRect.Top);
+                                //if (!mox)
+                                //{
+                                //    rx1_whole_filter_drag = true;
+                                //    whole_filter_start_low = radio.GetDSPRX(0, 0).RXFilterLow;
+                                //    whole_filter_start_high = radio.GetDSPRX(0, 0).RXFilterHigh;
+                                //}
+                                //else
+                                //{
+                                //    tx_whole_filter_drag = true;
+                                //    whole_filter_start_low = SetupForm.TXFilterLow;
+                                //    whole_filter_start_high = SetupForm.TXFilterHigh;
+                                //}
+                            }
+                            else if (mouseRegion == DisplayRegion.freqScalePanadapterRegion)
+                            {
+                                rulerMouseDownPos = new Point(FreqScalePanRect.Left, FreqScalePanRect.Top);
 
-                        spectrum_drag_last_x = e.X;
-                        // if (click_tune_display)
-                        //{
-                        //     rx1_spectrum_tune_drag = true;
+                                spectrum_drag_last_x = e.X;
+                                //if (click_tune_display)
+                                //{
+                                //    rx1_spectrum_tune_drag = true;
+                                
+                                //    Cursor = Cursors.SizeWE;
+                                //}
 
-                        //    Cursor = Cursors.SizeWE;
-                        //}
+                                //  if (e.Button == System.Windows.Forms.MouseButtons.Right) next_cursor = Cursors.HSplit;
+                                //  return;
+                            }
+                            else if (mouseRegion == DisplayRegion.dBmScalePanadapterRegion)
+                            {
+                                rulerMouseDownPos = new Point(DBMScalePanRect.Left, DBMScalePanRect.Top);
 
-                        //  if (e.Button ==
-                        //  System.Windows.Forms.MouseButtons.Right)
-                        //  next_cursor = Cursors.HSplit; return;
-                    }
-                    else if (mouseRegion
-                        == DisplayRegion.dBmScalePanadapterRegion)
-                    {
-                        rulerMouseDownPos
-                            = new Point(DBMScalePanRect.Left,
-                                DBMScalePanRect.Top);
+                               // if (!mox)
+                               // {
+                                    grid_minmax_drag_start_point = pos;
+                                    gridminmaxadjust = true;
+                                   // tx1_grid_adjust = false;
+                                    grid_minmax_max_y = (decimal)SpectrumGridMax;
+                                    grid_minmax_min_y = (decimal)SpectrumGridMin;
+                                   // Cursor = grabbing;
+                                //}
+                                //else
+                                //{
+                                //    if (((rx1_grid_adjust && !TXOnVFOB) ||
+                                //        (rx1_grid_adjust && TXOnVFOB && !RX2Enabled)) &&
+                                //        CurrentDisplayMode != DisplayMode.PANAFALL)
+                                //    {
+                                //        grid_minmax_drag_start_point = pos;
+                                //        gridminmaxadjust = true;
+                                //        tx1_grid_adjust = true;
+                                //        grid_minmax_max_y = (decimal)picDisplay.TXSpectrumGridMax;
+                                //        grid_minmax_min_y = (decimal)picDisplay.TXSpectrumGridMin;
+                                //        Cursor = grabbing;
+                                //    }
+                                //    else if (rx1_grid_adjust && picDisplay.TXOnVFOB)
+                                //    {
+                                //        grid_minmax_drag_start_point = pos;
+                                //        gridminmaxadjust = true;
+                                //        tx1_grid_adjust = false;
+                                //        grid_minmax_max_y = (decimal)SpectrumGridMax;
+                                //        grid_minmax_min_y = (decimal)SpectrumGridMin;
+                                //        Cursor = grabbing;
+                                //    }
+                                //}
+                            }
 
-                        // if (!mox)
-                        // {
-                        grid_minmax_drag_start_point = pos;
-                        gridminmaxadjust = true;
-                        // tx1_grid_adjust = false;
-                        grid_minmax_max_y
-                            = (decimal)SpectrumGridMax;
-                        grid_minmax_min_y
-                            = (decimal)SpectrumGridMin;
-                        // Cursor = grabbing;
-                        //}
-                        // else
-                        //{
-                        //    if (((rx1_grid_adjust && !TXOnVFOB) ||
-                        //        (rx1_grid_adjust && TXOnVFOB &&
-                        //        !RX2Enabled)) &&
-                        //        CurrentDisplayMode !=
-                        //        DisplayMode.PANAFALL)
-                        //    {
-                        //        grid_minmax_drag_start_point =
-                        //        pos; gridminmaxadjust = true;
-                        //        tx1_grid_adjust = true;
-                        //        grid_minmax_max_y =
-                        //        (decimal)picDisplay.TXSpectrumGridMax;
-                        //        grid_minmax_min_y =
-                        //        (decimal)picDisplay.TXSpectrumGridMin;
-                        //        Cursor = grabbing;
-                        //    }
-                        //    else if (rx1_grid_adjust &&
-                        //    picDisplay.TXOnVFOB)
-                        //    {
-                        //        grid_minmax_drag_start_point =
-                        //        pos; gridminmaxadjust = true;
-                        //        tx1_grid_adjust = false;
-                        //        grid_minmax_max_y =
-                        //        (decimal)SpectrumGridMax;
-                        //        grid_minmax_min_y =
-                        //        (decimal)SpectrumGridMin; Cursor =
-                        //        grabbing;
-                        //    }
-                        //}
-                    }
-
-                    // break;
+                            //break;
                     //    case DisplayMode.WATERFALL:
                     //        break;
-                    // }
+                   // }
                     // }
 
-                    if (mouseRegion
-                            == DisplayRegion.panadapterRegion
-                        || mouseRegion
-                            == DisplayRegion.waterfallRegion)
+                    if (mouseRegion == DisplayRegion.panadapterRegion || mouseRegion == DisplayRegion.waterfallRegion)
                     {
                         spectrum_drag_last_x = e.X;
 
-                        // if (!mox)
+                        //if (!mox)
                         //{
-                        //     switch (CurrentDisplayMode)
-                        //     {
-                        //         case DisplayMode.PANADAPTER:
-                        //             if
-                        //             (picDisplay.AGCKnee.Contains(e.X,
-                        //             e.Y) && show_agc)
-                        //             {
-                        //                 agc_knee_drag = true;
-                        //                 Cursor = grabbing;//
-                        //                 Cursors.HSplit;
-                        //                 //
-                        //                 Debug.WriteLine("AGCKnee
-                        //                 Y:" +
-                        //                 picDisplay.AGCKnee.Y);
+                        //    switch (CurrentDisplayMode)
+                        //    {
+                        //        case DisplayMode.PANADAPTER:
+                        //            if (picDisplay.AGCKnee.Contains(e.X, e.Y) && show_agc)
+                        //            {
+                        //                agc_knee_drag = true;
+                        //                Cursor = grabbing;// Cursors.HSplit;
+                        //                // Debug.WriteLine("AGCKnee Y:" + picDisplay.AGCKnee.Y);
 
                         //            }
                         //            else
-                        //                if
-                        //                (picDisplay.AGCHang.Contains(e.X,
-                        //                e.Y) && show_agc)
+                        //                if (picDisplay.AGCHang.Contains(e.X, e.Y) && show_agc)
                         //                {
                         //                    agc_hang_drag = true;
-                        //                    Cursor = grabbing; //
-                        //                    Cursors.HSplit;
-                        //                    //
-                        //                    Debug.WriteLine("AGCKnee
-                        //                    Y:" +
-                        //                    picDisplay.AGCKnee.Y);
+                        //                    Cursor = grabbing; // Cursors.HSplit;
+                        //                    // Debug.WriteLine("AGCKnee Y:" + picDisplay.AGCKnee.Y);
 
                         //                }
                         //                else
                         //                {
                         //                    agc_knee_drag = false;
                         //                    agc_hang_drag = false;
-                        //                    // Cursor =
-                        //                    Cursors.Cross;
+                        //                    // Cursor = Cursors.Cross;
                         //                }
                         //            // }
                         //            break;
                         //    }
                         //}
 
-                        // if (//!near_notch &&
-                        //! agc_knee_drag &&
-                        //! agc_hang_drag &&
-                        //! gridminmaxadjust &&
-                        //! gridmaxadjust &&
-                        //    (current_click_tune_mode !=
-                        //    ClickTuneMode.Off ||
-                        //    click_tune_display))
+                        //if (//!near_notch &&
+                        //!agc_knee_drag &&
+                        //!agc_hang_drag &&
+                        //!gridminmaxadjust &&
+                        //!gridmaxadjust &&
+                        //    (current_click_tune_mode != ClickTuneMode.Off || click_tune_display))
                         //{
                         //    switch (picDisplay.CurrentDisplayMode)
                         //    {
@@ -5305,119 +4197,79 @@ namespace Thetis
                         //            float x = PixelToHz(e.X);
                         //            double freq;
                         //            if (!click_tune_display)
-                        //                freq =
-                        //                double.Parse(txtVFOAFreq.Text)
-                        //                + (double)x * 0.0000010;
-                        //                // click tune w/x-hairs
-                        //            else if (click_tune_drag) freq
-                        //            = center_frequency + (double)x
-                        //            * 0.0000010; // click tune &
-                        //            drag vfo else freq =
-                        //            double.Parse(txtVFOAFreq.Text);
-                        //            // click & drag vfo
+                        //                freq = double.Parse(txtVFOAFreq.Text) + (double)x * 0.0000010; // click tune w/x-hairs
+                        //            else if (click_tune_drag) freq = center_frequency + (double)x * 0.0000010; // click tune & drag vfo
+                        //            else freq = double.Parse(txtVFOAFreq.Text); // click & drag vfo
 
                         //            switch (rx1_dsp_mode)
                         //            {
                         //                case DSPMode.CWL:
-                        //                    freq +=
-                        //                    (float)cw_pitch *
-                        //                    0.0000010; break;
+                        //                    freq += (float)cw_pitch * 0.0000010;
+                        //                    break;
                         //                case DSPMode.CWU:
-                        //                    freq -=
-                        //                    (float)cw_pitch *
-                        //                    0.0000010; break;
+                        //                    freq -= (float)cw_pitch * 0.0000010;
+                        //                    break;
                         //                case DSPMode.DIGL:
-                        //                    if (!ClickTuneFilter)
-                        //                    freq +=
-                        //                    (float)digl_click_tune_offset
-                        //                    * 0.0000010; break;
+                        //                    if (!ClickTuneFilter) freq += (float)digl_click_tune_offset * 0.0000010;
+                        //                    break;
                         //                case DSPMode.DIGU:
-                        //                    if (!ClickTuneFilter)
-                        //                    freq -=
-                        //                    (float)digu_click_tune_offset
-                        //                    * 0.0000010; break;
+                        //                    if (!ClickTuneFilter) freq -= (float)digu_click_tune_offset * 0.0000010;
+                        //                    break;
                         //            }
 
                         //            if (snap_to_click_tuning &&
-                        //                 (current_click_tune_mode
-                        //                 != ClickTuneMode.Off ||
-                        //                 click_tune_drag) &&
-                        //                rx1_dsp_mode !=
-                        //                DSPMode.CWL &&
-                        //                rx1_dsp_mode !=
-                        //                DSPMode.CWU &&
-                        //                rx1_dsp_mode !=
-                        //                DSPMode.DIGL &&
-                        //                rx1_dsp_mode !=
-                        //                DSPMode.DIGU &&
-                        //                Audio.WavePlayback ==
-                        //                false)
+                        //                 (current_click_tune_mode != ClickTuneMode.Off || click_tune_drag) &&
+                        //                rx1_dsp_mode != DSPMode.CWL &&
+                        //                rx1_dsp_mode != DSPMode.CWU &&
+                        //                rx1_dsp_mode != DSPMode.DIGL &&
+                        //                rx1_dsp_mode != DSPMode.DIGU &&
+                        //                Audio.WavePlayback == false)
                         //            {
-                        //                // round freq to the
-                        //                nearest tuning step long f
-                        //                = (long)(freq *
-                        //                1000000.0); int mult =
-                        //                CurrentTuneStepHz;
-                        //                //(int)(wheel_tune_list[wheel_tune_index]
-                        //                * 1000000.0); if (f % mult
-                        //                > mult / 2) f += (mult - f
-                        //                % mult); else f -= f %
-                        //                mult; freq = (double)f *
-                        //                0.0000010;
+                        //                // round freq to the nearest tuning step
+                        //                long f = (long)(freq * 1000000.0);
+                        //                int mult = CurrentTuneStepHz; //(int)(wheel_tune_list[wheel_tune_index] * 1000000.0);
+                        //                if (f % mult > mult / 2) f += (mult - f % mult);
+                        //                else f -= f % mult;
+                        //                freq = (double)f * 0.0000010;
                         //            }
                         //            // }
 
                         //            if (click_tune_display)
                         //            {
-                        //                // spectrum_drag_last_x =
-                        //                e.X;
+                        //                // spectrum_drag_last_x = e.X;
 
-                        //                //if (rx2_enabled && e.Y >
-                        //                picDisplay.Height / 2)
+                        //                //if (rx2_enabled && e.Y > picDisplay.Height / 2)
                         //                //{
-                        //                //    spectrum_drag_last_x
-                        //                = e.X;
-                        //                //    if
-                        //                (click_tune_rx2_display)
+                        //                //    spectrum_drag_last_x = e.X;
+                        //                //    if (click_tune_rx2_display)
                         //                //    {
-                        //                //        if (e.Y <
-                        //                ((picDisplay.Height / 2) +
-                        //                15))
+                        //                //        if (e.Y < ((picDisplay.Height / 2) + 15))
                         //                //        {
-                        //                // rx2_spectrum_tune_drag
-                        //                = true;
-                        //                //            Cursor =
-                        //                Cursors.SizeWE;
+                        //                //            rx2_spectrum_tune_drag = true;
+                        //                //            Cursor = Cursors.SizeWE;
                         //                //        }
                         //                //        else
                         //                //        {
-                        //                // rx2_click_tune_drag =
-                        //                true;
-                        //                //            Cursor =
-                        //                grabbing;
+                        //                //            rx2_click_tune_drag = true;
+                        //                //            Cursor = grabbing;
                         //                //        }
                         //                //    }
-                        //                //    else
-                        //                rx2_spectrum_drag = true;
+                        //                //    else rx2_spectrum_drag = true;
                         //                //}
                         //                //else
                         //                //{
-                        //                //  spectrum_drag_last_x =
-                        //                e.X; // change to freq
-                        //                rectangle
+                        //                //  spectrum_drag_last_x = e.X; // change to freq rectangle
                         //                // if (click_tune_display)
                         //                // {
                         //                //  if (e.Y < 15)
                         //                //  {
-                        //                // rx1_spectrum_tune_drag
-                        //                = true;
-                        //                //     Cursor =
-                        //                Cursors.SizeWE;
+                        //                //     rx1_spectrum_tune_drag = true;
+                        //                //     Cursor = Cursors.SizeWE;
                         //                //  }
                         //                // else
                         //                //  {
-                        //                rx1_click_tune_drag =
-                        //                true; Cursor = grabbing;
+                        //                rx1_click_tune_drag = true;
+                        //                Cursor = grabbing;
                         //                //  }
                         //                // }
 
@@ -5428,107 +4280,68 @@ namespace Thetis
                         //            //spectrum_drag_last_x = e.X;
                         //            //if (click_tune_display)
                         //            //{
-                        //            //    if
-                        //            (!rx1_spectrum_tune_drag)
+                        //            //    if (!rx1_spectrum_tune_drag)
                         //            //    {
-                        //            //        rx1_click_tune_drag
-                        //            = true;
+                        //            //        rx1_click_tune_drag = true;
                         //            //        Cursor = grabbing;
                         //            //    }
                         //            //}
-                        //            //else rx1_spectrum_drag =
-                        //            true;
+                        //            //else rx1_spectrum_drag = true;
 
                         //            if (!rx1_spectrum_drag)
                         //            {
                         //                if (!rx2_enabled)
                         //                {
-                        //                    if
-                        //                    (!rx1_spectrum_tune_drag)
+                        //                    if (!rx1_spectrum_tune_drag)
                         //                    {
-                        //                        if
-                        //                        (current_click_tune_mode
-                        //                        ==
-                        //                        ClickTuneMode.VFOA
-                        //                        ||
-                        //                            (click_tune_display
-                        //                            &&
-                        //                            current_click_tune_mode
-                        //                            !=
-                        //                            ClickTuneMode.VFOB))
+                        //                        if (current_click_tune_mode == ClickTuneMode.VFOA ||
+                        //                            (click_tune_display && current_click_tune_mode != ClickTuneMode.VFOB))
                         //                        {
-                        //                            VFOAFreq =
-                        //                            Math.Round(freq,
-                        //                            6);
+                        //                            VFOAFreq = Math.Round(freq, 6);
                         //                        }
                         //                        else
-                        //                            VFOBFreq =
-                        //                            Math.Round(freq,
-                        //                            6);
+                        //                            VFOBFreq = Math.Round(freq, 6);
                         //                    }
                         //                }
                         //                else
                         //                {
 
-                        //                    if
-                        //                    (current_click_tune_mode
-                        //                    == ClickTuneMode.VFOB
-                        //                    && // red cross hairs
-                        //                        (chkVFOSplit.Checked
-                        //                        ||
-                        //                        chkEnableMultiRX.Checked))
+                        //                    if (current_click_tune_mode == ClickTuneMode.VFOB && // red cross hairs
+                        //                        (chkVFOSplit.Checked || chkEnableMultiRX.Checked))
                         //                    {
-                        //                        VFOASubFreq =
-                        //                        Math.Round(freq,
-                        //                        6);
+                        //                        VFOASubFreq = Math.Round(freq, 6);
                         //                    }
                         //                    else
                         //                    {
-                        //                        if (e.Y <=
-                        //                        picDisplay.Height
-                        //                        / 2)
+                        //                        if (e.Y <= picDisplay.Height / 2)
                         //                        {
-                        //                            if
-                        //                            (!rx1_spectrum_tune_drag)
-                        //                                VFOAFreq =
-                        //                                Math.Round(freq,
-                        //                                6);
+                        //                            if (!rx1_spectrum_tune_drag)
+                        //                                VFOAFreq = Math.Round(freq, 6);
                         //                        }
 
                         //                        else
                         //                        {
-                        //                            if
-                        //                            (!rx2_spectrum_tune_drag)
-                        //                                VFOBFreq =
-                        //                                Math.Round(freq,
-                        //                                6);
+                        //                            if (!rx2_spectrum_tune_drag)
+                        //                                VFOBFreq = Math.Round(freq, 6);
                         //                        }
                         //                    }
                         //                }
                         //            }
 
-                        //            if (!chkMOX.Checked &&
-                        //            (chkRIT.Checked &&
-                        //            current_click_tune_mode ==
-                        //            ClickTuneMode.VFOA))
+                        //            if (!chkMOX.Checked && (chkRIT.Checked && current_click_tune_mode == ClickTuneMode.VFOA))
                         //                udRIT.Value = 0;
-                        //            else if (chkMOX.Checked &&
-                        //            chkXIT.Checked &&
-                        //            current_click_tune_mode ==
-                        //            ClickTuneMode.VFOB)
+                        //            else if (chkMOX.Checked && chkXIT.Checked && current_click_tune_mode == ClickTuneMode.VFOB)
                         //                udXIT.Value = 0;
                         //            break;
                         //        default:
                         //            break;
                         //    }
                         //}
-                        // else if (//!near_notch &&
+                        //else if (//!near_notch &&
                         //      !agc_knee_drag &&
                         //      !agc_hang_drag &&
                         //      !gridminmaxadjust &&
-                        //      !gridmaxadjust)//
-                        //      current_click_tune_mode ==
-                        //      ClickTuneMode.Off)
+                        //      !gridmaxadjust)// current_click_tune_mode == ClickTuneMode.Off) 
                         //{
                         //    switch (picDisplay.CurrentDisplayMode)
                         //    {
@@ -5540,79 +4353,45 @@ namespace Thetis
                         //            int vfoa_sub_x = 0;
                         //            int vfoa_sub_low_x = 0;
                         //            int vfoa_sub_high_x = 0;
-                        //            if (mox)// &&
-                        //            chkVFOATX.Checked)
+                        //            if (mox)// && chkVFOATX.Checked)
                         //            {
-                        //                low_x =
-                        //                HzToPixel(radio.GetDSPTX(0).TXFilterLow);
-                        //                high_x =
-                        //                HzToPixel(radio.GetDSPTX(0).TXFilterHigh);
+                        //                low_x = HzToPixel(radio.GetDSPTX(0).TXFilterLow);
+                        //                high_x = HzToPixel(radio.GetDSPTX(0).TXFilterHigh);
                         //            }
-                        //            else if (rx1_dsp_mode !=
-                        //            DSPMode.DRM)
+                        //            else if (rx1_dsp_mode != DSPMode.DRM)
                         //            {
-                        //                low_x =
-                        //                HzToPixel(radio.GetDSPRX(0,
-                        //                0).RXFilterLow); high_x =
-                        //                HzToPixel(radio.GetDSPRX(0,
-                        //                0).RXFilterHigh);
+                        //                low_x = HzToPixel(radio.GetDSPRX(0, 0).RXFilterLow);
+                        //                high_x = HzToPixel(radio.GetDSPRX(0, 0).RXFilterHigh);
                         //            }
 
-                        //            if (chkEnableMultiRX.Checked
-                        //            && !mox)
+                        //            if (chkEnableMultiRX.Checked && !mox)
                         //            {
                         //                if (!rx2_enabled)
                         //                {
-                        //                    vfoa_sub_x =
-                        //                    HzToPixel((float)((VFOBFreq
-                        //                    - VFOAFreq) *
-                        //                    1000000.0));
-                        //                    vfoa_sub_low_x =
-                        //                    vfoa_sub_x +
-                        //                    (HzToPixel((int)udFilterLow.Value)
-                        //                    - HzToPixel(0.0f));
-                        //                    vfoa_sub_high_x =
-                        //                    vfoa_sub_x +
-                        //                    (HzToPixel((int)udFilterHigh.Value)
-                        //                    - HzToPixel(0.0f));
+                        //                    vfoa_sub_x = HzToPixel((float)((VFOBFreq - VFOAFreq) * 1000000.0));
+                        //                    vfoa_sub_low_x = vfoa_sub_x + (HzToPixel((int)udFilterLow.Value) - HzToPixel(0.0f));
+                        //                    vfoa_sub_high_x = vfoa_sub_x + (HzToPixel((int)udFilterHigh.Value) - HzToPixel(0.0f));
                         //                }
                         //                else
                         //                {
-                        //                    vfoa_sub_x =
-                        //                    HzToPixel((float)((VFOASubFreq
-                        //                    - VFOAFreq) *
-                        //                    1000000.0));
-                        //                    vfoa_sub_low_x =
-                        //                    vfoa_sub_x +
-                        //                    (HzToPixel((int)udFilterLow.Value)
-                        //                    - HzToPixel(0.0f));
-                        //                    vfoa_sub_high_x =
-                        //                    vfoa_sub_x +
-                        //                    (HzToPixel((int)udFilterHigh.Value)
-                        //                    - HzToPixel(0.0f));
+                        //                    vfoa_sub_x = HzToPixel((float)((VFOASubFreq - VFOAFreq) * 1000000.0));
+                        //                    vfoa_sub_low_x = vfoa_sub_x + (HzToPixel((int)udFilterLow.Value) - HzToPixel(0.0f));
+                        //                    vfoa_sub_high_x = vfoa_sub_x + (HzToPixel((int)udFilterHigh.Value) - HzToPixel(0.0f));
                         //                }
                         //            }
-                        //              if (chkEnableMultiRX.Checked
-                        //              && !mox &&
-                        //            (e.X > vfoa_sub_low_x - 3 &&
-                        //            e.X < vfoa_sub_high_x + 3))
+                        //              if (chkEnableMultiRX.Checked && !mox &&
+                        //            (e.X > vfoa_sub_low_x - 3 && e.X < vfoa_sub_high_x + 3))
                         //            {
                         //                sub_drag_last_x = e.X;
-                        //                if (rx2_enabled)
-                        //                sub_drag_start_freq =
-                        //                VFOASubFreq; else
-                        //                sub_drag_start_freq =
-                        //                VFOBFreq; rx1_sub_drag =
-                        //                true;
+                        //                if (rx2_enabled) sub_drag_start_freq = VFOASubFreq;
+                        //                else sub_drag_start_freq = VFOBFreq;
+                        //                rx1_sub_drag = true;
                         //            }
                         //            else
                         //            {
-                        //                spectrum_drag_last_x =
-                        //                e.X; if (rx2_enabled &&
-                        //                e.Y > picDisplay.Height /
-                        //                2) rx2_spectrum_drag =
-                        //                true; else
-                        //                rx1_spectrum_drag = true;
+                        //                spectrum_drag_last_x = e.X;
+                        //                if (rx2_enabled && e.Y > picDisplay.Height / 2) rx2_spectrum_drag = true;
+                        //                else rx1_spectrum_drag = true;
                         //            }
 
                         //            break;
@@ -5622,121 +4401,100 @@ namespace Thetis
 
                     break;
                 case MouseButtons.Right:
-                    // double cfreq;
+                    //double cfreq;
 
-                    // cfreq = VFOAFreq;
-                    // switch (rx1_dsp_mode)
+                    //cfreq = VFOAFreq;
+                    //switch (rx1_dsp_mode)
                     //{
-                    //     case DSPMode.CWU: cfreq -= cw_pitch *
-                    //     1e-6; break; case DSPMode.CWL: cfreq +=
-                    //     cw_pitch * 1e-6; break;
-                    // }
+                    //    case DSPMode.CWU: cfreq -= cw_pitch * 1e-6; break;
+                    //    case DSPMode.CWL: cfreq += cw_pitch * 1e-6; break;
+                    //}
                     ////  }
 
-                    // int clow = (int)PixelToHz(e.X - 3);
-                    // int chigh = (int)PixelToHz(e.X + 3);
+                    //int clow = (int)PixelToHz(e.X - 3);
+                    //int chigh = (int)PixelToHz(e.X + 3);
 
                     //// NEW !!!!
-                    // double Freq = double.Parse(txtVFOAFreq.Text);
-                    // if (click_tune_display)    // Correct Notch
-                    // frequency when CTUN on -G3OQD
-                    //     cfreq = cfreq + (center_frequency -
-                    //     Freq);
+                    //double Freq = double.Parse(txtVFOAFreq.Text);
+                    //if (click_tune_display)    // Correct Notch frequency when CTUN on -G3OQD
+                    //    cfreq = cfreq + (center_frequency - Freq);
 
-                    if (mouseRegion
-                        == DisplayRegion.dBmScalePanadapterRegion)
+                    if (mouseRegion == DisplayRegion.dBmScalePanadapterRegion)
                     {
-                        // if (!mox)
-                        // {
-                        grid_minmax_drag_start_point
-                            = new Point(e.X, e.Y);
-                        gridmaxadjust = true;
-                        // tx1_grid_adjust = false;
-                        grid_minmax_max_y
-                            = (decimal)SpectrumGridMax;
-                        // Cursor = grabbing;
-                        // }
-                        // else if (mox)
+                       // if (!mox)
+                       // {
+                            grid_minmax_drag_start_point = new Point(e.X, e.Y);
+                            gridmaxadjust = true;
+                           // tx1_grid_adjust = false;
+                            grid_minmax_max_y = (decimal)SpectrumGridMax;
+                           // Cursor = grabbing;
+                       // }
+                        //else if (mox)
                         //{
-                        //    if ((rx1_grid_adjust &&
-                        //    !picDisplay.TXOnVFOB) ||
-                        //        (rx1_grid_adjust &&
-                        //        picDisplay.TXOnVFOB &&
-                        //        !RX2Enabled))
+                        //    if ((rx1_grid_adjust && !picDisplay.TXOnVFOB) ||
+                        //        (rx1_grid_adjust && picDisplay.TXOnVFOB && !RX2Enabled))
                         //    {
-                        //        grid_minmax_drag_start_point = new
-                        //        Point(e.X, e.Y); gridmaxadjust =
-                        //        true; tx1_grid_adjust = true;
-                        //        grid_minmax_max_y =
-                        //        (decimal)picDisplay.TXSpectrumGridMax;
+                        //        grid_minmax_drag_start_point = new Point(e.X, e.Y);
+                        //        gridmaxadjust = true;
+                        //        tx1_grid_adjust = true;
+                        //        grid_minmax_max_y = (decimal)picDisplay.TXSpectrumGridMax;
                         //        Cursor = grabbing;
                         //    }
                         //    else if (picDisplay.TXOnVFOB)
                         //    {
-                        //        grid_minmax_drag_start_point = new
-                        //        Point(e.X, e.Y); gridmaxadjust =
-                        //        true; tx1_grid_adjust = false;
-                        //        grid_minmax_max_y =
-                        //        (decimal)picDisplay.SpectrumGridMax;
+                        //        grid_minmax_drag_start_point = new Point(e.X, e.Y);
+                        //        gridmaxadjust = true;
+                        //        tx1_grid_adjust = false;
+                        //        grid_minmax_max_y = (decimal)picDisplay.SpectrumGridMax;
                         //        Cursor = grabbing;
                         //    }
                         //}
                     }
-                    else if (mouseRegion
-                        == DisplayRegion
-                               .freqScalePanadapterRegion)
+                    else if (mouseRegion == DisplayRegion.freqScalePanadapterRegion)
                     {
-                        // CurrentClickTuneMode = ClickTuneMode.Off;
+                       // CurrentClickTuneMode = ClickTuneMode.Off;
                     }
-                    // else
+                    //else
                     //{
-                    //     switch (current_click_tune_mode)
-                    //     {
-                    //         case ClickTuneMode.Off:
-                    //             CurrentClickTuneMode =
-                    //             ClickTuneMode.VFOA; break;
-                    //         case ClickTuneMode.VFOA:
-                    //             if (chkVFOSplit.Checked ||
-                    //             chkEnableMultiRX.Checked)
-                    //                 CurrentClickTuneMode =
-                    //                 ClickTuneMode.VFOB;
-                    //             else
-                    //                 CurrentClickTuneMode =
-                    //                 ClickTuneMode.Off;
-                    //             break;
-                    //         case ClickTuneMode.VFOB:
-                    //             CurrentClickTuneMode =
-                    //             ClickTuneMode.Off; break;
-                    //     }
-                    // }
+                    //    switch (current_click_tune_mode)
+                    //    {
+                    //        case ClickTuneMode.Off:
+                    //            CurrentClickTuneMode = ClickTuneMode.VFOA;
+                    //            break;
+                    //        case ClickTuneMode.VFOA:
+                    //            if (chkVFOSplit.Checked || chkEnableMultiRX.Checked)
+                    //                CurrentClickTuneMode = ClickTuneMode.VFOB;
+                    //            else
+                    //                CurrentClickTuneMode = ClickTuneMode.Off;
+                    //            break;
+                    //        case ClickTuneMode.VFOB:
+                    //            CurrentClickTuneMode = ClickTuneMode.Off;
+                    //            break;
+                    //    }
+                    //}
                     break;
-                    // case MouseButtons.Middle:
-                    //     if (mouse_tune_step)
-                    //     {
-                    //         if (shift_down) ChangeTuneStepDown();
-                    //         else ChangeTuneStepUp();
-                    //     }
-                    //     break;
+                //case MouseButtons.Middle:
+                //    if (mouse_tune_step)
+                //    {
+                //        if (shift_down) ChangeTuneStepDown();
+                //        else ChangeTuneStepUp();
+                //    }
+                //    break;
             }
         }
 
-        /********************************************************************************************************
-         *																										*
-         *											Display
-         *Code
-         **
-         *																										*
-         ********************************************************************************************************/
 
-        //  private int dispid;     // the display id
-        //  would be passed-in as a parameter if the
-        //  display code is put in a separate class
+/********************************************************************************************************
+ *																										*
+ *											Display Code												*
+ *																										*
+ ********************************************************************************************************/
+
+      //  private int dispid;     // the display id would be passed-in as a parameter if the display code is put in a separate class
         // example:  See above 'public rxa (int i)'
 
-        private int sample_rate = 192000;
-        public int
-            SampleRate // set from incoming sample rate
-                       // selection for this receiver
+        private int sample_rate = 192000; 
+        public int SampleRate                           // set from incoming sample rate selection for this receiver
         {
             get { return sample_rate; }
             set
@@ -5746,11 +4504,8 @@ namespace Thetis
             }
         }
 
-        private int data_type
-            = 1; // 1 => Complex; 0 => Real
-        public int
-            DataType // initialized depending upon the
-                     // use of this display
+        private int data_type = 1;                      // 1 => Complex; 0 => Real
+        public int DataType                             // initialized depending upon the use of this display
         {
             get { return data_type; }
             set
@@ -5760,7 +4515,7 @@ namespace Thetis
             }
         }
 
-        private int fft_size = 4096; // 16384;
+        private int fft_size = 4096; //16384;
         public int FFTSize
         {
             get { return fft_size; }
@@ -5772,8 +4527,7 @@ namespace Thetis
         }
 
         private int window_type = 6;
-        public int
-            WindowType // set from Window Type control
+        public int WindowType                           // set from Window Type control
         {
             get { return window_type; }
             set
@@ -5784,8 +4538,7 @@ namespace Thetis
         }
 
         private double kaiser_pi = 14.0;
-        public double
-            KaiserPi // set from Kaiser PiAlpha control
+        public double KaiserPi                          // set from Kaiser PiAlpha control
         {
             get { return kaiser_pi; }
             set
@@ -5796,9 +4549,7 @@ namespace Thetis
         }
 
         private int pixels = 2048;
-        public int
-            Pixels // display code must set the number
-                   // of pixel values it needs
+        public int Pixels                               // display code must set the number of pixel values it needs
         {
             get { return pixels; }
             set
@@ -5809,50 +4560,36 @@ namespace Thetis
         }
 
         private int avm = 0;
-        private bool average_on
-            = true; // true if the Average button is
-                    // depressed
-        public bool AverageOn // set from Average button
+        private bool average_on = true;				// true if the Average button is depressed
+        public bool AverageOn                           // set from Average button
         {
             get { return average_on; }
             set
             {
                 average_on = value;
-                if (peak_on)
-                    avm = -1; // -1 => peak_detect
-                else if (average_on)
-                    avm = 6; //  6 => low_noise_floor,
-                             //  time_weighted, log_data
-                else
-                    avm = 0; //  0 => averaging & peak_detect are
-                             //  both OFF
+                if (peak_on) avm = -1;                  // -1 => peak_detect
+                else if (average_on) avm = 6;           //  6 => low_noise_floor, time_weighted, log_data
+                else avm = 0;                           //  0 => averaging & peak_detect are both OFF
                 initAnalyzer();
             }
         }
 
-        private bool peak_on
-            = false; // true if the Peak button is
-                     // depressed
-        public bool PeakOn // set from Peak button
+        private bool peak_on = false;					// true if the Peak button is depressed
+        public bool PeakOn                              // set from Peak button
         {
             get { return peak_on; }
             set
             {
                 peak_on = value;
-                if (peak_on)
-                    avm = -1;
-                else if (average_on)
-                    avm = 6;
-                else
-                    avm = 0;
+                if (peak_on) avm = -1;
+                else if (average_on) avm = 6;
+                else avm = 0;
                 initAnalyzer();
             }
         }
 
-        private double tau
-            = 0.120; // time-constant for averaging
-        public double AvTau // set from Averaging Time
-                            // Constant control
+        private double tau = 0.120;                     // time-constant for averaging
+        public double AvTau                             // set from Averaging Time Constant control
         {
             get { return tau; }
             set
@@ -5863,8 +4600,7 @@ namespace Thetis
         }
 
         private int frame_rate = 15;
-        public int
-            FrameRate // set from Frame Rate control
+        public int FrameRate                            // set from Frame Rate control
         {
             get { return frame_rate; }
             set
@@ -5874,10 +4610,8 @@ namespace Thetis
             }
         }
 
-        private double z_factor
-            = 0.5; // range is 0.0 to 1.0
-        public double
-            ZoomFactor // set by Zoom Slider position
+        private double z_factor = 0.5;                  // range is 0.0 to 1.0
+        public double ZoomFactor                        // set by Zoom Slider position
         {
             get { return z_factor; }
             set
@@ -5890,10 +4624,8 @@ namespace Thetis
             }
         }
 
-        private double p_slider
-            = 0.5; // range is 0.0 to 1.0
-        public double
-            PanSlider // set by Pan Slider position
+        private double p_slider = 0.5;                  // range is 0.0 to 1.0
+        public double PanSlider                         // set by Pan Slider position
         {
             get { return p_slider; }
             set
@@ -5904,8 +4636,7 @@ namespace Thetis
         }
 
         private double freq_offset = 0.0;
-        public double
-            FreqOffset // set to 12000.0 for DRM mode
+        public double FreqOffset                        // set to 12000.0 for DRM mode
         {
             get { return freq_offset; }
             set
@@ -5916,25 +4647,21 @@ namespace Thetis
         }
 
         private int low_freq;
-        public int LowFreq // get the lowest freq that's
-                           // being displayed (relative
-                           // to center = 0)
+        public int LowFreq                              // get the lowest freq that's being displayed (relative to center = 0)
         {
             get { return low_freq; }
             set { low_freq = value; }
         }
 
         private int high_freq;
-        public int HighFreq // get the highest freq
-                            // that's being displayed
-                            // (relative to center = 0)
+        public int HighFreq                             // get the highest freq that's being displayed (relative to center = 0)
         {
             get { return high_freq; }
             set { high_freq = value; }
         }
 
         private int display_id;
-        public int DisplayID
+        public int DisplayID                             
         {
             get { return display_id; }
             set { display_id = value; }
@@ -5945,50 +4672,36 @@ namespace Thetis
         public void initAnalyzer()
         {
             if (!init) return;
-            // dispid = stid;      // eliminate this line if
-            // the display code is in a separate class
+            //dispid = stid;      // eliminate this line if the display code is in a separate class
 
             const double KEEP_TIME = 0.1;
 
-            // no spur elimination => only one spur_elim_fft
-            // and it's spectrum is not flipped
+            // no spur elimination => only one spur_elim_fft and it's spectrum is not flipped
             int[] flip = { 0 };
-            GCHandle handle
-                = GCHandle.Alloc(flip, GCHandleType.Pinned);
+            GCHandle handle = GCHandle.Alloc(flip, GCHandleType.Pinned);
             IntPtr h_flip = handle.AddrOfPinnedObject();
 
-            // compute multiplier for weighted averaging
-            double avb
-                = Math.Exp(-1.0 / (frame_rate * tau));
+            //compute multiplier for weighted averaging
+            double avb = Math.Exp(-1.0 / (frame_rate * tau));
 
-            int overlap = 0, clip = 0, span_clip_l = 0,
-                span_clip_h = 0, max_w = 0;
+            int overlap = 0, clip = 0, span_clip_l = 0, span_clip_h = 0, max_w = 0;
             switch (data_type)
             {
                 case 0: // real samples
 
                     break;
                 case 1: // complex samples
-                        // fraction of the spectrum to clip off each
-                        // side of each sub-span
+                    // fraction of the spectrum to clip off each side of each sub-span
                     const double CLIP_FRACTION = 0.017;
 
-                    // set overlap as needed to achieve the desired
-                    // frame_rate
-                    overlap = (int)Math.Max(0.0,
-                        Math.Ceiling(fft_size
-                            - (double)sample_rate
-                                / (double)frame_rate));
+                    // set overlap as needed to achieve the desired frame_rate
+                    overlap = (int)Math.Max(0.0, Math.Ceiling(fft_size - (double)sample_rate / (double)frame_rate));
 
-                    // clip is the number of bins to clip off each
-                    // side of each sub-span
-                    clip
-                        = (int)Math.Floor(CLIP_FRACTION * fft_size);
+                    // clip is the number of bins to clip off each side of each sub-span
+                    clip = (int)Math.Floor(CLIP_FRACTION * fft_size);
 
-                    // the amount of frequency in each fft bin (for
-                    // complex samples) is given by:
-                    double bin_width
-                        = (double)sample_rate / (double)fft_size;
+                    // the amount of frequency in each fft bin (for complex samples) is given by:
+                    double bin_width = (double)sample_rate / (double)fft_size;
 
                     // the number of useable bins
                     int bins = fft_size - 2 * clip;
@@ -5997,87 +4710,56 @@ namespace Thetis
                     double bw = bins * bin_width;
 
                     // apply log function to zoom slider value
-                    double zoom_slider
-                        = Math.Log10(9.0 * z_factor + 1.0);
+                    double zoom_slider = Math.Log10(9.0 * z_factor + 1.0);
 
-                    // limits how much you can zoom in; higher value
-                    // means you zoom more
+                    // limits how much you can zoom in; higher value means you zoom more
                     const double zoom_limit = 100.0;
 
                     // width = number of bins to use AFTER zooming
-                    int width = (int)(bins
-                        * (1.0
-                            - (1.0 - 1.0 / zoom_limit)
-                                * zoom_slider));
+                    int width = (int)(bins * (1.0 - (1.0 - 1.0 / zoom_limit) * zoom_slider));
 
-                    // FSCLIPL is 0 if pan_slider is 0; it's
-                    // bins-width if pan_slider is 1 FSCLIPH is
-                    // bins-width if pan_slider is 0; it's 0 if
-                    // pan_slider is 1
-                    span_clip_l = (int)Math.Floor(
-                        p_slider * (bins - width));
+                    // FSCLIPL is 0 if pan_slider is 0; it's bins-width if pan_slider is 1
+                    // FSCLIPH is bins-width if pan_slider is 0; it's 0 if pan_slider is 1
+                    span_clip_l = (int)Math.Floor(p_slider * (bins - width));
                     span_clip_h = bins - width - span_clip_l;
 
                     // apply any desired frequency offset
                     int bin_offset = (int)(freq_offset / bin_width);
-                    if ((span_clip_h -= bin_offset) < 0)
-                        span_clip_h = 0;
+                    if ((span_clip_h -= bin_offset) < 0) span_clip_h = 0;
                     span_clip_l = bins - width - span_clip_h;
 
-                    // the low and high frequencies that are being
-                    // displayed:
-                    low_freq = -(int)(0.5 * bw
-                        - (double)span_clip_l * bin_width
-                        + bin_width / 2.0);
-                    high_freq = +(int)(0.5 * bw
-                        - (double)span_clip_h * bin_width
-                        - bin_width / 2.0);
-                    // Note that the bin_width/2.0 factors are
-                    // included because the complex FFT has one more
-                    // negative output bin than positive output bin.
+                    // the low and high frequencies that are being displayed:
+                    low_freq = -(int)(0.5 * bw - (double)span_clip_l * bin_width + bin_width / 2.0);
+                    high_freq = +(int)(0.5 * bw - (double)span_clip_h * bin_width - bin_width / 2.0);
+                    // Note that the bin_width/2.0 factors are included because the complex FFT has one more negative output bin
+                    // than positive output bin.
 
                     // samples to keep for future display
-                    max_w = fft_size
-                        + (int)Math.Min(KEEP_TIME * sample_rate,
-                            KEEP_TIME * fft_size * frame_rate);
+                    max_w = fft_size + (int)Math.Min(KEEP_TIME * sample_rate, KEEP_TIME * fft_size * frame_rate);
                     break;
             }
 
-            SpecHPSDRDLL.SetAnalyzer(
-                display_id, // dispid,                    //
-                            // id of this display unit
-                1, // number of outputs for this display
-                1, // spur elimination FFTs:  not used for
-                   // simple console display
-                data_type, // 0 for real data, 1 for complex
-                           // data
-                h_flip, // no spur elimination:  only one
-                        // spur_elim_fft and it's spectrum
-                        // is not flipped
-                fft_size, // fft size
-                cmaster.GetBuffSize(
-                    sample_rate), // input buffer size
-                window_type, // window function type
-                kaiser_pi, // piAlpha value for Kaiser
-                           // window choice
-                overlap, // number of samples by which to
-                         // overlap successive frames
-                clip, // number of bins to clip from EACH
-                      // side
-                span_clip_l, // number of additional bins to
-                             // clip from LOW side
-                span_clip_h, // number of additional bins to
-                             // clip from HIGH side
-                pixels, // number of pixels to output
-                1, // stitches:  no display stitching used
-                0, // calibration_data_set:  not using
-                   // calibration
-                0.0, // span_min_freq:  not using
-                     // calibration
-                0.0, // span_max_freq:  not using
-                     // calibration
-                max_w); // samples to keep for future
-                        // display
+            SpecHPSDRDLL.SetAnalyzer(display_id, //dispid,                    // id of this display unit
+                        1,                                      // number of outputs for this display
+                        1,                                      // spur elimination FFTs:  not used for simple console display
+                        data_type,                              // 0 for real data, 1 for complex data
+                        h_flip,                                 // no spur elimination:  only one spur_elim_fft and it's spectrum is not flipped
+                        fft_size,                               // fft size
+                        cmaster.GetBuffSize(sample_rate),       // input buffer size
+                        window_type,                            // window function type
+                        kaiser_pi,                              // piAlpha value for Kaiser window choice
+                        overlap,                                // number of samples by which to overlap successive frames
+                        clip,                                   // number of bins to clip from EACH side
+                        span_clip_l,                            // number of additional bins to clip from LOW side
+                        span_clip_h,                            // number of additional bins to clip from HIGH side
+                        pixels,                                 // number of pixels to output
+                        1,                                      // stitches:  no display stitching used
+                        0,                                      // calibration_data_set:  not using calibration
+                        0.0,                                    // span_min_freq:  not using calibration
+                        0.0,                                    // span_max_freq:  not using calibration
+                        max_w);                                 // samples to keep for future display
+
+
         }
 
         #endregion
@@ -6085,6 +4767,6 @@ namespace Thetis
         #endregion
         #endregion
         #endregion
+
     }
 }
-#endif

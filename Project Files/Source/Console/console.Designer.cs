@@ -252,7 +252,7 @@
         private PanelTS panelRX2Filter;
         private PrettyTrackBar ptbDisplayPan;
         private PrettyTrackBar ptbDisplayZoom;
-        private PrettyTrackBar ptbAF;
+        public PrettyTrackBar ptbAF;
         private PrettyTrackBar ptbRF;
         private PrettyTrackBar ptbPWR;
         private PrettyTrackBar ptbSquelch;
@@ -893,6 +893,7 @@
             this.thetisOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabel_Volts = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Amps = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_TXInhibit = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_SeqWarning = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelRXAnt = new System.Windows.Forms.ToolStripDropDownButton();
             this.toolStripMenuItem20 = new System.Windows.Forms.ToolStripMenuItem();
@@ -1030,6 +1031,8 @@
             this.panelModeSpecificPhone = new System.Windows.Forms.PanelTS();
             this.labelTS2 = new System.Windows.Forms.LabelTS();
             this.lblPAProfile = new System.Windows.Forms.LabelTS();
+            this.labelTS4 = new System.Windows.Forms.LabelTS();
+            this.labelTS3 = new System.Windows.Forms.LabelTS();
             this.picNoiseGate = new System.Windows.Forms.PictureBox();
             this.lblNoiseGateVal = new System.Windows.Forms.LabelTS();
             this.ptbNoiseGate = new Thetis.PrettyTrackBar();
@@ -1042,8 +1045,6 @@
             this.ptbMic = new Thetis.PrettyTrackBar();
             this.lblMIC = new System.Windows.Forms.LabelTS();
             this.lblTransmitProfile = new System.Windows.Forms.LabelTS();
-            this.labelTS4 = new System.Windows.Forms.LabelTS();
-            this.labelTS3 = new System.Windows.Forms.LabelTS();
             this.panelModeSpecificDigital = new System.Windows.Forms.PanelTS();
             this.lblVACTXIndicator = new System.Windows.Forms.LabelTS();
             this.lblVACRXIndicator = new System.Windows.Forms.LabelTS();
@@ -1233,6 +1234,7 @@
             // 
             // timer_cpu_meter
             // 
+            this.timer_cpu_meter.Enabled = true;
             this.timer_cpu_meter.Interval = 1000;
             this.timer_cpu_meter.Tick += new System.EventHandler(this.timer_cpu_meter_Tick);
             // 
@@ -1397,8 +1399,10 @@
             this.chkRX2Squelch.FlatAppearance.BorderSize = 0;
             this.chkRX2Squelch.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkRX2Squelch.Name = "chkRX2Squelch";
+            this.chkRX2Squelch.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkRX2Squelch, resources.GetString("chkRX2Squelch.ToolTip"));
-            this.chkRX2Squelch.CheckedChanged += new System.EventHandler(this.chkRX2Squelch_CheckedChanged);
+            this.chkRX2Squelch.CheckStateChanged += new System.EventHandler(this.chkRX2Squelch_CheckStateChanged);
+            this.chkRX2Squelch.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2Squelch_MouseDown);
             // 
             // chkRX2Mute
             // 
@@ -2576,8 +2580,10 @@
             this.chkSquelch.FlatAppearance.BorderSize = 0;
             this.chkSquelch.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkSquelch.Name = "chkSquelch";
+            this.chkSquelch.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkSquelch, resources.GetString("chkSquelch.ToolTip"));
-            this.chkSquelch.CheckedChanged += new System.EventHandler(this.chkSquelch_CheckedChanged);
+            this.chkSquelch.CheckStateChanged += new System.EventHandler(this.chkSquelch_CheckStateChanged);
+            this.chkSquelch.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkSquelch_MouseDown);
             // 
             // btnMemoryQuickRestore
             // 
@@ -4905,6 +4911,7 @@
             this.toolStripDropDownButton_CPU,
             this.toolStripStatusLabel_Volts,
             this.toolStripStatusLabel_Amps,
+            this.toolStripStatusLabel_TXInhibit,
             this.toolStripStatusLabel_SeqWarning,
             this.toolStripStatusLabelRXAnt,
             this.toolStripStatusLabelTXAnt,
@@ -5140,6 +5147,14 @@
             this.toolStripStatusLabel_Amps.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.toolStripStatusLabel_Amps.Name = "toolStripStatusLabel_Amps";
             this.toolStripStatusLabel_Amps.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_TXInhibit
+            // 
+            this.toolStripStatusLabel_TXInhibit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_TXInhibit.Image = global::Thetis.Properties.Resources.stop;
+            resources.ApplyResources(this.toolStripStatusLabel_TXInhibit, "toolStripStatusLabel_TXInhibit");
+            this.toolStripStatusLabel_TXInhibit.Name = "toolStripStatusLabel_TXInhibit";
+            this.toolStripStatusLabel_TXInhibit.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             // 
             // toolStripStatusLabel_SeqWarning
             // 
@@ -5481,13 +5496,13 @@
             this.ptbRX2Squelch.LimitBarColor = System.Drawing.Color.Red;
             this.ptbRX2Squelch.LimitEnabled = false;
             this.ptbRX2Squelch.LimitValue = 0;
-            this.ptbRX2Squelch.Maximum = 0;
-            this.ptbRX2Squelch.Minimum = -160;
+            this.ptbRX2Squelch.Maximum = 100;
+            this.ptbRX2Squelch.Minimum = 0;
             this.ptbRX2Squelch.Name = "ptbRX2Squelch";
             this.ptbRX2Squelch.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.ptbRX2Squelch.SmallChange = 1;
             this.ptbRX2Squelch.TabStop = false;
-            this.ptbRX2Squelch.Value = -150;
+            this.ptbRX2Squelch.Value = 0;
             this.ptbRX2Squelch.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbRX2Squelch_Scroll);
             // 
             // panelRX2DSP
@@ -5550,6 +5565,7 @@
             this.panelButtonBar.Controls.Add(this.btnAndrBar2);
             this.panelButtonBar.Controls.Add(this.btnAndrBar1);
             this.panelButtonBar.Name = "panelButtonBar";
+            this.panelButtonBar.Layout += new System.Windows.Forms.LayoutEventHandler(this.panelButtonBar_Layout);
             // 
             // btnAndrBar8
             // 
@@ -6319,6 +6335,8 @@
             this.panelModeSpecificPhone.BackColor = System.Drawing.Color.Transparent;
             this.panelModeSpecificPhone.Controls.Add(this.labelTS2);
             this.panelModeSpecificPhone.Controls.Add(this.lblPAProfile);
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
             this.panelModeSpecificPhone.Controls.Add(this.udTXFilterLow);
             this.panelModeSpecificPhone.Controls.Add(this.udTXFilterHigh);
             this.panelModeSpecificPhone.Controls.Add(this.chkMicMute);
@@ -6342,8 +6360,6 @@
             this.panelModeSpecificPhone.Controls.Add(this.chkVOX);
             this.panelModeSpecificPhone.Controls.Add(this.chkNoiseGate);
             this.panelModeSpecificPhone.Controls.Add(this.comboAMTXProfile);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
             this.panelModeSpecificPhone.Name = "panelModeSpecificPhone";
             // 
             // labelTS2
@@ -6357,6 +6373,18 @@
             resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
             this.lblPAProfile.ForeColor = System.Drawing.Color.White;
             this.lblPAProfile.Name = "lblPAProfile";
+            // 
+            // labelTS4
+            // 
+            resources.ApplyResources(this.labelTS4, "labelTS4");
+            this.labelTS4.ForeColor = System.Drawing.Color.White;
+            this.labelTS4.Name = "labelTS4";
+            // 
+            // labelTS3
+            // 
+            resources.ApplyResources(this.labelTS3, "labelTS3");
+            this.labelTS3.ForeColor = System.Drawing.Color.White;
+            this.labelTS3.Name = "labelTS3";
             // 
             // picNoiseGate
             // 
@@ -6482,18 +6510,6 @@
             resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
             this.lblTransmitProfile.Name = "lblTransmitProfile";
             // 
-            // labelTS4
-            // 
-            resources.ApplyResources(this.labelTS4, "labelTS4");
-            this.labelTS4.ForeColor = System.Drawing.Color.White;
-            this.labelTS4.Name = "labelTS4";
-            // 
-            // labelTS3
-            // 
-            resources.ApplyResources(this.labelTS3, "labelTS3");
-            this.labelTS3.ForeColor = System.Drawing.Color.White;
-            this.labelTS3.Name = "labelTS3";
-            // 
             // panelModeSpecificDigital
             // 
             resources.ApplyResources(this.panelModeSpecificDigital, "panelModeSpecificDigital");
@@ -6594,7 +6610,6 @@
             this.infoBar.Button2MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2MouseDown);
             this.infoBar.SwapRedBlueChanged += new System.EventHandler(this.infoBar_SwapRedBlueChanged);
             this.infoBar.HideFeedbackChanged += new System.EventHandler(this.infoBar_HideFeedbackChanged);
-            this.infoBar.Load += new System.EventHandler(this.infoBar_Load);
             // 
             // lblDisplayZoom
             // 
@@ -6615,7 +6630,6 @@
             this.picDisplay.Cursor = System.Windows.Forms.Cursors.Default;
             this.picDisplay.Name = "picDisplay";
             this.picDisplay.TabStop = false;
-            this.picDisplay.Click += new System.EventHandler(this.picDisplay_Click);
             this.picDisplay.DoubleClick += new System.EventHandler(this.picDisplay_DoubleClick);
             this.picDisplay.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picDisplay_MouseDown);
             this.picDisplay.MouseLeave += new System.EventHandler(this.picDisplay_MouseLeave);
@@ -7182,13 +7196,13 @@
             this.ptbSquelch.LimitBarColor = System.Drawing.Color.Red;
             this.ptbSquelch.LimitEnabled = false;
             this.ptbSquelch.LimitValue = 0;
-            this.ptbSquelch.Maximum = 0;
-            this.ptbSquelch.Minimum = -160;
+            this.ptbSquelch.Maximum = 100;
+            this.ptbSquelch.Minimum = 0;
             this.ptbSquelch.Name = "ptbSquelch";
             this.ptbSquelch.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.ptbSquelch.SmallChange = 1;
             this.ptbSquelch.TabStop = false;
-            this.ptbSquelch.Value = -150;
+            this.ptbSquelch.Value = 0;
             this.ptbSquelch.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbSquelch_Scroll);
             // 
             // panelModeSpecificFM
@@ -7487,15 +7501,13 @@
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
             this.Controls.Add(this.panelModeSpecificCW);
+            this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";
-            this.Opacity = 0D;
             this.Activated += new System.EventHandler(this.Console_Activated);
             this.Closing += new System.ComponentModel.CancelEventHandler(this.Console_Closing);
             this.Deactivate += new System.EventHandler(this.Console_Deactivate);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Console_FormClosing);
-            this.Load += new System.EventHandler(this.Console_Load);
             this.Shown += new System.EventHandler(this.Console_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Console_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Console_KeyPress);
@@ -7748,6 +7760,7 @@
         private LabelTS labelTS2;
         private NumericUpDownTS nudPwrTemp;
         private NumericUpDownTS nudPwrTemp2;
+        private ToolStripStatusLabel toolStripStatusLabel_TXInhibit;
         private CheckBoxTS chkMNU;
     }
 }

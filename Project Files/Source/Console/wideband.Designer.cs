@@ -1,5 +1,4 @@
-﻿
-namespace Thetis
+﻿namespace Thetis
 {
     partial class wideband
     {

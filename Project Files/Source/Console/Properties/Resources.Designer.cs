@@ -163,29 +163,9 @@ namespace Thetis.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap brush {
+        internal static System.Drawing.Bitmap brush32border {
             get {
-                object obj = ResourceManager.GetObject("brush", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap brush16 {
-            get {
-                object obj = ResourceManager.GetObject("brush16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap brush32 {
-            get {
-                object obj = ResourceManager.GetObject("brush32", resourceCulture);
+                object obj = ResourceManager.GetObject("brush32border", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -286,6 +266,16 @@ namespace Thetis.Properties {
         internal static System.Drawing.Bitmap down_black {
             get {
                 object obj = ResourceManager.GetObject("down_black", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap gear {
+            get {
+                object obj = ResourceManager.GetObject("gear", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -443,19 +433,9 @@ namespace Thetis.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap pipette16 {
+        internal static System.Drawing.Bitmap pipette32border {
             get {
-                object obj = ResourceManager.GetObject("pipette16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap pipette32 {
-            get {
-                object obj = ResourceManager.GetObject("pipette32", resourceCulture);
+                object obj = ResourceManager.GetObject("pipette32border", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -556,6 +536,16 @@ namespace Thetis.Properties {
         internal static System.Drawing.Bitmap star {
             get {
                 object obj = ResourceManager.GetObject("star", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap stop {
+            get {
+                object obj = ResourceManager.GetObject("stop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -836,8 +826,7 @@ namespace Thetis.Properties {
         ///     padding-top: 10px;
         ///     margin-right: 10px;
         ///   }
-        ///   .freqPanel {    
-        ///     backg [rest of string was truncated]&quot;;.
+        ///   .f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string template {
             get {

@@ -19,8 +19,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <StartWorkingDirectory>
     </StartWorkingDirectory>
-    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
-    <StartArguments>-autostart</StartArguments>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+    <StartArguments>
+    </StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>

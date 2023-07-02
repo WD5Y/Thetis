@@ -36,7 +36,6 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
-    <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -74,23 +73,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\bin\$(LibrariesArchitecture)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\wdsp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\bin\$(LibrariesArchitecture)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\wdsp\</IntDir>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\bin\$(LibrariesArchitecture)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\wdsp\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\bin\$(LibrariesArchitecture)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)..\build\$(HPSDR_PLATFORM)\$(Configuration)\wdsp\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,18 +101,17 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>.;../../lib/portaudio_VS2008/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions) /Qpar-report:1 /Qvec-report:1</AdditionalOptions>
+      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
       <CompileAs>CompileAsC</CompileAs>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>../../lib/fftw_$(HPSDR_PLATFORM)/libfftw3-3.lib;avrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)..\bin\$(HPSDR_PLATFORM)\$(Configuration)\wdsp.dll</OutputFile>
       <AdditionalLibraryDirectories>../Debug;../../lib/portaudio_VS2008/build/msvc/Win32/Debug;../../lib/fftw_$(HPSDR_PLATFORM)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -124,27 +121,21 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>ARCH_64BIT;PMPA_OVERRIDE_C_MEMORY_FUNCTIONS;WIN32;_DEBUG;_WINDOWS;_USRDLL;WDSP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <AdditionalIncludeDirectories>../memory-pool-allocator;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;WDSP_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <AdditionalIncludeDirectories>.;../../lib/portaudio_VS2008/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions) /Qpar-report:1 /Qvec-report:1</AdditionalOptions>
+      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
       <CompileAs>CompileAsC</CompileAs>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>../../lib/fftw_$(HPSDR_PLATFORM)/libfftw3-3.lib;avrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)..\bin\$(HPSDR_PLATFORM)\$(Configuration)\wdsp.dll</OutputFile>
       <AdditionalLibraryDirectories>../../lib/fftw_$(HPSDR_PLATFORM)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -158,20 +149,20 @@
       <PreprocessorDefinitions>WIN32;_WIN32;_MBCS;NDEBUG;_WINDOWS;_USRDLL;SPECHPSDR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>.;../../lib/portaudio_VS2008/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsC</CompileAs>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions) /Qpar-report:1 /Qvec-report:1</AdditionalOptions>
+      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)..\bin\$(HPSDR_PLATFORM)\$(Configuration)\wdsp.dll</OutputFile>
       <AdditionalDependencies>../../lib/fftw_$(HPSDR_PLATFORM)/libfftw3-3.lib;avrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../Release;../../lib/fftw_$(HPSDR_PLATFORM)</AdditionalLibraryDirectories>
     </Link>
@@ -186,25 +177,22 @@
       <PreprocessorDefinitions>WIN32;_WIN32;_MBCS;NDEBUG;_WINDOWS;_USRDLL;SPECHPSDR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AdditionalIncludeDirectories>.;../../lib/portaudio_VS2008/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsC</CompileAs>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/D_ATL_XP_TARGETING %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ProgramDataBaseFileName>$(IntDir)</ProgramDataBaseFileName>
-      <FloatingPointModel>Fast</FloatingPointModel>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(SolutionDir)..\bin\$(HPSDR_PLATFORM)\$(Configuration)\wdsp.dll</OutputFile>
       <AdditionalDependencies>../../lib/fftw_$(HPSDR_PLATFORM)/libfftw3-3.lib;avrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../../lib/fftw_$(HPSDR_PLATFORM)</AdditionalLibraryDirectories>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -230,7 +218,6 @@
     <ClInclude Include="eq.h" />
     <ClInclude Include="channel.h" />
     <ClInclude Include="comm.h" />
-    <ClInclude Include="fastmath.h" />
     <ClInclude Include="fcurve.h" />
     <ClInclude Include="fftw3.h" />
     <ClInclude Include="fir.h" />
@@ -243,8 +230,6 @@
     <ClInclude Include="iir.h" />
     <ClInclude Include="iobuffs.h" />
     <ClInclude Include="iqc.h" />
-    <ClInclude Include="klj_fastmaths.h" />
-    <ClInclude Include="klj_mem.h" />
     <ClInclude Include="lmath.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="meter.h" />
@@ -255,7 +240,6 @@
     <ClInclude Include="osctrl.h" />
     <ClInclude Include="patchpanel.h" />
     <ClInclude Include="resample.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />
     <ClInclude Include="rmatch.h" />
     <ClInclude Include="RXA.h" />
@@ -270,7 +254,6 @@
     <ClInclude Include="TXA.h" />
     <ClInclude Include="utilities.h" />
     <ClInclude Include="varsamp.h" />
-    <ClInclude Include="version.h" />
     <ClInclude Include="wcpAGC.h" />
   </ItemGroup>
   <ItemGroup>
@@ -303,7 +286,6 @@
     <ClCompile Include="icfir.c" />
     <ClCompile Include="iir.c" />
     <ClCompile Include="iqc.c" />
-    <ClCompile Include="klj_mem.c" />
     <ClCompile Include="lmath.c" />
     <ClCompile Include="meterlog10.c" />
     <ClCompile Include="fir.c" />
@@ -333,14 +315,6 @@
     <ClCompile Include="version.c" />
     <ClCompile Include="wcpAGC.c" />
     <ClCompile Include="wisdom.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\portaudio\msvc\portaudio.vcxproj">
-      <Project>{0a18a071-125e-442f-aff7-a3f68abecf99}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="calculus" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="wdsp.rc" />

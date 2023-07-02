@@ -81,12 +81,6 @@
     <ClInclude Include="pro.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ivacextras.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aamix.c">
@@ -102,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cmsetup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ivac.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pipe.c">
@@ -158,13 +155,5 @@
     <ClCompile Include="pro.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ivac.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="ChannelMaster.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

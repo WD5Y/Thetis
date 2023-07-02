@@ -35,7 +35,6 @@
     <TargetZone>LocalIntranet</TargetZone>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <IncrementVersionOnBuild>1.yyyy.Mdd.Hmm</IncrementVersionOnBuild>
     <PublishUrl>C:\Documents and Settings\w5wc\Desktop\PowerSDR 1.19.3\publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -65,8 +64,7 @@
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
     <NoWarn>
-			IDE0001;IDE0002;IDE0049
-		</NoWarn>
+    </NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -120,7 +118,6 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>ManagedMinimumRules.ruleset</CodeAnalysisRuleSet>
-    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>..\..\bin\x86\Release\</OutputPath>
@@ -166,7 +163,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\..\bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FIX_BUG DEV_PREVIEW</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NEW_KEYER</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileAlignment>4096</FileAlignment>
@@ -180,7 +177,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>..\..\bin\x64\Release\</OutputPath>
-    <DefineConstants>FIX_BUG DEV_PREVIEW</DefineConstants>
+    <DefineConstants>TRACE;</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
@@ -210,6 +207,9 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FTDI2XX, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FTD2XX.Net.1.2.1\lib\net45\FTDI2XX.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
@@ -232,9 +232,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -278,10 +276,9 @@
     </Compile>
     <Compile Include="BasicAudio.cs" />
     <Compile Include="CAT\TCPIPcatServer.cs" />
+    <Compile Include="CAT\UsbBCDCable.cs" />
     <Compile Include="Channel.cs" />
     <Compile Include="clsBandStackManager.cs" />
-    <Compile Include="display.cs" />
-    <Compile Include="Extras\AudioExtras.cs" />
     <Compile Include="Firewall.cs" />
     <Compile Include="cmaster.cs" />
     <Compile Include="Andromeda\displaysettingsform.cs">
@@ -340,21 +337,6 @@
     <Compile Include="frmSeqLog.designer.cs">
       <DependentUpon>frmSeqLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="HL2\HL2.cs" />
-    <Compile Include="KLJ\Forms\frmFindInSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="KLJ\Forms\frmFindInSetup.Designer.cs">
-      <DependentUpon>frmFindInSetup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="KLJ\frmKLJ.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="KLJ\frmKLJ.Designer.cs">
-      <DependentUpon>frmKLJ.cs</DependentUpon>
-    </Compile>
-    <Compile Include="KLJ\Utils.cs" />
-    <Compile Include="KLJ\Win32\Controls\IPv4Control.cs" />
     <Compile Include="MeterManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -447,6 +429,9 @@
     <Compile Include="database.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="display.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DiversityForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -517,8 +502,12 @@
     <Compile Include="KE9N\HttpServer\SetParamRequestHandler.cs" />
     <Compile Include="KE9N\HttpServer\UnknownRequestHandler.cs" />
     <Compile Include="KE9N\HttpServer\WebPageRequestHandler.cs" />
-    <None Include="KE9N\scan.cs" />
-    <Compile Include="KE9N\stack.cs" />
+    <Compile Include="KE9N\scan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KE9N\stack.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="KE9N\swl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -541,7 +530,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HPSDR\Penny.cs" />
-    <Compile Include="PanDisplay.cs" />
+    <Compile Include="PanDisplay.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Path_Illustrator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -675,12 +666,12 @@
     <None Include="Resources\arrow_right_black.png" />
     <None Include="Resources\arrow_up_black.png" />
     <None Include="Resources\ukraine_flag.png" />
-    <None Include="Resources\brush.png" />
     <None Include="Resources\bucket.png" />
-    <None Include="Resources\pipette16.png" />
-    <None Include="Resources\brush16.png" />
-    <None Include="Resources\pipette32.png" />
-    <None Include="Resources\brush32.png" />
+    <None Include="Resources\brush32border.png" />
+    <None Include="Resources\pipette32border.png" />
+    <None Include="Resources\gear.png" />
+    <Content Include="FTDI2XX.xml" />
+    <None Include="Resources\stop.png" />
     <Content Include="thetis-icon.ico" />
     <None Include="Resources\thetis-logo1.png" />
     <None Include="Resources\cross_rl.cur" />
@@ -736,12 +727,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmSeqLog.resx">
       <DependentUpon>frmSeqLog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="KLJ\Forms\frmFindInSetup.resx">
-      <DependentUpon>frmFindInSetup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="KLJ\frmKLJ.resx">
-      <DependentUpon>frmKLJ.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resource1.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -995,10 +980,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-copy /Y "..\..\..\lib\fftw_$(PlatformName)\libfftw3-3.dll" "$(ProjectDir)$(OutDir)";
+    <PostBuildEvent>copy /Y "..\..\..\lib\fftw_$(PlatformName)\libfftw3-3.dll" "$(ProjectDir)$(OutDir)";
 copy /Y "$(ProjectDir)CAT\CATStructs.xml" "$(ProjectDir)$(OutDir)";
 copy /Y "..\..\..\lib\Thetis-resources\calculus" "$(ProjectDir)$(OutDir)"
-		</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

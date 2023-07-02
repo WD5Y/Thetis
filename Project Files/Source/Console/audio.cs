@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 // You may contact us via email at: sales@flex-radio.com.
-// Paper mail may be sent to:
+// Paper mail may be sent to: 
 //    FlexRadio Systems
 //    8900 Marybank Dr.
 //    Austin, TX 78750
@@ -33,18 +33,12 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
-using static Thetis.PortAudioForThetis;
-using System.Collections.Generic;
-// using ProjectCeilidh.PortAudio;
-// using ProjectCeilidh.PortAudio.Native;
-// using static ProjectCeilidh.PortAudio.Native.PortAudio;
+//using ProjectCeilidh.PortAudio;
+//using ProjectCeilidh.PortAudio.Native;
+//using static ProjectCeilidh.PortAudio.Native.PortAudio;
 
 namespace Thetis
 {
-    // a list of devices, with lookup by ApiIndex.
-    using DeviceCollectionType = Dictionary<int, List<PaDeviceInfoEx>>;
-    using DeviceListType = List<PaDeviceInfoEx>;
-
     public class Audio
     {
         #region Thetis Specific Variables
@@ -52,16 +46,6 @@ namespace Thetis
         // ======================================================
         // Thetis Specific Variables
         // ======================================================
-
-        public static void EnableVAC1Exclusive(bool ex)
-        {
-            ivac.SetIVACExclusive(0, ex ? 1 : 0);
-        }
-
-        public static bool GetVAC1Exclusive()
-        {
-            return ivac.GetIVACExclusive(0) != 0;
-        }
 
         public enum AudioState
         {
@@ -83,8 +67,7 @@ namespace Thetis
             SILENCE,
         }
 
-        // unsafe private static PortAudioForThetis.PaStreamCallback PAcallbackport
-        // = PACallbackPort;
+        // unsafe private static PA19.PaStreamCallback PAcallbackport = PACallbackPort;
 
         // public static int callback_return;
 
@@ -191,6 +174,7 @@ namespace Thetis
                     ivac.SetIVACvox(0, 0);
                     ivac.SetIVACvox(1, 0);
                 }
+
             }
         }
 
@@ -198,7 +182,10 @@ namespace Thetis
         public static float VOXGain
         {
             get { return vox_gain; }
-            set { vox_gain = value; }
+            set
+            {
+                vox_gain = value;
+            }
         }
 
         private static double high_swr_scale = 1.0;
@@ -243,37 +230,25 @@ namespace Thetis
                 monitor_volume = value;
                 cmaster.CMSetAudioVolume(value);
 
-                // MW0LGE_21k-rc2
-                if (vfob_tx)
-                {
-                    if (rx2_enabled) // need to check the vac2 split thing ?
-                    {
-                        ivac.SetIVACmonVol(1, monitor_volume);
-                    }
-                    else
-                    {
-                        ivac.SetIVACmonVol(0, monitor_volume);
-                    }
-                }
-                else
-                {
-                    ivac.SetIVACmonVol(0, monitor_volume);
-                }
+                ////MW0LGE_21k-rc2
+                //if (vfob_tx)
+                //{
+                //    if (rx2_enabled) // need to check the vac2 split thing ?
+                //    {
+                //        ivac.SetIVACmonVol(1, monitor_volume);
+                //    }
+                //    else
+                //    {
+                //        ivac.SetIVACmonVol(0, monitor_volume);
+                //    }
+                //}
+                //else
+                //{
+                //    ivac.SetIVACmonVol(0, monitor_volume);
+                //}
 
-                // G7KLJ bugfix: tx mon volume was not working on VAC!
-                // the check for console.SetupForm.MasterVolumeForVac addresses feature #
-                if ((console.VACEnabled || console.VAC2Enabled) && console.SetupForm.MasterVolumeForVac)
-                {
-                    if (console.MOX)
-                    {
-                        ivac.SetIVACMonVolume(0, value);
-                    }
-                    else
-                    {
-                        // overall gain:
-                        ivac.SetIVACMonVolume(-1, value);
-                    }
-                }
+                //MW0LGE [pre g2]
+                ivac.SetIVACmonVol(0, monitor_volume);
             }
         }
 
@@ -329,12 +304,7 @@ namespace Thetis
             }
         }
 
-        // public static Console console;
-        public static Console console
-        {
-            get;
-            set;
-        }
+        public static Console console;
         public static float[] phase_buf_l;
         public static float[] phase_buf_r;
         public static bool phase;
@@ -377,17 +347,13 @@ namespace Thetis
             set
             {
                 mox = value;
-                if (mox && vfob_tx)
-                {
-                    ivac.SetIVACmox(0, 0);
-                    ivac.SetIVACmox(1, 1);
-                }
-                if (mox && !vfob_tx)
+
+                if (mox)
                 {
                     ivac.SetIVACmox(0, 1);
-                    ivac.SetIVACmox(1, 0);
+                    ivac.SetIVACmox(1, 1);
                 }
-                if (!mox)
+                else
                 {
                     ivac.SetIVACmox(0, 0);
                     ivac.SetIVACmox(1, 0);
@@ -397,29 +363,42 @@ namespace Thetis
 
         private static void setupIVACforMon()
         {
-            // MW0LGE_21k9d - reworked
-            if (mon && vfob_tx)
-            {
-                if (rx2_enabled) // need to check the vac2 split thing?
-                {
-                    ivac.SetIVACmon(0, 0);
-                    ivac.SetIVACmon(1, 1);
-                    ivac.SetIVACmonVol(1, monitor_volume);
-                }
-                else
-                {
-                    ivac.SetIVACmon(0, 1);
-                    ivac.SetIVACmon(1, 0);
-                    ivac.SetIVACmonVol(0, monitor_volume);
-                }
-            }
-            else if (mon && !vfob_tx)
+            ////MW0LGE_21k9d - reworked
+            //if (mon && vfob_tx)
+            //{
+            //    if (rx2_enabled) // need to check the vac2 split thing?
+            //    {
+            //        ivac.SetIVACmon(0, 0);
+            //        ivac.SetIVACmon(1, 1);
+            //        ivac.SetIVACmonVol(1, monitor_volume);
+            //    }
+            //    else
+            //    {
+            //        ivac.SetIVACmon(0, 1);
+            //        ivac.SetIVACmon(1, 0);
+            //        ivac.SetIVACmonVol(0, monitor_volume);
+            //    }                                    
+            //}
+            //else if (mon && !vfob_tx)
+            //{
+            //    ivac.SetIVACmon(0, 1);
+            //    ivac.SetIVACmon(1, 0);
+            //    ivac.SetIVACmonVol(0, monitor_volume);
+            //}
+            //else if (!mon)
+            //{
+            //    ivac.SetIVACmon(0, 0);
+            //    ivac.SetIVACmon(1, 0);
+            //}
+
+            //MW0LGE [pre g2]
+            if (mon)
             {
                 ivac.SetIVACmon(0, 1);
                 ivac.SetIVACmon(1, 0);
                 ivac.SetIVACmonVol(0, monitor_volume);
             }
-            else if (!mon)
+            else
             {
                 ivac.SetIVACmon(0, 0);
                 ivac.SetIVACmon(1, 0);
@@ -440,7 +419,10 @@ namespace Thetis
                     cmaster.SetAAudioMixWhat((void*)0, 0, WDSP.id(1, 0), value);
                 }
             }
-            get { return mon; }
+            get
+            {
+                return mon;
+            }
         }
 
         private static bool full_duplex = false;
@@ -452,7 +434,11 @@ namespace Thetis
         private static bool vfob_tx = false;
         public static bool VFOBTX
         {
-            set { vfob_tx = value; }
+            set
+            {
+                vfob_tx = value;
+            }
+
         }
 
         private static bool antivox_source_VAC = false;
@@ -474,7 +460,8 @@ namespace Thetis
                 vac_enabled = value;
                 cmaster.CMSetTXAPanelGain1(WDSP.id(1, 0));
                 cmaster.CMSetAntiVoxSourceWhat();
-                if (console.PowerOn) EnableVAC1(value);
+                if (console.PowerOn)
+                    EnableVAC1(value);
             }
             get { return vac_enabled; }
         }
@@ -486,7 +473,8 @@ namespace Thetis
             {
                 vac2_enabled = value;
                 cmaster.CMSetAntiVoxSourceWhat();
-                if (console.PowerOn) EnableVAC2(value);
+                if (console.PowerOn)
+                    EnableVAC2(value);
             }
             get { return vac2_enabled; }
         }
@@ -550,7 +538,10 @@ namespace Thetis
         private static bool vac_bypass = false;
         public static bool VACBypass
         {
-            get { return vac_bypass; }
+            get
+            {
+                return vac_bypass;
+            }
             set
             {
                 vac_bypass = value;
@@ -782,13 +773,17 @@ namespace Thetis
             {
                 vac2_output_iq = value;
                 ivac.SetIVACiqType(1, Convert.ToInt32(value));
+
             }
         }
 
         private static bool vac_output_rx2 = false;
         public static bool VACOutputRX2
         {
-            set { vac_output_rx2 = value; }
+            set
+            {
+                vac_output_rx2 = value;
+            }
         }
 
         private static bool vac_correct_iq = true;
@@ -810,9 +805,19 @@ namespace Thetis
             set { vox_active = value; }
         }
 
+        private static int host2 = 0;
+        public static int Host2
+        {
+            get { return host2; }
+            set { host2 = value; }
+        }
 
-        public static int Host2 { get; set; }
-        public static int Host3 { get; set; }
+        private static int host3 = 0;
+        public static int Host3
+        {
+            get { return host3; }
+            set { host3 = value; }
+        }
 
         private static int input_dev2 = 0;
         public static int Input2
@@ -890,7 +895,7 @@ namespace Thetis
             set { latency3 = value; }
         }
 
-        // MW0LGE_21h/i/j
+        //MW0LGE_21h/i/j
         private static double vac1_feedbackgainIn = 4.0e-06;
         private static double vac1_slewtimeIn = 0.003;
         private static double vac2_feedbackgainIn = 4.0e-06;
@@ -936,19 +941,17 @@ namespace Thetis
             return (x != 0) && ((x & (x - 1)) == 0);
         }
 
-        // vac1in
+        //vac1in
         public static double VAC1FeedbackGainIn
         {
-            set
-            {
+            set { 
                 vac1_feedbackgainIn = value;
                 ivac.SetIVACFeedbackGain(0, 1, vac1_feedbackgainIn);
             }
         }
         public static double VAC1SlewTimeIn
         {
-            set
-            {
+            set { 
                 vac1_slewtimeIn = value;
                 ivac.SetIVACSlewTime(0, 1, vac1_slewtimeIn);
             }
@@ -1004,13 +1007,12 @@ namespace Thetis
             set
             {
                 vac1_oldVarIn = value;
-                // ivac.SetIVACvar(0, 1, vac1_oldVarIn); // used in vac enable only
+                //ivac.SetIVACvar(0, 1, vac1_oldVarIn); // used in vac enable only
             }
         }
         public static bool VAC1ControlFlagIn
         {
-            get
-            {
+            get {
                 int flg;
                 unsafe
                 {
@@ -1020,19 +1022,17 @@ namespace Thetis
             }
         }
 
-        // vac1out
+        //vac1out
         public static double VAC1FeedbackGainOut
         {
-            set
-            {
+            set { 
                 vac1_feedbackgainOut = value;
                 ivac.SetIVACFeedbackGain(0, 0, vac1_feedbackgainOut);
             }
         }
         public static double VAC1SlewTimeOut
         {
-            set
-            {
+            set { 
                 vac1_slewtimeOut = value;
                 ivac.SetIVACSlewTime(0, 0, vac1_slewtimeOut);
             }
@@ -1088,8 +1088,7 @@ namespace Thetis
             set
             {
                 vac1_oldVarOut = value;
-                // ivac.SetIVACvar(0, 0, vac1_oldVarOut);  // used in vac enable
-                // only
+                //ivac.SetIVACvar(0, 0, vac1_oldVarOut);  // used in vac enable only
             }
         }
         public static bool VAC1ControlFlagOut
@@ -1105,19 +1104,17 @@ namespace Thetis
             }
         }
 
-        // vac2in
+        //vac2in
         public static double VAC2FeedbackGainIn
         {
-            set
-            {
+            set { 
                 vac2_feedbackgainIn = value;
                 ivac.SetIVACFeedbackGain(1, 1, vac2_feedbackgainIn);
             }
         }
         public static double VAC2SlewTimeIn
         {
-            set
-            {
+            set { 
                 vac2_slewtimeIn = value;
                 ivac.SetIVACSlewTime(1, 1, vac2_slewtimeIn);
             }
@@ -1171,7 +1168,7 @@ namespace Thetis
             set
             {
                 vac2_oldVarIn = value;
-                // ivac.SetIVACvar(1, 1, vac2_oldVarIn);  // used in vac enable only
+                //ivac.SetIVACvar(1, 1, vac2_oldVarIn);  // used in vac enable only
             }
         }
         public static bool VAC2ControlFlagIn
@@ -1187,19 +1184,17 @@ namespace Thetis
             }
         }
 
-        // vac2out
+        //vac2out
         public static double VAC2FeedbackGainOut
         {
-            set
-            {
+            set { 
                 vac2_feedbackgainOut = value;
                 ivac.SetIVACFeedbackGain(1, 0, vac2_feedbackgainOut);
             }
         }
         public static double VAC2SlewTimeOut
         {
-            set
-            {
+            set { 
                 vac2_slewtimeOut = value;
                 ivac.SetIVACSlewTime(1, 0, vac2_slewtimeOut);
             }
@@ -1253,8 +1248,7 @@ namespace Thetis
             set
             {
                 vac2_oldVarOut = value;
-                // ivac.SetIVACvar(1, 0, vac2_oldVarOut);  // used in vac enable
-                // only
+                //ivac.SetIVACvar(1, 0, vac2_oldVarOut);  // used in vac enable only
             }
         }
         public static bool VAC2ControlFlagOut
@@ -1279,26 +1273,12 @@ namespace Thetis
             {
                 mute_rx1 = value;
 
-                setupIVACforMon(); // MW0LGE_21k9d
+                setupIVACforMon(); //MW0LGE_21k9d
 
                 unsafe
                 {
                     cmaster.SetAAudioMixWhat((void*)0, 0, 0, !mute_rx1);
                     cmaster.SetAAudioMixWhat((void*)0, 0, 1, !mute_rx1);
-                    /*/
-                    if (console.VACEnabled)
-                    {
-                        if (value)
-                        {
-                            ivac.SetIVACMonVolume(-1, 0);
-                        }
-                        else
-                        {
-
-                            ivac.SetIVACMonVolume(-1, MonitorVolume);
-                        }
-                    }
-                    /*/
                 }
             }
         }
@@ -1311,7 +1291,7 @@ namespace Thetis
             {
                 mute_rx2 = value;
 
-                setupIVACforMon(); // MW0LGE_21k9d
+                setupIVACforMon(); //MW0LGE_21k9d
 
                 unsafe
                 {
@@ -1381,21 +1361,30 @@ namespace Thetis
         public static int OutCount
         {
             get { return out_count; }
-            set { out_count = value; }
+            set
+            {
+                out_count = value;
+            }
         }
 
         private static int out_count_rx2 = 1024;
         public static int OutCountRX2
         {
             get { return out_count_rx2; }
-            set { out_count_rx2 = value; }
+            set
+            {
+                out_count_rx2 = value;
+            }
         }
 
         private static int out_count_tx = 1024;
         public static int OutCountTX
         {
             get { return out_count_tx; }
-            set { out_count_tx = value; }
+            set
+            {
+                out_count_tx = value;
+            }
         }
 
         #endregion
@@ -1406,255 +1395,118 @@ namespace Thetis
 
         #region Misc Routines
 
-        public static void PopulateComboAPIs(ComboBox[] cbos) // klj
+        public static ArrayList GetPAHosts() // returns a text list of driver types
         {
-            foreach (ComboBox cb in cbos)
+            var a = new ArrayList();
+            for (int i = 0; i < PA19.PA_GetHostApiCount(); i++)
             {
-                cb.Items.Clear();
-            }
-            int hostIndex = 0;
-            foreach (var host in Audio.HostAPIList)
-            {
-                var inList = Audio.FindDeviceList(hostIndex, Audio.DeviceIO.Input);
-                var outList = Audio.FindDeviceList(hostIndex, Audio.DeviceIO.Output);
-                Debug.Assert(inList.Count > 0 && outList.Count > 0);
-                if (inList.Count > 0 && outList.Count > 0)
-                {
-                    foreach (ComboBox cbo in cbos)
-                    {
-                        cbo.Items.Add(host);
-                    }
-                }
-
-                hostIndex++;
-            }
-        }
-
-        public static void PopulateComboDevices(ComboBox input, ComboBox output, ComboBox api) // KLJ
-        {
-            var API = api.SelectedItem;
-            int host = 0;
-            if (API != null)
-            {
-                var oapi = (PaHostApiInfoEx)API;
-                host = oapi.HostAPIIndex;
-            }
-
-            input.Items.Clear();
-            output.Items.Clear();
-            var a = Audio.FindDeviceList(host, Audio.DeviceIO.Input);
-            input.Items.AddRange(a.Cast<object>().ToArray());
-
-            var b = Audio.FindDeviceList(host, Audio.DeviceIO.Output);
-            output.Items.AddRange(b.Cast<object>().ToArray());
-        }
-
-        // KLJ: Mind your lifetimes! DO NOT call any static functions relating to
-        // audio devices and APIs until you are sure this is complete.
-        // Since PortAudio is not initialised on the main thread, setup in
-        // particular needs to be sure that this is done. See
-        // m_waiting_for_portaudio in console.
-        public static void Populate()
-        {
-            GetPAHosts();
-            foreach (var api in m_HostAPIs)
-            {
-                GetPAInputDevices(api.HostAPIIndex, true);
-            }
-            foreach (var api in m_HostAPIs)
-            {
-                GetPAOutputDevices(api.HostAPIIndex, true);
-            }
-        }
-
-        static List<String> m_APIList;
-        public static int TimesAPIListCalled = 0;
-        public static List<PaHostApiInfoEx> m_HostAPIs;
-
-        public static List<PaHostApiInfoEx> HostAPIList { get => m_HostAPIs; }
-
-        public static List<String> GetPAHosts(
-            bool refresh = false) // returns a text list of driver types
-        {
-            ++TimesAPIListCalled;
-            var a = m_APIList;
-            if (!refresh && a != null && a.Count() > 0)
-            {
-                return m_APIList;
-            }
-            else
-            {
-                m_APIList = new List<String>();
-                m_HostAPIs = new List<PaHostApiInfoEx>();
-                a = m_APIList;
-            }
-            for (int i = 0; i < PA_GetHostApiCount(); i++)
-            {
-                PaHostApiInfo info = PortAudioForThetis.PA_GetHostApiInfo(i);
+                PA19.PaHostApiInfo info = PA19.PA_GetHostApiInfo(i);
                 a.Add(info.name);
-                m_HostAPIs.Add(new PaHostApiInfoEx(info, i));
             }
-            // a.Add("HPSDR (USB/UDP)");
+            a.Add("HPSDR (USB/UDP)");
             return a;
         }
 
-        public enum DeviceIO
+        public static ArrayList GetPAInputDevices(int hostIndex)
         {
-            Input,
-            Output
-        }
+            var a = new ArrayList();
 
-        // Slightly incorrect naming: this thing will create a list if it
-        // is missing, and so it guarantees to return a valid list,
-        // though it may be empty
-        internal static DeviceListType FindDeviceList(int hostIndex, DeviceIO io)
-        {
-            DeviceCollectionType col = null;
-            if (io == DeviceIO.Input)
+            if (hostIndex >= PA19.PA_GetHostApiCount())
             {
-                col = m_PAInputDevices;
-                if (col == null)
-                {
-                    m_PAInputDevices = new DeviceCollectionType();
-                    col = m_PAInputDevices;
-                }
-            }
-            else
-            {
-                col = m_PAOutputDevices;
-                if (col == null)
-                {
-                    m_PAOutputDevices = new DeviceCollectionType();
-                    col = m_PAOutputDevices;
-                }
+                a.Add(new PADeviceInfo("HPSDR (PCM A/D)", 0));
+                return a;
             }
 
-            DeviceListType list = null;
-            if (col != null)
-            {
-                if (col.ContainsKey(hostIndex))
-                {
-                    list = col[hostIndex];
-                    if (list == null)
-                    {
-                        list = new DeviceListType();
-                        col.Add(hostIndex, list);
-                    }
-                    else
-                    {
-                        list = col[hostIndex];
-                    }
-                }
-                else
-                {
-                    list = new DeviceListType();
-                    col.Add(hostIndex, list);
-                }
-            }
-
-            Debug.Assert(list != null);
-            return list;
-        }
-
-        private static DeviceCollectionType m_PAInputDevices;
-        public static int TimesInputDevsCalled = 0;
-
-
-        private static DeviceCollectionType m_PAOutputDevices;
-        public static int TimesOutputDevsCalled = 0;
-
-        public static DeviceListType GetPAInputDevices(int hostAPI, bool refresh = false)
-        {
-            return GetPADevices(DeviceIO.Input, hostAPI, refresh);
-        }
-
-        public static DeviceListType GetPAOutputDevices(int hostAPI, bool refresh = false)
-        {
-            return GetPADevices(DeviceIO.Output, hostAPI, refresh);
-        }
-
-
-
-        public static DeviceListType GetPADevices(DeviceIO ioKind,
-            int hostAPI, bool refresh = false)
-        {
-            Debug.Assert(hostAPI >= 0);
-            Debug.Assert(hostAPI < PA_GetHostApiCount());
-
-            ++TimesOutputDevsCalled;
-
-            var list = FindDeviceList(hostAPI, ioKind);
-            Debug.Assert(list != null);
-
-            if (refresh)
-            {
-                list.Clear();
-            }
-            else
-            {
-                if (list.Count() > 0) return list;
-            }
-
-            PortAudioForThetis.PaHostApiInfo hostInfo
-                = PortAudioForThetis.PA_GetHostApiInfo(hostAPI);
+            PA19.PaHostApiInfo hostInfo = PA19.PA_GetHostApiInfo(hostIndex);
             for (int i = 0; i < hostInfo.deviceCount; i++)
             {
-                int devIndex
-                    = PortAudioForThetis.PA_HostApiDeviceIndexToDeviceIndex(
-                        hostAPI, i);
-                PortAudioForThetis.PaDeviceInfo devInfo
-                    = PortAudioForThetis.PA_GetDeviceInfo(devIndex);
-                bool qualifies = ioKind == DeviceIO.Input ? devInfo.maxInputChannels > 0 : devInfo.maxOutputChannels > 0;
-                if (qualifies)
+                int devIndex = PA19.PA_HostApiDeviceIndexToDeviceIndex(hostIndex, i);
+                PA19.PaDeviceInfo devInfo = PA19.PA_GetDeviceInfo(devIndex);
+                if (devInfo.maxInputChannels > 0)
                 {
                     string name = devInfo.name;
-                    list.Add(new PaDeviceInfoEx(i, devInfo, hostAPI, devIndex));
-                    // list.Add(new PaDeviceInfoEx(name, i) /* + " - " +
-                    // devIndex*/);
+                    int index = name.IndexOf("- ");
+                    if (index > 0)
+                    {
+                        char c = name[index - 1]; // make sure this is what we're looking for
+                        if (c >= '0' && c <= '9') // it is... remove index
+                        {
+                            int x = name.IndexOf("(");
+                            name = devInfo.name.Substring(0, x + 1); // grab first part of string including "("
+                            name += devInfo.name.Substring(index + 2, devInfo.name.Length - index - 2); // add end of string;
+                        }
+                    }
+                    a.Add(new PADeviceInfo(name, i)/* + " - " + devIndex*/);
                 }
             }
-
-            return list;
+            return a;
         }
 
         public static bool CheckPAInputDevices(int hostIndex, string name)
         {
-            PortAudioForThetis.PaHostApiInfo hostInfo
-                = PortAudioForThetis.PA_GetHostApiInfo(hostIndex);
+            PA19.PaHostApiInfo hostInfo = PA19.PA_GetHostApiInfo(hostIndex);
             for (int i = 0; i < hostInfo.deviceCount; i++)
             {
-                int devIndex
-                    = PortAudioForThetis.PA_HostApiDeviceIndexToDeviceIndex(
-                        hostIndex, i);
-                PortAudioForThetis.PaDeviceInfo devInfo
-                    = PortAudioForThetis.PA_GetDeviceInfo(devIndex);
+                int devIndex = PA19.PA_HostApiDeviceIndexToDeviceIndex(hostIndex, i);
+                PA19.PaDeviceInfo devInfo = PA19.PA_GetDeviceInfo(devIndex);
                 if (devInfo.maxInputChannels > 0 && devInfo.name.Contains(name))
                     return true;
             }
             return false;
         }
 
-        public static bool CheckPAOutputDevices(int hostIndex, string name)
+        public static ArrayList GetPAOutputDevices(int hostIndex)
         {
-            PortAudioForThetis.PaHostApiInfo hostInfo
-                = PortAudioForThetis.PA_GetHostApiInfo(hostIndex);
+            var a = new ArrayList();
+
+            if (hostIndex >= PA19.PA_GetHostApiCount())
+            {
+                a.Add(new PADeviceInfo("HPSDR (PWM D/A)", 0));
+                return a;
+            }
+
+            PA19.PaHostApiInfo hostInfo = PA19.PA_GetHostApiInfo(hostIndex);
             for (int i = 0; i < hostInfo.deviceCount; i++)
             {
-                int devIndex
-                    = PortAudioForThetis.PA_HostApiDeviceIndexToDeviceIndex(
-                        hostIndex, i);
-                PortAudioForThetis.PaDeviceInfo devInfo
-                    = PortAudioForThetis.PA_GetDeviceInfo(devIndex);
+                int devIndex = PA19.PA_HostApiDeviceIndexToDeviceIndex(hostIndex, i);
+                PA19.PaDeviceInfo devInfo = PA19.PA_GetDeviceInfo(devIndex);
+                if (devInfo.maxOutputChannels > 0)
+                {
+                    string name = devInfo.name;
+                    int index = name.IndexOf("- "); // find case for things like "Microphone (2- FLEX-1500)"
+                    if (index > 0)
+                    {
+                        char c = name[index - 1]; // make sure this is what we're looking for
+                        if (c >= '0' && c <= '9') // it is... remove index
+                        {
+                            int x = name.IndexOf("(");
+                            name = devInfo.name.Substring(0, x + 1); // grab first part of string including "("
+                            name += devInfo.name.Substring(index + 2, devInfo.name.Length - index - 2); // add end of string;
+                        }
+                    }
+                    a.Add(new PADeviceInfo(name, i)/* + " - " + devIndex*/);
+                }
+            }
+            return a;
+        }
+
+
+        public static bool CheckPAOutputDevices(int hostIndex, string name)
+        {
+            PA19.PaHostApiInfo hostInfo = PA19.PA_GetHostApiInfo(hostIndex);
+            for (int i = 0; i < hostInfo.deviceCount; i++)
+            {
+                int devIndex = PA19.PA_HostApiDeviceIndexToDeviceIndex(hostIndex, i);
+                PA19.PaDeviceInfo devInfo = PA19.PA_GetDeviceInfo(devIndex);
                 if (devInfo.maxOutputChannels > 0 && devInfo.name.Contains(name))
                     return true;
             }
             return false;
         }
 
-        // public static ArrayList GetPAHosts() // returns a text list of driver
-        // types
+        //public static ArrayList GetPAHosts() // returns a text list of driver types
         //{
-        //     var a = new ArrayList();
+        //    var a = new ArrayList();
 
         //    foreach (var api in PortAudioHostApi.SupportedHostApis)
         //    {
@@ -1664,17 +1516,18 @@ namespace Thetis
         //    return a;
         //}
 
-        // public static ArrayList GetPAInputDevices(int hostAPI)
+        //public static ArrayList GetPAInputDevices(int hostIndex)
         //{
-        //     var a = new ArrayList();
+        //    var a = new ArrayList();
 
-        //    if (hostAPI >= PortAudioHostApi.SupportedHostApis.Count())
+
+        //    if (hostIndex >= PortAudioHostApi.SupportedHostApis.Count())
         //    {
-        //        a.Add(new PADeviceInfo("HPSDR (PCM A/D)", 0));
+        //        a.Add(new PADeviceInfo("HPSDR (PCM A/D)", 0));               
         //        return a;
         //    }
 
-        //    var hst = PortAudioHostApi.SupportedHostApis.ElementAt(hostAPI);
+        //    var hst = PortAudioHostApi.SupportedHostApis.ElementAt(hostIndex);         
         //    int idx = 0;
         //        foreach (var dev in hst.Devices)
         //        {
@@ -1684,15 +1537,12 @@ namespace Thetis
         //                int index = name.IndexOf("- ");
         //                if (index > 0)
         //                {
-        //                    char c = name[index - 1]; // make sure this is
-        //                    what we're looking for if (c >= '0' && c <= '9')
-        //                    // it is... remove index
+        //                    char c = name[index - 1]; // make sure this is what we're looking for
+        //                    if (c >= '0' && c <= '9') // it is... remove index
         //                    {
         //                        int x = name.IndexOf("(");
-        //                        name = dev.Name.Substring(0, x + 1); // grab
-        //                        first part of string including "(" name +=
-        //                        dev.Name.Substring(index + 2, dev.Name.Length
-        //                        - index - 2); // add end of string;
+        //                        name = dev.Name.Substring(0, x + 1); // grab first part of string including "("
+        //                        name += dev.Name.Substring(index + 2, dev.Name.Length - index - 2); // add end of string;
         //                    }
         //                }
         //                a.Add(new PADeviceInfo(name, idx));
@@ -1703,17 +1553,17 @@ namespace Thetis
         //    return a;
         //}
 
-        // public static ArrayList GetPAOutputDevices(int hostAPI)
+        //public static ArrayList GetPAOutputDevices(int hostIndex)
         //{
-        //     var a = new ArrayList();
+        //    var a = new ArrayList();
 
-        //    if (hostAPI >= PortAudioHostApi.SupportedHostApis.Count())
+        //    if (hostIndex >= PortAudioHostApi.SupportedHostApis.Count())
         //    {
         //        a.Add(new PADeviceInfo("HPSDR (PWM D/A)", 0));
         //        return a;
         //    }
 
-        //    var hst = PortAudioHostApi.SupportedHostApis.ElementAt(hostAPI);
+        //    var hst = PortAudioHostApi.SupportedHostApis.ElementAt(hostIndex);       
         //    int idx = 0;
         //        foreach (var dev in hst.Devices)
         //        {
@@ -1723,15 +1573,12 @@ namespace Thetis
         //                int index = name.IndexOf("- ");
         //                if (index > 0)
         //                {
-        //                    char c = name[index - 1]; // make sure this is
-        //                    what we're looking for if (c >= '0' && c <= '9')
-        //                    // it is... remove index
+        //                    char c = name[index - 1]; // make sure this is what we're looking for
+        //                    if (c >= '0' && c <= '9') // it is... remove index
         //                    {
         //                        int x = name.IndexOf("(");
-        //                        name = dev.Name.Substring(0, x + 1); // grab
-        //                        first part of string including "(" name +=
-        //                        dev.Name.Substring(index + 2, dev.Name.Length
-        //                        - index - 2); // add end of string;
+        //                        name = dev.Name.Substring(0, x + 1); // grab first part of string including "("
+        //                        name += dev.Name.Substring(index + 2, dev.Name.Length - index - 2); // add end of string;
         //                    }
         //                }
         //                a.Add(new PADeviceInfo(name, idx));
@@ -1742,59 +1589,21 @@ namespace Thetis
         //    return a;
         //}
 
-        public struct VACStatus
-        {
-            public bool state;
-            public String status;
-        };
-        public static VACStatus[] Status = new VACStatus[2];
-
-        struct Latencies
-        {
-            public double inLatency;
-            public double outLatency;
-            public double paInLatency;
-            public double paOutLatency;
-        }
-
-        private static Latencies GetLatencies(int inputDev, int outputDev)
-        {
-            var ret = new Latencies();
-            ret.inLatency = vac1_latency_manual
-                ? latency2 / 1000.0
-                : PortAudioForThetis.PA_GetDeviceInfo(input_dev2)
-                      .defaultLowInputLatency;
-            ret.outLatency = vac1_latency_manual_out
-                ? latency2_out / 1000.0
-                : PortAudioForThetis.PA_GetDeviceInfo(output_dev2)
-                      .defaultLowOutputLatency;
-            ret.paInLatency = vac1_latency_pa_in_manual
-                ? latency_pa_in / 1000.0
-                : PortAudioForThetis.PA_GetDeviceInfo(input_dev2)
-                      .defaultLowInputLatency;
-            ret.paOutLatency = vac1_latency_pa_out_manual
-                ? latency_pa_out / 1000.0
-                : PortAudioForThetis.PA_GetDeviceInfo(output_dev2)
-                      .defaultLowOutputLatency;
-            return ret;
-        }
-
-        public enum VACSelection
-        {
-            VAC1,
-            VAC2
-        }
-
         public static void EnableVAC1(bool enable)
         {
             bool retval = false;
-            var index = (int)VACSelection.VAC1;
-
-            if (enable) unsafe
+ 
+            if (enable)
+                unsafe
                 {
                     int num_chan = 1;
                     int sample_rate = sample_rate2;
                     int block_size = block_size_vac;
+                    double in_latency = vac1_latency_manual ? latency2 / 1000.0 : PA19.PA_GetDeviceInfo(input_dev2).defaultLowInputLatency;
+                    double out_latency = vac1_latency_manual_out ? latency2_out / 1000.0 : PA19.PA_GetDeviceInfo(output_dev2).defaultLowOutputLatency;
+                    double pa_in_latency = vac1_latency_pa_in_manual ? latency_pa_in / 1000.0 : PA19.PA_GetDeviceInfo(input_dev2).defaultLowInputLatency;
+                    double pa_out_latency = vac1_latency_pa_out_manual ? latency_pa_out / 1000.0 : PA19.PA_GetDeviceInfo(output_dev2).defaultLowOutputLatency;
+                  //  double pa_out_latency = vac1_latency_pa_out_manual ? latency_pa_out / 1000.0 : outp_dev2.;
 
                     if (vac_output_iq)
                     {
@@ -1802,20 +1611,18 @@ namespace Thetis
                         sample_rate = sample_rate1;
                         block_size = block_size1;
                     }
-                    else if (vac_stereo)
-                        num_chan = 2;
+                    else if (vac_stereo) num_chan = 2;
 
                     VACRBReset = true;
-                    var latencies = GetLatencies(input_dev2, output_dev2);
 
-                    ivac.SetIVAChostAPIindex(0, Host2);
+                    ivac.SetIVAChostAPIindex(0, host2);
                     ivac.SetIVACinputDEVindex(0, input_dev2);
                     ivac.SetIVACoutputDEVindex(0, output_dev2);
                     ivac.SetIVACnumChannels(0, num_chan);
-                    ivac.SetIVACInLatency(0, latencies.inLatency, 0);
-                    ivac.SetIVACOutLatency(0, latencies.outLatency, 0);
-                    ivac.SetIVACPAInLatency(0, latencies.paInLatency, 0);
-                    ivac.SetIVACPAOutLatency(0, latencies.paOutLatency, 1);
+                    ivac.SetIVACInLatency(0, in_latency, 0);
+                    ivac.SetIVACOutLatency(0, out_latency, 0);
+                    ivac.SetIVACPAInLatency(0, pa_in_latency, 0);
+                    ivac.SetIVACPAOutLatency(0, pa_out_latency, 1);
 
                     // MW0LGE_21h
                     ivac.SetIVACFeedbackGain(0, 0, vac1_feedbackgainOut);
@@ -1835,96 +1642,23 @@ namespace Thetis
                     ivac.SetIVACFFRingMax(0, 1, vac1_ff_ringmaxIn);
                     ivac.SetIVACFFAlpha(0, 0, vac1_ff_alphaOut);
                     ivac.SetIVACFFAlpha(0, 1, vac1_ff_alphaIn);
-                    // ivac.SetIVACvar(0, 0, vac1_oldVarOut);
-                    // ivac.SetIVACvar(0, 1, vac1_oldVarIn);
+                    //ivac.SetIVACvar(0, 0, vac1_oldVarOut);
+                    //ivac.SetIVACvar(0, 1, vac1_oldVarIn);
                     ivac.SetIVACinitialVars(0, vac1_oldVarIn, vac1_oldVarOut);
                     //
-                    string pa_msg = "";
-                    int return_value = 0;
+
                     try
                     {
-                        return_value = ivac.StartAudioIVAC(0);
-                        retval = return_value
-                            == Convert.ToInt32(
-                                PortAudioForThetis.PaErrorCode.paNoError);
-
-                        if (!retval)
-                        {
-                            if (return_value == -1)
-                            {
-                                pa_msg
-                                    = "\n\nFailed to start VAC because the input device is invalid";
-                            }
-                            else if (return_value == -2)
-                            {
-                                pa_msg
-                                    = "\n\nFailed to start VAC because the output device is invalid";
-                            }
-                            else
-                            {
-                                pa_msg
-                                    = "\n\nFailed to start VAC. Audio subsystem reports: "
-                                    + PortAudioForThetis.PA_GetErrorText(
-                                        return_value);
-                                var v
-                                    = PortAudioForThetis.PA_GetLastHostErrorInfo();
-                                if (v.errorText.Length > 0)
-                                    pa_msg += "\n\n Api Error: " + v.errorText;
-                            }
-                        }
-                        if (!retval)
-                        {
-                            Status[index].status = pa_msg;
-                            Status[index].state = false;
-                            console.SetupForm.ShowSetupTab(Setup.SetupTab.VAC1_Tab);
-                            throw new Exception("VAC audio engine failed to start");
-
-
-                        }
+                        retval = ivac.StartAudioIVAC(0) == 1;
                         if (retval && console.PowerOn)
-                        {
                             ivac.SetIVACrun(0, 1);
-                            Status[index].state = true;
-                            Status[index].status = "OK";
-                        }
                     }
                     catch (Exception)
                     {
-                        if (return_value != 0)
-                        {
-                            console.PowerOn = false;
-                            if (pa_msg.Length == 0)
-                            {
-                                pa_msg
-                                    = "\n\nFailed to start VAC. Audio subsystem reports: "
-                                    + PortAudioForThetis.PA_GetErrorText(
-                                        return_value);
-                                var v
-                                    = PortAudioForThetis.PA_GetLastHostErrorInfo();
-                                if (v.errorText.Length > 0)
-                                    pa_msg += "\n\n Api Error: " + v.errorText;
-                            }
-
-                            if ((PortAudioForThetis.PaErrorCode)(return_value)
-                                == PortAudioForThetis.PaErrorCode
-                                       .paInvalidSampleRate)
-                            {
-                                // pa_msg += "\n" + "Suggested sample rate
-                                // (for input) is: " +
-                                // PortAudioForThetis.PA_GetDeviceInfo(input_dev2).defaultSampleRate
-                                //     + "\n" + "Suggested sample rate (for
-                                //     output) is: " +
-                                //     PortAudioForThetis.PA_GetDeviceInfo(output_dev2).defaultSampleRate;
-                            }
-                        }
-                        Status[index].status = pa_msg;
-                        Status[index].state = false;
-
-                        MessageBox.Show(
-                            "The program is having trouble starting the VAC audio streams.\n"
-                                + "Please examine the VAC related settings on the Setup Form -> Audio Tab and try again."
-                                + pa_msg,
-                            "VAC Audio Stream Startup Error.", MessageBoxButtons.OK,
+                        MessageBox.Show("The program is having trouble starting the VAC audio streams.\n" +
+                            "Please examine the VAC related settings on the Setup Form -> Audio Tab and try again.",
+                            "VAC Audio Stream Startup Error",
+                            MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                     }
                 }
@@ -1933,40 +1667,26 @@ namespace Thetis
                 ivac.SetIVACrun(0, 0);
                 ivac.StopAudioIVAC(0);
 
-                Thread.Sleep(10); // MW0LGE_21k9rc4 prevent exception when
-                                  // using ASIO
+                Thread.Sleep(10); //MW0LGE_21k9rc4 prevent exception when using ASIO 
             }
+
         }
 
         public static void EnableVAC2(bool enable)
         {
             bool retval = false;
-            var index = (int)VACSelection.VAC2;
 
-            if (enable) unsafe
+            if (enable)
+                unsafe
                 {
-                    Status[index].state = false;
-                    Status[index].status = "Starting";
                     int num_chan = 1;
                     int sample_rate = sample_rate3;
                     int block_size = block_size_vac2;
 
-                    double in_latency = vac2_latency_manual
-                        ? latency3 / 1000.0
-                        : PortAudioForThetis.PA_GetDeviceInfo(input_dev3)
-                              .defaultLowInputLatency;
-                    double out_latency = vac2_latency_out_manual
-                        ? vac2_latency_out / 1000.0
-                        : PortAudioForThetis.PA_GetDeviceInfo(output_dev3)
-                              .defaultLowOutputLatency;
-                    double pa_in_latency = vac2_latency_pa_in_manual
-                        ? vac2_latency_pa_in / 1000.0
-                        : PortAudioForThetis.PA_GetDeviceInfo(input_dev3)
-                              .defaultLowInputLatency;
-                    double pa_out_latency = vac2_latency_pa_out_manual
-                        ? vac2_latency_pa_out / 1000.0
-                        : PortAudioForThetis.PA_GetDeviceInfo(output_dev3)
-                              .defaultLowOutputLatency;
+                    double in_latency = vac2_latency_manual ? latency3 / 1000.0 : PA19.PA_GetDeviceInfo(input_dev3).defaultLowInputLatency;
+                    double out_latency = vac2_latency_out_manual ? vac2_latency_out / 1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
+                    double pa_in_latency = vac2_latency_pa_in_manual ? vac2_latency_pa_in / 1000.0 : PA19.PA_GetDeviceInfo(input_dev3).defaultLowInputLatency;
+                    double pa_out_latency = vac2_latency_pa_out_manual ? vac2_latency_pa_out / 1000.0 : PA19.PA_GetDeviceInfo(output_dev3).defaultLowOutputLatency;
 
                     if (vac2_output_iq)
                     {
@@ -1974,12 +1694,11 @@ namespace Thetis
                         sample_rate = sample_rate_rx2;
                         block_size = block_size_rx2;
                     }
-                    else if (vac2_stereo)
-                        num_chan = 2;
+                    else if (vac2_stereo) num_chan = 2;
 
                     VAC2RBReset = true;
 
-                    ivac.SetIVAChostAPIindex(1, Host3);
+                    ivac.SetIVAChostAPIindex(1, host3);
                     ivac.SetIVACinputDEVindex(1, input_dev3);
                     ivac.SetIVACoutputDEVindex(1, output_dev3);
                     ivac.SetIVACnumChannels(1, num_chan);
@@ -2006,51 +1725,58 @@ namespace Thetis
                     ivac.SetIVACFFRingMax(1, 1, vac2_ff_ringmaxIn);
                     ivac.SetIVACFFAlpha(1, 0, vac2_ff_alphaOut);
                     ivac.SetIVACFFAlpha(1, 1, vac2_ff_alphaIn);
-                    // ivac.SetIVACvar(1, 0, vac2_oldVarOut);
-                    // ivac.SetIVACvar(1, 1, vac2_oldVarIn);
+                    //ivac.SetIVACvar(1, 0, vac2_oldVarOut);
+                    //ivac.SetIVACvar(1, 1, vac2_oldVarIn);
                     ivac.SetIVACinitialVars(1, vac2_oldVarIn, vac2_oldVarOut);
                     //
 
                     try
                     {
-                        int return_value = ivac.StartAudioIVAC(1);
-                        retval = return_value
-                            == Convert.ToInt32(
-                                PortAudioForThetis.PaErrorCode.paNoError);
+                        retval = ivac.StartAudioIVAC(1) == 1;
                         if (retval && console.PowerOn)
-                        {
                             ivac.SetIVACrun(1, 1);
-                            Status[index].state = true;
-                            Status[index].status = "OK";
-                        }
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        MessageBox.Show(
-                            "The program is having trouble starting the VAC audio streams.\n"
-                                + "Please examine the VAC related settings on the Setup Form -> Audio Tab and try again.\n\n" + ex.Message,
-                            "VAC2 Audio Stream Startup Error", MessageBoxButtons.OK,
+                        MessageBox.Show("The program is having trouble starting the VAC audio streams.\n" +
+                            "Please examine the VAC related settings on the Setup Form -> Audio Tab and try again.",
+                            "VAC2 Audio Stream Startup Error",
+                            MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
-                        Status[index].state = false;
-                        Status[index].status = ex.Message;
                     }
                 }
             else
             {
                 ivac.SetIVACrun(1, 0);
                 ivac.StopAudioIVAC(1);
-                Status[index].state = false;
-                Status[index].status = "";
 
-                Thread.Sleep(10); // MW0LGE_21k9rc4 prevent exception when
-                                  // using ASIO
+                Thread.Sleep(10); //MW0LGE_21k9rc4 prevent exception when using ASIO
             }
+
         }
 
+        private static RadioProtocol _lastRadioProtocol = RadioProtocol.None;
+        public static RadioProtocol LastRadioProtocol
+        {
+            get { return _lastRadioProtocol; }
+            set 
+            {
+                _lastRadioProtocol = value; 
+            }
+        }
+        private static HPSDRHW _lastRadiohadware = HPSDRHW.Unknown;
+        public static HPSDRHW LastRadioHardware
+        {
+            get { return _lastRadiohadware; }
+            set
+            {
+                _lastRadiohadware = value;
+            }
+        }
         public static bool Start()
         {
-            RadioProtocol oldProto = NetworkIO.CurrentRadioProtocol;
+            //RadioProtocol oldProto = NetworkIO.CurrentRadioProtocol;
 
             bool retval = false;
             int rc;
@@ -2061,58 +1787,69 @@ namespace Thetis
 
             if (rc != 0)
             {
-                if (rc == -101) // firmware version error;
+                if (rc == -101) // firmware version error; 
                 {
                     string fw_err = NetworkIO.getFWVersionErrorMsg();
                     if (fw_err == null)
                     {
                         fw_err = "Bad Firmware levels";
                     }
-                    MessageBox.Show(fw_err, "Firmware Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    MessageBox.Show(fw_err, "Firmware Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
                     return false;
                 }
                 else
                 {
-                    if (!String.IsNullOrEmpty(NetworkIO.LastError))
-                    {
-                        MessageBox.Show("Unable to connect to the radio: " + NetworkIO.LastError);
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "Error starting SDR hardware, is it connected and powered?",
-                            "Network Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Error starting SDR hardware, is it connected and powered?", "Network Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
                     return false;
                 }
             }
 
-            // add setup calls that are needed to change between P1 & P2
-            // before startup
+            // add setup calls that are needed to change between P1 & P2 before startup
             if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
             {
-                console.SampleRateTX = 48000; // set tx audio sampling rate
+                console.SampleRateTX = 48000; // set tx audio sampling rate  
                 WDSP.SetTXACFIRRun(cmaster.chid(cmaster.inid(1, 0), 0), false);
+                //puresignal.SetPSHWPeak(cmaster.chid(cmaster.inid(1, 0), 0), 0.4072);
+                //console.psform.PSdefpeak = "0.4072"; //MW0LGE_21k9rc5 moved to psform.SetDefaultPeaks(), called below
             }
             else
             {
                 console.SampleRateTX = 192000;
                 WDSP.SetTXACFIRRun(cmaster.chid(cmaster.inid(1, 0), 0), true);
+                //if(console.CurrentHPSDRHardware == HPSDRHW.Saturn)                              // G8NJJ  // MW0LGE note, we do this below by calling SetDefaultPeaks if needed
+                //    puresignal.SetPSHWPeak(cmaster.chid(cmaster.inid(1, 0), 0), 0.6121);
+                //else
+                //    puresignal.SetPSHWPeak(cmaster.chid(cmaster.inid(1, 0), 0), 0.2899);
+                //console.psform.PSdefpeak = "0.2899"; //moved to psform.SetDefaultPeaks(), called below
             }
-            console.psform.SetDefaultPeaks(NetworkIO.CurrentRadioProtocol
-                != oldProto); // if the procol changed, force it
-                              // MW0LGE_21k9rc6
 
-            var s = c.SetupForm;
-            if (oldProto != NetworkIO.CurrentRadioProtocol || s.ProtocolInUI != NetworkIO.CurrentRadioProtocol)
+            //console.psform.SetDefaultPeaks(NetworkIO.CurrentRadioProtocol != oldProto); // if the procol changed, force it MW0LGE_21k9rc6
+            ////MW0LGE [2.9.0.8] fix if protocol is changed at some point
+            //
+            //note: setdefaultpeaks will only be called if fresh DB, or if at some point the protcol changes ie user has flashed the radio with different protocol
+            //we dont recover or assign here as psform stores the peak data in the form save/close. Those values can be tweaked by end user and are store/recovered
+            //against the form. This is to enable the reset of peaks for a new install or new protocol
+            bool bSetDefaultPeaks = false;
+            if (LastRadioHardware == HPSDRHW.Unknown || (LastRadioHardware != HPSDRHW.Unknown && LastRadioHardware != NetworkIO.BoardID))
             {
-                s.InitAudioTab(null, NetworkIO.CurrentRadioProtocol);
-                s.ForceAudioReset();
+                bSetDefaultPeaks = true;
+                LastRadioHardware = NetworkIO.BoardID; // saved in db
             }
-            cmaster.PSLoopback = cmaster.PSLoopback;
 
+            if (LastRadioProtocol == RadioProtocol.None || (LastRadioProtocol != RadioProtocol.None && LastRadioProtocol != NetworkIO.CurrentRadioProtocol))
+            {
+                bSetDefaultPeaks = true;                
+                LastRadioProtocol = NetworkIO.CurrentRadioProtocol; // saved in db
+            }
+            if(bSetDefaultPeaks) console.psform.SetDefaultPeaks(); // if false, will use the psform recovered values
+
+            c.SetupForm.InitAudioTab();
+            c.SetupForm.ForceAudioReset();
+            cmaster.PSLoopback = cmaster.PSLoopback;
 
             int result = NetworkIO.StartAudioNative();
             if (result == 0) retval = true;
@@ -2120,33 +1857,26 @@ namespace Thetis
             return retval;
         }
 
-        //        private static void PortAudioErrorMessageBox(PaErrorCode
-        //        error)
-        //       {
-        //            if (error < PaErrorCode.NoError) throw
-        //            PortAudioException.GetException(error);
-        //             switch (error)
-        //             {
-        //                 case PaErrorCode.InvalidDevice:
-        //                     string s = "Whoops!  Looks like something has
-        //                     gone wrong in the\n" +
-        //                         "Audio section.  Go look in the Setup Form ->
-        //                         Audio Tab to\n" + "verify the settings
-        //                         there.";
-        //                     if (vac_enabled) s += "  Since VAC is enabled,
-        //                     make sure\n" +
-        //                          "you look at those settings as well.";
-        //                     MessageBox.Show(s, "Audio Subsystem Error:
-        //                     Invalid Device",
-        //                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                     break;
-        //                 default:
-        //                     MessageBox.Show(PortAudio.Pa_GetErrorText(error),
-        //                     "PortAudio Error: " + error,
-        //                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                     break;
-        //             }
-        //        }
+//        private static void PortAudioErrorMessageBox(PaErrorCode error)
+ //       {
+//            if (error < PaErrorCode.NoError) throw PortAudioException.GetException(error);
+//             switch (error)
+//             {
+//                 case PaErrorCode.InvalidDevice:
+//                     string s = "Whoops!  Looks like something has gone wrong in the\n" +
+//                         "Audio section.  Go look in the Setup Form -> Audio Tab to\n" +
+//                         "verify the settings there.";
+//                     if (vac_enabled) s += "  Since VAC is enabled, make sure\n" +
+//                          "you look at those settings as well.";
+//                     MessageBox.Show(s, "Audio Subsystem Error: Invalid Device",
+//                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+//                     break;
+//                 default:
+//                     MessageBox.Show(PortAudio.Pa_GetErrorText(error), "PortAudio Error: " + error,
+//                         MessageBoxButtons.OK, MessageBoxIcon.Error);
+//                     break;
+//             }
+//        }
 
         #endregion
 
@@ -2162,16 +1892,16 @@ namespace Thetis
 
         private static int scope_display_width = 704;
 
-        // public static int ScopeDisplayWidth
+        //public static int ScopeDisplayWidth
         //{
-        //     get { return scope_display_width; }
-        //     set {
-        //         lock (m_objArrayLock)
-        //         {
-        //             scope_display_width = value;
-        //         }
-        //     }
-        // }
+        //    get { return scope_display_width; }
+        //    set {
+        //        lock (m_objArrayLock)
+        //        {
+        //            scope_display_width = value;
+        //        }
+        //    }
+        //}
 
         private static int scope_sample_index = 0;
         private static int scope_pixel_index = 0;
@@ -2179,14 +1909,10 @@ namespace Thetis
         private static float scope_pixel_max = float.MinValue;
         private static float[] scope_min;
 
-        private static readonly Object m_objArrayLock
-            = new Object(); // MW0LGE_21k9 lock needed as display can change the
-                            // size of these arrays, and being in a different
-                            // thread will cause issues otherwise
+        private static readonly Object m_objArrayLock = new Object();        //MW0LGE_21k9 lock needed as display can change the size of these arrays, and being in a different thread will cause issues otherwise
         public static float[] ScopeMin
         {
-            set
-            {
+            set {
                 lock (m_objArrayLock)
                 {
                     scope_min = value;
@@ -2204,8 +1930,7 @@ namespace Thetis
 
         public static float[] ScopeMax
         {
-            set
-            {
+            set {
                 lock (m_objArrayLock)
                 {
                     scope_max = value;
@@ -2223,43 +1948,38 @@ namespace Thetis
         {
             lock (m_objArrayLock)
             {
-                // if (scope_min == null || scope_min.Length <
-                // scope_display_width)
+                //if (scope_min == null || scope_min.Length < scope_display_width)
                 //{
-                //     if (Display.ScopeMin == null ||
-                //     Display.ScopeMin.Length < scope_display_width)
-                //         Display.ScopeMin = new
-                //         float[scope_display_width];
-                //     scope_min = Display.ScopeMin;
-                // }
-                // if (scope_max == null || scope_max.Length <
-                // scope_display_width)
+                //    if (Display.ScopeMin == null || Display.ScopeMin.Length < scope_display_width)
+                //        Display.ScopeMin = new float[scope_display_width];
+                //    scope_min = Display.ScopeMin;
+                //}
+                //if (scope_max == null || scope_max.Length < scope_display_width)
                 //{
-                //     if (Display.ScopeMax == null ||
-                //     Display.ScopeMax.Length < scope_display_width)
-                //         Display.ScopeMax = new
-                //         float[scope_display_width];
-                //     scope_max = Display.ScopeMax;
-                // }
+                //    if (Display.ScopeMax == null || Display.ScopeMax.Length < scope_display_width)
+                //        Display.ScopeMax = new float[scope_display_width];
+                //    scope_max = Display.ScopeMax;
+                //}
                 if (scope_min == null || scope_max == null) return;
 
                 for (int i = 0; i < frameCount; i++)
                 {
-                    if (Display.CurrentDisplayMode == DisplayMode.SCOPE
-                        || // MW0LGE added all other scope modes
-                        Display.CurrentDisplayMode == DisplayMode.SCOPE2
-                        || // MW0LGE_21g
-                        Display.CurrentDisplayMode == DisplayMode.PANASCOPE
-                        || Display.CurrentDisplayMode == DisplayMode.SPECTRASCOPE)
+                    if (Display.CurrentDisplayMode == DisplayMode.SCOPE || //MW0LGE added all other scope modes
+                        Display.CurrentDisplayMode == DisplayMode.SCOPE2 || //MW0LGE_21g
+                        Display.CurrentDisplayMode == DisplayMode.PANASCOPE ||
+                        Display.CurrentDisplayMode == DisplayMode.SPECTRASCOPE)
                     {
-                        if (buf[i] < scope_pixel_min) scope_pixel_min = buf[i];
-                        if (buf[i] > scope_pixel_max) scope_pixel_max = buf[i];
+                        if (buf[i] < scope_pixel_min)
+                            scope_pixel_min = buf[i];
+                        if (buf[i] > scope_pixel_max)
+                            scope_pixel_max = buf[i];
                     }
                     else
                     {
                         scope_pixel_min = buf[i];
                         scope_pixel_max = buf[i];
                     }
+
 
                     scope_sample_index++;
                     if (scope_sample_index >= scope_samples_per_pixel)
@@ -2292,12 +2012,11 @@ namespace Thetis
 
         public static float[] Scope2Max
         {
-            set
-            {
+            set {
                 lock (m_objArrayLock)
                 {
                     scope2_max = value;
-                    scope2_pixel_index = 0; // MW0LGE_21k9
+                    scope2_pixel_index = 0; //MW0LGE_21k9
 
                     int nMin = scope2_min != null ? scope2_min.Length : 0;
                     int nMax = scope2_max != null ? scope2_max.Length : 0;
@@ -2308,12 +2027,11 @@ namespace Thetis
         }
         public static float[] Scope2Min
         {
-            set
-            {
+            set {
                 lock (m_objArrayLock)
                 {
                     scope2_min = value;
-                    scope2_pixel_index = 0; // MW0LGE_21k9
+                    scope2_pixel_index = 0; //MW0LGE_21k9
 
                     int nMin = scope2_min != null ? scope2_min.Length : 0;
                     int nMax = scope2_max != null ? scope2_max.Length : 0;
@@ -2327,36 +2045,31 @@ namespace Thetis
         {
             lock (m_objArrayLock)
             {
-                // if (scope2_min == null || scope2_min.Length <
-                // scope_display_width)
+                //if (scope2_min == null || scope2_min.Length < scope_display_width)
                 //{
-                //     if (Display.Scope2Min == null ||
-                //     Display.Scope2Min.Length < scope_display_width)
-                //         Display.Scope2Min = new
-                //         float[scope_display_width];
-                //     scope2_min = Display.Scope2Min;
-                // }
-                // if (scope2_max == null || scope2_max.Length <
-                // scope_display_width)
+                //    if (Display.Scope2Min == null || Display.Scope2Min.Length < scope_display_width)
+                //        Display.Scope2Min = new float[scope_display_width];
+                //    scope2_min = Display.Scope2Min;
+                //}
+                //if (scope2_max == null || scope2_max.Length < scope_display_width)
                 //{
-                //     if (Display.Scope2Max == null ||
-                //     Display.Scope2Max.Length < scope_display_width)
-                //         Display.Scope2Max = new
-                //         float[scope_display_width];
-                //     scope2_max = Display.Scope2Max;
-                // }
+                //    if (Display.Scope2Max == null || Display.Scope2Max.Length < scope_display_width)
+                //        Display.Scope2Max = new float[scope_display_width];
+                //    scope2_max = Display.Scope2Max;
+                //}
                 if (scope2_min == null || scope2_max == null) return;
 
                 for (int i = 0; i < frameCount; i++)
                 {
-                    if (Display.CurrentDisplayMode == DisplayMode.SCOPE
-                        || Display.CurrentDisplayMode == DisplayMode.SCOPE2
-                        || // MW0LGE_21g
-                        Display.CurrentDisplayMode == DisplayMode.PANASCOPE
-                        || Display.CurrentDisplayMode == DisplayMode.SPECTRASCOPE)
+                    if (Display.CurrentDisplayMode == DisplayMode.SCOPE ||
+                        Display.CurrentDisplayMode == DisplayMode.SCOPE2 || //MW0LGE_21g
+                        Display.CurrentDisplayMode == DisplayMode.PANASCOPE ||
+                        Display.CurrentDisplayMode == DisplayMode.SPECTRASCOPE)
                     {
-                        if (buf[i] < scope2_pixel_min) scope2_pixel_min = buf[i];
-                        if (buf[i] > scope2_pixel_max) scope2_pixel_max = buf[i];
+                        if (buf[i] < scope2_pixel_min)
+                            scope2_pixel_min = buf[i];
+                        if (buf[i] > scope2_pixel_max)
+                            scope2_pixel_max = buf[i];
                     }
                     else
                     {
@@ -2364,13 +2077,12 @@ namespace Thetis
                         scope2_pixel_max = buf[i];
                     }
 
+
                     scope2_sample_index++;
                     if (scope2_sample_index >= scope_samples_per_pixel)
                     {
                         scope2_sample_index = 0;
-                        scope2_min[scope2_pixel_index]
-                            = scope2_pixel_min; // MW0LGE_21g  fix .. was
-                                                // scope_pixel_index
+                        scope2_min[scope2_pixel_index] = scope2_pixel_min;  //MW0LGE_21g  fix .. was scope_pixel_index
                         scope2_max[scope2_pixel_index] = scope2_pixel_max;
 
                         scope2_pixel_min = float.MaxValue;
@@ -2385,5 +2097,6 @@ namespace Thetis
         }
 
         #endregion
+
     }
 }

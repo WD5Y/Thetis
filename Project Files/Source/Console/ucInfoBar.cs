@@ -51,7 +51,6 @@ namespace Thetis
         private Console _console;
         private bool _mox;
         private bool _psEnabled = false;
-        // private bool _psEnabled = false;
         private System.Timers.Timer _psTimer;
         private System.Timers.Timer _warningTimer;
         private bool _preventClickEvents = false;
@@ -101,7 +100,7 @@ namespace Thetis
         {
             public bool Checked;
             public ActionTypes Action;
-
+            
             public string DisplayString
             {
                 get
@@ -203,7 +202,7 @@ namespace Thetis
             _leftToolTip = new string[MAX_FLIP, 3];
             _rightToolTip = new string[MAX_FLIP, 3];
 
-            for (int n = 0; n < MAX_FLIP; n++)
+            for (int n=0; n<MAX_FLIP; n++)
             {
                 _left1BaseWidth[n] = lblLeft1.Width;
                 _left2BaseWidth[n] = lblLeft2.Width;
@@ -279,11 +278,11 @@ namespace Thetis
         }
         private void OnActionClicked_Button1(object sender, frmInfoBarPopup.PopupActionSelected e)
         {
-            if (e.Button == MouseButtons.Left)
+            if(e.Button == MouseButtons.Left)
             {
                 doAction(1, e.Action, e.ButtonState, e.Button);
             }
-            else if (e.Button == MouseButtons.Right)
+            else if(e.Button == MouseButtons.Right)
             {
                 if (Common.ShiftKeyDown)
                 {
@@ -345,7 +344,7 @@ namespace Thetis
             }
         }
 
-        private void addPopup(frmInfoBarPopup frm, ToolStripControlHost host, ToolStripDropDown dropDown)
+        private void addPopup(frmInfoBarPopup frm, ToolStripControlHost host, ToolStripDropDown dropDown) 
         {
             // build the popup
             host.AutoSize = false;
@@ -373,7 +372,7 @@ namespace Thetis
         }
         public void ShutDown()
         {
-            if (_console != null) _console.MoxChangeHandlers -= OnMoxChangeHandler;
+            if(_console != null) _console.MoxChangeHandlers -= OnMoxChangeHandler;
 
             _shutDown = true;
             if (_psTimer != null)
@@ -417,7 +416,7 @@ namespace Thetis
             //bool bDone = r < 96 && g < 96 && b < 96;
             bool bDone = false;
 
-            if (_lastColor == Color.Red)
+            if(_lastColor == Color.Red)
             {
                 bDone = (r <= 128);
             }
@@ -466,7 +465,7 @@ namespace Thetis
                 _psTimer.Stop();
             }
             else
-                if (_psTimer != null) _psTimer.Start(); // fade more
+                if(_psTimer != null) _psTimer.Start(); // fade more
         }
 
         public void LateInit(Console c)
@@ -516,13 +515,12 @@ namespace Thetis
         {
             _bCalibrationAttemptsChanged = false;
             _bCorrectionsBeingApplied = false;
-            _bFeedbackLevelOk = false;
+            _bFeedbackLevelOk = false;            
         }
         private void chkButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (_preventClickEvents) return;
-            Button1Clicked?.Invoke(this, new InfoBarAction
-            {
+            Button1Clicked?.Invoke(this, new InfoBarAction { 
                 Action = _button1Action.Action,
                 ButtonState = chkButton1.Checked,
                 Button = MouseButtons.None
@@ -532,17 +530,16 @@ namespace Thetis
         private void chkButton2_CheckedChanged(object sender, EventArgs e)
         {
             if (_preventClickEvents) return;
-            Button2Clicked?.Invoke(this, new InfoBarAction
-            {
+            Button2Clicked?.Invoke(this, new InfoBarAction { 
                 Action = _button2Action.Action,
                 ButtonState = chkButton2.Checked,
                 Button = MouseButtons.None
-            }); ;
+            });;
         }
 
         public void UpdateButtonState(ActionTypes action, bool bEnabled, bool bIncludePopup = true)
         {
-            if (!_button1Actions.ContainsKey(action) || !_button2Actions.ContainsKey(action)) return;
+            if(!_button1Actions.ContainsKey(action) || !_button2Actions.ContainsKey(action)) return;
 
             _preventClickEvents = true; // so that events are not fired when the button state is initialised
 
@@ -588,7 +585,7 @@ namespace Thetis
                 lblRight3.BackColor = value;
                 lblWarning.BackColor = value;
 
-                if (_frmInfoBarPopup_Button1 != null) _frmInfoBarPopup_Button1.BackColor = value;
+                if(_frmInfoBarPopup_Button1 != null) _frmInfoBarPopup_Button1.BackColor = value;
                 if (_frmInfoBarPopup_Button2 != null) _frmInfoBarPopup_Button2.BackColor = value;
             }
         }
@@ -714,7 +711,7 @@ namespace Thetis
 
             switch (labelIndex)
             {
-                case 1:
+                case 1:                   
                     lbl = lblLeft1;
                     break;
                 case 2:
@@ -782,7 +779,7 @@ namespace Thetis
         public bool PSAEnabled
         {
             set
-            {
+            {                
                 _psEnabled = value;
                 if (!_psEnabled)
                     setPSboolsToFalse();
@@ -791,20 +788,17 @@ namespace Thetis
             }
         }
 
-        private void updatePSDisplay(bool single_cal = false)
+        private void updatePSDisplay()
         {
             if (!_psEnabled)
             {
                 lblFB.BackColor = Color.FromArgb(255, Color.DimGray);
                 lblPS.BackColor = Color.FromArgb(255, Color.DimGray);
                 _lastColor = Color.DimGray;
-                if (!single_cal)
-                {
-                    if (_useSmallFonts)
-                        lblFB.Text = "FB";
-                    else
-                        lblFB.Text = "Feedback";
-                }
+                if (_useSmallFonts)
+                    lblFB.Text = "FB";
+                else
+                    lblFB.Text = "Feedback";
                 lblPS.Text = "Pure Signal2";
             }
             else
@@ -818,17 +812,8 @@ namespace Thetis
                     }
                     else
                     {
-                        if (single_cal)
-                        {
-                            lblPS.Text = "SCal";
-                            //lblPS.BackColor = this._console.psform.
-                            // color is set to feedback color below ... // KLJ
-                        }
-                        else
-                        {
-                            lblPS.Text = "Pure Signal2";
-                            lblPS.BackColor = Color.FromArgb(255, Color.SeaGreen);
-                        }
+                        lblPS.Text = "Pure Signal2";
+                        lblPS.BackColor = Color.FromArgb(255, Color.SeaGreen);
                     }
 
                     lblFB.BackColor = _feedbackColour;
@@ -836,24 +821,10 @@ namespace Thetis
 
                     if (_hideFeedback || !_bCalibrationAttemptsChanged)
                     {
-                        if (!single_cal)
-                        {
-                            if (_useSmallFonts)
-                                lblFB.Text = "FB";
-                            else
-                                lblFB.Text = "Feedback";
-                        }
+                        if (_useSmallFonts)
+                            lblFB.Text = "FB";
                         else
-                        {
-                            if (_useSmallFonts)
-                            {
-                                lblPS.Text = "S-CAL";
-                            }
-                            else
-                            {
-                                lblPS.Text = "Single CAL";
-                            }
-                        }
+                            lblFB.Text = "Feedback";
                     }
                     else
                     {
@@ -909,7 +880,6 @@ namespace Thetis
             lblWarning.Visible = true;
             _warningTimer.Start();
         }
-
         private void InfoBar_Resize(object sender, EventArgs e)
         {
             //splitter
@@ -925,7 +895,7 @@ namespace Thetis
         private void InfoBar_Click(object sender, EventArgs e)
         {
             flip();
-        }
+        }    
         private void flip()
         {
             _currentFlip++;
@@ -947,8 +917,8 @@ namespace Thetis
             //tool tips
             for (int i = 0; i < 3; i++)
             {
-                SetToolTipLeft(_currentFlip, i + 1, _leftToolTip[_currentFlip, i]);  //+1 as we know them as right1 left1
-                SetToolTipRight(_currentFlip, i + 1, _rightToolTip[_currentFlip, i]);
+                SetToolTipLeft(_currentFlip, i+1, _leftToolTip[_currentFlip, i]);  //+1 as we know them as right1 left1
+                SetToolTipRight(_currentFlip, i+1, _rightToolTip[_currentFlip, i]);
             }
             //
 
@@ -1020,12 +990,12 @@ namespace Thetis
 
         private void lblFB_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if(e.Button == MouseButtons.Left)
             {
                 // swap red/blue
                 SwapRedBlue = !puresignal.InvertRedBlue;
             }
-            else if (e.Button == MouseButtons.Right)
+            else if(e.Button == MouseButtons.Right)
             {
                 // disable/enabled feedback numbers
                 HideFeedback = !HideFeedback;
@@ -1047,8 +1017,8 @@ namespace Thetis
         public bool HideFeedback
         {
             get { return _hideFeedback; }
-            set
-            {
+            set 
+            { 
                 bool bChanged = _hideFeedback != value;
                 _hideFeedback = value;
                 setToolTips();
@@ -1056,7 +1026,7 @@ namespace Thetis
                 if (bChanged) HideFeedbackChanged?.Invoke(this, EventArgs.Empty);
             }
         }
-
+        
         private void setToolTips()
         {
             string fb = "";
@@ -1085,7 +1055,7 @@ namespace Thetis
             else if (button == 2)
             {
                 _button2Action.Action = action; // new action
-            }
+            }            
 
             _preventClickEvents = false;
 
@@ -1093,12 +1063,12 @@ namespace Thetis
         }
         public CheckBoxTS GetPopupButton(int infoBarButton, int index)
         {
-            if (infoBarButton == 1)
+            if(infoBarButton == 1)
             {
                 if (_frmInfoBarPopup_Button1 == null) return null;
                 return _frmInfoBarPopup_Button1.GetPopupButton(index);
             }
-            else if (infoBarButton == 2)
+            else if(infoBarButton == 2)
             {
                 if (_frmInfoBarPopup_Button2 == null) return null;
                 return _frmInfoBarPopup_Button2.GetPopupButton(index);
@@ -1117,7 +1087,7 @@ namespace Thetis
         private void lblSplitter_MouseEnter(object sender, EventArgs e)
         {
             lblSplitter.BackColor = Color.White;
-
+            
             _oldCursor = Cursor.Current;
             this.Cursor = Cursors.SizeWE;
         }
@@ -1240,11 +1210,6 @@ namespace Thetis
         {
             get { return _splitterRatio; }
             set { _splitterRatio = value; }
-        }
-
-        private void lblPS_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

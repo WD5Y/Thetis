@@ -30,9 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(rxa));
             this.panelPanDisplay = new System.Windows.Forms.PanelTS();
-#if (USE_PANDISPLAY)
             this.panDisplay = new Thetis.PanDisplay();
-#endif
             this.udRXAAGCGain = new System.Windows.Forms.NumericUpDownTS();
             this.labelTS5 = new System.Windows.Forms.LabelTS();
             this.labelTS4 = new System.Windows.Forms.LabelTS();
@@ -43,9 +41,7 @@
             this.labelTS1 = new System.Windows.Forms.LabelTS();
             this.udRXAFreq = new System.Windows.Forms.NumericUpDownTS();
             this.panelPanDisplay.SuspendLayout();
-#if (USE_PANDISPLAY)
             ((System.ComponentModel.ISupportInitialize)(this.panDisplay)).BeginInit();
-#endif
             ((System.ComponentModel.ISupportInitialize)(this.udRXAAGCGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAMode)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAVolume)).BeginInit();
@@ -57,9 +53,7 @@
             this.panelPanDisplay.AutoScrollMargin = new System.Drawing.Size(0, 0);
             this.panelPanDisplay.AutoScrollMinSize = new System.Drawing.Size(0, 0);
             this.panelPanDisplay.BackColor = System.Drawing.Color.Transparent;
-#if (USE_PANDISPLAY)
             this.panelPanDisplay.Controls.Add(this.panDisplay);
-#endif
             this.panelPanDisplay.Location = new System.Drawing.Point(0, 0);
             this.panelPanDisplay.Name = "panelPanDisplay";
             this.panelPanDisplay.Size = new System.Drawing.Size(700, 285);
@@ -67,7 +61,6 @@
             // 
             // panDisplay
             // 
-#if (USE_PANDISPLAY)
             this.panDisplay.AGCHang = new System.Drawing.Rectangle(0, 0, 0, 0);
             this.panDisplay.AGCKnee = new System.Drawing.Rectangle(0, 0, 0, 0);
             this.panDisplay.AlexPreampOffset = 0F;
@@ -174,7 +167,6 @@
             this.panDisplay.WindowType = 6;
             this.panDisplay.ZoomFactor = 0.5D;
             this.panDisplay.Resize += new System.EventHandler(this.panDisplay_Resize);
-#endif
             // 
             // udRXAAGCGain
             // 
@@ -360,9 +352,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.rxa_FormClosing);
             this.Resize += new System.EventHandler(this.rxa_Resize);
             this.panelPanDisplay.ResumeLayout(false);
-#if (USE_PANDISPLAY)
             ((System.ComponentModel.ISupportInitialize)(this.panDisplay)).EndInit();
-#endif
             ((System.ComponentModel.ISupportInitialize)(this.udRXAAGCGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAMode)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRXAVolume)).EndInit();
@@ -384,10 +374,8 @@
         private System.Windows.Forms.NumericUpDownTS udRXAAGCGain;
         private System.Windows.Forms.LabelTS labelTS5;
         private System.Windows.Forms.PanelTS panelPanDisplay;
-#if (USE_PANDISPLAY)
         private PanDisplay panDisplay;
-#endif
-        // private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
-        // private WeifenLuo.WinFormsUI.Docking.VS2012LightTheme vS2012LightTheme1;
+       // private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
+       // private WeifenLuo.WinFormsUI.Docking.VS2012LightTheme vS2012LightTheme1;
     }
 }
