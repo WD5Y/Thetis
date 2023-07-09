@@ -1082,7 +1082,11 @@ namespace Thetis
                         ClickTuneDisplay = bse.CTUNEnabled;
                         chkFWCATU.Checked = ClickTuneDisplay;
                         CentreFrequency = bse.CentreFrequency;
-                        ptbDisplayZoom.Value = bse.ZoomSlider;
+                        if (bse.ZoomSlider != ptbDisplayZoom.Value)
+                        {
+                            ptbDisplayZoom.Value = bse.ZoomSlider;
+                            ptbDisplayZoom_Scroll(this, EventArgs.Empty);
+                        }
 
                         if (RX1Filter != bse.Filter)
                         {
@@ -5353,39 +5357,39 @@ namespace Thetis
             qsk_band_changing = false;
             if (RX1_band_change != oldBand) // actual band change, not just rotating the stack
             {
-                if (chkQSK.Text == "QSK" && !QSKEnabled) // We're changing from QSK off to on due to a mode change
+                if (CurrentBreakInMode == BreakIn.QSK && !QSKEnabled) // We're changing from QSK off to on due to a mode change
                 {
                     QSKEnabled = true; // complete the postponed change started in SetRX1Mode() via QSKEnabled()                  
                 }
-                else if (!(chkQSK.Text == "QSK") && QSKEnabled) // We're changing from QSK on to off due to a mode change
+                else if (!(CurrentBreakInMode == BreakIn.QSK) && QSKEnabled) // We're changing from QSK on to off due to a mode change
                 {
                     rx1_agcm_by_band[(int)oldBand] = non_qsk_agc;  // was set on the old band where it was on                     
                     non_qsk_agc = rx1_agcm_by_band[(int)RX1_band_change];
                     QSKEnabled = false;  // complete the postponed change started in SetRX1Mode() via QSKEnabled() 
                 }
-                else if (chkQSK.Text == "QSK" && QSKEnabled) // CW mode to CW mode with QSK on 
+                else if (CurrentBreakInMode == BreakIn.QSK && QSKEnabled) // CW mode to CW mode with QSK on 
                 {
                     rx1_agcm_by_band[(int)oldBand] = non_qsk_agc;  // was set on the old band where it was on
                     non_qsk_agc = rx1_agcm_by_band[(int)RX1_band_change];
                     RX1AGCMode = AGCMode.CUSTOM;
                     ; // don't need to turn QSK on - it's already on
                 }
-                else if (!(chkQSK.Text == "QSK") && !QSKEnabled) // Either CW to CW or non-CW to non-CW, with QSK off
+                else if (!(CurrentBreakInMode == BreakIn.QSK) && !QSKEnabled) // Either CW to CW or non-CW to non-CW, with QSK off
                 {
                     RX1AGCMode = rx1_agcm_by_band[(int)RX1_band_change];
                 }
             }
             else // just rotating the stack without changing bands
             {
-                if (chkQSK.Text == "QSK" && !QSKEnabled) // We're changing from QSK off to on due to a mode change
+                if (CurrentBreakInMode == BreakIn.QSK && !QSKEnabled) // We're changing from QSK off to on due to a mode change
                 {
                     QSKEnabled = true; // complete the postponed change started in SetRX1Mode() via QSKEnabled()                  
                 }
-                else if (!(chkQSK.Text == "QSK") && QSKEnabled) // We're changing from QSK on to off due to a mode change
+                else if (!(CurrentBreakInMode == BreakIn.QSK) && QSKEnabled) // We're changing from QSK on to off due to a mode change
                 {
                     QSKEnabled = false;  // complete the postponed change started in SetRX1Mode() via QSKEnabled() 
                 }
-                else if (chkQSK.Text == "QSK" && QSKEnabled) // CW mode to CW mode with QSK on 
+                else if (CurrentBreakInMode == BreakIn.QSK && QSKEnabled) // CW mode to CW mode with QSK on 
                 {
                     ; // don't need to turn QSK on - it's already on
                 }
@@ -16418,6 +16422,8 @@ namespace Thetis
                         cmaster.SetADCSupply(0, 50);
                         NetworkIO.LRAudioSwap(0);
                         CurrentHPSDRHardware = HPSDRHW.Saturn;
+                        AmpSens = 66.23f;                                // current reading sensitivity
+                        AmpVoff = 0.0f;                                  // current sensor voltage offset
                         break;
                     case HPSDRModel.ANAN_G2_1K:             // G8NJJ: likely to need further changes for PA
                         chkDX.Visible = true;
@@ -16427,6 +16433,8 @@ namespace Thetis
                         cmaster.SetADCSupply(0, 50);
                         NetworkIO.LRAudioSwap(0);
                         CurrentHPSDRHardware = HPSDRHW.Saturn;
+                        AmpSens = 66.23f;                                // current reading sensitivity
+                        AmpVoff = 0.0f;                                  // current sensor voltage offset
                         break;
 
                 }
@@ -21430,20 +21438,6 @@ namespace Thetis
                     lblVFOSplit.BackColor = System.Drawing.Color.Transparent;
             }
         }
-
-        public bool RIT
-        {
-            get { return chkRIT.Checked; }
-            set
-            {
-                chkRIT.Checked = value;
-                if (value == true)
-                    lblRITLabel.BackColor = System.Drawing.Color.Blue;
-                else
-                    lblRITLabel.BackColor = System.Drawing.Color.Transparent;
-            }
-        }
-
         public bool RITOn
         {
             get { return chkRIT.Checked; }
@@ -23610,6 +23604,15 @@ namespace Thetis
                         low += offset;
                         high += offset;
                     }
+                }
+            }
+            else //rx2 MW0LGE [pre-g2]
+            {
+                if (VFOSync && chkRIT.Checked)
+                {
+                    int offset = (int)udRIT.Value;
+                    low += offset;
+                    high += offset;
                 }
             }
 
@@ -47586,7 +47589,7 @@ namespace Thetis
             if (SetupForm.NotchAdminBusy) return; // dont add if using add/edit on the setup form
 
             double vfoHz = VFOAFreq * 1.0e6;
-            if (RIT) vfoHz += (double)RITValue * 1e-6; // check for RIT
+            if (RITOn) vfoHz += (double)RITValue * 1e-6; // check for RIT
 
             // shift into sideband
             vfoHz += notchSidebandShift(1); //MW0LGE_21k9rc4
