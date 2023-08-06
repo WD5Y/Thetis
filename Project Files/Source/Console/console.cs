@@ -1575,7 +1575,7 @@ namespace Thetis
             {
                 RX0Gain = ptbAF.Value;
                 RX2Gain = ptbAF.Value;
-            }
+            }            
             //wd5y
 
             m_frmNotchPopup = new frmNotchPopup();
@@ -2072,9 +2072,9 @@ namespace Thetis
             m_frmSeqLog.SetWireSharkPath(DumpCap.WireSharkPath);
             //--
 
-            initialiseRawInput(); // MW0LGE
-
-            return;
+            initialiseRawInput(); // MW0LGE           
+            
+            return;            
         }
         #region InfoBar
         //infobar
@@ -43760,7 +43760,7 @@ namespace Thetis
                 if (!this.collapsedDisplay)
                 {
                     grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
-                    grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+                    grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);                   
 
                     setupHiddenButton(grpVFOA);
 
@@ -43826,6 +43826,7 @@ namespace Thetis
                 lblRX2ModeBigLabel.Hide();
                 panelVFOLabels.Hide();
                 panelAndromedaMisc.Hide();
+                menuStrip1.Location = new Point(chkMNU.Location.X + chkMNU.Width + 0, chkMNU.Location.Y + 25 - menuStrip1.Height);
             }
 
             ResumeDrawing(this); //MW0LGE
@@ -44090,8 +44091,7 @@ namespace Thetis
                 cmaster.SetRunPanadapter(1, true);
                 cmaster.CMSetSRXWavePlayRun(1);
                 cmaster.CMSetSRXWaveRecordRun(1);
-                chkRX2.Checked = value;
-                //Display.Init(); // not needed MW0LGE
+                chkRX2.Checked = value;                
                 if (rx2_enabled)
                 {
                     old_rx1_display_mode = comboDisplayMode.Text;
@@ -44220,7 +44220,7 @@ namespace Thetis
 
                 Audio.RX2Enabled = rx2_enabled;
                 Display.RX2Enabled = rx2_enabled;
-                chkSplitDisplay.Checked = rx2_enabled;
+                chkSplitDisplay.Checked = rx2_enabled;                
             }
         }
 
@@ -44325,11 +44325,11 @@ namespace Thetis
             // need to update anything on the info bar buttons that is relying on rx2
             SetupInfoBarButton(ucInfoBar.ActionTypes.ActivePeaks, Display.SpectralPeakHoldRX1 | (RX2Enabled && Display.SpectralPeakHoldRX2));
 
-            if(!m_bResizeDX2Display && (oldRX2Enabled != RX2Enabled)) m_bResizeDX2Display = true; // MW0LGE_22b force resize is rx2 enabled state is changed, this may also be set by reisze calls above
+            if (!m_bResizeDX2Display && (oldRX2Enabled != RX2Enabled)) m_bResizeDX2Display = true; // MW0LGE_22b force resize is rx2 enabled state is changed, this may also be set by reisze calls above
 
             pause_DisplayThread = false; //MW0LGE_21k8
 
-            if (oldRX2Enabled != RX2Enabled) RX2EnabledChangedHandlers?.Invoke(RX2Enabled);
+            if (oldRX2Enabled != RX2Enabled) RX2EnabledChangedHandlers?.Invoke(RX2Enabled);           
         }
 
         private void setSmallRX2ModeFilterLabels()
@@ -48120,14 +48120,14 @@ namespace Thetis
         // Collapsible Display                                                        //
         ///////////////////////////////////////////////////////////////////////////////
 
-        private bool show_rx1 = true;
+        public bool show_rx1 = true;
         public bool ShowRX1
         {
             set { this.show_rx1 = value; }
             get { return show_rx1; }
         }
 
-        private bool show_rx2 = false;
+        public bool show_rx2 = false;
         public bool ShowRX2
         {
             set { this.show_rx2 = value; }
@@ -48142,7 +48142,7 @@ namespace Thetis
             get { return this.collapsedDisplay; }
         }
 
-        private bool m_bShowTopControls = true;
+        public bool m_bShowTopControls = true;
         public bool ShowTopControls
         {
             set
@@ -48189,7 +48189,7 @@ namespace Thetis
             }
         }
 
-        private bool showAndromedaTopControls = false;
+        public bool showAndromedaTopControls = false;
         public bool ShowAndromedaTopControls
         {
             set
@@ -48698,8 +48698,9 @@ namespace Thetis
                     comboMeterRXMode.Show();
                     comboRX2MeterMode.Show();
                     comboMeterTXMode.Show();
-                }
+                }             
             }
+            menuStrip1.Location = new Point(chkMNU.Location.X + chkMNU.Width + 0, chkMNU.Location.Y + 25 - menuStrip1.Height);
             //wd5y
         }
 
@@ -48863,52 +48864,21 @@ namespace Thetis
 
             // G8NJJ: top display with both VFO controls
             if (this.showAndromedaTopControls)
-            {
-                chkMUT.Hide();
-                comboPreamp.Hide();
-                comboRX2Preamp.Hide();
-                udRX1StepAttData.Hide();
-                udRX2StepAttData.Hide();
+            {                               
                 chkX2TR.Hide();                     // RX2 CTUN
-                chkFWCATU.Hide();                   // RX1 CTUN
-                //wd5y
-                lblAF3.Hide();
-                //wd5y
-                lblAF2.Hide();
-                //wd5y
-                lblRF3.Hide();
-                //wd5y
-                lblRF2.Hide();
-                lblPWR2.Hide();
-                ptbAF.Hide();
-                ptbRX1AF.Hide();
-                ptbPWR.Hide();
-                ptbRX2AF.Hide();
-                ptbRF.Hide();
-                ptbRX2RF.Hide();
-                comboAGC.Hide();
-                comboRX2AGC.Hide();
-                comboRX2Preamp.Hide();
-                udRX2StepAttData.Hide();
-                //comboPreamp.Hide();
-                //udRX1StepAttData.Hide();
-                comboMeterRXMode.Hide();
-                comboRX2MeterMode.Hide();
-                comboMeterTXMode.Hide();
-
-                panelMeterLabels.Show();
+                chkFWCATU.Hide();                   // RX1 CTUN                
                 panelVFOALabels.Show();
                 lblModeBigLabel.Show();
                 panelVFOBLabels.Show();
                 lblRX2ModeBigLabel.Show();
                 panelVFOLabels.Show();
-                panelAndromedaMisc.Show();
+                //wd5y
+                panelAndromedaMisc.Hide();
+                //wd5y
                 lblModeLabel.Hide();
                 lblFilterLabel.Hide();
                 lblRX2ModeLabel.Hide();
-                lblRX2FilterLabel.Hide();
-                //                lblRX1APF.Hide();
-                //                lblRX2APF.Hide();
+                lblRX2FilterLabel.Hide();                
                 lblRX1MuteVFOA.BringToFront();
                 lblRX2MuteVFOB.BringToFront();
                 //
@@ -48943,17 +48913,24 @@ namespace Thetis
                     // G8NJJ
                     comboDisplayMode.Show();            // display mode eg panadapter
                     comboRX2DisplayMode.Hide();
-                    picMultiMeterDigital.Parent = this;
-                    picMultiMeterDigital.Show();
-                    txtMultiText.Parent = this;
+                    picMultiMeterDigital.Parent = this;                    
+                    txtMultiText.Parent = this;                    
+                    picRX2Meter.Parent = this;                   
+                    txtRX2Meter.Parent = this;                   
+
+                    //wd5y
                     txtMultiText.Show();
-                    // picRX2Meter.Parent = this;
-                    picRX2Meter.Hide();
-                    // txtRX2Meter.Parent = this;
                     txtRX2Meter.Hide();
-                    // lblMultiSMeter.Parent = this;
-                    //MW0LGE lblMultiSMeter.Hide();
-                    //lblRX2Meter.Hide();
+                    picMultiMeterDigital.Show();
+                    picRX2Meter.Hide();
+                    comboMeterRXMode.Show();
+                    comboRX2MeterMode.Hide();
+                    comboMeterTXMode.Show();
+                    chkMUT.Parent = this;
+                    chkMUT.Show();
+                    chkRX2Mute.Parent = this;
+                    chkRX2Mute.Hide();
+                    //wd5y
 
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
@@ -48966,18 +48943,24 @@ namespace Thetis
                     // G8NJJ
                     comboDisplayMode.Hide();
                     comboRX2DisplayMode.Show();
-                    // picMultiMeterDigital.Parent = this;
-                    picMultiMeterDigital.Hide();
-                    // txtMultiText.Parent = this;
-                    txtMultiText.Hide();
-                    picRX2Meter.Parent = this;
-                    picRX2Meter.Show();
+                    picMultiMeterDigital.Parent = this;                    
+                    txtMultiText.Parent = this;                    
+                    picRX2Meter.Parent = this;                   
                     txtRX2Meter.Parent = this;
-                    txtRX2Meter.Show();
 
-                    // lblMultiSMeter.Parent = this;
-                    //lblMultiSMeter.Hide();
-                    //MW0LGE lblRX2Meter.Hide();
+                    //wd5y
+                    txtMultiText.Hide();
+                    txtRX2Meter.Show();
+                    picMultiMeterDigital.Hide();
+                    picRX2Meter.Show();
+                    comboMeterRXMode.Hide();
+                    comboRX2MeterMode.Show();
+                    comboMeterTXMode.Show();
+                    chkMUT.Parent = this;
+                    chkMUT.Hide();
+                    chkRX2Mute.Parent = this;
+                    chkRX2Mute.Show();
+                    //wd5y
 
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
                     {
@@ -48992,33 +48975,13 @@ namespace Thetis
                 comboRX2Preamp.Parent = this;
                 udRX1StepAttData.Parent = this;
                 udRX2StepAttData.Parent = this;
-                //G8NJJ, to show RIT/XIT
-                //                chkRIT.Parent = this;
-                //                chkXIT.Parent = this;
-                //                udRIT.Parent = this;
-                //                udXIT.Parent = this;
-                //                btnRITReset.Parent = this;
-                //                btnXITReset.Parent = this;
-                //                chkRIT.Show();
-                //                chkXIT.Show();
-                //                udRIT.Show();
-                //                udXIT.Show();
-                //                btnRITReset.Show();
-                //                btnXITReset.Show();
-                // G8NJJ: restore foreground colours which seem to get lost in the move
-                //                if (!chkRIT.Checked)
-                //                    chkRIT.ForeColor = SystemColors.ControlLightLight;
-                //                if (!chkXIT.Checked)
-                //                    chkXIT.ForeColor = SystemColors.ControlLightLight;
-                //                btnRITReset.ForeColor = SystemColors.ControlLightLight;
-                //                btnXITReset.ForeColor = SystemColors.ControlLightLight;
+                
                 panelVFOALabels.Hide();
                 lblModeBigLabel.Hide();
                 panelVFOBLabels.Hide();
                 lblRX2ModeBigLabel.Hide();
                 panelVFOLabels.Hide();
-                panelAndromedaMisc.Hide();
-                panelMeterLabels.Hide();
+                panelAndromedaMisc.Hide();                               
 
                 if (show_rx1)
                 {
@@ -49121,25 +49084,10 @@ namespace Thetis
                     lblFilterLabel.Show();
 
                     if (current_meter_display_mode == MultiMeterDisplayMode.Original)
-                    {
-                        // current_meter_display_mode = MultiMeterDisplayMode.Edge;
-                        // SetupForm.comboMeterType.Text = "Edge";
-                        //picMultiMeterDigital.Hide();
-                        //MW0LGE lblMultiSMeter.Parent = this;
-                        picMultiMeterDigital.SendToBack();
-                        //MW0LGE lblMultiSMeter.Show();
-                        //MW0LGE lblMultiSMeter.BringToFront();
+                    {                        
+                        picMultiMeterDigital.SendToBack();                        
                     }
-                    /*      picMultiMeterDigital.Hide();
-                          lblMultiSMeter.Show();
-                      }
-                      else
-                      {
-                          picMultiMeterDigital.Parent = this;
-                          picMultiMeterDigital.Show();
-                          lblMultiSMeter.Hide();
-                      }*/
-                    // changed G8NJJ to pick up RX1 or RX2 mode
+
                     if (this.m_bShowModeControls)
                     {
                         panelMode.Show();
@@ -49147,8 +49095,10 @@ namespace Thetis
                     }
 
                     else
+                    {
                         panelMode.Hide();
-                    panelRX2Mode.Hide();
+                        panelRX2Mode.Hide();
+                    }
                 }
                 if (show_rx2)
                 {
@@ -49177,7 +49127,7 @@ namespace Thetis
                     txtMultiText.Hide();
                     txtRX2Meter.Parent = this;
                     txtRX2Meter.Show();
-
+                    
                     chkMON.Parent = this;
                     chkMON.Show();
 
@@ -49243,10 +49193,8 @@ namespace Thetis
                     else
                     {
                         comboRX2Preamp.Hide();
-                        udRX2StepAttData.Hide();
-                        // comboPreamp.Parent = this;
-                        comboPreamp.Show();
-                        // udRX1StepAttData.Parent = this;
+                        udRX2StepAttData.Hide();                        
+                        comboPreamp.Show();                        
                         udRX1StepAttData.Show();
                     }
                     // lblMultiSMeter.Parent = this;
@@ -49270,8 +49218,10 @@ namespace Thetis
                         panelButtonBar.Hide();
                     }
                     else
+                    {
                         panelRX2Mode.Hide();
-                    panelMode.Hide();
+                        panelMode.Hide();
+                    }
                 }
 
             }
@@ -49391,63 +49341,25 @@ namespace Thetis
                 //
                 // VFO B at right
                 //
-                panelVFOBLabels.Location = new Point(panelButtonBar.Width - 10 - grpVFOB.Width, gr_VFOA_basis_location.Y);
+                panelVFOBLabels.Location = new Point(panelButtonBar.Width - 43 - grpVFOB.Width, gr_VFOA_basis_location.Y);
                 grpVFOB.Location = new Point(panelVFOBLabels.Location.X, panelVFOBLabels.Location.Y + panelVFOBLabels.Height);
-                lblRX2APF.Location = new Point(txtVFOBBand.Location.X + 5, txtVFOBBand.Location.Y + 2);
+                lblRX2APF.Location = new Point(txtVFOBBand.Location.X + 300, txtVFOBBand.Location.Y + 2);
                 lblRX2MuteVFOB.Location = new Point(txtVFOBBand.Location.X + 5, txtVFOBBand.Location.Y + 12);
 
-                panelAndromedaMisc.Location = new Point(panelVFOBLabels.Location.X - panelAndromedaMisc.Width - 10, panelVFOLabels.Location.Y);
-
-                //
-                // RX1 or RX2 meter (button dependent)
-                //
-                panelMeterLabels.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 3 - panelMeterLabels.Height);
-                if (show_rx1)
-                {
-                    // G8NJJ: deliberately set RX1 meter and txt size to RX2 ones size in Andromeda
-                    // they do get resized back later!
-                    txtMultiText.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
-                    txtMultiText.Size = txt_rx2meter_size_basis;
-                    picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 4);
-                    picMultiMeterDigital.Size = pic_rx2meter_size_basis;
-                    // for Andromeda mode both types of meter should have the same size!                  
-
-                    setupHiddenButton(grpVFOA); //MW0LGE_21a
-                }
-                else if (show_rx2)
-                {
-                    txtRX2Meter.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, grpVFOA.Location.Y + 5);
-                    txtRX2Meter.Size = txt_rx2meter_size_basis;
-                    picRX2Meter.Location = new Point(txtRX2Meter.Location.X, txtRX2Meter.Location.Y + txtRX2Meter.Height + 4);
-                    picRX2Meter.Size = pic_rx2meter_size_basis;
-                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
-                    {
-                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
-                    }
-                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
-                        txtRX2Meter.Location.Y + 2);
-                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
-                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
-                        txtRX2Meter.Location.Y + 2);
-                    // G8NJJ
-                    setupHiddenButton(grpVFOA); //MW0LGE_21a
-                }
+                panelAndromedaMisc.Location = new Point(panelVFOBLabels.Location.X - panelAndromedaMisc.Width - 10, panelVFOLabels.Location.Y);                
             }
-            //            else if (m_bShowModeControls)         /// changed G8NJJ - wrong variable used?
+            
             else if (m_bShowTopControls)
             {
                 if (show_rx1)
                 {
                     top = grpVFOA.Height + 10;
-                    //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
-                    //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+
                     grpVFOA.Location = new Point((this.ClientSize.Width - grpVFOA.Width) / 2, gr_VFOA_basis_location.Y);
-                    //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+
                     txtMultiText.Location = new Point(((this.ClientSize.Width - (grpVFOA.Location.X + grpVFOA.Width)) -
                         (txtMultiText.Width / 12)) * 2, grpVFOA.Location.Y + 5);
-                    // picMultiMeterDigital.Location = txtMultiText.Location;
-                    // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
+                    
                     picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
                     picMultiMeterDigital.Location = new Point(((this.ClientSize.Width - (grpVFOA.Location.X + grpVFOA.Width)) -
                         (picMultiMeterDigital.Width / 6)) * 2, txtMultiText.Location.Y + txtMultiText.Height + 9);
@@ -49458,48 +49370,42 @@ namespace Thetis
                     grpVFOA.Location = new Point(chkMUT.Location.X + chkMUT.Width + 122, gr_VFOA_basis_location.Y);
                     //wd5y
 
-                    // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
-                    //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-
-
                     comboMeterRXMode.Location = new Point(txtMultiText.Location.X - comboMeterRXMode.Width - 5,
-                        txtMultiText.Location.Y + 2);
-                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                        txtMultiText.Location.Y + 2);                    
                     comboMeterTXMode.Location = new Point(txtMultiText.Location.X + txtMultiText.Width + 5,
                         txtMultiText.Location.Y + 2);
                     chkPower.Location = new Point(30, grpVFOA.Location.Y + 2);
                     chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
                     radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
                     radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
-                    //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
+                    
                     chkMON.Location = new Point(grpVFOA.Location.X - chkMON.Width - 10, grpVFOA.Location.Y + 8);
-                    //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
+                    
                     chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
                     chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
-                    //                    chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    
                     chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
 
                     chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
-                    chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
-
+                    chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN                    
+                                        
                     //wd5y
                     lblAF3.Hide();
                     lblRF3.Hide();
                     lblAF2.Show();
                     lblRF2.Show();
+                    panelMeterLabels.Show();
                     //wd5y
 
                     lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
-                    // ptbAF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                    
                     ptbRX1AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
                     lblPWR2.Location = new Point(ptbRX1AF.Location.X + ptbRX1AF.Width + 2, ptbRX1AF.Location.Y);
                     ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
-                    //ptbAF.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 2);
+                    
                     lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
                     ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);
                     comboAGC.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y + 3);
-                    //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
                     
                     udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
                     comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
@@ -49507,14 +49413,13 @@ namespace Thetis
                     if (rx1_step_att_present)
                     {
                         comboPreamp.Hide();
-                        udRX1StepAttData.Show();
-                        //udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
+                        udRX1StepAttData.Show();                        
                     }
                     else
                     {
                         udRX1StepAttData.Hide();
                         comboPreamp.Show();
-                        // comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
+                        
                     }
                     udXIT.Location = new Point(grpVFOA.Location.X + grpVFOA.Width + 6, comboAGC.Location.Y);     // XIT bottom, to right of VFO
                     chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
@@ -49528,20 +49433,16 @@ namespace Thetis
                 else if (show_rx2)
                 {
                     top = grpVFOB.Height + 10;
-                    //top = grpMultimeter.Location.Y + grpMultimeter.Height + 5;
-                    //grpVFOA.Location = new Point(gr_VFOA_basis_location.X + (h_delta / 4), gr_VFOA_basis_location.Y);
+                    
                     grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
-                    //grpVFOB.Location = new Point(gr_VFOB_basis_location.X + h_delta - (h_delta / 4), gr_VFOB_basis_location.Y);
+                    
                     txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
                         (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
-                    // picMultiMeterDigital.Location = txtMultiText.Location;
-                    // picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 8);
+                    
                     picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
                     picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
                         (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
-                    // picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
-                    //grpMultimeter.Size = new Size(grpMultimeter.Width, grpVFOB.Height);
-
+                    
                     //wd5y                    
                     chkRX2Mute.Location = new Point(radRX2Show.Location.X + radRX2Show.Width + 1, radRX2Show.Location.Y);
                     top = grpVFOB.Height + 10;
@@ -49555,32 +49456,28 @@ namespace Thetis
 
                     comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
                         txtRX2Meter.Location.Y + 2);
-                    // comboMeterTXMode.Location = new Point(comboMeterRXMode.Location.X, 
-                    //     comboMeterRXMode.Location.Y + comboMeterRXMode.Height + 1);
+                    
                     comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
                         txtRX2Meter.Location.Y + 2);
                     chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
                     chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
                     radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
                     radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
-                    //chkMON.Location = new Point(10, chkPower.Location.Y + chkPower.Height + 5);
+                    
                     chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
-                    //chkMUT.Location = new Point(chkMON.Location.X + chkMON.Width, chkPower.Location.Y + chkPower.Height + 5);
+                    
                     
                     chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
-                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
-                    //                        chkVOX.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);                    
                     chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
-
-                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
-                    //  chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN
+                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP                    
                     chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
-
+                                       
                     //wd5y
                     lblAF2.Hide();
                     lblRF2.Hide();
                     lblAF3.Show();
-                    lblRF3.Show();
+                    lblRF3.Show();                    
                     lblAF3.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 1);
                     ptbRX2AF.Location = new Point(lblAF3.Location.X + lblAF3.Width, lblAF3.Location.Y);
                     lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
@@ -49590,8 +49487,7 @@ namespace Thetis
                     //wd5y
 
                     comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
-                    //chkMUT.Location = new Point(ptbAF.Location.X + ptbAF.Width + 2, ptbAF.Location.Y);
-                    //comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                    
                     udXIT.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 6, comboRX2AGC.Location.Y);     // XIT bottom, to right of VFO
                     chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
                     btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
@@ -49819,6 +49715,407 @@ namespace Thetis
             }
 
             //wd5y
+            if (RX2Enabled == true)
+            {
+                txtMultiText.Show();
+                txtRX2Meter.Show();
+                picMultiMeterDigital.Show();
+                picRX2Meter.Show();
+                comboMeterRXMode.Show();
+                comboRX2MeterMode.Show();
+                comboMeterTXMode.Show();
+
+                txtRX2Meter.Show();
+                txtMultiText.Show();
+                picRX2Meter.Show();
+                picMultiMeterDigital.Show();
+                comboMeterRXMode.Show();
+                comboRX2MeterMode.Show();
+                comboMeterTXMode.Show();
+                panelMeterLabels.Show();
+
+                if (m_bShowTopControls)
+                {
+                    txtMultiText.Hide();
+                    picMultiMeterDigital.Hide();
+                    txtRX2Meter.Hide();
+                    picRX2Meter.Hide();
+                }
+            }
+
+            if (this.showAndromedaTopControls || (this.RX2Enabled && this.showAndromedaTopControls))
+            {
+                comboPreamp.Parent = this;
+                comboRX2Preamp.Parent = this;
+                udRX1StepAttData.Parent = this;
+                udRX2StepAttData.Parent = this;
+
+                txtMultiText.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 570, grpVFOA.Location.Y + 5);
+                txtMultiText.Size = txt_rx2meter_size_basis;
+                picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 4);
+                picMultiMeterDigital.Size = pic_rx2meter_size_basis;
+                menuStrip1.Location = new Point(chkPower.Location.X + chkPower.Width - 45, chkPower.Location.Y + 172 - menuStrip1.Height);                
+
+                setupHiddenButton(grpVFOA); //MW0LGE_21a
+
+                txtRX2Meter.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 809, grpVFOA.Location.Y + 5);
+                txtRX2Meter.Size = txt_rx2meter_size_basis;
+                picRX2Meter.Location = new Point(txtRX2Meter.Location.X, txtRX2Meter.Location.Y + txtRX2Meter.Height + 4);
+                picRX2Meter.Size = pic_rx2meter_size_basis;
+                if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                {
+                    picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 1, pic_rx2meter_size_basis.Height);
+                }
+                comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                    txtRX2Meter.Location.Y + 2);
+                    
+                comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                        txtRX2Meter.Location.Y + 2);
+                if (show_rx1)
+                {
+                    comboRX2MeterMode.Hide();
+                    comboMeterRXMode.Parent = this;
+                    comboMeterRXMode.Show();
+
+                    comboMeterTXMode.Parent = this;
+                    comboMeterTXMode.Show();
+
+                    panelMeterLabels.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 570, grpVFOA.Location.Y + 3 - panelMeterLabels.Height);                   
+
+                    comboMeterRXMode.Location = new Point(txtMultiText.Location.X - comboMeterRXMode.Width - 5,
+                    txtMultiText.Location.Y + 2);
+
+                    comboMeterTXMode.Location = new Point(txtMultiText.Location.X + txtMultiText.Width + 5,
+                            txtMultiText.Location.Y + 2);
+
+                    lblAF3.Hide();
+                    lblRF3.Hide();
+                    lblAF2.Show();
+                    lblRF2.Show();
+                    lblRF3.Hide();
+                    lblPWR2.Show();
+                    ptbRX1AF.Parent = this;
+                    ptbRX1AF.Show();
+                    ptbRX2AF.Parent = this;
+                    ptbRX2AF.Hide();
+                    ptbPWR.Parent = this;
+                    ptbPWR.Show();
+                    ptbRF.Parent = this;
+                    ptbRF.Show();
+                    ptbRX2RF.Parent = this;
+                    ptbRX2RF.Hide();
+                    comboAGC.Parent = this;
+                    comboAGC.Show();
+                    comboRX2AGC.Parent = this;
+                    comboRX2AGC.Hide();
+                    comboPreamp.Parent = this;
+                    comboPreamp.Show();
+                    comboRX2Preamp.Parent = this;
+                    comboRX2Preamp.Hide();
+                    udRX1StepAttData.Parent = this;
+                    udRX1StepAttData.Show();
+                    udRX2StepAttData.Parent = this;
+                    udRX2StepAttData.Hide();
+                    chkMUT.Parent = this;
+                    chkMUT.Show();
+                    chkRX2Mute.Parent = this;
+                    chkRX2Mute.Hide();
+
+                    lblAF2.Location = new Point(chkPower.Location.X + 450, chkPower.Location.Y + chkPower.Height + 5);                    
+                    ptbRX1AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                    lblPWR2.Location = new Point(ptbRX1AF.Location.X + ptbRX1AF.Width + 2, ptbRX1AF.Location.Y);
+                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                    lblRF2.Location = new Point(chkPower.Location.X + 450, lblAF2.Location.Y + lblAF2.Height + 2);
+                    ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);
+                    comboAGC.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y + 3);
+                    udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
+                    comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
+                    chkMUT.Location = new Point(chkPower.Location.X + 65, chkPower.Location.Y + chkPower.Height + 39);
+
+                    if (rx1_step_att_present)
+                    {
+                        comboPreamp.Hide();
+                        udRX1StepAttData.Show();
+                    }
+                    else
+                    {
+                        udRX1StepAttData.Hide();
+                        comboPreamp.Show();
+                    }                    
+                }
+
+                else if (show_rx2)
+                {
+                    comboMeterRXMode.Hide();
+                    comboRX2MeterMode.Parent = this;
+                    comboRX2MeterMode.Show();
+
+                    comboMeterTXMode.Parent = this;
+                    comboMeterTXMode.Show();
+
+                    panelMeterLabels.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 809, grpVFOA.Location.Y + 3 - panelMeterLabels.Height);
+
+                    comboRX2MeterMode.Location = new Point(txtMultiText.Location.X - comboRX2MeterMode.Width + 234,
+                           txtMultiText.Location.Y + 2);
+
+                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                            txtRX2Meter.Location.Y + 2);
+
+                    lblAF3.Show();
+                    lblRF3.Show();
+                    lblAF2.Hide();
+                    lblRF2.Hide();
+                    lblRF3.Show();
+                    lblPWR2.Show();
+                    ptbRX1AF.Parent = this;
+                    ptbRX1AF.Hide();
+                    ptbRX2AF.Parent = this;
+                    ptbRX2AF.Show();
+                    ptbPWR.Parent = this;
+                    ptbPWR.Show();
+                    ptbRF.Parent = this;
+                    ptbRF.Hide();
+                    ptbRX2RF.Parent = this;
+                    ptbRX2RF.Show();
+                    comboAGC.Parent = this;
+                    comboAGC.Hide();
+                    comboRX2AGC.Parent = this;
+                    comboRX2AGC.Show();
+                    comboPreamp.Parent = this;
+                    comboPreamp.Hide();
+                    comboRX2Preamp.Parent = this;
+                    comboRX2Preamp.Show();
+                    udRX1StepAttData.Parent = this;
+                    udRX1StepAttData.Hide();
+                    udRX2StepAttData.Parent = this;
+                    udRX2StepAttData.Show();
+                    chkMUT.Parent = this;
+                    chkMUT.Hide();
+                    chkRX2Mute.Parent = this;
+                    chkRX2Mute.Show();
+
+                    lblAF3.Location = new Point(chkPower.Location.X + 450, chkPower.Location.Y + chkPower.Height + 5);
+                    ptbRX2AF.Location = new Point(lblAF3.Location.X + lblAF3.Width, lblAF3.Location.Y);
+                    lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
+                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                    lblRF3.Location = new Point(chkPower.Location.X + 450, lblAF3.Location.Y + lblAF3.Height + 2);
+                    ptbRX2RF.Location = new Point(lblRF3.Location.X + lblRF3.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
+                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
+                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                    chkRX2Mute.Location = new Point(chkPower.Location.X + 65, chkPower.Location.Y + chkPower.Height + 39);
+
+                    if (rx2_step_att_present)
+                    {
+                        comboPreamp.Hide();
+                        udRX2StepAttData.Show();
+                    }
+                    else
+                    {
+                        udRX2StepAttData.Hide();
+                        comboPreamp.Show();
+                    }                   
+                }
+            }
+            
+            if (m_bShowTopControls)
+            {
+               panelMeterLabels.Parent = this; 
+               panelMeterLabels.Location = new Point(chkPower.Location.X + chkPower.Width + 1627, chkPower.Location.Y + 2 - panelMeterLabels.Height);
+               menuStrip1.Location = new Point(chkPower.Location.X + chkPower.Width - 45, chkPower.Location.Y + 133 - menuStrip1.Height);
+
+                if (show_rx1)
+                {
+                    top = grpVFOA.Height + 10;
+
+                    grpVFOA.Location = new Point((this.ClientSize.Width - grpVFOA.Width) / 2, gr_VFOA_basis_location.Y);
+
+                    txtMultiText.Location = new Point(((this.ClientSize.Width - (grpVFOA.Location.X + grpVFOA.Width)) -
+                        (txtMultiText.Width / 12)) * 2, grpVFOA.Location.Y + 5);
+
+                    picMultiMeterDigital.Size = new Size(pic_multi_meter_size_basis.Width * 2, pic_multi_meter_size_basis.Height);
+                    picMultiMeterDigital.Location = new Point(((this.ClientSize.Width - (grpVFOA.Location.X + grpVFOA.Width)) -
+                        (picMultiMeterDigital.Width / 6)) * 2, txtMultiText.Location.Y + txtMultiText.Height + 9);
+
+                    //wd5y                    
+                    chkMUT.Location = new Point(radRX2Show.Location.X + radRX2Show.Width + 1, radRX2Show.Location.Y);
+                    top = grpVFOA.Height + 10;
+                    grpVFOA.Location = new Point(chkMUT.Location.X + chkMUT.Width + 122, gr_VFOA_basis_location.Y);
+                    //wd5y
+
+                    comboMeterRXMode.Location = new Point(txtMultiText.Location.X - comboMeterRXMode.Width - 5,
+                        txtMultiText.Location.Y + 2);
+                    comboMeterTXMode.Location = new Point(txtMultiText.Location.X + txtMultiText.Width + 5,
+                        txtMultiText.Location.Y + 2);
+                    chkPower.Location = new Point(30, grpVFOA.Location.Y + 2);
+                    chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
+                    radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
+                    radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+
+                    chkMON.Location = new Point(grpVFOA.Location.X - chkMON.Width - 10, grpVFOA.Location.Y + 8);
+
+                    chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
+
+                    chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+
+                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP
+                    chkFWCATU.Location = new Point(chkMOX.Location.X - chkFWCATU.Width - 10, chkMOX.Location.Y); //CTUN                    
+
+                    //wd5y
+                    lblAF3.Hide();
+                    lblRF3.Hide();
+                    lblAF2.Show();
+                    lblRF2.Show();
+                    panelMeterLabels.Show();
+                    //wd5y
+
+                    lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
+
+                    ptbRX1AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
+                    lblPWR2.Location = new Point(ptbRX1AF.Location.X + ptbRX1AF.Width + 2, ptbRX1AF.Location.Y);
+                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+
+                    lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
+                    ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);
+                    comboAGC.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y + 3);
+
+                    udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
+                    comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
+
+                    if (rx1_step_att_present)
+                    {
+                        comboPreamp.Hide();
+                        udRX1StepAttData.Show();
+                    }
+                    else
+                    {
+                        udRX1StepAttData.Hide();
+                        comboPreamp.Show();
+
+                    }
+                    udXIT.Location = new Point(grpVFOA.Location.X + grpVFOA.Width + 6, comboAGC.Location.Y);     // XIT bottom, to right of VFO
+                    chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
+                    btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
+                    udRIT.Location = new Point(udXIT.Location.X, chkXIT.Location.Y - udRIT.Height);
+                    chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
+                    btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
+
+                    setupHiddenButton(grpVFOA); //MW0LGE_21a
+                }
+                else if (show_rx2)
+                {
+                    top = grpVFOB.Height + 10;
+
+                    grpVFOB.Location = new Point((this.ClientSize.Width - grpVFOB.Width) / 2, gr_VFOB_basis_location.Y);
+
+                    txtRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                        (txtRX2Meter.Width / 12)) * 2, grpVFOB.Location.Y + 5);
+
+                    picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
+                    picRX2Meter.Location = new Point(((this.ClientSize.Width - (grpVFOB.Location.X + grpVFOB.Width)) -
+                        (picRX2Meter.Width / 6)) * 2, txtRX2Meter.Location.Y + txtRX2Meter.Height + 9);
+
+                    //wd5y                    
+                    chkRX2Mute.Location = new Point(radRX2Show.Location.X + radRX2Show.Width + 1, radRX2Show.Location.Y);
+                    top = grpVFOB.Height + 10;
+                    grpVFOB.Location = new Point(chkRX2Mute.Location.X + chkRX2Mute.Width + 122, gr_VFOB_basis_location.Y);
+                    //wd5y 
+
+                    if (current_meter_display_mode == MultiMeterDisplayMode.Original)
+                    {
+                        picRX2Meter.Size = new Size(pic_rx2meter_size_basis.Width * 2, pic_rx2meter_size_basis.Height);
+                    }
+
+                    comboRX2MeterMode.Location = new Point(txtRX2Meter.Location.X - comboRX2MeterMode.Width - 5,
+                        txtRX2Meter.Location.Y + 2);
+
+                    comboMeterTXMode.Location = new Point(txtRX2Meter.Location.X + txtRX2Meter.Width + 5,
+                        txtRX2Meter.Location.Y + 2);
+                    chkPower.Location = new Point(30, grpVFOB.Location.Y + 2);
+                    chkRX2.Location = new Point(chkPower.Location.X + chkRX2.Width + 5, chkPower.Location.Y);
+                    radRX1Show.Location = new Point(chkRX2.Location.X + radRX1Show.Width + 15, chkRX2.Location.Y + 4);
+                    radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
+
+                    chkMON.Location = new Point(grpVFOB.Location.X - chkMON.Width - 10, grpVFOB.Location.Y + 8);
+
+
+                    chkTUN.Location = new Point(chkMON.Location.X, chkMON.Location.Y + chkMON.Height + 4);
+                    chkMOX.Location = new Point(chkTUN.Location.X, chkTUN.Location.Y + chkTUN.Height + 4);
+                    chkFWCATUBypass.Location = new Point(chkMON.Location.X - chkVOX.Width - 10, chkMON.Location.Y);
+                    chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP                    
+                    chkX2TR.Location = new Point(chkMOX.Location.X - chkX2TR.Width - 10, chkMOX.Location.Y); //RX2 CTUN
+
+                    //wd5y
+                    lblAF2.Hide();
+                    lblRF2.Hide();
+                    lblAF3.Show();
+                    lblRF3.Show();
+                    lblAF3.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 1);
+                    ptbRX2AF.Location = new Point(lblAF3.Location.X + lblAF3.Width, lblAF3.Location.Y);
+                    lblPWR2.Location = new Point(ptbRX2AF.Location.X + ptbRX2AF.Width + 2, ptbRX2AF.Location.Y);
+                    ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
+                    lblRF3.Location = new Point(5, lblAF3.Location.Y + lblAF3.Height + 2);
+                    ptbRX2RF.Location = new Point(lblRF3.Location.X + lblRF3.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
+                    //wd5y
+
+                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
+
+                    udXIT.Location = new Point(grpVFOB.Location.X + grpVFOB.Width + 6, comboRX2AGC.Location.Y);     // XIT bottom, to right of VFO
+                    chkXIT.Location = new Point(udXIT.Location.X, udXIT.Location.Y - chkXIT.Height);             // chkXIT above it
+                    btnXITReset.Location = new Point(chkXIT.Location.X + chkXIT.Width, chkXIT.Location.Y);      // btnXIT to its right
+                    udRIT.Location = new Point(udXIT.Location.X, chkXIT.Location.Y - udRIT.Height);
+                    chkRIT.Location = new Point(udRIT.Location.X, udRIT.Location.Y - chkRIT.Height);
+                    btnRITReset.Location = new Point(chkRIT.Location.X + chkRIT.Width, chkRIT.Location.Y);
+
+                    comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                    udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+
+                    setupHiddenButton(grpVFOB); //MW0LGE_21a
+
+                    if (rx2_preamp_present)
+                    {
+                        if (rx2_step_att_present)
+                        {
+                            comboPreamp.Hide();
+                            udRX1StepAttData.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Show();
+                            // udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                        else
+                        {
+                            comboPreamp.Hide();
+                            udRX1StepAttData.Hide();
+                            udRX2StepAttData.Hide();
+                            comboRX2Preamp.Show();
+                            // comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                    }
+                    else
+                    {
+                        if (rx1_step_att_present)
+                        {
+                            comboPreamp.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Hide();
+                            udRX1StepAttData.Show();
+                            //udRX1StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX1StepAttData.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                        else
+                        {
+                            udRX1StepAttData.Hide();
+                            comboRX2Preamp.Hide();
+                            udRX2StepAttData.Hide();
+                            comboPreamp.Show();
+                            // comboPreamp.Location = new Point(comboRX2AGC.Location.X + comboPreamp.Width + 2, comboRX2AGC.Location.Y);
+                        }
+                    }
+                }
+            }           
+
             if (collapsedDisplay == true)
             {
                 if (ColMeter == true)
@@ -49830,21 +50127,44 @@ namespace Thetis
                     txtMultiText.Hide();
                     picRX2Meter.Hide();
                     txtRX2Meter.Hide();
+                    panelMeterLabels.Hide();
                 }
-                if (ColMeter == false)
+                else if (ColMeter == false)
                 {
-                    comboMeterRXMode.Show();
-                    comboRX2MeterMode.Show();
-                    comboMeterTXMode.Show();
-                    picMultiMeterDigital.Show();
-                    txtMultiText.Show();
-                    picRX2Meter.Show();
-                    txtRX2Meter.Show();
+                    if (show_rx1 == true)
+                    {
+                        comboMeterRXMode.Show();
+                        comboRX2MeterMode.Hide();
+                        comboMeterTXMode.Show();
+                        picMultiMeterDigital.Show();
+                        txtMultiText.Show();
+                        picRX2Meter.Hide();
+                        txtRX2Meter.Hide();
+                        panelMeterLabels.Show();                        
+                    }
+                    if (show_rx2 == true)
+                    {
+                        comboMeterRXMode.Hide();
+                        comboRX2MeterMode.Show();
+                        comboMeterTXMode.Show();
+                        picMultiMeterDigital.Hide();
+                        txtMultiText.Hide();
+                        picRX2Meter.Show();
+                        txtRX2Meter.Show();
+                        panelMeterLabels.Show();                        
+                    }
+                    if (chkRX2.Checked == true)
+                    {                        
+                        picMultiMeterDigital.Show();
+                        txtMultiText.Show();
+                        picRX2Meter.Show();
+                        txtRX2Meter.Show();
+                        panelMeterLabels.Show();                        
+                    }
                 }
-            }
+            }            
             //wd5y
         }
-
         // W1CEG:  End
         #endregion Collapsible Display
 

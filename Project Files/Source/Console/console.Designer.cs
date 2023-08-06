@@ -15,7 +15,7 @@
         private System.Windows.Forms.GroupBoxTS grpVFOB;
         private System.Windows.Forms.TextBoxTS txtVFOBBand;
         private System.Windows.Forms.CheckBoxTS chkPower;
-        private System.Windows.Forms.ComboBoxTS comboDisplayMode;
+        public System.Windows.Forms.ComboBoxTS comboDisplayMode;
         private System.Windows.Forms.NumericUpDownTS udFilterLow;
         private System.Windows.Forms.NumericUpDownTS udFilterHigh;
         private System.Windows.Forms.RadioButtonTS radFilterVar1;
@@ -149,7 +149,7 @@
         private System.Windows.Forms.CheckBoxTS ckQuickRec;
         private System.Windows.Forms.GroupBoxTS grpDisplaySplit;
         private System.Windows.Forms.CheckBoxTS chkDisplayPeak;
-        private System.Windows.Forms.CheckBoxTS chkRX2;
+        public System.Windows.Forms.CheckBoxTS chkRX2;
         private System.Windows.Forms.CheckBoxTS chkRX2SR;
         private System.Windows.Forms.Panel panelVFOASubHover;
         private System.Windows.Forms.RadioButtonTS radRX2ModeAM;
@@ -192,7 +192,7 @@
         private System.Windows.Forms.CheckBoxTS chkRX2Squelch;
         private System.Windows.Forms.CheckBoxTS chkRX1Preamp;
         private System.Windows.Forms.CheckBoxTS chkRX2DisplayPeak;
-        private System.Windows.Forms.ComboBoxTS comboRX2DisplayMode;
+        public System.Windows.Forms.ComboBoxTS comboRX2DisplayMode;
         private System.Windows.Forms.CheckBoxTS chkRX2DisplayAVG;
         private System.Windows.Forms.Label lblRX2Pan;
         private System.Windows.Forms.Label lblRX2Vol;
@@ -725,6 +725,7 @@
             this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
             this.btnDisplayZTB = new System.Windows.Forms.ButtonTS();
             this.ptbTune = new Thetis.PrettyTrackBar();
+            this.chkMNU = new System.Windows.Forms.CheckBoxTS();
             this.picSquelch = new System.Windows.Forms.PictureBox();
             this.timer_clock = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFilterRX1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -1130,7 +1131,6 @@
             this.lblATUTuneLabel = new System.Windows.Forms.LabelTS();
             this.nudPwrTemp = new System.Windows.Forms.NumericUpDownTS();
             this.nudPwrTemp2 = new System.Windows.Forms.NumericUpDownTS();
-            this.chkMNU = new System.Windows.Forms.CheckBoxTS();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
@@ -3945,6 +3945,15 @@
             this.ptbTune.Value = 50;
             this.ptbTune.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbTune_Scroll);
             this.ptbTune.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ptbTune_MouseUp);
+            // 
+            // chkMNU
+            // 
+            resources.ApplyResources(this.chkMNU, "chkMNU");
+            this.chkMNU.FlatAppearance.BorderSize = 0;
+            this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMNU.Name = "chkMNU";
+            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
+            this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
             // 
             // picSquelch
             // 
@@ -7432,15 +7441,6 @@
             0,
             0});
             // 
-            // chkMNU
-            // 
-            resources.ApplyResources(this.chkMNU, "chkMNU");
-            this.chkMNU.FlatAppearance.BorderSize = 0;
-            this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkMNU.Name = "chkMNU";
-            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
-            this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
-            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -7681,7 +7681,7 @@
         private LabelTS lblVFOSplit;
         private LabelTS lblStepValue;
         private LabelTS lblStep;
-        private PanelTS panelMeterLabels;
+        public PanelTS panelMeterLabels;
         private LabelTS lblRXMeter;
         public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
         public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;

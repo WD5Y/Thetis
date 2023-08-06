@@ -26891,6 +26891,7 @@ namespace Thetis
                     console.txtMultiText.Hide();
                     console.picRX2Meter.Hide();
                     console.txtRX2Meter.Hide();
+                    console.panelMeterLabels.Hide();
                 }
             }
             if (chkColMHde.Checked == false)
@@ -26898,13 +26899,36 @@ namespace Thetis
                 console.ColMeter = false;
                 if (console.collapsedDisplay == true)
                 {
-                    console.comboMeterRXMode.Show();
-                    console.comboRX2MeterMode.Show();
-                    console.comboMeterTXMode.Show();
-                    console.picMultiMeterDigital.Show();
-                    console.txtMultiText.Show();
-                    console.picRX2Meter.Show();
-                    console.txtRX2Meter.Show();
+                    if (console.show_rx1 == true)
+                    {
+                        console.comboMeterRXMode.Show();
+                        console.comboRX2MeterMode.Hide();
+                        console.comboMeterTXMode.Show();
+                        console.picMultiMeterDigital.Show();
+                        console.txtMultiText.Show();
+                        console.picRX2Meter.Hide();
+                        console.txtRX2Meter.Hide();
+                        console.panelMeterLabels.Show();
+                    }
+                    if (console.show_rx2 == true)
+                    {
+                        console.comboMeterRXMode.Hide();
+                        console.comboRX2MeterMode.Show();
+                        console.comboMeterTXMode.Show();
+                        console.picMultiMeterDigital.Hide();
+                        console.txtMultiText.Hide();
+                        console.picRX2Meter.Show();
+                        console.txtRX2Meter.Show();
+                        console.panelMeterLabels.Show();
+                    }
+                    if (console.chkRX2.Checked == true)
+                    {                        
+                        console.picMultiMeterDigital.Show();
+                        console.txtMultiText.Show();
+                        console.picRX2Meter.Show();
+                        console.txtRX2Meter.Show();
+                        console.panelMeterLabels.Show();
+                    }
                 }
             }
         }
