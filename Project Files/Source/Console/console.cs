@@ -48343,6 +48343,10 @@ namespace Thetis
             }
 
             //wd5y
+            modeDependentSettingsForm.Close();
+            //wd5y
+
+            //wd5y
             lblAF3.Hide();
             //wd5y
             lblAF2.Hide();

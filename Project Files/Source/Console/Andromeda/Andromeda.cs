@@ -3522,6 +3522,11 @@ namespace Thetis
             //wd5y
             else           
             {
+                if (modeDependentSettingsForm == null || modeDependentSettingsForm.IsDisposed)
+                {
+                    modeDependentSettingsForm = new ModeDependentSettingsForm(this);
+                }
+
                 panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta,
                                     gr_Mode_basis_location.Y + (v_delta / 2));
                 panelModeSpecificPhone.Location = new Point(
