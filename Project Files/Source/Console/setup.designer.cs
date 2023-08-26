@@ -261,6 +261,10 @@
             this.chkMercuryPresent = new System.Windows.Forms.CheckBoxTS();
             this.chkPennyPresent = new System.Windows.Forms.CheckBoxTS();
             this.grpGeneralHardwareORION = new System.Windows.Forms.GroupBoxTS();
+            this.panelSaturnMicInput = new System.Windows.Forms.PanelTS();
+            this.radSaturnXLR = new System.Windows.Forms.RadioButtonTS();
+            this.radSaturn3p5mm = new System.Windows.Forms.RadioButtonTS();
+            this.lblSaturnMicInput = new System.Windows.Forms.LabelTS();
             this.panelOrionPTT = new System.Windows.Forms.PanelTS();
             this.radOrionPTTOn = new System.Windows.Forms.RadioButtonTS();
             this.radOrionPTTOff = new System.Windows.Forms.RadioButtonTS();
@@ -1694,6 +1698,7 @@
             this.comboAudioDriver3 = new System.Windows.Forms.ComboBoxTS();
             this.chkVAC2Enable = new System.Windows.Forms.CheckBoxTS();
             this.tpAudioOptions = new System.Windows.Forms.TabPage();
+            this.chkMafCtrl = new System.Windows.Forms.CheckBoxTS();
             this.chkDisableRearSpeakerJacksAudioAmplifier = new System.Windows.Forms.CheckBoxTS();
             this.chkNoFadeOverUnderWarning = new System.Windows.Forms.CheckBoxTS();
             this.chkAFSlidersMute = new System.Windows.Forms.CheckBoxTS();
@@ -3450,7 +3455,6 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
-            this.chkMafCtrl = new System.Windows.Forms.CheckBoxTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -3523,6 +3527,7 @@
             this.grpMetisAddr.SuspendLayout();
             this.groupBoxHPSDRHW.SuspendLayout();
             this.grpGeneralHardwareORION.SuspendLayout();
+            this.panelSaturnMicInput.SuspendLayout();
             this.panelOrionPTT.SuspendLayout();
             this.panelOrionBias.SuspendLayout();
             this.panelOrionMic.SuspendLayout();
@@ -7750,6 +7755,8 @@
             // 
             // grpGeneralHardwareORION
             // 
+            this.grpGeneralHardwareORION.Controls.Add(this.panelSaturnMicInput);
+            this.grpGeneralHardwareORION.Controls.Add(this.lblSaturnMicInput);
             this.grpGeneralHardwareORION.Controls.Add(this.panelOrionPTT);
             this.grpGeneralHardwareORION.Controls.Add(this.lblOrionPTT);
             this.grpGeneralHardwareORION.Controls.Add(this.panelOrionBias);
@@ -7762,6 +7769,55 @@
             this.grpGeneralHardwareORION.TabIndex = 8;
             this.grpGeneralHardwareORION.TabStop = false;
             this.grpGeneralHardwareORION.Text = "Hardware Options";
+            // 
+            // panelSaturnMicInput
+            // 
+            this.panelSaturnMicInput.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.panelSaturnMicInput.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.panelSaturnMicInput.Controls.Add(this.radSaturnXLR);
+            this.panelSaturnMicInput.Controls.Add(this.radSaturn3p5mm);
+            this.panelSaturnMicInput.Location = new System.Drawing.Point(40, 100);
+            this.panelSaturnMicInput.Name = "panelSaturnMicInput";
+            this.panelSaturnMicInput.Size = new System.Drawing.Size(114, 18);
+            this.panelSaturnMicInput.TabIndex = 7;
+            this.panelSaturnMicInput.Visible = false;
+            // 
+            // radSaturnXLR
+            // 
+            this.radSaturnXLR.AutoSize = true;
+            this.radSaturnXLR.Image = null;
+            this.radSaturnXLR.Location = new System.Drawing.Point(3, 2);
+            this.radSaturnXLR.Name = "radSaturnXLR";
+            this.radSaturnXLR.Size = new System.Drawing.Size(46, 17);
+            this.radSaturnXLR.TabIndex = 0;
+            this.radSaturnXLR.TabStop = true;
+            this.radSaturnXLR.Text = "XLR";
+            this.radSaturnXLR.UseVisualStyleBackColor = true;
+            // 
+            // radSaturn3p5mm
+            // 
+            this.radSaturn3p5mm.AutoSize = true;
+            this.radSaturn3p5mm.Checked = true;
+            this.radSaturn3p5mm.Image = null;
+            this.radSaturn3p5mm.Location = new System.Drawing.Point(49, 2);
+            this.radSaturn3p5mm.Name = "radSaturn3p5mm";
+            this.radSaturn3p5mm.Size = new System.Drawing.Size(56, 17);
+            this.radSaturn3p5mm.TabIndex = 1;
+            this.radSaturn3p5mm.TabStop = true;
+            this.radSaturn3p5mm.Text = "3.5mm";
+            this.radSaturn3p5mm.UseVisualStyleBackColor = true;
+            this.radSaturn3p5mm.CheckedChanged += new System.EventHandler(this.radSaturn3p5mm_CheckedChanged);
+            // 
+            // lblSaturnMicInput
+            // 
+            this.lblSaturnMicInput.AutoSize = true;
+            this.lblSaturnMicInput.Image = null;
+            this.lblSaturnMicInput.Location = new System.Drawing.Point(9, 102);
+            this.lblSaturnMicInput.Name = "lblSaturnMicInput";
+            this.lblSaturnMicInput.Size = new System.Drawing.Size(31, 13);
+            this.lblSaturnMicInput.TabIndex = 6;
+            this.lblSaturnMicInput.Text = "Input";
+            this.lblSaturnMicInput.Visible = false;
             // 
             // panelOrionPTT
             // 
@@ -27499,6 +27555,19 @@
             this.tpAudioOptions.Size = new System.Drawing.Size(712, 404);
             this.tpAudioOptions.TabIndex = 4;
             this.tpAudioOptions.Text = "Options";
+            // 
+            // chkMafCtrl
+            // 
+            this.chkMafCtrl.AutoSize = true;
+            this.chkMafCtrl.Image = null;
+            this.chkMafCtrl.Location = new System.Drawing.Point(20, 123);
+            this.chkMafCtrl.Name = "chkMafCtrl";
+            this.chkMafCtrl.Size = new System.Drawing.Size(170, 17);
+            this.chkMafCtrl.TabIndex = 4;
+            this.chkMafCtrl.Text = "Master Af Link - RX1 And RX2";
+            this.toolTip1.SetToolTip(this.chkMafCtrl, "Links AF Controls");
+            this.chkMafCtrl.UseVisualStyleBackColor = true;
+            this.chkMafCtrl.CheckedChanged += new System.EventHandler(this.chkMafCtrl_CheckedChanged);
             // 
             // chkDisableRearSpeakerJacksAudioAmplifier
             // 
@@ -54939,19 +55008,6 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
-            // chkMafCtrl
-            // 
-            this.chkMafCtrl.AutoSize = true;
-            this.chkMafCtrl.Image = null;
-            this.chkMafCtrl.Location = new System.Drawing.Point(20, 123);
-            this.chkMafCtrl.Name = "chkMafCtrl";
-            this.chkMafCtrl.Size = new System.Drawing.Size(170, 17);
-            this.chkMafCtrl.TabIndex = 4;
-            this.chkMafCtrl.Text = "Master Af Link - RX1 And RX2";
-            this.toolTip1.SetToolTip(this.chkMafCtrl, "Links AF Controls");
-            this.chkMafCtrl.UseVisualStyleBackColor = true;
-            this.chkMafCtrl.CheckedChanged += new System.EventHandler(this.chkMafCtrl_CheckedChanged);
-            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -55049,6 +55105,8 @@
             this.groupBoxHPSDRHW.PerformLayout();
             this.grpGeneralHardwareORION.ResumeLayout(false);
             this.grpGeneralHardwareORION.PerformLayout();
+            this.panelSaturnMicInput.ResumeLayout(false);
+            this.panelSaturnMicInput.PerformLayout();
             this.panelOrionPTT.ResumeLayout(false);
             this.panelOrionPTT.PerformLayout();
             this.panelOrionBias.ResumeLayout(false);
@@ -57633,6 +57691,10 @@
         private System.Windows.Forms.TextBoxTS txtCAT2;
         private System.Windows.Forms.CheckBoxTS chkRX2StepAtt;
         private System.Windows.Forms.GroupBoxTS grpGeneralHardwareORION;
+        private System.Windows.Forms.PanelTS panelSaturnMicInput;
+        private System.Windows.Forms.RadioButtonTS radSaturnXLR;
+        private System.Windows.Forms.RadioButtonTS radSaturn3p5mm;
+        private System.Windows.Forms.LabelTS lblSaturnMicInput;
         private System.Windows.Forms.PanelTS panelOrionPTT;
         private System.Windows.Forms.RadioButtonTS radOrionPTTOn;
         private System.Windows.Forms.RadioButtonTS radOrionPTTOff;
@@ -59498,12 +59560,12 @@
         private LabelTS labelTS181;
         private GroupBoxTS grpUSBBCD;
         private CheckBoxTS chkUsbBCD;
-        private ComboBoxTS comboUsbDevices;
-        public ComboBoxTS comboAudioBuffer2;
-        public ComboBoxTS comboAudioBuffer3;
+        private ComboBoxTS comboUsbDevices;        
         private RadioButtonTS radSpaceBarVFOBTX;
         private CheckBoxTS chkExpMHde;
         private CheckBoxTS chkColMHde;
         private CheckBoxTS chkMafCtrl;
+        public ComboBoxTS comboAudioBuffer2;
+        public ComboBoxTS comboAudioBuffer3;
     }
 }

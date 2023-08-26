@@ -14773,6 +14773,18 @@ namespace Thetis
             }
         }
 
+        private bool mic_xlr = true;
+        public bool MicXlr
+        {
+            get { return mic_xlr; }
+            set
+            {
+                mic_xlr = value;
+                ptbMic_Scroll(this, EventArgs.Empty);
+                SetMicXlr();
+            }
+        }
+
         private bool always_on_top = false;
         public bool AlwaysOnTop
         {
@@ -31265,6 +31277,8 @@ namespace Thetis
                         case HPSDRModel.ORIONMKII:
                         case HPSDRModel.ANAN7000D:
                         case HPSDRModel.ANAN8000D:
+                        case HPSDRModel.ANAN_G2:
+                        case HPSDRModel.ANAN_G2_1K:
                             if (chkPower.Checked)
                             {
                                 // If POWER is ON, we always have data flow for RX1 and RX1-Sub; we have data flow for
@@ -48087,6 +48101,12 @@ namespace Thetis
                 ++k;
             }
             lineinarrayfill = true;
+        }
+
+        public void SetMicXlr()
+        {
+            var v = mic_xlr ? 1 : 0;
+            NetworkIO.SetMicXlr(v);
         }
 
         public void SetMicGain()
