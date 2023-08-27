@@ -48363,7 +48363,10 @@ namespace Thetis
             }
 
             //wd5y
-            modeDependentSettingsForm.Close();
+            if (modeDependentSettingsForm != null && !modeDependentSettingsForm.IsDisposed)
+            {
+                modeDependentSettingsForm.Close();
+            }
             //wd5y
 
             //wd5y
