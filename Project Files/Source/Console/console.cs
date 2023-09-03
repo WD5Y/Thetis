@@ -42519,16 +42519,14 @@ namespace Thetis
                 if (chkPower.Checked)
                 {
                     txtVFOABand.Font = new Font("Microsoft Sans Sarif", 12.0f, FontStyle.Regular);
-                    txtVFOABand.ForeColor = band_text_light_color;
-                    txtVFOABand.TextAlign = HorizontalAlignment.Center;
+                    txtVFOABand.ForeColor = band_text_light_color;                   
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                     panelVFOASubHover.Visible = false;
                 }
                 else
                 {
                     txtVFOABand.Font = new Font("Microsoft Sans Sarif", 12.0f, FontStyle.Regular);
-                    txtVFOABand.ForeColor = band_text_dark_color;
-                    txtVFOABand.TextAlign = HorizontalAlignment.Center;
+                    txtVFOABand.ForeColor = band_text_dark_color;                   
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
                     panelVFOASubHover.Visible = false;
                 }
@@ -48378,6 +48376,10 @@ namespace Thetis
             //wd5y
             lblRF2.Hide();
             lblPWR2.Hide();
+            //wd5y
+            txtVFOABand.TextAlign = HorizontalAlignment.Center;
+            txtVFOBBand.TextAlign = HorizontalAlignment.Center;
+            //wd5y
 
             //MW0LGE
             if (m_bShowSmallModeFilterOnVFOs)
@@ -49365,6 +49367,10 @@ namespace Thetis
                 radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
                 lblRX1APF.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 2);
                 lblRX1MuteVFOA.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 12);
+                //wd5y
+                txtVFOABand.TextAlign = HorizontalAlignment.Right;
+                txtVFOBBand.TextAlign= HorizontalAlignment.Right;
+                //wd5y
                 //
                 // VFO B at right
                 //
@@ -49394,9 +49400,11 @@ namespace Thetis
                     //wd5y                    
                     chkMUT.Location = new Point(radRX2Show.Location.X + radRX2Show.Width + 1, radRX2Show.Location.Y);
                     top = grpVFOA.Height + 10;
-                    grpVFOA.Location = new Point(chkMUT.Location.X + chkMUT.Width + 122, gr_VFOA_basis_location.Y);
+                    grpVFOA.Location = new Point(chkMUT.Location.X + chkMUT.Width + 122, gr_VFOA_basis_location.Y);                    
+                    txtVFOABand.TextAlign = HorizontalAlignment.Right;
+                    txtVFOBBand.TextAlign = HorizontalAlignment.Right;
                     //wd5y
-
+                    
                     comboMeterRXMode.Location = new Point(txtMultiText.Location.X - comboMeterRXMode.Width - 5,
                         txtMultiText.Location.Y + 2);                    
                     comboMeterTXMode.Location = new Point(txtMultiText.Location.X + txtMultiText.Width + 5,
