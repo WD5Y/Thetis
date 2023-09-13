@@ -49368,15 +49368,15 @@ namespace Thetis
                 radRX1Show.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 10, chkRX2.Location.Y + 4);
                 radRX2Show.Location = new Point(radRX1Show.Location.X + radRX1Show.Width + 5, radRX1Show.Location.Y);
                 lblRX1APF.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 2);
-                lblRX1MuteVFOA.Location = new Point(txtVFOABand.Location.X + 5, txtVFOABand.Location.Y + 12);
+                lblRX1MuteVFOA.Location = new Point(txtVFOABand.Location.X + 47, txtVFOABand.Location.Y - 53);                
                 //
                 // VFO B at right
                 //
                 panelVFOBLabels.Location = new Point(panelButtonBar.Width - 43 - grpVFOB.Width, gr_VFOA_basis_location.Y);
                 grpVFOB.Location = new Point(panelVFOBLabels.Location.X, panelVFOBLabels.Location.Y + panelVFOBLabels.Height);
                 lblRX2APF.Location = new Point(txtVFOBBand.Location.X + 300, txtVFOBBand.Location.Y + 2);
-                lblRX2MuteVFOB.Location = new Point(txtVFOBBand.Location.X + 5, txtVFOBBand.Location.Y + 12);
-
+                lblRX2MuteVFOB.Location = new Point(txtVFOBBand.Location.X + 19, txtVFOBBand.Location.Y - 53);
+                
                 panelAndromedaMisc.Location = new Point(panelVFOBLabels.Location.X - panelAndromedaMisc.Width - 10, panelVFOLabels.Location.Y);                
             }
             
