@@ -332,7 +332,7 @@ namespace Thetis
                 int Y_first = 0;
                 int X_first = 0;
 
-                Font font = new Font("Arial", 10.0f);
+                Font font = new Font("Microsft Sans Serif", 10.0f);
                 SolidBrush brush = new SolidBrush(Color.Black);
                 Y_range = Y_bottom - Y_top;
 

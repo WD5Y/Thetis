@@ -695,8 +695,7 @@ namespace Thetis
                         if (dr == DialogResult.Yes)
                         {
                             //string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                            string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
-                                DateTime.Now.ToShortTimeString().Replace(":", ".");
+                            string datetime = Common.DateTimeStringForFile();//DateTime.Now.ToShortDateString().Replace("/", "-") + "_" + DateTime.Now.ToShortTimeString().Replace(":", ".");
 
                             string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
                             file = file.Substring(0, file.Length - 4);
@@ -715,15 +714,14 @@ namespace Thetis
                     if (!DB.Init()) // Init throws an exception on reading XML files that are too corrupted for DataSet.ReadXml to handle.
                     {
                        // string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                        string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
-                            DateTime.Now.ToShortTimeString().Replace(":", ".");
+                        string datetime = Common.DateTimeStringForFile();//DateTime.Now.ToShortDateString().Replace("/", "-") + "_" + DateTime.Now.ToShortTimeString().Replace(":", ".");
 
                         string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
                         file = file.Substring(0, file.Length - 4);
                         if (!Directory.Exists(AppDataPath + "DB_Archive\\"))
                             Directory.CreateDirectory(AppDataPath + "DB_Archive\\");
 
-                        File.Copy(db_file_name, AppDataPath + "DB_Archive\\Thetis" + file + "_" + datetime + ".xml", true);
+                        File.Copy(db_file_name, AppDataPath + "DB_Archive\\Thetis_" + file + "_" + datetime + ".xml", true);
                         File.Delete(db_file_name);
                         MessageBox.Show("The database file could not be read. It has been copied to the DB_Archive folder\n\n"
                                     + "Current database has been reset and initialized.  After the reset, "
@@ -750,7 +748,7 @@ namespace Thetis
                         }
                         //
 
-                        if (bForcedUpdate || DBVersion != "" && DBVersion != version || File.Exists(autoMergeFileName)) // Back-level DB detected
+                        if (bForcedUpdate || (DBVersion != "" && DBVersion != version) || File.Exists(autoMergeFileName)) // Back-level DB detected
                         {
                             //-W2PA Automatically reset, shut down, and import the old database file if possible
 
@@ -785,14 +783,13 @@ namespace Thetis
                             {
                                 // Archive the old database file and reset database
                                // string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                                string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
-                                    DateTime.Now.ToShortTimeString().Replace(":", ".");
+                                string datetime = Common.DateTimeStringForFile();//DateTime.Now.ToShortDateString().Replace("/", "-") + "_" + DateTime.Now.ToShortTimeString().Replace(":", ".");
 
                                 string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
                                 file = file.Substring(0, file.Length - 4);
                                 if (!Directory.Exists(AppDataPath + "DB_Archive\\"))
                                     Directory.CreateDirectory(AppDataPath + "DB_Archive\\");
-                                File.Copy(db_file_name, AppDataPath + "DB_Archive\\Thetis" + file + "_" + datetime + ".xml", true);
+                                File.Copy(db_file_name, AppDataPath + "DB_Archive\\Thetis_" + file + "_" + datetime + ".xml", true);
                                 File.Copy(db_file_name, autoMergeFileName, true); // After reset and restart, this will be a flag to attempt to merge
                                 File.Delete(db_file_name);
                                 resetForAutoMerge = true;  // a flag to main()
@@ -1292,8 +1289,7 @@ namespace Thetis
 
             if (reset_db)
             {
-                string datetime = DateTime.Now.ToShortDateString().Replace("/", "-") + "_" +
-                    DateTime.Now.ToShortTimeString().Replace(":", ".");
+                string datetime = Common.DateTimeStringForFile();//DateTime.Now.ToShortDateString().Replace("/", "-") + "_" + DateTime.Now.ToShortTimeString().Replace(":", ".");
 
                 string file = db_file_name.Substring(db_file_name.LastIndexOf("\\") + 1);
                 file = file.Substring(0, file.Length - 4);
@@ -2072,9 +2068,9 @@ namespace Thetis
             m_frmSeqLog.SetWireSharkPath(DumpCap.WireSharkPath);
             //--
 
-            initialiseRawInput(); // MW0LGE           
-            
-            return;            
+            initialiseRawInput(); // MW0LGE
+
+            return;
         }
         #region InfoBar
         //infobar
@@ -25811,7 +25807,7 @@ namespace Thetis
             set { m_bUseSignalHistory = value; }
         }
 
-        private Font font7 = new Font("Arial", 7.0f, FontStyle.Bold);
+        private Font font7 = new Font("Microsoft Sans Serif", 7.0f, FontStyle.Bold);
         private double avg_num = Display.CLEAR_FLAG;//- 130.0;
         private List<float> m_RX1SignalPixels_X = new List<float>();
         private List<float> m_RX2SignalPixels_X = new List<float>();
@@ -27508,6 +27504,10 @@ namespace Thetis
         private float _MKIIPAAmps = 0f;
         private ConcurrentQueue<int> _voltsQueue = new ConcurrentQueue<int>();
         private ConcurrentQueue<int> _ampsQueue = new ConcurrentQueue<int>();
+        public float MKIIPAVolts
+        {
+            get { return _MKIIPAVolts; }
+        }
         private async void readMKIIPAVoltsAmps()
         {
             // MW0LGE_21k9c
@@ -43738,7 +43738,13 @@ namespace Thetis
             }
             ckQuickPlay.Enabled = !ckQuickRec.Checked;
         }
-
+        private void moveModeSpecificPanels()
+        {
+            panelModeSpecificPhone.Location = new Point(gr_ModePhone_basis_location.X + h_delta - (h_delta / 4), gr_ModePhone_basis_location.Y + v_delta);
+            panelModeSpecificCW.Location = new Point(gr_ModeCW_basis_location.X + h_delta - (h_delta / 4), gr_ModeCW_basis_location.Y + v_delta);
+            panelModeSpecificDigital.Location = new Point(gr_ModeDig_basis_location.X + h_delta - (h_delta / 4), gr_ModeDig_basis_location.Y + v_delta);
+            panelModeSpecificFM.Location = new Point(gr_ModeFM_basis_location.X + h_delta - (h_delta / 4), gr_ModeFM_basis_location.Y + v_delta);
+        }
         private void ResizeConsole(int h_delta, int v_delta)
         {
             // MW0LGE changes made to this function so that RX1 meter fills space to right of VFOB box, also delay repaint until all controls moved
@@ -43764,10 +43770,7 @@ namespace Thetis
                 panelBandVHF.Location = new Point(gr_BandVHF_basis_location.X + h_delta, gr_BandVHF_basis_location.Y + (v_delta / 4));
 
                 panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta, gr_Mode_basis_location.Y + (v_delta / 2));
-                panelModeSpecificPhone.Location = new Point(gr_ModePhone_basis_location.X + h_delta - (h_delta / 4), gr_ModePhone_basis_location.Y + v_delta);
-                panelModeSpecificCW.Location = new Point(gr_ModeCW_basis_location.X + h_delta - (h_delta / 4), gr_ModeCW_basis_location.Y + v_delta);
-                panelModeSpecificDigital.Location = new Point(gr_ModeDig_basis_location.X + h_delta - (h_delta / 4), gr_ModeDig_basis_location.Y + v_delta);
-                panelModeSpecificFM.Location = new Point(gr_ModeFM_basis_location.X + h_delta - (h_delta / 4), gr_ModeFM_basis_location.Y + v_delta);
+                moveModeSpecificPanels();// MW0LGE [2.10.1.0]
 
                 panelVFO.Location = new Point(gr_VFO_basis_location.X + (h_delta / 4), gr_VFO_basis_location.Y + v_delta);
 
@@ -44236,7 +44239,7 @@ namespace Thetis
 
                 Audio.RX2Enabled = rx2_enabled;
                 Display.RX2Enabled = rx2_enabled;
-                chkSplitDisplay.Checked = rx2_enabled;                
+                chkSplitDisplay.Checked = rx2_enabled;
             }
         }
 
@@ -44341,11 +44344,11 @@ namespace Thetis
             // need to update anything on the info bar buttons that is relying on rx2
             SetupInfoBarButton(ucInfoBar.ActionTypes.ActivePeaks, Display.SpectralPeakHoldRX1 | (RX2Enabled && Display.SpectralPeakHoldRX2));
 
-            if (!m_bResizeDX2Display && (oldRX2Enabled != RX2Enabled)) m_bResizeDX2Display = true; // MW0LGE_22b force resize is rx2 enabled state is changed, this may also be set by reisze calls above
+            if(!m_bResizeDX2Display && (oldRX2Enabled != RX2Enabled)) m_bResizeDX2Display = true; // MW0LGE_22b force resize is rx2 enabled state is changed, this may also be set by reisze calls above
 
             pause_DisplayThread = false; //MW0LGE_21k8
 
-            if (oldRX2Enabled != RX2Enabled) RX2EnabledChangedHandlers?.Invoke(RX2Enabled);           
+            if (oldRX2Enabled != RX2Enabled) RX2EnabledChangedHandlers?.Invoke(RX2Enabled);
         }
 
         private void setSmallRX2ModeFilterLabels()
@@ -48371,15 +48374,12 @@ namespace Thetis
             {
                 modeDependentSettingsForm.Close();
             }
-            //wd5y
-
-            //wd5y
-            lblAF3.Hide();
-            //wd5y
-            lblAF2.Hide();
-            //wd5y
+            
+            lblAF3.Hide();            
+            lblAF2.Hide();            
             lblRF3.Hide();
             //wd5y
+
             lblRF2.Hide();
             lblPWR2.Hide();
 
@@ -49785,8 +49785,8 @@ namespace Thetis
                 txtMultiText.Size = txt_rx2meter_size_basis;
                 picMultiMeterDigital.Location = new Point(txtMultiText.Location.X, txtMultiText.Location.Y + txtMultiText.Height + 4);
                 picMultiMeterDigital.Size = pic_rx2meter_size_basis;
-                menuStrip1.Location = new Point(chkPower.Location.X + chkPower.Width - 45, chkPower.Location.Y + 172 - menuStrip1.Height);                
-
+                menuStrip1.Location = new Point(chkMNU.Location.X + chkMNU.Width + 0, chkMNU.Location.Y + 25 - menuStrip1.Height);
+                
                 setupHiddenButton(grpVFOA); //MW0LGE_21a
 
                 txtRX2Meter.Location = new Point(panelVFOLabels.Location.X + panelVFOLabels.Width + 809, grpVFOA.Location.Y + 5);
@@ -49953,8 +49953,8 @@ namespace Thetis
             {
                panelMeterLabels.Parent = this; 
                panelMeterLabels.Location = new Point(chkPower.Location.X + chkPower.Width + 1627, chkPower.Location.Y + 2 - panelMeterLabels.Height);
-               menuStrip1.Location = new Point(chkPower.Location.X + chkPower.Width - 45, chkPower.Location.Y + 133 - menuStrip1.Height);
-
+               menuStrip1.Location = new Point(chkMNU.Location.X + chkMNU.Width + 0, chkMNU.Location.Y + 25 - menuStrip1.Height);
+               
                 if (show_rx1)
                 {
                     top = grpVFOA.Height + 10;

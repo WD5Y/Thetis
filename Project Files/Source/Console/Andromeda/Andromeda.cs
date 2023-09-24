@@ -3342,22 +3342,11 @@ namespace Thetis
 
                 case EButtonBarActions.eBBModeSettingsForm:        // show the "mode dependent settings" form
                     if (modeDependentSettingsForm == null || modeDependentSettingsForm.IsDisposed) modeDependentSettingsForm = new ModeDependentSettingsForm(this);
+
                     Invoke(new MethodInvoker(modeDependentSettingsForm.Show));
 
-                    Invoke(new MethodInvoker(panelModeSpecificCW.Show));
-                    Invoke(new MethodInvoker(panelModeSpecificPhone.Show));
-                    Invoke(new MethodInvoker(panelModeSpecificDigital.Show));
-                    Invoke(new MethodInvoker(panelModeSpecificFM.Show));
+                    setupModePanels();
 
-                    panelModeSpecificCW.Location = new Point(0, 0);
-                    panelModeSpecificPhone.Location = new Point(0, 0);
-                    panelModeSpecificDigital.Location = new Point(0, 0);
-                    panelModeSpecificFM.Location = new Point(0, 0);
-
-                    panelModeSpecificCW.Parent = modeDependentSettingsForm;
-                    panelModeSpecificPhone.Parent = modeDependentSettingsForm;
-                    panelModeSpecificDigital.Parent = modeDependentSettingsForm;
-                    panelModeSpecificFM.Parent = modeDependentSettingsForm;
                     SelectModeDependentPanel();
                     break;
 
@@ -3431,7 +3420,23 @@ namespace Thetis
             UpdateButtonBarButtons();                               // re-check texts
         }
 
+        private void setupModePanels()
+        {
+            Invoke(new MethodInvoker(panelModeSpecificCW.Show));
+            Invoke(new MethodInvoker(panelModeSpecificPhone.Show));
+            Invoke(new MethodInvoker(panelModeSpecificDigital.Show));
+            Invoke(new MethodInvoker(panelModeSpecificFM.Show));
 
+            panelModeSpecificCW.Location = new Point(0, 0); // NOTE: we check this in SelectModeDependentPanel() to see if has been moved
+            panelModeSpecificPhone.Location = new Point(0, 0);
+            panelModeSpecificDigital.Location = new Point(0, 0);
+            panelModeSpecificFM.Location = new Point(0, 0);
+
+            panelModeSpecificCW.Parent = modeDependentSettingsForm;
+            panelModeSpecificPhone.Parent = modeDependentSettingsForm;
+            panelModeSpecificDigital.Parent = modeDependentSettingsForm;
+            panelModeSpecificFM.Parent = modeDependentSettingsForm;
+        }
         //
         // execute a single button longpress action
         // this can be invoked by a menu button press or front panel button press
@@ -3476,79 +3481,52 @@ namespace Thetis
             UpdateButtonBarButtons();                               // re-check texts
         }
 
-        private void ShowModeSpecificFormTitle()
-        {
-            if (panelModeSpecificCW.Parent == modeDependentSettingsForm)
-            {
-                if (modeDependentSettingsForm != null && !modeDependentSettingsForm.IsDisposed)
-                {
-                    if (panelModeSpecificCW.Visible)
-                        modeDependentSettingsForm.Text = "CW Settings";
-                    else if (panelModeSpecificDigital.Visible)
-                        modeDependentSettingsForm.Text = "Digital Settings";
-                    else if (panelModeSpecificPhone.Visible)
-                        modeDependentSettingsForm.Text = "Phone Settings";
-                    else if (panelModeSpecificFM.Visible)
-                        modeDependentSettingsForm.Text = "FM Settings";
 
-                    modeDependentSettingsForm.WindowState = FormWindowState.Normal;
-                }
-            }
-        }
 
         //
         // bring the right mode dependent panel to the front
         //
         private void SelectModeDependentPanel()
         {
+            // MW0LGE [2.10.1.0]
+            bool bHaveModeDependentForm = modeDependentSettingsForm != null && !modeDependentSettingsForm.IsDisposed;
+
             if (iscollapsed && !isexpanded)
             {
                 // MW0LGE [2.9.0.7] in collapsed view, hide them all
                 //https://github.com/ramdor/Thetis-2.9.0/issues/90
 
-                panelModeSpecificPhone.Hide();
-                panelModeSpecificCW.Hide();
-                panelModeSpecificDigital.Hide();
-                panelModeSpecificFM.Hide();
-                if (panelModeSpecificCW.Parent != modeDependentSettingsForm)
+                // MW0LGE [2.10.1.0] andromeda mode dependant form fixes
+                //https://github.com/ramdor/Thetis/issues/145
+                if (bHaveModeDependentForm && modeDependentSettingsForm.Visible)
                 {
-                    // KLJ. Issue:
-                    // https://github.com/sjk7/Thetis-2.9.0/issues/18
-                    // Pretty sure we don't want to do this when the controls
-                    // are sited on the modeDependentsettingsform
+                    // need to move the frames to the modeDepForm
+                    setupModePanels();
+                }
+                else
+                {
+                    panelModeSpecificPhone.Hide();
+                    panelModeSpecificCW.Hide();
+                    panelModeSpecificDigital.Hide();
+                    panelModeSpecificFM.Hide();
                     return;
                 }
             }
-            //wd5y
-            else           
+            else
             {
-                if (modeDependentSettingsForm == null || modeDependentSettingsForm.IsDisposed)
+                // MW0LGE [2.10.1.0]
+                // check if the panels have been moved by andromeda into the modeDependentSettingsForm
+                // they will be at 0,0 if they have
+                if (panelModeSpecificPhone.Location.X == 0 && panelModeSpecificPhone.Location.Y == 0)
                 {
-                    modeDependentSettingsForm = new ModeDependentSettingsForm(this);
+                    moveModeSpecificPanels();
                 }
-
-                panelMode.Location = new Point(gr_Mode_basis_location.X + h_delta,
-                                    gr_Mode_basis_location.Y + (v_delta / 2));
-                panelModeSpecificPhone.Location = new Point(
-                    gr_ModePhone_basis_location.X + h_delta - (h_delta / 4),
-                    gr_ModePhone_basis_location.Y + v_delta);
-                panelModeSpecificCW.Location = new Point(
-                    gr_ModeCW_basis_location.X + h_delta - (h_delta / 4),
-                    gr_ModeCW_basis_location.Y + v_delta);
-                panelModeSpecificDigital.Location = new Point(
-                    gr_ModeDig_basis_location.X + h_delta - (h_delta / 4),
-                    gr_ModeDig_basis_location.Y + v_delta);
-                panelModeSpecificFM.Location = new Point(
-                    gr_ModeFM_basis_location.X + h_delta - (h_delta / 4),
-                    gr_ModeFM_basis_location.Y + v_delta);                
             }
-            //wd5y
 
-            // MW0LGE_21k9d changed to show/hide as it was causing some unexplained
-            // slow down, perhaps z-order fighting, not sure. ~1-3 seconds taken to
-            // get through this function, changing from digi to something else.
-            // Hidden controls are still returned in this.Controls so will still be
-            // saved out ok
+            //MW0LGE_21k9d changed to show/hide as it was causing some unexplained
+            //slow down, perhaps z-order fighting, not sure. ~1-3 seconds taken to get through
+            //this function, changing from digi to something else.
+            //Hidden controls are still returned in this.Controls so will still be saved out ok
             switch (RX1DSPMode)
             {
                 case DSPMode.LSB:
@@ -3591,10 +3569,9 @@ namespace Thetis
                     //panelModeSpecificDigital.BringToFront();
                     break;
             }
-
-            ShowModeSpecificFormTitle();
-
         }
+
+
 
         //
         // update text for button bar buttons

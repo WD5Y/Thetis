@@ -7788,7 +7788,7 @@
             this.radSaturnXLR.Image = null;
             this.radSaturnXLR.Location = new System.Drawing.Point(3, 2);
             this.radSaturnXLR.Name = "radSaturnXLR";
-            this.radSaturnXLR.Size = new System.Drawing.Size(46, 17);
+            this.radSaturnXLR.Size = new System.Drawing.Size(39, 17);
             this.radSaturnXLR.TabIndex = 0;
             this.radSaturnXLR.TabStop = true;
             this.radSaturnXLR.Text = "XLR";
@@ -7801,9 +7801,8 @@
             this.radSaturn3p5mm.Image = null;
             this.radSaturn3p5mm.Location = new System.Drawing.Point(49, 2);
             this.radSaturn3p5mm.Name = "radSaturn3p5mm";
-            this.radSaturn3p5mm.Size = new System.Drawing.Size(56, 17);
+            this.radSaturn3p5mm.Size = new System.Drawing.Size(39, 17);
             this.radSaturn3p5mm.TabIndex = 1;
-            this.radSaturn3p5mm.TabStop = true;
             this.radSaturn3p5mm.Text = "3.5mm";
             this.radSaturn3p5mm.UseVisualStyleBackColor = true;
             this.radSaturn3p5mm.CheckedChanged += new System.EventHandler(this.radSaturn3p5mm_CheckedChanged);
@@ -7814,7 +7813,7 @@
             this.lblSaturnMicInput.Image = null;
             this.lblSaturnMicInput.Location = new System.Drawing.Point(9, 102);
             this.lblSaturnMicInput.Name = "lblSaturnMicInput";
-            this.lblSaturnMicInput.Size = new System.Drawing.Size(31, 13);
+            this.lblSaturnMicInput.Size = new System.Drawing.Size(28, 13);
             this.lblSaturnMicInput.TabIndex = 6;
             this.lblSaturnMicInput.Text = "Input";
             this.lblSaturnMicInput.Visible = false;
@@ -49817,7 +49816,7 @@
             // 
             this.grpKeyboardOptions.Controls.Add(this.chkOptEnableKBShortcuts);
             this.grpKeyboardOptions.Controls.Add(this.chkOptQuickQSY);
-            this.grpKeyboardOptions.Location = new System.Drawing.Point(525, 157);
+            this.grpKeyboardOptions.Location = new System.Drawing.Point(525, 139);
             this.grpKeyboardOptions.Name = "grpKeyboardOptions";
             this.grpKeyboardOptions.Size = new System.Drawing.Size(168, 72);
             this.grpKeyboardOptions.TabIndex = 27;
@@ -55939,7 +55938,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayLineWidth)).EndInit();
             this.grpDisplayPeakCursor.ResumeLayout(false);
             this.tpAppearanceMeter.ResumeLayout(false);
-            this.tpAppearanceMeter.PerformLayout();
             this.groupBoxTS14.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbSignalHistoryAlpha)).EndInit();
             this.grpMeterEdge.ResumeLayout(false);
