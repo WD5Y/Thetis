@@ -343,7 +343,7 @@ namespace Thetis
 
         private void PSForm_Closing(object sender, FormClosingEventArgs e)
         {
-            if (console.AppQuitting)
+            if (ampv != null)
             {
                 _dismissAmpv = true;
                 ampvThread.Join();
@@ -858,7 +858,7 @@ namespace Thetis
         {
             SetDefaultPeaks();
         }
-
+        //wd5y
         private void chkAmpV_CheckedChanged(object sender, EventArgs e)
         {
             if (chkAmpV.Checked == true)
@@ -867,7 +867,7 @@ namespace Thetis
                 {
                     _dismissAmpv = false;
                     ampvThread = new Thread(RunAmpv);
-                    ampvThread.SetApartmentState(ApartmentState.STA);                    
+                    ampvThread.SetApartmentState(ApartmentState.STA);
                     ampvThread.Name = "Ampv Thread";
                     ampvThread.Start();
                     console.Focus();
@@ -879,6 +879,7 @@ namespace Thetis
                 console.Focus();
             }
         }
+        //wd5y
     }
 
     unsafe static class puresignal

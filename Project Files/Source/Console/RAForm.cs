@@ -636,7 +636,7 @@ namespace Thetis
                     {
                         RA_timer.Enabled = false;
                         s = "Maximum # data points collected...acquisition halted";
-                        font = new Font("Arial", 18.0f);
+                        font = new Font("Microsft Sans Serif", 18.0f);
                         brush = new SolidBrush(Color.Red);
                         Point p = new Point(70, 150);
                         g.DrawString(s, font, brush, p);

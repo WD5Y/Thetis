@@ -38,11 +38,9 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Text;
 using System.Security.Principal;
-using System.Security.Cryptography;
 using System.Globalization;
-using System.Diagnostics.Eventing.Reader;
+using System.Threading.Tasks;
 
 namespace Thetis
 {
@@ -987,5 +985,65 @@ namespace Thetis
 			return sRet;
         }
         #endregion
+
+        #region WindowFade
+        public static async void FadeIn(Form frm, int msTimeToFade = 500, int steps = 20)
+        {
+			float stepSize = 1 / (float)steps;
+			float interval = msTimeToFade / (float)steps;
+            while (frm.Opacity < 1.0)
+            {
+                await Task.Delay((int)interval);
+                frm.Opacity += stepSize;
+            }
+            frm.Opacity = 1;
+        }
+
+        public static async void FadeOut(Form frm, int msTimeToFade = 500, int steps = 20)
+        {
+            float stepSize = 1 / (float)steps;
+            float interval = msTimeToFade / (float)steps;
+            while (frm.Opacity > 0.0)
+            {
+                await Task.Delay((int)interval);
+                frm.Opacity -= stepSize;
+            }
+            frm.Opacity = 0;
+        }
+        #endregion
+
+        public static int CompareVersions(string version1, string version2)
+        {
+			// in the format X.X X
+
+            string[] parts1 = version1.Split('.');
+            string[] parts2 = version2.Split('.');
+
+            if (parts1.Length != 3 || parts2.Length != 3)
+            {
+                throw new ArgumentException("Invalid version number format. It should be X.X.X");
+            }
+
+            int major1 = int.Parse(parts1[0]);
+            int minor1 = int.Parse(parts1[1]);
+            int patch1 = int.Parse(parts1[2]);
+
+            int major2 = int.Parse(parts2[0]);
+            int minor2 = int.Parse(parts2[1]);
+            int patch2 = int.Parse(parts2[2]);
+
+            if (major1 != major2)
+            {
+                return major1.CompareTo(major2);
+            }
+            else if (minor1 != minor2)
+            {
+                return minor1.CompareTo(minor2);
+            }
+            else
+            {
+                return patch1.CompareTo(patch2);
+            }
+        }
     }
 }

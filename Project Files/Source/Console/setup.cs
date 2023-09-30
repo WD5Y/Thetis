@@ -1457,7 +1457,7 @@ namespace Thetis
             // remove any outdated options from the DB MW0LGE_22b
             handleOutdatedOptions(false);
 
-            DB.SaveVarsDictionary("Options", ref a);
+            DB.SaveVarsDictionary("Options", ref a, true);
             //DB.WriteCurrentDB(console.DBFileName);//MW0LGE_[2.9.0.7]
             DB.WriteDB(console.DBFileName);
         }
@@ -2508,8 +2508,8 @@ namespace Thetis
                 if (DB.ConvertFromDBVal<bool>(dr["Dexp_LookAhead_On"]) != chkDEXPLookAheadEnable.Checked) return true;
                 if (DB.ConvertFromDBVal<int>(dr["Dexp_LookAhead"]) != (int)udDEXPLookAhead.Value) return true;
 
-                if (DB.ConvertFromDBVal<int>(dr["Tune_Power"]) != (int)udTXTunePower.Value) return true;
-                if (DB.ConvertFromDBVal<string>(dr["Tune_Meter_Type"]) != (string)comboTXTUNMeter.Text) return true;
+                //if (DB.ConvertFromDBVal<int>(dr["Tune_Power"]) != (int)udTXTunePower.Value) return true; // [2.10.1.0] MW0LGE not used anymore
+                //if (DB.ConvertFromDBVal<string>(dr["Tune_Meter_Type"]) != (string)comboTXTUNMeter.Text) return true; // [2.10.1.0] MW0LGE not used anymore
 
                 if (DB.ConvertFromDBVal<int>(dr["TX_AF_Level"]) != console.TXAF) return true;
 
@@ -2821,6 +2821,8 @@ namespace Thetis
 
         private void udpateTXProfileInDB(DataRow dr)
         {
+            if (dr == null) return;
+
             dr["FilterLow"] = (int)udTXFilterLow.Value;
             dr["FilterHigh"] = (int)udTXFilterHigh.Value;
             dr["TXEQNumBands"] = console.EQForm.NumBands;
@@ -2872,8 +2874,8 @@ namespace Thetis
             dr["Dexp_LookAhead_On"] = chkDEXPLookAheadEnable.Checked;
             dr["Dexp_LookAhead"] = (int)udDEXPLookAhead.Value;
 
-            dr["Tune_Power"] = (int)udTXTunePower.Value;
-            dr["Tune_Meter_Type"] = (string)comboTXTUNMeter.Text;
+            //dr["Tune_Power"] = (int)udTXTunePower.Value; // [2.10.1.0] MW0LGE not used anymore
+            //dr["Tune_Meter_Type"] = (string)comboTXTUNMeter.Text; // [2.10.1.0] MW0LGE not used anymore
 
             dr["TX_AF_Level"] = console.TXAF;
 
@@ -2999,13 +3001,24 @@ namespace Thetis
             //        break;
             //    }
             //}
-            foreach (DataRow d in from DataRow d in DB.ds.Tables["TxProfile"].Rows where (string)d["Name"] == name select d)
+            foreach (DataRow dd in from DataRow d in DB.ds.Tables["TxProfile"].Rows where (string)d["Name"] == name select d)
             {
-                dr = d;
+                dr = dd;
                 break;
             }
 
-            udpateTXProfileInDB(dr); //MW0LGE_21a remove duplication
+            if (dr == null)
+            {
+                DialogResult dres = MessageBox.Show(
+                    "Unable to find txprofile in the database for name [" + name + "] in SaveTXProfileData()",
+                    "Missing TX Profile Table",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+            }
+            else
+            {
+                udpateTXProfileInDB(dr); //MW0LGE_21a remove duplication
+            }
         }
 
         public void UpdateWaterfallBandInfo()
@@ -10270,9 +10283,9 @@ namespace Thetis
                 if (result == DialogResult.No)
                     return;
 
-                foreach (DataRow d in from DataRow d in DB.ds.Tables["TxProfile"].Rows where (string)d["Name"] == name select d)
+                foreach (DataRow dd in from DataRow d in DB.ds.Tables["TxProfile"].Rows where (string)d["Name"] == name select d)
                 {
-                    dr = d;
+                    dr = dd;
                     break;
                 }
             }
@@ -10282,7 +10295,18 @@ namespace Thetis
                 dr["Name"] = name;
             }
 
-            udpateTXProfileInDB(dr); //MW0LGE_21a remove duplication
+            if (dr == null)
+            {
+                DialogResult dres = MessageBox.Show(
+                    "Unable to find txprofile in the database for name [" + name + "] in btnTXProfileSave_Click()",
+                    "Missing TX Profile Table",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+            }
+            else
+            {
+                udpateTXProfileInDB(dr); //MW0LGE_21a remove duplication
+            }
 
             //dr["FilterLow"] = (int)udTXFilterLow.Value;
             //dr["FilterHigh"] = (int)udTXFilterHigh.Value;
@@ -12472,7 +12496,7 @@ namespace Thetis
         {
             //-W2PA Import more carefully, allowing DBs created by previous versions to retain settings and options
             //MW0LGE_[2.9.0.7] changed structure slightly
-            bool success = DB.ImportAndMergeDatabase(openFileDialog1.FileName, console.AppDataPath);
+            bool success = DB.ImportAndMergeDatabase(openFileDialog1.FileName, console.AppDataPath, true);
 
             if (success)
                 MessageBox.Show("Database Imported Successfully. Thetis will now close.\n\nPlease RE-START.",
@@ -20803,7 +20827,7 @@ namespace Thetis
 
         private void comboRadioModel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // if (initializing) return; // forceallevents will call this
+            if (initializing) return; // forceallevents will call this  // [2.10.1.0] MW0LGE renabled
 
             bool power = console.PowerOn;
             HPSDRModel old_model = console.CurrentHPSDRModel;
@@ -21388,7 +21412,26 @@ namespace Thetis
                 btnResetP2ADC_Click(this, EventArgs.Empty);
                 btnResetP1ADC_Click(this, EventArgs.Empty);
 
-                if (!initializing) updatePAProfileCombo("Default - " + console.CurrentHPSDRModel.ToString()); //MW0LGE_22b
+                if (!initializing)
+                {
+                    string sCurrentPAProfile = comboPAProfile.Text;
+
+                    updatePAProfileCombo("Default - " + console.CurrentHPSDRModel.ToString()); //MW0LGE_22b
+
+                    //[2.10.1.0] MW0LGE
+                    //re-assign the current if it still exists, this needed because on a DB import, we are changing from HERMES to whatever is set in the DB
+                    //and if the PA profile is in the new rebuilt list, let us use it instead of the radio Default
+                    for (int n = 0; n < comboPAProfile.Items.Count; n++)
+                    {
+                        string sName = (string)comboPAProfile.Items[n];
+
+                        if (sName == sCurrentPAProfile)
+                        {
+                            comboPAProfile.SelectedIndex = n;
+                            break;
+                        }
+                    }
+                }
             }
 
             InitHPSDR();
@@ -23149,7 +23192,7 @@ namespace Thetis
 
         private void tmrCFCOMPGain_Tick(object sender, EventArgs e)
         {
-            if (!console.MOX || !picCFC.Visible || !chkCFCEnable.Checked)
+            if (!picCFC.Visible || !chkCFCEnable.Checked || console.MOX)
             {
                 tmrCFCOMPGain.Interval = 1000;
                 if (m_bShowingCFC) picCFC.Invalidate();
@@ -23915,6 +23958,8 @@ namespace Thetis
         }
         private void comboPAProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (initializing) return; //[2.10.1.0] MW0LGE only want to apply this at the forceallevents stage
+
             PAProfile p = getPAProfile(comboPAProfile.Text);
 
             if (p != null)
@@ -26690,8 +26735,19 @@ namespace Thetis
 
             if (canPasteSettings())
             {
-                //updateItemSettingsControlsForSelected(_itemGroupSettings);
-                //updateMeterType();
+                // ignore some things [2.10.1.0] MW0LGE - fixes issue where bar with change units is paste into new bar, and source bars have no sub indicator
+                MeterManager.clsIGSettings currentSettings = m.GetSettingsForMeterGroup(mt);
+
+                _itemGroupSettings.Unit = currentSettings.Unit;
+
+                if(!_itemGroupSettings.SubIndicators)
+                {
+                    // no sub indicators on the source, replace with current so we end up with no change on the paste
+                    _itemGroupSettings.ShowSubMarker = currentSettings.ShowMarker;
+                    _itemGroupSettings.ShowSubMarker = currentSettings.ShowSubMarker;
+                    _itemGroupSettings.SubMarkerColour = currentSettings.SubMarkerColour;
+                }
+                //
 
                 m.ApplySettingsForMeterGroup(mt, _itemGroupSettings);
                 updateItemSettingsControlsForSelected();
@@ -26859,41 +26915,25 @@ namespace Thetis
         }
         #endregion
 
-        private void radSpaceBarVFOBTX_CheckedChanged(object sender, EventArgs e)
+        private void tmrCheckProfile_Tick(object sender, EventArgs e)
         {
-            this.console.SpaceBarVFOTXB = radSpaceBarVFOBTX.Checked;
+            if (!this.Visible) return;
+
+            tmrCheckProfile.Enabled = false;
+
+            bool bChanged = checkTXProfileChanged2();
+
+            lblTXProfileWarning.Visible = bChanged;
+
+            tmrCheckProfile.Enabled = true;
         }
 
-        private void chkExpMHde_CheckedChanged(object sender, EventArgs e)
+        private void btnClearTCISpots_Click(object sender, EventArgs e)
         {
-            if (chkExpMHde.Checked == true)
-            {
-                console.ExpMeter = true;
-                if (console.collapsedDisplay == false)
-                {
-                    console.grpMultimeter.Hide();
-                    console.grpMultimeterMenus.Hide();
-                    console.grpRX2Meter.Hide();
-                    console.comboMeterRXMode.Hide();
-                    console.comboRX2MeterMode.Hide();
-                    console.comboMeterTXMode.Hide();
-                }
-            }
-            if (chkExpMHde.Checked == false)
-            {
-                console.ExpMeter = false;
-                if (console.collapsedDisplay == false)
-                {
-                    console.grpMultimeter.Show();
-                    console.grpMultimeterMenus.Show();
-                    console.grpRX2Meter.Show();
-                    console.comboMeterRXMode.Show();
-                    console.comboRX2MeterMode.Show();
-                    console.comboMeterTXMode.Show();
-                }
-            }
+            SpotManager2.ClearAllSpots();
         }
 
+        //wd5y
         private void chkColMHde_CheckedChanged(object sender, EventArgs e)
         {
             if (chkColMHde.Checked == true)
@@ -26939,7 +26979,7 @@ namespace Thetis
                         console.panelMeterLabels.Show();
                     }
                     if (console.chkRX2.Checked == true)
-                    {                        
+                    {
                         console.picMultiMeterDigital.Show();
                         console.txtMultiText.Show();
                         console.picRX2Meter.Show();
@@ -26950,7 +26990,36 @@ namespace Thetis
             }
         }
 
-       //wd5y
+        private void chkExpMHde_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkExpMHde.Checked == true)
+            {
+                console.ExpMeter = true;
+                if (console.collapsedDisplay == false)
+                {
+                    console.grpMultimeter.Hide();
+                    console.grpMultimeterMenus.Hide();
+                    console.grpRX2Meter.Hide();
+                    console.comboMeterRXMode.Hide();
+                    console.comboRX2MeterMode.Hide();
+                    console.comboMeterTXMode.Hide();
+                }
+            }
+            if (chkExpMHde.Checked == false)
+            {
+                console.ExpMeter = false;
+                if (console.collapsedDisplay == false)
+                {
+                    console.grpMultimeter.Show();
+                    console.grpMultimeterMenus.Show();
+                    console.grpRX2Meter.Show();
+                    console.comboMeterRXMode.Show();
+                    console.comboRX2MeterMode.Show();
+                    console.comboMeterTXMode.Show();
+                }
+            }
+        }
+
         private void chkMafCtrl_CheckedChanged(object sender, EventArgs e)
         {
             if (chkMafCtrl.Checked == true)
@@ -26964,9 +27033,19 @@ namespace Thetis
                 console.AfLnk = false;
             }
         }
-        //wd5y
-    }
 
+        private void radSpaceBarVFOBTX_CheckedChanged(object sender, EventArgs e)
+        {
+            this.console.SpaceBarVFOTXB = radSpaceBarVFOBTX.Checked;
+        }
+
+        private void chkSamRst_CheckedChanged(object sender, EventArgs e)
+        {
+         this.console.SplRst = chkSamRst.Checked;
+        }
+    }
+    //wd5y
+   
     #region PADeviceInfo Helper Class
 
     public class PADeviceInfo

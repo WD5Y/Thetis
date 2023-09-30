@@ -1698,6 +1698,7 @@
             this.comboAudioDriver3 = new System.Windows.Forms.ComboBoxTS();
             this.chkVAC2Enable = new System.Windows.Forms.CheckBoxTS();
             this.tpAudioOptions = new System.Windows.Forms.TabPage();
+            this.chkSamRst = new System.Windows.Forms.CheckBoxTS();
             this.chkMafCtrl = new System.Windows.Forms.CheckBoxTS();
             this.chkDisableRearSpeakerJacksAudioAmplifier = new System.Windows.Forms.CheckBoxTS();
             this.chkNoFadeOverUnderWarning = new System.Windows.Forms.CheckBoxTS();
@@ -3212,6 +3213,7 @@
             this.comboCATstopbits = new System.Windows.Forms.ComboBoxTS();
             this.tpTCITCPIPN1MM = new System.Windows.Forms.TabPage();
             this.grpTCIServer = new System.Windows.Forms.GroupBoxTS();
+            this.btnClearTCISpots = new System.Windows.Forms.ButtonTS();
             this.chkEmulateExpertSDR3Protocol = new System.Windows.Forms.CheckBoxTS();
             this.chkEmulateSunSDR2Pro = new System.Windows.Forms.CheckBoxTS();
             this.btnIPv4TCI = new System.Windows.Forms.ButtonTS();
@@ -3405,6 +3407,7 @@
             this.btnCancel = new System.Windows.Forms.ButtonTS();
             this.btnOK = new System.Windows.Forms.ButtonTS();
             this.chkEnableRFEPATR = new System.Windows.Forms.CheckBoxTS();
+            this.lblTXProfileWarning = new System.Windows.Forms.LabelTS();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.timer_VAC_Monitor = new System.Windows.Forms.Timer(this.components);
             this.timer_LED_Mirror = new System.Windows.Forms.Timer(this.components);
@@ -3455,6 +3458,7 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
+            this.tmrCheckProfile = new System.Windows.Forms.Timer(this.components);
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -7496,13 +7500,15 @@
             this.grpFRSRegion.Controls.Add(this.comboFRSRegion);
             this.grpFRSRegion.Location = new System.Drawing.Point(28, 134);
             this.grpFRSRegion.Name = "grpFRSRegion";
-            this.grpFRSRegion.Size = new System.Drawing.Size(150, 75);
+            this.grpFRSRegion.Size = new System.Drawing.Size(150, 74);
             this.grpFRSRegion.TabIndex = 33;
             this.grpFRSRegion.TabStop = false;
             this.grpFRSRegion.Text = "Region";
             // 
             // lblWarningRegionExtended
             // 
+            this.lblWarningRegionExtended.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWarningRegionExtended.ForeColor = System.Drawing.Color.Red;
             this.lblWarningRegionExtended.Image = null;
             this.lblWarningRegionExtended.Location = new System.Drawing.Point(41, 75);
             this.lblWarningRegionExtended.Name = "lblWarningRegionExtended";
@@ -7512,6 +7518,7 @@
             // 
             // picWarningRegionExtended
             // 
+            this.picWarningRegionExtended.Image = global::Thetis.Properties.Resources.warning4;
             this.picWarningRegionExtended.Location = new System.Drawing.Point(12, 75);
             this.picWarningRegionExtended.Name = "picWarningRegionExtended";
             this.picWarningRegionExtended.Size = new System.Drawing.Size(20, 20);
@@ -7788,7 +7795,7 @@
             this.radSaturnXLR.Image = null;
             this.radSaturnXLR.Location = new System.Drawing.Point(3, 2);
             this.radSaturnXLR.Name = "radSaturnXLR";
-            this.radSaturnXLR.Size = new System.Drawing.Size(39, 17);
+            this.radSaturnXLR.Size = new System.Drawing.Size(46, 17);
             this.radSaturnXLR.TabIndex = 0;
             this.radSaturnXLR.TabStop = true;
             this.radSaturnXLR.Text = "XLR";
@@ -7801,8 +7808,9 @@
             this.radSaturn3p5mm.Image = null;
             this.radSaturn3p5mm.Location = new System.Drawing.Point(49, 2);
             this.radSaturn3p5mm.Name = "radSaturn3p5mm";
-            this.radSaturn3p5mm.Size = new System.Drawing.Size(39, 17);
+            this.radSaturn3p5mm.Size = new System.Drawing.Size(56, 17);
             this.radSaturn3p5mm.TabIndex = 1;
+            this.radSaturn3p5mm.TabStop = true;
             this.radSaturn3p5mm.Text = "3.5mm";
             this.radSaturn3p5mm.UseVisualStyleBackColor = true;
             this.radSaturn3p5mm.CheckedChanged += new System.EventHandler(this.radSaturn3p5mm_CheckedChanged);
@@ -7813,7 +7821,7 @@
             this.lblSaturnMicInput.Image = null;
             this.lblSaturnMicInput.Location = new System.Drawing.Point(9, 102);
             this.lblSaturnMicInput.Name = "lblSaturnMicInput";
-            this.lblSaturnMicInput.Size = new System.Drawing.Size(28, 13);
+            this.lblSaturnMicInput.Size = new System.Drawing.Size(31, 13);
             this.lblSaturnMicInput.TabIndex = 6;
             this.lblSaturnMicInput.Text = "Input";
             this.lblSaturnMicInput.Visible = false;
@@ -27544,6 +27552,7 @@
             // tpAudioOptions
             // 
             this.tpAudioOptions.BackColor = System.Drawing.SystemColors.Control;
+            this.tpAudioOptions.Controls.Add(this.chkSamRst);
             this.tpAudioOptions.Controls.Add(this.chkMafCtrl);
             this.tpAudioOptions.Controls.Add(this.chkDisableRearSpeakerJacksAudioAmplifier);
             this.tpAudioOptions.Controls.Add(this.chkNoFadeOverUnderWarning);
@@ -27555,14 +27564,27 @@
             this.tpAudioOptions.TabIndex = 4;
             this.tpAudioOptions.Text = "Options";
             // 
+            // chkSamRst
+            // 
+            this.chkSamRst.AutoSize = true;
+            this.chkSamRst.Image = null;
+            this.chkSamRst.Location = new System.Drawing.Point(19, 111);
+            this.chkSamRst.Name = "chkSamRst";
+            this.chkSamRst.Size = new System.Drawing.Size(218, 17);
+            this.chkSamRst.TabIndex = 6;
+            this.chkSamRst.Text = "VAC Audio Sampling Reset @ Power-On";
+            this.toolTip1.SetToolTip(this.chkSamRst, "Helps Stabilize VAC Audio @ Startup");
+            this.chkSamRst.UseVisualStyleBackColor = true;
+            this.chkSamRst.CheckedChanged += new System.EventHandler(this.chkSamRst_CheckedChanged);
+            // 
             // chkMafCtrl
             // 
             this.chkMafCtrl.AutoSize = true;
             this.chkMafCtrl.Image = null;
-            this.chkMafCtrl.Location = new System.Drawing.Point(20, 123);
+            this.chkMafCtrl.Location = new System.Drawing.Point(19, 88);
             this.chkMafCtrl.Name = "chkMafCtrl";
             this.chkMafCtrl.Size = new System.Drawing.Size(170, 17);
-            this.chkMafCtrl.TabIndex = 4;
+            this.chkMafCtrl.TabIndex = 5;
             this.chkMafCtrl.Text = "Master Af Link - RX1 And RX2";
             this.toolTip1.SetToolTip(this.chkMafCtrl, "Links AF Controls");
             this.chkMafCtrl.UseVisualStyleBackColor = true;
@@ -27572,7 +27594,7 @@
             // 
             this.chkDisableRearSpeakerJacksAudioAmplifier.AutoSize = true;
             this.chkDisableRearSpeakerJacksAudioAmplifier.Image = null;
-            this.chkDisableRearSpeakerJacksAudioAmplifier.Location = new System.Drawing.Point(20, 80);
+            this.chkDisableRearSpeakerJacksAudioAmplifier.Location = new System.Drawing.Point(19, 65);
             this.chkDisableRearSpeakerJacksAudioAmplifier.Name = "chkDisableRearSpeakerJacksAudioAmplifier";
             this.chkDisableRearSpeakerJacksAudioAmplifier.Size = new System.Drawing.Size(239, 17);
             this.chkDisableRearSpeakerJacksAudioAmplifier.TabIndex = 2;
@@ -47152,7 +47174,7 @@
             this.chkExpMHde.Location = new System.Drawing.Point(27, 111);
             this.chkExpMHde.Name = "chkExpMHde";
             this.chkExpMHde.Size = new System.Drawing.Size(142, 17);
-            this.chkExpMHde.TabIndex = 90;
+            this.chkExpMHde.TabIndex = 91;
             this.chkExpMHde.Text = "Hide Expand Multi-Meter";
             this.chkExpMHde.UseVisualStyleBackColor = true;
             this.chkExpMHde.CheckedChanged += new System.EventHandler(this.chkExpMHde_CheckedChanged);
@@ -49387,10 +49409,10 @@
             // 
             this.chkColMHde.AutoSize = true;
             this.chkColMHde.Image = null;
-            this.chkColMHde.Location = new System.Drawing.Point(21, 172);
+            this.chkColMHde.Location = new System.Drawing.Point(15, 162);
             this.chkColMHde.Name = "chkColMHde";
             this.chkColMHde.Size = new System.Drawing.Size(152, 17);
-            this.chkColMHde.TabIndex = 21;
+            this.chkColMHde.TabIndex = 22;
             this.chkColMHde.Text = "Hide Collapsed Multi-Meter";
             this.chkColMHde.UseVisualStyleBackColor = true;
             this.chkColMHde.CheckedChanged += new System.EventHandler(this.chkColMHde_CheckedChanged);
@@ -49575,7 +49597,7 @@
             this.grpBoxSpaceBarPTT.Controls.Add(this.radSpaceBarPTT);
             this.grpBoxSpaceBarPTT.Location = new System.Drawing.Point(525, 8);
             this.grpBoxSpaceBarPTT.Name = "grpBoxSpaceBarPTT";
-            this.grpBoxSpaceBarPTT.Size = new System.Drawing.Size(168, 122);
+            this.grpBoxSpaceBarPTT.Size = new System.Drawing.Size(168, 125);
             this.grpBoxSpaceBarPTT.TabIndex = 41;
             this.grpBoxSpaceBarPTT.TabStop = false;
             this.grpBoxSpaceBarPTT.Text = "SpaceBar Control";
@@ -49584,10 +49606,10 @@
             // 
             this.radSpaceBarVFOBTX.AutoSize = true;
             this.radSpaceBarVFOBTX.Image = null;
-            this.radSpaceBarVFOBTX.Location = new System.Drawing.Point(6, 99);
+            this.radSpaceBarVFOBTX.Location = new System.Drawing.Point(6, 103);
             this.radSpaceBarVFOBTX.Name = "radSpaceBarVFOBTX";
             this.radSpaceBarVFOBTX.Size = new System.Drawing.Size(115, 17);
-            this.radSpaceBarVFOBTX.TabIndex = 66;
+            this.radSpaceBarVFOBTX.TabIndex = 67;
             this.radSpaceBarVFOBTX.Text = "VFOB_TX - Toggle";
             this.toolTip1.SetToolTip(this.radSpaceBarVFOBTX, "SpaceBar Toggles To VFOB-TX");
             this.radSpaceBarVFOBTX.UseVisualStyleBackColor = true;
@@ -49816,7 +49838,7 @@
             // 
             this.grpKeyboardOptions.Controls.Add(this.chkOptEnableKBShortcuts);
             this.grpKeyboardOptions.Controls.Add(this.chkOptQuickQSY);
-            this.grpKeyboardOptions.Location = new System.Drawing.Point(525, 139);
+            this.grpKeyboardOptions.Location = new System.Drawing.Point(525, 152);
             this.grpKeyboardOptions.Name = "grpKeyboardOptions";
             this.grpKeyboardOptions.Size = new System.Drawing.Size(168, 72);
             this.grpKeyboardOptions.TabIndex = 27;
@@ -51065,6 +51087,7 @@
             // 
             // grpTCIServer
             // 
+            this.grpTCIServer.Controls.Add(this.btnClearTCISpots);
             this.grpTCIServer.Controls.Add(this.chkEmulateExpertSDR3Protocol);
             this.grpTCIServer.Controls.Add(this.chkEmulateSunSDR2Pro);
             this.grpTCIServer.Controls.Add(this.btnIPv4TCI);
@@ -51095,6 +51118,18 @@
             this.grpTCIServer.TabIndex = 98;
             this.grpTCIServer.TabStop = false;
             this.grpTCIServer.Text = "TCI Server (0 clients)";
+            // 
+            // btnClearTCISpots
+            // 
+            this.btnClearTCISpots.Image = null;
+            this.btnClearTCISpots.Location = new System.Drawing.Point(229, 251);
+            this.btnClearTCISpots.Name = "btnClearTCISpots";
+            this.btnClearTCISpots.Selectable = true;
+            this.btnClearTCISpots.Size = new System.Drawing.Size(77, 26);
+            this.btnClearTCISpots.TabIndex = 99;
+            this.btnClearTCISpots.Text = "Clear Spots";
+            this.btnClearTCISpots.UseVisualStyleBackColor = true;
+            this.btnClearTCISpots.Click += new System.EventHandler(this.btnClearTCISpots_Click);
             // 
             // chkEmulateExpertSDR3Protocol
             // 
@@ -53896,7 +53931,7 @@
             // btnApply
             // 
             this.btnApply.Image = null;
-            this.btnApply.Location = new System.Drawing.Point(640, 476);
+            this.btnApply.Location = new System.Drawing.Point(659, 476);
             this.btnApply.Name = "btnApply";
             this.btnApply.Selectable = true;
             this.btnApply.Size = new System.Drawing.Size(75, 23);
@@ -53908,7 +53943,7 @@
             // btnCancel
             // 
             this.btnCancel.Image = null;
-            this.btnCancel.Location = new System.Drawing.Point(559, 476);
+            this.btnCancel.Location = new System.Drawing.Point(578, 476);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Selectable = true;
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -53920,7 +53955,7 @@
             // btnOK
             // 
             this.btnOK.Image = null;
-            this.btnOK.Location = new System.Drawing.Point(478, 476);
+            this.btnOK.Location = new System.Drawing.Point(497, 476);
             this.btnOK.Name = "btnOK";
             this.btnOK.Selectable = true;
             this.btnOK.Size = new System.Drawing.Size(75, 23);
@@ -53939,6 +53974,22 @@
             this.chkEnableRFEPATR.Text = "Enable RFE PA TR";
             this.toolTip1.SetToolTip(this.chkEnableRFEPATR, "Enabled the RFE PA TR line to toggle with MOX (for use with non-FLEX PA).");
             this.chkEnableRFEPATR.CheckedChanged += new System.EventHandler(this.chkEnableRFEPATR_CheckedChanged);
+            // 
+            // lblTXProfileWarning
+            // 
+            this.lblTXProfileWarning.BackColor = System.Drawing.Color.Orange;
+            this.lblTXProfileWarning.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblTXProfileWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTXProfileWarning.ForeColor = System.Drawing.Color.Black;
+            this.lblTXProfileWarning.Image = null;
+            this.lblTXProfileWarning.Location = new System.Drawing.Point(609, 2);
+            this.lblTXProfileWarning.Name = "lblTXProfileWarning";
+            this.lblTXProfileWarning.Size = new System.Drawing.Size(134, 33);
+            this.lblTXProfileWarning.TabIndex = 24;
+            this.lblTXProfileWarning.Text = "TX Profile modified\r\nSave profile to store";
+            this.lblTXProfileWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolTip1.SetToolTip(this.lblTXProfileWarning, resources.GetString("lblTXProfileWarning.ToolTip"));
+            this.lblTXProfileWarning.Visible = false;
             // 
             // saveFileDialog1
             // 
@@ -53980,7 +54031,7 @@
             this.labelSavingLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSavingLoading.ForeColor = System.Drawing.Color.Red;
             this.labelSavingLoading.Image = null;
-            this.labelSavingLoading.Location = new System.Drawing.Point(615, 498);
+            this.labelSavingLoading.Location = new System.Drawing.Point(634, 498);
             this.labelSavingLoading.Name = "labelSavingLoading";
             this.labelSavingLoading.Size = new System.Drawing.Size(100, 10);
             this.labelSavingLoading.TabIndex = 23;
@@ -55007,11 +55058,18 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
+            // tmrCheckProfile
+            // 
+            this.tmrCheckProfile.Enabled = true;
+            this.tmrCheckProfile.Interval = 1000;
+            this.tmrCheckProfile.Tick += new System.EventHandler(this.tmrCheckProfile_Tick);
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(744, 511);
+            this.Controls.Add(this.lblTXProfileWarning);
             this.Controls.Add(this.labelSavingLoading);
             this.Controls.Add(this.btnExportDB);
             this.Controls.Add(this.btnImportDB);
@@ -55938,6 +55996,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayLineWidth)).EndInit();
             this.grpDisplayPeakCursor.ResumeLayout(false);
             this.tpAppearanceMeter.ResumeLayout(false);
+            this.tpAppearanceMeter.PerformLayout();
             this.groupBoxTS14.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbSignalHistoryAlpha)).EndInit();
             this.grpMeterEdge.ResumeLayout(false);
@@ -56111,7 +56170,7 @@
             this.ResumeLayout(false);
 
         }
-        #endregion
+#endregion
 
         protected override void Dispose(bool disposing)
         {
@@ -56308,6 +56367,7 @@
         private ComboBoxTS comboAudioInput2;
         private ComboBoxTS comboAudioDriver2;
         private NumericUpDownTS udAudioLatency2;
+        public ComboBoxTS comboAudioBuffer2;
         private ComboBoxTS comboAudioSampleRate2;
         private GroupBoxTS grpAudioBuffer2;
         private GroupBoxTS grpAudioSampleRate2;
@@ -57272,6 +57332,7 @@
         private System.Windows.Forms.GroupBoxTS grpAudioSampleRate3;
         private System.Windows.Forms.ComboBoxTS comboAudioSampleRate3;
         private System.Windows.Forms.GroupBoxTS grpAudioBuffer3;
+        public System.Windows.Forms.ComboBoxTS comboAudioBuffer3;
         private System.Windows.Forms.GroupBoxTS grpAudioDetails3;
         public System.Windows.Forms.LabelTS lblAudioOutput3;
         private System.Windows.Forms.ComboBoxTS comboAudioOutput3;
@@ -59558,12 +59619,14 @@
         private LabelTS labelTS181;
         private GroupBoxTS grpUSBBCD;
         private CheckBoxTS chkUsbBCD;
-        private ComboBoxTS comboUsbDevices;        
-        private RadioButtonTS radSpaceBarVFOBTX;
-        private CheckBoxTS chkExpMHde;
+        private ComboBoxTS comboUsbDevices;
+        private LabelTS lblTXProfileWarning;
+        private Timer tmrCheckProfile;
+        private ButtonTS btnClearTCISpots;
         private CheckBoxTS chkColMHde;
+        private CheckBoxTS chkExpMHde;
         private CheckBoxTS chkMafCtrl;
-        public ComboBoxTS comboAudioBuffer2;
-        public ComboBoxTS comboAudioBuffer3;
+        private RadioButtonTS radSpaceBarVFOBTX;
+        private CheckBoxTS chkSamRst;
     }
 }

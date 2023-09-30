@@ -122,6 +122,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Thetis
 {
@@ -212,8 +213,23 @@ namespace Thetis
 			bool bSplit = console.ThreadSafeTCIAccessor.VFOSplit;
 			sendSplit(rx-1, bSplit);
 		}
-
-		private void limitList()
+        public void MuteChanged(int rx, bool newState)
+        {
+            if (m_disconnected) return;
+			sendMute(console.ThreadSafeTCIAccessor.MUT || (console.ThreadSafeTCIAccessor.RX2Enabled && console.ThreadSafeTCIAccessor.MUT2));
+			sendMuteRX(rx - 1, newState);
+        }
+		public void MONChanged(bool newState)
+		{
+            if (m_disconnected) return;
+			sendMONEnable(newState);
+        }
+		public void MONVolumeChanged(int newVolume)
+		{
+			if (m_disconnected) return;
+            sendMONVolume(linearToDbVolume(newVolume));
+		}
+        private void limitList()
         {
 			lock (m_objVFODataLock)
 			{
@@ -251,6 +267,7 @@ namespace Thetis
 					if (vfoData.cen)
                     {
                         sendDDS(vfoData.rx, (long)(vfoData.centreMHz * 1e6));
+                        if (vfoData.sendIF) sendIF(vfoData.rx, vfoData.chan, (int)vfoData.offsetHz);
                     }
                     else
                     {
@@ -591,7 +608,29 @@ namespace Thetis
 			string s = "modulation:" + rx.ToString() + "," + sMode.ToUpper() + ";"; // MW0LGE_22b mods are uppcase on the sun, replicate
 			sendTextFrame(s);
 		}
-		private void sendTunePower(int rx, int drive)
+        private void sendMute(bool mute)
+        {
+            string s = "mute:" + mute.ToString().ToLower() + ";";
+            sendTextFrame(s);
+        }
+        private void sendMuteRX(int rx, bool mute)
+        {
+            string s = "rx_mute:" + rx.ToString() + "," + mute.ToString().ToLower() + ";";
+            sendTextFrame(s);
+        }
+		private void sendMONEnable(bool enable)
+		{
+            string s = "mon_enable:" + enable.ToString().ToLower() + ";";
+            sendTextFrame(s);
+        }
+		private void sendMONVolume(double volume)
+		{
+            if (volume < -60f || volume > 0f) return;
+
+            string s = "mon_volume:" + volume.ToString("F1").ToLower() + ";";
+            sendTextFrame(s);
+        }
+        private void sendTunePower(int rx, int drive)
 		{
 			if (drive < 0 || drive > 100) return;
 
@@ -677,8 +716,9 @@ namespace Thetis
         private void sendInitialRadioState()
         {
 			bool bSend = m_server != null ? m_server.SendInitialFrequencyStateOnConnect : true;
+			bool bRX2Enabled = console.ThreadSafeTCIAccessor.RX2Enabled;
 
-			if (bSend)
+            if (bSend)
 			{
 				sendDDS(0);
 				sendDDS(1);
@@ -698,29 +738,36 @@ namespace Thetis
 			//TODO sendFilterBand(0)
 
 			sendRXEnable(0, !console.ThreadSafeTCIAccessor.MOX);
-			sendRXEnable(1, console.ThreadSafeTCIAccessor.RX2Enabled && !console.ThreadSafeTCIAccessor.MOX);
+			sendRXEnable(1, bRX2Enabled && !console.ThreadSafeTCIAccessor.MOX);
 
 			//lock
 			//TODO rx channel enable
-			// rit/xit
+			//rit/xit
 
 			sendSplit(0, console.ThreadSafeTCIAccessor.VFOSplit);
-			sendSplit(1, console.ThreadSafeTCIAccessor.RX2Enabled && console.ThreadSafeTCIAccessor.VFOSplit);
+			sendSplit(1, bRX2Enabled && console.ThreadSafeTCIAccessor.VFOSplit);
 
 			sendTXEnable(0, !console.ThreadSafeTCIAccessor.MOX);
-			sendTXEnable(1, console.ThreadSafeTCIAccessor.RX2Enabled && !console.ThreadSafeTCIAccessor.MOX);
+			sendTXEnable(1, bRX2Enabled && !console.ThreadSafeTCIAccessor.MOX);
 
-            sendMOX(0, console.ThreadSafeTCIAccessor.MOX && !(console.ThreadSafeTCIAccessor.VFOBTX && console.ThreadSafeTCIAccessor.RX2Enabled));
-            sendMOX(1, console.ThreadSafeTCIAccessor.MOX && (console.ThreadSafeTCIAccessor.VFOBTX && console.ThreadSafeTCIAccessor.RX2Enabled));
+            sendMOX(0, console.ThreadSafeTCIAccessor.MOX && !(console.ThreadSafeTCIAccessor.VFOBTX && bRX2Enabled));
+            sendMOX(1, console.ThreadSafeTCIAccessor.MOX && (console.ThreadSafeTCIAccessor.VFOBTX && bRX2Enabled));
 
-            sendTune(0, console.ThreadSafeTCIAccessor.TUN && !(console.ThreadSafeTCIAccessor.VFOBTX && console.ThreadSafeTCIAccessor.RX2Enabled));
-            sendTune(1, console.ThreadSafeTCIAccessor.TUN && (console.ThreadSafeTCIAccessor.VFOBTX && console.ThreadSafeTCIAccessor.RX2Enabled));
+            sendTune(0, console.ThreadSafeTCIAccessor.TUN && !(console.ThreadSafeTCIAccessor.VFOBTX && bRX2Enabled));
+            sendTune(1, console.ThreadSafeTCIAccessor.TUN && (console.ThreadSafeTCIAccessor.VFOBTX && bRX2Enabled));
 
 			//TODO iq sample rate
 			//TODO iq stop
 			//TODO audio_samplerate
 
-			sendStartStop(console.ThreadSafeTCIAccessor.PowerOn);// MW0LGE_22b moved here to replicate sun
+			sendMute(console.ThreadSafeTCIAccessor.MUT || (console.ThreadSafeTCIAccessor.MUT2 && bRX2Enabled));
+			sendMuteRX(0, console.ThreadSafeTCIAccessor.MUT);
+            sendMuteRX(1, console.ThreadSafeTCIAccessor.MUT2);
+
+			sendMONEnable(console.ThreadSafeTCIAccessor.MON);
+            sendMONVolume(linearToDbVolume(console.ThreadSafeTCIAccessor.TXAF));
+
+            sendStartStop(console.ThreadSafeTCIAccessor.PowerOn);// MW0LGE_22b moved here to replicate sun
 
 			Debug.Print("SENT INITIAL STATE");
 		}
@@ -1119,6 +1166,10 @@ namespace Thetis
 		{
             if (console.ThreadSafeTCIAccessor.PowerOn)
 				console.ThreadSafeTCIAccessor.PowerOn = false;
+		}
+		private void handleSpotClear()
+		{
+			SpotManager2.ClearAllSpots();
 		}
 		private void handleSplitEnableMessage(string[] args)
 		{
@@ -1589,7 +1640,101 @@ namespace Thetis
 				sendTunePower(rx, console.ThreadSafeTCIAccessor.TunePWRConstrained);
 			}
 		}
-		private void handleSpot(string[] args)
+        private void handleMute(string[] args, bool hasArgs = true)
+        {
+            if (hasArgs && args.Length == 1)
+            {
+                bool bOK = bool.TryParse(args[0], out bool mute);
+                //set
+                if (bOK)
+                {
+					console.ThreadSafeTCIAccessor.MUT = mute;
+					console.ThreadSafeTCIAccessor.MUT2 = mute;
+                }
+            }
+            else if (!hasArgs)
+            {
+                //read
+                sendMute(console.ThreadSafeTCIAccessor.MUT || console.ThreadSafeTCIAccessor.MUT2);
+            }
+        }
+        private void handleMuteRX(string[] args)
+        {
+            if (args.Length < 1) return;
+
+            bool bOK = int.TryParse(args[0], out int rx);
+
+            if (bOK && args.Length == 2)
+            {
+                //set
+                bOK = bool.TryParse(args[1], out bool mute);
+                if (bOK)
+                {
+                    if(rx == 0)
+                        console.ThreadSafeTCIAccessor.MUT = mute;
+                    else if(rx == 1)
+                        console.ThreadSafeTCIAccessor.MUT2 = mute;
+                }
+            }
+            else if (bOK && args.Length == 1)
+            {
+                //read
+                sendMuteRX(rx, rx == 0 ? console.ThreadSafeTCIAccessor.MUT : console.ThreadSafeTCIAccessor.MUT2);
+            }
+        }
+		private void handleMONEnable(string[] args, bool hasArgs = true)
+		{
+            if (hasArgs && args.Length == 1)
+            {
+                //set
+                bool bOK = bool.TryParse(args[0], out bool enable);
+                if (bOK)
+                {
+					console.ThreadSafeTCIAccessor.MON = enable;
+                }
+            }
+            else if (!hasArgs)
+            {
+				//read
+				sendMONEnable(console.ThreadSafeTCIAccessor.MON);
+            }
+        }
+		private double linearToDbVolume(int volume)
+		{
+            double dbMin = -60f;
+            double dbMax = 0;
+            double linearMax = 100f;
+            double linearMin = 0;
+
+            double dbValue = ((volume - linearMin) / (linearMax - linearMin)) * (dbMax - dbMin) + dbMin;
+
+            return Math.Max(dbMin, Math.Min(dbMax, dbValue));
+        }
+		private void handleMONVolume(string[] args, bool hasArgs = true)
+		{
+            if (hasArgs && args.Length == 1)
+            {
+                //set
+                bool bOK = double.TryParse(args[0], out double dBLevel);
+                if (bOK)
+                {
+                    double dbMin = -60f;
+                    double dbMax = 0;
+                    double linearMax = 100f;
+                    double linearMin = 0;
+                    double linearValue = ((dBLevel - dbMin) / (dbMax - dbMin)) * (linearMax - linearMin) + linearMin;
+                    linearValue = Math.Max(linearMin, Math.Min(linearMax, linearValue));
+
+                    console.ThreadSafeTCIAccessor.TXAF = (int)linearValue;
+                }
+            }
+            else if (!hasArgs)
+            {
+				//read
+                sendMONVolume(linearToDbVolume(console.ThreadSafeTCIAccessor.TXAF));
+            }
+        }
+        private void handleSpot(string[] args)
         {
 			if (args.Length >= 4) // 4 as argument 5 may contain commas
 			{
@@ -1776,6 +1921,18 @@ namespace Thetis
 					case "tune_drive":
 						handleTuneDrive(args);
 						break;
+					case "mute":
+                        handleMute(args);
+						break;
+                    case "rx_mute":
+                        handleMuteRX(args);
+						break;
+					case "mon_volume":
+						handleMONVolume(args);
+						break;
+					case "mon_enable":
+                        handleMONEnable(args);
+                        break;
                 }
             }
 			else if (parts.Length == 1)
@@ -1793,7 +1950,19 @@ namespace Thetis
 					case "set_in_focus":
 						handleSetInFocus();
 						break;
-				}
+                    case "mute":
+                        handleMute(null, false);
+                        break;
+                    case "mon_enable":
+                        handleMONEnable(null, false);
+                        break;
+                    case "mon_volume":
+                        handleMONVolume(null, false);
+                        break;
+					case "spot_clear":
+						handleSpotClear();
+						break;
+                }
             }
 		}
 
@@ -2017,8 +2186,11 @@ namespace Thetis
 					console.ThreadSafeTCIAccessor.ThetisFocusChangedHandlers += OnThetisFocusChanged;
 					console.ThreadSafeTCIAccessor.RX2EnabledChangedHandlers += OnRX2EnabledChanged;
 					console.ThreadSafeTCIAccessor.SpotClickedHandlers += OnSpotClicked;
+					console.ThreadSafeTCIAccessor.MuteChangedHandlers += OnMuteChanged;
+					console.ThreadSafeTCIAccessor.MONChangedHandlers += OnMONChanged;
+                    console.ThreadSafeTCIAccessor.MONVolumeChangedHandlers += OnMONVolumeChanged;
 
-					m_bDelegatesAdded = true;
+                    m_bDelegatesAdded = true;
 				}
 
 				try
@@ -2098,8 +2270,11 @@ namespace Thetis
 					console.ThreadSafeTCIAccessor.ThetisFocusChangedHandlers -= OnThetisFocusChanged;
 					console.ThreadSafeTCIAccessor.RX2EnabledChangedHandlers -= OnRX2EnabledChanged;
 					console.ThreadSafeTCIAccessor.SpotClickedHandlers -= OnSpotClicked;
+                    console.ThreadSafeTCIAccessor.MuteChangedHandlers -= OnMuteChanged;
+                    console.ThreadSafeTCIAccessor.MONChangedHandlers -= OnMONChanged;
+                    console.ThreadSafeTCIAccessor.MONVolumeChangedHandlers -= OnMONVolumeChanged;
 
-					m_bDelegatesAdded = false;
+                    m_bDelegatesAdded = false;
 				}
 
 				// Stop the TCP/IP Server, so can clean up without more clients connecting
@@ -2363,18 +2538,21 @@ namespace Thetis
 				}
 			}
 		}
-		public void OnCentreFrequencyChanged(int rx, double oldFreq, double newFreq, Band band)
+		public void OnCentreFrequencyChanged(int rx, double oldFreq, double newFreq, Band band, double offset)
 		{
+			//only want to send IF with this if CTUN is enabled
+			bool bCTun = rx == 1 ? console.ThreadSafeTCIAccessor.ClickTuneDisplay : console.ThreadSafeTCIAccessor.ClickTuneRX2Display;
+
             TCPIPtciSocketListener.VFOData vfod = new TCPIPtciSocketListener.VFOData()
             {
                 freqMHz = -1,
-                offsetHz = -1,
-                chan = -1,
+                offsetHz = bCTun ? (int)-offset : -1,
+                chan = 0,
                 centreMHz = newFreq,
                 cen = true,
                 rx = rx - 1,
                 duplicate_tochan = -1,
-				sendIF = false
+				sendIF = bCTun
             };
             lock (m_objLocker)
             {
@@ -2486,8 +2664,37 @@ namespace Thetis
 				}
 			}
 		}
-
-		public void ShowLog()
+		private void OnMuteChanged(int rx, bool oldState, bool newState)
+		{
+            lock (m_objLocker)
+            {
+                foreach (TCPIPtciSocketListener socketListener in m_socketListenersList)
+                {
+                    socketListener.MuteChanged(rx, newState);
+                }
+            }
+        }
+        private void OnMONChanged(bool oldState, bool newState)
+        {
+            lock (m_objLocker)
+            {
+                foreach (TCPIPtciSocketListener socketListener in m_socketListenersList)
+                {
+                    socketListener.MONChanged(newState);
+                }
+            }
+        }
+        private void OnMONVolumeChanged(int oldVolume, int newVolume)
+        {
+            lock (m_objLocker)
+            {
+                foreach (TCPIPtciSocketListener socketListener in m_socketListenersList)
+                {
+                    socketListener.MONVolumeChanged(newVolume);
+                }
+            }
+        }
+        public void ShowLog()
         {
 			if (_log != null) _log.ShowWithTitle("TCI");
 		}

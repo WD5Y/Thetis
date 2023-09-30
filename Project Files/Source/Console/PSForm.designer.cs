@@ -782,10 +782,10 @@
             this.chkAmpV.AutoSize = true;
             this.chkAmpV.ForeColor = System.Drawing.SystemColors.HighlightText;
             this.chkAmpV.Image = null;
-            this.chkAmpV.Location = new System.Drawing.Point(397, 178);
+            this.chkAmpV.Location = new System.Drawing.Point(397, 180);
             this.chkAmpV.Name = "chkAmpV";
             this.chkAmpV.Size = new System.Drawing.Size(159, 17);
-            this.chkAmpV.TabIndex = 73;
+            this.chkAmpV.TabIndex = 74;
             this.chkAmpV.Text = "Enable Amp View At Startup";
             this.chkAmpV.UseVisualStyleBackColor = true;
             this.chkAmpV.CheckedChanged += new System.EventHandler(this.chkAmpV_CheckedChanged);
