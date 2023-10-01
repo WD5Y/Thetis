@@ -55996,7 +55996,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udDisplayLineWidth)).EndInit();
             this.grpDisplayPeakCursor.ResumeLayout(false);
             this.tpAppearanceMeter.ResumeLayout(false);
-            this.tpAppearanceMeter.PerformLayout();
             this.groupBoxTS14.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tbSignalHistoryAlpha)).EndInit();
             this.grpMeterEdge.ResumeLayout(false);
