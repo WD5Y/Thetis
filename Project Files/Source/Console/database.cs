@@ -4340,11 +4340,43 @@ namespace Thetis
             t.Columns.Add("CESSB_On", typeof(bool));
             t.Columns.Add("Pure_Signal_Enabled", typeof(bool));
 
+            //
+            t.Columns.Add("FM_RX_AFFilter_Low", typeof(decimal));
+            t.Columns.Add("FM_RX_AFFilter_High", typeof(decimal));
+            t.Columns.Add("FM_TX_AFFilter_Low", typeof(decimal));
+            t.Columns.Add("FM_TX_AFFilter_High", typeof(decimal));
+            t.Columns.Add("VAC1_Force_In", typeof(bool));
+            t.Columns.Add("VAC1_Force_Out", typeof(bool));
+            t.Columns.Add("VAC2_Force_In", typeof(bool));
+            t.Columns.Add("VAC2_Force_Out", typeof(bool));
+            t.Columns.Add("VAC1_SwapIQ", typeof(bool));
+            t.Columns.Add("VAC2_SwapIQ", typeof(bool));
+            t.Columns.Add("Audio_Disable_Audio_Amp", typeof(bool));
+            t.Columns.Add("PA_Profile", typeof(string));
+            t.Columns.Add("RXEQEnabled", typeof(bool));
+            t.Columns.Add("RXEQPreamp", typeof(int));
+            t.Columns.Add("RXEQ1", typeof(int));
+            t.Columns.Add("RXEQ2", typeof(int));
+            t.Columns.Add("RXEQ3", typeof(int));
+            t.Columns.Add("RXEQ4", typeof(int));
+            t.Columns.Add("RXEQ5", typeof(int));
+            t.Columns.Add("RXEQ6", typeof(int));
+            t.Columns.Add("RXEQ7", typeof(int));
+            t.Columns.Add("RXEQ8", typeof(int));
+            t.Columns.Add("RXEQ9", typeof(int));
+            t.Columns.Add("RXEQ10", typeof(int));
+            t.Columns.Add("VAC1_Exclusive_In", typeof(bool));
+            t.Columns.Add("VAC1_Exclusive_Out", typeof(bool));
+            t.Columns.Add("VAC2_Exclusive_In", typeof(bool));
+            t.Columns.Add("VAC2_Exclusive_Out", typeof(bool));
+            //
+
             // CFC
             t.Columns.Add("CFCEnabled", typeof(bool));
             t.Columns.Add("CFCPostEqEnabled", typeof(bool));
             t.Columns.Add("CFCPhaseRotatorEnabled", typeof(bool));
-
+            t.Columns.Add("CFCPhaseReverseEnabled", typeof(bool));
+            
             t.Columns.Add("CFCPhaseRotatorFreq", typeof(int));
             t.Columns.Add("CFCPhaseRotatorStages", typeof(int));
 
@@ -4530,10 +4562,42 @@ namespace Thetis
             dr["CESSB_On"] = false;
             dr["Pure_Signal_Enabled"] = false;
 
+            //
+            dr["FM_RX_AFFilter_Low"] = 300;
+            dr["FM_RX_AFFilter_High"] = 3000;
+            dr["FM_TX_AFFilter_Low"] = 300;
+            dr["FM_TX_AFFilter_High"] = 3000;
+            dr["VAC1_Force_In"] = false;
+            dr["VAC1_Force_Out"] = false;
+            dr["VAC2_Force_In"] = false;
+            dr["VAC2_Force_Out"] = false;
+            dr["VAC1_SwapIQ"] = true;
+            dr["VAC2_SwapIQ"] = true;
+            dr["Audio_Disable_Audio_Amp"] = false;
+            dr["PA_Profile"] = "";
+            dr["RXEQEnabled"] = false;
+            dr["RXEQPreamp"] = 0;
+            dr["RXEQ1"] = 0;
+            dr["RXEQ2"] = 0;
+            dr["RXEQ3"] = 0;
+            dr["RXEQ4"] = 0;
+            dr["RXEQ5"] = 0;
+            dr["RXEQ6"] = 0;
+            dr["RXEQ7"] = 0;
+            dr["RXEQ8"] = 0;
+            dr["RXEQ9"] = 0;
+            dr["RXEQ10"] = 0;
+            dr["VAC1_Exclusive_In"] = false;
+            dr["VAC1_Exclusive_Out"] = false;
+            dr["VAC2_Exclusive_In"] = false;
+            dr["VAC2_Exclusive_Out"] = false;
+            //
+
             // CFC
             dr["CFCEnabled"] = false;
             dr["CFCPostEqEnabled"] = false;
             dr["CFCPhaseRotatorEnabled"] = false;
+            dr["CFCPhaseReverseEnabled"] = false;
 
             dr["CFCPhaseRotatorFreq"] = 338;
             dr["CFCPhaseRotatorStages"] = 8;
@@ -4722,10 +4786,42 @@ namespace Thetis
             dr["CESSB_On"] = false;
             dr["Pure_Signal_Enabled"] = false;
 
+            //
+            dr["FM_RX_AFFilter_Low"] = 300;
+            dr["FM_RX_AFFilter_High"] = 3000;
+            dr["FM_TX_AFFilter_Low"] = 300;
+            dr["FM_TX_AFFilter_High"] = 3000;
+            dr["VAC1_Force_In"] = false;
+            dr["VAC1_Force_Out"] = false;
+            dr["VAC2_Force_In"] = false;
+            dr["VAC2_Force_Out"] = false;
+            dr["VAC1_SwapIQ"] = true;
+            dr["VAC2_SwapIQ"] = true;
+            dr["Audio_Disable_Audio_Amp"] = false;
+            dr["PA_Profile"] = "";
+            dr["RXEQEnabled"] = false;
+            dr["RXEQPreamp"] = 0;
+            dr["RXEQ1"] = 0;
+            dr["RXEQ2"] = 0;
+            dr["RXEQ3"] = 0;
+            dr["RXEQ4"] = 0;
+            dr["RXEQ5"] = 0;
+            dr["RXEQ6"] = 0;
+            dr["RXEQ7"] = 0;
+            dr["RXEQ8"] = 0;
+            dr["RXEQ9"] = 0;
+            dr["RXEQ10"] = 0;
+            dr["VAC1_Exclusive_In"] = false;
+            dr["VAC1_Exclusive_Out"] = false;
+            dr["VAC2_Exclusive_In"] = false;
+            dr["VAC2_Exclusive_Out"] = false;
+            //
+
             // CFC
             dr["CFCEnabled"] = false;
             dr["CFCPostEqEnabled"] = false;
             dr["CFCPhaseRotatorEnabled"] = false;
+            dr["CFCPhaseReverseEnabled"] = false;
 
             dr["CFCPhaseRotatorFreq"] = 338;
             dr["CFCPhaseRotatorStages"] = 8;
@@ -4915,10 +5011,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -5107,10 +5235,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -5298,10 +5458,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -5489,10 +5681,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -5680,10 +5904,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -5871,10 +6127,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -6062,10 +6350,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -6253,10 +6573,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -6444,10 +6796,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -6635,10 +7019,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -6826,10 +7242,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7017,10 +7465,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7208,10 +7688,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7399,10 +7911,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7590,10 +8134,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7781,10 +8357,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -7972,10 +8580,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -8163,10 +8803,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 8;
@@ -8354,10 +9026,42 @@ namespace Thetis
                 dr["CESSB_On"] = false;
                 dr["Pure_Signal_Enabled"] = false;
 
+                //
+                dr["FM_RX_AFFilter_Low"] = 300;
+                dr["FM_RX_AFFilter_High"] = 3000;
+                dr["FM_TX_AFFilter_Low"] = 300;
+                dr["FM_TX_AFFilter_High"] = 3000;
+                dr["VAC1_Force_In"] = false;
+                dr["VAC1_Force_Out"] = false;
+                dr["VAC2_Force_In"] = false;
+                dr["VAC2_Force_Out"] = false;
+                dr["VAC1_SwapIQ"] = true;
+                dr["VAC2_SwapIQ"] = true;
+                dr["Audio_Disable_Audio_Amp"] = false;
+                dr["PA_Profile"] = "";
+                dr["RXEQEnabled"] = false;
+                dr["RXEQPreamp"] = 0;
+                dr["RXEQ1"] = 0;
+                dr["RXEQ2"] = 0;
+                dr["RXEQ3"] = 0;
+                dr["RXEQ4"] = 0;
+                dr["RXEQ5"] = 0;
+                dr["RXEQ6"] = 0;
+                dr["RXEQ7"] = 0;
+                dr["RXEQ8"] = 0;
+                dr["RXEQ9"] = 0;
+                dr["RXEQ10"] = 0;
+                dr["VAC1_Exclusive_In"] = false;
+                dr["VAC1_Exclusive_Out"] = false;
+                dr["VAC2_Exclusive_In"] = false;
+                dr["VAC2_Exclusive_Out"] = false;
+                //
+
                 // CFC
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
+                dr["CFCPhaseReverseEnabled"] = false;
 
                 dr["CFCPhaseRotatorFreq"] = 338;
                 dr["CFCPhaseRotatorStages"] = 9;
@@ -8466,7 +9170,7 @@ namespace Thetis
             CheckBandTextValid();
 
             VersionNumber = Common.GetVerNum();
-            VersionString = TitleBar.GetString();
+            VersionString = TitleBar.GetString(false);
 
             return true;
         }
@@ -9054,6 +9758,8 @@ namespace Thetis
 
             DataSet mergedDB = ds.Clone(); // Adopt the new DB schema
 
+            List<string> foundNotches = new List<string>();
+
             // MW0LGE [2.9.0.8]
             // check if we have multimeter and/or PA settings in the db that is being imported
             bool bOldDBhasMultiMeterSettings = false;
@@ -9330,8 +10036,7 @@ namespace Thetis
                         }
 
                         // For each row of existingDB table, if there is matching key in corresponding oldDB table, 
-                        // copy that entry, else take the existing one, into tempMergedTable.
-                        List<string> foundNotches = new List<string>();
+                        // copy that entry, else take the existing one, into tempMergedTable.                        
 
                         foreach (DataRow row in table.Rows)
                         {
@@ -9394,7 +10099,7 @@ namespace Thetis
                                 }
                                 else tempMergedTable.ImportRow(row);
                             }
-                            else if (thisKey.Contains("mnotchdb"))
+                            else if (thisKey.Contains("mnotchdb")) //[2.10.3]MW0LGE let defaul else import any
                             {
                                 // add existing to list, to check at end
                                 foundNotches.Add(row["Value"].ToString());
@@ -9477,29 +10182,43 @@ namespace Thetis
                             }
                         }
 
-                        //MW0LGE_[2.9.0.7] reimplemented
-                        // run through temp table to check if any notches already there, and remove them from the list
-                        if (foundNotches.Count > 0)
+                        //[2.10.3]MW0LGE merge from old, any notches, fixes #236
+                        if (tempTable.TableName == "State" && oldDB.Tables.Contains("State"))
                         {
-                            int nTot = 0;
-                            foreach (DataRow row in tempTable.Rows)
+                            DataTable stateTable = oldDB.Tables["State"];
+                            DataRow[] rows = stateTable.Select("Key like '" + "mnotchdb*" + "'");
+                            if (rows != null)
                             {
-                                string thisKey = Convert.ToString(row["Key"]);
-                                if (thisKey.Contains("mnotchdb"))
+                                foreach (DataRow dr in rows)
                                 {
-                                    string sValue = row["Value"].ToString();
-                                    if (foundNotches.Contains(sValue))
+                                    string thisKey = Convert.ToString(dr["Key"]);
+                                    if (thisKey.Contains("mnotchdb"))
                                     {
-                                        // alread in the table, remove from the importing list
-                                        foundNotches.Remove(sValue);
+                                        string sValue = dr["Value"].ToString();
+
+                                        MNotch newNotch = MNotch.Parse(sValue);
+                                        bool notchExists = false;
+                                        foreach(string sn in foundNotches)
+                                        {
+                                            MNotch notch = MNotch.Parse(sn);
+                                            if(notch.FCenter == newNotch.FCenter)
+                                            {
+                                                //note this will not import notch width or active state settings from oldDB, if the same notch frequency is in existingDB
+                                                notchExists = true;
+                                                break;
+                                            }
+                                        }
+
+                                        if (!notchExists) // check we dont already have this exact notch
+                                            foundNotches.Add(sValue);
                                     }
-                                    nTot++;
                                 }
                             }
-                            // now add any
+
+                            //write everything to merged table
+                            int nTot = 0;
                             foreach (string s in foundNotches)
                             {
-                                // any that are left add in
                                 DataRow dr = tempMergedTable.NewRow();
 
                                 dr["Key"] = "mnotchdb[" + nTot.ToString() + "]";
@@ -9510,21 +10229,6 @@ namespace Thetis
                             }
                         }
                         //
-
-                        //// merge in any old notch entries MW0LGE_21k9rc6
-                        //if (foundTable && table.TableName == "State")
-                        //{
-                        //    foreach (DataRow row in tempTable.Rows)
-                        //    {
-                        //        string thisKey = Convert.ToString(row["Key"]);
-
-                        //        if (thisKey.Contains("mnotchdb"))
-                        //        {
-                        //            tempMergedTable.ImportRow(row);
-                        //        }
-                        //    }
-                        //}
-                        ////
 
                         // Merge in the assembled temp table into mergedDB 
                         mergedDB.Merge(tempMergedTable);

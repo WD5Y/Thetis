@@ -26,6 +26,7 @@ warren@wpratt.com
 */
 
 #include "cmcomm.h"
+#include "pa_win_wasapi.h"
 
 __declspec (align (16))			IVAC pvac[MAX_EXT_VACS];
 
@@ -86,6 +87,9 @@ PORT void create_ivac(
 	a->OUTfvar = 1.0;
 	a->initial_INvar = 1.0;
 	a->initial_OUTvar = 1.0;
+	a->swapIQout = 0;
+	a->exclusive_in = 0;
+	a->exclusive_out = 0;
 	create_resamps(a);
 	{
 		int inrate[2] = { a->audio_rate, a->txmon_rate };
@@ -169,6 +173,9 @@ int CallbackIVAC(const void *input,
 	xrmatchIN (a->rmatchIN, in_ptr);	// MIC data from VAC
 	xrmatchOUT(a->rmatchOUT, out_ptr);	// audio or I-Q data to VAC
 	// if (id == 0)  WriteAudio (120.0, 48000, a->vac_size, out_ptr, 3); //
+	if (a->iq_type && a->swapIQout)
+		for (int i = 0, j = 1; i < a->vac_size; i++, j+=2)
+			out_ptr[j] = -out_ptr[j];
 	return 0;
 }
 
@@ -183,11 +190,54 @@ PORT int StartAudioIVAC(int id)
 	a->inParam.channelCount = 2;
 	a->inParam.suggestedLatency = a->pa_in_latency;
 	a->inParam.sampleFormat = paFloat64;
-
+	a->inParam.hostApiSpecificStreamInfo = NULL;
+	
 	a->outParam.device = out_dev;
 	a->outParam.channelCount = 2;
 	a->outParam.suggestedLatency = a->pa_out_latency;
 	a->outParam.sampleFormat = paFloat64;
+	a->outParam.hostApiSpecificStreamInfo = NULL;
+
+	//attempt to get exlusive if wasapi devices
+	PaWasapiStreamInfo wasapiInputInfo;
+	PaWasapiStreamInfo wasapiOutputInfo;
+	if (in_dev >= 0 && a->exclusive_in)
+	{
+		const PaDeviceInfo *devInfo = Pa_GetDeviceInfo(in_dev);
+		if (devInfo != NULL)
+		{
+			const PaHostApiInfo* hostApiInfo = Pa_GetHostApiInfo(devInfo->hostApi);
+			if (hostApiInfo != NULL && hostApiInfo->type == paWASAPI)
+			{
+				wasapiInputInfo.size = sizeof(PaWasapiStreamInfo);
+				wasapiInputInfo.hostApiType = paWASAPI;
+				wasapiInputInfo.version = 1;
+				wasapiInputInfo.flags = (paWinWasapiExclusive | paWinWasapiThreadPriority);
+				wasapiInputInfo.threadPriority = eThreadPriorityProAudio;
+
+				a->inParam.hostApiSpecificStreamInfo = &wasapiInputInfo;
+			}
+		}		
+	}
+	if (out_dev >= 0 && a->exclusive_out)
+	{
+		const PaDeviceInfo* devInfo = Pa_GetDeviceInfo(out_dev);
+		if (devInfo != NULL)
+		{
+			const PaHostApiInfo* hostApiInfo = Pa_GetHostApiInfo(devInfo->hostApi);
+			if (hostApiInfo != NULL && hostApiInfo->type == paWASAPI)
+			{
+				wasapiOutputInfo.size = sizeof(PaWasapiStreamInfo);
+				wasapiOutputInfo.hostApiType = paWASAPI;
+				wasapiOutputInfo.version = 1;
+				wasapiOutputInfo.flags = (paWinWasapiExclusive | paWinWasapiThreadPriority);
+				wasapiOutputInfo.threadPriority = eThreadPriorityProAudio;
+
+				a->outParam.hostApiSpecificStreamInfo = &wasapiOutputInfo;
+			}
+		}
+	}
+	//
 
 	error = Pa_OpenStream(&a->Stream,
 		&a->inParam,
@@ -196,7 +246,7 @@ PORT int StartAudioIVAC(int id)
 		a->vac_size,	//paFramesPerBufferUnspecified, 
 		0,
 		CallbackIVAC,
-		(void *)id);	// pass 'id' as userData
+		(void*)id);	// pass 'id' as userData
 
 	if (error != 0) return -1;
 
@@ -679,5 +729,26 @@ void SetIVACinitialVars(int id, double INvar, double OUTvar)
 		destroy_resamps(a);
 		create_resamps(a);
 	}
+}
+
+PORT
+void SetIVACswapIQout(int id, int swap)
+{
+	IVAC a = pvac[id];
+	a->swapIQout = swap;
+}
+
+PORT
+void SetIVACExclusiveOut(int id, int exclusive_out)
+{
+	IVAC a = pvac[id];
+	a->exclusive_out = exclusive_out;
+}
+
+PORT
+void SetIVACExclusiveIn(int id, int exclusive_in)
+{
+	IVAC a = pvac[id];
+	a->exclusive_in = exclusive_in;
 }
 //

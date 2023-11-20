@@ -393,8 +393,9 @@ namespace Thetis
 
 				m_clientListenerThread =
 					new Thread(new ThreadStart(SocketListenerThreadStart));
+				m_clientListenerThread.Name = "TCI client listener Thread";
 
-				m_clientListenerThread.Start();
+                m_clientListenerThread.Start();
 			}
 		}
 
@@ -1184,6 +1185,14 @@ namespace Thetis
 
 				if (bOK)
 				{
+					if (!console.ThreadSafeTCIAccessor.IsSetupFormNull)
+					{
+                        if (console.ThreadSafeTCIAccessor.SetupForm.SplitFromCATorTCIcancelsQSPLIT)
+                        {
+                            if (console.ThreadSafeTCIAccessor.SetupForm.QuickSplitEnabled)
+                                console.ThreadSafeTCIAccessor.SetupForm.QuickSplitEnabled = false;
+                        }
+                    }
 					if (rx == 0 || rx == 1)
 						if(console.ThreadSafeTCIAccessor.VFOSplit != bSplit)
 							console.ThreadSafeTCIAccessor.VFOSplit = bSplit;
@@ -1227,7 +1236,7 @@ namespace Thetis
 							console.ThreadSafeTCIAccessor.VFOATX = true;
 
 						if (console.ThreadSafeTCIAccessor.MOX != bMox)
-							console.ThreadSafeTCIAccessor.MOX = bMox;
+							console.ThreadSafeTCIAccessor.TCIPTT = bMox;
 					}
                     else if (rx == 1 && console.ThreadSafeTCIAccessor.RX2Enabled)
                     {
@@ -1235,7 +1244,7 @@ namespace Thetis
 							console.ThreadSafeTCIAccessor.VFOBTX = true;
 
 						if (console.ThreadSafeTCIAccessor.MOX != bMox)
-							console.ThreadSafeTCIAccessor.MOX = bMox;
+							console.ThreadSafeTCIAccessor.TCIPTT = bMox;
 					}
 				}
 			}
@@ -2198,11 +2207,13 @@ namespace Thetis
 
 					m_serverThread = new Thread(new ThreadStart(ServerThreadStart));
 					m_serverThread.Priority = ThreadPriority.BelowNormal;
+					m_serverThread.Name = "TCI server Thread";
 					m_serverThread.Start();
 
 					m_purgingThread = new Thread(new ThreadStart(PurgingThreadStart));
 					m_purgingThread.Priority = ThreadPriority.Lowest;
-					m_purgingThread.Start();
+                    m_purgingThread.Name = "TCI purging Thread";
+                    m_purgingThread.Start();
 				}
 				catch(SocketException se)
                 {
@@ -2702,5 +2713,25 @@ namespace Thetis
         {
 			if (_log != null) _log.Hide();
 		}
-	}
+
+        public async Task ConnectToServer(string serverAddress, int port, int timeoutMilliseconds)
+        {
+            using (TcpClient client = new TcpClient())
+            {
+                Task connectTask = client.ConnectAsync(serverAddress, port);
+                Task timeoutTask = Task.Delay(timeoutMilliseconds);
+
+                Task completedTask = await Task.WhenAny(connectTask, timeoutTask);
+
+                if (completedTask == connectTask)
+                {
+                    client.Close();
+                }
+                else
+                {
+                    //throw new TimeoutException("Connection timed out.");
+                }
+            }
+        }
+    }
 }

@@ -7,7 +7,6 @@ namespace Thetis
 {
     public enum Axis
     {
-//        NONE = 0,
         LEFT = 0,
         TOPLEFT,
         TOP,
@@ -39,6 +38,7 @@ namespace Thetis
             _console = null;
             _id = System.Guid.NewGuid().ToString();
             _border = true;
+            _noTitleBar = false;
 
             btnFloat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 
@@ -50,9 +50,6 @@ namespace Thetis
             setTopBarButtons();
             setTitle();
             setupBorder();
-
-            //btnFloat.foc
-            //btnFloat.SetStyle(ControlStyles.Selectable, false);
 
             btnAxis.Hide();
 
@@ -78,6 +75,7 @@ namespace Thetis
         private bool _mox;
         private string _id;
         private bool _border;
+        private bool _noTitleBar;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public Console Console
@@ -304,17 +302,16 @@ namespace Thetis
         {
             Cursor = _cursor;
 
-            if (!_resizing && !pbGrab.ClientRectangle.Contains(picContainer.PointToClient(Control.MousePosition)))
+            if (!_resizing && (!pbGrab.ClientRectangle.Contains(pbGrab.PointToClient(Control.MousePosition)) || !this.ClientRectangle.Contains(this.PointToClient(Control.MousePosition)))) //[2.10.3.4]MW0LGE added 'this' incase we are totally outside, fix issue where ui items get left visible
                 mouseLeave();
         }
 
         private void picContainer_MouseMove(object sender, MouseEventArgs e)
         {
-            bool bContains;
-
             if (!_dragging)
             {
-                bContains = pnlBar.ClientRectangle.Contains(pnlBar.PointToClient(Control.MousePosition));
+                bool noBar = _noTitleBar && !Common.ShiftKeyDown; //[2.10.3.4]MW0LGE no title, override by holding shift
+                bool bContains = !noBar && pnlBar.ClientRectangle.Contains(pnlBar.PointToClient(Control.MousePosition));
                 if (bContains && !pnlBar.Visible)
                 {
                     pnlBar.BringToFront();
@@ -328,7 +325,7 @@ namespace Thetis
 
             if (!_resizing)
             {
-                bContains = pbGrab.ClientRectangle.Contains(pbGrab.PointToClient(Control.MousePosition));
+                bool bContains = pbGrab.ClientRectangle.Contains(pbGrab.PointToClient(Control.MousePosition));
                 if (bContains && !pbGrab.Visible)
                 {
                     pbGrab.BringToFront();
@@ -473,7 +470,14 @@ namespace Thetis
                 setupBorder();
             }
         }
-
+        public bool NoTitleBar
+        {
+            get { return _noTitleBar; }
+            set
+            {
+                _noTitleBar = value;
+            }
+        }
         private void btnAxis_Click(object sender, EventArgs e)
         {
             MouseEventArgs me = (MouseEventArgs)e;
@@ -568,7 +572,8 @@ namespace Thetis
                 AxisLock.ToString() + "|" +
                 PinOnTop.ToString() + "|" +
                 UCBorder.ToString() + "|" +
-                Common.ColourToString(this.BackColor);
+                Common.ColourToString(this.BackColor) + "|" +
+                NoTitleBar.ToString();
         }
         public bool TryParse(string str)
         {
@@ -577,11 +582,12 @@ namespace Thetis
             bool floating = false;
             bool pinOnTop = false;
             bool border = false;
+            bool noTitleWhenPinned = false;
 
             if (str != "")
             {
                 string[] tmp = str.Split('|');
-                if(tmp.Length == 13)
+                if(tmp.Length >= 13 && tmp.Length <= 14)
                 {
                     bOk = tmp[0] != "";
                     if (bOk) ID = tmp[0];
@@ -623,6 +629,12 @@ namespace Thetis
                     Color c = Common.ColourFromString(tmp[12]);
                     bOk = c != System.Drawing.Color.Empty;
                     if(bOk) this.BackColor = c;
+
+                    if(bOk && tmp.Length > 13) // we also have the new for [2.10.1.0] the notitleifpined option
+                    {
+                        bOk = bool.TryParse(tmp[13], out noTitleWhenPinned);
+                        if (bOk) NoTitleBar = noTitleWhenPinned;
+                    }
                 }
             }
 
@@ -655,7 +667,13 @@ namespace Thetis
 
         private void uiComponentMouseLeave()
         {
-            if (!_dragging && !pnlBar.ClientRectangle.Contains(pnlBar.PointToClient(Control.MousePosition)))
+            if (!_dragging && (!pnlBar.ClientRectangle.Contains(pnlBar.PointToClient(Control.MousePosition)) || !this.ClientRectangle.Contains(this.PointToClient(Control.MousePosition)))) //[2.10.3.4]MW0LGE added 'this' incase we are totally outside, fix issue where ui items get left visible
+                mouseLeave();
+        }
+
+        private void ucMeter_MouseLeave(object sender, EventArgs e)
+        {
+            if (!(_dragging || _resizing) && !picContainer.ClientRectangle.Contains(this.PointToClient(Control.MousePosition)))
                 mouseLeave();
         }
     }

@@ -234,7 +234,7 @@ namespace Thetis
 
 		// Sets or reads VFO B to control tx
 		// another "happiness" command
-		public string FT(string s)
+		public string FT(string s, bool bFromCatDirect = false)
 		{
 			//			if(s.Length == parser.nSet)
 			//			{
@@ -254,7 +254,7 @@ namespace Thetis
 			//			}
 			//			else
 			//				return parser.Error1;
-			return ZZSP(s);
+			return ZZSP(s, bFromCatDirect);
 		}
 
 		// Sets or reads the DSP filter width
@@ -1894,7 +1894,7 @@ namespace Thetis
 		{
 			//return parser.Error1;
 			if (console.initializing) return "";
-            return String.Format("{0:000.00}", console.cpu_usage.NextValue());
+            return String.Format("{0:000.00}", console.total_cpu_usage.NextValue());
 		}
 
 		// Sets or reads the Display Average status
@@ -3457,8 +3457,9 @@ namespace Thetis
 			if(s.Length == parser.nSet)
 			{
 				cws = Convert.ToInt32(s);
-				cws = Math.Max(1, cws);
-				cws = Math.Min(99, cws);
+				//cws = Math.Max(1, cws);
+				//cws = Math.Min(99, cws);
+				//[2.10.3.4]MW0LGE put in the property WPM where it should be
 				console.CWXForm.WPM = cws;
 				return "";
 
@@ -5740,10 +5741,19 @@ namespace Thetis
         }
 
 		// Sets or reads the VFO Split status
-		public string ZZSP(string s)
+		public string ZZSP(string s, bool bFromCatDirect = false)
 		{
 			if(s.Length == parser.nSet && (s == "0" || s == "1"))
 			{
+				if (bFromCatDirect && !console.IsSetupFormNull)
+				{
+					if (console.SetupForm.SplitFromCATorTCIcancelsQSPLIT)
+					{
+						if (console.SetupForm.QuickSplitEnabled)
+							console.SetupForm.QuickSplitEnabled = false;
+					}
+				}
+
 				if(s == "0")
 					console.VFOSplit = false;
 				else
@@ -8014,6 +8024,53 @@ namespace Thetis
             else if (s.Length == parser.nGet)
             {
 				return console.Midi2Cat.SwapVFOWheelsProperty ? "1" : "0";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+		//[2.10.1.0]MW0LGE enable/disable quick split mode
+		public string ZZZN(string s)
+		{
+            if (console is null || console.Midi2Cat is null) return parser.Error1;
+
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+				if(!console.IsSetupFormNull)
+					console.SetupForm.QuickSplitEnabled = (s == "1");
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+				bool bRet = false;
+				if (!console.IsSetupFormNull) bRet = console.SetupForm.QuickSplitEnabled;
+                return bRet ? "1" : "0";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+        //[2.10.1.0]MW0LGE enable/disable quick split and turn split on/off at same time
+        public string ZZZO(string s)
+        {
+            if (console is null || console.Midi2Cat is null) return parser.Error1;
+
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                if (!console.IsSetupFormNull)
+                    console.SetupForm.QuickSplitEnabled = (s == "1");
+
+				console.VFOSplit = (s == "1");
+
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+				bool bRet = console.VFOSplit;
+				if (!console.IsSetupFormNull) bRet &= console.SetupForm.QuickSplitEnabled;				
+                return bRet ? "1" : "0";
             }
             else
             {

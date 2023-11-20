@@ -88,6 +88,27 @@ namespace Thetis
         private LabelTS labelTS16;
         private System.ComponentModel.IContainer components = null;
         private bool FormAutoShown;
+        public LabelTS lblAFrx1;
+        public LabelTS lblAFrx2;
+        public LabelTS lblSubRXAF;
+        public LabelTS lblRX1rf;
+        public LabelTS lblRX2rf;
+        public LabelTS lblRX1sql;
+        public LabelTS lblRX2sql;
+        public LabelTS lblRX1at;
+        public LabelTS lblRX2at;
+        public LabelTS lblRX1VACRX;
+        public LabelTS lblRX1VACTX;
+        public LabelTS lblRX2VACTX;
+        public LabelTS lblRX2VACRX;
+        public LabelTS lblaf;
+        public LabelTS lblmic;
+        public LabelTS lblDRV;
+        public LabelTS lblMainPan;
+        public LabelTS lblSubPan;
+        public LabelTS lblRX2Pan;
+        public CheckBoxTS chkSQLAut;
+        public CheckBoxTS chkRX2SQLAut;
         System.Timers.Timer AutoHideTimer;                         // times auto hiding of form 
 
         #endregion
@@ -105,6 +126,30 @@ namespace Thetis
             AutoHideTimer = new System.Timers.Timer(); 
             AutoHideTimer.Elapsed += new ElapsedEventHandler(Callback);
             AutoHideTimer.Enabled = false;
+
+            //wd5y
+            lblaf.Text = console.ptbAF.Value.ToString();
+            lblmic.Text = console.lblMicVal.Text;
+            lblDRV.Text = console.lblPWR.Text;
+            lblAFrx1.Text = console.ptbRX0Gain.Value.ToString();
+            lblAFrx2.Text = console.ptbRX2Gain.Value.ToString();
+            lblSubRXAF.Text = console.ptbRX1Gain.Value.ToString();
+            lblRX1rf.Text = console.ptbRF.Value.ToString();
+            lblRX2rf.Text = console.ptbRX2RF.Value.ToString();
+            lblRX1sql.Text = console.chkSquelch.Text;
+            lblRX2sql.Text = console.chkRX2Squelch.Text;
+            lblRX1at.Text = console.SetupForm.HermesAttenuatorData.ToString();
+            lblRX2at.Text = console.SetupForm.HermesAttenuatorDataRX2.ToString();
+            lblRX1VACRX.Text = console.SetupForm.VACRXGain.ToString();
+            lblRX1VACTX.Text = console.SetupForm.VACTXGain.ToString();
+            lblRX2VACRX.Text = console.SetupForm.VAC2RXGain.ToString();
+            lblRX2VACTX.Text = console.SetupForm.VAC2TXGain.ToString();
+            lblMainPan.Text = console.PanMainRX.ToString();
+            lblRX2Pan.Text = console.RX2Pan.ToString();
+            lblSubPan.Text = console.PanSubRX.ToString();
+            chkSQLAut.Checked = console.AutoAGCRX1;
+            chkRX2SQLAut.Checked = console.AutoAGCRX2;
+            //wd5y
 
         }
 
@@ -136,6 +181,8 @@ namespace Thetis
             this.lblMasterAF = new System.Windows.Forms.LabelTS();
             this.lblDrive = new System.Windows.Forms.LabelTS();
             this.grpSubRX = new System.Windows.Forms.GroupBoxTS();
+            this.lblSubPan = new System.Windows.Forms.LabelTS();
+            this.lblSubRXAF = new System.Windows.Forms.LabelTS();
             this.chkSubRX = new System.Windows.Forms.CheckBoxTS();
             this.labelTS5 = new System.Windows.Forms.LabelTS();
             this.labelTS4 = new System.Windows.Forms.LabelTS();
@@ -143,6 +190,13 @@ namespace Thetis
             this.tbSubRXAF = new System.Windows.Forms.TrackBarTS();
             this.tbDrive = new System.Windows.Forms.TrackBarTS();
             this.grpRX2 = new System.Windows.Forms.GroupBoxTS();
+            this.lblRX2Pan = new System.Windows.Forms.LabelTS();
+            this.lblRX2VACTX = new System.Windows.Forms.LabelTS();
+            this.lblRX2VACRX = new System.Windows.Forms.LabelTS();
+            this.lblRX2at = new System.Windows.Forms.LabelTS();
+            this.lblRX2sql = new System.Windows.Forms.LabelTS();
+            this.lblRX2rf = new System.Windows.Forms.LabelTS();
+            this.lblAFrx2 = new System.Windows.Forms.LabelTS();
             this.labelTS15 = new System.Windows.Forms.LabelTS();
             this.labelTS14 = new System.Windows.Forms.LabelTS();
             this.chkRX2VAC = new System.Windows.Forms.CheckBoxTS();
@@ -162,6 +216,14 @@ namespace Thetis
             this.tbRX2AF = new System.Windows.Forms.TrackBarTS();
             this.tbMasterAF = new System.Windows.Forms.TrackBarTS();
             this.grpRX1 = new System.Windows.Forms.GroupBoxTS();
+            this.chkSQLAut = new System.Windows.Forms.CheckBoxTS();
+            this.lblMainPan = new System.Windows.Forms.LabelTS();
+            this.lblRX1VACTX = new System.Windows.Forms.LabelTS();
+            this.lblRX1VACRX = new System.Windows.Forms.LabelTS();
+            this.lblRX1at = new System.Windows.Forms.LabelTS();
+            this.lblRX1sql = new System.Windows.Forms.LabelTS();
+            this.lblRX1rf = new System.Windows.Forms.LabelTS();
+            this.lblAFrx1 = new System.Windows.Forms.LabelTS();
             this.chkRX1VAC = new System.Windows.Forms.CheckBoxTS();
             this.labelTS13 = new System.Windows.Forms.LabelTS();
             this.tbRX1VACTX = new System.Windows.Forms.TrackBarTS();
@@ -181,6 +243,10 @@ namespace Thetis
             this.tbRX1AF = new System.Windows.Forms.TrackBarTS();
             this.tbMicGain = new System.Windows.Forms.TrackBarTS();
             this.labelTS16 = new System.Windows.Forms.LabelTS();
+            this.lblaf = new System.Windows.Forms.LabelTS();
+            this.lblmic = new System.Windows.Forms.LabelTS();
+            this.lblDRV = new System.Windows.Forms.LabelTS();
+            this.chkRX2SQLAut = new System.Windows.Forms.CheckBoxTS();
             this.grpSubRX.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSubRXPan)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbSubRXAF)).BeginInit();
@@ -210,6 +276,7 @@ namespace Thetis
             this.btnClose.Image = null;
             this.btnClose.Location = new System.Drawing.Point(759, 211);
             this.btnClose.Name = "btnClose";
+            this.btnClose.Selectable = true;
             this.btnClose.Size = new System.Drawing.Size(96, 40);
             this.btnClose.TabIndex = 11;
             this.btnClose.Text = "Close";
@@ -221,25 +288,27 @@ namespace Thetis
             this.lblMasterAF.AutoSize = true;
             this.lblMasterAF.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblMasterAF.Image = null;
-            this.lblMasterAF.Location = new System.Drawing.Point(775, 44);
+            this.lblMasterAF.Location = new System.Drawing.Point(750, 44);
             this.lblMasterAF.Name = "lblMasterAF";
-            this.lblMasterAF.Size = new System.Drawing.Size(80, 13);
+            this.lblMasterAF.Size = new System.Drawing.Size(83, 13);
             this.lblMasterAF.TabIndex = 10;
-            this.lblMasterAF.Text = "Master AF Gain";
+            this.lblMasterAF.Text = "Master AF Gain:";
             // 
             // lblDrive
             // 
             this.lblDrive.AutoSize = true;
             this.lblDrive.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblDrive.Image = null;
-            this.lblDrive.Location = new System.Drawing.Point(791, 160);
+            this.lblDrive.Location = new System.Drawing.Point(750, 176);
             this.lblDrive.Name = "lblDrive";
-            this.lblDrive.Size = new System.Drawing.Size(49, 13);
+            this.lblDrive.Size = new System.Drawing.Size(24, 13);
             this.lblDrive.TabIndex = 9;
-            this.lblDrive.Text = "TX Drive";
+            this.lblDrive.Text = "TX:";
             // 
             // grpSubRX
             // 
+            this.grpSubRX.Controls.Add(this.lblSubPan);
+            this.grpSubRX.Controls.Add(this.lblSubRXAF);
             this.grpSubRX.Controls.Add(this.chkSubRX);
             this.grpSubRX.Controls.Add(this.labelTS5);
             this.grpSubRX.Controls.Add(this.labelTS4);
@@ -248,17 +317,37 @@ namespace Thetis
             this.grpSubRX.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpSubRX.Location = new System.Drawing.Point(579, 9);
             this.grpSubRX.Name = "grpSubRX";
-            this.grpSubRX.Size = new System.Drawing.Size(155, 243);
+            this.grpSubRX.Size = new System.Drawing.Size(155, 303);
             this.grpSubRX.TabIndex = 8;
             this.grpSubRX.TabStop = false;
             this.grpSubRX.Text = "Sub RX";
+            // 
+            // lblSubPan
+            // 
+            this.lblSubPan.AutoSize = true;
+            this.lblSubPan.Image = null;
+            this.lblSubPan.Location = new System.Drawing.Point(106, 254);
+            this.lblSubPan.Name = "lblSubPan";
+            this.lblSubPan.Size = new System.Drawing.Size(29, 13);
+            this.lblSubPan.TabIndex = 28;
+            this.lblSubPan.Text = "PAN";
+            // 
+            // lblSubRXAF
+            // 
+            this.lblSubRXAF.AutoSize = true;
+            this.lblSubRXAF.Image = null;
+            this.lblSubRXAF.Location = new System.Drawing.Point(61, 156);
+            this.lblSubRXAF.Name = "lblSubRXAF";
+            this.lblSubRXAF.Size = new System.Drawing.Size(20, 13);
+            this.lblSubRXAF.TabIndex = 22;
+            this.lblSubRXAF.Text = "AF";
             // 
             // chkSubRX
             // 
             this.chkSubRX.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSubRX.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkSubRX.Image = null;
-            this.chkSubRX.Location = new System.Drawing.Point(24, 156);
+            this.chkSubRX.Location = new System.Drawing.Point(23, 179);
             this.chkSubRX.Name = "chkSubRX";
             this.chkSubRX.Size = new System.Drawing.Size(110, 28);
             this.chkSubRX.TabIndex = 11;
@@ -271,7 +360,7 @@ namespace Thetis
             // 
             this.labelTS5.AutoSize = true;
             this.labelTS5.Image = null;
-            this.labelTS5.Location = new System.Drawing.Point(52, 222);
+            this.labelTS5.Location = new System.Drawing.Point(52, 254);
             this.labelTS5.Name = "labelTS5";
             this.labelTS5.Size = new System.Drawing.Size(48, 13);
             this.labelTS5.TabIndex = 10;
@@ -289,7 +378,7 @@ namespace Thetis
             // 
             // tbSubRXPan
             // 
-            this.tbSubRXPan.Location = new System.Drawing.Point(5, 190);
+            this.tbSubRXPan.Location = new System.Drawing.Point(5, 213);
             this.tbSubRXPan.Maximum = 100;
             this.tbSubRXPan.Name = "tbSubRXPan";
             this.tbSubRXPan.Size = new System.Drawing.Size(144, 45);
@@ -308,7 +397,7 @@ namespace Thetis
             // 
             // tbDrive
             // 
-            this.tbDrive.Location = new System.Drawing.Point(740, 128);
+            this.tbDrive.Location = new System.Drawing.Point(740, 144);
             this.tbDrive.Maximum = 100;
             this.tbDrive.Name = "tbDrive";
             this.tbDrive.Size = new System.Drawing.Size(131, 45);
@@ -317,6 +406,14 @@ namespace Thetis
             // 
             // grpRX2
             // 
+            this.grpRX2.Controls.Add(this.chkRX2SQLAut);
+            this.grpRX2.Controls.Add(this.lblRX2Pan);
+            this.grpRX2.Controls.Add(this.lblRX2VACTX);
+            this.grpRX2.Controls.Add(this.lblRX2VACRX);
+            this.grpRX2.Controls.Add(this.lblRX2at);
+            this.grpRX2.Controls.Add(this.lblRX2sql);
+            this.grpRX2.Controls.Add(this.lblRX2rf);
+            this.grpRX2.Controls.Add(this.lblAFrx2);
             this.grpRX2.Controls.Add(this.labelTS15);
             this.grpRX2.Controls.Add(this.labelTS14);
             this.grpRX2.Controls.Add(this.chkRX2VAC);
@@ -337,10 +434,80 @@ namespace Thetis
             this.grpRX2.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpRX2.Location = new System.Drawing.Point(295, 9);
             this.grpRX2.Name = "grpRX2";
-            this.grpRX2.Size = new System.Drawing.Size(268, 243);
+            this.grpRX2.Size = new System.Drawing.Size(268, 303);
             this.grpRX2.TabIndex = 7;
             this.grpRX2.TabStop = false;
             this.grpRX2.Text = "RX2";
+            // 
+            // lblRX2Pan
+            // 
+            this.lblRX2Pan.AutoSize = true;
+            this.lblRX2Pan.Image = null;
+            this.lblRX2Pan.Location = new System.Drawing.Point(154, 254);
+            this.lblRX2Pan.Name = "lblRX2Pan";
+            this.lblRX2Pan.Size = new System.Drawing.Size(29, 13);
+            this.lblRX2Pan.TabIndex = 27;
+            this.lblRX2Pan.Text = "PAN";
+            // 
+            // lblRX2VACTX
+            // 
+            this.lblRX2VACTX.AutoSize = true;
+            this.lblRX2VACTX.Image = null;
+            this.lblRX2VACTX.Location = new System.Drawing.Point(239, 156);
+            this.lblRX2VACTX.Name = "lblRX2VACTX";
+            this.lblRX2VACTX.Size = new System.Drawing.Size(21, 13);
+            this.lblRX2VACTX.TabIndex = 26;
+            this.lblRX2VACTX.Text = "TX";
+            // 
+            // lblRX2VACRX
+            // 
+            this.lblRX2VACRX.AutoSize = true;
+            this.lblRX2VACRX.Image = null;
+            this.lblRX2VACRX.Location = new System.Drawing.Point(193, 156);
+            this.lblRX2VACRX.Name = "lblRX2VACRX";
+            this.lblRX2VACRX.Size = new System.Drawing.Size(22, 13);
+            this.lblRX2VACRX.TabIndex = 25;
+            this.lblRX2VACRX.Text = "RX";
+            // 
+            // lblRX2at
+            // 
+            this.lblRX2at.AutoSize = true;
+            this.lblRX2at.Image = null;
+            this.lblRX2at.Location = new System.Drawing.Point(147, 156);
+            this.lblRX2at.Name = "lblRX2at";
+            this.lblRX2at.Size = new System.Drawing.Size(28, 13);
+            this.lblRX2at.TabIndex = 24;
+            this.lblRX2at.Text = "ATT";
+            // 
+            // lblRX2sql
+            // 
+            this.lblRX2sql.AutoSize = true;
+            this.lblRX2sql.Image = null;
+            this.lblRX2sql.Location = new System.Drawing.Point(89, 156);
+            this.lblRX2sql.Name = "lblRX2sql";
+            this.lblRX2sql.Size = new System.Drawing.Size(52, 13);
+            this.lblRX2sql.TabIndex = 23;
+            this.lblRX2sql.Text = "SQL:-100";
+            // 
+            // lblRX2rf
+            // 
+            this.lblRX2rf.AutoSize = true;
+            this.lblRX2rf.Image = null;
+            this.lblRX2rf.Location = new System.Drawing.Point(57, 156);
+            this.lblRX2rf.Name = "lblRX2rf";
+            this.lblRX2rf.Size = new System.Drawing.Size(21, 13);
+            this.lblRX2rf.TabIndex = 22;
+            this.lblRX2rf.Text = "RF";
+            // 
+            // lblAFrx2
+            // 
+            this.lblAFrx2.AutoSize = true;
+            this.lblAFrx2.Image = null;
+            this.lblAFrx2.Location = new System.Drawing.Point(11, 156);
+            this.lblAFrx2.Name = "lblAFrx2";
+            this.lblAFrx2.Size = new System.Drawing.Size(20, 13);
+            this.lblAFrx2.TabIndex = 21;
+            this.lblAFrx2.Text = "AF";
             // 
             // labelTS15
             // 
@@ -367,7 +534,7 @@ namespace Thetis
             this.chkRX2VAC.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX2VAC.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX2VAC.Image = null;
-            this.chkRX2VAC.Location = new System.Drawing.Point(201, 156);
+            this.chkRX2VAC.Location = new System.Drawing.Point(196, 179);
             this.chkRX2VAC.Name = "chkRX2VAC";
             this.chkRX2VAC.Size = new System.Drawing.Size(49, 28);
             this.chkRX2VAC.TabIndex = 18;
@@ -404,7 +571,7 @@ namespace Thetis
             // 
             this.lblPan.AutoSize = true;
             this.lblPan.Image = null;
-            this.lblPan.Location = new System.Drawing.Point(101, 222);
+            this.lblPan.Location = new System.Drawing.Point(100, 254);
             this.lblPan.Name = "lblPan";
             this.lblPan.Size = new System.Drawing.Size(48, 13);
             this.lblPan.TabIndex = 6;
@@ -436,7 +603,7 @@ namespace Thetis
             this.chkRX2Mute.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX2Mute.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX2Mute.Image = null;
-            this.chkRX2Mute.Location = new System.Drawing.Point(6, 156);
+            this.chkRX2Mute.Location = new System.Drawing.Point(6, 179);
             this.chkRX2Mute.Name = "chkRX2Mute";
             this.chkRX2Mute.Size = new System.Drawing.Size(40, 28);
             this.chkRX2Mute.TabIndex = 9;
@@ -480,7 +647,7 @@ namespace Thetis
             this.chkRX2Sql.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX2Sql.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX2Sql.Image = null;
-            this.chkRX2Sql.Location = new System.Drawing.Point(92, 156);
+            this.chkRX2Sql.Location = new System.Drawing.Point(73, 179);
             this.chkRX2Sql.Name = "chkRX2Sql";
             this.chkRX2Sql.Size = new System.Drawing.Size(40, 28);
             this.chkRX2Sql.TabIndex = 6;
@@ -491,7 +658,7 @@ namespace Thetis
             // 
             // tbRX2Pan
             // 
-            this.tbRX2Pan.Location = new System.Drawing.Point(59, 190);
+            this.tbRX2Pan.Location = new System.Drawing.Point(57, 213);
             this.tbRX2Pan.Maximum = 100;
             this.tbRX2Pan.Name = "tbRX2Pan";
             this.tbRX2Pan.Size = new System.Drawing.Size(150, 45);
@@ -544,6 +711,14 @@ namespace Thetis
             // 
             // grpRX1
             // 
+            this.grpRX1.Controls.Add(this.chkSQLAut);
+            this.grpRX1.Controls.Add(this.lblMainPan);
+            this.grpRX1.Controls.Add(this.lblRX1VACTX);
+            this.grpRX1.Controls.Add(this.lblRX1VACRX);
+            this.grpRX1.Controls.Add(this.lblRX1at);
+            this.grpRX1.Controls.Add(this.lblRX1sql);
+            this.grpRX1.Controls.Add(this.lblRX1rf);
+            this.grpRX1.Controls.Add(this.lblAFrx1);
             this.grpRX1.Controls.Add(this.chkRX1VAC);
             this.grpRX1.Controls.Add(this.labelTS13);
             this.grpRX1.Controls.Add(this.tbRX1VACTX);
@@ -564,17 +739,101 @@ namespace Thetis
             this.grpRX1.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.grpRX1.Location = new System.Drawing.Point(9, 9);
             this.grpRX1.Name = "grpRX1";
-            this.grpRX1.Size = new System.Drawing.Size(268, 243);
+            this.grpRX1.Size = new System.Drawing.Size(268, 303);
             this.grpRX1.TabIndex = 3;
             this.grpRX1.TabStop = false;
             this.grpRX1.Text = "RX1";
+            // 
+            // chkSQLAut
+            // 
+            this.chkSQLAut.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkSQLAut.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.chkSQLAut.Image = null;
+            this.chkSQLAut.Location = new System.Drawing.Point(111, 179);
+            this.chkSQLAut.Name = "chkSQLAut";
+            this.chkSQLAut.Size = new System.Drawing.Size(40, 28);
+            this.chkSQLAut.TabIndex = 27;
+            this.chkSQLAut.Text = "AUT";
+            this.chkSQLAut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkSQLAut.UseVisualStyleBackColor = true;
+            this.chkSQLAut.CheckedChanged += new System.EventHandler(this.chkSQLAut_CheckedChanged);
+            // 
+            // lblMainPan
+            // 
+            this.lblMainPan.AutoSize = true;
+            this.lblMainPan.Image = null;
+            this.lblMainPan.Location = new System.Drawing.Point(154, 254);
+            this.lblMainPan.Name = "lblMainPan";
+            this.lblMainPan.Size = new System.Drawing.Size(29, 13);
+            this.lblMainPan.TabIndex = 26;
+            this.lblMainPan.Text = "PAN";
+            // 
+            // lblRX1VACTX
+            // 
+            this.lblRX1VACTX.AutoSize = true;
+            this.lblRX1VACTX.Image = null;
+            this.lblRX1VACTX.Location = new System.Drawing.Point(239, 156);
+            this.lblRX1VACTX.Name = "lblRX1VACTX";
+            this.lblRX1VACTX.Size = new System.Drawing.Size(21, 13);
+            this.lblRX1VACTX.TabIndex = 25;
+            this.lblRX1VACTX.Text = "TX";
+            // 
+            // lblRX1VACRX
+            // 
+            this.lblRX1VACRX.AutoSize = true;
+            this.lblRX1VACRX.Image = null;
+            this.lblRX1VACRX.Location = new System.Drawing.Point(193, 156);
+            this.lblRX1VACRX.Name = "lblRX1VACRX";
+            this.lblRX1VACRX.Size = new System.Drawing.Size(22, 13);
+            this.lblRX1VACRX.TabIndex = 24;
+            this.lblRX1VACRX.Text = "RX";
+            // 
+            // lblRX1at
+            // 
+            this.lblRX1at.AutoSize = true;
+            this.lblRX1at.Image = null;
+            this.lblRX1at.Location = new System.Drawing.Point(148, 156);
+            this.lblRX1at.Name = "lblRX1at";
+            this.lblRX1at.Size = new System.Drawing.Size(28, 13);
+            this.lblRX1at.TabIndex = 23;
+            this.lblRX1at.Text = "ATT";
+            // 
+            // lblRX1sql
+            // 
+            this.lblRX1sql.AutoSize = true;
+            this.lblRX1sql.Image = null;
+            this.lblRX1sql.Location = new System.Drawing.Point(89, 156);
+            this.lblRX1sql.Name = "lblRX1sql";
+            this.lblRX1sql.Size = new System.Drawing.Size(52, 13);
+            this.lblRX1sql.TabIndex = 22;
+            this.lblRX1sql.Text = "SQL:-100";
+            // 
+            // lblRX1rf
+            // 
+            this.lblRX1rf.AutoSize = true;
+            this.lblRX1rf.Image = null;
+            this.lblRX1rf.Location = new System.Drawing.Point(58, 156);
+            this.lblRX1rf.Name = "lblRX1rf";
+            this.lblRX1rf.Size = new System.Drawing.Size(21, 13);
+            this.lblRX1rf.TabIndex = 21;
+            this.lblRX1rf.Text = "RF";
+            // 
+            // lblAFrx1
+            // 
+            this.lblAFrx1.AutoSize = true;
+            this.lblAFrx1.Image = null;
+            this.lblAFrx1.Location = new System.Drawing.Point(12, 156);
+            this.lblAFrx1.Name = "lblAFrx1";
+            this.lblAFrx1.Size = new System.Drawing.Size(20, 13);
+            this.lblAFrx1.TabIndex = 20;
+            this.lblAFrx1.Text = "AF";
             // 
             // chkRX1VAC
             // 
             this.chkRX1VAC.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX1VAC.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX1VAC.Image = null;
-            this.chkRX1VAC.Location = new System.Drawing.Point(200, 156);
+            this.chkRX1VAC.Location = new System.Drawing.Point(194, 179);
             this.chkRX1VAC.Name = "chkRX1VAC";
             this.chkRX1VAC.Size = new System.Drawing.Size(49, 28);
             this.chkRX1VAC.TabIndex = 19;
@@ -662,7 +921,7 @@ namespace Thetis
             this.chkRX1Mute.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX1Mute.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX1Mute.Image = null;
-            this.chkRX1Mute.Location = new System.Drawing.Point(6, 156);
+            this.chkRX1Mute.Location = new System.Drawing.Point(6, 179);
             this.chkRX1Mute.Name = "chkRX1Mute";
             this.chkRX1Mute.Size = new System.Drawing.Size(40, 28);
             this.chkRX1Mute.TabIndex = 10;
@@ -695,7 +954,7 @@ namespace Thetis
             // 
             this.labelTS6.AutoSize = true;
             this.labelTS6.Image = null;
-            this.labelTS6.Location = new System.Drawing.Point(99, 222);
+            this.labelTS6.Location = new System.Drawing.Point(100, 254);
             this.labelTS6.Name = "labelTS6";
             this.labelTS6.Size = new System.Drawing.Size(48, 13);
             this.labelTS6.TabIndex = 10;
@@ -706,7 +965,7 @@ namespace Thetis
             this.chkRX1Sql.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkRX1Sql.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.chkRX1Sql.Image = null;
-            this.chkRX1Sql.Location = new System.Drawing.Point(91, 156);
+            this.chkRX1Sql.Location = new System.Drawing.Point(73, 179);
             this.chkRX1Sql.Name = "chkRX1Sql";
             this.chkRX1Sql.Size = new System.Drawing.Size(40, 28);
             this.chkRX1Sql.TabIndex = 5;
@@ -717,7 +976,7 @@ namespace Thetis
             // 
             // tbRX1Pan
             // 
-            this.tbRX1Pan.Location = new System.Drawing.Point(59, 190);
+            this.tbRX1Pan.Location = new System.Drawing.Point(58, 213);
             this.tbRX1Pan.Maximum = 100;
             this.tbRX1Pan.Name = "tbRX1Pan";
             this.tbRX1Pan.Size = new System.Drawing.Size(150, 45);
@@ -774,18 +1033,68 @@ namespace Thetis
             this.labelTS16.AutoSize = true;
             this.labelTS16.ForeColor = System.Drawing.SystemColors.Control;
             this.labelTS16.Image = null;
-            this.labelTS16.Location = new System.Drawing.Point(795, 107);
+            this.labelTS16.Location = new System.Drawing.Point(750, 109);
             this.labelTS16.Name = "labelTS16";
-            this.labelTS16.Size = new System.Drawing.Size(49, 13);
+            this.labelTS16.Size = new System.Drawing.Size(52, 13);
             this.labelTS16.TabIndex = 13;
-            this.labelTS16.Text = "Mic Gain";
+            this.labelTS16.Text = "Mic Gain:";
+            // 
+            // lblaf
+            // 
+            this.lblaf.AutoSize = true;
+            this.lblaf.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblaf.Image = null;
+            this.lblaf.Location = new System.Drawing.Point(839, 44);
+            this.lblaf.Name = "lblaf";
+            this.lblaf.Size = new System.Drawing.Size(20, 13);
+            this.lblaf.TabIndex = 22;
+            this.lblaf.Text = "AF";
+            // 
+            // lblmic
+            // 
+            this.lblmic.AutoSize = true;
+            this.lblmic.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblmic.Image = null;
+            this.lblmic.Location = new System.Drawing.Point(808, 109);
+            this.lblmic.Name = "lblmic";
+            this.lblmic.Size = new System.Drawing.Size(20, 13);
+            this.lblmic.TabIndex = 23;
+            this.lblmic.Text = "AF";
+            // 
+            // lblDRV
+            // 
+            this.lblDRV.AutoSize = true;
+            this.lblDRV.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblDRV.Image = null;
+            this.lblDRV.Location = new System.Drawing.Point(781, 176);
+            this.lblDRV.Name = "lblDRV";
+            this.lblDRV.Size = new System.Drawing.Size(21, 13);
+            this.lblDRV.TabIndex = 24;
+            this.lblDRV.Text = "TX";
+            // 
+            // chkRX2SQLAut
+            // 
+            this.chkRX2SQLAut.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkRX2SQLAut.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.chkRX2SQLAut.Image = null;
+            this.chkRX2SQLAut.Location = new System.Drawing.Point(111, 179);
+            this.chkRX2SQLAut.Name = "chkRX2SQLAut";
+            this.chkRX2SQLAut.Size = new System.Drawing.Size(40, 28);
+            this.chkRX2SQLAut.TabIndex = 28;
+            this.chkRX2SQLAut.Text = "AUT";
+            this.chkRX2SQLAut.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkRX2SQLAut.UseVisualStyleBackColor = true;
+            this.chkRX2SQLAut.CheckedChanged += new System.EventHandler(this.chkRX2SQLAut_CheckedChanged);
             // 
             // SliderSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            this.ClientSize = new System.Drawing.Size(883, 257);
+            this.ClientSize = new System.Drawing.Size(883, 323);
+            this.Controls.Add(this.lblDRV);
+            this.Controls.Add(this.lblmic);
+            this.Controls.Add(this.lblaf);
             this.Controls.Add(this.labelTS16);
             this.Controls.Add(this.tbMicGain);
             this.Controls.Add(this.btnClose);
@@ -1278,63 +1587,111 @@ namespace Thetis
         private void tbRX1AF_Scroll(object sender, EventArgs e)
         {
             console.RX0Gain = tbRX1AF.Value;
+
+            //wd5y
+            lblAFrx1.Text = console.ptbRX0Gain.Value.ToString();
+            //wd5y
         }
 
         private void tbRX2AF_Scroll(object sender, EventArgs e)
         {
             console.RX2Gain = tbRX2AF.Value;
+
+            //wd5y
+            lblAFrx2.Text = console.ptbRX2Gain.Value.ToString();
+            //wd5y
         }
 
         private void tbSubRXAF_Scroll(object sender, EventArgs e)
         {
             console.RX1Gain = tbSubRXAF.Value;
-        }
+
+            //wd5y
+            lblSubRXAF.Text = console.ptbRX1Gain.Value.ToString();
+            //wd5y
+        }        
 
         private void tbRX1RF_Scroll(object sender, EventArgs e)
         {
             if (console.RF != tbRX1RF.Value && console.AutoAGCRX1) console.AutoAGCRX1 = false; // turn off 'auto agc' only if different MW0LGE_21k8
             console.RF = tbRX1RF.Value;
+
+            //wd5y
+            lblRX1rf.Text = console.ptbRF.Value.ToString();
+            //wd5y
         }
 
         private void tbRX2RF_Scroll(object sender, EventArgs e)
         {
             if (console.RX2RF != tbRX2RF.Value && console.AutoAGCRX2) console.AutoAGCRX2 = false; // turn off 'auto agc' only if different MW0LGE_21k8
             console.RX2RF = tbRX2RF.Value;
+
+            //wd5y
+            lblRX2rf.Text = console.ptbRX2RF.Value.ToString();
+            //wd5y
         }
 
         private void tbRX1Sql_Scroll(object sender, EventArgs e)
         {
             console.Squelch = tbRX1Sql.Value;
+
+            //wd5y
+            lblRX1sql.Text = console.chkSquelch.Text;
+            //wd5y
         }
 
         private void tbRX2Sql_Scroll(object sender, EventArgs e)
         {
             console.Squelch2 = tbRX2Sql.Value;
+
+            //wd5y
+            lblRX2sql.Text = console.chkRX2Squelch.Text;
+            //wd5y
         }
 
         private void tbRX1Pan_Scroll(object sender, EventArgs e)
         {
             console.PanMainRX = tbRX1Pan.Value;
+
+            //wd5y
+            lblMainPan.Text = console.PanMainRX.ToString();
+            //wd5y
         }
 
         private void tbRX2Pan_Scroll(object sender, EventArgs e)
         {
             console.RX2Pan = tbRX2Pan.Value;
+
+            //wd5y
+            lblRX2Pan.Text = console.RX2Pan.ToString();
+            //wd5y
         }
 
         private void tbSubRXPan_Scroll(object sender, EventArgs e)
         {
             console.PanSubRX = tbSubRXPan.Value;
+
+            //wd5y
+            lblSubPan.Text = console.PanSubRX.ToString();
+            //wd5y
         }
 
         private void tbMasterAF_Scroll(object sender, EventArgs e)
         {
             console.AF = tbMasterAF.Value;
+
+            //wd5y
+            lblaf.Text = console.ptbAF.Value.ToString();
+            //wd5y
         }
 
         private void tbDrive_Scroll(object sender, EventArgs e)
         {
             console.PWR = tbDrive.Value;
+
+            //wd5y
+            lblDRV.Text = console.lblPWR.Text;
+            //wd5y
         }
 
         private void chkRX1Sql_CheckedChanged(object sender, EventArgs e)
@@ -1374,12 +1731,19 @@ namespace Thetis
         private void tbRX1Atten_Scroll(object sender, EventArgs e)
         {
             console.SetupForm.HermesAttenuatorData = tbRX1Atten.Value;
+
+            //wd5y            
+            lblRX1at.Text = console.SetupForm.HermesAttenuatorData.ToString();
+            //wd5y
         }
 
         private void tbRX2Atten_Scroll(object sender, EventArgs e)
-        {
-            //console.RX2ATT = tbRX2Atten.Value;
-            console.SetupForm.HermesAttenuatorDataRX2 = tbRX1Atten.Value; //MW0LGE_21d step atten
+        {            
+            console.SetupForm.HermesAttenuatorDataRX2 = tbRX2Atten.Value; //MW0LGE_21d step atten
+
+            //wd5y
+            lblRX2at.Text = console.SetupForm.HermesAttenuatorDataRX2.ToString();
+            //wd5y
         }
 
         private void chkRX1Mute_CheckedChanged(object sender, EventArgs e)
@@ -1407,30 +1771,58 @@ namespace Thetis
         private void TbMicGain_Scroll(object sender, EventArgs e)
         {
             console.CATMIC = tbMicGain.Value;
+
+            //wd5y
+            lblmic.Text = console.lblMicVal.Text;
+            //wd5y
         }
 
         private void TbRX1VACRX_Scroll(object sender, EventArgs e)
         {
             if (console.SetupForm != null)
+            {
                 console.SetupForm.VACRXGain = tbRX1VACRX.Value;
+
+                //wd5y
+                lblRX1VACRX.Text = console.SetupForm.VACRXGain.ToString();
+                //wd5y
+            }
         }
 
         private void TbRX1VACTX_Scroll(object sender, EventArgs e)
         {
             if (console.SetupForm != null)
+            {
                 console.SetupForm.VACTXGain = tbRX1VACTX.Value;
+
+                //wd5y
+                lblRX1VACTX.Text = console.SetupForm.VACTXGain.ToString();
+                //wd5y
+            }
         }
 
         private void TbRX2VACRX_Scroll(object sender, EventArgs e)
         {
             if (console.SetupForm != null)
+            {
                 console.SetupForm.VAC2RXGain = tbRX2VACRX.Value;
+
+                //wd5y
+                lblRX2VACRX.Text = console.SetupForm.VAC2RXGain.ToString();
+                //wd5y
+            }
         }
 
         private void TbRX2VACTX_Scroll(object sender, EventArgs e)
         {
             if (console.SetupForm != null)
+            {
                 console.SetupForm.VAC2TXGain = tbRX2VACTX.Value;
+
+            //wd5y
+            lblRX2VACTX.Text = console.SetupForm.VAC2TXGain.ToString();
+            //wd5y
+            }
         }
 
         // method called by console encoder event. Provides option of auto-show and auto-hide
@@ -1462,5 +1854,16 @@ namespace Thetis
             this.Hide();
         }
 
+        //wd5y
+        private void chkSQLAut_CheckedChanged(object sender, EventArgs e)
+        {            
+            console.AutoAGCRX1 = chkSQLAut.Checked;
+        }
+
+        private void chkRX2SQLAut_CheckedChanged(object sender, EventArgs e)
+        {
+            console.AutoAGCRX2 = chkRX2SQLAut.Checked;
+        }
+        //wd5y
     }
 }

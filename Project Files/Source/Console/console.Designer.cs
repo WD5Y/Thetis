@@ -43,23 +43,23 @@
         private System.Windows.Forms.NumericUpDownTS udRIT;
         private System.Windows.Forms.CheckBoxTS chkXIT;
         private System.Windows.Forms.CheckBoxTS chkRIT;
-        private System.Windows.Forms.LabelTS lblPWR;
+        public System.Windows.Forms.LabelTS lblPWR;
         private System.Windows.Forms.LabelTS lblAF;
         private System.Windows.Forms.LabelTS lblMIC;
         private System.Windows.Forms.TextBoxTS txtWheelTune;
         private System.Windows.Forms.CheckBoxTS chkBIN;
-        public System.Windows.Forms.GroupBoxTS grpMultimeter;
+        private System.Windows.Forms.GroupBoxTS grpMultimeter;
         private System.Windows.Forms.ButtonTS btnVFOSwap;
         private System.Windows.Forms.ButtonTS btnVFOBtoA;
         private System.Windows.Forms.ButtonTS btnVFOAtoB;
         public System.Windows.Forms.CheckBoxTS chkVFOSplit;
         private System.Windows.Forms.CheckBoxTS chkDisplayAVG;
-        public System.Windows.Forms.TextBoxTS txtMultiText;
-        private System.Windows.Forms.Timer timer_cpu_meter;
+        private System.Windows.Forms.TextBoxTS txtMultiText;
+        private System.Windows.Forms.Timer timer_cpu_volts_meter;
         private System.Windows.Forms.LabelTS lblFilterHigh;
         private System.Windows.Forms.LabelTS lblFilterLow;
-        public System.Windows.Forms.PictureBox picMultiMeterDigital;
-        private System.Windows.Forms.CheckBoxTS chkSquelch;
+        private System.Windows.Forms.PictureBox picMultiMeterDigital;
+        public System.Windows.Forms.CheckBoxTS chkSquelch;
         private System.Windows.Forms.Timer timer_peak_text;
         private System.Windows.Forms.TextBoxTS txtMemoryQuick;
         private System.Windows.Forms.ButtonTS btnMemoryQuickSave;
@@ -70,8 +70,8 @@
         private System.Windows.Forms.Timer timer_clock;
         private System.Windows.Forms.Panel panelVFOAHover;
         private System.Windows.Forms.Panel panelVFOBHover;
-        public System.Windows.Forms.ComboBoxTS comboMeterRXMode;
-        public System.Windows.Forms.ComboBoxTS comboMeterTXMode;
+        private System.Windows.Forms.ComboBoxTS comboMeterRXMode;
+        private System.Windows.Forms.ComboBoxTS comboMeterTXMode;
         private System.Windows.Forms.ButtonTS btnXITReset;
         private System.Windows.Forms.ButtonTS btnRITReset;
         private System.Windows.Forms.ComboBoxTS comboTuneMode;
@@ -149,7 +149,7 @@
         private System.Windows.Forms.CheckBoxTS ckQuickRec;
         private System.Windows.Forms.GroupBoxTS grpDisplaySplit;
         private System.Windows.Forms.CheckBoxTS chkDisplayPeak;
-        public System.Windows.Forms.CheckBoxTS chkRX2;
+        private System.Windows.Forms.CheckBoxTS chkRX2;
         private System.Windows.Forms.CheckBoxTS chkRX2SR;
         private System.Windows.Forms.Panel panelVFOASubHover;
         private System.Windows.Forms.RadioButtonTS radRX2ModeAM;
@@ -174,8 +174,8 @@
         private System.Windows.Forms.RadioButtonTS radRX2Filter7;
         private System.Windows.Forms.RadioButtonTS radRX2FilterVar1;
         private System.Windows.Forms.RadioButtonTS radRX2FilterVar2;
-        public System.Windows.Forms.GroupBoxTS grpRX2Meter;
-        public System.Windows.Forms.ComboBoxTS comboRX2MeterMode;
+        private System.Windows.Forms.GroupBoxTS grpRX2Meter;
+        private System.Windows.Forms.ComboBoxTS comboRX2MeterMode;
         private System.Windows.Forms.NumericUpDownTS udRX2FilterLow;
         private System.Windows.Forms.NumericUpDownTS udRX2FilterHigh;
         private System.Windows.Forms.LabelTS lblRX2FilterLow;
@@ -184,12 +184,12 @@
         private System.Windows.Forms.CheckBoxTS chkRX2NB;
         private System.Windows.Forms.CheckBoxTS chkRX2ANF;
         private System.Windows.Forms.CheckBoxTS chkRX2NR;
-        public System.Windows.Forms.PictureBox picRX2Meter;
-        public System.Windows.Forms.TextBoxTS txtRX2Meter;
+        private System.Windows.Forms.PictureBox picRX2Meter;
+        private System.Windows.Forms.TextBoxTS txtRX2Meter;
         public CheckBoxTS chkRX2Preamp;
         private System.Windows.Forms.LabelTS lblRX2RF;
         private System.Windows.Forms.PictureBox picSquelch;
-        private System.Windows.Forms.CheckBoxTS chkRX2Squelch;
+        public System.Windows.Forms.CheckBoxTS chkRX2Squelch;
         private System.Windows.Forms.CheckBoxTS chkRX1Preamp;
         private System.Windows.Forms.CheckBoxTS chkRX2DisplayPeak;
         private System.Windows.Forms.ComboBoxTS comboRX2DisplayMode;
@@ -253,11 +253,11 @@
         private PrettyTrackBar ptbDisplayPan;
         private PrettyTrackBar ptbDisplayZoom;
         public PrettyTrackBar ptbAF;
-        private PrettyTrackBar ptbRF;
+        public PrettyTrackBar ptbRF;
         private PrettyTrackBar ptbPWR;
         private PrettyTrackBar ptbSquelch;
         private PrettyTrackBar ptbMic;
-        private LabelTS lblMicVal;
+        public LabelTS lblMicVal;
         private PrettyTrackBar ptbCPDR;
         private LabelTS lblCPDRVal;
         private PrettyTrackBar ptbVOX;
@@ -269,12 +269,12 @@
         private PrettyTrackBar ptbCWSpeed;
         private PrettyTrackBar ptbPanMainRX;
         private PrettyTrackBar ptbPanSubRX;
-        private PrettyTrackBar ptbRX2RF;
+        public PrettyTrackBar ptbRX2RF;
         private PrettyTrackBar ptbRX2Squelch;
-        private PrettyTrackBar ptbRX2Gain;
+        public PrettyTrackBar ptbRX2Gain;
         private PrettyTrackBar ptbRX2Pan;
-        private PrettyTrackBar ptbRX1Gain;
-        private PrettyTrackBar ptbRX0Gain;
+        public PrettyTrackBar ptbRX1Gain;
+        public PrettyTrackBar ptbRX0Gain;
         private PrettyTrackBar ptbVACRXGain;
         private PrettyTrackBar ptbVACTXGain;
         private ContextMenuStrip contextMenuStripFilterRX1;
@@ -512,7 +512,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Console));
-            this.timer_cpu_meter = new System.Windows.Forms.Timer(this.components);
+            this.timer_cpu_volts_meter = new System.Windows.Forms.Timer(this.components);
             this.timer_peak_text = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.picSquelch = new System.Windows.Forms.PictureBox();
@@ -647,6 +647,7 @@
             this.BPFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.finderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.picRX2Squelch = new System.Windows.Forms.PictureBox();
             this.statusStripMain = new System.Windows.Forms.StatusStrip();
             this.toolStripDropDownButton_ScreenSize = new System.Windows.Forms.ToolStripDropDownButton();
@@ -702,6 +703,7 @@
             this.toolStripStatusLabel_LocalTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmrAutoAGC = new System.Windows.Forms.Timer(this.components);
             this.chkMNU = new System.Windows.Forms.CheckBoxTS();
+            this.lblPAProfile = new System.Windows.Forms.LabelTS();
             this.nudPwrTemp2 = new System.Windows.Forms.NumericUpDownTS();
             this.nudPwrTemp = new System.Windows.Forms.NumericUpDownTS();
             this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
@@ -758,6 +760,17 @@
             this.chk2TONE = new System.Windows.Forms.CheckBoxTS();
             this.chkFWCATUBypass = new System.Windows.Forms.CheckBoxTS();
             this.comboTuneMode = new System.Windows.Forms.ComboBoxTS();
+            this.udTXFilterLow = new System.Windows.Forms.NumericUpDownTS();
+            this.udTXFilterHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.chkMicMute = new System.Windows.Forms.CheckBoxTS();
+            this.chkShowTXFilter = new System.Windows.Forms.CheckBoxTS();
+            this.chkTXEQ = new System.Windows.Forms.CheckBoxTS();
+            this.chkRXEQ = new System.Windows.Forms.CheckBoxTS();
+            this.chkCPDR = new System.Windows.Forms.CheckBoxTS();
+            this.chkVOX = new System.Windows.Forms.CheckBoxTS();
+            this.chkNoiseGate = new System.Windows.Forms.CheckBoxTS();
+            this.comboTXProfile = new System.Windows.Forms.ComboBoxTS();
+            this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
             this.chkX2TR = new System.Windows.Forms.CheckBoxTS();
             this.chkFWCATU = new System.Windows.Forms.CheckBoxTS();
             this.comboRX2Band = new System.Windows.Forms.ComboBoxTS();
@@ -811,15 +824,8 @@
             this.lblAGC = new System.Windows.Forms.LabelTS();
             this.comboPreamp = new System.Windows.Forms.ComboBoxTS();
             this.lblRF = new System.Windows.Forms.LabelTS();
-            this.chkShowTXFilter = new System.Windows.Forms.CheckBoxTS();
             this.chkDX = new System.Windows.Forms.CheckBoxTS();
-            this.chkTXEQ = new System.Windows.Forms.CheckBoxTS();
-            this.comboTXProfile = new System.Windows.Forms.ComboBoxTS();
-            this.chkRXEQ = new System.Windows.Forms.CheckBoxTS();
-            this.chkCPDR = new System.Windows.Forms.CheckBoxTS();
             this.chkVAC1 = new System.Windows.Forms.CheckBoxTS();
-            this.chkVOX = new System.Windows.Forms.CheckBoxTS();
-            this.chkNoiseGate = new System.Windows.Forms.CheckBoxTS();
             this.comboDigTXProfile = new System.Windows.Forms.ComboBoxTS();
             this.chkVACStereo = new System.Windows.Forms.CheckBoxTS();
             this.comboVACSampleRate = new System.Windows.Forms.ComboBoxTS();
@@ -886,7 +892,6 @@
             this.radDisplayZoom4x = new System.Windows.Forms.RadioButtonTS();
             this.radDisplayZoom2x = new System.Windows.Forms.RadioButtonTS();
             this.radDisplayZoom1x = new System.Windows.Forms.RadioButtonTS();
-            this.chkMicMute = new System.Windows.Forms.CheckBoxTS();
             this.chkMUT = new System.Windows.Forms.CheckBoxTS();
             this.chkCWFWKeyer = new System.Windows.Forms.CheckBoxTS();
             this.chkShowCWZero = new System.Windows.Forms.CheckBoxTS();
@@ -933,14 +938,26 @@
             this.radBandGEN2 = new System.Windows.Forms.RadioButtonTS();
             this.radBandGEN1 = new System.Windows.Forms.RadioButtonTS();
             this.radBandGEN0 = new System.Windows.Forms.RadioButtonTS();
-            this.udTXFilterLow = new System.Windows.Forms.NumericUpDownTS();
-            this.udTXFilterHigh = new System.Windows.Forms.NumericUpDownTS();
             this.chkRxAnt = new System.Windows.Forms.CheckBoxTS();
             this.chkVFOBLock = new System.Windows.Forms.CheckBoxTS();
             this.chkQSK = new System.Windows.Forms.CheckBoxTS();
-            this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
             this.btnDisplayZTB = new System.Windows.Forms.ButtonTS();
             this.ptbTune = new Thetis.PrettyTrackBar();
+            this.panelModeSpecificPhone = new System.Windows.Forms.PanelTS();
+            this.labelTS4 = new System.Windows.Forms.LabelTS();
+            this.labelTS3 = new System.Windows.Forms.LabelTS();
+            this.picNoiseGate = new System.Windows.Forms.PictureBox();
+            this.lblNoiseGateVal = new System.Windows.Forms.LabelTS();
+            this.ptbNoiseGate = new Thetis.PrettyTrackBar();
+            this.picVOX = new System.Windows.Forms.PictureBox();
+            this.ptbVOX = new Thetis.PrettyTrackBar();
+            this.lblVOXVal = new System.Windows.Forms.LabelTS();
+            this.ptbCPDR = new Thetis.PrettyTrackBar();
+            this.lblCPDRVal = new System.Windows.Forms.LabelTS();
+            this.lblMicVal = new System.Windows.Forms.LabelTS();
+            this.ptbMic = new Thetis.PrettyTrackBar();
+            this.lblMIC = new System.Windows.Forms.LabelTS();
+            this.lblTransmitProfile = new System.Windows.Forms.LabelTS();
             this.panelButtonBar = new System.Windows.Forms.PanelTS();
             this.btnAndrBar8 = new System.Windows.Forms.ButtonTS();
             this.btnAndrBar7 = new System.Windows.Forms.ButtonTS();
@@ -1031,27 +1048,10 @@
             this.lblAF3 = new System.Windows.Forms.LabelTS();
             this.lblAF2 = new System.Windows.Forms.LabelTS();
             this.lblPWR2 = new System.Windows.Forms.LabelTS();
-            this.panelModeSpecificPhone = new System.Windows.Forms.PanelTS();
-            this.labelTS2 = new System.Windows.Forms.LabelTS();
-            this.lblPAProfile = new System.Windows.Forms.LabelTS();
-            this.labelTS4 = new System.Windows.Forms.LabelTS();
-            this.labelTS3 = new System.Windows.Forms.LabelTS();
-            this.picNoiseGate = new System.Windows.Forms.PictureBox();
-            this.lblNoiseGateVal = new System.Windows.Forms.LabelTS();
-            this.ptbNoiseGate = new Thetis.PrettyTrackBar();
-            this.picVOX = new System.Windows.Forms.PictureBox();
-            this.ptbVOX = new Thetis.PrettyTrackBar();
-            this.lblVOXVal = new System.Windows.Forms.LabelTS();
-            this.ptbCPDR = new Thetis.PrettyTrackBar();
-            this.lblCPDRVal = new System.Windows.Forms.LabelTS();
-            this.lblMicVal = new System.Windows.Forms.LabelTS();
-            this.ptbMic = new Thetis.PrettyTrackBar();
-            this.lblMIC = new System.Windows.Forms.LabelTS();
-            this.lblTransmitProfile = new System.Windows.Forms.LabelTS();
             this.panelModeSpecificDigital = new System.Windows.Forms.PanelTS();
             this.lblVACTXIndicator = new System.Windows.Forms.LabelTS();
-            this.lblVACRXIndicator = new System.Windows.Forms.LabelTS();
             this.lblDigTXProfile = new System.Windows.Forms.LabelTS();
+            this.lblVACRXIndicator = new System.Windows.Forms.LabelTS();
             this.lblRXGain = new System.Windows.Forms.LabelTS();
             this.grpVACStereo = new System.Windows.Forms.GroupBoxTS();
             this.lblTXGain = new System.Windows.Forms.LabelTS();
@@ -1152,6 +1152,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).BeginInit();
             this.panelRX2DSP.SuspendLayout();
             this.panelOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).BeginInit();
@@ -1180,9 +1182,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).BeginInit();
+            this.panelModeSpecificPhone.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbNoiseGate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picVOX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbVOX)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCPDR)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbMic)).BeginInit();
             this.panelButtonBar.SuspendLayout();
             this.panelVFOLabels.SuspendLayout();
             this.panelVFOALabels.SuspendLayout();
@@ -1201,13 +1208,6 @@
             this.panelDSP.SuspendLayout();
             this.panelVFO.SuspendLayout();
             this.panelSoundControls.SuspendLayout();
-            this.panelModeSpecificPhone.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbNoiseGate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picVOX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbVOX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCPDR)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbMic)).BeginInit();
             this.panelModeSpecificDigital.SuspendLayout();
             this.grpVACStereo.SuspendLayout();
             this.grpDIGSampleRate.SuspendLayout();
@@ -1232,11 +1232,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbAndromedaEncoderSlider)).BeginInit();
             this.SuspendLayout();
             // 
-            // timer_cpu_meter
+            // timer_cpu_volts_meter
             // 
-            this.timer_cpu_meter.Enabled = true;
-            this.timer_cpu_meter.Interval = 1000;
-            this.timer_cpu_meter.Tick += new System.EventHandler(this.timer_cpu_meter_Tick);
+            this.timer_cpu_volts_meter.Enabled = true;
+            this.timer_cpu_volts_meter.Interval = 1000;
+            this.timer_cpu_volts_meter.Tick += new System.EventHandler(this.timer_cpu_volts_meter_Tick);
             // 
             // timer_peak_text
             // 
@@ -1372,7 +1372,8 @@
             this.RAtoolStripMenuItem,
             this.wBToolStripMenuItem,
             this.pIToolStripMenuItem,
-            this.BPFToolStripMenuItem});
+            this.BPFToolStripMenuItem,
+            this.finderMenuItem});
             this.menuStrip1.Name = "menuStrip1";
             // 
             // setupToolStripMenuItem
@@ -2189,6 +2190,13 @@
             resources.ApplyResources(this.BPF2ToolStripMenuItem, "BPF2ToolStripMenuItem");
             this.BPF2ToolStripMenuItem.Click += new System.EventHandler(this.BPF2ToolStripMenuItem_Click);
             // 
+            // finderMenuItem
+            // 
+            this.finderMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.finderMenuItem.Name = "finderMenuItem";
+            resources.ApplyResources(this.finderMenuItem, "finderMenuItem");
+            this.finderMenuItem.Click += new System.EventHandler(this.finderMenuItem_Click);
+            // 
             // picRX2Squelch
             // 
             this.picRX2Squelch.BackColor = System.Drawing.SystemColors.ControlText;
@@ -2589,8 +2597,16 @@
             this.chkMNU.FlatAppearance.BorderSize = 0;
             this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkMNU.Name = "chkMNU";
-            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
             this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
+            // 
+            // lblPAProfile
+            // 
+            this.lblPAProfile.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
+            this.lblPAProfile.ForeColor = System.Drawing.Color.White;
+            this.lblPAProfile.Name = "lblPAProfile";
+            this.toolTip1.SetToolTip(this.lblPAProfile, resources.GetString("lblPAProfile.ToolTip"));
+            this.lblPAProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblPAProfile_MouseDown);
             // 
             // nudPwrTemp2
             // 
@@ -2840,14 +2856,14 @@
             // 
             // lblFilterHigh
             // 
-            this.lblFilterHigh.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblFilterHigh, "lblFilterHigh");
+            this.lblFilterHigh.ForeColor = System.Drawing.Color.White;
             this.lblFilterHigh.Name = "lblFilterHigh";
             // 
             // lblFilterWidth
             // 
-            this.lblFilterWidth.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblFilterWidth, "lblFilterWidth");
+            this.lblFilterWidth.ForeColor = System.Drawing.Color.White;
             this.lblFilterWidth.Name = "lblFilterWidth";
             // 
             // radFilterVar2
@@ -2860,8 +2876,8 @@
             // 
             // lblFilterLow
             // 
-            this.lblFilterLow.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblFilterLow, "lblFilterLow");
+            this.lblFilterLow.ForeColor = System.Drawing.Color.White;
             this.lblFilterLow.Name = "lblFilterLow";
             // 
             // radFilterVar1
@@ -2874,8 +2890,8 @@
             // 
             // lblFilterShift
             // 
-            this.lblFilterShift.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblFilterShift, "lblFilterShift");
+            this.lblFilterShift.ForeColor = System.Drawing.Color.White;
             this.lblFilterShift.Name = "lblFilterShift";
             // 
             // radFilter9
@@ -2991,10 +3007,12 @@
             // chkFullDuplex
             // 
             resources.ApplyResources(this.chkFullDuplex, "chkFullDuplex");
+            this.chkFullDuplex.BackColor = System.Drawing.Color.Transparent;
             this.chkFullDuplex.FlatAppearance.BorderSize = 0;
             this.chkFullDuplex.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkFullDuplex.Name = "chkFullDuplex";
             this.toolTip1.SetToolTip(this.chkFullDuplex, resources.GetString("chkFullDuplex.ToolTip"));
+            this.chkFullDuplex.UseVisualStyleBackColor = false;
             this.chkFullDuplex.CheckedChanged += new System.EventHandler(this.chkFullDuplex_CheckedChanged);
             // 
             // ptbRX2Squelch
@@ -3102,8 +3120,8 @@
             this.comboRX2AGC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2AGC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2AGC.DropDownWidth = 48;
-            this.comboRX2AGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboRX2AGC, "comboRX2AGC");
+            this.comboRX2AGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboRX2AGC.Name = "comboRX2AGC";
             this.toolTip1.SetToolTip(this.comboRX2AGC, resources.GetString("comboRX2AGC.ToolTip"));
             this.comboRX2AGC.SelectedIndexChanged += new System.EventHandler(this.comboRX2AGC_SelectedIndexChanged);
@@ -3262,6 +3280,160 @@
             this.toolTip1.SetToolTip(this.comboTuneMode, resources.GetString("comboTuneMode.ToolTip"));
             this.comboTuneMode.SelectedIndexChanged += new System.EventHandler(this.comboTuneMode_SelectedIndexChanged);
             // 
+            // udTXFilterLow
+            // 
+            this.udTXFilterLow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            resources.ApplyResources(this.udTXFilterLow, "udTXFilterLow");
+            this.udTXFilterLow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.udTXFilterLow.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTXFilterLow.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXFilterLow.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXFilterLow.Name = "udTXFilterLow";
+            this.udTXFilterLow.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXFilterLow, resources.GetString("udTXFilterLow.ToolTip"));
+            this.udTXFilterLow.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXFilterLow.ValueChanged += new System.EventHandler(this.udTXFilterLow_ValueChanged);
+            // 
+            // udTXFilterHigh
+            // 
+            this.udTXFilterHigh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            resources.ApplyResources(this.udTXFilterHigh, "udTXFilterHigh");
+            this.udTXFilterHigh.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.udTXFilterHigh.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTXFilterHigh.Maximum = new decimal(new int[] {
+            20000,
+            0,
+            0,
+            0});
+            this.udTXFilterHigh.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udTXFilterHigh.Name = "udTXFilterHigh";
+            this.udTXFilterHigh.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udTXFilterHigh, resources.GetString("udTXFilterHigh.ToolTip"));
+            this.udTXFilterHigh.Value = new decimal(new int[] {
+            6000,
+            0,
+            0,
+            0});
+            this.udTXFilterHigh.ValueChanged += new System.EventHandler(this.udTXFilterHigh_ValueChanged);
+            // 
+            // chkMicMute
+            // 
+            resources.ApplyResources(this.chkMicMute, "chkMicMute");
+            this.chkMicMute.Checked = true;
+            this.chkMicMute.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkMicMute.FlatAppearance.BorderSize = 0;
+            this.chkMicMute.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMicMute.Name = "chkMicMute";
+            this.toolTip1.SetToolTip(this.chkMicMute, resources.GetString("chkMicMute.ToolTip"));
+            this.chkMicMute.CheckedChanged += new System.EventHandler(this.chkMicMute_CheckedChanged);
+            this.chkMicMute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkMicMute_MouseDown);
+            // 
+            // chkShowTXFilter
+            // 
+            resources.ApplyResources(this.chkShowTXFilter, "chkShowTXFilter");
+            this.chkShowTXFilter.FlatAppearance.BorderSize = 0;
+            this.chkShowTXFilter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkShowTXFilter.Name = "chkShowTXFilter";
+            this.toolTip1.SetToolTip(this.chkShowTXFilter, resources.GetString("chkShowTXFilter.ToolTip"));
+            this.chkShowTXFilter.CheckedChanged += new System.EventHandler(this.chkShowTXFilter_CheckedChanged);
+            // 
+            // chkTXEQ
+            // 
+            resources.ApplyResources(this.chkTXEQ, "chkTXEQ");
+            this.chkTXEQ.FlatAppearance.BorderSize = 0;
+            this.chkTXEQ.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkTXEQ.Name = "chkTXEQ";
+            this.toolTip1.SetToolTip(this.chkTXEQ, resources.GetString("chkTXEQ.ToolTip"));
+            this.chkTXEQ.CheckedChanged += new System.EventHandler(this.chkTXEQ_CheckedChanged);
+            this.chkTXEQ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkTXEQ_MouseDown);
+            // 
+            // chkRXEQ
+            // 
+            resources.ApplyResources(this.chkRXEQ, "chkRXEQ");
+            this.chkRXEQ.FlatAppearance.BorderSize = 0;
+            this.chkRXEQ.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkRXEQ.Name = "chkRXEQ";
+            this.toolTip1.SetToolTip(this.chkRXEQ, resources.GetString("chkRXEQ.ToolTip"));
+            this.chkRXEQ.CheckedChanged += new System.EventHandler(this.chkRXEQ_CheckedChanged);
+            this.chkRXEQ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRXEQ_MouseDown);
+            // 
+            // chkCPDR
+            // 
+            resources.ApplyResources(this.chkCPDR, "chkCPDR");
+            this.chkCPDR.FlatAppearance.BorderSize = 0;
+            this.chkCPDR.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkCPDR.Name = "chkCPDR";
+            this.toolTip1.SetToolTip(this.chkCPDR, resources.GetString("chkCPDR.ToolTip"));
+            this.chkCPDR.CheckedChanged += new System.EventHandler(this.chkCPDR_CheckedChanged);
+            this.chkCPDR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCPDR_MouseDown);
+            // 
+            // chkVOX
+            // 
+            resources.ApplyResources(this.chkVOX, "chkVOX");
+            this.chkVOX.FlatAppearance.BorderSize = 0;
+            this.chkVOX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkVOX.Name = "chkVOX";
+            this.toolTip1.SetToolTip(this.chkVOX, resources.GetString("chkVOX.ToolTip"));
+            this.chkVOX.CheckedChanged += new System.EventHandler(this.chkVOX_CheckedChanged);
+            this.chkVOX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVOX_MouseDown);
+            // 
+            // chkNoiseGate
+            // 
+            resources.ApplyResources(this.chkNoiseGate, "chkNoiseGate");
+            this.chkNoiseGate.FlatAppearance.BorderSize = 0;
+            this.chkNoiseGate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkNoiseGate.Name = "chkNoiseGate";
+            this.toolTip1.SetToolTip(this.chkNoiseGate, resources.GetString("chkNoiseGate.ToolTip"));
+            this.chkNoiseGate.CheckedChanged += new System.EventHandler(this.chkNoiseGate_CheckedChanged);
+            this.chkNoiseGate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNoiseGate_MouseDown);
+            // 
+            // comboTXProfile
+            // 
+            this.comboTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.comboTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboTXProfile.DropDownWidth = 96;
+            resources.ApplyResources(this.comboTXProfile, "comboTXProfile");
+            this.comboTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.comboTXProfile.Name = "comboTXProfile";
+            this.toolTip1.SetToolTip(this.comboTXProfile, resources.GetString("comboTXProfile.ToolTip"));
+            this.comboTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboTXProfile_SelectedIndexChanged);
+            this.comboTXProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.comboTXProfile_MouseDown);
+            // 
+            // comboAMTXProfile
+            // 
+            this.comboAMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.comboAMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAMTXProfile.DropDownWidth = 96;
+            resources.ApplyResources(this.comboAMTXProfile, "comboAMTXProfile");
+            this.comboAMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.comboAMTXProfile.Name = "comboAMTXProfile";
+            this.toolTip1.SetToolTip(this.comboAMTXProfile, resources.GetString("comboAMTXProfile.ToolTip"));
+            this.comboAMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboAMTXProfile_SelectedIndexChanged);
+            // 
             // chkX2TR
             // 
             resources.ApplyResources(this.chkX2TR, "chkX2TR");
@@ -3286,8 +3458,8 @@
             this.comboRX2Band.DisplayMember = "0";
             this.comboRX2Band.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2Band.DropDownWidth = 56;
-            this.comboRX2Band.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboRX2Band, "comboRX2Band");
+            this.comboRX2Band.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboRX2Band.Items.AddRange(new object[] {
             resources.GetString("comboRX2Band.Items"),
             resources.GetString("comboRX2Band.Items1"),
@@ -3608,8 +3780,8 @@
             this.comboRX2DisplayMode.DisplayMember = "0";
             this.comboRX2DisplayMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2DisplayMode.DropDownWidth = 88;
-            this.comboRX2DisplayMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboRX2DisplayMode, "comboRX2DisplayMode");
+            this.comboRX2DisplayMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboRX2DisplayMode.Items.AddRange(new object[] {
             resources.GetString("comboRX2DisplayMode.Items"),
             resources.GetString("comboRX2DisplayMode.Items1"),
@@ -3728,11 +3900,14 @@
             // chkVFOSplit
             // 
             resources.ApplyResources(this.chkVFOSplit, "chkVFOSplit");
+            this.chkVFOSplit.AutoCheck = false;
             this.chkVFOSplit.FlatAppearance.BorderSize = 0;
             this.chkVFOSplit.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkVFOSplit.Name = "chkVFOSplit";
             this.toolTip1.SetToolTip(this.chkVFOSplit, resources.GetString("chkVFOSplit.ToolTip"));
             this.chkVFOSplit.CheckedChanged += new System.EventHandler(this.chkVFOSplit_CheckedChanged);
+            this.chkVFOSplit.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chkVFOSplit_MouseClick);
+            this.chkVFOSplit.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVFOSplit_MouseDown);
             // 
             // btnRITReset
             // 
@@ -3886,8 +4061,8 @@
             this.comboAGC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboAGC.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAGC.DropDownWidth = 48;
-            this.comboAGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboAGC, "comboAGC");
+            this.comboAGC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboAGC.Name = "comboAGC";
             this.toolTip1.SetToolTip(this.comboAGC, resources.GetString("comboAGC.ToolTip"));
             this.comboAGC.SelectedIndexChanged += new System.EventHandler(this.comboAGC_SelectedIndexChanged);
@@ -3905,8 +4080,8 @@
             this.comboPreamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboPreamp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboPreamp.DropDownWidth = 48;
-            this.comboPreamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboPreamp, "comboPreamp");
+            this.comboPreamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboPreamp.Name = "comboPreamp";
             this.toolTip1.SetToolTip(this.comboPreamp, resources.GetString("comboPreamp.ToolTip"));
             this.comboPreamp.SelectedIndexChanged += new System.EventHandler(this.comboPreamp_SelectedIndexChanged);
@@ -3919,15 +4094,6 @@
             this.toolTip1.SetToolTip(this.lblRF, resources.GetString("lblRF.ToolTip"));
             this.lblRF.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblRF_MouseDown);
             // 
-            // chkShowTXFilter
-            // 
-            resources.ApplyResources(this.chkShowTXFilter, "chkShowTXFilter");
-            this.chkShowTXFilter.FlatAppearance.BorderSize = 0;
-            this.chkShowTXFilter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkShowTXFilter.Name = "chkShowTXFilter";
-            this.toolTip1.SetToolTip(this.chkShowTXFilter, resources.GetString("chkShowTXFilter.ToolTip"));
-            this.chkShowTXFilter.CheckedChanged += new System.EventHandler(this.chkShowTXFilter_CheckedChanged);
-            // 
             // chkDX
             // 
             resources.ApplyResources(this.chkDX, "chkDX");
@@ -3936,48 +4102,6 @@
             this.chkDX.Name = "chkDX";
             this.toolTip1.SetToolTip(this.chkDX, resources.GetString("chkDX.ToolTip"));
             this.chkDX.CheckedChanged += new System.EventHandler(this.chkDX_CheckedChanged);
-            // 
-            // chkTXEQ
-            // 
-            resources.ApplyResources(this.chkTXEQ, "chkTXEQ");
-            this.chkTXEQ.FlatAppearance.BorderSize = 0;
-            this.chkTXEQ.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkTXEQ.Name = "chkTXEQ";
-            this.toolTip1.SetToolTip(this.chkTXEQ, resources.GetString("chkTXEQ.ToolTip"));
-            this.chkTXEQ.CheckedChanged += new System.EventHandler(this.chkTXEQ_CheckedChanged);
-            this.chkTXEQ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkTXEQ_MouseDown);
-            // 
-            // comboTXProfile
-            // 
-            this.comboTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.comboTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboTXProfile.DropDownWidth = 96;
-            this.comboTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            resources.ApplyResources(this.comboTXProfile, "comboTXProfile");
-            this.comboTXProfile.Name = "comboTXProfile";
-            this.toolTip1.SetToolTip(this.comboTXProfile, resources.GetString("comboTXProfile.ToolTip"));
-            this.comboTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboTXProfile_SelectedIndexChanged);
-            this.comboTXProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.comboTXProfile_MouseDown);
-            // 
-            // chkRXEQ
-            // 
-            resources.ApplyResources(this.chkRXEQ, "chkRXEQ");
-            this.chkRXEQ.FlatAppearance.BorderSize = 0;
-            this.chkRXEQ.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkRXEQ.Name = "chkRXEQ";
-            this.toolTip1.SetToolTip(this.chkRXEQ, resources.GetString("chkRXEQ.ToolTip"));
-            this.chkRXEQ.CheckedChanged += new System.EventHandler(this.chkRXEQ_CheckedChanged);
-            this.chkRXEQ.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRXEQ_MouseDown);
-            // 
-            // chkCPDR
-            // 
-            resources.ApplyResources(this.chkCPDR, "chkCPDR");
-            this.chkCPDR.FlatAppearance.BorderSize = 0;
-            this.chkCPDR.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkCPDR.Name = "chkCPDR";
-            this.toolTip1.SetToolTip(this.chkCPDR, resources.GetString("chkCPDR.ToolTip"));
-            this.chkCPDR.CheckedChanged += new System.EventHandler(this.chkCPDR_CheckedChanged);
-            this.chkCPDR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCPDR_MouseDown);
             // 
             // chkVAC1
             // 
@@ -3989,33 +4113,13 @@
             this.chkVAC1.CheckedChanged += new System.EventHandler(this.chkVAC1_CheckedChanged);
             this.chkVAC1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVAC1_MouseDown);
             // 
-            // chkVOX
-            // 
-            resources.ApplyResources(this.chkVOX, "chkVOX");
-            this.chkVOX.FlatAppearance.BorderSize = 0;
-            this.chkVOX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkVOX.Name = "chkVOX";
-            this.toolTip1.SetToolTip(this.chkVOX, resources.GetString("chkVOX.ToolTip"));
-            this.chkVOX.CheckedChanged += new System.EventHandler(this.chkVOX_CheckedChanged);
-            this.chkVOX.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVOX_MouseDown);
-            // 
-            // chkNoiseGate
-            // 
-            resources.ApplyResources(this.chkNoiseGate, "chkNoiseGate");
-            this.chkNoiseGate.FlatAppearance.BorderSize = 0;
-            this.chkNoiseGate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkNoiseGate.Name = "chkNoiseGate";
-            this.toolTip1.SetToolTip(this.chkNoiseGate, resources.GetString("chkNoiseGate.ToolTip"));
-            this.chkNoiseGate.CheckedChanged += new System.EventHandler(this.chkNoiseGate_CheckedChanged);
-            this.chkNoiseGate.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNoiseGate_MouseDown);
-            // 
             // comboDigTXProfile
             // 
             this.comboDigTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboDigTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDigTXProfile.DropDownWidth = 96;
-            this.comboDigTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboDigTXProfile, "comboDigTXProfile");
+            this.comboDigTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboDigTXProfile.Name = "comboDigTXProfile";
             this.toolTip1.SetToolTip(this.comboDigTXProfile, resources.GetString("comboDigTXProfile.ToolTip"));
             this.comboDigTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboDigTXProfile_SelectedIndexChanged);
@@ -4033,8 +4137,8 @@
             this.comboVACSampleRate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboVACSampleRate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboVACSampleRate.DropDownWidth = 64;
-            this.comboVACSampleRate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboVACSampleRate, "comboVACSampleRate");
+            this.comboVACSampleRate.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboVACSampleRate.Items.AddRange(new object[] {
             resources.GetString("comboVACSampleRate.Items"),
             resources.GetString("comboVACSampleRate.Items1"),
@@ -4227,8 +4331,8 @@
             this.comboMeterTXMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboMeterTXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMeterTXMode.DropDownWidth = 72;
-            this.comboMeterTXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboMeterTXMode, "comboMeterTXMode");
+            this.comboMeterTXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboMeterTXMode.Name = "comboMeterTXMode";
             this.toolTip1.SetToolTip(this.comboMeterTXMode, resources.GetString("comboMeterTXMode.ToolTip"));
             this.comboMeterTXMode.SelectedIndexChanged += new System.EventHandler(this.comboMeterTXMode_SelectedIndexChanged);
@@ -4238,8 +4342,8 @@
             this.comboMeterRXMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboMeterRXMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboMeterRXMode.DropDownWidth = 72;
-            this.comboMeterRXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboMeterRXMode, "comboMeterRXMode");
+            this.comboMeterRXMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboMeterRXMode.Name = "comboMeterRXMode";
             this.toolTip1.SetToolTip(this.comboMeterRXMode, resources.GetString("comboMeterRXMode.ToolTip"));
             this.comboMeterRXMode.SelectedIndexChanged += new System.EventHandler(this.comboMeterRXMode_SelectedIndexChanged);
@@ -4366,8 +4470,8 @@
             this.comboRX2MeterMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2MeterMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2MeterMode.DropDownWidth = 72;
-            this.comboRX2MeterMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboRX2MeterMode, "comboRX2MeterMode");
+            this.comboRX2MeterMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboRX2MeterMode.Name = "comboRX2MeterMode";
             this.toolTip1.SetToolTip(this.comboRX2MeterMode, resources.GetString("comboRX2MeterMode.ToolTip"));
             this.comboRX2MeterMode.SelectedIndexChanged += new System.EventHandler(this.comboRX2MeterMode_SelectedIndexChanged);
@@ -4860,18 +4964,6 @@
             this.radDisplayZoom1x.CheckedChanged += new System.EventHandler(this.radDisplayZoom1x_CheckedChanged);
             this.radDisplayZoom1x.Click += new System.EventHandler(this.radDisplayZoom1x_Click);
             // 
-            // chkMicMute
-            // 
-            resources.ApplyResources(this.chkMicMute, "chkMicMute");
-            this.chkMicMute.Checked = true;
-            this.chkMicMute.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkMicMute.FlatAppearance.BorderSize = 0;
-            this.chkMicMute.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkMicMute.Name = "chkMicMute";
-            this.toolTip1.SetToolTip(this.chkMicMute, resources.GetString("chkMicMute.ToolTip"));
-            this.chkMicMute.CheckedChanged += new System.EventHandler(this.chkMicMute_CheckedChanged);
-            this.chkMicMute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkMicMute_MouseDown);
-            // 
             // chkMUT
             // 
             resources.ApplyResources(this.chkMUT, "chkMUT");
@@ -4916,8 +5008,8 @@
             this.comboFMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboFMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFMTXProfile.DropDownWidth = 96;
-            this.comboFMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboFMTXProfile, "comboFMTXProfile");
+            this.comboFMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboFMTXProfile.Name = "comboFMTXProfile";
             this.toolTip1.SetToolTip(this.comboFMTXProfile, resources.GetString("comboFMTXProfile.ToolTip"));
             this.comboFMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboFMTXProfile_SelectedIndexChanged);
@@ -4967,9 +5059,11 @@
             // 
             // comboFMCTCSS
             // 
+            this.comboFMCTCSS.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboFMCTCSS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFMCTCSS.DropDownWidth = 60;
             resources.ApplyResources(this.comboFMCTCSS, "comboFMCTCSS");
+            this.comboFMCTCSS.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboFMCTCSS.Name = "comboFMCTCSS";
             this.toolTip1.SetToolTip(this.comboFMCTCSS, resources.GetString("comboFMCTCSS.ToolTip"));
             this.comboFMCTCSS.SelectedIndexChanged += new System.EventHandler(this.comboFMCTCSS_SelectedIndexChanged);
@@ -5179,8 +5273,8 @@
             this.comboRX2Preamp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboRX2Preamp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboRX2Preamp.DropDownWidth = 48;
-            this.comboRX2Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboRX2Preamp, "comboRX2Preamp");
+            this.comboRX2Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboRX2Preamp.Name = "comboRX2Preamp";
             this.toolTip1.SetToolTip(this.comboRX2Preamp, resources.GetString("comboRX2Preamp.ToolTip"));
             this.comboRX2Preamp.SelectedIndexChanged += new System.EventHandler(this.comboRX2Preamp_SelectedIndexChanged);
@@ -5483,66 +5577,6 @@
             this.radBandGEN0.Click += new System.EventHandler(this.radBandGEN0_Click);
             this.radBandGEN0.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN0_MouseDown);
             // 
-            // udTXFilterLow
-            // 
-            this.udTXFilterLow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.udTXFilterLow, "udTXFilterLow");
-            this.udTXFilterLow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.udTXFilterLow.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udTXFilterLow.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXFilterLow.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXFilterLow.Name = "udTXFilterLow";
-            this.udTXFilterLow.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXFilterLow, resources.GetString("udTXFilterLow.ToolTip"));
-            this.udTXFilterLow.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXFilterLow.ValueChanged += new System.EventHandler(this.udTXFilterLow_ValueChanged);
-            // 
-            // udTXFilterHigh
-            // 
-            this.udTXFilterHigh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            resources.ApplyResources(this.udTXFilterHigh, "udTXFilterHigh");
-            this.udTXFilterHigh.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.udTXFilterHigh.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udTXFilterHigh.Maximum = new decimal(new int[] {
-            20000,
-            0,
-            0,
-            0});
-            this.udTXFilterHigh.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udTXFilterHigh.Name = "udTXFilterHigh";
-            this.udTXFilterHigh.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udTXFilterHigh, resources.GetString("udTXFilterHigh.ToolTip"));
-            this.udTXFilterHigh.Value = new decimal(new int[] {
-            6000,
-            0,
-            0,
-            0});
-            this.udTXFilterHigh.ValueChanged += new System.EventHandler(this.udTXFilterHigh_ValueChanged);
-            // 
             // chkRxAnt
             // 
             resources.ApplyResources(this.chkRxAnt, "chkRxAnt");
@@ -5572,17 +5606,6 @@
             this.chkQSK.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
             this.chkQSK.CheckStateChanged += new System.EventHandler(this.chkQSK_CheckStateChanged);
-            // 
-            // comboAMTXProfile
-            // 
-            this.comboAMTXProfile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.comboAMTXProfile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboAMTXProfile.DropDownWidth = 96;
-            this.comboAMTXProfile.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            resources.ApplyResources(this.comboAMTXProfile, "comboAMTXProfile");
-            this.comboAMTXProfile.Name = "comboAMTXProfile";
-            this.toolTip1.SetToolTip(this.comboAMTXProfile, resources.GetString("comboAMTXProfile.ToolTip"));
-            this.comboAMTXProfile.SelectedIndexChanged += new System.EventHandler(this.comboAMTXProfile_SelectedIndexChanged);
             // 
             // btnDisplayZTB
             // 
@@ -5615,6 +5638,173 @@
             this.ptbTune.Value = 50;
             this.ptbTune.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbTune_Scroll);
             this.ptbTune.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ptbTune_MouseUp);
+            // 
+            // panelModeSpecificPhone
+            // 
+            resources.ApplyResources(this.panelModeSpecificPhone, "panelModeSpecificPhone");
+            this.panelModeSpecificPhone.BackColor = System.Drawing.Color.Transparent;
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
+            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
+            this.panelModeSpecificPhone.Controls.Add(this.udTXFilterLow);
+            this.panelModeSpecificPhone.Controls.Add(this.udTXFilterHigh);
+            this.panelModeSpecificPhone.Controls.Add(this.chkMicMute);
+            this.panelModeSpecificPhone.Controls.Add(this.picNoiseGate);
+            this.panelModeSpecificPhone.Controls.Add(this.lblNoiseGateVal);
+            this.panelModeSpecificPhone.Controls.Add(this.ptbNoiseGate);
+            this.panelModeSpecificPhone.Controls.Add(this.picVOX);
+            this.panelModeSpecificPhone.Controls.Add(this.ptbVOX);
+            this.panelModeSpecificPhone.Controls.Add(this.lblVOXVal);
+            this.panelModeSpecificPhone.Controls.Add(this.ptbCPDR);
+            this.panelModeSpecificPhone.Controls.Add(this.lblCPDRVal);
+            this.panelModeSpecificPhone.Controls.Add(this.lblMicVal);
+            this.panelModeSpecificPhone.Controls.Add(this.ptbMic);
+            this.panelModeSpecificPhone.Controls.Add(this.lblMIC);
+            this.panelModeSpecificPhone.Controls.Add(this.chkShowTXFilter);
+            this.panelModeSpecificPhone.Controls.Add(this.lblTransmitProfile);
+            this.panelModeSpecificPhone.Controls.Add(this.chkTXEQ);
+            this.panelModeSpecificPhone.Controls.Add(this.chkRXEQ);
+            this.panelModeSpecificPhone.Controls.Add(this.chkCPDR);
+            this.panelModeSpecificPhone.Controls.Add(this.chkVOX);
+            this.panelModeSpecificPhone.Controls.Add(this.chkNoiseGate);
+            this.panelModeSpecificPhone.Controls.Add(this.comboTXProfile);
+            this.panelModeSpecificPhone.Controls.Add(this.comboAMTXProfile);
+            this.panelModeSpecificPhone.Name = "panelModeSpecificPhone";
+            // 
+            // labelTS4
+            // 
+            resources.ApplyResources(this.labelTS4, "labelTS4");
+            this.labelTS4.ForeColor = System.Drawing.Color.White;
+            this.labelTS4.Name = "labelTS4";
+            // 
+            // labelTS3
+            // 
+            resources.ApplyResources(this.labelTS3, "labelTS3");
+            this.labelTS3.ForeColor = System.Drawing.Color.White;
+            this.labelTS3.Name = "labelTS3";
+            // 
+            // picNoiseGate
+            // 
+            this.picNoiseGate.BackColor = System.Drawing.SystemColors.ControlText;
+            resources.ApplyResources(this.picNoiseGate, "picNoiseGate");
+            this.picNoiseGate.Name = "picNoiseGate";
+            this.picNoiseGate.TabStop = false;
+            this.picNoiseGate.Paint += new System.Windows.Forms.PaintEventHandler(this.picNoiseGate_Paint);
+            // 
+            // lblNoiseGateVal
+            // 
+            resources.ApplyResources(this.lblNoiseGateVal, "lblNoiseGateVal");
+            this.lblNoiseGateVal.ForeColor = System.Drawing.Color.White;
+            this.lblNoiseGateVal.Name = "lblNoiseGateVal";
+            // 
+            // ptbNoiseGate
+            // 
+            resources.ApplyResources(this.ptbNoiseGate, "ptbNoiseGate");
+            this.ptbNoiseGate.GreenThumb = false;
+            this.ptbNoiseGate.HeadImage = null;
+            this.ptbNoiseGate.LargeChange = 1;
+            this.ptbNoiseGate.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbNoiseGate.LimitEnabled = false;
+            this.ptbNoiseGate.LimitValue = 0;
+            this.ptbNoiseGate.Maximum = 0;
+            this.ptbNoiseGate.Minimum = -160;
+            this.ptbNoiseGate.Name = "ptbNoiseGate";
+            this.ptbNoiseGate.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbNoiseGate.SmallChange = 1;
+            this.ptbNoiseGate.TabStop = false;
+            this.ptbNoiseGate.Value = -40;
+            this.ptbNoiseGate.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbNoiseGate_Scroll);
+            // 
+            // picVOX
+            // 
+            this.picVOX.BackColor = System.Drawing.SystemColors.ControlText;
+            resources.ApplyResources(this.picVOX, "picVOX");
+            this.picVOX.Name = "picVOX";
+            this.picVOX.TabStop = false;
+            this.picVOX.Paint += new System.Windows.Forms.PaintEventHandler(this.picVOX_Paint);
+            // 
+            // ptbVOX
+            // 
+            resources.ApplyResources(this.ptbVOX, "ptbVOX");
+            this.ptbVOX.GreenThumb = false;
+            this.ptbVOX.HeadImage = null;
+            this.ptbVOX.LargeChange = 1;
+            this.ptbVOX.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbVOX.LimitEnabled = false;
+            this.ptbVOX.LimitValue = 0;
+            this.ptbVOX.Maximum = 0;
+            this.ptbVOX.Minimum = -80;
+            this.ptbVOX.Name = "ptbVOX";
+            this.ptbVOX.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbVOX.SmallChange = 1;
+            this.ptbVOX.TabStop = false;
+            this.ptbVOX.Value = -20;
+            this.ptbVOX.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbVOX_Scroll);
+            // 
+            // lblVOXVal
+            // 
+            resources.ApplyResources(this.lblVOXVal, "lblVOXVal");
+            this.lblVOXVal.ForeColor = System.Drawing.Color.White;
+            this.lblVOXVal.Name = "lblVOXVal";
+            // 
+            // ptbCPDR
+            // 
+            resources.ApplyResources(this.ptbCPDR, "ptbCPDR");
+            this.ptbCPDR.GreenThumb = false;
+            this.ptbCPDR.HeadImage = null;
+            this.ptbCPDR.LargeChange = 1;
+            this.ptbCPDR.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbCPDR.LimitEnabled = false;
+            this.ptbCPDR.LimitValue = 0;
+            this.ptbCPDR.Maximum = 20;
+            this.ptbCPDR.Minimum = 0;
+            this.ptbCPDR.Name = "ptbCPDR";
+            this.ptbCPDR.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbCPDR.SmallChange = 1;
+            this.ptbCPDR.TabStop = false;
+            this.ptbCPDR.Value = 1;
+            this.ptbCPDR.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCPDR_Scroll);
+            // 
+            // lblCPDRVal
+            // 
+            resources.ApplyResources(this.lblCPDRVal, "lblCPDRVal");
+            this.lblCPDRVal.ForeColor = System.Drawing.Color.White;
+            this.lblCPDRVal.Name = "lblCPDRVal";
+            // 
+            // lblMicVal
+            // 
+            resources.ApplyResources(this.lblMicVal, "lblMicVal");
+            this.lblMicVal.ForeColor = System.Drawing.Color.White;
+            this.lblMicVal.Name = "lblMicVal";
+            // 
+            // ptbMic
+            // 
+            resources.ApplyResources(this.ptbMic, "ptbMic");
+            this.ptbMic.GreenThumb = false;
+            this.ptbMic.HeadImage = null;
+            this.ptbMic.LargeChange = 1;
+            this.ptbMic.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbMic.LimitEnabled = false;
+            this.ptbMic.LimitValue = 0;
+            this.ptbMic.Maximum = 70;
+            this.ptbMic.Minimum = -96;
+            this.ptbMic.Name = "ptbMic";
+            this.ptbMic.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbMic.SmallChange = 1;
+            this.ptbMic.TabStop = false;
+            this.ptbMic.Value = 6;
+            this.ptbMic.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbMic_Scroll);
+            // 
+            // lblMIC
+            // 
+            resources.ApplyResources(this.lblMIC, "lblMIC");
+            this.lblMIC.ForeColor = System.Drawing.Color.White;
+            this.lblMIC.Name = "lblMIC";
+            // 
+            // lblTransmitProfile
+            // 
+            resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
+            this.lblTransmitProfile.ForeColor = System.Drawing.Color.White;
+            this.lblTransmitProfile.Name = "lblTransmitProfile";
             // 
             // panelButtonBar
             // 
@@ -6043,14 +6233,14 @@
             // 
             // lblCWBreakInDelay
             // 
-            this.lblCWBreakInDelay.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblCWBreakInDelay, "lblCWBreakInDelay");
+            this.lblCWBreakInDelay.ForeColor = System.Drawing.Color.White;
             this.lblCWBreakInDelay.Name = "lblCWBreakInDelay";
             // 
             // lblCWPitchFreq
             // 
-            this.lblCWPitchFreq.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblCWPitchFreq, "lblCWPitchFreq");
+            this.lblCWPitchFreq.ForeColor = System.Drawing.Color.White;
             this.lblCWPitchFreq.Name = "lblCWPitchFreq";
             // 
             // panelRX2Filter
@@ -6206,8 +6396,8 @@
             // 
             // lblRX2Vol
             // 
-            this.lblRX2Vol.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.lblRX2Vol, "lblRX2Vol");
+            this.lblRX2Vol.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.lblRX2Vol.Name = "lblRX2Vol";
             // 
             // panelMultiRX
@@ -6392,198 +6582,17 @@
             resources.ApplyResources(this.lblPWR2, "lblPWR2");
             this.lblPWR2.Name = "lblPWR2";
             // 
-            // panelModeSpecificPhone
-            // 
-            resources.ApplyResources(this.panelModeSpecificPhone, "panelModeSpecificPhone");
-            this.panelModeSpecificPhone.BackColor = System.Drawing.Color.Transparent;
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS2);
-            this.panelModeSpecificPhone.Controls.Add(this.lblPAProfile);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS4);
-            this.panelModeSpecificPhone.Controls.Add(this.labelTS3);
-            this.panelModeSpecificPhone.Controls.Add(this.udTXFilterLow);
-            this.panelModeSpecificPhone.Controls.Add(this.udTXFilterHigh);
-            this.panelModeSpecificPhone.Controls.Add(this.chkMicMute);
-            this.panelModeSpecificPhone.Controls.Add(this.picNoiseGate);
-            this.panelModeSpecificPhone.Controls.Add(this.lblNoiseGateVal);
-            this.panelModeSpecificPhone.Controls.Add(this.ptbNoiseGate);
-            this.panelModeSpecificPhone.Controls.Add(this.picVOX);
-            this.panelModeSpecificPhone.Controls.Add(this.ptbVOX);
-            this.panelModeSpecificPhone.Controls.Add(this.lblVOXVal);
-            this.panelModeSpecificPhone.Controls.Add(this.ptbCPDR);
-            this.panelModeSpecificPhone.Controls.Add(this.lblCPDRVal);
-            this.panelModeSpecificPhone.Controls.Add(this.lblMicVal);
-            this.panelModeSpecificPhone.Controls.Add(this.ptbMic);
-            this.panelModeSpecificPhone.Controls.Add(this.lblMIC);
-            this.panelModeSpecificPhone.Controls.Add(this.chkShowTXFilter);
-            this.panelModeSpecificPhone.Controls.Add(this.lblTransmitProfile);
-            this.panelModeSpecificPhone.Controls.Add(this.chkTXEQ);
-            this.panelModeSpecificPhone.Controls.Add(this.comboTXProfile);
-            this.panelModeSpecificPhone.Controls.Add(this.chkRXEQ);
-            this.panelModeSpecificPhone.Controls.Add(this.chkCPDR);
-            this.panelModeSpecificPhone.Controls.Add(this.chkVOX);
-            this.panelModeSpecificPhone.Controls.Add(this.chkNoiseGate);
-            this.panelModeSpecificPhone.Controls.Add(this.comboAMTXProfile);
-            this.panelModeSpecificPhone.Name = "panelModeSpecificPhone";
-            // 
-            // labelTS2
-            // 
-            resources.ApplyResources(this.labelTS2, "labelTS2");
-            this.labelTS2.ForeColor = System.Drawing.Color.White;
-            this.labelTS2.Name = "labelTS2";
-            // 
-            // lblPAProfile
-            // 
-            resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
-            this.lblPAProfile.ForeColor = System.Drawing.Color.White;
-            this.lblPAProfile.Name = "lblPAProfile";
-            // 
-            // labelTS4
-            // 
-            resources.ApplyResources(this.labelTS4, "labelTS4");
-            this.labelTS4.ForeColor = System.Drawing.Color.White;
-            this.labelTS4.Name = "labelTS4";
-            // 
-            // labelTS3
-            // 
-            resources.ApplyResources(this.labelTS3, "labelTS3");
-            this.labelTS3.ForeColor = System.Drawing.Color.White;
-            this.labelTS3.Name = "labelTS3";
-            // 
-            // picNoiseGate
-            // 
-            this.picNoiseGate.BackColor = System.Drawing.SystemColors.ControlText;
-            resources.ApplyResources(this.picNoiseGate, "picNoiseGate");
-            this.picNoiseGate.Name = "picNoiseGate";
-            this.picNoiseGate.TabStop = false;
-            this.picNoiseGate.Paint += new System.Windows.Forms.PaintEventHandler(this.picNoiseGate_Paint);
-            // 
-            // lblNoiseGateVal
-            // 
-            resources.ApplyResources(this.lblNoiseGateVal, "lblNoiseGateVal");
-            this.lblNoiseGateVal.ForeColor = System.Drawing.Color.White;
-            this.lblNoiseGateVal.Name = "lblNoiseGateVal";
-            // 
-            // ptbNoiseGate
-            // 
-            resources.ApplyResources(this.ptbNoiseGate, "ptbNoiseGate");
-            this.ptbNoiseGate.GreenThumb = false;
-            this.ptbNoiseGate.HeadImage = null;
-            this.ptbNoiseGate.LargeChange = 1;
-            this.ptbNoiseGate.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbNoiseGate.LimitEnabled = false;
-            this.ptbNoiseGate.LimitValue = 0;
-            this.ptbNoiseGate.Maximum = 0;
-            this.ptbNoiseGate.Minimum = -160;
-            this.ptbNoiseGate.Name = "ptbNoiseGate";
-            this.ptbNoiseGate.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbNoiseGate.SmallChange = 1;
-            this.ptbNoiseGate.TabStop = false;
-            this.ptbNoiseGate.Value = -40;
-            this.ptbNoiseGate.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbNoiseGate_Scroll);
-            // 
-            // picVOX
-            // 
-            this.picVOX.BackColor = System.Drawing.SystemColors.ControlText;
-            resources.ApplyResources(this.picVOX, "picVOX");
-            this.picVOX.Name = "picVOX";
-            this.picVOX.TabStop = false;
-            this.picVOX.Paint += new System.Windows.Forms.PaintEventHandler(this.picVOX_Paint);
-            // 
-            // ptbVOX
-            // 
-            resources.ApplyResources(this.ptbVOX, "ptbVOX");
-            this.ptbVOX.GreenThumb = false;
-            this.ptbVOX.HeadImage = null;
-            this.ptbVOX.LargeChange = 1;
-            this.ptbVOX.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbVOX.LimitEnabled = false;
-            this.ptbVOX.LimitValue = 0;
-            this.ptbVOX.Maximum = 0;
-            this.ptbVOX.Minimum = -80;
-            this.ptbVOX.Name = "ptbVOX";
-            this.ptbVOX.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbVOX.SmallChange = 1;
-            this.ptbVOX.TabStop = false;
-            this.ptbVOX.Value = -20;
-            this.ptbVOX.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbVOX_Scroll);
-            // 
-            // lblVOXVal
-            // 
-            resources.ApplyResources(this.lblVOXVal, "lblVOXVal");
-            this.lblVOXVal.ForeColor = System.Drawing.Color.White;
-            this.lblVOXVal.Name = "lblVOXVal";
-            // 
-            // ptbCPDR
-            // 
-            resources.ApplyResources(this.ptbCPDR, "ptbCPDR");
-            this.ptbCPDR.GreenThumb = false;
-            this.ptbCPDR.HeadImage = null;
-            this.ptbCPDR.LargeChange = 1;
-            this.ptbCPDR.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbCPDR.LimitEnabled = false;
-            this.ptbCPDR.LimitValue = 0;
-            this.ptbCPDR.Maximum = 20;
-            this.ptbCPDR.Minimum = 0;
-            this.ptbCPDR.Name = "ptbCPDR";
-            this.ptbCPDR.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbCPDR.SmallChange = 1;
-            this.ptbCPDR.TabStop = false;
-            this.ptbCPDR.Value = 1;
-            this.ptbCPDR.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCPDR_Scroll);
-            // 
-            // lblCPDRVal
-            // 
-            resources.ApplyResources(this.lblCPDRVal, "lblCPDRVal");
-            this.lblCPDRVal.ForeColor = System.Drawing.Color.White;
-            this.lblCPDRVal.Name = "lblCPDRVal";
-            // 
-            // lblMicVal
-            // 
-            resources.ApplyResources(this.lblMicVal, "lblMicVal");
-            this.lblMicVal.ForeColor = System.Drawing.Color.White;
-            this.lblMicVal.Name = "lblMicVal";
-            // 
-            // ptbMic
-            // 
-            resources.ApplyResources(this.ptbMic, "ptbMic");
-            this.ptbMic.GreenThumb = false;
-            this.ptbMic.HeadImage = null;
-            this.ptbMic.LargeChange = 1;
-            this.ptbMic.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbMic.LimitEnabled = false;
-            this.ptbMic.LimitValue = 0;
-            this.ptbMic.Maximum = 70;
-            this.ptbMic.Minimum = -96;
-            this.ptbMic.Name = "ptbMic";
-            this.ptbMic.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbMic.SmallChange = 1;
-            this.ptbMic.TabStop = false;
-            this.ptbMic.Value = 6;
-            this.ptbMic.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbMic_Scroll);
-            // 
-            // lblMIC
-            // 
-            resources.ApplyResources(this.lblMIC, "lblMIC");
-            this.lblMIC.ForeColor = System.Drawing.Color.White;
-            this.lblMIC.Name = "lblMIC";
-            // 
-            // lblTransmitProfile
-            // 
-            this.lblTransmitProfile.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblTransmitProfile, "lblTransmitProfile");
-            this.lblTransmitProfile.Name = "lblTransmitProfile";
-            // 
             // panelModeSpecificDigital
             // 
             resources.ApplyResources(this.panelModeSpecificDigital, "panelModeSpecificDigital");
             this.panelModeSpecificDigital.BackColor = System.Drawing.Color.Transparent;
             this.panelModeSpecificDigital.Controls.Add(this.lblVACTXIndicator);
+            this.panelModeSpecificDigital.Controls.Add(this.lblDigTXProfile);
             this.panelModeSpecificDigital.Controls.Add(this.lblVACRXIndicator);
             this.panelModeSpecificDigital.Controls.Add(this.ptbVACTXGain);
             this.panelModeSpecificDigital.Controls.Add(this.comboDigTXProfile);
             this.panelModeSpecificDigital.Controls.Add(this.ptbVACRXGain);
             this.panelModeSpecificDigital.Controls.Add(this.radRX1Show);
-            this.panelModeSpecificDigital.Controls.Add(this.lblDigTXProfile);
             this.panelModeSpecificDigital.Controls.Add(this.lblRXGain);
             this.panelModeSpecificDigital.Controls.Add(this.radRX2Show);
             this.panelModeSpecificDigital.Controls.Add(this.grpVACStereo);
@@ -6598,17 +6607,17 @@
             resources.ApplyResources(this.lblVACTXIndicator, "lblVACTXIndicator");
             this.lblVACTXIndicator.Name = "lblVACTXIndicator";
             // 
-            // lblVACRXIndicator
-            // 
-            this.lblVACRXIndicator.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblVACRXIndicator, "lblVACRXIndicator");
-            this.lblVACRXIndicator.Name = "lblVACRXIndicator";
-            // 
             // lblDigTXProfile
             // 
             this.lblDigTXProfile.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblDigTXProfile, "lblDigTXProfile");
             this.lblDigTXProfile.Name = "lblDigTXProfile";
+            // 
+            // lblVACRXIndicator
+            // 
+            this.lblVACRXIndicator.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblVACRXIndicator, "lblVACRXIndicator");
+            this.lblVACRXIndicator.Name = "lblVACRXIndicator";
             // 
             // lblRXGain
             // 
@@ -7322,14 +7331,14 @@
             // labelTS7
             // 
             this.labelTS7.BackColor = System.Drawing.Color.Transparent;
-            this.labelTS7.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.labelTS7, "labelTS7");
+            this.labelTS7.ForeColor = System.Drawing.Color.White;
             this.labelTS7.Name = "labelTS7";
             // 
             // lblFMOffset
             // 
-            this.lblFMOffset.BackColor = System.Drawing.Color.Transparent;
             resources.ApplyResources(this.lblFMOffset, "lblFMOffset");
+            this.lblFMOffset.BackColor = System.Drawing.Color.Transparent;
             this.lblFMOffset.ForeColor = System.Drawing.Color.White;
             this.lblFMOffset.Name = "lblFMOffset";
             // 
@@ -7345,8 +7354,8 @@
             this.comboFMMemory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
             this.comboFMMemory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboFMMemory.DropDownWidth = 96;
-            this.comboFMMemory.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             resources.ApplyResources(this.comboFMMemory, "comboFMMemory");
+            this.comboFMMemory.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.comboFMMemory.Name = "comboFMMemory";
             this.comboFMMemory.SelectedIndexChanged += new System.EventHandler(this.comboFMMemory_SelectedIndexChanged);
             // 
@@ -7447,6 +7456,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.Controls.Add(this.chkMNU);
+            this.Controls.Add(this.lblPAProfile);
             this.Controls.Add(this.nudPwrTemp2);
             this.Controls.Add(this.nudPwrTemp);
             this.Controls.Add(this.statusStripMain);
@@ -7505,6 +7515,7 @@
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Console";
+            this.Opacity = 0D;
             this.Activated += new System.EventHandler(this.Console_Activated);
             this.Closing += new System.ComponentModel.CancelEventHandler(this.Console_Closing);
             this.Deactivate += new System.EventHandler(this.Console_Deactivate);
@@ -7538,6 +7549,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).EndInit();
             this.panelRX2DSP.ResumeLayout(false);
             this.panelOptions.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).EndInit();
@@ -7566,9 +7579,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).EndInit();
+            this.panelModeSpecificPhone.ResumeLayout(false);
+            this.panelModeSpecificPhone.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbNoiseGate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picVOX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbVOX)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCPDR)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbMic)).EndInit();
             this.panelButtonBar.ResumeLayout(false);
             this.panelVFOLabels.ResumeLayout(false);
             this.panelVFOALabels.ResumeLayout(false);
@@ -7578,8 +7597,10 @@
             this.panelRX2Power.ResumeLayout(false);
             this.panelPower.ResumeLayout(false);
             this.panelModeSpecificCW.ResumeLayout(false);
+            this.panelModeSpecificCW.PerformLayout();
             this.grpCWAPF.ResumeLayout(false);
             this.grpSemiBreakIn.ResumeLayout(false);
+            this.grpSemiBreakIn.PerformLayout();
             this.panelRX2Filter.ResumeLayout(false);
             this.panelRX2Mode.ResumeLayout(false);
             this.panelRX2Display.ResumeLayout(false);
@@ -7589,14 +7610,6 @@
             this.panelDSP.ResumeLayout(false);
             this.panelVFO.ResumeLayout(false);
             this.panelSoundControls.ResumeLayout(false);
-            this.panelModeSpecificPhone.ResumeLayout(false);
-            this.panelModeSpecificPhone.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbNoiseGate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picVOX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbVOX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCPDR)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbMic)).EndInit();
             this.panelModeSpecificDigital.ResumeLayout(false);
             this.panelModeSpecificDigital.PerformLayout();
             this.grpVACStereo.ResumeLayout(false);
@@ -7618,6 +7631,7 @@
             this.panelBandVHF.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbSquelch)).EndInit();
             this.panelModeSpecificFM.ResumeLayout(false);
+            this.panelModeSpecificFM.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFMMic)).EndInit();
             this.panelBandGEN.ResumeLayout(false);
             this.panelMeterLabels.ResumeLayout(false);
@@ -7681,11 +7695,11 @@
         private LabelTS lblVFOSplit;
         private LabelTS lblStepValue;
         private LabelTS lblStep;
-        public PanelTS panelMeterLabels;
+        private PanelTS panelMeterLabels;
         private LabelTS lblRXMeter;
         public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
         public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
-        public GroupBoxTS grpMultimeterMenus;
+        private GroupBoxTS grpMultimeterMenus;
         private ToolStripMenuItem BPFToolStripMenuItem;
         private ToolStripMenuItem BPF1ToolStripMenuItem;
         private ToolStripMenuItem BPF2ToolStripMenuItem;
@@ -7757,10 +7771,10 @@
         private PrettyTrackBar ptbTune;
         private LabelTS lblTune;
         private LabelTS lblPAProfile;
-        private LabelTS labelTS2;
         private NumericUpDownTS nudPwrTemp;
         private NumericUpDownTS nudPwrTemp2;
         private ToolStripStatusLabel toolStripStatusLabel_TXInhibit;
+        private ToolStripMenuItem finderMenuItem;
         private CheckBoxTS chkMNU;
     }
 }

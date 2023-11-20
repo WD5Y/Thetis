@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Thetis
 {
-    public partial class Console
+    public partial class Console : Form
     {
         // G8NJJ: handlers for ARIES ATU
         #region ARIES ATU functions
@@ -711,11 +711,11 @@ namespace Thetis
             if (rx1_xvtr_index >= 0)
             {
                 Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-                Alex.getAlex().UpdateAlexAntSelection(lo_band, mox, alex_ant_ctrl_enabled, true);
+                Alex.getAlex().UpdateAlexAntSelection(lo_band, _mox, alex_ant_ctrl_enabled, true);
             }
             else
             {
-                Alex.getAlex().UpdateAlexAntSelection(RX1Band, mox, alex_ant_ctrl_enabled, false);
+                Alex.getAlex().UpdateAlexAntSelection(RX1Band, _mox, alex_ant_ctrl_enabled, false);
             }
         }
 
@@ -3419,7 +3419,19 @@ namespace Thetis
             }
             UpdateButtonBarButtons();                               // re-check texts
         }
-
+        public void UpdateAndromedaSkins()
+        {
+            if (modePopupForm != null && modePopupForm.Visible)
+                Skin.Restore(CurrentSkin, AppDataPath, modePopupForm);
+            if (filterPopupForm != null && filterPopupForm.Visible)
+                Skin.Restore(CurrentSkin, AppDataPath, filterPopupForm);
+            if (bandPopupForm != null && bandPopupForm.Visible)
+                Skin.Restore(CurrentSkin, AppDataPath, bandPopupForm);
+            if (sliderForm != null && sliderForm.Visible)
+                Skin.Restore(CurrentSkin, AppDataPath, sliderForm);
+            if (VFOSettingsForm != null && VFOSettingsForm.Visible)
+                Skin.Restore(CurrentSkin, AppDataPath, VFOSettingsForm);
+        }
         private void setupModePanels()
         {
             Invoke(new MethodInvoker(panelModeSpecificCW.Show));
@@ -3516,7 +3528,7 @@ namespace Thetis
             {
                 // MW0LGE [2.10.1.0]
                 // check if the panels have been moved by andromeda into the modeDependentSettingsForm
-                // they will be at 0,0 if they have
+                // they will be at 0,0 if they have by function setupModePanels()
                 if (panelModeSpecificPhone.Location.X == 0 && panelModeSpecificPhone.Location.Y == 0)
                 {
                     moveModeSpecificPanels();

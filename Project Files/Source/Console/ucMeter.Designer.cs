@@ -215,6 +215,7 @@
             this.Size = new System.Drawing.Size(400, 200);
             this.LocationChanged += new System.EventHandler(this.ucMeter_LocationChanged);
             this.SizeChanged += new System.EventHandler(this.ucMeter_SizeChanged);
+            this.MouseLeave += new System.EventHandler(this.ucMeter_MouseLeave);
             this.pnlBar.ResumeLayout(false);
             this.pnlBar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGrab)).EndInit();

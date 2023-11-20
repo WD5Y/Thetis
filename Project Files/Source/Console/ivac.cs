@@ -140,6 +140,15 @@
 
         [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACinitialVars", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetIVACinitialVars(int id, double INvar, double OUTvar);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACswapIQout", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetIVACswapIQout(int id, int swap);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACExclusiveOut", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetIVACExclusiveOut(int id, int exclusive_out);
+
+        [DllImport("ChannelMaster.dll", EntryPoint = "SetIVACExclusiveIn", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetIVACExclusiveIn(int id, int exclusive_in);
         //
         #endregion
 

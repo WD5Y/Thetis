@@ -59,7 +59,7 @@ namespace Thetis
         public static extern void SetAllRates(int channel, int in_rate, int dsp_rate, int out_rate);
 
         [DllImport("wdsp.dll", EntryPoint = "SetChannelState", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetChannelState(int channel, int state, int dmode);
+        public static extern int SetChannelState(int channel, int state, int dmode);
 
         [DllImport("wdsp.dll", EntryPoint = "SetChannelTDelayUp", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetChannelTDelayUp(int channel, double time);
@@ -72,6 +72,9 @@ namespace Thetis
 
         [DllImport("wdsp.dll", EntryPoint = "SetChannelTSlewDown", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetChannelTSlewDown(int channel, double time);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetTXAuSlewTime", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetTXAuSlewTime(int channel, double time);
 
         [DllImport("wdsp.dll", EntryPoint = "SetRXAMode", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAMode(int channel, DSPMode mode);
@@ -267,6 +270,12 @@ namespace Thetis
 
         [DllImport("wdsp.dll", EntryPoint = "SetRXAFMLimGain", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAFMLimGain(int channel, double gaindB);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAFMAFFilter", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAFMAFFilter(int channel, double low, double high);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetTXAFMAFFilter", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetTXAFMAFFilter(int channel, double low, double high);
 
         [DllImport("wdsp.dll", EntryPoint = "SetTXAFMDeviation", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetTXAFMDeviation(int channel, double deviation);
@@ -647,6 +656,9 @@ namespace Thetis
 
         [DllImport("wdsp.dll", EntryPoint = "SetTXAPHROTNstages", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetTXAPHROTNstages(int channel, int nstages);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetTXAPHROTReverse", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetTXAPHROTReverse(int channel, int reverse);
 
         // TXEQ
         [DllImport("wdsp.dll", EntryPoint = "SetTXAEQProfile", CallingConvention = CallingConvention.Cdecl)]

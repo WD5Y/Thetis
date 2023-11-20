@@ -350,8 +350,16 @@ namespace Thetis
 
                 if (mox)
                 {
-                    ivac.SetIVACmox(0, 1);
-                    ivac.SetIVACmox(1, 1);
+                    if (rx2_enabled && vfob_tx)  //[2.10.0.4]MW0LGE fix issue with no RX2 audio when tx'ing on rx1
+                    {
+                        ivac.SetIVACmox(0, 0);
+                        ivac.SetIVACmox(1, 1);
+                    }
+                    else
+                    {
+                        ivac.SetIVACmox(0, 1);
+                        ivac.SetIVACmox(1, 0);
+                    }
                 }
                 else
                 {
@@ -709,6 +717,18 @@ namespace Thetis
             {
                 block_size_rx2 = value;
                 SetOutCountRX2();
+            }
+        }
+
+        //[2.10.3.4]MW0LGE added
+        private static int block_size_tx = 1024;
+        public static int BlockSizeTX
+        {
+            get { return block_size_tx; }
+            set
+            {
+                block_size_tx = value;
+                SetOutCountTX();
             }
         }
 
@@ -1351,10 +1371,16 @@ namespace Thetis
 
         private static void SetOutCountTX()
         {
+            //if (out_rate_tx >= sample_rate_tx)
+            //    OutCountTX = block_size1 * (out_rate_tx / sample_rate_tx);
+            //else
+            //    OutCountTX = block_size1 / (sample_rate_tx / out_rate_tx);
+
+            //[2.10.3.4]MW0LGE changed to use tx block size
             if (out_rate_tx >= sample_rate_tx)
-                OutCountTX = block_size1 * (out_rate_tx / sample_rate_tx);
+                OutCountTX = block_size_tx * (out_rate_tx / sample_rate_tx);
             else
-                OutCountTX = block_size1 / (sample_rate_tx / out_rate_tx);
+                OutCountTX = block_size_tx / (sample_rate_tx / out_rate_tx);
         }
 
         private static int out_count = 1024;
@@ -1387,6 +1413,67 @@ namespace Thetis
             }
         }
 
+        private static int _swap_iq_vac1 = 0;
+        public static int VAC1SwapIQ
+        {
+            get { return _swap_iq_vac1; }
+            set
+            {
+                _swap_iq_vac1 = value;
+                ivac.SetIVACswapIQout(0, _swap_iq_vac1);
+            }
+        }
+        private static int _swap_iq_vac2 = 0;
+        public static int VAC2SwapIQ
+        {
+            get { return _swap_iq_vac2; }
+            set
+            {
+                _swap_iq_vac2 = value;
+                ivac.SetIVACswapIQout(1, _swap_iq_vac2);
+            }
+        }
+        private static int _exclusive_out_vac1 = 0;
+        public static int VAC1ExclusiveOut
+        {
+            get { return _exclusive_out_vac1; }
+            set
+            {
+                _exclusive_out_vac1 = value;
+                ivac.SetIVACExclusiveOut(0, _exclusive_out_vac1);
+            }
+        }
+        private static int _exclusive_out_vac2 = 0;
+        public static int VAC2ExclusiveOut
+        {
+            get { return _exclusive_out_vac2; }
+            set
+            {
+                _exclusive_out_vac2 = value;
+                ivac.SetIVACExclusiveOut(1, _exclusive_out_vac2);
+            }
+        }
+
+        private static int _exclusive_in_vac1 = 0;
+        public static int VAC1ExclusiveIn
+        {
+            get { return _exclusive_in_vac1; }
+            set
+            {
+                _exclusive_in_vac1 = value;
+                ivac.SetIVACExclusiveIn(0, _exclusive_in_vac1);
+            }
+        }
+        private static int _exclusive_in_vac2 = 0;
+        public static int VAC2ExclusiveIn
+        {
+            get { return _exclusive_in_vac2; }
+            set
+            {
+                _exclusive_in_vac2 = value;
+                ivac.SetIVACExclusiveIn(1, _exclusive_in_vac2);
+            }
+        }
         #endregion
 
         #region Callback Routines
@@ -1403,7 +1490,7 @@ namespace Thetis
                 PA19.PaHostApiInfo info = PA19.PA_GetHostApiInfo(i);
                 a.Add(info.name);
             }
-            a.Add("HPSDR (USB/UDP)");
+            //a.Add("HPSDR (USB/UDP)"); //[2.10.3.4]MW0LGE removed
             return a;
         }
 
@@ -1413,7 +1500,7 @@ namespace Thetis
 
             if (hostIndex >= PA19.PA_GetHostApiCount())
             {
-                a.Add(new PADeviceInfo("HPSDR (PCM A/D)", 0));
+                //a.Add(new PADeviceInfo("HPSDR (PCM A/D)", 0)); //[2.10.3.4]MW0LGE removed
                 return a;
             }
 
@@ -1422,6 +1509,7 @@ namespace Thetis
             {
                 int devIndex = PA19.PA_HostApiDeviceIndexToDeviceIndex(hostIndex, i);
                 PA19.PaDeviceInfo devInfo = PA19.PA_GetDeviceInfo(devIndex);
+                
                 if (devInfo.maxInputChannels > 0)
                 {
                     string name = devInfo.name;
@@ -1461,7 +1549,7 @@ namespace Thetis
 
             if (hostIndex >= PA19.PA_GetHostApiCount())
             {
-                a.Add(new PADeviceInfo("HPSDR (PWM D/A)", 0));
+                //a.Add(new PADeviceInfo("HPSDR (PWM D/A)", 0)); //[2.10.3.4]MW0LGE removed
                 return a;
             }
 
@@ -1642,6 +1730,7 @@ namespace Thetis
                     ivac.SetIVACFFRingMax(0, 1, vac1_ff_ringmaxIn);
                     ivac.SetIVACFFAlpha(0, 0, vac1_ff_alphaOut);
                     ivac.SetIVACFFAlpha(0, 1, vac1_ff_alphaIn);
+                    ivac.SetIVACswapIQout(0, _swap_iq_vac1);
                     //ivac.SetIVACvar(0, 0, vac1_oldVarOut);
                     //ivac.SetIVACvar(0, 1, vac1_oldVarIn);
                     ivac.SetIVACinitialVars(0, vac1_oldVarIn, vac1_oldVarOut);
@@ -1725,6 +1814,7 @@ namespace Thetis
                     ivac.SetIVACFFRingMax(1, 1, vac2_ff_ringmaxIn);
                     ivac.SetIVACFFAlpha(1, 0, vac2_ff_alphaOut);
                     ivac.SetIVACFFAlpha(1, 1, vac2_ff_alphaIn);
+                    ivac.SetIVACswapIQout(1, _swap_iq_vac2);
                     //ivac.SetIVACvar(1, 0, vac2_oldVarOut);
                     //ivac.SetIVACvar(1, 1, vac2_oldVarIn);
                     ivac.SetIVACinitialVars(1, vac2_oldVarIn, vac2_oldVarOut);

@@ -35,11 +35,9 @@ namespace Thetis
     class TitleBar
     {
         public const string BUILD_NAME = "WD5Y";
-        public const string BUILD_DATE = "(10/3/23)<FW>"; //MW0LGE_21g <FW> gets replaced in BasicTitle (console.cs) with firmware version
-
-        public static string GetString()
+        public static string GetString(bool bWithFirmware = true)
         {
-            string sRevision = "." + Common.GetRevision(); //MW0LGE_22b
+            string sRevision = "." + Common.GetRevision();
             if (sRevision == ".0") sRevision = "";
 
             string version = Common.GetVerNum() + sRevision;
@@ -48,8 +46,11 @@ namespace Thetis
             string sBits = Common.Is64Bit ? " x64" : " x86";
 
             s += " v" + version + sBits;
-            if (BUILD_DATE != "") s += " " + BUILD_DATE;
+            s += " (" + VersionInfo.BuildDate + ")<FW>";  //[2.10.2.2]MW0LGE use the auto generated class from pre build event for the BuildDate
+
             if (BUILD_NAME != "") s += " " + BUILD_NAME;
+
+            if (!bWithFirmware) s = s.Replace("<FW>", "");
 
             return s;
         }

@@ -56,6 +56,9 @@ namespace Midi2Cat.IO
         public event MidiInputEventHandler onMidiInput;
         public event DebugMsgEventHandler onMidiDebugMessage;
 
+        static public bool BuildIDFromControlIDAndChannel = false; //[2.10.3.4]MW0LGE
+        static public bool IncludeStatusInControlID = false; //[2.10.3.4]MW0LGE
+        static public bool Ignore14bitMessages = false; //[2.10.3.4]MW0LGE
         static public int VFOSelect;  //-W2PA for switching Behringer PL-1 main wheel between VFO A and B.  Used in inDevice_ChannelMessageReceived() below and in MidiDeviceSetup.cs
         public int latestControlID = 0;
         public int lastLED = 0;
@@ -341,7 +344,7 @@ namespace Midi2Cat.IO
                         if (Event == (int)MidiEvent.Note_Off)
                             data = 0x00;
 
-                       // Debug.WriteLine("wMsg=MIM_DATA, dwInstance={0}, dwParam1={1}, dwParam2={2}", dwInstance, dwParam1.ToString("X8"), dwParam2.ToString("X8"));
+                        // Debug.WriteLine("wMsg=MIM_DATA, dwInstance={0}, dwParam1={1}, dwParam2={2}", dwInstance, dwParam1.ToString("X8"), dwParam2.ToString("X8"));
 
                         //Debug.WriteLine("ControlId={0}, byte2={1}, status={2}, Event={3}, channel={4}", controlId.ToString("X2"), data.ToString("X2"), status.ToString("X2"), Event.ToString("X2"), channel.ToString("X2"));
 
@@ -607,18 +610,61 @@ namespace Midi2Cat.IO
 
         public void inDevice_ChannelMessageReceived(int ControlId, int Data, int Status, int Event, int Channel)
         {
+
+            if (!messageOk(ControlId, Status, Channel, out int controlIDmapped)) return; //[2.10.3.4]MW0LGE added filter
+
             if (onMidiInput != null) 
             {
                 try
                 {
-                    ControlId = FixBehringerCtlID(ControlId, Status); //-W2PA Disambiguate messages from Behringer controllers
+                    ControlId = FixBehringerCtlID(controlIDmapped, Status); //-W2PA Disambiguate messages from Behringer controllers
 
                     onMidiInput(this, DeviceIndex, ControlId, Data, Status, Event, Channel);
                 }
                 catch { }
             }
         }
+        private bool messageOk(int controlId, int status, int channel, out int controlIDmapped)
+        {
+            // return true if msg is ok
 
+            controlIDmapped = controlId;
+
+            //handy doc : https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
+            if (Ignore14bitMessages && controlId >= 32 && controlId <= 63) return false; //[2.10.3.4]MW0LGE ignore LSB Controller message for 0-31 until we code up 14 bit support
+
+            switch (DeviceName)
+            {
+                case "DJControl Starlight" :
+                    {
+                        // ignore the finger presses on the wheel surfaces as this causes a problem when adding as a wheel
+                        // two events will come in otherwise, and is virtually impossible to setup a vfo wheel
+                        if (controlId == 0x08 && (channel == 0x01 || channel == 0x02) && (status == 0x91 || status == 0x92)) return false;
+
+                        // scrap first message for the vinal button as two arrive
+                        if (controlId == 0x03 && channel == 0x01 && status == 0x91) return false;
+
+                        // controlID and the channel defines a button/control id with the starlight, fine to use 16 bits
+                        controlIDmapped = ((controlId & 0xFF) << 8) | (channel & 0xFF);
+
+                        break;
+                    }
+                default :
+                    {
+                        if (BuildIDFromControlIDAndChannel) // build a 16/24 bit ID from the controlID and the channel and status, as so many controlID's are duplicated for different buttons on some devices
+                        {
+                            if (IncludeStatusInControlID)
+                                controlIDmapped = ((controlId & 0xFF) << 16) | ((channel & 0xFF) << 8) | (status & 0xFF);
+                            else
+                                controlIDmapped = ((controlId & 0xFF) << 8) | (channel & 0xFF);
+                        }
+
+                        break;
+                    }
+            }
+
+            return true;
+        }
         private int FixBehringerCtlID(int ControlId, int Status) //-W2PA Test for DeviceName is a Behringer type, and disambiguate the messages if necessary
         {            
             if (DeviceName == "CMD PL-1")
@@ -687,6 +733,24 @@ namespace Midi2Cat.IO
 
         public ParsedMidiMessage ParseMsg(int inChannel, int inValue, int inStatus, int inControl, string inMsg)
         {
+            // undo controlID changes [2.10.3.4]MW0LGE
+            switch (DeviceName)
+            {
+                case "DJControl Starlight":
+                    inControl = (inControl >> 8) & 0xFF;
+                    break;
+                default:
+                    if (BuildIDFromControlIDAndChannel)
+                    {
+                        if (IncludeStatusInControlID)
+                            inControl = (inControl >> 16) & 0xFF;
+                        else
+                            inControl = (inControl >> 8) & 0xFF;
+                    }
+                    break;
+            }
+            //
+
             string msg = inMsg;
             ParsedMidiMessage Rc = new ParsedMidiMessage();
             if (msg.Length != 6)

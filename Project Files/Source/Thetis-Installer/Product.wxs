@@ -2,6 +2,7 @@
 <!-- Full version number to display -->
 <?define VersionNumber="!(bind.FileVersion.ThetisEXE)" ?>
 <?define NetFx480MinRelease = 528040 ?>
+<!-- <?define NetFx481MinRelease = 533320 ?> -->
 <?define DocumentationPath = "..\..\lib\Thetis-resources\" ?>
 <!-- 32-bit / 64-bit variables -->
 <?if $(var.Platform) = x64 ?>
@@ -12,6 +13,7 @@
 <?define VC143 = "Microsoft_VC143_CRT_x64.msm" ?>
 <?define PlatformProgramFilesFolder = "ProgramFiles64Folder" ?>
 <?define FilesPath = "..\..\Bin\$(var.Platform)\$(var.Configuration)\" ?>
+<?define SourcePath = "..\..\Source\" ?>
 <?else ?>
 <?define Win64 = "no" ?>
 <?define UpgradeCode = "CE4756C9-3CA7-4A55-8980-7F0A920890DE"?>
@@ -41,8 +43,11 @@
     <!-- Upgrade logic -->
     <!-- AllowSameVersionUpgrades -> Always upgrade, never allow two versions to be installed next to each other -->
     <!-- AllowSameVersionUpgrades causes ICE61 which must be ignored -->
-    <MajorUpgrade Schedule="afterInstallExecute" 
-                  DowngradeErrorMessage="!(loc.NewerInstalled)" 
+	<!-- [2.10.2] MW0LGE -->
+	<!-- afterInstallExecute changed to afterInstallValidate which removes any installed version before installing -->
+	<!-- downside is that if install fails you wont have old version either -->
+    <MajorUpgrade Schedule="afterInstallValidate" 
+                  DowngradeErrorMessage="!(loc.NewerInstalled)"
                   AllowSameVersionUpgrades="yes" />
     
     <MediaTemplate EmbedCab="yes" />
@@ -103,8 +108,8 @@
     <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
     <Property Id="WIX_IS_NETFRAMEWORK_480_OR_LATER_INSTALLED" Secure="yes" />
     <SetProperty Id="WIX_IS_NETFRAMEWORK_480_OR_LATER_INSTALLED" Value="1" After="AppSearch">
-      WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx480MinRelease)"
-    </SetProperty>
+		WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx480MinRelease)"
+	</SetProperty>
   </Fragment>
 
   <Fragment>
@@ -192,7 +197,7 @@
          Target="[INSTALLFOLDER]Thetis-CAT-Command-Reference-Guide-V3.pdf"
          WorkingDirectory="INSTALLFOLDER" />
 
-      </Component>
+	  </Component>
     </DirectoryRef>
        
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
@@ -202,15 +207,16 @@
         <File Id="ThetisEXE"
               Source="$(var.FilesPath)Thetis.exe"
               KeyPath="yes">
-          <fire:FirewallException Id="thetis_$(var.Platform)_tcp"
+
+			<fire:FirewallException Id="thetis_$(var.Platform)_tcp"
                       Name="$(var.ThetisName) (TCP In)"
                       Description="TCP In-bound Firewall rule for OpenHPSDR SDRs running Thetis"
                       Protocol="tcp"
                       Scope="any"
                       IgnoreFailure="no"
-                      Profile="all" /> 
-        
-          <fire:FirewallException Id="thetis_$(var.Platform)_udp"
+                      Profile="all" />
+			
+			<fire:FirewallException Id="thetis_$(var.Platform)_udp"
                       Name="$(var.ThetisName) (UDP In)"
                       Description="UDP In-bound Firewall rule for OpenHPSDR SDRs running Thetis"
                       Protocol="udp"
@@ -282,14 +288,34 @@
               KeyPath="yes"
               />
       </Component>
-
-      <Component Guid="*">
+		<Component Guid="*">
         <File Id="SharpDX.DesktopDLL"
               Source="$(var.FilesPath)SharpDX.Desktop.dll"
               KeyPath="yes"
               />
       </Component>
 
+		<Component Guid="*">
+			<File Id="Newtonsoft.JsonDLL"
+				  Source="$(var.FilesPath)Newtonsoft.Json.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+
+		<Component Guid="*">
+			<File Id="MarkdigDLL"
+				  Source="$(var.FilesPath)Markdig.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+
+		<Component Guid="*">
+			<File Id="System.MemoryDLL"
+				  Source="$(var.FilesPath)System.Memory.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		
       <Component Guid="*">
         <File Id="SharpDX.Direct2D1DLL"
               Source="$(var.FilesPath)SharpDX.Direct2D1.dll"
@@ -332,6 +358,12 @@
             KeyPath="yes"
               />
       </Component>
+	  <Component Guid="*">
+        <File Id="DotNetZipDLL"
+            Source="$(var.FilesPath)DotNetZip.dll"
+            KeyPath="yes"
+              />
+      </Component>
       <Component Guid="*">
         <File Id="PureSignalPDF"
               Source="$(var.DocumentationPath)PureSignal.pdf"
@@ -365,7 +397,13 @@
               Source="$(var.DocumentationPath)Thetis-CAT-Command-Reference-Guide-V3.pdf"
               KeyPath="yes"
               />
-      </Component>
+	  </Component>
+		<Component Guid="*">
+			<File Id="ThetisReleaseNotesTXT"
+				Source="$(var.SourcePath)ReleaseNotes.txt"
+				KeyPath="yes"
+            />			  
+		  </Component>
     </ComponentGroup>
 
     <Binary Id="InstallSkins" SourceFile="OpenHPSDR_Skins.exe" />

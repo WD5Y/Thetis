@@ -77,8 +77,8 @@ namespace Thetis
 
         private static eCMDState _cmdstate = eCMDState.OFF;
         private static bool _topmost = false;
-
-        private Thread _ps_thread;
+        
+        private Thread _ps_thread = null;
         #endregion
 
         #region properties
@@ -111,7 +111,7 @@ namespace Thetis
         }
 
         private bool _bPSRunning = false;
-        private async void PSLoop()
+        private void PSLoop()
         {
             int nCount = 0;
 
@@ -131,16 +131,17 @@ namespace Thetis
                         nCount = 0;
                     }
 
-                    await Task.Delay(10);
+                    Thread.Sleep(10);
                 }
                 else
                 {
-                    await Task.Delay(200);
+                    nCount = 0;
+                    Thread.Sleep(50);
                 }
             }
         }
 
-        public bool _dismissAmpv = false;
+        private bool _dismissAmpv = false;
         public bool DismissAmpv
         {
             get { return _dismissAmpv; }
@@ -343,6 +344,22 @@ namespace Thetis
 
         private void PSForm_Closing(object sender, FormClosingEventArgs e)
         {
+            //[2.10.3.4]]MW0LGE leave it there until thetis closes
+            //if (ampv != null)
+            //{
+            //    _dismissAmpv = true;
+            //    ampvThread.Join();
+            //    ampv.Close();
+            //    ampv = null;
+            //}
+            //_advancedON = true;//MW0LGE_[2.9.0.7]
+            //btnPSAdvanced_Click(this, e); //MW0LGE_[2.9.0.7]
+            this.Hide();
+            e.Cancel = true;
+            Common.SaveForm(this, "PureSignal");
+        }
+        public void CloseAmpView()
+        {
             if (ampv != null)
             {
                 _dismissAmpv = true;
@@ -350,17 +367,12 @@ namespace Thetis
                 ampv.Close();
                 ampv = null;
             }
-            //_advancedON = true;//MW0LGE_[2.9.0.7]
-            //btnPSAdvanced_Click(this, e); //MW0LGE_[2.9.0.7]
-            this.Hide();
-            e.Cancel = true;
-            Common.SaveForm(this, "PureSignal");
         }
-
         public void RunAmpv()
         {
             ampv = new AmpView(this);
-            Application.Run(ampv);
+            ampv.Opacity = 0;
+            Application.Run(ampv);            
         }
 
         private void btnPSAmpView_Click(object sender, EventArgs e)
@@ -478,6 +490,8 @@ namespace Thetis
 
         private void timer1code()
         {
+            if (!_bPSRunning) return;
+
             puresignal.GetInfo(_txachannel);
 
             if (puresignal.HasInfoChanged)
@@ -544,13 +558,11 @@ namespace Thetis
                     console.InfoBarFeedbackLevel(puresignal.FeedbackLevel, puresignal.IsFeedbackLevelOK, puresignal.CorrectionsBeingApplied, puresignal.CalibrationAttemptsChanged, puresignal.FeedbackColourLevel);
             }
             //
-
             unsafe
             {
                 fixed (double* ptr = &_GetPSpeakval)
                     puresignal.GetPSMaxTX(_txachannel, ptr);
             }
-
             string s = _GetPSpeakval.ToString();
             if (GetPSpeak.Text != s) GetPSpeak.Text = s;
 
@@ -614,7 +626,7 @@ namespace Thetis
                         _cmdstate = eCMDState.TurnOnSingleCalibrate;// 3;
                     break;
                 case eCMDState.TurnOFF://6:     // Turn-OFF
-                    //autoON = false;
+                    //_autoON = false;
                     if(!_autocal_enabled) _autoON = false; // only want to turn this off if autocal is off MW0LGE_21k9rc4
                     puresignal.SetPSControl(_txachannel, 1, 0, 0, 0);
                     if (!PSEnabled) PSEnabled = true;
@@ -642,7 +654,8 @@ namespace Thetis
         }
         private void timer2code()
         {
-            //if (autoattenuate && !console.ATTOnTX) console.ATTOnTX = true;//MW0LGE moved into 0 state
+            if (!_bPSRunning) return;
+
             switch (_autoAttenuateState)
             {
                 case eAAState.Monitor:// 0: // monitor
@@ -684,6 +697,7 @@ namespace Thetis
                     if (console.SetupForm.ATTOnTX != newAtten)
                     {
                         console.SetupForm.ATTOnTX = newAtten;
+
                         // give some additional time for the network msg to get to the radio before switching back on MW0LGE_21k9d5
                         if(m_bQuckAttenuate) Thread.Sleep(100);
                     }
@@ -812,6 +826,19 @@ namespace Thetis
             this.TopMost = _topmost; //MW0LGE
         }
 
+        public void HandleStartup()
+        {
+            if (chkShowOnStartup.Checked)
+            {
+                this.Opacity = 0f;
+                this.SetupForm();
+                this.Show();
+                Common.FadeIn(this);                
+            }
+
+            if (chkShowAmpViewOnStartup.Checked)
+                btnPSAmpView_Click(this, EventArgs.Empty);
+        }
         #endregion
 
         #region methods
@@ -858,28 +885,6 @@ namespace Thetis
         {
             SetDefaultPeaks();
         }
-        //wd5y
-        private void chkAmpV_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkAmpV.Checked == true)
-            {
-                if (ampv == null || (ampv != null && ampv.IsDisposed))
-                {
-                    _dismissAmpv = false;
-                    ampvThread = new Thread(RunAmpv);
-                    ampvThread.SetApartmentState(ApartmentState.STA);
-                    ampvThread.Name = "Ampv Thread";
-                    ampvThread.Start();
-                    console.Focus();
-                }
-            }
-            if (chkAmpV.Checked == false)
-            {
-                _dismissAmpv = true;
-                console.Focus();
-            }
-        }
-        //wd5y
     }
 
     unsafe static class puresignal

@@ -115,7 +115,6 @@ struct EscribeEstructura EscribeCosas;
 
 void EscribeLoTodo (void* arg)
 {
-
 	for (int i = 0; i < EscribeCosas.nddcs; i++)
 	{
 		char num[1];

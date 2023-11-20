@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Thetis
 {
@@ -475,6 +476,10 @@ namespace Thetis
         //    public int[] flip;
         //}
 
+        public void resetPixelBuffers()
+        {
+            SpecHPSDRDLL.ResetPixelBuffers(disp);
+        }
         public void initAnalyzer()
         {
             //no spur elimination => only one spur_elim_fft and it's spectrum is not flipped
@@ -716,6 +721,9 @@ namespace Thetis
         // public static extern void XCreateAnalyzer(int disp, ref int success, int m_size, int m_LO, int m_stitch);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ResetPixelBuffers(int disp);
+
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroyAnalyzer(int disp);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -732,6 +740,9 @@ namespace Thetis
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SnapSpectrum(int disp, int ss, int LO, double* snap_buff);
+
+        [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SnapSpectrumTimeout(int disp, int ss, int LO, double* snap_buff, uint timeout, ref int flag);
 
         [DllImport("WDSP.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetDisplayDetectorMode (int disp, int pixout, int mode);

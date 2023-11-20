@@ -1243,7 +1243,6 @@ DWORD WINAPI ReadThreadMain(LPVOID n) {
 }
 
 DWORD WINAPI KeepAliveMain(LPVOID n) {
-
 	KeepAliveLoop();
 
 	return 0;
