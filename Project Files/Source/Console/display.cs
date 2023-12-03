@@ -840,7 +840,14 @@ namespace Thetis
                     }
 
 #if SNOWFALL
-                    if(_snowFall) _snow.Clear();
+                    if (_snowFall)
+                    {
+                        lock (_snowLock)
+                        {
+                            _snow.Clear();
+                            _showSanta = false;
+                        }
+                    }
 #endif
                 }
             }
@@ -1934,6 +1941,19 @@ namespace Thetis
                 }
             }
         }
+        private static Color noisefloor_color_text = Color.Yellow;
+        public static Color NoiseFloorColorText
+        {
+            get { return noisefloor_color_text; }
+            set
+            {
+                lock (_objDX2Lock)
+                {
+                    noisefloor_color_text = value;
+                    buildDX2Resources();
+                }
+            }
+        }
         private static float m_fWaterfallAGCOffsetRX1 = 0.0f;
         private static float m_fWaterfallAGCOffsetRX2 = 0.0f;
         public static float WaterfallAGCOffsetRX1
@@ -2750,6 +2770,10 @@ namespace Thetis
 
                     if (_bitmapBackground != null)
                         Utilities.Dispose(ref _bitmapBackground);
+
+#if SNOWFALL
+                    santaCleanUp();
+#endif
 
                     Utilities.Dispose(ref _waterfall_bmp_dx2d);
                     Utilities.Dispose(ref _waterfall_bmp2_dx2d);
@@ -3984,7 +4008,8 @@ namespace Thetis
             float fAttenuation = 100f;
             int width = High - Low;
 
-            List<clsNotchCoords> notchData = handleNotches(rx, bottom, getCWSideToneShift(rx), Low, High, 0, 0, width, W, 0, false);//, 50);
+            // get the notch data
+            List<clsNotchCoords> notchData = handleNotches(rx, bottom, getCWSideToneShift(rx), Low, High, 0, 0, width, W, 0, false);
 
             int nDecimatedWidth = W / m_nDecimation;
 
@@ -3994,26 +4019,26 @@ namespace Thetis
 
                 // do left
                 int wL = nc._c_x - nc._left_x;
-                //wL *= 3;
+                wL = Math.Max(1, wL);
                 for (int i = nc._c_x; i > nc._c_x - wL; i--)
                 {
                     int xPos = i / m_nDecimation;
                     if (xPos < 0 || xPos > nDecimatedWidth - 1) continue;
 
-                    int x = nc._c_x - i + 1; // +1 to fix /0
+                    int x = nc._c_x - i;
 
                     float fTmp = 1f / ((float)Math.Pow((double)wL / (double)(wL - x), 1.5)); // pow2 quite sharp
                     data[xPos] -= (fAttenuation * fTmp);
                 }
                 // do right
                 int wR = nc._right_x - nc._c_x;
-                //wR *= 3;
+                wR = Math.Max(1, wR);
                 for (int i = nc._c_x; i < nc._c_x + wR; i++)
                 {
                     int xPos = i / m_nDecimation;
                     if (xPos < 0 || xPos > nDecimatedWidth - 1) continue;
 
-                    int x = i - nc._c_x + 1; // +1 to fix /0
+                    int x = i - nc._c_x;
 
                     float fTmp = 1f / ((float)Math.Pow((double)wR / (double)(wR - x), 1.5)); // pow2 quite sharp
                     data[xPos] -= (fAttenuation * fTmp);
@@ -4541,6 +4566,7 @@ namespace Thetis
                             yPixelActual += nVerticalShift;
 
                             SharpDX.Direct2D1.Brush nf_colour = bFast ? m_bDX2_Gray : m_bDX2_noisefloor;
+                            SharpDX.Direct2D1.Brush nf_colour_text = bFast ? m_bDX2_Gray : m_bDX2_noisefloor_text;
 
                             int yP = (int)yPixelLerp;
 
@@ -4551,11 +4577,11 @@ namespace Thetis
                             if (m_bShowNoiseFloorDBM)
                             {
                                 drawLineDX2D(nf_colour, nf_box.X - 3, (int)yPixelActual, nf_box.X - 3, yP, 2); // direction up/down line
-                                drawStringDX2D(lerp.ToString(_NFDecimal ? "F1" : "F0"), fontDX2d_font9b, nf_colour, nf_box.X + nf_box.Width, nf_box.Y - 6);
+                                drawStringDX2D(lerp.ToString(_NFDecimal ? "F1" : "F0"), fontDX2d_font9b, nf_colour_text, nf_box.X + nf_box.Width, nf_box.Y - 6);
                             }
                             else
                             {
-                                drawStringDX2D("-NF", fontDX2d_panafont, nf_colour, nf_box.X + nf_box.Width, nf_box.Y - 4);
+                                drawStringDX2D("-NF", fontDX2d_panafont, nf_colour_text, nf_box.X + nf_box.Width, nf_box.Y - 4);
                             }
                         }
                     }
@@ -5485,10 +5511,10 @@ namespace Thetis
                                         waterfall_minimum = dataCopy[i] + fOffset;
 
                                     // set pixel color changed by w3sz
-
-                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)B;    // set color in memory
+                                    //[2.10.3.5]MW0LGE note these are reverse RGB, we normally expect BGRA #289
+                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)R;    // set color in memory
                                     row[(i * m_nDecimation) * pixel_size + 1] = (byte)G;
-                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)R;
+                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)B;
                                     row[(i * m_nDecimation) * pixel_size + 3] = nbBitmapAlpaha;
                                 }
                             }
@@ -5692,9 +5718,10 @@ namespace Thetis
                                     if (waterfall_minimum > dataCopy[i] + fOffset) //[2.10.3]MW0LGE use non notched data
                                         waterfall_minimum = dataCopy[i] + fOffset;
 
-                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)B;    // set color in memory
+                                    //[2.10.3.5]MW0LGE note these are reverse RGB, we normally expect BGRA #289
+                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)R;    // set color in memory
                                     row[(i * m_nDecimation) * pixel_size + 1] = (byte)G;
-                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)R;
+                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)B;
                                     row[(i * m_nDecimation) * pixel_size + 3] = nbBitmapAlpaha;
                                 }
                             }
@@ -5897,9 +5924,10 @@ namespace Thetis
                                     }
 
                                     // set pixel color changed by w3sz
-                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)B;    // set color in memory
+                                    //[2.10.3.5]MW0LGE note these are reverse RGB, we normally expect BGRA #289
+                                    row[(i * m_nDecimation) * pixel_size + 0] = (byte)R;    // set color in memory
                                     row[(i * m_nDecimation) * pixel_size + 1] = (byte)G;
-                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)R;
+                                    row[(i * m_nDecimation) * pixel_size + 2] = (byte)B;
                                     row[(i * m_nDecimation) * pixel_size + 3] = nbBitmapAlpaha;
                                 }
                             }
@@ -6117,6 +6145,7 @@ namespace Thetis
         private static SharpDX.Direct2D1.StrokeStyle m_styleDots;
 
         private static SharpDX.Direct2D1.Brush m_bDX2_noisefloor;
+        private static SharpDX.Direct2D1.Brush m_bDX2_noisefloor_text;
 
         private static SharpDX.Direct2D1.Brush m_bDX2_m_bHightlightNumberScale;
         private static SharpDX.Direct2D1.Brush m_bDX2_m_bHightlightNumbers;
@@ -6319,6 +6348,7 @@ namespace Thetis
             if (m_styleDots != null) Utilities.Dispose(ref m_styleDots);
 
             if (m_bDX2_noisefloor != null) Utilities.Dispose(ref m_bDX2_noisefloor);
+            if (m_bDX2_noisefloor_text != null) Utilities.Dispose(ref m_bDX2_noisefloor_text);
 
             //
             m_brushLGDataFillRX1 = null;
@@ -6397,6 +6427,7 @@ namespace Thetis
             m_styleDots = null;
 
             m_bDX2_noisefloor = null;
+            m_bDX2_noisefloor_text = null;
             //
 
         }
@@ -6483,6 +6514,7 @@ namespace Thetis
                 m_styleDots = new StrokeStyle(_d2dFactory, ssp);
 
                 m_bDX2_noisefloor = convertBrush(new SolidBrush(noisefloor_color));
+                m_bDX2_noisefloor_text = convertBrush(new SolidBrush(noisefloor_color_text));
             }
         }
         //--------------------------
@@ -6791,13 +6823,11 @@ namespace Thetis
                 }
                 else
                 {
-                    //int expandHz = (int)(_dMNFminSize * 0.5);
-                    //double nw = n.FWidth < 100 ? 100 : n.FWidth;
                     double dNewWidth = n.FWidth < _mnfMinSize ? _mnfMinSize : n.FWidth; // use the min width of filter from WDSP
                     dNewWidth += 20; // fudge factor to align better with spectrum notch
                     notch_centre_x = (int)((float)((n.FCenter) - rf_freq - Low - localRit) / width * W);
-                    notch_left_x = (int)((float)((n.FCenter) - rf_freq - dNewWidth / 2 - Low - localRit/* - expandHz*/) / width * W);
-                    notch_right_x = (int)((float)((n.FCenter) - rf_freq + dNewWidth / 2 - Low - localRit/* + expandHz*/) / width * W);
+                    notch_left_x = (int)((float)((n.FCenter) - rf_freq - dNewWidth / 2 - Low - localRit) / width * W);
+                    notch_right_x = (int)((float)((n.FCenter) - rf_freq + dNewWidth / 2 - Low - localRit) / width * W);
                 }
 
                 clsNotchCoords nc = new clsNotchCoords(notch_centre_x, notch_left_x, notch_right_x, _tnf_active && n.Active, (int)n.FWidth);
@@ -10018,6 +10048,7 @@ namespace Thetis
             public float XShift { get; set; }
             public bool Settled {  get; set; }
             public float Size { get; set; }
+            public bool Finished { get; set; }
 
             public SnowFlake(int width)
             {
@@ -10028,6 +10059,7 @@ namespace Thetis
                 XShift = _rnd.NextFloat(-0.5f, 0.5f);
                 Settled = false;
                 Size = _rnd.NextFloat(1f, 2f);
+                Finished = false;
             }
 
             public void Update()
@@ -10036,7 +10068,7 @@ namespace Thetis
                 {
 
                     Y += FallSpeed;
-                    X += XShift;                    
+                    X += XShift;
 
                     int dirRand = _rnd.Next(0, 10);
                     if (dirRand == 9 && XShift < 0.5f)
@@ -10058,7 +10090,11 @@ namespace Thetis
                 else
                 {
                     Alpha -= 0.5f;
-                    if (Alpha < 0) Alpha = 0;
+                    if (Alpha <= 0)
+                    {
+                        Alpha = 0;
+                        Finished = true;
+                    }
                 }
             }
         }
@@ -10070,12 +10106,28 @@ namespace Thetis
             set 
             { 
                 _snowFall = value;
-                if (!_snowFall) _snow.Clear();
+                if (!_snowFall)
+                {
+                    lock (_snowLock)
+                    {
+                        _snow.Clear();
+                        _showSanta = false;
+                    }
+                }
             }
         }
+        private static readonly object _snowLock = new object();
         private static Random _rnd = new Random();
         private static List<SnowFlake> _snow = new List<SnowFlake>();
         private static double _oldSnowFrame = 0;
+        private static double _oldSantaFrame = 0;
+        private static double _oldSantaXFrame = 0;
+        private static SharpDX.Direct2D1.Bitmap[] _santaFrames;
+        private static int _santaFrameIndex;
+        private static float _santaX;
+        private static bool _showSanta;
+        private static DateTime _whenToShowSanta;
+
         private static void letItSnow()
         {
             bool bUpdate = false;
@@ -10086,28 +10138,145 @@ namespace Thetis
                 bUpdate = true;
             }
 
-            if (bUpdate)
+            lock (_snowLock)
             {
-                if (_snow.Count < 500)
+                if (bUpdate)
                 {
-                    SnowFlake sf = new SnowFlake(Target.Width);
-                    _snow.Add(sf);
-                }               
+                    if (_snow.Count < 500)
+                    {
+                        SnowFlake sf = new SnowFlake(Target.Width);
+                        _snow.Add(sf);
+                    }
 
+                    foreach (SnowFlake snowflake in _snow)
+                        snowflake.Update();
+
+                    _snow.RemoveAll(s => s.Finished);
+                }
+
+                Ellipse e = new Ellipse(new SharpDX.Vector2(0, 0), 1, 1);
                 foreach (SnowFlake snowflake in _snow)
-                    snowflake.Update();
-
-                _snow.RemoveAll(s => s.Alpha == 0);
+                {
+                    e.Point.X = snowflake.X;
+                    e.Point.Y = snowflake.Y;
+                    e.RadiusX = snowflake.Size;
+                    e.RadiusY = snowflake.Size;
+                    _d2dRenderTarget.FillEllipse(e, getDXBrushForColour(Color.White, (int)snowflake.Alpha));
+                }
             }
 
-            Ellipse e = new Ellipse(new SharpDX.Vector2(0, 0), 1, 1);
-            foreach (SnowFlake snowflake in _snow)
+            plotSanta();
+        }
+        private static void plotSanta()
+        {
+            if (!_showSanta)
             {
-                e.Point.X = snowflake.X;
-                e.Point.Y = snowflake.Y;
-                e.RadiusX = snowflake.Size;
-                e.RadiusY = snowflake.Size;
-                _d2dRenderTarget.FillEllipse(e, getDXBrushForColour(Color.White, (int)snowflake.Alpha));
+                DateTime now = DateTime.Now;
+                if (now > _whenToShowSanta)
+                {                    
+                    _showSanta = now >= new DateTime(now.Year, 12, 1) && now.Date <= new DateTime(now.Year, 12, 25);
+                    _whenToShowSanta = now.AddSeconds(_rnd.Next(120, 600));
+                }
+
+                return;
+            }
+
+            if (_santaFrames.Length <= 0) return;
+
+            bool bUpdateFrame = false;
+            if (m_dElapsedFrameStart >= _oldSantaFrame + 250)
+            {
+                //fixed update
+                _oldSantaFrame = m_dElapsedFrameStart;
+                bUpdateFrame = true;
+            }
+
+            SharpDX.Direct2D1.Bitmap santa = _santaFrames[_santaFrameIndex];
+
+            float y = displayTargetHeight - santa.Size.Height / 2;
+            RectangleF rectDest = new RectangleF(_santaX, y, santa.Size.Width / 2, santa.Size.Height / 2);
+            _d2dRenderTarget.DrawBitmap(santa, rectDest, 1f, BitmapInterpolationMode.Linear);
+
+            // xpos shift
+            if (m_dElapsedFrameStart >= _oldSantaXFrame + 16)
+            {
+                if (_santaFrameIndex <= 2) // dig frames 0 and 1
+                {
+                    lock (_snowLock)
+                    {
+                        float x = rectDest.X + rectDest.Width / 2;
+
+                        _snow
+                            .Where(snowflake => snowflake.Settled && snowflake.X >= x && snowflake.X <= rectDest.X + rectDest.Width)
+                            .ToList()
+                            .ForEach(snowflake => snowflake.Alpha = 0);
+                    }
+                }
+
+                //fixed update
+                _oldSantaXFrame = m_dElapsedFrameStart;
+
+                _santaX += 0.5f;
+                if (_santaX > displayTargetWidth)
+                {
+                    _santaX = -50;
+                    _showSanta = false;
+                }
+            }
+
+            if (bUpdateFrame)
+            {
+                _santaFrameIndex++;
+                if (_santaFrameIndex >= _santaFrames.Length) _santaFrameIndex = 0;
+            }
+        }
+        public static void SetSantaGif(System.Drawing.Image image)
+        {
+            lock (_objDX2Lock)
+            {
+                if (!_bDX2Setup) return;
+                if (image== null) return;
+                if (image.RawFormat != null && image.RawFormat.Guid != ImageFormat.Gif.Guid) return; // image not a gif
+                if (image.FrameDimensionsList != null && image.FrameDimensionsList.Length <= 0) return;
+
+                _santaFrameIndex = 0;
+                _santaX = -50;
+                _showSanta = false;
+                _whenToShowSanta = DateTime.Now.AddSeconds(_rnd.Next(120, 600));
+
+                FrameDimension dimension = new FrameDimension(image.FrameDimensionsList[0]);
+                int totalFrames = image.GetFrameCount(dimension);
+
+                // remove any existing santa frames
+                santaCleanUp();
+
+                _santaFrames = new SharpDX.Direct2D1.Bitmap[totalFrames];
+
+                for (int i = 0; i < totalFrames; i++)
+                {
+                    image.SelectActiveFrame(dimension, i);
+
+                    using (Bitmap graphicsImage = new Bitmap(image))
+                    {                        
+                        _santaFrames[i] = SDXBitmapFromSysBitmap(_d2dRenderTarget, graphicsImage);
+                    }
+                }
+            }
+        }
+        private static void santaCleanUp()
+        {
+            if (_santaFrames != null)
+            {
+                for (int i = 0; i < _santaFrames.Length; i++)
+                {
+                    if (_santaFrames[i] != null)
+                    {
+                        Utilities.Dispose(ref _santaFrames[i]);
+                        _santaFrames[i] = null;
+                    }
+                }
+
+                _santaFrames = null;
             }
         }
 #endif

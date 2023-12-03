@@ -101,9 +101,6 @@ namespace Thetis
         private bool displaydidit = false;
         public Mutex calibration_mutex = new Mutex();
 
-        //public Http httpFile;                           // ke9ns add
-        //public HttpServer httpServer = null;           // rn3kk add
-
         private Setup m_frmSetupForm;
         private readonly Object m_objSetupFormLocker = new Object();
 
@@ -941,6 +938,8 @@ namespace Thetis
             Init60mChannels();
             LoadLEDFont();
 
+            TimeOutTimerManager.Initialise(this);
+
             Splash.SetStatus("Loading Settings");				// Set progress point
 
             InitConsole();                                      // Initialize all forms and main variables  INIT_SLOW
@@ -954,7 +953,6 @@ namespace Thetis
             catch { }
             //
 
-            // MW0LGE_21k9pre5 moved after initconosole
             addDelegates();
 
             CWFWKeyer = true;
@@ -1050,6 +1048,21 @@ namespace Thetis
             }
             CpuUsage(); //[2.10.1.0] MW0LGE initial call to setup check marks in status bar as a minimum
 
+            if (!resetForAutoMerge)
+            {
+                Splash.SetStatus("Processing Finder Info");
+                // obtain finder info before splash closes
+                //-- setup finder search data
+                _frmFinder.ReadXmlFinderFile(AppDataPath); // note: needs to be before frm gather
+                _frmFinder.GatherSearchData(this, toolTip1);
+                _frmFinder.GatherSearchData(SetupForm, SetupForm.ToolTip);
+                _frmFinder.GatherSearchData(EQForm, EQForm.ToolTip);
+                _frmFinder.GatherSearchData(m_frmBandStack2, m_frmBandStack2.ToolTip);
+                _frmFinder.GatherSearchData(psform, null);
+                _frmFinder.WriteXmlFinderFile(AppDataPath); // note: this will only happen if not already there
+                //
+            }
+
             Splash.SetStatus("Finished");
 
             Splash.SplashForm.Owner = this;						// So that main form will show/focus when splash disappears //MW0LGE_21d done in show above
@@ -1137,16 +1150,6 @@ namespace Thetis
                     SetupForm.StartupTCPIPcatServer();
                 }
 
-                //-- setup finder search data
-                _frmFinder.ReadXmlFinderFile(AppDataPath); // note: needs to be before frm gather
-                _frmFinder.GatherSearchData(this, toolTip1);
-                _frmFinder.GatherSearchData(SetupForm, SetupForm.ToolTip);
-                _frmFinder.GatherSearchData(EQForm, EQForm.ToolTip);
-                _frmFinder.GatherSearchData(m_frmBandStack2, m_frmBandStack2.ToolTip);
-                _frmFinder.GatherSearchData(psform, null);
-                _frmFinder.WriteXmlFinderFile(AppDataPath);
-                //
-
                 //resize N1MM //MW0LGE_21k9c
                 N1MM.Resize(1);
                 if (RX2Enabled) N1MM.Resize(2);
@@ -1159,6 +1162,9 @@ namespace Thetis
                 if (psform != null) psform.HandleStartup();
 
                 //display render thread
+#if SNOWFALL
+                Display.SetSantaGif(Properties.Resources.santa);
+#endif
                 m_bResizeDX2Display = true;
                 if (draw_display_thread == null || !draw_display_thread.IsAlive)
                 {
@@ -1903,7 +1909,7 @@ namespace Thetis
             //
 
             //[2.10.3.1]MW0LGE make sure it is created on this thread, as the following serial
-            //decices could cause it to be created on another thread
+            //devices could cause it to be created on another thread
             CWX tmp = CWXForm;
             //--
 
@@ -1920,8 +1926,6 @@ namespace Thetis
             InitFilterPresets();					// Initialize filter values
 
             SwlForm = new SwlControl(this);         // ke9ns add communicate with swl list controls
-            //httpFile = new Http(this);              // ke9ns add
-            //httpServer = new HttpServer(this);      // rn3kk add
 
             // ***** THIS IS WHERE SETUP FORM IS CREATED
             _onlyOneSetupInstance = true; // make sure that we limit to one instance
@@ -13430,8 +13434,16 @@ namespace Thetis
                 UpdateButtonBarButtons();
             }
         }
-
-
+        public bool QuickRec // DH1KLM
+        {     
+            get { return ckQuickRec.Checked; }
+            set
+            {
+                ckQuickRec.Checked = value;
+                UpdateButtonBarButtons();
+            }
+        }
+        
         public void HighlightTXProfileSaveItems(bool bHighlight)
         {
             Common.HightlightControl(chkDX, bHighlight);
@@ -32266,6 +32278,9 @@ namespace Thetis
             if (!IsSetupFormNull) SetupForm.RemoveDelegates(); // MW0LGE_22b
             //
 
+            Common.LogStringToPath("BeforeTimeOutTimerManager.StopToT()", AppDataPath, "shutdown_log.txt");
+            TimeOutTimerManager.Shutdown();
+
             //MW0LGE
             //Change to check if existing save is happening. Without this
             //it is possible to crash on save and corrupt settings file
@@ -33314,12 +33329,25 @@ namespace Thetis
         private bool _mox = false;
         private PreampMode temp_mode = PreampMode.HPSDR_OFF; // HPSDR preamp mode
         private PreampMode temp_mode2 = PreampMode.HPSDR_OFF; // HPSDR preamp mode
+
         private bool _forceATTwhenPSAoff = true; //MW0LGE [2.9.0.7] added
         public bool ForceATTwhenPSAoff
         {
             get { return _forceATTwhenPSAoff; }
             set { _forceATTwhenPSAoff = value; }
         }
+        private bool _forceATTwhenPowerChangesWhenPSAon = true; //MW0LGE [2.9.3.5] added
+        private float _lastPower = -1;
+        public bool ForceATTwhenOutputPowerChangesWhenPSAon
+        {
+            get { return _forceATTwhenPowerChangesWhenPSAon; }
+            set 
+            {
+                if (value != _forceATTwhenPowerChangesWhenPSAon) _lastPower = -1;
+                _forceATTwhenPowerChangesWhenPSAon = value;                 
+            }
+        }
+        
         private void chkMOX_CheckedChanged2(object sender, System.EventArgs e)
         {
             bool bOldMox = _mox; //MW0LGE_21b used for state change delgates at end of fn
@@ -50396,6 +50424,7 @@ namespace Thetis
             {
                 //wd5y
                 menuStrip1.Location = new Point(chkMNU.Location.X + chkMNU.Width - 10, chkMNU.Location.Y + 22 - menuStrip1.Height);
+                panelMeterLabels.Hide();
                 //wd5y
 
                 if (show_rx1)
@@ -50788,7 +50817,52 @@ namespace Thetis
                 grpVFOB.Location = new Point(grpVFOB.Location.X, -200);
                 radRX1Show.Location = new Point(radRX1Show.Location.X, -200);
                 radRX2Show.Location = new Point(radRX2Show.Location.X, -200);
-            }            
+            }
+            
+            //wd5y
+            if (this.m_bShowTopControls || this.showAndromedaTopControls)
+            {
+                comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+
+                lblAF2.BringToFront();
+                lblAF3.BringToFront();
+                ptbRX1AF.BringToFront();
+                ptbRX2AF.BringToFront();
+                lblRF2.BringToFront();
+                lblRF3.BringToFront();
+                ptbRF.BringToFront();
+                ptbRX2RF.BringToFront();
+                lblPWR2.BringToFront();
+                ptbPWR.BringToFront();
+                comboAGC.BringToFront();
+                comboRX2AGC.BringToFront();
+                comboPreamp.BringToFront();
+                comboRX2Preamp.BringToFront();
+                udRX1StepAttData.BringToFront();
+                udRX2StepAttData.BringToFront();
+                txtVFOABand.BringToFront();
+                txtVFOBBand.BringToFront();
+            }
+            if (showAndromedaTopControls == false && m_bShowTopControls == false)
+            {
+                lblAF2.Hide();
+                lblAF3.Hide();
+                ptbRX1AF.Hide();
+                ptbRX2AF.Hide();
+                lblRF2.Hide();
+                lblRF3.Hide();
+                ptbRF.Hide();
+                ptbRX2RF.Hide();
+                lblPWR2.Hide();
+                ptbPWR.Hide();
+                comboAGC.Hide();
+                comboRX2AGC.Hide();
+                comboPreamp.Hide();
+                comboRX2Preamp.Hide();
+                udRX1StepAttData.Hide();
+                udRX2StepAttData.Hide();
+            }
+            //wd5y
         }
         // W1CEG:  End
         #endregion Collapsible Display
@@ -52477,27 +52551,7 @@ namespace Thetis
         {
 
         }
-
-
-        ////=========================================================================================
-        ////=========================================================================================
-        //// ke9ns add allows Http server to talk with Setup through Console
-
-        //*/
-
-        //public static int m_port = 0;   // ke9ns add port# 
-        //public static bool m_terminated = true;
-
-        //public bool HttpServer
-        //{
-
-        //    set
-        //    {
-        //        httpFile.HttpServer1();
-        //    }
-
-        //} //HttpServer
-
+        */
 
         //=========================================================================================
         //=========================================================================================
@@ -52514,56 +52568,6 @@ namespace Thetis
             if (initializing) return; // MW0LGE
             if (!IsSetupFormNull) SetupForm.TXFilterLow = (int)udTXFilterLow.Value;
         }
-
-        ////=========================================================================================
-        ////=========================================================================================
-        //// ke9ns add allows Http server to talk with Setup through Console
-
-        //public int HTTP_PORT
-        //{
-        //    get
-        //    {
-        //        return (int)SetupForm.udHttpPort.Value;
-        //    }
-
-        //} // HTTP_PORT
-
-        ////=========================================================================================
-        ////=========================================================================================
-        //// ke9ns add allows Http server to talk with Setup through Console
-        //public int HTTP_REFRESH
-        //{
-        //    get
-        //    {
-        //        return (int)SetupForm.udHttpRefresh.Value;
-        //    }
-
-        //} // HTTP_REFRESH
-
-        ////=========================================================================================
-        ////=========================================================================================
-        //// ke9ns add allows Http server to talk with Setup through Console
-        //public string HTTP_USER
-        //{
-        //    get
-        //    {
-        //        return SetupForm.txtHttpUser.Text;
-        //    }
-
-        //} // HTTP_PORT
-
-
-        ////=========================================================================================
-        ////=========================================================================================
-        //// ke9ns add allows Http server to talk with Setup through Console
-        //public string HTTP_PASS
-        //{
-        //    get
-        //    {
-        //        return SetupForm.txtHttpPass.Text;
-        //    }
-
-        //} // HTTP_PORT
 
         //=========================================================================================
         //=========================================================================================
@@ -54089,6 +54093,8 @@ namespace Thetis
             //MONVolumeChangedHandlers += OnMONVolumeChanged;
 
             Display.SetupDelegates();
+            
+            TimeOutTimerManager.SetCallback(timeOutTimer);
         }
         private void removeDelegates()
         {
@@ -54157,8 +54163,25 @@ namespace Thetis
             }
 
             Display.RemoveDelegates();
+            TimeOutTimerManager.RemoveCallback(timeOutTimer);
         }
         //
+        private void timeOutTimer(string msg)
+        {
+            if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked)
+            {
+                //everything off !!
+                MOX = false;
+                manual_mox = false;
+                if (chkTUN.Checked)
+                    chkTUN.Checked = false;
+                if (chk2TONE.Checked)
+                    chk2TONE.Checked = false;
+
+                infoBar.Warning(msg + " Time Out Timer", 1, true);
+            }
+        }
+
         private void OnTXInhibitChanged(bool oldState, bool newState)
         {
             TXInhibit = newState;
@@ -55677,6 +55700,15 @@ namespace Thetis
             targetdBm = target_dbm;
             if (!bSetPower) return new_pwr;
 
+            //[2.10.3.5]MW0LGE max tx attenuation when power is increased and PS is enabled
+            if (new_pwr != _lastPower && chkFWCATUBypass.Checked && _forceATTwhenPowerChangesWhenPSAon)
+            {
+                if(new_pwr > _lastPower)
+                    SetupForm.ATTOnTX = 31;
+
+                _lastPower = new_pwr;
+            }
+
             if (new_pwr == 0)
             {
                 Audio.RadioVolume = 0.0;
@@ -56151,6 +56183,12 @@ namespace Thetis
             {
                 case CheckState.Unchecked:
                     // off
+
+                    //wd5y
+                    chkSquelch.Text = "SQL-OFF";
+                    break;
+                    //wd5y
+
                 case CheckState.Checked:
                     // sql
                     if (rx1_dsp_mode == DSPMode.FM) //FM Squelch
@@ -56183,17 +56221,32 @@ namespace Thetis
                     }
 
                     chkSquelch.Text = "SQL:" + nValue.ToString();
+
+                    //wd5y
+                    if (sliderForm != null)
+                    {
+                        sliderForm.lblRX1sql.Text = chkSquelch.Text;
+                    }
+                    //wd5y
                     break;
                 case CheckState.Indeterminate:
                     // vsq
                     nValue = ptbSquelch.Value; // 0-100
 
-                    rx1_voice_squelch_threshold_scroll = nValue;
+                    rx1_voice_squelch_threshold_scroll = nValue;                    
 
-                    radio.GetDSPRX(0, 0).SSqlThreshold = nValue / 100f;
-                    radio.GetDSPRX(0, 1).SSqlThreshold = nValue / 100f;
+                     radio.GetDSPRX(0, 0).SSqlThreshold = nValue / 100f;
+                     radio.GetDSPRX(0, 1).SSqlThreshold = nValue / 100f;
 
                     chkSquelch.Text = "VSQL:" + nValue.ToString();
+
+                    //wd5y
+                    if (sliderForm != null)
+                    {
+                        sliderForm.lblRX1sql.Text = chkSquelch.Text;
+                        sliderForm.chkRX1VSQL.Checked = true;
+                    }
+                    //wd5y
                     break;
             }
 
@@ -56203,13 +56256,9 @@ namespace Thetis
             }
             if (sliderForm != null)
             {
-                sliderForm.RX1Squelch = -(int)(ptbSquelch.Value * 1.6f); // convert to range 0 to -160
-
-                //wd5y
-                sliderForm.lblRX1sql.Text = chkSquelch.Text;
-                //wd5y
+                sliderForm.RX1Squelch = -(int)(ptbSquelch.Value * 1.6f); // convert to range 0 to -160                
             }
-            }
+        }
         private bool _bIgnoreSqlStateChange = false;// used by handleSqlFM
         private void chkSquelch_CheckStateChanged(object sender, EventArgs e)
         {
@@ -56292,8 +56341,10 @@ namespace Thetis
             //if (rx1_dsp_mode == DSPMode.FM) rx1_fm_squelch_on = chkSquelch.Checked;
 
             if (sliderForm != null)
+            {
                 sliderForm.RX1SquelchOnOff = chkSquelch.Checked;
-            AndromedaIndicatorCheck(EIndicatorActions.eINSquelch, true, chkSquelch.Checked);
+                AndromedaIndicatorCheck(EIndicatorActions.eINSquelch, true, chkSquelch.Checked);
+            }
 
             //update
             picSquelch.Visible = bShowLevelBar;
@@ -56303,6 +56354,13 @@ namespace Thetis
             _bIgnoreSqlUpdate = false;
 
             ptbSquelch_Scroll(this, EventArgs.Empty);
+
+            //wd5y
+            if (sliderForm != null)
+            {
+                sliderForm.lblRX1sql.Text = chkSquelch.Text;
+            }
+            //wd5y
         }
         private void handleSqlFM(int rx, bool bFM)
         {
@@ -56474,6 +56532,13 @@ namespace Thetis
             _bIgnoreSqlUpdate = false;
 
             ptbRX2Squelch_Scroll(this, EventArgs.Empty);
+
+            //wd5y
+            if (sliderForm != null)
+            {
+                sliderForm.lblRX2sql.Text = chkRX2Squelch.Text;
+            }
+            //wd5y
         }
 
         //private void chkRX2Squelch_CheckedChanged(object sender, System.EventArgs e)
@@ -56559,7 +56624,13 @@ namespace Thetis
             switch (chkRX2Squelch.CheckState)
             {
                 case CheckState.Unchecked:
-                // off
+                    // off
+
+                    //wd5y
+                    chkRX2Squelch.Text = "SQL-OFF";
+                    break;
+                //wd5y
+
                 case CheckState.Checked:
                     // sql
                     if (rx2_dsp_mode == DSPMode.FM) //FM Squelch
@@ -56592,6 +56663,13 @@ namespace Thetis
                     }
 
                     chkRX2Squelch.Text = "SQL:" + nValue.ToString();
+
+                    //wd5y
+                    if (sliderForm != null)
+                    {
+                        sliderForm.lblRX2sql.Text = chkRX2Squelch.Text;
+                    }
+                    //wd5y
                     break;
                 case CheckState.Indeterminate:
                     // vsq
@@ -56603,6 +56681,14 @@ namespace Thetis
                     radio.GetDSPRX(1, 1).SSqlThreshold = nValue / 100f;
 
                     chkRX2Squelch.Text = "VSQL:" + nValue.ToString();
+
+                    //wd5y
+                    if (sliderForm != null)
+                    {
+                        sliderForm.lblRX2sql.Text = chkRX2Squelch.Text;
+                        sliderForm.chkRX2VSQL.Checked = true;
+                    }
+                    //wd5y
                     break;
             }
 
@@ -56710,17 +56796,17 @@ namespace Thetis
                 
                 if (m_bShowTopControls)
                 {
-                    panelMeterLabels.Visible = _useLegacyMeters;
+                    panelMeterLabels.Visible = false;
                     comboMeterRXMode.Visible = _useLegacyMeters && ShowRX1;
                     comboRX2MeterMode.Visible = _useLegacyMeters && ShowRX2;
-                    comboMeterTXMode.Visible = _useLegacyMeters;
+                    comboMeterTXMode.Visible = _useLegacyMeters;                    
                 }
                 else if (showAndromedaTopControls)
                 {
                     panelMeterLabels.Visible = _useLegacyMeters;
-                    comboMeterRXMode.Visible = _useLegacyMeters && ShowRX1;
-                    comboRX2MeterMode.Visible = _useLegacyMeters && ShowRX2;
-                    comboMeterTXMode.Visible = _useLegacyMeters;
+                    comboMeterRXMode.Visible = false;
+                    comboRX2MeterMode.Visible = false;
+                    comboMeterTXMode.Visible = false;                    
                 }
                 else
                 {
@@ -56731,7 +56817,7 @@ namespace Thetis
                     picMultiMeterDigital.Visible = false;
                     txtMultiText.Visible = false;
                     picRX2Meter.Visible = false;
-                    txtRX2Meter.Visible = false;                    
+                    txtRX2Meter.Visible = false;
                 }                             
             }
             //wd5y
@@ -56821,7 +56907,7 @@ namespace Thetis
             {
                 menuStrip1.Show();
             }
-        }        
+        }       
         //wd5y
     }
 
