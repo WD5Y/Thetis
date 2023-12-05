@@ -21586,7 +21586,10 @@ namespace Thetis
                     case CheckState.Checked:
                         if (rx1_dsp_mode == DSPMode.FM)
                         {
-                            if (value > 100) value = 100;
+                            //wd5y
+                            if (value > 160) value = 160;
+                            value = (int)((float)(value / 160f) * 100); // convert from 0-160 to 0-100
+                            //wd5y
                         }
                         else
                         {
@@ -21595,7 +21598,10 @@ namespace Thetis
                         }
                         break;
                     case CheckState.Indeterminate:
-                        if (value > 100) value = 100;
+                            //wd5y
+                            if (value > 160) value = 160;
+                            value = (int)((float)(value / 160f) * 100); // convert from 0-160 to 0-100
+                            //wd5y
                         break;
                 }
 
@@ -21631,7 +21637,10 @@ namespace Thetis
                     case CheckState.Checked:
                         if (rx2_dsp_mode == DSPMode.FM)
                         {
-                            if (value > 100) value = 100;
+                            //wd5y
+                            if (value > 160) value = 160;
+                            value = (int)((float)(value / 160f) * 100); // convert from 0-160 to 0-100
+                            //wd5y
                         }
                         else
                         {
@@ -21640,7 +21649,10 @@ namespace Thetis
                         }
                         break;
                     case CheckState.Indeterminate:
-                        if (value > 100) value = 100;
+                            //wd5y
+                            if (value > 160) value = 160;
+                            value = (int)((float)(value / 160f) * 100); // convert from 0-160 to 0-100
+                            //wd5y
                         break;
                 }
 
@@ -56907,7 +56919,7 @@ namespace Thetis
             {
                 menuStrip1.Show();
             }
-        }       
+        }        
         //wd5y
     }
 

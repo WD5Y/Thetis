@@ -2597,6 +2597,7 @@
             this.chkMNU.FlatAppearance.BorderSize = 0;
             this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.chkMNU.Name = "chkMNU";
+            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
             this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
             // 
             // lblPAProfile

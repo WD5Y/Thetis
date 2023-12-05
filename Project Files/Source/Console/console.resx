@@ -1565,6 +1565,9 @@
   <data name="chkMNU.Text" xml:space="preserve">
     <value>MNU</value>
   </data>
+  <data name="chkMNU.ToolTip" xml:space="preserve">
+    <value>Hides Menu-Strip</value>
+  </data>
   <data name="&gt;&gt;chkMNU.Name" xml:space="preserve">
     <value>chkMNU</value>
   </data>

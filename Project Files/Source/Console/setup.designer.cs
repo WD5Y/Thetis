@@ -61089,6 +61089,6 @@
         private TextBoxTS txtToTPingIP;
         private ColorButton clrbtnNoiseFloorText;
         private LabelTS labelTS192;
-        private CheckBoxTS chkContainerShow;        
+        private CheckBoxTS chkContainerShow;
     }
 }
