@@ -73,7 +73,7 @@ namespace Thetis
         private LabelTS labelTS8;
         private LabelTS labelTS9;
         private LabelTS labelTS6;
-        private CheckBoxTS chkSubRX;
+        public CheckBoxTS chkSubRX;
         private LabelTS labelTS15;
         private LabelTS labelTS14;
         private CheckBoxTS chkRX2VAC;
@@ -159,6 +159,9 @@ namespace Thetis
             chkRX2Sql.Checked = console.chkRX2Squelch.Checked;
             chkRX1VSQL.Checked = console.chkSquelch.Checked;
             chkRX2VSQL.Checked = console.chkRX2Squelch.Checked;
+            chkSubRX.Checked = console.chkEnableMultiRX.Checked;
+            chkAGCAut.Checked = console.AutoAGCRX1;            
+            chkRX2AGCAut.Checked = console.AutoAGCRX2;
             //wd5y
 
         }
@@ -1688,8 +1691,13 @@ namespace Thetis
         private void tbRX1RF_Scroll(object sender, EventArgs e)
         {
             if (console.RF != tbRX1RF.Value && console.AutoAGCRX1) console.AutoAGCRX1 = false; // turn off 'auto agc' only if different MW0LGE_21k8
-            console.RF = tbRX1RF.Value;
+            
+            //wd5y
+            chkAGCAut.Checked = false;
+            //wd5y
 
+            console.RF = tbRX1RF.Value;
+            
             //wd5y
             lblRX1rf.Text = console.ptbRF.Value.ToString();
             //wd5y
@@ -1698,6 +1706,11 @@ namespace Thetis
         private void tbRX2RF_Scroll(object sender, EventArgs e)
         {
             if (console.RX2RF != tbRX2RF.Value && console.AutoAGCRX2) console.AutoAGCRX2 = false; // turn off 'auto agc' only if different MW0LGE_21k8
+
+            //wd5y
+            chkRX2AGCAut.Checked = false;
+            //wd5y
+
             console.RX2RF = tbRX2RF.Value;
 
             //wd5y

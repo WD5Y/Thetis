@@ -32835,6 +32835,7 @@ namespace Thetis
                 sliderForm.RX1RFGainAGC = ptbRF.Value;
 
                 //wd5y
+                sliderForm.chkAGCAut.Checked = false;
                 sliderForm.lblRX1rf.Text = ptbRF.Value.ToString();
                 //wd5y
             }
@@ -44286,6 +44287,17 @@ namespace Thetis
                 MultiRxHandlers?.Invoke(chkEnableMultiRX.Checked, _oldMultiRX, VFOASubFreq, nb, RX2Enabled);
                 _oldMultiRX = chkEnableMultiRX.Checked;
             }
+
+            //wd5y
+            if (chkEnableMultiRX.Checked == true)
+            {
+                sliderForm.chkSubRX.Checked = true;
+            }
+            else
+            {
+                sliderForm.chkSubRX.Checked = false;
+            }
+            //wd5y
         }
 
         private void chkPanSwap_CheckedChanged(object sender, System.EventArgs e)
@@ -46468,12 +46480,13 @@ namespace Thetis
                 sliderForm.RX2RFGainAGC = ptbRX2RF.Value;
 
                 //wd5y
+                sliderForm.chkRX2AGCAut.Checked = false;
                 sliderForm.lblRX2rf.Text = ptbRX2RF.Value.ToString();
                 //wd5y
             }
 
-                //wd5y
-                lblRF3.Size = new Size(30, 28);
+            //wd5y
+            lblRF3.Size = new Size(30, 28);
             lblRF3.Text = "RF:   " + ptbRX2RF.Value.ToString();
             //wd5y
         }
@@ -53672,6 +53685,7 @@ namespace Thetis
         private bool checkVersions()
         {
             int nCMasterVersion = -1;
+            int nCMasterAsioVersion = -1;
             int nWDSPVersion = -1;
             int nPAVersion = -1;
 
@@ -53695,6 +53709,26 @@ namespace Thetis
                     MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
             }
 
+            //cmASIO.dll
+            try
+            {
+                nCMasterAsioVersion = cmaster.GetCMasioVersion();
+                if (nCMasterAsioVersion != Versions._CMASTER_ASIO_VERSION)
+                {
+                    DialogResult dr = MessageBox.Show("Incorrect version of cmASIO.dll installed.",
+                    "Version error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+            }
+            catch
+            {
+                DialogResult dr = MessageBox.Show("Could not find GetCMasioVersion() in cmASIO.dll .\nEnsure correct version installed.",
+                    "Version function error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+            }
+            
             // wdsp.dll
             // Version number is in version.c where it is 121.  *10 to match Versions.WDSP_VERSION
             try
@@ -53742,6 +53776,7 @@ namespace Thetis
             }
 
             bool bRet = (nCMasterVersion == Versions._CMASTER_VERSION) &&
+                   (nCMasterAsioVersion == Versions._CMASTER_ASIO_VERSION) &&
                    (nWDSPVersion == Versions._WDSP_VERSION) &&
                    (nPAVersion == Versions._PORTAUDIO_VERSION);
 
@@ -55032,12 +55067,26 @@ namespace Thetis
         {
             if (IsRightButton((MouseEventArgs)e))
                 AutoAGCRX1 = !AutoAGCRX1;
+
+            //wd5y
+            if (sliderForm != null)
+            {
+                 sliderForm.chkAGCAut.Checked = AutoAGCRX1;                
+            }
+            //wd5y
         }
 
         private void ptbRX2RF_Click(object sender, EventArgs e)
         {
             if (IsRightButton((MouseEventArgs)e))
                 AutoAGCRX2 = !AutoAGCRX2;
+
+            //wd5y
+            if (sliderForm != null)
+            {
+                sliderForm.chkRX2AGCAut.Checked = AutoAGCRX2;
+            }
+            //wd5y
         }
 
         private void chkRXEQ_MouseDown(object sender, MouseEventArgs e)
@@ -56641,7 +56690,7 @@ namespace Thetis
                     //wd5y
                     chkRX2Squelch.Text = "SQL-OFF";
                     break;
-                //wd5y
+                    //wd5y
 
                 case CheckState.Checked:
                     // sql
