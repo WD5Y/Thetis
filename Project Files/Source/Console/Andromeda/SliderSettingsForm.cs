@@ -1691,9 +1691,16 @@ namespace Thetis
         private void tbRX1RF_Scroll(object sender, EventArgs e)
         {
             if (console.RF != tbRX1RF.Value && console.AutoAGCRX1) console.AutoAGCRX1 = false; // turn off 'auto agc' only if different MW0LGE_21k8
-            
+
             //wd5y
-            chkAGCAut.Checked = false;
+            if (console.AutoAGCRX1)
+            {
+                chkAGCAut.Checked = true;
+            }
+            else
+            {
+                chkAGCAut.Checked = false;
+            }
             //wd5y
 
             console.RF = tbRX1RF.Value;
@@ -1708,8 +1715,15 @@ namespace Thetis
             if (console.RX2RF != tbRX2RF.Value && console.AutoAGCRX2) console.AutoAGCRX2 = false; // turn off 'auto agc' only if different MW0LGE_21k8
 
             //wd5y
-            chkRX2AGCAut.Checked = false;
-            //wd5y
+            if (console.AutoAGCRX2)
+            {
+                chkRX2AGCAut.Checked = true;
+            }
+            else
+            {
+                chkRX2AGCAut.Checked = false;
+            }
+            //wd5y            
 
             console.RX2RF = tbRX2RF.Value;
 
