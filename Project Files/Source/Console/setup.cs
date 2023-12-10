@@ -1452,6 +1452,9 @@ namespace Thetis
 #endif
             }
 
+            // add this manually because the usbbcd combo box will need this to recover previously selected
+            a.Add("UsbBCDSerialNumber", m_sUsbBCDSerialNumber);
+
             // add this manually because soundfile string not stored in any control in setup
             a.Add("QSOTimerFilenameWav", console.QSOTimerAudioPlayer.SoundFile);
 
@@ -1661,6 +1664,10 @@ namespace Thetis
                             lgLinearGradientRX1.Text = val;
                             //lgPickerRX1.HighlightFirstGripper();
                         }
+                    }
+                    else if (name == "UsbBCDSerialNumber") // [2.10.3.5]MW0LGE recover this as the usbbcd combo box will not have any entries at this point
+                    {
+                        m_sUsbBCDSerialNumber = val;
                     }
                     else if (name == "QSOTimerFilenameWav")
                     {
@@ -2059,6 +2066,8 @@ namespace Thetis
             clrbtnRX2WaterfallLow_Changed(this, e);
             chkRX1WaterfallAGC_CheckedChanged(this, e);
             chkRX2WaterfallAGC_CheckedChanged(this, e);
+            chkStopRX1WaterfallOnTx_CheckedChanged(this, e); //[2.10.3.5]MW0LGE
+            chkStopRX2WaterfallOnTx_CheckedChanged(this, e);
             chkANAN8000DLEDisplayVoltsAmps_CheckedChanged(this, e);
             udDisplayWaterfallUpdatePeriod_ValueChanged(this, e);
             udRX2DisplayWaterfallUpdatePeriod_ValueChanged(this, e);
@@ -2476,6 +2485,7 @@ namespace Thetis
 
             //OC tab
             chkAllowHotSwitching_CheckedChanged(this, e);
+            chkUsbBCD_CheckedChanged(this, e); //[2.10.3.5]MW0LGE
 
             //PA
             comboPAProfile_SelectedIndexChanged(this, e); //MW0LGE_22b
@@ -8882,7 +8892,7 @@ namespace Thetis
             Audio.VACRXScale = Math.Pow(10.0, (int)udAudioVACGainRX.Value / 20.0);
             console.VACRXGain = (int)udAudioVACGainRX.Value;
             if (console.sliderForm != null)
-            {              
+            {
                 console.sliderForm.RX1VACRX = (int)udAudioVACGainRX.Value;
 
                 //wd5y
@@ -9539,12 +9549,12 @@ namespace Thetis
 
         private void clrbtnWaterfallHigh_Changed(object sender, System.EventArgs e)
         {
-            Display.WaterfallHighColor = clrbtnWaterfallHigh.Color;
+            //Display.WaterfallHighColor = clrbtnWaterfallHigh.Color;
         }
 
         private void clrbtnWaterfallMid_Changed(object sender, System.EventArgs e)
         {
-            Display.WaterfallMidColor = clrbtnWaterfallMid.Color;
+            //Display.WaterfallMidColor = clrbtnWaterfallMid.Color;
         }
 
         private void udDisplayWaterfallLowLevel_ValueChanged(object sender, System.EventArgs e)
@@ -9696,15 +9706,15 @@ namespace Thetis
             Display.RX2WaterfallLowColor = clrbtnRX2WaterfallLow.Color;
         }
 
-        private void clrbtnRX2WaterfallHigh_Changed(object sender, System.EventArgs e)
-        {
-            Display.RX2WaterfallHighColor = clrbtnRX2WaterfallHigh.Color;
-        }
+        //private void clrbtnRX2WaterfallHigh_Changed(object sender, System.EventArgs e)
+        //{
+        //    Display.RX2WaterfallHighColor = clrbtnRX2WaterfallHigh.Color;
+        //}
 
-        private void clrbtnRX2WaterfallMid_Changed(object sender, System.EventArgs e)
-        {
-            Display.RX2WaterfallMidColor = clrbtnRX2WaterfallMid.Color;
-        }
+        //private void clrbtnRX2WaterfallMid_Changed(object sender, System.EventArgs e)
+        //{
+        //    Display.RX2WaterfallMidColor = clrbtnRX2WaterfallMid.Color;
+        //}
 
         private void udRX2DisplayWaterfallLowLevel_ValueChanged(object sender, System.EventArgs e)
         {
@@ -13751,71 +13761,71 @@ namespace Thetis
             {
                 console.color_sheme = ColorSheme.original;
                 clrbtnWaterfallLow.Visible = true;
-                clrbtnWaterfallHigh.Visible = true;
-                clrbtnWaterfallMid.Visible = true;
-                lblDisplayWaterfallHighColor.Visible = true;
-                lblDisplayWaterfallLowColor.Visible = true;
-                lblDisplayWaterfallMidColor.Visible = true;
+                //clrbtnWaterfallHigh.Visible = true;
+                //clrbtnWaterfallMid.Visible = true;
+                //lblDisplayWaterfallHighColor.Visible = true;
+                //lblDisplayWaterfallLowColor.Visible = true;
+                //lblDisplayWaterfallMidColor.Visible = true;
             }
             if (comboColorPalette.Text == "Enhanced")
             {
                 console.color_sheme = ColorSheme.enhanced;
                 clrbtnWaterfallLow.Visible = true;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = true;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = true;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
             if (comboColorPalette.Text == "Spectran")
             {
                 clrbtnWaterfallLow.Visible = false;
                 console.color_sheme = ColorSheme.SPECTRAN;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = false;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = false;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
             if (comboColorPalette.Text == "BlackWhite")
             {
                 console.color_sheme = ColorSheme.BLACKWHITE;
                 clrbtnWaterfallLow.Visible = false;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = false;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = false;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
             if (comboColorPalette.Text == "LinLog")
             {
                 console.color_sheme = ColorSheme.LinLog;
                 clrbtnWaterfallLow.Visible = false;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = false;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = false;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
             if (comboColorPalette.Text == "LinRad")
             {
                 console.color_sheme = ColorSheme.LinRad;
                 clrbtnWaterfallLow.Visible = false;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = false;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = false;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
             if (comboColorPalette.Text == "LinAuto")
             {
                 console.color_sheme = ColorSheme.LinAuto;
                 clrbtnWaterfallLow.Visible = false;
-                clrbtnWaterfallHigh.Visible = false;
-                clrbtnWaterfallMid.Visible = false;
-                lblDisplayWaterfallHighColor.Visible = false;
-                lblDisplayWaterfallLowColor.Visible = false;
-                lblDisplayWaterfallMidColor.Visible = false;
+                //clrbtnWaterfallHigh.Visible = false;
+                //clrbtnWaterfallMid.Visible = false;
+                //lblDisplayWaterfallHighColor.Visible = false;
+                //lblDisplayWaterfallLowColor.Visible = false;
+                //lblDisplayWaterfallMidColor.Visible = false;
             }
         }
 
@@ -13825,71 +13835,71 @@ namespace Thetis
             {
                 console.rx2_color_sheme = ColorSheme.original;
                 clrbtnRX2WaterfallLow.Visible = true;
-                clrbtnRX2WaterfallHigh.Visible = true;
-                clrbtnRX2WaterfallMid.Visible = true;
-                lblRX2DisplayWaterfallHighColor.Visible = true;
-                lblRX2DisplayWaterfallLowColor.Visible = true;
-                lblRX2DisplayWaterfallMidColor.Visible = true;
+                //clrbtnRX2WaterfallHigh.Visible = true;
+                //clrbtnRX2WaterfallMid.Visible = true;
+                //lblRX2DisplayWaterfallHighColor.Visible = true;
+                //lblRX2DisplayWaterfallLowColor.Visible = true;
+                //lblRX2DisplayWaterfallMidColor.Visible = true;
             }
             if (comboRX2ColorPalette.Text == "Enhanced")
             {
                 console.rx2_color_sheme = ColorSheme.enhanced;
                 clrbtnRX2WaterfallLow.Visible = true;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = true;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = true;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
             if (comboRX2ColorPalette.Text == "Spectran")
             {
                 console.rx2_color_sheme = ColorSheme.SPECTRAN;
                 clrbtnRX2WaterfallLow.Visible = false;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = false;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = false;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
             if (comboRX2ColorPalette.Text == "BlackWhite")
             {
                 console.rx2_color_sheme = ColorSheme.BLACKWHITE;
                 clrbtnRX2WaterfallLow.Visible = false;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = false;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = false;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
             if (comboRX2ColorPalette.Text == "LinLog")
             {
                 console.rx2_color_sheme = ColorSheme.LinLog;
                 clrbtnRX2WaterfallLow.Visible = false;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = false;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = false;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
             if (comboRX2ColorPalette.Text == "LinRad")
             {
                 console.rx2_color_sheme = ColorSheme.LinRad;
                 clrbtnRX2WaterfallLow.Visible = false;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = false;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = false;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
             if (comboRX2ColorPalette.Text == "LinAuto")
             {
                 console.rx2_color_sheme = ColorSheme.LinAuto;
                 clrbtnRX2WaterfallLow.Visible = false;
-                clrbtnRX2WaterfallHigh.Visible = false;
-                clrbtnRX2WaterfallMid.Visible = false;
-                lblRX2DisplayWaterfallHighColor.Visible = false;
-                lblRX2DisplayWaterfallLowColor.Visible = false;
-                lblRX2DisplayWaterfallMidColor.Visible = false;
+                //clrbtnRX2WaterfallHigh.Visible = false;
+                //clrbtnRX2WaterfallMid.Visible = false;
+                //lblRX2DisplayWaterfallHighColor.Visible = false;
+                //lblRX2DisplayWaterfallLowColor.Visible = false;
+                //lblRX2DisplayWaterfallMidColor.Visible = false;
             }
         }
 
@@ -26712,7 +26722,7 @@ namespace Thetis
         {
             if (MeterManager.TotalMeterContainers < MAX_CONTAINERS)
             {
-                string sId = MeterManager.AddMeterContainer(1, false, true);
+                string sId = MeterManager.AddMeterContainer(1, false);//, true);
                 updateMeter2Controls(sId);
             }
         }
@@ -26721,7 +26731,7 @@ namespace Thetis
         {
             if (MeterManager.TotalMeterContainers < MAX_CONTAINERS)
             {
-                string sId = MeterManager.AddMeterContainer(2, false, true);
+                string sId = MeterManager.AddMeterContainer(2, false);//, true);
                 updateMeter2Controls(sId);
             }
         }
@@ -26770,7 +26780,7 @@ namespace Thetis
             clrbtnContainerBackground.Enabled = bEnableControls;
             chkContainerBorder.Enabled = bEnableControls;
             chkContainerNoTitle.Enabled = bEnableControls;
-            chkContainerShow.Enabled = bEnableControls;
+            chkContainerEnable.Enabled = bEnableControls;
             lblMMContainerBackground.Enabled = bEnableControls;
             lstMetersAvailable.Enabled = bEnableControls;
             lstMetersInUse.Enabled = bEnableControls;
@@ -26852,7 +26862,7 @@ namespace Thetis
             chkContainerBorder.Checked = MeterManager.ContainerHasBorder(cci.ID);
             clrbtnContainerBackground.Color = MeterManager.GetContainerBackgroundColour(cci.ID);
             chkContainerNoTitle.Checked = MeterManager.ContainerNoTitleBar(cci.ID);
-            chkContainerShow.Checked = MeterManager.ContainerShow(cci.ID);
+            chkContainerEnable.Checked = MeterManager.ContainerShow(cci.ID);
 
             updateMeterLists();
         }
@@ -26872,12 +26882,12 @@ namespace Thetis
                 MeterManager.HighlightContainer("");
             }
         }
-        private void chkContainerShow_CheckedChanged(object sender, EventArgs e)
+        private void chkContainerEnable_CheckedChanged(object sender, EventArgs e)
         {
             clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
             if (cci != null)
             {
-                MeterManager.ShowContainer(cci.ID, chkContainerShow.Checked);
+                MeterManager.EnableContainer(cci.ID, chkContainerEnable.Checked);
             }
         }
         private void btnAddMeterItem_Click(object sender, EventArgs e)
@@ -27896,71 +27906,196 @@ namespace Thetis
         #endregion
 
         #region USB/BCD Cable
-        UsbBCDDevices _usbbcddevices;
-        private bool usbBCD = false;
+        //[2.10.3.5]MW0LGE re-write, fixes #222
+        private UsbBCDDevices m_usbbcddevices;
+        private bool m_bUsbBCD = false;
+        private string m_sUsbBCDSerialNumber = "";
+        private bool m_bUsbBCDdeviceOpen = false;
         public bool UsbBCD
         {
-            get { return usbBCD; }
-            set { usbBCD = value; }
+            get { return m_bUsbBCD; }
+            set { m_bUsbBCD = value; }
         }
-
         public void UpdateUsbBCDdevice(Band rx1band)
         {
-            if(usbBCD) 
-            _usbbcddevices.SetBCDbyBand(_usbdevicesn, rx1band);
+            if (m_bUsbBCD && m_sUsbBCDSerialNumber != "" && m_bUsbBCDdeviceOpen)
+                m_usbbcddevices.SetBCDbyBand(m_sUsbBCDSerialNumber, rx1band);
         }
-        private string _usbdevicesn;
         private void chkUsbBCD_CheckedChanged(object sender, EventArgs e)
         {
-            UsbBCD = chkUsbBCD.Checked;
-            comboUsbDevices.Enabled = UsbBCD;
+            if (initializing) return;
+            m_bUsbBCD = chkUsbBCD.Checked;
+            comboUsbDevices.Enabled = m_bUsbBCD;
 
-            if (usbBCD)
+            if (!m_bUsbBCD)
             {
-                if (_usbbcddevices == null)
-                {
-                    _usbbcddevices = new UsbBCDDevices();
+                // close current
+                CloseUsbBcdDevice();
 
-                    if (_usbbcddevices.HasDevices)
+                // clear all
+                comboUsbDevices.Items.Clear();
+                m_sUsbBCDSerialNumber = "";
+                m_usbbcddevices = null;
+
+                return;
+            }
+
+            if (m_bUsbBCD)
+            {
+                if (m_usbbcddevices == null)
+                {
+                    comboUsbDevices.Items.Clear(); // not needed  but belts/braces
+                    try
                     {
-                        foreach (string device in _usbbcddevices.DeviceSerialNumbers)
+                        m_usbbcddevices = new UsbBCDDevices();
+
+                        foreach (string s in m_usbbcddevices.DeviceSerialNumbers)
                         {
-                            _usbbcddevices.OpenDevice(device);
+                            comboUsbDevices.Items.Add(s);
                         }
+
+                        if (comboUsbDevices.Items.Contains(m_sUsbBCDSerialNumber))
+                            comboUsbDevices.SelectedIndex = comboUsbDevices.Items.IndexOf(m_sUsbBCDSerialNumber);
                     }
-                    else
+                    catch
                     {
                         chkUsbBCD.Checked = false;
                         return;
                     }
                 }
-
-                comboUsbDevices.DataSource = _usbbcddevices.DeviceSerialNumbers;
-                comboUsbDevices.SelectedIndex = 0;
-
-                _usbdevicesn = comboUsbDevices.Text;
-                if (_usbdevicesn == "")
-                {
-                    return;
-                }
-
-                byte values = _usbbcddevices.GetRelays(_usbdevicesn);
-                //_usbbcddevices.SetRelays(sn, values);
-                _usbbcddevices.SetBCDbyBand(_usbdevicesn, console.RX1Band);
-
-            }
-            else
-            {
-                if (_usbbcddevices != null)
-                {
-                    if (_usbbcddevices.HasDevices) _usbbcddevices.SetRelays(_usbdevicesn, 0);                   
-                    _usbbcddevices.CloseDevice(_usbdevicesn);
-                    _usbbcddevices = null;
-                    _usbdevicesn = "";
-                    comboUsbDevices.Text = "";
-                }              
             }
         }
+        public void CloseUsbBcdDevice()
+        {
+            if (m_usbbcddevices != null && m_sUsbBCDSerialNumber != "" && m_bUsbBCDdeviceOpen)
+            {
+                try
+                {
+                    m_usbbcddevices.SetRelays(m_sUsbBCDSerialNumber, 0);
+                }
+                catch { }
+                try
+                {
+                    m_usbbcddevices.CloseDevice(m_sUsbBCDSerialNumber);
+                }
+                catch { }
+            }
+            m_bUsbBCDdeviceOpen = false;
+        }
+        private void comboUsbDevices_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (m_usbbcddevices == null) return;
+
+            if (m_bUsbBCDdeviceOpen && comboUsbDevices.Text != m_sUsbBCDSerialNumber)
+            {
+                // a device is open, but the one we now want is different, close current
+                CloseUsbBcdDevice();
+            }
+
+            m_sUsbBCDSerialNumber = comboUsbDevices.Text;
+
+            if (m_sUsbBCDSerialNumber != "")
+            {
+                bool bOk = true;
+
+                if (!m_bUsbBCDdeviceOpen)
+                {
+                    try
+                    {
+                        m_usbbcddevices.OpenDevice(m_sUsbBCDSerialNumber);
+                        m_bUsbBCDdeviceOpen = true;
+                    }
+                    catch { bOk = false; }
+                }
+
+                if (bOk && m_bUsbBCDdeviceOpen)
+                {
+                    try
+                    {
+                        byte values = m_usbbcddevices.GetRelays(m_sUsbBCDSerialNumber);
+                    }
+                    catch { bOk = false; }
+
+                    try
+                    {
+                        m_usbbcddevices.SetBCDbyBand(m_sUsbBCDSerialNumber, console.RX1Band);
+                    }
+                    catch { bOk = false; }
+                }
+
+                if (!bOk)
+                {
+                    chkUsbBCD.Checked = false;
+                    return;
+                }
+            }
+        }
+        //UsbBCDDevices _usbbcddevices;
+        //private bool usbBCD = false;
+        //public bool UsbBCD
+        //{
+        //    get { return usbBCD; }
+        //    set { usbBCD = value; }
+        //}
+
+        //public void UpdateUsbBCDdevice(Band rx1band)
+        //{
+        //    if(usbBCD) 
+        //    _usbbcddevices.SetBCDbyBand(_usbdevicesn, rx1band);
+        //}
+        //private string _usbdevicesn;
+        //private void chkUsbBCD_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    UsbBCD = chkUsbBCD.Checked;
+        //    comboUsbDevices.Enabled = UsbBCD;
+
+        //    if (usbBCD)
+        //    {
+        //        if (_usbbcddevices == null)
+        //        {
+        //            _usbbcddevices = new UsbBCDDevices();
+
+        //            if (_usbbcddevices.HasDevices)
+        //            {
+        //                foreach (string device in _usbbcddevices.DeviceSerialNumbers)
+        //                {
+        //                    _usbbcddevices.OpenDevice(device);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                chkUsbBCD.Checked = false;
+        //                return;
+        //            }
+        //        }
+
+        //        comboUsbDevices.DataSource = _usbbcddevices.DeviceSerialNumbers;
+        //        comboUsbDevices.SelectedIndex = 0;
+
+        //        _usbdevicesn = comboUsbDevices.Text;
+        //        if (_usbdevicesn == "")
+        //        {
+        //            return;
+        //        }
+
+        //        byte values = _usbbcddevices.GetRelays(_usbdevicesn);
+        //        //_usbbcddevices.SetRelays(sn, values);
+        //        _usbbcddevices.SetBCDbyBand(_usbdevicesn, console.RX1Band);
+
+        //    }
+        //    else
+        //    {
+        //        if (_usbbcddevices != null)
+        //        {
+        //            if (_usbbcddevices.HasDevices) _usbbcddevices.SetRelays(_usbdevicesn, 0);                   
+        //            _usbbcddevices.CloseDevice(_usbdevicesn);
+        //            _usbbcddevices = null;
+        //            _usbdevicesn = "";
+        //            comboUsbDevices.Text = "";
+        //        }              
+        //    }
+        //}
         #endregion
 
         private bool _timerCheckingTXProfile = false; //[2.10.3.5]MW0LGE used to bypass changed events caused
@@ -29203,6 +29338,27 @@ namespace Thetis
 
             InitAudioTab();
         }
+
+        //[2.10.3.5]W4WMT implements #87
+        private void chkMICVOXAllowBypass_CheckedChanged(object sender, EventArgs e)
+        {
+            console.AllowMICVOXBypass = chkMICVOXAllowBypass.Checked;
+        }
+
+        //[2.10.3.5]MW0LGE implements #306
+        private void chkStopRX1WaterfallOnTx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            Display.StopRX1WaterfallOnTx = chkStopRX1WaterfallOnTx.Checked;
+        }
+
+        private void chkStopRX2WaterfallOnTx_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            Display.StopRX2WaterfallOnTx = chkStopRX2WaterfallOnTx.Checked;
+        }
+        //
+
         //private bool renameSkinForDeletion(string sFullPath)
         //{
         //    if (_skinPath == "" || !Directory.Exists(sFullPath)) return false;
