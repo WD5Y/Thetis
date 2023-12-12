@@ -3537,6 +3537,7 @@
             this.panelTS4 = new System.Windows.Forms.PanelTS();
             this.radioButtonTS5 = new System.Windows.Forms.RadioButtonTS();
             this.radioButtonTS6 = new System.Windows.Forms.RadioButtonTS();
+            this.chkAutoStart = new System.Windows.Forms.CheckBoxTS();
             tpAlexAntCtrl = new System.Windows.Forms.TabPage();
             numericUpDownTS3 = new System.Windows.Forms.NumericUpDownTS();
             numericUpDownTS4 = new System.Windows.Forms.NumericUpDownTS();
@@ -9034,6 +9035,7 @@
             // tpOptions2
             // 
             this.tpOptions2.BackColor = System.Drawing.SystemColors.Control;
+            this.tpOptions2.Controls.Add(this.chkAutoStart);
             this.tpOptions2.Controls.Add(this.groupBoxTS32);
             this.tpOptions2.Controls.Add(this.chkCancelQSplitOnCatTCIsplit);
             this.tpOptions2.Controls.Add(this.chkQuickSplit);
@@ -56373,6 +56375,19 @@
             this.radioButtonTS6.Text = "Auto";
             this.radioButtonTS6.UseVisualStyleBackColor = true;
             // 
+            // chkAutoStart
+            // 
+            this.chkAutoStart.AutoSize = true;
+            this.chkAutoStart.Image = null;
+            this.chkAutoStart.Location = new System.Drawing.Point(204, 253);
+            this.chkAutoStart.Name = "chkAutoStart";
+            this.chkAutoStart.Size = new System.Drawing.Size(148, 17);
+            this.chkAutoStart.TabIndex = 41;
+            this.chkAutoStart.Text = "Auto Power-Up At Startup";
+            this.toolTip1.SetToolTip(this.chkAutoStart, "Use an outlined cross for the mouse cursor if it is flickering/vanishing");
+            this.chkAutoStart.UseVisualStyleBackColor = true;
+            this.chkAutoStart.CheckedChanged += new System.EventHandler(this.chkAutoStart_CheckedChanged);
+            // 
             // Setup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -61066,5 +61081,6 @@
         private CheckBoxTS chkMICVOXAllowBypass;
         private CheckBoxTS chkStopRX1WaterfallOnTx;
         private CheckBoxTS chkStopRX2WaterfallOnTx;
+        public CheckBoxTS chkAutoStart;
     }
 }

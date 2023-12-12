@@ -29357,6 +29357,18 @@ namespace Thetis
             if (initializing) return;
             Display.StopRX2WaterfallOnTx = chkStopRX2WaterfallOnTx.Checked;
         }
+
+        private void chkAutoStart_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAutoStart.Checked)
+            {
+                console.chkautostart = true;
+            }
+            else
+            {
+                console.chkautostart = false;
+            }
+        }
         //
 
         //private bool renameSkinForDeletion(string sFullPath)

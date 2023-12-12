@@ -79,6 +79,7 @@ namespace Thetis
         public PSForm psform;
         private DigiMode rx1dm;
         private DigiMode rx2dm;
+        public bool chkautostart;
 
         public Radio radio;
         public SpecRX specRX;
@@ -1210,6 +1211,16 @@ namespace Thetis
                         break;
                     }
                 }
+
+                //wd5y
+                if (chkautostart == true)
+                {
+                    autoStartTimer = new System.Timers.Timer(2000);
+                    autoStartTimer.Elapsed += OnAutoStartTimerEvent;
+                    autoStartTimer.AutoReset = false;
+                    autoStartTimer.Enabled = true;
+                }
+                //wd5y
             }
         }
         private void initialisePortAudio()
@@ -48878,6 +48889,20 @@ namespace Thetis
             RX1AGCMode = record.AGCMode;
             if (RF != record.AGCT && AutoAGCRX1) AutoAGCRX1 = false; // turn off 'auto agc' only if different MW0LGE_21k8
             RF = record.AGCT;
+
+            //wd5y
+            AutoAGCRX1 = record.RX1AGCAUT;
+            if (sliderForm != null)
+            {
+                sliderForm.chkAGCAut.Checked = AutoAGCRX1;
+            }
+
+            AutoAGCRX2 = record.RX2AGCAUT;
+            if (sliderForm != null)
+            {
+                sliderForm.chkRX2AGCAut.Checked = AutoAGCRX2;
+            }
+            //wd5y
         }
 
         private void comboFMMemory_SelectedIndexChanged(object sender, EventArgs e)

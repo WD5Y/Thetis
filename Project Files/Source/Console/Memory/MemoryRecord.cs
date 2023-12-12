@@ -79,8 +79,8 @@ namespace Thetis
         public MemoryRecord(string _group, double _rxfreq, string _name, DSPMode _dsp_mode, bool _scan,
                  string _tune_step, FMTXMode _repeater_mode, double _fm_tx_offset_mhz, bool _ctcss_on, double _ctcss_freq,
                  int _power, int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh,
-                 string _comments, AGCMode _agc_mode, int _agc_thresh, 
-                 DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
+                 string _comments, AGCMode _agc_mode, int _agc_thresh, bool _rx1agcaut, bool _rx2agcaut,
+        DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
         {
             group = _group;
             rx_freq = _rxfreq;
@@ -102,6 +102,8 @@ namespace Thetis
             comments = _comments;
             agc_mode = _agc_mode;
             agct = _agc_thresh;
+            rx1agcaut = _rx1agcaut;
+            rx2agcaut = _rx2agcaut;
 
             startdate = _StartDate; // ke9ns add  for scheduled freq change and optional recording
             scheduleon = _ScheduleOn; // ke9ns add  for scheduled freq change and optional recording 
@@ -148,7 +150,8 @@ namespace Thetis
             comments = rec.comments;
             agc_mode = rec.agc_mode;
             agct = rec.agct;
-
+            rx1agcaut = rec.rx1agcaut;
+            rx2agcaut = rec.rx2agcaut;
 
             startdate = rec.startdate; // ke9ns add  for scheduled freq change and optional recording
             scheduleon = rec.scheduleon; // ke9ns add  for scheduled freq change and optional recording 
@@ -509,6 +512,31 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("Extra"));
             }
         }
+
+        //wd5y
+        private bool rx1agcaut = false;
+        public bool RX1AGCAUT
+        {
+            get { return rx1agcaut; }
+            set
+            {
+                rx1agcaut = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("RX1AGC-AUT"));
+            }
+        }
+
+        private bool rx2agcaut = false;
+        public bool RX2AGCAUT
+        {
+            get { return rx2agcaut; }
+            set
+            {
+                rx2agcaut = value;
+                OnPropertyChanged(this, new PropertyChangedEventArgs("RX2AGC-AUT"));
+            }
+        }
+        //wd5y
+
 
 
 
