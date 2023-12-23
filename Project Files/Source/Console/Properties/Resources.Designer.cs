@@ -183,6 +183,46 @@ namespace Thetis.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cat_serial_status {
+            get {
+                object obj = ResourceManager.GetObject("cat_serial_status", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cat_tcp_status {
+            get {
+                object obj = ResourceManager.GetObject("cat_tcp_status", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cm_green {
+            get {
+                object obj = ResourceManager.GetObject("cm_green", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cm_red {
+            get {
+                object obj = ResourceManager.GetObject("cm_red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cpu {
             get {
                 object obj = ResourceManager.GetObject("cpu", resourceCulture);
@@ -376,6 +416,16 @@ namespace Thetis.Properties {
         internal static System.Drawing.Bitmap Multifunction {
             get {
                 object obj = ResourceManager.GetObject("Multifunction", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap n1mm {
+            get {
+                object obj = ResourceManager.GetObject("n1mm", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -817,6 +867,16 @@ namespace Thetis.Properties {
             get {
                 object obj = ResourceManager.GetObject("swissli", resourceCulture);
                 return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tci_status {
+            get {
+                object obj = ResourceManager.GetObject("tci_status", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

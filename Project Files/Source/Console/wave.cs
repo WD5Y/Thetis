@@ -976,13 +976,15 @@ namespace Thetis
 
             if (!checkBoxRecord.Checked)
             {
-                if (console.RX2Enabled && WaveThing.wave_file_writer[0] != null)
+                if (console.RX2Enabled && WaveThing.wave_file_writer[1] != null) //[2.10.3.5]MW0LGE [1] for null not [0]
                 {
                     Thread.Sleep(100);
                     WaveThing.wave_file_writer[1].Stop();
                 }
 
-             	WaveThing.wave_file_writer[0].Stop();
+                if (WaveThing.wave_file_writer[0] != null) //[2.10.3.5]MW0LGE
+                    WaveThing.wave_file_writer[0].Stop();
+
 				checkBoxRecord.BackColor = SystemColors.Control;
 				//MessageBox.Show("The file has been written to the following location:\n"+file_name);
 			}
@@ -2478,6 +2480,7 @@ namespace Thetis
 			return filename;
 		}
 
+        private bool m_bMox = false;
         private float m_fInverseGain = 1f;
         private object m_inversGainlock = new object();
         public float RecordGain
@@ -2486,6 +2489,8 @@ namespace Thetis
             {
                 lock (m_inversGainlock)
                 {
+                    UpdateMox();
+
                     if (value <= 0)
                     {
                         m_fInverseGain = 0;
@@ -2498,13 +2503,29 @@ namespace Thetis
                 }
             }
         }
+        public void UpdateMox()
+        {
+            // upate based on what is happening in console
+            // this m_bMox bool is then used win WriteBuffer() so that audio recorded when mox has a gain of 1
+            lock (m_inversGainlock)
+            {
+                if (id == 0) //rx1 sub0
+                    m_bMox = Audio.MOX && Audio.console.VFOATX;
+                else if (id == 1) //rx2 sub0
+                    m_bMox = Audio.MOX && Audio.console.RX2Enabled && Audio.console.VFOBTX;
+            }
+        }
+
         public static bool dither = false;
 		private void WriteBuffer(ref BinaryWriter writer, ref int count)
 		{
             float fGain;
             lock (m_inversGainlock)
             {
-                fGain = m_fInverseGain;
+                if (!m_bMox)                                     // data belongs to RX
+                    fGain = m_fInverseGain;
+                else                                                // data belongs to TX
+                    fGain = 1;
             }
 
             int cntL = rb_l.Read(in_buf_l, IN_BLOCK);
@@ -2551,6 +2572,8 @@ namespace Thetis
                 for (int i = 0; i < out_cnt; i++)
                 {
                     out_buf_l[i] = out_buf_l[i] * fGain;
+                    if (out_buf_l[i] > 1.0f) out_buf_l[i] = 1.0f;
+                    else if (out_buf_l[i] < -1.0f) out_buf_l[i] = -1.0f;
                 }
 
                 out_buf_l.CopyTo(out_buf, 0);

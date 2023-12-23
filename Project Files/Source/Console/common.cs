@@ -44,9 +44,9 @@ using System.Threading.Tasks;
 
 namespace Thetis
 {
-	// extend contains to be able to ignore case etc MW0LGE
 	public static class StringExtensions
 	{
+        // extend contains to be able to ignore case etc MW0LGE
         public static bool Contains(this string source, string toCheck, StringComparison comp)
 		{
             if (source == null)
@@ -1148,6 +1148,26 @@ namespace Thetis
 				return true;
 			}
 			catch { return false; }
+        }
+
+        public static int FindNextPowerOf2(int n)
+        {
+            n--;
+            n |= n >> 1;
+            n |= n >> 2;
+            n |= n >> 4;
+            n |= n >> 8;
+            n |= n >> 16;
+            return ++n;
+        }
+        public static int FindPreviousPowerOf2(int n)
+        {
+            n |= n >> 1;
+            n |= n >> 2;
+            n |= n >> 4;
+            n |= n >> 8;
+            n |= n >> 16;
+            return n - (n >> 1);
         }
     }
 }
