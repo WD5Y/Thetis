@@ -1,5 +1,7 @@
 # !! CW Warning !!
 
+**UPDATE: The CW issue has been resolved for Protocol 2. It requires a firmware update and this modified version of Thetis. Please see the [ApacheLab community forums here](https://community.apache-labs.com/viewtopic.php?f=32&t=4972)**
+
 If you use CW and you have different RX and TX antenna ports configured, there is a high potential for full RF power to be present briefly on the RX port. This may lead to damage of any sensitive equipment attached to the RX port such as active antennas and the like. This situation can occur if you utilise the CWX form, serial keying/PTT, and standard hardware keys plugged into the radio. This issue is currently under investigation and has existed in Thetis for an extended period (years and years). If you are interested in following the progress, you can read more about it on [GitHub here](https://github.com/ramdor/Thetis/issues/228).
 
 **Note: You can revisit these release notes by clicking the button in the setup form within the General -> H/W Select tab.**
@@ -7,7 +9,15 @@ If you use CW and you have different RX and TX antenna ports configured, there i
 
 Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/issues/new/choose).
 
-## v2.10.3.5 Pre-Release Change Log
+## v2.10.3.6 Change Log - WIP dev
+- [add] -help command line option
+- [fix] vac mic audio source can now be recorded
+- [fix] split TXing out of a ham band will no longer disable split when extended mode is used. Note: 'Prevent TX when on different band to RX' option will be used if enabled and TX band has been moved for bandpass/lpf purposes (ie when tx'ing on 11m)
+- [fix] output power on ANT ports configured as RX only should be resolved. Requires an update to your firmware. See the [ApacheLab community forums here](https://community.apache-labs.com/viewtopic.php?f=32&t=4972)
+- [change] the dB shift setting for AGC auto noise floor compensation is now a true shift from NF. You will probably need to tweak your previous setting
+- [change] the shutdown log is defaulted off. Use command line param -logshutdown to cause Thetis to create a shutdown_log.txt file if you are having shutdown issues which can then be sent in for analysis
+
+## v2.10.3.5 Change Log
 - [add] midi device DJ2GO2 Touch MIDI is now handled uniquely, and main sliders will have values reversed
 - [add] mox/ptt time out timer functionality in Options2 tab
 - [add] amp view will restore size if set to 'show on startup'
@@ -18,7 +28,7 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [add] dBm text colour appearance option for noise floor line
 - [add] option to show/hide multimeter containers
 - [add] can now use vsql from andromeda analogue slider window. The sql buttons are now tri state, sqloff, sql, vsql
-- [add] cmASIO feature for 'power users'. See included documentation in the install folder/start menu
+- [add] cmASIO feature for 'power users'. See included documentation in the install folder/start menu. Bryan W4WMT
 - [add] cmASIO icon on status bar. Green if ok and in use. Red if there is a problem.
 - [add] someone in red might show up when it snows from now until the 26th Dec
 - [add] option in VAC1 to cause VOX to use MIC instead of VAC
@@ -36,6 +46,7 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [fix] scope time base differences between RX and TX should be resolved
 - [fix] Protocol 1 MAC address now correcly obtained from the discovery packet sent from the radio on port 1024. P1 MAC addy starts at byte 3, not byte 5
 - [fix] fixed an issue that caused the spectral area to be recentred for rx1+rx2 when shift was held to peform a ZTB for RX2
+- [change] TCI now has option to switch to CWU if it receives a CW modulation message and related vfo frequency is at or above 10MHz
 - [change] wav file recording volume is normalised to ignore RX AF. Note: when muted/0vol recording is 'silent'
 - [change] finder will now gather info using multiple threads at a time. Some users were reporting startup time delay
 - [change] skinserver now attempts to select skin when downloaded and shows 'wait' mouse pointer whilst changing
@@ -43,6 +54,8 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [change] protocol tri state checkbox changed over to 3 radio buttons, one to select each protocol, and one to select auto
 - [change] vfosync in diversity form now mirrors state at top of main console
 - [change] scope display time is now in ms, and will take that long to fill the width of the view
+- [change] normalising PBSNR now does not adjust noise floor
+- [change] layout adjustments by DK1KLM
 
 ## v2.10.3.4 Change Log
 - [add] show on startup options for ampview and linearity/ps window. Set in the linearity/ps window

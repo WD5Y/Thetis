@@ -3513,7 +3513,7 @@ namespace Thetis
                     chkRX2StepAtt.Checked = value;
                 }
             }
-        }      
+        }
         public int ATTOnTX
         {
             get
@@ -3527,7 +3527,11 @@ namespace Thetis
                 {
                     if (value > 31) value = 31;
                     if (value < 0) value = 0; //MW0LGE [2.9.0.7] added after mi0bot source review
-                    udATTOnTX.Value = value;
+                    lblTXattBand.Text = console.TXBand.ToString();
+                    if (udATTOnTX.Value == value) //[2.10.3.6]MW0LGE there will be no change event
+                        udATTOnTX_ValueChanged(this, EventArgs.Empty);
+                    else
+                        udATTOnTX.Value = value;
                 }
             }
         }
@@ -7409,7 +7413,7 @@ namespace Thetis
                     Display.SpectrumGridMin = (int)console.DisplayGridMinXVTR;
                     break;
             }
-            console.UpdateDisplayGridLevelMinValues(); //MW0LGE  //MW0LGE_21e
+            console.UpdateDisplayGridLevelMinValues(true); //MW0LGE  //MW0LGE_21e
             console.WaterfallUseRX1SpectrumMinMax = chkWaterfallUseRX1SpectrumMinMax.Checked; // MW0LGE_21d this will force an update
                                                                                               // which is needed because Cat etc will cause
                                                                                               // this valuechanged event
@@ -9734,7 +9738,7 @@ namespace Thetis
                 console.CATEnabled = false;
             }
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void chkCAT2Enable_CheckedChanged(object sender, System.EventArgs e)
@@ -9790,7 +9794,7 @@ namespace Thetis
                 console.CAT2Enabled = false;
             }
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void chkCAT3Enable_CheckedChanged(object sender, System.EventArgs e)
@@ -9846,7 +9850,7 @@ namespace Thetis
                 console.CAT3Enabled = false;
             }
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void chkCAT4Enable_CheckedChanged(object sender, System.EventArgs e)
@@ -9902,7 +9906,7 @@ namespace Thetis
                 console.CAT4Enabled = false;
             }
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void ChkEnableAndromeda_CheckedChanged(object sender, EventArgs e)
@@ -10135,7 +10139,7 @@ namespace Thetis
             if (comboCATPort.Text.StartsWith("COM"))
                 console.CATPort = Int32.Parse(comboCATPort.Text.Substring(3));
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void comboCAT2Port_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -10155,7 +10159,7 @@ namespace Thetis
             if (comboCAT2Port.Text.StartsWith("COM"))
                 console.CAT2Port = Int32.Parse(comboCAT2Port.Text.Substring(3));
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void comboCAT3Port_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -10175,7 +10179,7 @@ namespace Thetis
             if (comboCAT3Port.Text.StartsWith("COM"))
                 console.CAT3Port = Int32.Parse(comboCAT3Port.Text.Substring(3));
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void comboCAT4Port_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -10195,7 +10199,7 @@ namespace Thetis
             if (comboCAT4Port.Text.StartsWith("COM"))
                 console.CAT4Port = Int32.Parse(comboCAT4Port.Text.Substring(3));
 
-            console.UpdateStatusBarStatusIcons(4);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
         private void ComboAndromedaCATPort_SelectedIndexChanged(object sender, EventArgs e)
@@ -13139,7 +13143,7 @@ namespace Thetis
 
             console.AlexAntCtrlEnabled = true; // need side effect of prop set to push data down to C code 
 
-            return;
+            handleRXAntennaChangeForNF(band);
         }
 
 
@@ -13189,11 +13193,11 @@ namespace Thetis
                 Alex.getAlex().setRxAnt(band, (byte)ant);
                 pi_RxAnt = ant;                                 // Path_Illustrator support
                 console.SetAriesRXAntenna(ant, band); // temporaily disable needs more work
+
+                handleRXAntennaChangeForNF(band);
             }
 
             console.AlexAntCtrlEnabled = true; // need side effect of prop set to push data down to C code 
-
-            return;
         }
 
         // set RX antenna to new antenna 1-3
@@ -13257,6 +13261,21 @@ namespace Thetis
             }
         }
 
+        private void handleRXAntennaChangeForNF(Band band)
+        {
+            // antenna change should cause noise floor to go into fast attack
+
+            int rx1 = -1, rx2 = -1, sync1 = -1, sync2 = -1, psrx = -1, pstx = -1;
+            console.GetDDC(out rx1, out rx2, out sync1, out sync2, out psrx, out pstx);
+            int nRX1ADCinUse = console.GetADCInUse(rx1);
+            int nRX2ADCinUse = console.GetADCInUse(rx2);
+
+            if (nRX1ADCinUse == 0 && console.RX1Band == band)
+                Display.FastAttackNoiseFloorRX1 = true;
+
+            if (nRX2ADCinUse == 0 && (console.RX2Enabled && console.RX2Band == band)) // also if adc0 for rx2 then we need to fast attack
+                Display.FastAttackNoiseFloorRX2 = true;
+        }
         private void btnHPSDRFreqCalReset_Click(object sender, System.EventArgs e)
         {
             udHPSDRFreqCorrectFactor.Value = (decimal)1.0;
@@ -13280,19 +13299,31 @@ namespace Thetis
             lblMetisIP.Text = NetworkIO.HpSdrHwIpAddress;
             lblMetisMAC.Text = NetworkIO.HpSdrHwMacAddress;
 
-            //MW0LGE_21d
-            if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH)
+            string sProtocolInfo = "Protocol ?";
+            string sMetisCodeVersion = "?.?";
+            string sBoard = "?";
+
+            if (NetworkIO.getHaveSync() == 1)
             {
-                lblProtocolInfo.Text = "Protocol 2 (v" + NetworkIO.ProtocolSupported.ToString("0\\.0") + ")";
-                lblMetisCodeVersion.Text = NetworkIO.FWCodeVersion.ToString("0\\.0") + "." + NetworkIO.BetaVersion.ToString();
-            }
-            else
-            {
-                lblProtocolInfo.Text = "Protocol 1";
-                lblMetisCodeVersion.Text = NetworkIO.FWCodeVersion.ToString("0\\.0");
+                //MW0LGE_21d
+                if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH)
+                {
+                    sProtocolInfo = "Protocol 2 (v" + NetworkIO.ProtocolSupported.ToString("0\\.0") + ")";
+                    sMetisCodeVersion = NetworkIO.FWCodeVersion.ToString("0\\.0") + "." + NetworkIO.BetaVersion.ToString();
+                }
+                else
+                {
+                    sProtocolInfo = "Protocol 1";
+                    sMetisCodeVersion = NetworkIO.FWCodeVersion.ToString("0\\.0");
+                }
+
+                sBoard = NetworkIO.BoardID.ToString();
             }
 
-            lblMetisBoardID.Text = NetworkIO.BoardID.ToString();
+            lblProtocolInfo.Text = sProtocolInfo;
+            lblMetisCodeVersion.Text = sMetisCodeVersion;
+            lblMetisBoardID.Text = sBoard;
+
             return;
         }
 
@@ -16440,13 +16471,13 @@ namespace Thetis
             if (initializing) return;
             console.radio.GetDSPRX(0, 1).RXADollyFreq1 = (double)udDSPRX1SubDollyF1.Value;
         }
-        private bool _updatingATTTX = false;
+        //private bool _updatingATTTX = false;
         private void udATTOnTX_ValueChanged(object sender, EventArgs e)
         {
-            if (_updatingATTTX) return;
-            _updatingATTTX = true;
+            //if (_updatingATTTX) return;
+            //_updatingATTTX = true;
             console.TxAttenData = (int)udATTOnTX.Value;
-            _updatingATTTX = false;
+            //_updatingATTTX = false;
         }
 
         private void ud6mLNAGainOffset_ValueChanged(object sender, EventArgs e)
@@ -19932,7 +19963,7 @@ namespace Thetis
 
         private void tmrPLLLockChecker_Tick(object sender, EventArgs e)
         {
-            if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH)
+            if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH && NetworkIO.getHaveSync() == 1)
             {
                 lblPLLLock.Text = NetworkIO.GetPLLLock() ? "PLL Locked" : "PLL Not Locked";
             }
@@ -19996,7 +20027,7 @@ namespace Thetis
 
             stopStartN1MMSpectrum();
 
-            console.UpdateStatusBarStatusIcons(2);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.N1MM);
         }
 
         private void stopStartN1MMSpectrum()
@@ -20021,7 +20052,7 @@ namespace Thetis
 
             stopStartN1MMSpectrum();
 
-            console.UpdateStatusBarStatusIcons(2);
+            console.UpdateStatusBarStatusIcons(StatusBarIconGroup.N1MM);
         }
 
         private void txtN1MMSendTo_TextChanged(object sender, EventArgs e)
@@ -22054,6 +22085,7 @@ namespace Thetis
             if (p.GetMaxPowerUse(_adjustingBand))
             {
                 // using watts
+                lblDriveHeader.TextAlign = ContentAlignment.MiddleRight;
                 for (int n = 0; n < 9; n++)
                 {
                     int num = (n * 10) + 10;
@@ -22070,6 +22102,7 @@ namespace Thetis
             else
             {
                 //using drive
+                lblDriveHeader.TextAlign = ContentAlignment.MiddleCenter;
                 for (int n = 0; n < 9; n++)
                 {
                     int num = (n * 10) + 10;
@@ -26708,6 +26741,74 @@ namespace Thetis
             if (initializing) return;
             console.RX2PBsnrShift = (double)nudPBsnrShiftRx2.Value;
         }
+
+        private void chkCWbecomesCWUabove10mhz_CheckedChanged(object sender, EventArgs e)
+        {
+            console.TCICWbecomesCWUabove10mhz = chkCWbecomesCWUabove10mhz.Checked;
+        }
+        
+        //wd5y
+        private void chkAmpDRVLim_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)            
+                {
+                int drvlimpwr = (int)(console.ptbPWR.Value / (float)(console.ptbPWR.Maximum - console.ptbPWR.Minimum) * GetPABandMaxPower(console.TXBand));
+                int tunlimpwr = (int)(console.ptbTune.Value / (float)(console.ptbTune.Maximum - console.ptbTune.Minimum) * GetPABandMaxPower(console.TXBand));
+
+                if (numUpDnDRVLim.Value < drvlimpwr & numUpDnTUNLim.Value < tunlimpwr)
+                {
+                    console.RXOnly = true;
+                    console.chkExternalPA.Checked = false;
+                    console.ptbPWR.Value = 0;                    
+                    console.lblPWR.Text = "Drive:  " + 0 + "w";
+                    console.lblPWR2.Text = "Drive:  " + 0 + "w";
+                    console.ptbTune.Value = 0;                    
+                    console.lblTune.Text = "Tune:  " + 0 + "w";
+
+                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    console.RXOnly = false;
+                    console.chkExternalPA.Checked = true;
+                    return;
+                }
+            }
+
+            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)
+            {
+                int drvlimpwr = (int)(console.ptbPWR.Value / (float)(console.ptbPWR.Maximum - console.ptbPWR.Minimum) * GetPABandMaxPower(console.TXBand));
+
+                if (numUpDnDRVLim.Value < drvlimpwr)
+                {
+                    console.RXOnly = true;
+                    console.chkExternalPA.Checked = false;
+                    console.ptbPWR.Value = 0;                    
+                    console.lblPWR.Text = "Drive:  " + 0 + "w";
+                    console.lblPWR2.Text = "Drive:  " + 0 + "w";
+
+                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    console.RXOnly = false;
+                    console.chkExternalPA.Checked = true;
+                    return;
+                }
+            }
+            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)
+            {
+                int tunlimpwr = (int)(console.ptbTune.Value / (float)(console.ptbTune.Maximum - console.ptbTune.Minimum) * GetPABandMaxPower(console.TXBand));
+
+                if (numUpDnTUNLim.Value < tunlimpwr)
+                {
+                    console.RXOnly = true;
+                    console.chkExternalPA.Checked = false;
+                    console.ptbTune.Value = 0;                    
+                    console.lblTune.Text = "Tune:  " + 0 + "w";
+
+                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    console.RXOnly = false;
+                    console.chkExternalPA.Checked = true;
+                    return;
+                }
+            }            
+        }
+        //wd5y
     }
 
     #region PADeviceInfo Helper Class
