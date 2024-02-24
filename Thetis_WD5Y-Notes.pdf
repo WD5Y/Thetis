@@ -1,0 +1,10 @@
+1) Added "Amp Pwr Lim" checkbox on the OC tab in setup; lets you set hard limits on both the drive and tune sliders. This will toggle the radio xmit and xPA to off and move the
+   associated slider or sliders to zero, then show a window to inform the operator to reset slider values. This works before any power is transmitted to ensure amp safety.
+
+2) Added memory tabs to save "AGC Auto" funtion, saves you from having to re-enter auto agc when moving to another memory.
+
+3) Added values to the sliders along with buttons to "Gain" form in the "Andromeda Button Bar" selection in collapsed view.
+
+4) Linked sliders in the Andromeda Gain form.
+
+5) Cleaned up some anomalies / issues in Collapsed view.
