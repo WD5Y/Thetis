@@ -26764,6 +26764,7 @@ namespace Thetis
                     console.lblPWR2.Text = "Drive:  " + 0 + "w";
                     console.ptbTune.Value = 0;                    
                     console.lblTune.Text = "Tune:  " + 0 + "w";
+                    console.lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     console.RXOnly = false;
@@ -26800,6 +26801,7 @@ namespace Thetis
                     console.chkExternalPA.Checked = false;
                     console.ptbTune.Value = 0;                    
                     console.lblTune.Text = "Tune:  " + 0 + "w";
+                    console.lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     console.RXOnly = false;

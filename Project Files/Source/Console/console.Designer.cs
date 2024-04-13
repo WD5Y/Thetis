@@ -301,6 +301,8 @@
         //wd5y
         private LabelTS lblRF2;
         public LabelTS lblPWR2;
+        public LabelTS lblTune2;
+        //wd5y
         private LabelTS lblModeLabel;
         private LabelTS lblFilterLabel;
         private CheckBoxTS chkCWFWKeyer;
@@ -1051,7 +1053,10 @@
             this.lblPreamp = new System.Windows.Forms.LabelTS();
             this.lblAF3 = new System.Windows.Forms.LabelTS();
             this.lblAF2 = new System.Windows.Forms.LabelTS();
+            //wd5y
             this.lblPWR2 = new System.Windows.Forms.LabelTS();
+            this.lblTune2 = new System.Windows.Forms.LabelTS();
+            //wd5y
             this.panelModeSpecificDigital = new System.Windows.Forms.PanelTS();
             this.lblVACTXIndicator = new System.Windows.Forms.LabelTS();
             this.lblDigTXProfile = new System.Windows.Forms.LabelTS();
@@ -6620,6 +6625,14 @@
             this.lblPWR2.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblPWR2, "lblPWR2");
             this.lblPWR2.Name = "lblPWR2";
+            //
+            // lblTune2
+            //
+            this.lblTune2.Size = new System.Drawing.Size(35, 23);
+            this.lblTune2.BackColor = System.Drawing.Color.Transparent;
+            this.lblTune2.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblTune2, "lblTune2");
+            this.lblTune2.Name = "lblTune2";
             // 
             // panelModeSpecificDigital
             // 
@@ -7517,7 +7530,10 @@
             this.Controls.Add(this.panelMultiRX);
             this.Controls.Add(this.lblAF3);
             this.Controls.Add(this.lblAF2);
+            //wd5y
             this.Controls.Add(this.lblPWR2);
+            this.Controls.Add(this.lblTune2);
+            //wd5y
             this.Controls.Add(this.panelDisplay2);
             this.Controls.Add(this.panelDSP);
             this.Controls.Add(this.panelVFO);

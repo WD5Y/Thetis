@@ -111,6 +111,9 @@ namespace Thetis
         public LabelTS lblaf;
         public LabelTS lblmic;
         public LabelTS lblDRV;
+        public TrackBarTS tbTune;
+        private LabelTS lblTune;
+        public LabelTS lblTNE;
         System.Timers.Timer AutoHideTimer;                         // times auto hiding of form 
 
         #endregion
@@ -154,6 +157,7 @@ namespace Thetis
             lblmic.Text = console.lblMicVal.Text;
             lblDRV.Text = console.lblPWR.Text;
             chkSubRX.Checked = console.chkEnableMultiRX.Checked;
+            lblTNE.Text = console.lblTune.Text;
             //wd5y
         }
 
@@ -253,6 +257,9 @@ namespace Thetis
             this.lblaf = new System.Windows.Forms.LabelTS();
             this.lblmic = new System.Windows.Forms.LabelTS();
             this.lblDRV = new System.Windows.Forms.LabelTS();
+            this.tbTune = new System.Windows.Forms.TrackBarTS();
+            this.lblTune = new System.Windows.Forms.LabelTS();
+            this.lblTNE = new System.Windows.Forms.LabelTS();
             ((System.ComponentModel.ISupportInitialize)(this.tbMicGain)).BeginInit();
             this.grpSubRX.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSubRXPan)).BeginInit();
@@ -275,6 +282,7 @@ namespace Thetis
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1Sql)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1RF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1AF)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTune)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTS16
@@ -282,7 +290,7 @@ namespace Thetis
             this.labelTS16.AutoSize = true;
             this.labelTS16.ForeColor = System.Drawing.SystemColors.Control;
             this.labelTS16.Image = null;
-            this.labelTS16.Location = new System.Drawing.Point(750, 109);
+            this.labelTS16.Location = new System.Drawing.Point(750, 102);
             this.labelTS16.Name = "labelTS16";
             this.labelTS16.Size = new System.Drawing.Size(49, 13);
             this.labelTS16.TabIndex = 13;
@@ -290,7 +298,7 @@ namespace Thetis
             // 
             // tbMicGain
             // 
-            this.tbMicGain.Location = new System.Drawing.Point(740, 77);
+            this.tbMicGain.Location = new System.Drawing.Point(740, 70);
             this.tbMicGain.Maximum = 70;
             this.tbMicGain.Minimum = -96;
             this.tbMicGain.Name = "tbMicGain";
@@ -301,7 +309,7 @@ namespace Thetis
             // btnClose
             // 
             this.btnClose.Image = null;
-            this.btnClose.Location = new System.Drawing.Point(759, 211);
+            this.btnClose.Location = new System.Drawing.Point(759, 260);
             this.btnClose.Name = "btnClose";
             this.btnClose.Selectable = true;
             this.btnClose.Size = new System.Drawing.Size(96, 40);
@@ -326,7 +334,7 @@ namespace Thetis
             this.lblDrive.AutoSize = true;
             this.lblDrive.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblDrive.Image = null;
-            this.lblDrive.Location = new System.Drawing.Point(750, 176);
+            this.lblDrive.Location = new System.Drawing.Point(750, 162);
             this.lblDrive.Name = "lblDrive";
             this.lblDrive.Size = new System.Drawing.Size(24, 13);
             this.lblDrive.TabIndex = 9;
@@ -424,7 +432,7 @@ namespace Thetis
             // 
             // tbDrive
             // 
-            this.tbDrive.Location = new System.Drawing.Point(740, 144);
+            this.tbDrive.Location = new System.Drawing.Point(740, 130);
             this.tbDrive.Maximum = 100;
             this.tbDrive.Name = "tbDrive";
             this.tbDrive.Size = new System.Drawing.Size(131, 45);
@@ -1107,7 +1115,7 @@ namespace Thetis
             this.lblmic.AutoSize = true;
             this.lblmic.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblmic.Image = null;
-            this.lblmic.Location = new System.Drawing.Point(808, 109);
+            this.lblmic.Location = new System.Drawing.Point(808, 102);
             this.lblmic.Name = "lblmic";
             this.lblmic.Size = new System.Drawing.Size(20, 13);
             this.lblmic.TabIndex = 23;
@@ -1118,11 +1126,42 @@ namespace Thetis
             this.lblDRV.AutoSize = true;
             this.lblDRV.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.lblDRV.Image = null;
-            this.lblDRV.Location = new System.Drawing.Point(781, 176);
+            this.lblDRV.Location = new System.Drawing.Point(781, 162);
             this.lblDRV.Name = "lblDRV";
             this.lblDRV.Size = new System.Drawing.Size(21, 13);
             this.lblDRV.TabIndex = 24;
             this.lblDRV.Text = "TX";
+            // 
+            // tbTune
+            // 
+            this.tbTune.Location = new System.Drawing.Point(740, 190);
+            this.tbTune.Maximum = 100;
+            this.tbTune.Name = "tbTune";
+            this.tbTune.Size = new System.Drawing.Size(131, 45);
+            this.tbTune.TabIndex = 25;
+            this.tbTune.Scroll += new System.EventHandler(this.tbTune_Scroll);
+            // 
+            // lblTune
+            // 
+            this.lblTune.AutoSize = true;
+            this.lblTune.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblTune.Image = null;
+            this.lblTune.Location = new System.Drawing.Point(750, 222);
+            this.lblTune.Name = "lblTune";
+            this.lblTune.Size = new System.Drawing.Size(35, 13);
+            this.lblTune.TabIndex = 26;
+            this.lblTune.Text = "Tune:";
+            // 
+            // lblTNE
+            // 
+            this.lblTNE.AutoSize = true;
+            this.lblTNE.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.lblTNE.Image = null;
+            this.lblTNE.Location = new System.Drawing.Point(791, 222);
+            this.lblTNE.Name = "lblTNE";
+            this.lblTNE.Size = new System.Drawing.Size(32, 13);
+            this.lblTNE.TabIndex = 27;
+            this.lblTNE.Text = "Tune";
             // 
             // SliderSettingsForm
             // 
@@ -1130,6 +1169,9 @@ namespace Thetis
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.ClientSize = new System.Drawing.Size(883, 323);
+            this.Controls.Add(this.lblTNE);
+            this.Controls.Add(this.lblTune);
+            this.Controls.Add(this.tbTune);
             this.Controls.Add(this.lblDRV);
             this.Controls.Add(this.lblmic);
             this.Controls.Add(this.lblaf);
@@ -1178,6 +1220,7 @@ namespace Thetis
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1Sql)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1RF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbRX1AF)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTune)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1617,6 +1660,7 @@ namespace Thetis
             tbSubRXPan.Value = console.PanSubRX;
             tbMasterAF.Value = console.AF;
             tbDrive.Value = console.PWR;
+            tbTune.Value = console.TunePWR;
 
             //[2.10.3.5]MW0LGE
             //if (console.CATSquelch == 1)
@@ -2054,6 +2098,15 @@ namespace Thetis
         {
             if (console.SetupForm != null)
                 console.SetupForm.chkRX2StepAtt.Checked = chkATT2.Checked;
+        }
+
+        private void tbTune_Scroll(object sender, EventArgs e)
+        {
+            console.TunePWR = tbTune.Value;
+
+            //wd5y
+            lblTNE.Text = console.lblTune.Text;
+            //wd5y
         }
         //wd5y
     }

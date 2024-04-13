@@ -60,6 +60,7 @@ namespace Thetis
     using System.Windows.Forms;
     using System.Xml.Linq;
     using System.Collections.Concurrent;
+    using Thetis.Properties;
 
     public partial class Console : Form
     {
@@ -27539,13 +27540,13 @@ namespace Thetis
             if (!bShowLimitValue)
             {
                 if (ptbPWR.IsConstrained)
-                    lblPWR.Text = "Drive:  (" + sValue + ")";
+                    lblPWR.Text = "Drive :  (" + sValue + ")";
                 else
-                    lblPWR.Text = "Drive:  " + sValue;
+                    lblPWR.Text = "Drive :  " + sValue;
             }
             else
             {
-                lblPWR.Text = "Limit: " + sValue;
+                lblPWR.Text = "Limit :  " + sValue;
             }
 
             //wd5y
@@ -27563,6 +27564,7 @@ namespace Thetis
                     lblPWR2.Text = "Drive:  " + 0 + "w";
                     ptbTune.Value = 0;
                     lblTune.Text = "Tune:  " + 0 + "w";
+                    lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     RXOnly = false;
@@ -41483,10 +41485,11 @@ namespace Thetis
             lblAF3.Hide();
             lblAF2.Hide();
             lblRF3.Hide();
-            //wd5y
-
+            
             lblRF2.Hide();
             lblPWR2.Hide();
+            lblTune2.Hide();
+            //wd5y
 
             //MW0LGE
             if (m_bShowSmallModeFilterOnVFOs)
@@ -41616,6 +41619,11 @@ namespace Thetis
             ptbRX2AF.Location = tb_rx2af_basis;
             ptbPWR.Parent = panelSoundControls;
             ptbPWR.Location = tb_pwr_basis;
+
+            //wd5y
+            ptbTune.Parent = panelSoundControls;
+            ptbTune.Location = new Point(8, 246);            
+            //wd5y
 
             ptbRF.Parent = panelSoundControls;
             ptbRF.Location = tb_rf_basis;
@@ -42035,7 +42043,10 @@ namespace Thetis
                 chkFWCATU.Hide();                   // RX1 CTUN
                 lblAF2.Hide();
                 lblRF2.Hide();
+                //wd5y
                 lblPWR2.Hide();
+                lblTune2.Hide();
+                //wd5y
                 ptbAF.Hide();
                 ptbRX1AF.Hide();
                 ptbPWR.Hide();
@@ -42181,7 +42192,10 @@ namespace Thetis
                     //wd5y
 
                     lblRF2.Show();
+                    //wd5y
                     lblPWR2.Show();
+                    lblTune2.Show();
+                    //wd5y
 
                     ptbAF.Hide();
                     ptbRX1AF.Parent = this;
@@ -42275,7 +42289,10 @@ namespace Thetis
                     //wd5y
 
                     lblRF2.Show();
+                    //wd5y
                     lblPWR2.Show();
+                    lblTune2.Show();
+                    //wd5y
                     ptbPWR.Parent = this;
                     ptbPWR.Show();
 
@@ -42345,7 +42362,10 @@ namespace Thetis
                 //wd5y
 
                 lblRF2.Hide();
+                //wd5y
                 lblPWR2.Hide();
+                lblTune2.Hide();
+                //wd5y
                 comboPreamp.Hide();//MW0LGE
             }
 
@@ -42456,6 +42476,7 @@ namespace Thetis
                 lblAF3.Hide();
                 ptbRX2AF.Hide();
                 lblPWR2.Hide();
+                lblTune2.Hide();
                 ptbPWR.Hide();
                 lblRF3.Hide();
                 ptbRX2RF.Hide();
@@ -42592,19 +42613,24 @@ namespace Thetis
                     ptbRF.Show();
                     comboAGC.Show();
                     udRX1StepAttData.Show();
-                    comboPreamp.Show();
+                    comboPreamp.Show();                    
+                    ptbTune.Parent = this;
+                    ptbTune.Show();
+                    lblTune2.Show();
 
                     lblAF2.Location = new Point(5, chkPower.Location.Y + chkPower.Height + 5);
                     ptbRX1AF.Location = new Point(lblAF2.Location.X + lblAF2.Width, lblAF2.Location.Y);
                     lblPWR2.Location = new Point(ptbRX1AF.Location.X + ptbRX1AF.Width + 2, ptbRX1AF.Location.Y);
                     ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
                     lblRF2.Location = new Point(5, lblAF2.Location.Y + lblAF2.Height + 2);
-                    ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);
-                    comboAGC.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y + 3);
-                    udRX1StepAttData.Location = new Point(comboAGC.Location.X + udRX1StepAttData.Width + 2, comboAGC.Location.Y);
-                    comboPreamp.Location = new Point(comboAGC.Location.X + comboPreamp.Width + 2, comboAGC.Location.Y);
+                    ptbRF.Location = new Point(lblRF2.Location.X + lblRF2.Width, ptbRX1AF.Location.Y + ptbRX1AF.Height + 2);                   
+                    lblTune2.Location = new Point(ptbRF.Location.X + ptbRF.Width + 2, ptbRF.Location.Y);
+                    ptbTune.Location = new Point(lblTune2.Location.X + lblTune2.Width, lblTune2.Location.Y);
+                    comboAGC.Location = new Point(ptbTune.Location.X + ptbTune.Width + 2, ptbTune.Location.Y + 2);
+                    udRX1StepAttData.Location = new Point(comboAGC.Location.X + comboAGC.Width + 10, comboAGC.Location.Y);
+                    comboPreamp.Location = new Point(comboAGC.Location.X + comboAGC.Width + 10, comboAGC.Location.Y);
                     //wd5y
-                   
+
                     chkMUT.Location = new Point(grpVFOA.Location.X + grpVFOA.Width + 4, chkMON.Location.Y);  //MW0LGE -- move mute to right side of vfo box
 
                     //wd5y
@@ -42686,6 +42712,9 @@ namespace Thetis
                     comboRX2AGC.Show();
                     udRX2StepAttData.Show();
                     comboRX2Preamp.Show();
+                    ptbTune.Parent = this;
+                    ptbTune.Show();
+                    lblTune2.Show();
 
                     lblAF3.Location = new Point(9, chkPower.Location.Y + chkPower.Height + 5);
                     ptbRX2AF.Location = new Point(lblAF3.Location.X + lblAF3.Width, lblAF3.Location.Y);
@@ -42693,9 +42722,11 @@ namespace Thetis
                     ptbPWR.Location = new Point(lblPWR2.Location.X + lblPWR2.Width, lblPWR2.Location.Y);
                     lblRF3.Location = new Point(9, lblAF3.Location.Y + lblAF3.Height + 2);
                     ptbRX2RF.Location = new Point(lblRF3.Location.X + lblRF3.Width, ptbRX2AF.Location.Y + ptbRX2AF.Height + 2);
-                    comboRX2AGC.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y + 3);
-                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + udRX2StepAttData.Width + 2, comboRX2AGC.Location.Y);
-                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2Preamp.Width + 2, comboRX2AGC.Location.Y);
+                    lblTune2.Location = new Point(ptbRX2RF.Location.X + ptbRX2RF.Width + 2, ptbRX2RF.Location.Y);
+                    ptbTune.Location = new Point(lblTune2.Location.X + lblTune2.Width, lblTune2.Location.Y);
+                    comboRX2AGC.Location = new Point(ptbTune.Location.X + ptbTune.Width + 2, ptbTune.Location.Y + 2);
+                    udRX2StepAttData.Location = new Point(comboRX2AGC.Location.X + comboRX2AGC.Width, comboRX2AGC.Location.Y);
+                    comboRX2Preamp.Location = new Point(comboRX2AGC.Location.X + comboRX2AGC.Width, comboRX2AGC.Location.Y);                    
                     //wd5y 
 
                     chkRX2SR.Location = new Point(chkTUN.Location.X - chkRX2SR.Width - 10, chkTUN.Location.Y); //DUP                    
@@ -42932,7 +42963,9 @@ namespace Thetis
                 ptbRF.BringToFront();
                 ptbRX2RF.BringToFront();
                 lblPWR2.BringToFront();
+                lblTune2.BringToFront();
                 ptbPWR.BringToFront();
+                ptbTune.BringToFront();
                 comboAGC.BringToFront();
                 comboRX2AGC.BringToFront();
                 comboPreamp.BringToFront();
@@ -42953,7 +42986,9 @@ namespace Thetis
                 ptbRF.Hide();
                 ptbRX2RF.Hide();
                 lblPWR2.Hide();
+                lblTune2.Hide();
                 ptbPWR.Hide();
+                ptbTune.Hide();
                 comboAGC.Hide();
                 comboRX2AGC.Hide();
                 comboPreamp.Hide();
@@ -46016,6 +46051,7 @@ namespace Thetis
                     lblPWR2.Text = "Drive:  " + 0 + "w";
                     ptbTune.Value = 0;                    
                     lblTune.Text = "Tune:  " + 0 + "w";
+                    lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     RXOnly = false;
@@ -46052,6 +46088,7 @@ namespace Thetis
                     chkExternalPA.Checked = false;
                     ptbTune.Value = 0;                    
                     lblTune.Text = "Tune:  " + 0 + "w";
+                    lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     RXOnly = false;
@@ -46727,16 +46764,20 @@ namespace Thetis
             }
 
             if (!bShowLimitValue)
-            {                
+            {
                 if (ptbTune.IsConstrained)
-                    lblTune.Text = sHeader + ":  (" + sValue + ")";
+                    lblTune.Text = sHeader + " :   (" + sValue + ")";
                 else
-                    lblTune.Text = sHeader + ":  " + sValue;
+                    lblTune.Text = sHeader + " :   " + sValue;
             }
             else
             {
-                lblTune.Text = "Limit: "+ sValue;
+                lblTune.Text = "Limit :   " + sValue;
             }
+
+            //wd5y
+            lblTune2.Text = lblTune.Text;
+            //wd5y
         }
         private double m_fTuneDrivePower = -1;
         private void ptbTune_Scroll(object sender, EventArgs e)
@@ -46778,6 +46819,7 @@ namespace Thetis
                     lblPWR2.Text = "Drive:  " + 0 + "w";
                     ptbTune.Value = 0;
                     lblTune.Text = "Tune:  " + 0 + "w";
+                    lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     RXOnly = false;
@@ -46796,12 +46838,19 @@ namespace Thetis
                     chkExternalPA.Checked = false;
                     ptbTune.Value = 0;                    
                     lblTune.Text = "Tune:  " + 0 + "w";
+                    lblTune2.Text = "Tune:  " + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     RXOnly = false;
                     chkExternalPA.Checked = true;
                     return;
                 }
+            }
+
+            if (sliderForm != null)
+            {
+                sliderForm.tbTune.Value = ptbTune.Value;               
+                sliderForm.lblTNE.Text = lblTune.Text;                
             }
             //wd5y
         }
