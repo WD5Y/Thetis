@@ -1053,10 +1053,8 @@
             this.lblPreamp = new System.Windows.Forms.LabelTS();
             this.lblAF3 = new System.Windows.Forms.LabelTS();
             this.lblAF2 = new System.Windows.Forms.LabelTS();
-            //wd5y
             this.lblPWR2 = new System.Windows.Forms.LabelTS();
             this.lblTune2 = new System.Windows.Forms.LabelTS();
-            //wd5y
             this.panelModeSpecificDigital = new System.Windows.Forms.PanelTS();
             this.lblVACTXIndicator = new System.Windows.Forms.LabelTS();
             this.lblDigTXProfile = new System.Windows.Forms.LabelTS();
@@ -6625,10 +6623,9 @@
             this.lblPWR2.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblPWR2, "lblPWR2");
             this.lblPWR2.Name = "lblPWR2";
-            //
+            // 
             // lblTune2
-            //
-            this.lblTune2.Size = new System.Drawing.Size(35, 23);
+            // 
             this.lblTune2.BackColor = System.Drawing.Color.Transparent;
             this.lblTune2.ForeColor = System.Drawing.Color.White;
             resources.ApplyResources(this.lblTune2, "lblTune2");
@@ -7530,10 +7527,8 @@
             this.Controls.Add(this.panelMultiRX);
             this.Controls.Add(this.lblAF3);
             this.Controls.Add(this.lblAF2);
-            //wd5y
             this.Controls.Add(this.lblPWR2);
             this.Controls.Add(this.lblTune2);
-            //wd5y
             this.Controls.Add(this.panelDisplay2);
             this.Controls.Add(this.panelDSP);
             this.Controls.Add(this.panelVFO);
@@ -7815,7 +7810,10 @@
         private ToolStripMenuItem toolStripMenuItem18;
         private ToolStripStatusLabel toolStripStatusLabelAndromedaMulti;
         private ucQuickRecall ucQuickRecallPad;
-        private CheckBoxTS checkBoxTS1;        
+        private CheckBoxTS checkBoxTS1;
+        //wd5y
+        public CheckBoxTS chkExternalPA;
+        //wd5y
         private Timer tmrAutoAGC;
         private ButtonTS btnDisplayZTB;
         private ucInfoBar infoBar;
@@ -7833,7 +7831,6 @@
         private ToolStripStatusLabel toolStripStatusLabel_N1MM;
         private ToolStripStatusLabel toolStripStatusLabel_CatTCPip;
         private ToolStripStatusLabel toolStripStatusLabel_TCI;
-        private CheckBoxTS chkMNU;
-        public CheckBoxTS chkExternalPA;
+        private CheckBoxTS chkMNU;        
     }
 }

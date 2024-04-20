@@ -80,13 +80,13 @@ namespace Thetis
             console = c;
             this.Owner = c;
 
-            //everything here moved to AfterConstructor, which is called during singleton instance // G8KLJ's idea/implementation
+            //everything here moved to AfterConstructor, which is called during singleton instance // G7KLJ's idea/implementation
         }
         internal void AfterConstructor()
         {
             Splash.SetStatus("Setting up controls");
 
-            ThetisSkinService.Version = console.ProductVersion;
+            ThetisSkinService.Version = console.ProductVersion;            
 
             addDelegates();
 
@@ -26838,7 +26838,10 @@ namespace Thetis
 
         public override string ToString()
         {
-            return _Name;
+            //ToString is used by the combo box to show the text
+            //[2.10.3.6]MW0LGE fixes #414, note might have issues when first running up, but should be ok after a profile save
+            byte[] bytes = Encoding.Default.GetBytes(_Name);
+            return Encoding.UTF8.GetString(bytes);
         }
     }
 

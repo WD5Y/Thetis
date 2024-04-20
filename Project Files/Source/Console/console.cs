@@ -60,7 +60,6 @@ namespace Thetis
     using System.Windows.Forms;
     using System.Xml.Linq;
     using System.Collections.Concurrent;
-    using Thetis.Properties;
 
     public partial class Console : Form
     {
@@ -1185,10 +1184,10 @@ namespace Thetis
                 {
                     if (IsSetupFormNull)
                     {
-                        Debug.Assert(_onlyOneSetupInstance); // this should not happen, ever !  // G8KLJ's idea/implementation
+                        Debug.Assert(_onlyOneSetupInstance); // this should not happen, ever !  // G7KLJ's idea/implementation
                         Debug.Print("New setup form - should happen only once");
                         m_frmSetupForm = new Setup(this);
-                        m_frmSetupForm.AfterConstructor(); // G8KLJ's idea/implementation
+                        m_frmSetupForm.AfterConstructor(); // G7KLJ's idea/implementation
                     }
                     return m_frmSetupForm;
                 }
@@ -15214,6 +15213,13 @@ namespace Thetis
                 if (IsSetupFormNull)
                     return;
 
+                //[2.10.3.6]MW0LGE fix #417
+                value = Math.Max(mic_gain_min, value);
+                value = Math.Min(mic_gain_max, value);
+                ptbMic.Minimum = mic_gain_min;
+                ptbMic.Maximum = mic_gain_max;
+                //
+
                 ptbMic.Value = value;
                 ptbMic_Scroll(this, EventArgs.Empty);
             }
@@ -15226,6 +15232,14 @@ namespace Thetis
             {
                 if (IsSetupFormNull)
                     return;
+
+                //[2.10.3.6]MW0LGE fix #417
+                value = Math.Max(mic_gain_min, value);
+                value = Math.Min(mic_gain_max, value);
+                ptbFMMic.Minimum = mic_gain_min;
+                ptbFMMic.Maximum = mic_gain_max;
+                //
+
                 ptbFMMic.Value = value;
                 ptbFMMic_Scroll(this, EventArgs.Empty);
             }
@@ -15974,8 +15988,16 @@ namespace Thetis
             }
             set
             {
-                value = Math.Max(-96, value);
-                value = Math.Min(70, value);
+                //value = Math.Max(-96, value);
+                //value = Math.Min(70, value);
+
+                //[2.10.3.6]MW0LGE fix #417
+                value = Math.Max(mic_gain_min, value);
+                value = Math.Min(mic_gain_max, value);
+                ptbMic.Minimum = mic_gain_min;
+                ptbMic.Maximum = mic_gain_max;
+                //
+
                 ptbMic.Value = value;
                 ptbMic_Scroll(this, EventArgs.Empty);
                 if (sliderForm != null)
@@ -37401,9 +37423,9 @@ namespace Thetis
             }
             ptbRX1AF.Value = ptbRX0Gain.Value;
 
-            lblRX1AF.Text = "RX1 AF:  " + ptbRX0Gain.Value.ToString();
-
             //wd5y            
+            lblRX1AF.Text = "RX1 AF:  " + ptbRX0Gain.Value.ToString();
+                                   
             lblAF2.Size = new Size(30, 28);
             lblAF2.Text = "AF:  " + ptbRX0Gain.Value.ToString();
             //wd5y
@@ -48374,7 +48396,7 @@ namespace Thetis
 
             tx_step_attenuator_by_band[(int)b] = att;
         }
-        #endregion        
+        #endregion                
     }
 
     public class DigiMode
