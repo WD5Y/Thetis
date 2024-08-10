@@ -141,8 +141,8 @@ namespace Thetis
             chkRX2AGCAut.Checked = console.AutoAGCRX2;
             lblRX1sql.Text = console.chkSquelch.Text;
             lblRX2sql.Text = console.chkRX2Squelch.Text;
-            lblRX1at.Text = console.SetupForm.HermesAttenuatorData.ToString();
-            lblRX2at.Text = console.SetupForm.HermesAttenuatorDataRX2.ToString();
+            lblRX1at.Text = console.SetupForm.ATTOnRX1.ToString();
+            lblRX2at.Text = console.SetupForm.ATTOnRX2.ToString();
             chkATT1.Checked = console.SetupForm.chkHermesStepAttenuator.Checked;
             chkATT2.Checked = console.SetupForm.chkRX2StepAtt.Checked;
             lblRX1VACRX.Text = console.SetupForm.VACRXGain.ToString();
@@ -1648,15 +1648,15 @@ namespace Thetis
             tbRX1Pan.Value = console.PanMainRX;
             tbRX2Pan.Value = console.RX2Pan;
             // clip atten at 31dB (Andromeda is designed for 7000 series RF)
-            if (console.SetupForm.HermesAttenuatorData <= tbRX1Atten.Maximum)
-                tbRX1Atten.Value = console.SetupForm.HermesAttenuatorData;
+            if (console.SetupForm.ATTOnRX1 <= tbRX1Atten.Maximum)
+                tbRX1Atten.Value = console.SetupForm.ATTOnRX1;
             else
                 tbRX1Atten.Value = tbRX1Atten.Maximum;
-            if (/*console.RX2ATT*/console.SetupForm.HermesAttenuatorDataRX2 <= tbRX2Atten.Maximum)
-                tbRX2Atten.Value = console.SetupForm.HermesAttenuatorDataRX2/*RX2ATT*/;
+            if (/*console.RX2ATT*/console.SetupForm.ATTOnRX2 <= tbRX2Atten.Maximum)
+                tbRX2Atten.Value = console.SetupForm.ATTOnRX2/*RX2ATT*/;
             else
                 tbRX2Atten.Value = tbRX2Atten.Maximum;
-            tbRX2Atten.Value = console.SetupForm.HermesAttenuatorDataRX2/*RX2ATT*/; //MW0LGE_21d step atten changes
+            tbRX2Atten.Value = console.SetupForm.ATTOnRX2/*RX2ATT*/; //MW0LGE_21d step atten changes
             tbSubRXPan.Value = console.PanSubRX;
             tbMasterAF.Value = console.AF;
             tbDrive.Value = console.PWR;
@@ -1849,20 +1849,12 @@ namespace Thetis
 
         private void tbRX1Atten_Scroll(object sender, EventArgs e)
         {
-            console.SetupForm.HermesAttenuatorData = tbRX1Atten.Value;
-
-            //wd5y            
-            lblRX1at.Text = console.SetupForm.HermesAttenuatorData.ToString();
-            //wd5y
+            console.SetupForm.ATTOnRX1 = tbRX1Atten.Value;
         }
 
         private void tbRX2Atten_Scroll(object sender, EventArgs e)
-        {            
-            console.SetupForm.HermesAttenuatorDataRX2 = tbRX2Atten.Value; //MW0LGE_21d step atten
-
-            //wd5y
-            lblRX2at.Text = console.SetupForm.HermesAttenuatorDataRX2.ToString();
-            //wd5y
+        {
+            console.SetupForm.ATTOnRX2 = tbRX2Atten.Value; //MW0LGE_21d step atten
         }
 
         private void chkRX1Mute_CheckedChanged(object sender, EventArgs e)

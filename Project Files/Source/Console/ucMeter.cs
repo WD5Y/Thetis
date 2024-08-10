@@ -1,4 +1,30 @@
-﻿using System;
+﻿/*  ucMeter.cs
+
+This file is part of a program that implements a Software-Defined Radio.
+
+This code/file can be found on GitHub : https://github.com/ramdor/Thetis
+
+Copyright (C) 2020-2024 Richard Samphire MW0LGE
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+The author can be reached by email at
+
+mw0lge@grange-lane.co.uk
+*/
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -40,6 +66,8 @@ namespace Thetis
             _border = true;
             _noTitleBar = false;
             _enabled = true;
+            _container_minimises = true;
+            _notes = "";
 
             this.Name = "UCMeter_" + _id;
 
@@ -53,6 +81,11 @@ namespace Thetis
             setTopBarButtons();
             setTitle();
             setupBorder();
+
+            btnAxis.BringToFront();
+            btnFloat.BringToFront();
+            btnPin.BringToFront();
+            btnSettings.BringToFront();
 
             btnAxis.Hide();
 
@@ -80,6 +113,8 @@ namespace Thetis
         private bool _border;
         private bool _noTitleBar;
         private bool _enabled;
+        private bool _container_minimises;
+        private string _notes;
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public Console Console
@@ -98,7 +133,7 @@ namespace Thetis
         public string ID
         {
             get { return _id; }
-            set { _id = value; }
+            set { _id = value.Replace("|",""); }
         }
         private void addDelegates()
         {
@@ -284,7 +319,17 @@ namespace Thetis
         private void setTitle()
         {
             string sPrefix = _mox ? "TX" : "RX";
-            lblRX.Text = sPrefix + _rx.ToString();
+            string sNotes = getFirstLineOrWholeString(_notes);
+            lblRX.Text = sPrefix + _rx.ToString() + (sNotes != "" ? " " + sNotes : "");
+        }
+        private string getFirstLineOrWholeString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            string[] lines = input.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+
+            return lines[0];
         }
         private void setupBorder()
         {
@@ -483,6 +528,26 @@ namespace Thetis
                 _enabled = value;                
             }
         }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ContainerMinimises
+        {
+            get { return _container_minimises; }
+            set
+            {
+                _container_minimises = value;
+            }
+        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public string Notes
+        {
+            get { return _notes; }
+            set
+            {
+                _notes = value.Replace("|",""); // need to replace this as used in split parsing
+                setTitle();
+            }
+        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool NoTitle
         {
             get { return _noTitleBar; }
@@ -587,7 +652,9 @@ namespace Thetis
                 UCBorder.ToString() + "|" +
                 Common.ColourToString(this.BackColor) + "|" +
                 NoTitle.ToString() + "|" +
-                MeterEnabled.ToString();
+                MeterEnabled.ToString() + "|" +
+                Notes + "|" +
+                ContainerMinimises.ToString().ToLower();
         }
         public bool TryParse(string str)
         {
@@ -598,11 +665,12 @@ namespace Thetis
             bool border = false;
             bool noTitleBar = false;
             bool enabled = true;
+            bool minimises = true;
 
             if (str != "")
             {
                 string[] tmp = str.Split('|');
-                if(tmp.Length >= 13 && tmp.Length <= 15)
+                if(tmp.Length >= 13 && tmp.Length <= 17)
                 {
                     bOk = tmp[0] != "";
                     if (bOk) ID = tmp[0];
@@ -655,6 +723,17 @@ namespace Thetis
                     {
                         bOk = bool.TryParse(tmp[14], out enabled);
                         if (bOk) MeterEnabled = enabled;
+                    }
+
+                    if (bOk && tmp.Length > 15) // we also have the new for [2.10.3.6] notes
+                    {
+                        Notes = tmp[15];
+                    }
+
+                    if (bOk && tmp.Length > 16) // we also have the new for [2.10.3.6]
+                    {
+                        if (bOk) bOk = bool.TryParse(tmp[16], out minimises);
+                        if (bOk) ContainerMinimises = minimises;
                     }
                 }
             }

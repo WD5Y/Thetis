@@ -892,8 +892,8 @@ namespace Thetis
 			}
 		}
 
-		// Reads the S Meter value
-		public string SM(string s)
+        // Reads the S Meter value  //TODO modify to consider console.S9Frequency
+        public string SM(string s)
 		{
 			int sm = 0;
 			double sx = 0.0;
@@ -1607,7 +1607,15 @@ namespace Thetis
         //Shuts down the console
         public string ZZBY()
         {
-            this.console.Close();
+			if (console.InvokeRequired) //[2.10.3.6]MW0LGE Fixes #460 - needed as Midi is from another thread
+			{
+                console.BeginInvoke(new MethodInvoker(() =>
+                {
+                    console.Close();
+                }));
+            }
+			else	
+				console.Close();
             return "";
         }
 
@@ -1870,18 +1878,18 @@ namespace Thetis
 
 			if(s != null && s != "")
 				n = Convert.ToInt32(s);
-			n = Math.Max(0, n);
-			n = Math.Min(20, n);
+			n = Math.Max(console.CPDRMin, n); //[2.10.3.6]MW0LGE was 0
+			n = Math.Min(console.CPDRMax, n); //was 20
 
-			if(s.Length == parser.nSet)
+            if (s.Length == parser.nSet)
 			{
-				console.CPDRVal = n;
+				console.CPDRLevel = n;
                 console.TitleBarEncoderString = "Comp Threshold = " + n + "dB";
 				return "";
 			}
 			else if(s.Length == parser.nGet)
 			{
-				return AddLeadingZeros((int) console.CPDRVal);
+				return AddLeadingZeros((int) console.CPDRLevel);
 			}
 			else
 			{
@@ -4081,7 +4089,7 @@ namespace Thetis
 				n = Math.Max(-50,n);
 			}
 
-			if(s.Length == parser.nSet)
+			if(s.Length == parser.nSet || s.Length == parser.nSet + 1) //[2.10.3.6]MW0LGE can also have -. Could have changed catsructs but not sure on cat msg formats from other sources other than midi so left with the +1
 			{
 				console.CATMIC = n;
                 console.TitleBarEncoderString = "Mic Gain = " + console.CATMIC + "dB";
@@ -4667,27 +4675,71 @@ namespace Thetis
                 return parser.Error1;
             }
         }
-        
-        //Sets or reads the RX1 antenna
-		public string ZZOA(string s)
-		{
-                parser.Verbose_Error_Code = 7;
-                return parser.Error1;
-		}
 
-		//Sets or reads the RX2 antenna (if RX2 installed)
-		public string ZZOB(string s)
+        //Sets or reads the RX1 antenna //[2.3.10.6]MW0LGE https://github.com/ramdor/Thetis/issues/385
+        public string ZZOA(string s)
+		{
+            int n = 0;
+
+            if (s != null && s != "")
+                n = Convert.ToInt32(s);
+            n = Math.Max(1, n);
+            n = Math.Min(3, n);
+
+            if (s.Length == parser.nSet)
+            {
+				if (console.SetupForm != null)
+					console.SetupForm.SetRXAntenna(n, console.RX1Band);
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+				if (console.SetupForm != null)
+					return console.SetupForm.GetRXAntenna(console.RX1Band).ToString();
+				else
+					return "";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+
+        //Sets or reads the RX2 antenna (if RX2 installed)
+        public string ZZOB(string s)
 		{
              parser.Verbose_Error_Code = 7;
                 return parser.Error1;
 		}
 
-		//Sets or reads the TX antenna
-		public string ZZOC(string s)
+        //Sets or reads the TX antenna //[2.3.10.6]MW0LGE https://github.com/ramdor/Thetis/issues/385
+        public string ZZOC(string s)
 		{
-                parser.Verbose_Error_Code = 7;
+            int n = 0;
+
+            if (s != null && s != "")
+                n = Convert.ToInt32(s);
+            n = Math.Max(1, n);
+            n = Math.Min(3, n);
+
+            if (s.Length == parser.nSet)
+            {
+                if (console.SetupForm != null)
+                    console.SetupForm.SetTXAntenna(n, console.TXBand);
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                if (console.SetupForm != null)
+                    return console.SetupForm.GetTXAntenna(console.TXBand).ToString();
+                else
+                    return "";
+            }
+            else
+            {
                 return parser.Error1;
-		}
+            }
+        }
 
 		//Sets or reads the current Antenna Mode
 		public string ZZOD(string s)
@@ -4754,7 +4806,6 @@ namespace Thetis
             {
                 return parser.Error1;
             }
-
         }
 
         //Sets or reads the current repeater offset direction
@@ -5556,13 +5607,13 @@ namespace Thetis
                 att = Convert.ToInt32(s);
                 att = Math.Max(0, att);
                 att = Math.Min(31, att);
-                console.SetupForm.HermesAttenuatorData = att;        // Set the console control
+                console.SetupForm.ATTOnRX1 = att;        // Set the console control
                 console.TitleBarEncoderString = "RX1 Step Atten = " + att + "dB";
                 return "";
             }
             else if (s.Length == parser.nGet)   // if this is a read command
             {
-                return AddLeadingZeros(console.SetupForm.HermesAttenuatorData);     // Get the console setting
+                return AddLeadingZeros(console.SetupForm.ATTOnRX1);     // Get the console setting
             }
             else
             {
@@ -5580,13 +5631,13 @@ namespace Thetis
                 att = Convert.ToInt32(s);
                 att = Math.Max(0, att);
                 att = Math.Min(31, att);
-                console.SetupForm.HermesAttenuatorDataRX2 = att; //RX2ATT = att;        // Set the console control // MW0LGE_21d step atten changes
+                console.SetupForm.ATTOnRX2 = att; //RX2ATT = att;        // Set the console control // MW0LGE_21d step atten changes
 				console.TitleBarEncoderString = "RX2 Step Atten = " + att + "dB";
                 return "";
             }
             else if (s.Length == parser.nGet)   // if this is a read command
             {
-                return AddLeadingZeros(console.SetupForm.HermesAttenuatorDataRX2 /*RX2ATT*/);     // Get the console setting // MW0LGE_21d step atten changes
+                return AddLeadingZeros(console.SetupForm.ATTOnRX2 /*RX2ATT*/);     // Get the console setting // MW0LGE_21d step atten changes
 			}
             else
             {
@@ -8113,6 +8164,25 @@ namespace Thetis
 				bool bRet = console.VFOSplit;
 				if (!console.IsSetupFormNull) bRet &= console.SetupForm.QuickSplitEnabled;				
                 return bRet ? "1" : "0";
+            }
+            else
+            {
+                return parser.Error1;
+            }
+        }
+
+        public string ZZXA(string s)
+        {
+            if (console is null) return parser.Error1;
+
+            if (s.Length == parser.nSet && (s == "0" || s == "1"))
+            {
+                console.EnableAudioAmplifier = (s == "1");
+                return "";
+            }
+            else if (s.Length == parser.nGet)
+            {
+                return console.EnableAudioAmplifier ? "1" : "0";
             }
             else
             {

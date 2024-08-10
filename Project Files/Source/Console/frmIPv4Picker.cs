@@ -1,7 +1,29 @@
-﻿//=================================================================
-// frmIPv4Picker.cs - MW0LGE 2022
-//=================================================================
+﻿/*  frmIPv4Picker.cs
 
+This file is part of a program that implements a Software-Defined Radio.
+
+This code/file can be found on GitHub : https://github.com/ramdor/Thetis
+
+Copyright (C) 2020-2024 Richard Samphire MW0LGE
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+The author can be reached by email at
+
+mw0lge@grange-lane.co.uk
+*/
 using System;
 using System.Windows.Forms;
 using System.Net.NetworkInformation;
@@ -23,6 +45,23 @@ namespace Thetis
 
         private void btnSelect_Click(object sender, EventArgs e)
         {
+            if (comboAddresses.Text.Contains(":"))
+            {
+                string[] parts = comboAddresses.Text.Split(':');
+                if (parts.Length == 2)
+                {
+                    //port is defined
+                    int oldP = _port;
+                    _bPortOk = int.TryParse(parts[1], out _port);
+                    if (_bPortOk)
+                    {
+                        _ip = parts[0] + ":" + parts[1];
+                        return;
+                    }
+                    _port = oldP;
+                }
+            }
+
             if (_port != -1 && _bPortOk)
             {
                 _ip = comboAddresses.Text + ":" + _port.ToString();
@@ -47,6 +86,10 @@ namespace Thetis
         public string IP
         {
             get { return _ip; }
+        }
+        public int Port
+        {
+            get { return _port; }
         }
 
         public void Init(string sIPPort, bool addBroadcast = false)

@@ -247,7 +247,7 @@ namespace Thetis
             t.Columns.Add("FilterLow", typeof(int));
             t.Columns.Add("FilterHigh", typeof(int));
 
-            // defaults
+            // defaults (if required)
         }
         public static void SaveBandStack2Filter(BandStackFilter bsf)
         {
@@ -256,7 +256,7 @@ namespace Thetis
             DataRow[] rows;
             string sSelectString;
 
-            //---- remove exiting----
+            //---- remove existing----
             //remove filter
             sSelectString = "GUID = '" + bsf.GUID + "'";
             rows = ds.Tables["BandStack2Filters"].Select(sSelectString);
@@ -292,7 +292,7 @@ namespace Thetis
             {
                 row.Delete();
             }
-            //---- end remove exiting----
+            //---- end remove existing----
 
             //then add
             t = ds.Tables["BandStack2Filters"];
@@ -376,7 +376,7 @@ namespace Thetis
         }
         public static void RemoveBandStack2Entry(BandStackEntry bse)
         {
-            //delete if exiting
+            //delete if existing
             string sSelectString = "GUID = '" + bse.GUID + "'";
             DataRow[] rows = ds.Tables["BandStack2Entries"].Select(sSelectString);
             foreach (DataRow row in rows)
@@ -427,7 +427,7 @@ namespace Thetis
         }
         public static void RemoveAllBandStack2Entries()
         {
-            //delete if exiting
+            //delete if existing
             DataRow[] rows = ds.Tables["BandStack2Entries"].Select();
             foreach (DataRow row in rows)
             {
@@ -463,7 +463,7 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandStack2Entries"];
 
-            //delete if exiting
+            //delete if existing
             RemoveBandStack2Entry(bse);
             //
 
@@ -9189,48 +9189,18 @@ namespace Thetis
 
         public static void WriteDB()
         {
-            //MW0LGE_[2.9.0.7]
-            //    try
-            //    {
-            //    ds.WriteXml(file_name, XmlWriteMode.WriteSchema);
-            //}
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("A database write to file operation failed.  " +
-            //            "The exception error was:\n\n" + ex.Message,
-            //            "ERROR: Database Write Error",
-            //            MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
             WriteDB(file_name, ds);
         }
 
         //-W2PA Write the database to a specific file
         public static bool WriteDB(string fn)
         {
-            //// if (!File.Exists(fn)) return false;
-
-            //MW0LGE_[2.9.0.7]
-            // try
-            // {
-            //     ds.WriteXml(fn, XmlWriteMode.WriteSchema);
-            // }
-            // catch (Exception ex)
-            // {
-            //     MessageBox.Show("A database write to file operation failed.  " +
-            //         "The exception error was:\n\n" + ex.Message,
-            //         "ERROR: Database Write Error",
-            //         MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //     return false;
-            // }
-            // return true;
             return WriteDB(fn, ds);
         }
 
         //-W2PA Write specific dataset to a file 
         public static bool WriteDB(string fn, DataSet dsIN)
         {
-            // if (!File.Exists(fn)) return false;
-
             try
             {
                 dsIN.WriteXml(fn, XmlWriteMode.WriteSchema);
@@ -9245,12 +9215,6 @@ namespace Thetis
             }
             return true;
         }
-
-        //MW0LGE_[2.9.0.7]
-        //public static bool WriteCurrentDB(string fn)
-        //{
-        //    return WriteDB(fn, ds);
-        //}
 
         public static void Exit()
         {
@@ -9516,7 +9480,7 @@ namespace Thetis
             purgeTableEntries("Options", "meterContData_*");
             purgeTableEntries("Options", "meterData_*");
             purgeTableEntries("Options", "meterIGData_*");
-            purgeTableEntries("Options", "meterIGSettings_*");
+            purgeTableEntries("Options", "meterIGSettings_*"); // will scrap v1 and v2
 
             if (formGuids != null)
             {
@@ -9765,54 +9729,37 @@ namespace Thetis
             bool bOldDBhasMultiMeterSettings = false;
             bool bOldDBhasPAProfiles = false;
 
-            foreach (DataTable oldTable in oldDB.Tables)
+            if (oldDB.Tables.Contains("Options"))
             {
-                if(oldTable.TableName == "Options")
-                {
-                    DataRow[] rows = oldDB.Tables[oldTable.TableName].Select("Key like '" + "meterContData_*" + "'");
+                    DataRow[] rows = oldDB.Tables["Options"].Select("Key like '" + "meterContData_*" + "'");
                     bOldDBhasMultiMeterSettings = (rows != null && rows.Length > 0);
 
-                    rows = oldDB.Tables[oldTable.TableName].Select("Key like '" + "PAProfile*" + "'");
+                    rows = oldDB.Tables["Options"].Select("Key like '" + "PAProfile*" + "'");
                     bOldDBhasPAProfiles = (rows != null && rows.Length > 0);
-
-                    break;
-                }
             }
-            //
 
-            // Start by merging any tables in the imported DB that don't come with a freshly reset database
-            foreach (DataTable oldTable in oldDB.Tables)
+            // deal with version number from db being imported
+            if (oldDB.Tables.Contains("State"))
             {
-                bool found = false;
-
-                if (oldTable.TableName == "State")
+                foreach (DataRow rw in oldDB.Tables["State"].Rows)
                 {
-                    //// test code using linq
-                    //DataRow tdr = oldTable.Rows.Cast<DataRow>().Where(key => key[0].ToString() == "VersionNumber").FirstOrDefault();
-                    //if(tdr != null) Debug.Print(Convert.ToString(tdr["Value"]));
-                    ////
-
-                    foreach (DataRow rw in oldTable.Rows)
+                    string thisKey = Convert.ToString(rw["Key"]);
+                    if (thisKey == "VersionNumber")
                     {
-                        string thisKey = Convert.ToString(rw["Key"]);
-                        if (thisKey == "VersionNumber")
-                        {
-                            _versionnumber = Convert.ToString(rw["Value"]);
-                            break;
-                        }
-                    }
-                }
-
-                foreach (DataTable existingTable in existingDB.Tables)
-                {
-                    if (existingTable.TableName == oldTable.TableName)
-                    {                       
-                        found = true;
+                        _versionnumber = Convert.ToString(rw["Value"]);
                         break;
                     }
                 }
-                if (!found) mergedDB.Merge(oldTable);
-            }            
+            }
+
+            // merge any table from the oldDB (being imported) that do not exist in the merged
+            foreach (DataTable oldTable in oldDB.Tables)
+            {
+                if(!existingDB.Tables.Contains(oldTable.TableName))
+                {
+                    mergedDB.Merge(oldTable);
+                }
+            }          
 
             foreach (DataTable table in existingDB.Tables)
             {                

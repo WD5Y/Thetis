@@ -80,7 +80,7 @@ namespace Thetis
                  string _tune_step, FMTXMode _repeater_mode, double _fm_tx_offset_mhz, bool _ctcss_on, double _ctcss_freq,
                  int _power, int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh,
                  string _comments, AGCMode _agc_mode, int _agc_thresh, bool _rx1agcaut, bool _rx2agcaut,
-        DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
+                 DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
         {
             group = _group;
             rx_freq = _rxfreq;
@@ -152,6 +152,7 @@ namespace Thetis
             agct = rec.agct;
             rx1agcaut = rec.rx1agcaut;
             rx2agcaut = rec.rx2agcaut;
+
 
             startdate = rec.startdate; // ke9ns add  for scheduled freq change and optional recording
             scheduleon = rec.scheduleon; // ke9ns add  for scheduled freq change and optional recording 
@@ -536,7 +537,6 @@ namespace Thetis
             }
         }
         //wd5y
-
 
 
 

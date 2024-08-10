@@ -63,6 +63,7 @@
 
     <Feature Id="ProductFeature" Title="Thetis" Level="1" ConfigurableDirectory="INSTALLFOLDER">
       <ComponentGroupRef Id="ProductComponents" />
+	  <ComponentGroupRef Id="SkiaSharpComponents" />
       <ComponentRef Id="StartMenuShortcut" />
       <ComponentRef Id="DesktopShortcut" />
     </Feature>
@@ -119,7 +120,14 @@
       <Directory Id="$(var.PlatformProgramFilesFolder)">
         <Directory Id="HPSDRFolder" Name="OpenHPSDR">
           <Directory Id="INSTALLFOLDER" Name="Thetis">
-          </Directory>
+			  <?if $(var.Platform) = x64 ?>
+			  <Directory Id="SKIASHARP_INSTALLFOLDERx64" Name="x64">
+			  </Directory>
+			  <?else ?>
+			  <Directory Id="SKIASHARP_INSTALLFOLDERx86" Name="x86">
+			  </Directory>
+			  <?endif ?>
+		  </Directory>
         </Directory>
       </Directory>
 
@@ -205,7 +213,27 @@
 		  
 	  </Component>
     </DirectoryRef>
-       
+
+	  <?if $(var.Platform) = x64 ?>
+	  <ComponentGroup Id="SkiaSharpComponents" Directory="SKIASHARP_INSTALLFOLDERx64">
+		  <Component Guid="*">
+			  <File Id="SkiaSharpLibDLL"
+					Source="$(var.FilesPath)\x64\libSkiaSharp.dll"
+					KeyPath="yes"
+              />
+		  </Component>
+	  </ComponentGroup>
+	  <?else ?>
+	  <ComponentGroup Id="SkiaSharpComponents" Directory="SKIASHARP_INSTALLFOLDERx86">
+		  <Component Guid="*">
+			  <File Id="SkiaSharpLibDLL"
+					Source="$(var.FilesPath)\x86\libSkiaSharp.dll"
+					KeyPath="yes"
+              />
+		  </Component>
+	  </ComponentGroup>
+	  <?endif ?>
+	  
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       
       <Component Id="fwException" Guid="*" Transitive="yes">
@@ -274,12 +302,12 @@
               />
       </Component>
 
-      <!--<Component Guid="*">
-        <File Id="calculus"
-              Source="$(var.FilesPath)calculus"
+      <Component Guid="*">
+        <File Id="zetaHat.bin"
+              Source="$(var.FilesPath)zetaHat.bin"
               KeyPath="yes"
               />
-      </Component>-->
+      </Component>
 
       <Component Guid="*">
         <File Id="Midi2CatDLL"
@@ -322,6 +350,144 @@
               />
 		</Component>
 
+		<!-- 
+		Additional
+		-->
+		<Component Guid="*">
+			<File Id="System.Numerics.VectorsDLL"
+				  Source="$(var.FilesPath)System.Numerics.Vectors.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Runtime.CompilerServices.UnsafeDLL"
+				  Source="$(var.FilesPath)System.Runtime.CompilerServices.Unsafe.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Text.Encoding.CodePagesDLL"
+				  Source="$(var.FilesPath)System.Text.Encoding.CodePages.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Threading.Tasks.ExtensionsDLL"
+				  Source="$(var.FilesPath)System.Threading.Tasks.Extensions.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.ValueTupleDLL"
+				  Source="$(var.FilesPath)System.ValueTuple.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+
+		<Component Guid="*">
+			<File Id="HtmlAgilityPackDLL"
+				  Source="$(var.FilesPath)HtmlAgilityPack.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="SkiaSharpDLL"
+				  Source="$(var.FilesPath)SkiaSharp.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Drawing.CommonDLL"
+				  Source="$(var.FilesPath)System.Drawing.Common.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="ExCSSDLL"
+				  Source="$(var.FilesPath)ExCSS.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="SvgDLL"
+				  Source="$(var.FilesPath)Svg.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<!-- 
+		<Component Guid="*">
+			<File Id="System.IO.CompressionDLL"
+				  Source="$(var.FilesPath)System.IO.Compression.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.IO.Compression.ZipFileDLL"
+				  Source="$(var.FilesPath)System.IO.Compression.ZipFile.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		-->
+		<!-- 
+		Additional end
+		-->
+
+		<!-- 
+		Binding Redirects in Thetis.exe.config
+		-->
+		<Component Guid="*">
+			<File Id="Thetis.exe.config"
+				  Source="$(var.FilesPath)Thetis.exe.config"
+				  KeyPath="yes"
+              />
+		</Component>
+		<!-- 
+		End Thetis.exe.config
+		-->
+		
+		<!-- 
+		CodeAnalysis for Led/MultiMeter
+		-->
+		<Component Guid="*">
+			<File Id="Microsoft.CodeAnalysisDLL"
+				  Source="$(var.FilesPath)Microsoft.CodeAnalysis.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="Microsoft.CodeAnalysis.CSharpDLL"
+				  Source="$(var.FilesPath)Microsoft.CodeAnalysis.CSharp.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="Microsoft.CodeAnalysis.CSharp.Scripting"
+				  Source="$(var.FilesPath)Microsoft.CodeAnalysis.CSharp.Scripting.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="Microsoft.CodeAnalysis.ScriptingDLL"
+				  Source="$(var.FilesPath)Microsoft.CodeAnalysis.Scripting.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Collections.ImmutableDLL"
+				  Source="$(var.FilesPath)System.Collections.Immutable.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<Component Guid="*">
+			<File Id="System.Reflection.MetadataDLL"
+				  Source="$(var.FilesPath)System.Reflection.Metadata.dll"
+				  KeyPath="yes"
+              />
+		</Component>
+		<!-- 
+		End CodeAnalysis for Led/MultiMeter section
+		-->
+		
 		<Component Guid="*">
 			<File Id="System.MemoryDLL"
 				  Source="$(var.FilesPath)System.Memory.dll"

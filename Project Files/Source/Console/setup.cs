@@ -25,6 +25,9 @@
 //    8900 Marybank Dr.
 //    Austin, TX 78750
 //    USA
+//
+//=================================================================
+// Continual modifications Copyright (C) 2019-2024 Richard Samphire (MW0LGE)
 //=================================================================
 
 using System.Collections.Generic;
@@ -35,6 +38,7 @@ namespace Thetis
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Data;
     using System.Diagnostics;
     using System.Drawing;
@@ -47,10 +51,10 @@ namespace Thetis
     using RawInput_dll;
     using System.Net;
     using System.Threading.Tasks;
-    using Ionic.Zip;
-    using System.Drawing.Text;
-    using System.Diagnostics.Eventing.Reader;
-
+    //using Ionic.Zip;
+    using System.IO.Compression;
+    using System.Timers;
+    using System.Runtime.InteropServices;
     public partial class Setup : Form
     {
         private const string s_DEFAULT_GRADIENT = "9|1|0.000|-1509884160|1|0.339|-1493237760|1|0.234|-1509884160|1|0.294|-1493211648|0|0.669|-1493237760|0|0.159|-1|0|0.881|-65536|0|0.125|-32704|1|1.000|-1493237760|";
@@ -77,6 +81,14 @@ namespace Thetis
         {
             InitializeComponent();
 
+            //enable db on lists to stop flicker
+            Common.DoubleBuffered(lstMMIO_network_variables, true);
+            Common.DoubleBuffered(lstMetersInUse, true);
+            Common.DoubleBuffered(lstMetersAvailable, true);
+
+            MaximumSize = MinimumSize;
+            Size = MinimumSize;
+
             console = c;
             this.Owner = c;
 
@@ -86,7 +98,7 @@ namespace Thetis
         {
             Splash.SetStatus("Setting up controls");
 
-            ThetisSkinService.Version = console.ProductVersion;            
+            ThetisSkinService.Version = console.ProductVersion;
 
             addDelegates();
 
@@ -148,6 +160,13 @@ namespace Thetis
             showRegionBandstackWarning(false);
             //
 
+            // init the WebImage links
+            setup_comboWebImage_HamQsl();
+            setup_comboWebImage_BsdWorld();
+            setup_comboWebImage_nasa();
+            setup_comboWebImage_noaa();
+            //
+
             SetupDSPWarnings(false, false, false, false, false, false); // hide everything
 
             comboGeneralProcessPriority.Text = "Normal";
@@ -164,8 +183,79 @@ namespace Thetis
             comboTXLabelAlign.Text = "Cntr";
             //MW0LGE_21g comboDisplayDriver.Text = "DirectX";
 
-            //MW0LGE_21h
             string sTip =
+            "You can use the following variables anywhere in the text." + System.Environment.NewLine +
+            "%nl%" + System.Environment.NewLine +
+            "%swr%" + System.Environment.NewLine +
+            "%signal_strength%" + System.Environment.NewLine +
+            "%avg_signal_strength%" + System.Environment.NewLine +
+            "%pwr%" + System.Environment.NewLine +
+            "%reverse_pwr%" + System.Environment.NewLine +
+            "%mic%" + System.Environment.NewLine +
+            "%mic_pk%" + System.Environment.NewLine +
+            "%adc_pk%" + System.Environment.NewLine +
+            "%adc_av%" + System.Environment.NewLine +
+            "%agc_pk%" + System.Environment.NewLine +
+            "%agc_av%" + System.Environment.NewLine +
+            "%agc_gain%" + System.Environment.NewLine +
+            "%leveler%" + System.Environment.NewLine +
+            "%leveler_pk%" + System.Environment.NewLine +
+            "%lvl_g%" + System.Environment.NewLine +
+            "%alc%" + System.Environment.NewLine +
+            "%alc_pk%" + System.Environment.NewLine +
+            "%alc_g%" + System.Environment.NewLine +
+            "%alc_group%" + System.Environment.NewLine +
+            "%cfc_av%" + System.Environment.NewLine +
+            "%cfc_pk%" + System.Environment.NewLine +
+            "%cfc_g%" + System.Environment.NewLine +
+            "%comp%" + System.Environment.NewLine +
+            "%comp_pk%" + System.Environment.NewLine +
+            "%estimated_pbsnr%" + System.Environment.NewLine +
+            System.Environment.NewLine +
+            "%time_utc%" + System.Environment.NewLine +
+            "%time_loc%" + System.Environment.NewLine +
+            "%time_utc_int%" + System.Environment.NewLine +
+            "%time_loc_int%" + System.Environment.NewLine +
+            "%date_utc%" + System.Environment.NewLine +
+            "%date_loc%" + System.Environment.NewLine +
+            "%date_utc_int%" + System.Environment.NewLine +
+            "%date_loc_int%" + System.Environment.NewLine +
+            "%vfoa%" + System.Environment.NewLine +
+            "%vfob%" + System.Environment.NewLine +
+            "%vfoasub%" + System.Environment.NewLine +
+            "%vfoa_double%" + System.Environment.NewLine +
+            "%vfob_double%" + System.Environment.NewLine +
+            "%vfoasub_double%" + System.Environment.NewLine +
+            "%band_vfoa%" + System.Environment.NewLine +
+            "%band_vfob%" + System.Environment.NewLine +
+            "%band_vfoasub%" + System.Environment.NewLine +
+            "%mode_vfoa%" + System.Environment.NewLine +
+            "%mode_vfob%" + System.Environment.NewLine +
+            "%subrx%" + System.Environment.NewLine +
+            "%filter_vfoa%" + System.Environment.NewLine +
+            "%filter_vfob%" + System.Environment.NewLine +
+            "%filter_vfoa_name%" + System.Environment.NewLine +
+            "%filter_vfob_name%" + System.Environment.NewLine +
+            "%split%" + System.Environment.NewLine +
+            "%qso_time%" + System.Environment.NewLine +
+            "%qso_time_short%" + System.Environment.NewLine +
+            "%qso_time_int%" + System.Environment.NewLine +
+            "%tb_qso_time" + System.Environment.NewLine +
+            "%tb_qso_time_short%" + System.Environment.NewLine +
+            "%tb_qso_time_int%" + System.Environment.NewLine +
+            "%volts%" + System.Environment.NewLine +
+            "%amps%" + System.Environment.NewLine +
+            "%mox%" + System.Environment.NewLine +
+            "%cfc%" + System.Environment.NewLine +
+            "%comp%" + System.Environment.NewLine +
+            "%lev%" + System.Environment.NewLine +
+            "%rx2%" + System.Environment.NewLine +
+            "%tx_eq%";// + System.Environment.NewLine +
+
+            toolTip1.SetToolTip(pbTextOverlay_variables, sTip);
+
+            //MW0LGE_21h
+            sTip =
             "The feedback gain loop attempts to keep the sample buffer about � full." + System.Environment.NewLine +
             "This gives the maximum amount of margin before an overflow or underflow will occur." + System.Environment.NewLine +
             "If the gain is too high, the loop will respond too fast and strongly and we may " + System.Environment.NewLine +
@@ -410,6 +500,7 @@ namespace Thetis
                 else
                 {
                     chkEnableAndromeda.Checked = false;
+                    if(!chkAndrG2Panel.Checked)
                     chkEnableAndromeda.Enabled = false;
                 }
             }
@@ -607,7 +698,7 @@ namespace Thetis
         }
         private void OnTXInhibit(bool oldState, bool newState)
         {
-            if(TestIMD && newState) TestIMD = false; // return button state etc
+            if (TestIMD && newState) TestIMD = false; // return button state etc
 
             chkTestIMD.Enabled = !newState;
         }
@@ -952,6 +1043,7 @@ namespace Thetis
             chkDisable6mLNAonTX_CheckedChanged(this, e);
             chkDisable6mLNAonRX_CheckedChanged(this, e);
             chkDisableHPFonTX_CheckedChanged(this, e);
+            chkDisableHPFonPS_CheckedChanged(this, e);
 
             chkLPFBypass_CheckedChanged(this, e);
 
@@ -967,6 +1059,8 @@ namespace Thetis
             chkAlex213BPHPF_CheckedChanged(this, e);
             chkAlex220BPHPF_CheckedChanged(this, e);
             chkAlex26BPHPF_CheckedChanged(this, e);
+
+            chkATTOnTX_CheckedChanged(this, e); //MW0LGE [2.10.3.6]
 
             //MW0LGE_21h to make G8NJJ_21h change in each function work
             chkBlockTxAnt2_CheckedChanged(this, e);
@@ -1111,7 +1205,7 @@ namespace Thetis
             ArrayList a = Audio.GetPAInputDevices(host);
             foreach (PADeviceInfo p in a)
                 comboAudioInput2.Items.Add(p);
-            
+
             a = Audio.GetPAOutputDevices(host);
             foreach (PADeviceInfo p in a)
                 comboAudioOutput2.Items.Add(p);
@@ -1237,7 +1331,7 @@ namespace Thetis
             toRemove.Add("txtVAC2OldVarOut");
 
             // multimeter
-            foreach(Control c in grpMultiMeterHolder.Controls)
+            foreach (Control c in grpMultiMeterHolder.Controls)
             {
                 toRemove.Add(c.Name);
             }
@@ -1250,6 +1344,13 @@ namespace Thetis
                 toRemove.Add(c.Name);
             }
             foreach (Control c in grpMeterItemVfoDisplaySettings.Controls)
+            {
+                toRemove.Add(c.Name);
+            }
+            //
+
+            // multimeter io // fixes #485
+            foreach (Control c in pnlMMIO_network_container.Controls)
             {
                 toRemove.Add(c.Name);
             }
@@ -1291,6 +1392,8 @@ namespace Thetis
         }
         private void checkBoxCheckedChangeHandler(object sender, EventArgs e)
         {
+            //[2.6.10.3]MW0LGE this had been removed, and was spotted after I diffed older version. I put it here to keep a record
+            //of which check controls had been clicked. This is so that cancel works.
             if (initializing) return;
             string sName = ((Control)sender).Name;
             if (!m_lstUpdatedControls.Contains(sName)) m_lstUpdatedControls.Add(sName);
@@ -1461,6 +1564,8 @@ namespace Thetis
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
             }
             //
+            a.Add("multimeter_io2", MultiMeterIO.GetSaveData());
+            //
 
             // remove any outdated options from the DB MW0LGE_22b
             removeOutdatedOptions();
@@ -1513,9 +1618,12 @@ namespace Thetis
                         radRadioProtocol2Select.Checked = true;
                         break;
                 }
-               
+
                 _oldSettings.Add("chkRadioProtocolSelect_checkstate");
             }
+
+            if (getDict.ContainsKey("multimeter_io"))
+                _oldSettings.Add("multimeter_io");
 
             handleOldPAGainSettings(ref getDict);
         }
@@ -1657,7 +1765,8 @@ namespace Thetis
                     else if (name.StartsWith("meterContData_") ||
                         name.StartsWith("meterData_") ||
                         name.StartsWith("meterIGData_") ||
-                        name.StartsWith("meterIGSettings_"))
+                        name.StartsWith("meterIGSettings_") ||
+                        name.StartsWith("meterIGSettings_2_")) // need _2_ as the above will eventually be remoed from the db
                     {
                         // ignore, done later
                     }
@@ -1717,6 +1826,36 @@ namespace Thetis
             //
             if (recoveryList == null) // MW0LGE [2.9.0.8] ignore if we hit cancel, not possible to undo multimeter changes at this time
             {
+                bool ok = true;
+                if (a.ContainsKey("multimeter_io2"))
+                {
+                    //try version2 first                    
+                    try
+                    {
+                        ok = MultiMeterIO.RestoreSaveData2(a["multimeter_io2"]);
+                    }
+                    catch
+                    {
+                        ok = false;
+                    }
+                }
+                else if (a.ContainsKey("multimeter_io"))
+                {
+                    try
+                    {
+                        ok = MultiMeterIO.RestoreSaveData(a["multimeter_io"]);
+                    }
+                    catch
+                    {
+                        ok = false;
+                    }
+                }
+                if (!ok)
+                {
+                    MessageBox.Show("There was an issue restoring the settings for MultiMeterIO. Existing settings will be lost.", "MultiMeterIO RestoreSaveData",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+
                 if (!MeterManager.RestoreSettings(ref a)) // pass this dictionary of settings to the meter manager to restore from
                 {
                     MessageBox.Show("There was an issue restoring the settings for MultiMeter. Please remove all meters, re-add, and restart Thetis.", "MultiMeter RestoreSettings",
@@ -2109,6 +2248,7 @@ namespace Thetis
             radANFPreAGC_CheckedChanged(this, e);
             radANF2PreAGC_CheckedChanged(this, e);
             chkMNFAutoIncrease_CheckedChanged(this, e);
+            udCWEdgeLength_ValueChanged(this, e);
             //MW0LGE_21d
             chkShowAGC_CheckedChanged(this, e);
             chkAGCDisplayHangLine_CheckedChanged(this, e);
@@ -2195,13 +2335,19 @@ namespace Thetis
             // NR Tab
             radDSPNR2Linear_CheckedChanged(this, e);
             radDSPNR2Log_CheckedChanged(this, e);
+            radDSPNR2TRND_CheckedChanged(this, e);
+            udDSPNR2trainThresh_ValueChanged(this, e);
             radDSPNR2OSMS_CheckedChanged(this, e);
             radDSPNR2MMSE_CheckedChanged(this, e);
+            radDSPNR2NSTAT_CheckedChanged(this, e);
             chkDSPNR2AE_CheckedChanged(this, e);
             radDSPNR2LinearRX2_CheckedChanged(this, e);
             radDSPNR2LogRX2_CheckedChanged(this, e);
+            radDSPNR2TRNDRX2_CheckedChanged(this, e);
+            udDSPNR2trainThreshRX2_ValueChanged(this, e);
             radDSPNR2OSMSRX2_CheckedChanged(this, e);
             radDSPNR2MMSERX2_CheckedChanged(this, e);
+            radDSPNR2NSTATRX2_CheckedChanged(this, e);
             chkDSPNR2AERX2_CheckedChanged(this, e);
 
             // Transmit Tab
@@ -2330,6 +2476,11 @@ namespace Thetis
             chkLegacyMeters_CheckedChanged(this, e);
 
             chkJoinBandEdges_CheckedChanged(this, e);
+
+            clrbtnTXAttenuationBackground_Changed(this, e);
+
+            lstMetersInUse_SelectedIndexChanged(this, e);
+            lstMMIO_network_list_SelectedIndexChanged(this, e);
             //
 
             // RX2 tab
@@ -2356,7 +2507,7 @@ namespace Thetis
             radDSPRX1APFControls_CheckedChanged(this, e);
             radDSPRX1subAPFControls_CheckedChanged(this, e);
             radDSPRX2APFControls_CheckedChanged(this, e);
-            
+
             // dolly filter
             chkDSPRX1DollyEnable_CheckedChanged(this, e);
             chkDSPRX1DollySubEnable_CheckedChanged(this, e);
@@ -2371,6 +2522,9 @@ namespace Thetis
             // CAT
             comboFocusMasterMode_SelectedIndexChanged(this, e);
             chkRecenterOnZZFx_CheckedChanged(this, e);
+            //MW0GLE [2.10.3.6_dev4]
+            chkKWAI_CheckedChanged(this, e);
+
             //MW0LGE_21d n1mm
             chkN1MMEnableRX1_CheckedChanged(this, e);
             chkN1MMEnableRX2_CheckedChanged(this, e);
@@ -2383,6 +2537,7 @@ namespace Thetis
             chkShowTCISpots_CheckedChanged(this, EventArgs.Empty);
             chkSpotOwnCallAppearance_CheckedChanged(this, EventArgs.Empty);
 
+            //MIDI
             chkIgnore14bitMidiMessages_CheckedChanged(this, EventArgs.Empty);
             chkMidiControlIDincludesChannel_CheckedChanged(this, EventArgs.Empty);
             chkMidiControlIDincludesStatus_CheckedChanged(this, EventArgs.Empty);
@@ -2468,6 +2623,16 @@ namespace Thetis
             chkAutoPowerOn_CheckedChanged(this, e);
             nudPBsnrShiftRx1_ValueChanged(this, e);
             nudPBsnrShiftRx2_ValueChanged(this, e);
+
+            // auto start tab
+            updateAutoLaunchControls();
+
+            //
+            chkSWRProtection_CheckedChanged(this, e);
+            chkSWRTuneProtection_CheckedChanged(this, e);
+
+            //multimeter io tab
+            init_lstMMIO();
         }
 
         public string[] GetTXProfileStrings()
@@ -2730,7 +2895,7 @@ namespace Thetis
                 if (isTXProfileSettingDifferent<bool>(dr, "CFCEnabled", chkCFCEnable.Checked, out sReportOut)) sReport += sReportOut;
                 if (isTXProfileSettingDifferent<bool>(dr, "CFCPostEqEnabled", chkCFCPeqEnable.Checked, out sReportOut)) sReport += sReportOut;
                 if (isTXProfileSettingDifferent<bool>(dr, "CFCPhaseRotatorEnabled", chkPHROTEnable.Checked, out sReportOut)) sReport += sReportOut;
-                if (isTXProfileSettingDifferent<bool>(dr, "CFCPhaseReverseEnabled", chkPHROTReverse.Checked, out sReportOut)) sReport += sReportOut;                
+                if (isTXProfileSettingDifferent<bool>(dr, "CFCPhaseReverseEnabled", chkPHROTReverse.Checked, out sReportOut)) sReport += sReportOut;
                 if (isTXProfileSettingDifferent<int>(dr, "CFCPhaseRotatorFreq", (int)udPhRotFreq.Value, out sReportOut)) sReport += sReportOut;
                 if (isTXProfileSettingDifferent<int>(dr, "CFCPhaseRotatorStages", (int)udPHROTStages.Value, out sReportOut)) sReport += sReportOut;
                 int[] cfceq = CFCCOMPEQ;
@@ -2742,7 +2907,7 @@ namespace Thetis
                     if (isTXProfileSettingDifferent<int>(dr, "CFCPostEqGain" + (i - 12).ToString(), cfceq[i], out sReportOut)) sReport += sReportOut;
                 for (int i = 22; i < 32; i++)
                     if (isTXProfileSettingDifferent<int>(dr, "CFCEqFreq" + (i - 22).ToString(), cfceq[i], out sReportOut)) sReport += sReportOut;
-            }      
+            }
 
             return sReport;
         }
@@ -2940,7 +3105,7 @@ namespace Thetis
                 if (DB.ConvertFromDBVal<bool>(dr["CFCEnabled"]) != chkCFCEnable.Checked) return true;
                 if (DB.ConvertFromDBVal<bool>(dr["CFCPostEqEnabled"]) != chkCFCPeqEnable.Checked) return true;
                 if (DB.ConvertFromDBVal<bool>(dr["CFCPhaseRotatorEnabled"]) != chkPHROTEnable.Checked) return true;
-                if (DB.ConvertFromDBVal<bool>(dr["CFCPhaseReverseEnabled"]) != chkPHROTReverse.Checked) return true;                
+                if (DB.ConvertFromDBVal<bool>(dr["CFCPhaseReverseEnabled"]) != chkPHROTReverse.Checked) return true;
                 if (DB.ConvertFromDBVal<int>(dr["CFCPhaseRotatorFreq"]) != (int)udPhRotFreq.Value) return true;
                 if (DB.ConvertFromDBVal<int>(dr["CFCPhaseRotatorStages"]) != (int)udPHROTStages.Value) return true;
                 int[] cfceq = CFCCOMPEQ;
@@ -2956,7 +3121,7 @@ namespace Thetis
 
             return false;
         }
- 
+
         private void highlightTXProfileSaveItems(bool bHighlight)
         {
             if (initializing) return;
@@ -3288,7 +3453,7 @@ namespace Thetis
             dr["FM_RX_AFFilter_Low"] = (decimal)udFMLowCutRX.Value;
             dr["FM_RX_AFFilter_High"] = (decimal)udFMHighCutRX.Value;
             dr["FM_TX_AFFilter_Low"] = (decimal)udFMLowCutTX.Value;
-            dr["FM_TX_AFFilter_High"] = (decimal)udFMHighCutTX.Value; 
+            dr["FM_TX_AFFilter_High"] = (decimal)udFMHighCutTX.Value;
             dr["VAC1_Force_In"] = (bool)chkVAC1_Force2.Checked;  // note in is force2, and out is force
             dr["VAC1_Force_Out"] = (bool)chkVAC1_Force.Checked;
             dr["VAC2_Force_In"] = (bool)chkVAC2_Force2.Checked;
@@ -3462,7 +3627,7 @@ namespace Thetis
             }
         }
 
-        public bool HermesEnableAttenuator
+        public bool RX1EnableAtt
         {
             get
             {
@@ -3475,7 +3640,7 @@ namespace Thetis
             }
         }
 
-        public int HermesAttenuatorData
+        public int ATTOnRX1
         {
             get
             {
@@ -3484,10 +3649,16 @@ namespace Thetis
             }
             set
             {
-                if (udHermesStepAttenuatorData != null) udHermesStepAttenuatorData.Value = value;
+                if (udHermesStepAttenuatorData != null)
+                {
+                    if (udHermesStepAttenuatorData.Value == value)
+                        udHermesStepAttenuatorData_ValueChanged(this, EventArgs.Empty); //[2.10.3.6] no event will fire if the same, so force it
+                    else
+                        udHermesStepAttenuatorData.Value = value;
+                }
             }
         }
-        public int HermesAttenuatorDataRX2
+        public int ATTOnRX2
         {
             get
             {
@@ -3496,7 +3667,13 @@ namespace Thetis
             }
             set
             {
-                if (udHermesStepAttenuatorDataRX2 != null) udHermesStepAttenuatorDataRX2.Value = value;
+                if (udHermesStepAttenuatorDataRX2 != null)
+                {
+                    if (udHermesStepAttenuatorDataRX2.Value == value)
+                        udHermesStepAttenuatorDataRX2_ValueChanged(this, EventArgs.Empty); //[2.10.3.6]MW0LGE no event will fire if the same, so force it
+                    else
+                        udHermesStepAttenuatorDataRX2.Value = value;
+                }
             }
         }
         public bool RX2EnableAtt
@@ -3528,7 +3705,7 @@ namespace Thetis
                     if (value > 31) value = 31;
                     if (value < 0) value = 0; //MW0LGE [2.9.0.7] added after mi0bot source review
                     lblTXattBand.Text = console.TXBand.ToString();
-                    if (udATTOnTX.Value == value) //[2.10.3.6]MW0LGE there will be no change event
+                    if (udATTOnTX.Value == value) //[2.10.3.6]MW0LGE no event will fire if the same, so force it
                         udATTOnTX_ValueChanged(this, EventArgs.Empty);
                     else
                         udATTOnTX.Value = value;
@@ -5436,6 +5613,9 @@ namespace Thetis
             {
                 allow_freq_broadcast = value;
                 console.KWAutoInformation = value;
+
+                //update the 1/2/3/4/tcp visibility
+                updatePortAIstate(value);
             }
         }
 
@@ -5662,7 +5842,7 @@ namespace Thetis
         {
             get { return tcPowerAmplifier; }
             set { tcPowerAmplifier = value; }
-        }        
+        }
         public TabControl TabGeneral
         {
             get { return tcGeneral; }
@@ -5834,6 +6014,8 @@ namespace Thetis
                 labelAlex1FilterHPF.Text = "BPF1";
                 chkAlexHPFBypass.Text = "ByPass/55 MHz BPF";
                 chkDisableHPFonTX.Text = "BPF ByPass on TX";
+                chkDisableHPFonPSb.Text = "BPF ByPass on PS";
+                chkDisableHPFonPSb.Visible = true;
                 labelAlexFilterActive.Location = new Point(275, 0);
                 ud6mRx2LNAGainOffset.Visible = true;
                 lblRx26mLNA.Visible = true;
@@ -5852,6 +6034,7 @@ namespace Thetis
                 labelAlex1FilterHPF.Text = "HPF";
                 chkAlexHPFBypass.Text = "ByPass/55 MHz HPF";
                 chkDisableHPFonTX.Text = "HPF ByPass on TX";
+                chkDisableHPFonPSb.Visible = false;
                 panelAlexRXXVRTControl.Visible = true;
                 labelAlexFilterActive.Location = new Point(275, 0);
                 ud6mRx2LNAGainOffset.Visible = false;
@@ -5898,7 +6081,8 @@ namespace Thetis
                 chkAlexHPFBypass.Location = new Point(140, 185);
                 chkDisableHPFonTX.Parent = panelAlex1HPFControl;
                 chkDisableHPFonTX.Location = new Point(140, 213);
-
+                chkDisableHPFonPSb.Parent = panelAlex1HPFControl;
+                chkDisableHPFonPSb.Location = new Point(140, 241);
             }
 
             if (console.CurrentHPSDRModel == HPSDRModel.HERMES) tpPennyCtrl.Text = "Hermes Ctrl";
@@ -6324,7 +6508,7 @@ namespace Thetis
             }
 
             //[2.10.3]MW0LGE only enable if wasapi
-            if(comboAudioDriver2.SelectedIndex < PA19.PA_GetHostApiCount()) //[2.10.3.4]MW0LGE ignore the manually added HPSDR (PCM A/D)
+            if (comboAudioDriver2.SelectedIndex < PA19.PA_GetHostApiCount()) //[2.10.3.4]MW0LGE ignore the manually added HPSDR (PCM A/D)
             {
                 PA19.PaHostApiInfo hostInfo = PA19.PA_GetHostApiInfo(new_driver);
                 bool bIsWASAPI = hostInfo.type == (int)PA19.PaHostApiTypeId.paWASAPI;
@@ -6419,7 +6603,7 @@ namespace Thetis
 
             int old_input = Audio.Input2;
             int new_input = ((PADeviceInfo)comboAudioInput2.SelectedItem).Index;
-            bool power = console.PowerOn;      
+            bool power = console.PowerOn;
 
             if (power && chkAudioEnableVAC.Checked && old_input != new_input)
             {
@@ -6442,7 +6626,7 @@ namespace Thetis
 
             int old_input = Audio.Input3;
             int new_input = ((PADeviceInfo)comboAudioInput3.SelectedItem).Index;
-            bool power = console.PowerOn;            
+            bool power = console.PowerOn;
 
             if (power && chkVAC2Enable.Checked && old_input != new_input)
             {
@@ -8270,7 +8454,7 @@ namespace Thetis
                 case CheckState.Indeterminate:
                     // G8NJJ Saturn has QSK capability in any version.
                     if (((console.CurrentHPSDRHardware == HPSDRHW.Orion || console.CurrentHPSDRHardware == HPSDRHW.OrionMKII) &&
-                        (NetworkIO.FWCodeVersion >= 17) && !Alex.trx_ant_not_same) || (console.CurrentHPSDRHardware == HPSDRHW.Saturn))
+                        (NetworkIO.FWCodeVersion >= 17) && !Alex.trx_ant_different) || (console.CurrentHPSDRHardware == HPSDRHW.Saturn))
                     {
                         console.BreakInEnabledState = chkCWBreakInEnabled.CheckState;
                         chkCWBreakInEnabled.Text = "QSK";
@@ -8473,7 +8657,7 @@ namespace Thetis
         {
             if (initializing) return;
             console.radio.GetDSPRX(1, 0).RXFixedAGC = (double)udDSPAGCRX2FixedGaindB.Value;
- 
+
             if (console.RX2AGCMode == AGCMode.FIXD)
                 console.RX2RF = (int)udDSPAGCRX2FixedGaindB.Value;
         }
@@ -8557,7 +8741,7 @@ namespace Thetis
 
             console.SetupInfoBarButton(ucInfoBar.ActionTypes.Leveler, chkDSPLevelerEnabled.Checked);
 
-            if(_oldLevelerState != chkDSPLevelerEnabled.Checked)
+            if (_oldLevelerState != chkDSPLevelerEnabled.Checked)
             {
                 console.LevelerChangedHandlers?.Invoke(_oldLevelerState, chkDSPLevelerEnabled.Checked);
                 _oldLevelerState = chkDSPLevelerEnabled.Checked;
@@ -8979,7 +9163,7 @@ namespace Thetis
             else
             {
                 updateTXProfileInDB(dr); //MW0LGE_21a remove duplication
-            }            
+            }
 
             if (!comboTXProfileName.Items.Contains(name))
             {
@@ -9909,10 +10093,12 @@ namespace Thetis
             console.UpdateStatusBarStatusIcons(StatusBarIconGroup.SerialCat);
         }
 
+        // reguire a valid COM port for Andromeda; not needed for G2 panel
         private void ChkEnableAndromeda_CheckedChanged(object sender, EventArgs e)
         {
             if (initializing) return;
 
+            chkAndrG2Panel.Checked = false;
             if (comboAndromedaCATPort.Text == "" || !comboAndromedaCATPort.Text.StartsWith("COM"))
             {
                 if (chkEnableAndromeda.Focused)
@@ -9945,6 +10131,7 @@ namespace Thetis
                 try
                 {
                     console.AndromedaCATEnabled = true;
+                    chkAndrG2Panel.Enabled = false;
                 }
                 catch (Exception ex)
                 {
@@ -9979,6 +10166,7 @@ namespace Thetis
                 }
 
                 console.AndromedaCATEnabled = false;
+                chkAndrG2Panel.Enabled = true;
             }
 
         }
@@ -10212,6 +10400,7 @@ namespace Thetis
                         chkEnableAndromeda.Checked = false;
                 }
 
+                if(!chkAndrG2Panel.Checked)
                 chkEnableAndromeda.Enabled = false;
             }
             else chkEnableAndromeda.Enabled = true;
@@ -10764,7 +10953,7 @@ namespace Thetis
         }
         private void ApplyOptions()
         {
-            SaveOptions();        
+            SaveOptions();
             setButtonState(false, false);
         }
 
@@ -10828,7 +11017,7 @@ namespace Thetis
 
                 string sInc = "";
                 int n = 0;
-                while(File.Exists(archivePath + "Thetis_database_" + datetime + sInc + ".xml"))
+                while (File.Exists(archivePath + "Thetis_database_" + datetime + sInc + ".xml"))
                 {
                     sInc = "_" + n.ToString();
                     n++;
@@ -11399,7 +11588,7 @@ namespace Thetis
         private void chkCWKeyerMode_CheckedChanged(object sender, System.EventArgs e)
         {
             if (initializing) return;
-  
+
             if (chkCWKeyerMode.Checked)
                 NetworkIO.SetCWKeyerMode(1); // mode b
             else
@@ -12010,7 +12199,7 @@ namespace Thetis
             if (Directory.Exists(_skinPath + "\\" + comboAppSkin.Text))
             {
                 Skin.Restore(comboAppSkin.Text, _skinPath, console);
-                console.UpdateAndromedaSkins();                
+                console.UpdateAndromedaSkins();
             }
 
             console.CurrentSkin = comboAppSkin.Text;
@@ -12140,7 +12329,7 @@ namespace Thetis
 
             console.AlexPresent = chkAlexPresent.Checked;
             console.SetComboPreampForHPSDR();
-       
+
             udHermesStepAttenuatorData_ValueChanged(this, EventArgs.Empty);
         }
 
@@ -13200,6 +13389,53 @@ namespace Thetis
             console.AlexAntCtrlEnabled = true; // need side effect of prop set to push data down to C code 
         }
 
+        // get RX antenna in use for band
+        // this must also ignores ext input check boxes
+        public int GetRXAntenna(Band band)
+        {
+            int antInUse = 0; //0 none, 1-3 valid
+            if ((band >= Band.B160M) && (band <= Band.B6M))
+            {
+                int idx = (int)band - (int)Band.B160M;
+                int Btn;
+                // change to new radio button and clear all ext input checkboxes
+                RadioButtonTS[] buttons = AlexRxAntButtons[idx];
+                for (Btn = 0; Btn < 3; Btn++)
+                {
+                    if (buttons[Btn].Checked) antInUse = Btn + 1;
+                }
+            }
+            return antInUse;
+        }
+        // get TX antenna in use for band
+        public int GetTXAntenna(Band band)
+        {
+            int antInUse = 0; //0 none, 1-3 valid
+            if ((band >= Band.B160M) && (band <= Band.B6M))
+            {
+                int idx = (int)band - (int)Band.B160M;
+                int Btn;
+                RadioButtonTS[] buttons = AlexTxAntButtons[idx];
+                for (Btn = 0; Btn < 3; Btn++)
+                {
+                    if (buttons[Btn].Checked)
+                    {
+                        if (Btn == 1 && chkBlockTxAnt2.Checked)
+                        {
+                            antInUse = Btn + 1;
+                        }
+                        if (Btn == 2 && chkBlockTxAnt3.Checked)
+                        {
+                            antInUse = Btn + 1;
+                        }
+                        else
+                            antInUse = Btn + 1;
+                    }
+                }
+            }
+            return antInUse;
+        }
+
         // set RX antenna to new antenna 1-3
         // this must also cancel any ext input check boxes
         public void SetRXAntenna(int Antenna, Band band)
@@ -13276,6 +13512,7 @@ namespace Thetis
             if (nRX2ADCinUse == 0 && (console.RX2Enabled && console.RX2Band == band)) // also if adc0 for rx2 then we need to fast attack
                 Display.FastAttackNoiseFloorRX2 = true;
         }
+
         private void btnHPSDRFreqCalReset_Click(object sender, System.EventArgs e)
         {
             udHPSDRFreqCorrectFactor.Value = (decimal)1.0;
@@ -14765,6 +15002,7 @@ namespace Thetis
         private void chkSWRProtection_CheckedChanged(object sender, EventArgs e)
         {
             console.SWRProtection = chkSWRProtection.Checked;
+            udSwrProtectionLimit.Enabled = chkSWRProtection.Checked;
         }
 
         public bool ATTOnTXChecked
@@ -15061,7 +15299,7 @@ namespace Thetis
             //wd5y
         }
 
-        private bool _updatingRX1HermiesStepAttData = false;       
+        private bool _updatingRX1HermiesStepAttData = false;
         private void udHermesStepAttenuatorData_ValueChanged(object sender, EventArgs e)
         {
             if (_updatingRX1HermiesStepAttData) return;
@@ -15112,7 +15350,7 @@ namespace Thetis
         private bool _updatingRX2HermiesStepAttData = false;
         private void udHermesStepAttenuatorDataRX2_ValueChanged(object sender, EventArgs e)
         {
-            if(_updatingRX2HermiesStepAttData) return;
+            if (_updatingRX2HermiesStepAttData) return;
             _updatingRX2HermiesStepAttData = true;
             console.RX2AttenuatorData = (int)udHermesStepAttenuatorDataRX2.Value;
 
@@ -15421,6 +15659,7 @@ namespace Thetis
         private void chkSWRTuneProtection_CheckedChanged(object sender, EventArgs e)
         {
             console.DisableSWRonTune = chkSWRTuneProtection.Checked;
+            udTunePowerSwrIgnore.Enabled = chkSWRTuneProtection.Checked;
         }
 
         private void tbDisplayFFTSize_Scroll(object sender, EventArgs e)
@@ -15980,7 +16219,10 @@ namespace Thetis
         {
             get { return chkDisableHPFonTX.Checked; }
         }
-
+        public bool ChkDisableHPFOnPs
+        {
+            get { return chkDisableHPFonPSb.Checked; }
+        }
         public bool RadRX1ADC1
         {
             get { return radDDC0ADC0.Checked; }
@@ -16471,13 +16713,9 @@ namespace Thetis
             if (initializing) return;
             console.radio.GetDSPRX(0, 1).RXADollyFreq1 = (double)udDSPRX1SubDollyF1.Value;
         }
-        //private bool _updatingATTTX = false;
         private void udATTOnTX_ValueChanged(object sender, EventArgs e)
         {
-            //if (_updatingATTTX) return;
-            //_updatingATTTX = true;
             console.TxAttenData = (int)udATTOnTX.Value;
-            //_updatingATTTX = false;
         }
 
         private void ud6mLNAGainOffset_ValueChanged(object sender, EventArgs e)
@@ -17538,7 +17776,7 @@ namespace Thetis
             //
             console.SetupInfoBarButton(ucInfoBar.ActionTypes.CFC, chkCFCEnable.Checked);
 
-            if(_oldCFCState != chkCFCEnable.Checked)
+            if (_oldCFCState != chkCFCEnable.Checked)
             {
                 console.CFCChangedHandlers?.Invoke(_oldCFCState, chkCFCEnable.Checked);
                 _oldCFCState = chkCFCEnable.Checked;
@@ -19312,6 +19550,8 @@ namespace Thetis
                     chkAlexHPFBypass.Location = new Point(140, 185);
                     chkDisableHPFonTX.Parent = panelBPFControl;
                     chkDisableHPFonTX.Location = new Point(140, 213);
+                    chkDisableHPFonPSb.Parent = panelBPFControl;
+                    chkDisableHPFonPSb.Location = new Point(140, 241);
                     radDDC0ADC2.Enabled = true;
                     radDDC1ADC2.Enabled = true;
                     radDDC2ADC2.Enabled = true;
@@ -19370,6 +19610,8 @@ namespace Thetis
                     chkAlexHPFBypass.Location = new Point(140, 185);
                     chkDisableHPFonTX.Parent = panelBPFControl;
                     chkDisableHPFonTX.Location = new Point(140, 213);
+                    chkDisableHPFonPSb.Parent = panelBPFControl;
+                    chkDisableHPFonPSb.Location = new Point(140, 241);
                     radDDC0ADC2.Enabled = true;
                     radDDC1ADC2.Enabled = true;
                     radDDC2ADC2.Enabled = true;
@@ -19429,6 +19671,8 @@ namespace Thetis
                     chkAlexHPFBypass.Location = new Point(140, 185);
                     chkDisableHPFonTX.Parent = panelBPFControl;
                     chkDisableHPFonTX.Location = new Point(140, 213);
+                    chkDisableHPFonPSb.Parent = panelBPFControl;
+                    chkDisableHPFonPSb.Location = new Point(140, 241);
                     radDDC0ADC2.Enabled = true;
                     radDDC1ADC2.Enabled = true;
                     radDDC2ADC2.Enabled = true;
@@ -19486,6 +19730,8 @@ namespace Thetis
                     chkAlexHPFBypass.Location = new Point(140, 185);
                     chkDisableHPFonTX.Parent = panelBPFControl;
                     chkDisableHPFonTX.Location = new Point(140, 213);
+                    chkDisableHPFonPSb.Parent = panelBPFControl;
+                    chkDisableHPFonPSb.Location = new Point(140, 241);
                     radDDC0ADC2.Enabled = true;
                     radDDC1ADC2.Enabled = true;
                     radDDC2ADC2.Enabled = true;
@@ -19503,8 +19749,8 @@ namespace Thetis
                 btnResetP1ADC_Click(this, EventArgs.Empty);
             }
 
-            if(_firstRadioModelChange || old_model != console.CurrentHPSDRModel)
-            { 
+            if (_firstRadioModelChange || old_model != console.CurrentHPSDRModel)
+            {
                 if (!initializing)
                 {
                     string sCurrentPAProfile = comboPAProfile.Text;
@@ -19761,6 +20007,21 @@ namespace Thetis
                     radP1DDC5ADC0.Checked = true;
                     radP1DDC6ADC0.Checked = true;
                     break;
+            }
+        }
+
+        private void chkAndrG2Panel_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkAndrG2Panel.Checked)
+            {
+                chkEnableAndromeda.Checked = false;
+                chkEnableAndromeda.Enabled = false;
+                console.AndromedaG2Enabled = true;
+            }
+            else
+            {
+                chkEnableAndromeda.Enabled = true;
+                console.AndromedaG2Enabled = false;
             }
         }
 
@@ -21082,7 +21343,7 @@ namespace Thetis
                 {
                     m_bShowingCFC = false;
                     picCFC.Invalidate();
-                } 
+                }
                 return;
             }
             else
@@ -21109,7 +21370,7 @@ namespace Thetis
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
 
-            Point[] linePoints;            
+            Point[] linePoints;
             int height = picCFC.Height;
             float binsPerHz = 1025 / 48000f;
             int endFreqIndex = (int)((double)udCFC9.Value * binsPerHz);
@@ -21163,7 +21424,7 @@ namespace Thetis
             linePoints = new Point[10];
             for (int n = 0; n < 10; n++)
             {
-                switch(n)
+                switch (n)
                 {
                     case 0:
                         linePoints[n] = new Point((int)(((float)udCFC0.Value - fLow) * fHzPerPizel), height - (int)((pre + tbCFC0.Value) * scale));
@@ -21799,7 +22060,14 @@ namespace Thetis
         {
             console.EmulateExpertSDR3Protocol = chkEmulateExpertSDR3Protocol.Checked;
         }
-
+        public bool DisableAudioAmplifier
+        {
+            set
+            {
+                if (chkDisableRearSpeakerJacksAudioAmplifier.Checked != value)
+                    chkDisableRearSpeakerJacksAudioAmplifier.Checked = value;
+            }
+        }
         private void chkDisableRearSpeakerJacksAudioAmplifier_CheckedChanged(object sender, EventArgs e)
         {
             console.EnableAudioAmplifier = !chkDisableRearSpeakerJacksAudioAmplifier.Checked;
@@ -22125,7 +22393,7 @@ namespace Thetis
             if (p == null) return;
 
             nudMaxPowerForBandPA.Value = (decimal)p.GetMaxPower(_adjustingBand);
- 
+
             updateMaxPowerCheckbox(p);
 
             console.UpdateDriveLabel(false, EventArgs.Empty);
@@ -22667,6 +22935,7 @@ namespace Thetis
         private void OnTXBandChanged(Band oldBand, Band newBand)
         {
             setAdjustingBand(console.TXBand);
+            lblTXattBand.Text = newBand.ToString(); //[2.3.10.6]MW0LGE added (also in ATTOnTX)
         }
         private void setAdjustingBand(Band b)
         {
@@ -23535,9 +23804,9 @@ namespace Thetis
         {
             console.PreventTXonDifferentBandToRXband = chkPreventTXonDifferentBandToRX.Checked;
         }
-        #region MulitMeter2
+        #region MultiMeter2
         // multimeter 2
-        private const int MAX_CONTAINERS = 10;
+        private const int MAX_CONTAINERS = 50;
 
         private class clsContainerComboboxItem
         {
@@ -23643,7 +23912,10 @@ namespace Thetis
             chkContainerBorder.Enabled = bEnableControls;
             chkContainerNoTitle.Enabled = bEnableControls;
             chkContainerEnable.Enabled = bEnableControls;
+            chkContainerMinimises.Enabled = bEnableControls;
+            txtContainerNotes.Enabled = bEnableControls;
             lblMMContainerBackground.Enabled = bEnableControls;
+            lblMMContainerNotes.Enabled = bEnableControls;
             lstMetersAvailable.Enabled = bEnableControls;
             lstMetersInUse.Enabled = bEnableControls;
             btnAddMeterItem.Enabled = bEnableControls;
@@ -23654,14 +23926,21 @@ namespace Thetis
             btnMeterCopySettings.Enabled = bEnableControls && lstMetersInUse.Items.Count > 0;
             btnMeterPasteSettings.Enabled = bEnableControls && lstMetersInUse.Items.Count > 0;
 
+            if (!bEnableControls) txtContainerNotes.Text = "";
             if (!bEnableControls) comboContainerSelect.Text = "";
 
             updateMeterLists();
         }
         private void updateMeterLists()
         {
-            lstMetersAvailable.Items.Clear();
+            //lstMetersInUse.BeginUpdate();
+            //lstMetersAvailable.BeginUpdate();
+
+            //lstMetersInUse.SuspendLayout();
+            //lstMetersAvailable.SuspendLayout();
+
             lstMetersInUse.Items.Clear();
+            lstMetersAvailable.Items.Clear();
 
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return;
@@ -23675,15 +23954,27 @@ namespace Thetis
 
                 if (m.HasMeterType(mt))
                 {
-                    clsMeterTypeComboboxItem mtci = new clsMeterTypeComboboxItem(mt, m.GetOrderForMeterType(mt));
-                    inuse.Add(mtci);
+                    List<int> orders = m.GetOrderForMeterType(mt); // can be muliple orders
+                    foreach (int order in orders)
+                    {
+                        clsMeterTypeComboboxItem mtci = new clsMeterTypeComboboxItem(mt, order);
+                        inuse.Add(mtci);
+                    }
                 }
-                else
-                {
-                    clsMeterTypeComboboxItem mtci = new clsMeterTypeComboboxItem(mt, -1);
-                    notinuse.Add(mtci);
-                }
+                //else
+                //{
+                //if (mt != MeterType.SPACER && mt != MeterType.TEXT_OVERLAY)
+                //{
+                clsMeterTypeComboboxItem mtci2 = new clsMeterTypeComboboxItem(mt, -1);
+                notinuse.Add(mtci2);
+                //}
+                //}
             }
+            //// add spacer and overlay here always to notinuse
+            //clsMeterTypeComboboxItem mtci_tmp = new clsMeterTypeComboboxItem(MeterType.SPACER, -1);
+            //notinuse.Add(mtci_tmp);
+            //mtci_tmp = new clsMeterTypeComboboxItem(MeterType.TEXT_OVERLAY, -1);
+            //notinuse.Add(mtci_tmp);
 
             foreach (clsMeterTypeComboboxItem mtci in notinuse)
             {
@@ -23696,6 +23987,15 @@ namespace Thetis
 
             lstMetersAvailable_SelectedIndexChanged(this, EventArgs.Empty);
             lstMetersInUse_SelectedIndexChanged(this, EventArgs.Empty);
+
+            //lstMetersInUse.ResumeLayout();
+            //lstMetersAvailable.ResumeLayout();
+
+            //lstMetersInUse.Invalidate();
+            //lstMetersAvailable.Invalidate();
+
+            //lstMetersInUse.EndUpdate();
+            //lstMetersAvailable.EndUpdate();
         }
 
         private void btnContainerDelete_Click(object sender, EventArgs e)
@@ -23725,6 +24025,8 @@ namespace Thetis
             clrbtnContainerBackground.Color = MeterManager.GetContainerBackgroundColour(cci.ID);
             chkContainerNoTitle.Checked = MeterManager.ContainerNoTitleBar(cci.ID);
             chkContainerEnable.Checked = MeterManager.ContainerShow(cci.ID);
+            chkContainerMinimises.Checked = MeterManager.ContainerMinimises(cci.ID);
+            txtContainerNotes.Text = MeterManager.GetContainerNotes(cci.ID);
 
             updateMeterLists();
         }
@@ -23752,6 +24054,16 @@ namespace Thetis
                 MeterManager.EnableContainer(cci.ID, chkContainerEnable.Checked);
             }
         }
+        private void txtContainerNotes_TextChanged(object sender, EventArgs e)
+        {
+            clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
+            if (cci != null)
+            {
+                string sTmp = MeterManager.GetContainerNotes(cci.ID);
+                if (txtContainerNotes.Text != sTmp)
+                    MeterManager.ContainerNotes(cci.ID, txtContainerNotes.Text);
+            }
+        }
         private void btnAddMeterItem_Click(object sender, EventArgs e)
         {
             clsMeterTypeComboboxItem mti = lstMetersAvailable.SelectedItem as clsMeterTypeComboboxItem;
@@ -23761,6 +24073,7 @@ namespace Thetis
             if (m == null) return;
 
             m.AddMeter(mti.MeterType);
+            m.ZeroOut(true, true);
             m.Rebuild();
             updateMeterLists();
 
@@ -23769,7 +24082,7 @@ namespace Thetis
 
         private void lstMetersAvailable_SelectedIndexChanged(object sender, EventArgs e)
         {
-            btnAddMeterItem.Enabled = lstMetersAvailable.SelectedIndex >= 0;            
+            btnAddMeterItem.Enabled = lstMetersAvailable.SelectedIndex >= 0;
         }
 
         private void lstMetersInUse_SelectedIndexChanged(object sender, EventArgs e)
@@ -23797,7 +24110,7 @@ namespace Thetis
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return;
 
-            m.RemoveMeterType(mti.MeterType, true);
+            m.RemoveMeterType(mti.MeterType, mti.Order, true);
 
             updateMeterLists();
 
@@ -23815,7 +24128,7 @@ namespace Thetis
             int n = lstMetersInUse.SelectedIndex - 1;
             if (n < 0) return;
 
-            m.SetOrderForMeterType(mtci.MeterType, n, true, true);
+            m.SetOrderForMeterType(mtci.MeterType, n, true, true, mtci.Order);
 
             updateMeterLists();
 
@@ -23833,7 +24146,7 @@ namespace Thetis
             int n = lstMetersInUse.SelectedIndex + 1;
             if (n > lstMetersInUse.Items.Count - 1) return;
 
-            m.SetOrderForMeterType(mtci.MeterType, n, true, false);
+            m.SetOrderForMeterType(mtci.MeterType, n, true, false, mtci.Order);
 
             updateMeterLists();
 
@@ -23907,7 +24220,7 @@ namespace Thetis
             if (mtci == null) return "";
             if (!m.HasMeterType(mtci.MeterType)) return "";
 
-            return m.MeterGroupID(mtci.MeterType);
+            return m.MeterGroupID(mtci.MeterType, mtci.Order);
         }
         private MeterType meterItemGroupTypefromSelected()
         {
@@ -23935,16 +24248,82 @@ namespace Thetis
             string mgID = meterItemGroupIDfromSelected();
             if (mgID == "") return null;
 
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return null;
+            
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return null;
 
             MeterType mt = meterItemGroupTypefromSelected();
             if (mt == MeterType.NONE) return null;
 
-            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt);
+            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt, mtci.Order);
             if (igs == null) return null;
 
-            if (mt == MeterType.SIGNAL_TEXT)
+            if (mt == MeterType.WEB_IMAGE)
+            {
+                igs.UpdateInterval = (int)nudWebImage_update_interval.Value;
+                igs.EyeScale = (float)nudWebImage_width_scale.Value;
+                igs.FadeOnRx = chkWebImage_fade_rx.Checked;
+                igs.FadeOnTx = chkWebImage_fade_tx.Checked;
+                igs.Text1 = txtWebImage_url.Text;
+            }
+            else if(mt == MeterType.ROTATOR)
+            {
+                igs.UpdateInterval = (int)nudMeterItemUpdateRateRotator.Value;
+                igs.Colour = Color.FromArgb(255, clrbtnMeterItemHBackgroundRotator.Color);
+                igs.TitleColor = clrbtnMeterItemRotatorArrow.Color;
+                igs.MarkerColour = clrbtnMeterItemRotatorLargeDot.Color;
+                igs.SubMarkerColour = clrbtnMeterItemRotatorSmallDot.Color;
+                igs.ShowMarker = chkMeterItemRotatorShowBeamWidth.Checked;
+                igs.LowColor = clrbtnMeterItemRotatorBeamWidth.Color;
+                igs.HighColor = clrbtnMeterItemRotatorText.Color;
+                igs.ShowHistory = chkMeterItemRotatorCardinals.Checked;
+                igs.FadeOnRx = chkMeterItemFadeOnRxRotator.Checked;
+                igs.FadeOnTx = chkMeterItemFadeOnTxRotator.Checked;
+                igs.DarkMode = chkMeterItemDarkModeRotator.Checked;
+                igs.AttackRatio = (float)nudMeterItemRotatorBeamWidth.Value;
+                igs.EyeScale = (float)nudMeterItemRotator_padding.Value;
+
+                //
+                if (radMeterItemRotator_show_az.Checked)
+                    igs.HistoryDuration = (int)MeterManager.clsRotatorItem.RotatorMode.AZ;
+                else if (radMeterItemRotator_show_ele.Checked)
+                    igs.HistoryDuration = (int)MeterManager.clsRotatorItem.RotatorMode.ELE;
+                else if (radMeterItemRotator_show_both.Checked)
+                    igs.HistoryDuration = (int)MeterManager.clsRotatorItem.RotatorMode.BOTH;
+                //
+
+                igs.ShowType = chkMeterItemRotatorAllowControl.Checked;
+                igs.HistoryColor = clrbtnMeterItemRotatorControlColour.Color;
+                igs.Text1 = txtMeterItemRotatorAZcommand.Text;
+                igs.Text2 = txtMeterItemRotatorELEcommand.Text;
+
+                Guid guid = MultiMeterIO.GuidfromFourChar(txtRotator_4charID.Text);
+                if (guid != Guid.Empty)
+                {
+                    igs.SetMMIOGuid(2, guid);
+                }
+                else
+                {
+                    igs.SetMMIOGuid(2, Guid.Empty);
+                }
+            }
+            else if (mt == MeterType.DATA_OUT)
+            {
+                Guid guid = MultiMeterIO.GuidfromFourChar(txtDataOutNode_4charID.Text);
+                if (guid != Guid.Empty)
+                {
+                    igs.SetMMIOGuid(0, guid);
+                    igs.UpdateInterval = (int)nudDataOutNode_sendinterval.Value;
+                }
+                else
+                {
+                    igs.SetMMIOGuid(0, Guid.Empty);
+                    igs.UpdateInterval = 500;
+                }
+            }
+            else if (mt == MeterType.SIGNAL_TEXT)
             {
                 igs.UpdateInterval = (int)nudMeterItemUpdateRate.Value;
                 igs.AttackRatio = (float)nudMeterItemAttackRate.Value;
@@ -23975,6 +24354,7 @@ namespace Thetis
                 igs.PeakHoldMarkerColor = clrbtnMMVfoDisplayTx.Color;
                 igs.HistoryColor = clrbtnMMVfoDisplayFilter.Color;
                 igs.SegmentedSolidLowColour = clrbtnMMVfoDisplayBand.Color;
+                igs.PowerScaleColour = clrbtnMMVfoDigitHighlight.Color;
             }
             else if (mt == MeterType.CLOCK)
             {
@@ -23984,6 +24364,82 @@ namespace Thetis
                 igs.MarkerColour = clrbtnMMTime.Color;
                 igs.SubMarkerColour = clrbtnMMDate.Color;
                 igs.ShowMarker = radMM24Clock.Checked; // use the show marker bool for this                
+            }
+            else if (mt == MeterType.LED)
+            {
+                igs.FadeOnRx = chkLedIndicator_FadeOnRX.Checked;
+                igs.FadeOnTx = chkLedIndicator_FadeOnTX.Checked;
+                igs.Colour = clrbtnLedIndicator_true.Color;
+                igs.MarkerColour = clrbtnLedIndicator_false.Color;
+
+                igs.TitleColor = clrbtnLedIndicator_PanelBackground.Color;
+                igs.HistoryColor = clrbtnLedIndiciator_PanelBackgroundTX.Color;
+                igs.ShowSubMarker = chkLedIndicator_ShowPanel.Checked;
+
+                igs.EyeScale = (float)nudLedIndicator_xOffset.Value;
+                igs.EyeBezelScale = (float)nudLedIndicator_yOffset.Value;
+                igs.AttackRatio = (float)nudLedIndicator_xSize.Value;
+                igs.DecayRatio = (float)nudLedIndicator_ySize.Value;
+
+                igs.Text1 = txtLedIndicator_condition.Text;
+
+                igs.SpacerPadding = (float)nudLedIndicator_PanelPadding.Value;
+
+                igs.PeakHold = chkLed_show_true.Checked;
+                igs.ShowMarker = chkLed_show_false.Checked;
+                if (radLed_light_on_off.Checked)
+                    igs.IgnoreHistoryDuration = 0;
+                else if (radLed_light_blink.Checked)
+                    igs.IgnoreHistoryDuration = 1;
+                else if (radLed_light_pulsate.Checked)
+                    igs.IgnoreHistoryDuration = 2;
+                // also showhistory + showtype are return states for valid/error
+            }
+            else if (mt == MeterType.TEXT_OVERLAY)
+            {
+                igs.FadeOnRx = chkTextOverlay_FadeOnRX.Checked;
+                igs.FadeOnTx = chkTextOverlay_FadeOnTX.Checked;
+                igs.Colour = clrbtnTextOverlay_TextColour1.Color;
+                igs.MarkerColour = clrbtnTextOverlay_TextColour2.Color;
+                igs.SubMarkerColour = clrbtnTextOverlay_TextBackColour1.Color;
+                igs.ShowMarker = chkTextOverlay_textback1.Checked;
+                igs.PeakValueColour = clrbtnTextOverlay_TextBackColour2.Color;
+                igs.ShowType = chkTextOverlay_textback2.Checked;
+
+                igs.TitleColor = clrbtnTextOverlay_PanelBackground.Color;
+                igs.HistoryColor = clrbtnTextOverlay_PanelBackgroundTX.Color;
+                igs.ShowSubMarker = chkTextOverlay_ShowPanel.Checked;
+
+                igs.EyeScale = (float)nudTextOverlay_RXxOffset.Value;
+                igs.EyeBezelScale = (float)nudTextOverlay_RXyOffset.Value;
+                igs.AttackRatio = (float)nudTextOverlay_TXxOffset.Value;
+                igs.DecayRatio = (float)nudTextOverlay_TXyOffset.Value;
+
+                igs.Text1 = txtTextOverlay_RXText.Text;
+                igs.Text2 = txtTextOverlay_TXText.Text;
+
+                if (_textOverlayFont1 != null)
+                {
+                    igs.FontFamily1 = _textOverlayFont1.FontFamily.Name;
+                    igs.FontStyle1 = _textOverlayFont1.Style;
+                    igs.FontSize1 = _textOverlayFont1.Size;
+                }
+                if (_textOverlayFont2 != null)
+                {
+                    igs.FontFamily2 = _textOverlayFont2.FontFamily.Name;
+                    igs.FontStyle2 = _textOverlayFont2.Style;
+                    igs.FontSize2 = _textOverlayFont2.Size;
+                }
+
+                igs.SpacerPadding = (float)nudTextOverlay_PanelPadding.Value;
+            }
+            else if (mt == MeterType.SPACER)
+            {
+                igs.Colour = clrbtnMeterItemHBackgroundSpacerRX.Color;
+                igs.MarkerColour = clrbtnMeterItemHBackgroundSpacerTX.Color;
+                igs.FadeOnRx = chkMeterItemFadeOnRxSpacer.Checked;
+                igs.FadeOnTx = chkMeterItemFadeOnTxSpacer.Checked;
+                igs.SpacerPadding = (float)nudMeterItemSpacerPadding.Value;
             }
             else
             {
@@ -24031,8 +24487,9 @@ namespace Thetis
                 if (mt == MeterType.ANANMM || mt == MeterType.CROSS) igs.DarkMode = chkMeterItemDarkMode.Checked;
             }
 
-            m.ApplySettingsForMeterGroup(mt, igs);
+            m.ApplySettingsForMeterGroup(mt, igs, mtci.Order);
 
+            updateLedValidControls();
             return igs;
         }
         private bool _ignoreMeterItemChangeEvents = false;
@@ -24043,18 +24500,167 @@ namespace Thetis
             string mgID = meterItemGroupIDfromSelected();
             if (mgID == "") return;
 
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return;
+
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return;
 
             MeterType mt = meterItemGroupTypefromSelected();
             if (mt == MeterType.NONE) return;
 
-            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt);                
+            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt, mtci.Order);
             if (igs == null) return;
 
             _ignoreMeterItemChangeEvents = true;
 
-            if (mt == MeterType.SIGNAL_TEXT)
+            if (mt != MeterType.ROTATOR && mt != MeterType.SIGNAL_TEXT && mt != MeterType.VFO_DISPLAY && mt != MeterType.CLOCK && 
+                mt != MeterType.TEXT_OVERLAY && mt != MeterType.SPACER && mt != MeterType.LED)
+            {
+                switch (m.MeterVariables(mt))
+                {
+                    case 1:
+                        btnMMIO_variable.Enabled = true;
+                        btnMMIO_variable_2.Enabled = false;
+                        toolTip1.SetToolTip(btnMMIO_variable, m.MeterVariablesReading(mt, 0).ToString());
+                        pnlVariableInUse_1.Visible = variableInUse(0);
+                        pnlVariableInUse_2.Visible = false;
+                        break;
+                    case 2:
+                        btnMMIO_variable.Enabled = true;
+                        btnMMIO_variable_2.Enabled = true;
+                        toolTip1.SetToolTip(btnMMIO_variable, m.MeterVariablesReading(mt, 0).ToString());
+                        toolTip1.SetToolTip(btnMMIO_variable_2, m.MeterVariablesReading(mt, 1).ToString());
+                        pnlVariableInUse_1.Visible = variableInUse(0);
+                        pnlVariableInUse_2.Visible = variableInUse(1);
+                        break;
+                    case 7:
+                        //todo? anan mm
+                        btnMMIO_variable.Enabled = false;
+                        btnMMIO_variable_2.Enabled = false;
+                        pnlVariableInUse_1.Visible = false;
+                        pnlVariableInUse_2.Visible = false;
+                        break;
+                    default:
+                        btnMMIO_variable.Enabled = false;
+                        btnMMIO_variable_2.Enabled = false;
+                        pnlVariableInUse_1.Visible = false;
+                        pnlVariableInUse_2.Visible = false;
+                        break;
+                }
+            }
+            else if (mt == MeterType.ROTATOR)
+            {
+                switch (m.MeterVariables(mt))
+                {
+                    //case 1:
+                    //    btnMMIO_variable_rotator.Enabled = true;
+                    //    btnMMIO_variable_2_rotator.Enabled = false;
+                    //    toolTip1.SetToolTip(btnMMIO_variable, m.MeterVariablesReading(mt, 0).ToString());
+                    //    pnlVariableInUse_1_rotator.Visible = variableInUse(0);
+                    //    pnlVariableInUse_2_rotator.Visible = false;
+                    //    break;
+                    case 2:
+                        btnMMIO_variable_rotator.Enabled = true;
+                        btnMMIO_variable_2_rotator.Enabled = true;
+                        toolTip1.SetToolTip(btnMMIO_variable_rotator, m.MeterVariablesReading(mt, 0).ToString());
+                        toolTip1.SetToolTip(btnMMIO_variable_2_rotator, m.MeterVariablesReading(mt, 1).ToString());
+                        pnlVariableInUse_1_rotator.Visible = variableInUse(0);
+                        pnlVariableInUse_2_rotator.Visible = variableInUse(1);
+                        break;
+                    //case 7:
+                    //    //todo? anan mm
+                    //    btnMMIO_variable_rotator.Enabled = false;
+                    //    btnMMIO_variable_2_rotator.Enabled = false;
+                    //    pnlVariableInUse_1_rotator.Visible = false;
+                    //    pnlVariableInUse_2_rotator.Visible = false;
+                    //    break;
+                    //default:
+                    //    btnMMIO_variable_rotator.Enabled = false;
+                    //    btnMMIO_variable_2_rotator.Enabled = false;
+                    //    pnlVariableInUse_1_rotator.Visible = false;
+                    //    pnlVariableInUse_2_rotator.Visible = false;
+                    //    break;
+                }
+            }
+
+            if(mt == MeterType.WEB_IMAGE)
+            {
+                nudWebImage_update_interval.Value = igs.UpdateInterval;
+                nudWebImage_width_scale.Value = (decimal)igs.EyeScale;
+                chkWebImage_fade_rx.Checked = igs.FadeOnRx;
+                chkWebImage_fade_tx.Checked = igs.FadeOnTx;
+                txtWebImage_url.Text = igs.Text1;
+                updateWebImageState((ImageFetcher.State)igs.HistoryDuration);
+            }
+            else if (mt == MeterType.ROTATOR)
+            {
+                nudMeterItemUpdateRateRotator.Value = igs.UpdateInterval;
+                clrbtnMeterItemHBackgroundRotator.Color = igs.Colour;
+                clrbtnMeterItemRotatorArrow.Color = igs.TitleColor;
+                clrbtnMeterItemRotatorLargeDot.Color = igs.MarkerColour;
+                clrbtnMeterItemRotatorSmallDot.Color = igs.SubMarkerColour;
+                chkMeterItemRotatorShowBeamWidth.Checked = igs.ShowMarker;
+                clrbtnMeterItemRotatorBeamWidth.Color = igs.LowColor;
+                clrbtnMeterItemRotatorText.Color = igs.HighColor;
+                chkMeterItemRotatorCardinals.Checked = igs.ShowHistory;
+                chkMeterItemFadeOnRxRotator.Checked = igs.FadeOnRx;
+                chkMeterItemFadeOnTxRotator.Checked = igs.FadeOnTx;
+                chkMeterItemDarkModeRotator.Checked = igs.DarkMode;
+                nudMeterItemRotatorBeamWidth.Value = (decimal)igs.AttackRatio;
+                nudMeterItemRotator_padding.Value = (decimal)igs.EyeScale;
+                updateShowBeamWidthControls();
+
+                chkMeterItemRotatorAllowControl.Checked = igs.ShowType;
+                clrbtnMeterItemRotatorControlColour.Color = igs.HistoryColor;
+                txtMeterItemRotatorAZcommand.Text = igs.Text1;
+                txtMeterItemRotatorELEcommand.Text = igs.Text2;
+                updateRotatorControlControls();
+
+                //
+                switch ((MeterManager.clsRotatorItem.RotatorMode)igs.HistoryDuration)
+                {
+                    case MeterManager.clsRotatorItem.RotatorMode.AZ:
+                        radMeterItemRotator_show_az.Checked = true;
+                        break;
+                    case MeterManager.clsRotatorItem.RotatorMode.ELE:
+                        radMeterItemRotator_show_ele.Checked = true;
+                        break;
+                    case MeterManager.clsRotatorItem.RotatorMode.BOTH:
+                        radMeterItemRotator_show_both.Checked = true;
+                        break;
+                    default:
+                        break;
+                }
+                //
+
+                Guid guid = igs.GetMMIOGuid(2);
+                if (MultiMeterIO.Data.ContainsKey(guid))
+                {
+                    MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[guid];
+                    txtRotator_4charID.Text = mmio.FourChar;
+                }
+                else
+                {
+                    txtRotator_4charID.Text = "";
+                }
+            }
+            else if (mt == MeterType.DATA_OUT)
+            {
+                Guid guid = igs.GetMMIOGuid(0);
+                if (MultiMeterIO.Data.ContainsKey(guid))
+                {
+                    MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[guid];
+                    txtDataOutNode_4charID.Text = mmio.FourChar;
+                    nudDataOutNode_sendinterval.Value = (decimal)igs.UpdateInterval;
+                }
+                else
+                {
+                    txtDataOutNode_4charID.Text = "";
+                    nudDataOutNode_sendinterval.Value = 500;
+                }
+            }
+            else if (mt == MeterType.SIGNAL_TEXT)
             {
                 nudMeterItemUpdateRate.Value = igs.UpdateInterval < nudMeterItemUpdateRate.Minimum ? nudMeterItemUpdateRate.Minimum : igs.UpdateInterval;
                 nudMeterItemAttackRate.Value = (decimal)igs.AttackRatio;
@@ -24133,6 +24739,7 @@ namespace Thetis
                 clrbtnMMVfoDisplayTx.Color = igs.PeakHoldMarkerColor;
                 clrbtnMMVfoDisplayFilter.Color = igs.HistoryColor;
                 clrbtnMMVfoDisplayBand.Color = igs.SegmentedSolidLowColour;
+                clrbtnMMVfoDigitHighlight.Color = igs.PowerScaleColour;
             }
             else if (mt == MeterType.CLOCK)
             {
@@ -24142,8 +24749,85 @@ namespace Thetis
                 clrbtnMMTime.Color = igs.MarkerColour;
                 clrbtnMMDate.Color = igs.SubMarkerColour;
                 radMM24Clock.Checked = igs.ShowMarker; // use the show marker bool for this
-                if(!radMM24Clock.Checked && !radMM12Clock.Checked) radMM12Clock.Checked = true;
+                if (!radMM24Clock.Checked && !radMM12Clock.Checked) radMM12Clock.Checked = true;
                 updateTitleControlsClock();
+            }
+            else if (mt == MeterType.LED)
+            {
+                chkLedIndicator_FadeOnRX.Checked = igs.FadeOnRx;
+                chkLedIndicator_FadeOnTX.Checked = igs.FadeOnTx;
+                clrbtnLedIndicator_true.Color = igs.Colour;
+                clrbtnLedIndicator_false.Color = igs.MarkerColour;
+
+                clrbtnLedIndicator_PanelBackground.Color = igs.TitleColor;
+                clrbtnLedIndiciator_PanelBackgroundTX.Color = igs.HistoryColor;
+                chkLedIndicator_ShowPanel.Checked = igs.ShowSubMarker;
+
+                nudLedIndicator_xOffset.Value = (decimal)igs.EyeScale;
+                nudLedIndicator_yOffset.Value = (decimal)igs.EyeBezelScale;
+                nudLedIndicator_xSize.Value = (decimal)igs.AttackRatio;
+                nudLedIndicator_ySize.Value = (decimal)igs.DecayRatio;
+
+                txtLedIndicator_condition.Text = igs.Text1;
+
+                nudLedIndicator_PanelPadding.Value = (decimal)igs.SpacerPadding;
+
+                chkLed_show_true.Checked = igs.PeakHold;
+                chkLed_show_false.Checked = igs.ShowMarker;
+                switch(igs.IgnoreHistoryDuration)
+                {
+                    case 0:
+                        radLed_light_on_off.Checked = true;
+                        break;
+                    case 1:
+                        radLed_light_blink.Checked = true;
+                        break;
+                    case 2:
+                        radLed_light_pulsate.Checked = true;
+                        break;
+                }
+
+                updateLedIndicatorPanelControls();
+                updateLedValidControls();
+            }
+            else if (mt == MeterType.TEXT_OVERLAY)
+            {
+                chkTextOverlay_FadeOnRX.Checked = igs.FadeOnRx;
+                chkTextOverlay_FadeOnTX.Checked = igs.FadeOnTx;
+                clrbtnTextOverlay_TextColour1.Color = igs.Colour;
+                clrbtnTextOverlay_TextColour2.Color = igs.MarkerColour;
+                clrbtnTextOverlay_TextBackColour1.Color = igs.SubMarkerColour;
+                chkTextOverlay_textback1.Checked = igs.ShowMarker;
+                clrbtnTextOverlay_TextBackColour2.Color = igs.PeakValueColour;
+                chkTextOverlay_textback2.Checked = igs.ShowType;
+
+                clrbtnTextOverlay_PanelBackground.Color = igs.TitleColor;
+                clrbtnTextOverlay_PanelBackgroundTX.Color = igs.HistoryColor;
+                chkTextOverlay_ShowPanel.Checked = igs.ShowSubMarker;
+
+                nudTextOverlay_RXxOffset.Value = (decimal)igs.EyeScale;
+                nudTextOverlay_RXyOffset.Value = (decimal)igs.EyeBezelScale;
+                nudTextOverlay_TXxOffset.Value = (decimal)igs.AttackRatio;
+                nudTextOverlay_TXyOffset.Value = (decimal)igs.DecayRatio;
+
+                txtTextOverlay_RXText.Text = igs.Text1;
+                txtTextOverlay_TXText.Text = igs.Text2;
+
+                _textOverlayFont1 = new Font(igs.FontFamily1, igs.FontSize1, igs.FontStyle1);
+                _textOverlayFont2 = new Font(igs.FontFamily2, igs.FontSize2, igs.FontStyle2);
+
+                nudTextOverlay_PanelPadding.Value = (decimal)igs.SpacerPadding;
+
+                updateTextOverlayPanelControls();
+                updateTextOverlayBackTextControls();
+            }
+            else if (mt == MeterType.SPACER)
+            {
+                clrbtnMeterItemHBackgroundSpacerRX.Color = igs.Colour;
+                clrbtnMeterItemHBackgroundSpacerTX.Color = igs.MarkerColour;
+                chkMeterItemFadeOnRxSpacer.Checked = igs.FadeOnRx;
+                chkMeterItemFadeOnTxSpacer.Checked = igs.FadeOnTx;
+                nudMeterItemSpacerPadding.Value = (decimal)igs.SpacerPadding;
             }
             else
             {
@@ -24251,7 +24935,7 @@ namespace Thetis
                 if (mt == MeterType.ANANMM || mt == MeterType.CROSS) chkMeterItemDarkMode.Checked = igs.DarkMode;
                 //
             }
-
+            
             setupMMSettingsGroupBoxes(mt);
 
             _ignoreMeterItemChangeEvents = false;
@@ -24489,34 +25173,150 @@ namespace Thetis
         }
         private void setupMMSettingsGroupBoxes(MeterType mt)
         {
-            // grpMeterItemSettings is the x,y
+            // grpMeterItemSettings defines the x,y used by all
             Point loc = grpMeterItemSettings.Location;
 
             switch (mt)
             {
                 case MeterType.NONE:
-                    grpMeterItemSettings.Enabled = false;
-                    grpMeterItemSettings.Visible = true;                    
+                    grpMeterItemSettings.Visible = false;
                     grpMeterItemClockSettings.Visible = false;
                     grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
                     break;
                 case MeterType.VFO_DISPLAY:
+                    grpMeterItemVfoDisplaySettings.Parent = grpMultiMeterHolder;
                     grpMeterItemVfoDisplaySettings.Location = loc;
                     grpMeterItemVfoDisplaySettings.Visible = true;
+
                     grpMeterItemSettings.Visible = false;
                     grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
                     break;
                 case MeterType.CLOCK:
+                    grpMeterItemClockSettings.Parent = grpMultiMeterHolder;
                     grpMeterItemClockSettings.Location = loc;
                     grpMeterItemClockSettings.Visible = true;
+
                     grpMeterItemSettings.Visible = false;
                     grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
                     break;
-                default:
-                    grpMeterItemSettings.Enabled = true;
-                    grpMeterItemSettings.Visible = true;
+                case MeterType.SPACER:
+                    grpMeterItemSpacerSettings.Parent = grpMultiMeterHolder;
+                    grpMeterItemSpacerSettings.Location = loc;
+                    grpMeterItemSpacerSettings.Visible = true;
+
+                    grpMeterItemSettings.Visible = false;
                     grpMeterItemClockSettings.Visible = false;
                     grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
+                    break;
+                case MeterType.TEXT_OVERLAY:
+                    grpTextOverlay.Parent = grpMultiMeterHolder;
+                    grpTextOverlay.Location = loc;
+                    grpTextOverlay.Visible = true;
+
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
+                    break;
+                case MeterType.DATA_OUT:
+                    grpMeterItemDataOutNode.Parent = grpMultiMeterHolder;
+                    grpMeterItemDataOutNode.Location = loc;
+                    grpMeterItemDataOutNode.Visible = true;
+
+                    grpMeterItemSettings.Visible = false;
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
+                    break;
+                case MeterType.ROTATOR:
+                    grpMeterItemRotator.Parent = grpMultiMeterHolder;
+                    grpMeterItemRotator.Location = loc;
+                    grpMeterItemRotator.Visible = true;
+
+                    grpMeterItemSettings.Visible = false;
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
+                    break;
+                case MeterType.LED:
+                    grpLedIndiciator.Parent = grpMultiMeterHolder;
+                    grpLedIndiciator.Location = loc;
+                    grpLedIndiciator.Visible = true;
+
+                    grpMeterItemSettings.Visible = false;
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpWebImage.Visible = false;
+                    break;
+                case MeterType.WEB_IMAGE:
+                    grpWebImage.Parent = grpMultiMeterHolder;
+                    grpWebImage.Location = loc;
+                    grpWebImage.Visible = true;
+                    comboWebImage_HamQsl.SelectedIndex = 0;
+                    comboWebImage_BsdWorld.SelectedIndex = 0;
+                    comboWebImage_nasa.SelectedIndex = 0;
+                    comboWebImage_noaa.SelectedIndex = 0;
+
+                    grpMeterItemSettings.Visible = false;
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    break;
+                default:
+                    grpMeterItemSettings.Parent = grpMultiMeterHolder;
+                    grpMeterItemSettings.Visible = true;
+
+                    grpMeterItemClockSettings.Visible = false;
+                    grpMeterItemVfoDisplaySettings.Visible = false;
+                    grpMeterItemSpacerSettings.Visible = false;
+                    grpTextOverlay.Visible = false;
+                    grpMeterItemDataOutNode.Visible = false;
+                    grpMeterItemRotator.Visible = false;
+                    grpLedIndiciator.Visible = false;
+                    grpWebImage.Visible = false;
                     break;
             }
         }
@@ -24627,6 +25427,9 @@ namespace Thetis
 
         private void btnMeterCopySettings_Click(object sender, EventArgs e)
         {
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return;
+
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return;
 
@@ -24634,7 +25437,7 @@ namespace Thetis
             if (mt == MeterType.NONE) return;
 
             // copy settings into igs
-            _itemGroupSettings = m.GetSettingsForMeterGroup(mt);
+            _itemGroupSettings = m.GetSettingsForMeterGroup(mt, mtci.Order);
             if (_itemGroupSettings != null)
                 _itemGroupSettingsMeterType = meterItemGroupTypefromSelected();
             else
@@ -24645,6 +25448,9 @@ namespace Thetis
         {
             if (_itemGroupSettings == null || _itemGroupSettingsMeterType == MeterType.NONE) return;
 
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return;
+
             MeterManager.clsMeter m = meterFromSelectedContainer();
             if (m == null) return;
 
@@ -24654,11 +25460,11 @@ namespace Thetis
             if (canPasteSettings())
             {
                 // ignore some things [2.10.1.0] MW0LGE - fixes issue where bar with change units is paste into new bar, and source bars have no sub indicator
-                MeterManager.clsIGSettings currentSettings = m.GetSettingsForMeterGroup(mt);
+                MeterManager.clsIGSettings currentSettings = m.GetSettingsForMeterGroup(mt, mtci.Order);
 
                 _itemGroupSettings.Unit = currentSettings.Unit;
 
-                if(!_itemGroupSettings.SubIndicators)
+                if (!_itemGroupSettings.SubIndicators)
                 {
                     // no sub indicators on the source, replace with current so we end up with no change on the paste
                     _itemGroupSettings.ShowSubMarker = currentSettings.ShowMarker;
@@ -24667,7 +25473,7 @@ namespace Thetis
                 }
                 //
 
-                m.ApplySettingsForMeterGroup(mt, _itemGroupSettings);
+                m.ApplySettingsForMeterGroup(mt, _itemGroupSettings, mtci.Order);
                 updateItemSettingsControlsForSelected();
             }
         }
@@ -24686,18 +25492,24 @@ namespace Thetis
             // only allow paste into matching
             if (mt == MeterType.MAGIC_EYE || mt == MeterType.CROSS ||
                 mt == MeterType.ANANMM || mt == MeterType.SIGNAL_TEXT ||
+                mt == MeterType.SPACER || mt == MeterType.TEXT_OVERLAY ||
+                mt == MeterType.LED || mt == MeterType.ROTATOR ||
                 mt == MeterType.VFO_DISPLAY || mt == MeterType.CLOCK)
             {
                 bPaste = _itemGroupSettingsMeterType == mt;
             }
             else if (_itemGroupSettingsMeterType == MeterType.MAGIC_EYE || _itemGroupSettingsMeterType == MeterType.CROSS ||
                 _itemGroupSettingsMeterType == MeterType.ANANMM || _itemGroupSettingsMeterType == MeterType.SIGNAL_TEXT ||
+                _itemGroupSettingsMeterType == MeterType.SPACER || _itemGroupSettingsMeterType == MeterType.TEXT_OVERLAY ||
+                _itemGroupSettingsMeterType == MeterType.LED || mt == MeterType.ROTATOR ||
                 _itemGroupSettingsMeterType == MeterType.VFO_DISPLAY || _itemGroupSettingsMeterType == MeterType.CLOCK)
             {
                 bPaste = mt == _itemGroupSettingsMeterType;
             }
             else
+            {
                 bPaste = true;
+            }
 
             return bPaste;
         }
@@ -24781,7 +25593,7 @@ namespace Thetis
         private void OnBCDBandChangeHandler(int rx, Band old_band, Band new_band)
         {
             if (initializing) return;
-            if(rx == 1) updateUsbBCDdevice(new_band);
+            if (rx == 1) updateUsbBCDdevice(new_band);
         }
         private void updateUsbBCDdevice(Band rx1band)
         {
@@ -25144,22 +25956,48 @@ namespace Thetis
                     if (File.Exists(zipFilePath))
                         File.Delete(zipFilePath);
 
-                    using (ZipFile zip = new ZipFile())
+                    // Create the zip file
+                    using (FileStream zipToOpen = new FileStream(zipFilePath, FileMode.Create))
                     {
-                        foreach (string fileName in filesToZip)
+                        using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
                         {
-                            string filePath = Path.Combine(sourceDirectory, fileName);
-
-                            if (File.Exists(filePath))
+                            // Add each file to the zip
+                            foreach (string fileName in filesToZip)
                             {
-                                zip.AddFile(filePath, "");
+                                string filePath = Path.Combine(sourceDirectory, fileName);
+
+                                if (File.Exists(filePath))
+                                {
+                                    archive.CreateEntryFromFile(filePath, fileName);
+                                }
+                            }
+                            System.IO.Compression.
+                            // Add the version.txt entry
+                            ZipArchiveEntry versionEntry = archive.CreateEntry("version.txt");
+
+                            using (StreamWriter writer = new StreamWriter(versionEntry.Open()))
+                            {
+                                writer.Write(version);
                             }
                         }
-
-                        zip.AddEntry("version.txt", version);
-
-                        zip.Save(zipFilePath);
                     }
+                    //DotNetZip - depricated
+                    //using (ZipFile zip = new ZipFile())
+                    //{
+                    //    foreach (string fileName in filesToZip)
+                    //    {
+                    //        string filePath = Path.Combine(sourceDirectory, fileName);
+
+                    //        if (File.Exists(filePath))
+                    //        {
+                    //            zip.AddFile(filePath, "");
+                    //        }
+                    //    }
+
+                    //    zip.AddEntry("version.txt", version);
+
+                    //    zip.Save(zipFilePath);
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -25191,9 +26029,9 @@ namespace Thetis
             if (initializing) return;
 
             if (isSkinServerTabVisible())
-            {                
+            {
                 getSkinServers();
-            }         
+            }
             else
             {
                 hideAllSkinServerRelatedControls();
@@ -25282,7 +26120,7 @@ namespace Thetis
         }
         private void updateSelectedSkin()
         {
-            if(lstAvailableSkins.Items.Count == 0) return;
+            if (lstAvailableSkins.Items.Count == 0) return;
 
             chkReplaceCurrentMeterInSelectedSkin.Enabled = false;
 
@@ -25349,7 +26187,7 @@ namespace Thetis
             if (ss.Length >= 2 && ss.Length <= 4)
             {
                 bool bAllNums = true;
-                foreach(string s in ss)
+                foreach (string s in ss)
                 {
                     if (!int.TryParse(s, out int tmp))
                     {
@@ -25360,7 +26198,7 @@ namespace Thetis
                         }
                     }
                 }
-                if(bAllNums) return sVersion;
+                if (bAllNums) return sVersion;
             }
             return "?";
         }
@@ -25469,12 +26307,12 @@ namespace Thetis
                     Debug.Print(e.BytesDownloaded.ToString() + " - " + e.TotalBytes.ToString());
 
                     string sFile = getFileFromUrl(e.Url);
-                    if(sFile == "")
+                    if (sFile == "")
                         sFile = getFileFromUrl(e.FinalUri);
 
                     if (isSkinZipFile(e.Path, sFile, out bool bUsesFileInRoot, out bool bMeterFolderFound, e.BypassRootFolderCheck || e.IsMeterSkin))
-                    {                        
-                        string sOutputPath = "";                        
+                    {
+                        string sOutputPath = "";
 
                         if (bUsesFileInRoot || (e.BypassRootFolderCheck && !bMeterFolderFound))
                         {
@@ -25576,7 +26414,7 @@ namespace Thetis
                 }
                 else
                 {
-                    if(e.TotalBytes != -1)
+                    if (e.TotalBytes != -1)
                     {
                         if (!prgSkinDownload.Visible) prgSkinDownload.Visible = true;
 
@@ -25649,7 +26487,7 @@ namespace Thetis
 
                 ThetisSkin ts = lstAvailableSkins.Items[sel] as ThetisSkin;
                 if (ts == null) return;
-                
+
                 btnDownloadSkin.Text = "Cancel";
 
                 string tempFilePath = Path.GetTempFileName();
@@ -25664,7 +26502,6 @@ namespace Thetis
 
             updateSelectedSkin();
         }
-
         private bool isSkinZipFile(string filePath, string sFilename, out bool usesFilenameInRoot, out bool isMeterSkin, bool bypassRootFolderCheck)
         {
             bool bOk = false;
@@ -25673,9 +26510,10 @@ namespace Thetis
 
             try
             {
-                using (ZipFile zipFile = ZipFile.Read(filePath))
+                using (ZipArchive zipFile = ZipFile.OpenRead(filePath))
                 {
-                    if (zipFile.Any(entry => entry.FileName.StartsWith("Meters" + "/") && entry.IsDirectory))
+                    // Check if there is a directory entry starting with "Meters/"
+                    if (zipFile.Entries.Any(entry => entry.FullName.StartsWith("Meters/") && entry.FullName.EndsWith("/")))
                     {
                         bOk = true;
                         isMeterSkin = true;
@@ -25685,20 +26523,27 @@ namespace Thetis
                     {
                         if (!bypassRootFolderCheck)
                         {
-                            if (!bOk && zipFile.Any(entry => entry.FileName.StartsWith("Skins" + "/") && entry.IsDirectory))
-                                bOk = true;
-
-                            if (!bOk && sFilename != "")
+                            // Check for "Skins/" directory
+                            if (!bOk && zipFile.Entries.Any(entry => entry.FullName.StartsWith("Skins/") && entry.FullName.EndsWith("/")))
                             {
+                                bOk = true;
+                            }
+
+                            if (!bOk && !string.IsNullOrEmpty(sFilename))
+                            {
+                                // Different filename checks
                                 string sReplacedWithSpaces = sFilename.Replace("_", " ");
                                 string sReplacedWithoutSpaces = sFilename.Replace(" ", "_");
                                 string sReplacedWithMinus = sFilename.Replace(" ", "-");
                                 string sReplacedWithoutMinus = sFilename.Replace("-", " ");
 
-                                if (zipFile.Any(entry => (entry.FileName.StartsWith(sFilename + "/") || entry.FileName.StartsWith(sReplacedWithSpaces + "/") || 
-                                    entry.FileName.StartsWith(sReplacedWithoutSpaces + "/") || entry.FileName.StartsWith(sReplacedWithMinus + "/") ||
-                                    entry.FileName.StartsWith(sReplacedWithoutMinus + "/")
-                                    ) && entry.IsDirectory))
+                                if (zipFile.Entries.Any(entry =>
+                                    (entry.FullName.StartsWith(sFilename + "/") ||
+                                     entry.FullName.StartsWith(sReplacedWithSpaces + "/") ||
+                                     entry.FullName.StartsWith(sReplacedWithoutSpaces + "/") ||
+                                     entry.FullName.StartsWith(sReplacedWithMinus + "/") ||
+                                     entry.FullName.StartsWith(sReplacedWithoutMinus + "/")) &&
+                                     entry.FullName.EndsWith("/")))
                                 {
                                     usesFilenameInRoot = true;
                                     bOk = true;
@@ -25706,26 +26551,95 @@ namespace Thetis
                             }
                         }
                         else
+                        {
                             bOk = true;
+                        }
                     }
                 }
             }
-            catch (Ionic.Zip.BadReadException)
+            catch (InvalidDataException)
             {
+                // Handle invalid ZIP file
             }
             catch (Exception ex)
             {
+                // Handle other exceptions
             }
 
             return bOk;
         }
+        //dotnetzip depricated
+        //private bool isSkinZipFile(string filePath, string sFilename, out bool usesFilenameInRoot, out bool isMeterSkin, bool bypassRootFolderCheck)
+        //{
+        //    bool bOk = false;
+        //    usesFilenameInRoot = false;
+        //    isMeterSkin = false;
+
+        //    try
+        //    {
+        //        using (ZipFile zipFile = ZipFile.Read(filePath))
+        //        {
+        //            if (zipFile.Any(entry => entry.FileName.StartsWith("Meters" + "/") && entry.IsDirectory))
+        //            {
+        //                bOk = true;
+        //                isMeterSkin = true;
+        //            }
+
+        //            if (!bOk)
+        //            {
+        //                if (!bypassRootFolderCheck)
+        //                {
+        //                    if (!bOk && zipFile.Any(entry => entry.FileName.StartsWith("Skins" + "/") && entry.IsDirectory))
+        //                        bOk = true;
+
+        //                    if (!bOk && sFilename != "")
+        //                    {
+        //                        string sReplacedWithSpaces = sFilename.Replace("_", " ");
+        //                        string sReplacedWithoutSpaces = sFilename.Replace(" ", "_");
+        //                        string sReplacedWithMinus = sFilename.Replace(" ", "-");
+        //                        string sReplacedWithoutMinus = sFilename.Replace("-", " ");
+
+        //                        if (zipFile.Any(entry => (entry.FileName.StartsWith(sFilename + "/") || entry.FileName.StartsWith(sReplacedWithSpaces + "/") ||
+        //                            entry.FileName.StartsWith(sReplacedWithoutSpaces + "/") || entry.FileName.StartsWith(sReplacedWithMinus + "/") ||
+        //                            entry.FileName.StartsWith(sReplacedWithoutMinus + "/")
+        //                            ) && entry.IsDirectory))
+        //                        {
+        //                            usesFilenameInRoot = true;
+        //                            bOk = true;
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                    bOk = true;
+        //            }
+        //        }
+        //    }
+        //    catch (Ionic.Zip.BadReadException)
+        //    {
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //    }
+
+        //    return bOk;
+        //}
+
         private bool doesFolderExistInZip(string zipFilePath, string folderName)
         {
-            using (ZipFile zipFile = ZipFile.Read(zipFilePath))
+            using (ZipArchive zipArchive = ZipFile.OpenRead(zipFilePath))
             {
-                return zipFile.Any(entry => entry.FileName.StartsWith(folderName + "/") && entry.IsDirectory);
+                return zipArchive.Entries.Any(entry =>
+                    entry.FullName.StartsWith(folderName + "/") && entry.FullName.EndsWith("/"));
             }
         }
+        //depricated dotnetzip
+        //private bool doesFolderExistInZip(string zipFilePath, string folderName)
+        //{
+        //    using (ZipFile zipFile = ZipFile.Read(zipFilePath))
+        //    {
+        //        return zipFile.Any(entry => entry.FileName.StartsWith(folderName + "/") && entry.IsDirectory);
+        //    }
+        //}
 
         private static string extractPngFilesFromZip(string sourceZipFilePath, string outputPath)
         {
@@ -25735,26 +26649,28 @@ namespace Thetis
                 sourceZipFilePath = sourceZipFilePath.Replace('/', '\\');
                 outputPath = outputPath.Replace('/', '\\');
 
-                using (ZipFile zip = ZipFile.Read(sourceZipFilePath))
+                using (ZipArchive zip = ZipFile.OpenRead(sourceZipFilePath))
                 {
-                    foreach (ZipEntry entry in zip.Where(e => e.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase)))
+                    foreach (ZipArchiveEntry entry in zip.Entries.Where(e => e.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase)))
                     {
-                        string entryPath = Path.Combine(outputPath, entry.FileName.Replace('/', '\\'));
+                        // Normalize the entry path for file system usage
+                        string entryPath = Path.Combine(outputPath, entry.FullName.Replace('/', '\\'));
 
                         // Create the directory structure if it doesn't exist
                         Directory.CreateDirectory(Path.GetDirectoryName(entryPath));
 
-                        // if there is a file remove it
+                        // If a file exists at the target path, delete it
                         if (File.Exists(entryPath))
                             File.Delete(entryPath);
 
-                        entry.Extract(outputPath, ExtractExistingFileAction.OverwriteSilently);
+                        // Extract the entry
+                        entry.ExtractToFile(entryPath, true); // true to overwrite existing files
 
-                        if(sRootFolder == "")
+                        if (sRootFolder == "")
                         {
-                            //get skin name from folder structure
-                            int index = entry.FileName.IndexOf('/');
-                            if (index > 0) sRootFolder = entry.FileName.Substring(0, index);
+                            // Get the root folder name from the entry's path
+                            int index = entry.FullName.IndexOf('/');
+                            if (index > 0) sRootFolder = entry.FullName.Substring(0, index);
                         }
                     }
                 }
@@ -25762,13 +26678,56 @@ namespace Thetis
             catch (Exception ex)
             {
                 MessageBox.Show(
-                        "There was an issue extracting the .png file(s) from the download.\n\nSome/all of the images may be missing. The error is as follows :\n\n" + ex.ToString(),
-                        "Skin download issue",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                    "There was an issue extracting the .png file(s) from the download.\n\nSome/all of the images may be missing. The error is as follows :\n\n" + ex.ToString(),
+                    "Skin download issue",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
             }
             return sRootFolder;
         }
+        //depricated dotnetzip
+        //private static string extractPngFilesFromZip(string sourceZipFilePath, string outputPath)
+        //{
+        //    string sRootFolder = "";
+        //    try
+        //    {
+        //        sourceZipFilePath = sourceZipFilePath.Replace('/', '\\');
+        //        outputPath = outputPath.Replace('/', '\\');
+
+        //        using (ZipFile zip = ZipFile.Read(sourceZipFilePath))
+        //        {
+        //            foreach (ZipEntry entry in zip.Where(e => e.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase)))
+        //            {
+        //                string entryPath = Path.Combine(outputPath, entry.FileName.Replace('/', '\\'));
+
+        //                // Create the directory structure if it doesn't exist
+        //                Directory.CreateDirectory(Path.GetDirectoryName(entryPath));
+
+        //                // if there is a file remove it
+        //                if (File.Exists(entryPath))
+        //                    File.Delete(entryPath);
+
+        //                entry.Extract(outputPath, ExtractExistingFileAction.OverwriteSilently);
+
+        //                if (sRootFolder == "")
+        //                {
+        //                    //get skin name from folder structure
+        //                    int index = entry.FileName.IndexOf('/');
+        //                    if (index > 0) sRootFolder = entry.FileName.Substring(0, index);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(
+        //                "There was an issue extracting the .png file(s) from the download.\n\nSome/all of the images may be missing. The error is as follows :\n\n" + ex.ToString(),
+        //                "Skin download issue",
+        //                MessageBoxButtons.OK,
+        //                MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+        //    }
+        //    return sRootFolder;
+        //}
 
         private bool bIgnoreSkinServerListUpdate = false;
         private void comboSkinServerList_SelectedIndexChanged(object sender, EventArgs e)
@@ -25781,7 +26740,7 @@ namespace Thetis
 
         private void btnRemoveSkin_Click(object sender, EventArgs e)
         {
-            if(comboAppSkin.SelectedIndex == -1 || comboAppSkin.Items.Count <= 1 || _skinPath == "")
+            if (comboAppSkin.SelectedIndex == -1 || comboAppSkin.Items.Count <= 1 || _skinPath == "")
             {
                 btnRemoveSkin.Enabled = comboAppSkin.Items.Count > 1; // some reason it was enabled
 
@@ -25799,13 +26758,13 @@ namespace Thetis
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
 
-            if(dres == DialogResult.Yes)
+            if (dres == DialogResult.Yes)
             {
                 int nToSelect;
-                if(nSelected == comboAppSkin.Items.Count - 1)
+                if (nSelected == comboAppSkin.Items.Count - 1)
                 {
                     // selected last in the list, select previous
-                    nToSelect = nSelected -1;
+                    nToSelect = nSelected - 1;
                 }
                 else
                 {
@@ -25845,7 +26804,7 @@ namespace Thetis
         {
             try
             {
-                if(_skinPath != "")
+                if (_skinPath != "")
                     Process.Start("explorer.exe", _skinPath);
             }
             catch (Exception ex)
@@ -25939,7 +26898,7 @@ namespace Thetis
         {
             if (initializing) return;
 
-            if(sender == chkRecoverPAProfileFromTXProfile && chkRecoverPAProfileFromTXProfile.Checked)
+            if (sender == chkRecoverPAProfileFromTXProfile && chkRecoverPAProfileFromTXProfile.Checked)
             {
                 // manually clicked, warning
                 DialogResult dres = MessageBox.Show(
@@ -26038,7 +26997,7 @@ namespace Thetis
         {
             if (initializing) return;
             MidiDevice.BuildIDFromControlIDAndChannel = chkMidiControlIDincludesChannel.Checked;
-            MidiDevice.IncludeStatusInControlID  = chkMidiControlIDincludesChannel.Checked && chkMidiControlIDincludesStatus.Checked;
+            MidiDevice.IncludeStatusInControlID = chkMidiControlIDincludesChannel.Checked && chkMidiControlIDincludesStatus.Checked;
             chkMidiControlIDincludesStatus.Enabled = chkMidiControlIDincludesChannel.Checked;
         }
 
@@ -26111,7 +27070,7 @@ namespace Thetis
             if (initializing) return;
             //note: all 3 radio buttons for radio protocol call this on change
 
-            if(radRadioProtocol1Select.Checked)
+            if (radRadioProtocol1Select.Checked)
             {
                 RadioProtocolSelected = RadioProtocol.USB;
                 NetworkIO.RadioProtocolSelected = RadioProtocol.USB;
@@ -26746,7 +27705,2512 @@ namespace Thetis
         {
             console.TCICWbecomesCWUabove10mhz = chkCWbecomesCWUabove10mhz.Checked;
         }
-        
+
+        public readonly Dictionary<string, bool> KenwoodAISettings = new Dictionary<string, bool>(); // contains settings "enabled", "port1", "port2", "port3", "port4", "tcp", all as bools
+        private void chkKWAI_port1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KenwoodAISettings.ContainsKey("port1"))
+            {
+                KenwoodAISettings["port1"] = chkKWAI_port1.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("port1", chkKWAI_port1.Checked);
+            }
+        }
+
+        private void chkKWAI_port2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KenwoodAISettings.ContainsKey("port2"))
+            {
+                KenwoodAISettings["port2"] = chkKWAI_port2.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("port2", chkKWAI_port2.Checked);
+            }
+        }
+
+        private void chkKWAI_port3_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KenwoodAISettings.ContainsKey("port3"))
+            {
+                KenwoodAISettings["port3"] = chkKWAI_port3.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("port3", chkKWAI_port3.Checked);
+            }
+        }
+
+        private void chkKWAI_port4_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KenwoodAISettings.ContainsKey("port4"))
+            {
+                KenwoodAISettings["port4"] = chkKWAI_port4.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("port4", chkKWAI_port4.Checked);
+            }
+        }
+
+        private void chkKWAI_tcp_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KenwoodAISettings.ContainsKey("tcp"))
+            {
+                KenwoodAISettings["tcp"] = chkKWAI_tcp.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("tcp", chkKWAI_tcp.Checked);
+            }
+        }
+
+        private void updatePortAIstate(bool enabled)
+        {
+            if (KenwoodAISettings.ContainsKey("enabled"))
+            {
+                KenwoodAISettings["enabled"] = chkKWAI.Checked;
+            }
+            else
+            {
+                KenwoodAISettings.Add("enabled", chkKWAI.Checked);
+            }
+
+            chkKWAI_port1.Enabled = enabled;
+            chkKWAI_port2.Enabled = enabled;
+            chkKWAI_port3.Enabled = enabled;
+            chkKWAI_port4.Enabled = enabled;
+            chkKWAI_tcp.Enabled = enabled;
+
+            chkKWAI_port1_CheckedChanged(this, EventArgs.Empty);
+            chkKWAI_port2_CheckedChanged(this, EventArgs.Empty);
+            chkKWAI_port3_CheckedChanged(this, EventArgs.Empty);
+            chkKWAI_port4_CheckedChanged(this, EventArgs.Empty);
+            chkKWAI_tcp_CheckedChanged(this, EventArgs.Empty);
+        }
+
+        private void udCWEdgeLength_ValueChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            NetworkIO.SetCWEdgeLength((int)udCWEdgeLength.Value);
+        }
+
+        private void radDSPNR2TRND_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (radDSPNR2TRND.Checked)
+            {
+                console.radio.GetDSPRX(0, 0).RXANR2GainMethod = 3;
+                console.radio.GetDSPRX(0, 1).RXANR2GainMethod = 3;
+            }
+        }
+
+        private void radDSPNR2TRNDRX2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (radDSPNR2TRNDRX2.Checked)
+            {
+                console.radio.GetDSPRX(1, 0).RXANR2GainMethod = 3;
+                console.radio.GetDSPRX(1, 1).RXANR2GainMethod = 3;
+            }
+        }
+
+        private void radDSPNR2NSTAT_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (radDSPNR2NSTAT.Checked)
+            {
+                console.radio.GetDSPRX(0, 0).RXANR2NPEMethod = 2;
+                console.radio.GetDSPRX(0, 1).RXANR2NPEMethod = 2;
+            }
+        }
+
+        private void radDSPNR2NSTATRX2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (radDSPNR2NSTATRX2.Checked)
+            {
+                console.radio.GetDSPRX(1, 0).RXANR2NPEMethod = 2;
+                console.radio.GetDSPRX(1, 1).RXANR2NPEMethod = 2;
+            }
+        }
+
+        private void udDSPNR2trainThresh_ValueChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            WDSP.SetRXAEMNRtrainZetaThresh(WDSP.id(0, 0), (double)udDSPNR2trainThresh.Value);
+            WDSP.SetRXAEMNRtrainZetaThresh(WDSP.id(0, 1), (double)udDSPNR2trainThresh.Value);
+        }
+
+        private void udDSPNR2trainThreshRX2_ValueChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            WDSP.SetRXAEMNRtrainZetaThresh(WDSP.id(2, 0), (double)udDSPNR2trainThreshRX2.Value);
+            WDSP.SetRXAEMNRtrainZetaThresh(WDSP.id(2, 1), (double)udDSPNR2trainThreshRX2.Value);
+        }
+
+        private void radBelow30_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radBelow30.Checked)
+                console.S9Frequency = 30.0;
+        }
+
+        private void radBelow144_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radBelow144.Checked)
+                console.S9Frequency = 144.0;
+        }
+
+        private void udSwrProtectionLimit_ValueChanged(object sender, EventArgs e)
+        {
+            console.SwrProtectionLimit = (float)udSwrProtectionLimit.Value;
+        }
+
+        private void udTunePowerSwrIgnore_ValueChanged(object sender, EventArgs e)
+        {
+            console.TunePowerSwrIgnore = (float)udTunePowerSwrIgnore.Value;
+        }
+
+        private void chkShowFormStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            CheckBoxTS chk = sender as CheckBoxTS;
+            if (chk == null) return;
+
+            string id = chk.Name.Substring(chk.Name.IndexOf("_") + 1).ToLower();
+
+            console.SetAutoFormStartSetting(id, chk.Checked);
+        }
+        public void UpdateAutoStartForms()
+        {
+            foreach (Control c in chkShowFormStartup_setup.Parent.Controls)
+            {
+                CheckBox cc = c as CheckBoxTS;
+                if (cc != null)
+                {
+                    string id = cc.Name.Substring(cc.Name.IndexOf("_") + 1).ToLower();
+                    cc.Checked = console.GetAutoFormStartSetting(id);
+                }
+            }
+        }
+
+        private void chkDisableHPFonPS_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (sender == chkDisableHPFonPSb && !chkDisableHPFonPSb.Checked)
+            {
+                //msg to ask if user wants to do this
+                DialogResult dr = MessageBox.Show("Including the BPFs during a PureSignal tranmission may produce passive Inter-Modulation Distortion in the inductors of the bandpass filters.\n\n" +
+                    "You will NOT be able to observe this degraded performance on the panadapter because PS is correcting to the distorted feedback and the panadapter is \"seeing\" that same distorted feedback. " +
+                    "It can only be observed with an external spectrum analyzer.\n\nPlease ensure you understand the implications of inlcuding the BPFs when transmitting a PureSignal based signal. It is not recommended.", "PureSignal Issue",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
+                if (dr == DialogResult.Cancel)
+                {
+                    chkDisableHPFonPSb.Checked = true;
+                    return;
+                }
+            }
+            console.DisableHPFonPS = chkDisableHPFonPSb.Checked;
+            if (console.path_Illustrator != null)
+                console.path_Illustrator.pi_Changed();
+        }
+
+        private void txtAutoLaunchFile_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAutoLaunchSelectFile_Click(object sender, EventArgs e)
+        {
+            if (initializing) return;
+
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Executable files (*.exe)|*.exe|Command files (*.cmd)|*.cmd|Batch files (*.bat)|*.bat|All files (*.*)|*.*";
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    ButtonTS bb = sender as ButtonTS;
+                    if (bb != null)
+                    {
+                        string id = bb.Name.Substring(bb.Name.IndexOf("_") + 1).ToLower();
+                        grpAutoLaunchFiles.Controls["txtAutoLaunchFile_" + id.ToString()].Text = openFileDialog.FileName;
+                    }
+                }
+            }
+        }
+
+        private void chkAutoLaunch_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            CheckBoxTS cc = sender as CheckBoxTS;
+            if (cc == null) return;
+            string id = cc.Name.Substring(cc.Name.IndexOf("_") + 1).ToLower();
+            //chkAutoLaunch_0
+            //txtAutoLaunchFile_0
+            //btnAutoLaunchSelectFile_0
+            grpAutoLaunchFiles.Controls["txtAutoLaunchFile_" + id.ToString()].Enabled = cc.Checked;
+            grpAutoLaunchFiles.Controls["btnAutoLaunchSelectFile_" + id.ToString()].Enabled = cc.Checked;
+        }
+        private void updateAutoLaunchControls()
+        {
+            bool old_init = initializing;
+            initializing = false; // need this as chkAutoLaunch_CheckedChanged is protected
+            for (int i = 0; i < 10; i++)
+            {
+                chkAutoLaunch_CheckedChanged(grpAutoLaunchFiles.Controls["chkAutoLaunch_" + i.ToString()], EventArgs.Empty);
+            }
+            initializing = old_init;
+        }
+        public string[] GetAutoLaunchFiles()
+        {
+            List<string> files = new List<string>();
+            for (int i = 0; i < 10; i++)
+            {
+                CheckBoxTS cc = grpAutoLaunchFiles.Controls["chkAutoLaunch_" + i.ToString()] as CheckBoxTS;
+                if (cc != null && cc.Checked)
+                {
+                    TextBoxTS ts = grpAutoLaunchFiles.Controls["txtAutoLaunchFile_" + i.ToString()] as TextBoxTS;
+                    if (ts != null)
+                    {
+                        files.Add(ts.Text);
+                    }
+                }
+            }
+            return files.ToArray();
+        }
+        public bool AutoLaunchNoStartIfRunning
+        {
+            get { return chkAutoLaunchNoStartIfRunning.Checked; }
+        }
+        public bool AutoLaunchTryToClose
+        {
+            get { return chkAutoLaunchTryToClose.Checked; }
+        }
+
+        private void clrbtnTXAttenuationBackground_Changed(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            console.TxAttenuationBackgroundColour = Color.FromArgb(255, clrbtnTXAttenuationBackground.Color);
+        }
+
+        private void chkMeterItemFadeOnRxSpacer_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkMeterItemFadeOnTxSpacer_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemHBackgroundSpacerRX_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudMeterItemSpacerPadding_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemHBackgroundSpacerTX_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkTextOverlay_ShowPanel_CheckedChanged(object sender, EventArgs e)
+        {
+            updateTextOverlayPanelControls();
+            updateMeterType();
+        }
+        private void updateTextOverlayPanelControls()
+        {
+            bool enabled = chkTextOverlay_ShowPanel.Checked;
+            clrbtnTextOverlay_PanelBackground.Enabled = enabled;
+            clrbtnTextOverlay_PanelBackgroundTX.Enabled = enabled;            
+            nudTextOverlay_PanelPadding.Enabled = enabled;
+            chkTextOverlay_FadeOnRX.Enabled = enabled;
+            chkTextOverlay_FadeOnTX.Enabled = enabled;
+            lblTextOverlay_panelbackground.Enabled = enabled;
+            lblTextOverlay_panelbackgroundTX.Enabled = enabled;
+            lblTextOverlay_panelpadding.Enabled = enabled;
+        }
+        private void clrbtnTextOverlay_PanelBackground_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudTextOverlay_PanelPadding_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtTextOverlay_RXText_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtTextOverlay_TXText_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+        private Font _textOverlayFont1 = null;
+        private Font _textOverlayFont2 = null;
+        private void btnTextOverlay_Font1_Click(object sender, EventArgs e)
+        {
+            using (FontDialog fontDialog = new FontDialog())
+            {
+                fontDialog.Font = _textOverlayFont1;
+                if (fontDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _textOverlayFont1 = fontDialog.Font;
+                    updateMeterType();
+                }
+            }
+        }
+
+        private void btnTextOverlay_Font2_Click(object sender, EventArgs e)
+        {
+            using (FontDialog fontDialog = new FontDialog())
+            {
+                fontDialog.Font = _textOverlayFont2;
+                if (fontDialog.ShowDialog() == DialogResult.OK)
+                {
+                    _textOverlayFont2 = fontDialog.Font;
+                    updateMeterType();
+                }
+            }
+        }
+
+        private void clrbtnTextOverlay_TextColour1_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnTextOverlay_TextColour2_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudTextOverlay_RXxOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudTextOverlay_RXyOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudTextOverlay_TXxOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudTextOverlay_TXyOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkTextOverlay_FadeOnRX_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkTextOverlay_FadeOnTX_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnTextOverlay_copyoffsets_Click(object sender, EventArgs e)
+        {
+            nudTextOverlay_TXxOffset.Value = nudTextOverlay_RXxOffset.Value;
+            nudTextOverlay_TXyOffset.Value = nudTextOverlay_RXyOffset.Value;
+        }
+
+        private void clrbtnTextOverlay_PanelBackgroundTX_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnTextOverlay_TextBackColour1_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnTextOverlay_TextBackColour2_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkTextOverlay_textback1_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+            updateTextOverlayBackTextControls();
+        }
+
+        private void chkTextOverlay_textback2_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+            updateTextOverlayBackTextControls();
+        }
+
+        private void updateTextOverlayBackTextControls()
+        {
+            clrbtnTextOverlay_TextBackColour1.Enabled = chkTextOverlay_textback1.Checked;
+            clrbtnTextOverlay_TextBackColour2.Enabled = chkTextOverlay_textback2.Checked;
+        }
+
+        private void pbTextOverlay_variables_Click(object sender, EventArgs e)
+        {
+            toolTip1.Show(toolTip1.GetToolTip(pbTextOverlay_variables), pbTextOverlay_variables, 10 * 1000);
+        }
+
+        #region MultiMeter IO
+        // Code for the multimeter IO - MW0LGE [2.10.3.6]
+        private bool _MMIO_ignore_change_events = false;
+        private void init_lstMMIO()
+        {
+            lstMMIO_network_list.Items.Clear();
+            comboMMIO_network_format_in.Items.Clear();
+            comboMMIO_network_terminator_in.Items.Clear();
+            pnlMMIO_network_active.BackColor = Color.LightGray;
+            pnlMMIO_network_rxdata.BackColor = Color.LightGray;
+            pnlMMIO_network_txdata.BackColor = Color.LightGray;
+            _light_gray_tx = 1;
+            _light_gray_tx = 1;
+
+            for (int i = (int)MultiMeterIO.MMIOFormat.JSON; i < (int)(int)MultiMeterIO.MMIOFormat.LAST; i++)
+            {
+                comboMMIO_network_format_in.Items.Add(((MultiMeterIO.MMIOFormat)i).ToString());
+            }
+            for (int i = (int)MultiMeterIO.MMIOTerminator.NONE; i < (int)(int)MultiMeterIO.MMIOTerminator.LAST; i++)
+            {
+                comboMMIO_network_terminator_in.Items.Add(((MultiMeterIO.MMIOTerminator)i).ToString());
+            }
+
+            _tmrRXupdate = new System.Timers.Timer(20);
+            _tmrRXupdate.Elapsed += OnRxTimerTick;
+            _tmrRXupdate.AutoReset = false;
+
+            _tmrTXupdate = new System.Timers.Timer(20);
+            _tmrTXupdate.Elapsed += OnTxTimerTick;
+            _tmrTXupdate.AutoReset = false;
+
+            MultiMeterIO.ClientConnected += MultiMeterIO_ClientConnected;
+            MultiMeterIO.ClientDisconnected += MultiMeterIO_ClientDisconnected;
+            MultiMeterIO.ReceivedDataString += MultiMeterIO_ReceivedDataString;
+            MultiMeterIO.TransmittedData += MultiMeterIO_TransmittedData;
+            MultiMeterIO.ConnectorRunning += MultiMeterIO_ListenerRunning;
+
+            ConcurrentDictionary<Guid, MultiMeterIO.clsMMIO> data = MultiMeterIO.Data;
+            foreach (KeyValuePair<Guid, MultiMeterIO.clsMMIO> kvp in data)
+            {
+                MultiMeterIO.clsMMIO mmio = kvp.Value;
+                clsMultiMeterIOComboboxItem mmioci;
+                if (mmio.Type == MultiMeterIO.MMIOType.SERIAL)
+                {
+                    mmioci = new clsMultiMeterIOComboboxItem(mmio.Guid, mmio.Type, mmio.ComPort, mmio.Direction);
+                }
+                else
+                {
+                    mmioci = new clsMultiMeterIOComboboxItem(mmio.Guid, mmio.Type, mmio.IP, mmio.Port, mmio.Direction, mmio.UdpEndpointIP, mmio.UdpEndpointPort);
+                }
+                int index = lstMMIO_network_list.Items.Add(mmioci);
+            }
+        }
+
+        private void MultiMeterIO_ListenerRunning(Guid guid, MultiMeterIO.MMIOType type, bool enabled)
+        {
+            if (initializing || !lstMMIO_network_list.IsHandleCreated) return;
+            try
+            {
+                lstMMIO_network_list.BeginInvoke(new MethodInvoker(() =>
+                {
+                    lstMMIO_network_list_SelectedIndexChanged(this, EventArgs.Empty);
+                }));
+            }
+            catch { }
+        }
+        private void MultiMeterIO_ClientConnected(Guid guid)
+        {
+            if (initializing || !lstMMIO_network_list.IsHandleCreated) return;
+            try
+            {
+                lstMMIO_network_list.BeginInvoke(new MethodInvoker(() =>
+                {
+                    lstMMIO_network_list_SelectedIndexChanged(this, EventArgs.Empty);
+                }));
+            }
+            catch { }
+        }
+
+        private void MultiMeterIO_ClientDisconnected(Guid guid)
+        {
+            if (initializing || !lstMMIO_network_list.IsHandleCreated) return;
+            try
+            {
+                lstMMIO_network_list.BeginInvoke(new MethodInvoker(() =>
+                {
+                    lstMMIO_network_list_SelectedIndexChanged(this, EventArgs.Empty);
+                }));
+            }
+            catch { }
+        }
+        private System.Timers.Timer _tmrRXupdate;
+        private System.Timers.Timer _tmrTXupdate;
+        private double _light_gray_rx = 1f;
+        private double _light_gray_tx = 1f;
+        public void MultiMeterIOStopTimers()
+        {
+            if (_tmrRXupdate != null)
+            {
+                _tmrRXupdate.Stop();
+                _tmrRXupdate.Elapsed -= OnRxTimerTick;
+                _tmrRXupdate.Close();
+                _tmrRXupdate = null;
+            }
+            if (_tmrTXupdate != null)
+            {
+                _tmrTXupdate.Stop();
+                _tmrTXupdate.Elapsed -= OnTxTimerTick;
+                _tmrTXupdate.Close();
+                _tmrTXupdate = null;
+            }
+        }
+        private void OnRxTimerTick(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                _light_gray_rx += 0.08;
+                if (_light_gray_rx > 1f)
+                    _light_gray_rx = 1f;
+
+                Color c = ColorInterpolator.InterpolateBetween(Color.LimeGreen, Color.LightGray, _light_gray_rx);
+                pnlMMIO_network_rxdata.BackColor = c;
+
+                if (_light_gray_rx < 1f && pnlMMIO_network_rxdata.Visible)
+                    _tmrRXupdate.Start();
+            }
+            catch { }
+        }
+        private void OnTxTimerTick(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                _light_gray_tx += 0.08;
+                if (_light_gray_tx > 1f)
+                    _light_gray_tx = 1f;
+
+                Color c = ColorInterpolator.InterpolateBetween(Color.Red, Color.LightGray, _light_gray_tx);
+                pnlMMIO_network_txdata.BackColor = c;
+
+                if (_light_gray_tx < 1f && pnlMMIO_network_txdata.Visible)
+                    _tmrTXupdate.Start();
+            }
+            catch { }
+        }
+        private void MultiMeterIO_ReceivedDataString(Guid guid, string dataString)
+        {
+            if (initializing || !lstMMIO_network_list.IsHandleCreated) return;
+            try
+            {
+                lstMMIO_network_list.BeginInvoke(new MethodInvoker(() =>
+                {
+                    updateFromRecievedData(guid, dataString);
+                }));
+            }
+            catch { }            
+        }
+        private void MultiMeterIO_TransmittedData(Guid guid)
+        {
+            if (initializing || !lstMMIO_network_list.IsHandleCreated) return;
+            try
+            {
+                lstMMIO_network_list.BeginInvoke(new MethodInvoker(() =>
+                {
+                    updateFromTransmittedData(guid);
+                }));
+            }
+            catch { }
+        }
+        private void updateFromRecievedData(Guid guid, string dataString)
+        {
+            if (!pnlMMIO_network_rxdata.Visible) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (mmioci.Guid != guid) return;
+
+            pnlMMIO_network_rxdata.BackColor = Color.LimeGreen;
+            _light_gray_rx = 0f;
+            _tmrRXupdate.Start();
+
+            updateVariableList();
+        }
+        private void updateFromTransmittedData(Guid guid)
+        {
+            if (!pnlMMIO_network_rxdata.Visible) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (mmioci.Guid != guid) return;
+
+            pnlMMIO_network_txdata.BackColor = Color.Red;
+            _light_gray_tx = 0f;
+            _tmrTXupdate.Start();
+        }
+        private void updateVariableList()
+        {
+            ListView.SelectedListViewItemCollection items = lstMMIO_network_variables.SelectedItems;
+            string selectedKey = items.Count == 1 ? items[0].Text : "";
+
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            btnMMIO_network_remove_variable.Enabled = items.Count > 0;
+            btnMMIO_network_copyvariable_clipboard.Enabled = items.Count > 0;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+            lstMMIO_network_variables.SuspendLayout();
+            // remove any from list that are now not in variables
+            List<ListViewItem> to_remove = new List<ListViewItem>();
+            foreach (ListViewItem lvi in lstMMIO_network_variables.Items)
+            {
+                if (!mmio.Variables().ContainsKey(lvi.Text)) to_remove.Add(lvi);
+            }
+            foreach (ListViewItem lvi in to_remove)
+            {
+                lstMMIO_network_variables.Items.Remove(lvi);
+            }
+            to_remove.Clear();
+
+            //add/update list
+            foreach (KeyValuePair<string, object> kvp in mmio.Variables())
+            {
+                string type;
+                if (kvp.Value is int)
+                    type = "int";
+                else if (kvp.Value is float)
+                    type = "float";
+                else if (kvp.Value is double)
+                    type = "double";
+                else if (kvp.Value is bool)
+                    type = "bool";
+                else
+                    type = "string";
+
+                ListViewItem lvi;
+                if (!lstMMIO_network_variables.Items.ContainsKey(kvp.Key))
+                {
+                    lvi = lstMMIO_network_variables.Items.Add(kvp.Key, kvp.Key, null);
+                    lvi.SubItems.Add(mmio.VariableValueType(kvp.Value));
+                    lvi.SubItems.Add(type);
+                }
+                else
+                {
+                    lvi = lstMMIO_network_variables.Items[kvp.Key];
+                    lvi.SubItems[1].Text = mmio.VariableValueType(kvp.Value);      //[1] bizzar that it is index 1 for the added subitem
+                    lvi.SubItems[2].Text = type;
+                }
+
+                if (selectedKey != "" && kvp.Key == selectedKey)
+                    lvi.Selected = true;
+            }
+            lstMMIO_network_variables.ResumeLayout(false);
+            lstMMIO_network_variables.Invalidate();
+            btnMMIO_network_remove_all_variables.Enabled = lstMMIO_network_variables.Items.Count > 0;
+        }
+        private void lstMMIO_network_list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            int selected_index = lstMMIO_network_list.SelectedIndex;
+            pnlMMIO_network_container.Enabled = selected_index != -1;
+            btnMMIO_network_delete.Enabled = selected_index != -1;
+            if (selected_index == -1)
+            {
+                pnlMMIO_network_rxdata.BackColor = Color.LightGray;
+                pnlMMIO_network_txdata.BackColor = Color.LightGray;
+                pnlMMIO_network_active.BackColor = Color.LightGray;
+                lstMMIO_network_variables.Items.Clear();
+                picMutliMeterIO_udp_out_warning.Visible = false;
+                return;
+            }
+
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+
+            _MMIO_ignore_change_events = true;
+            if (mmio.Type == MultiMeterIO.MMIOType.SERIAL)
+            {
+                txtMMIO_network_ip_port.Text = mmio.ComPort;
+            }
+            else
+            {
+                txtMMIO_network_ip_port.Text = mmio.IP + ":" + mmio.Port.ToString();
+            }
+            txtMMIO_network_4char.Text = mmio.FourChar;
+            _MMIO_ignore_change_events = false;
+
+            pnlMMIO_network_active.BackColor = mmio.Active ? Color.LimeGreen : Color.LightGray;
+            pnlMMIO_network_rxdata.BackColor = Color.LightGray;
+            pnlMMIO_network_txdata.BackColor = Color.LightGray;
+            _light_gray_tx = 1;
+            _light_gray_tx = 1;
+            comboMMIO_network_format_in.SelectedIndex = (int)mmio.FormatIn;
+            comboMMIO_network_terminator_in.SelectedIndex = (int)mmio.TerminatorIn;
+            comboMMIO_network_format_out.SelectedIndex = (int)mmio.FormatOut;
+            comboMMIO_network_terminator_out.SelectedIndex = (int)mmio.TerminatorOut;
+
+            txtMMIO_network_udp_endpoint_ip_port.Text = mmio.UdpEndpointIP + ":" + mmio.UdpEndpointPort.ToString();
+
+            _MMIO_ignore_change_events = true;
+            txtMMIO_network_terminator_in_custom.Text = mmio.CustomTerminatorIn;
+            txtMMIO_network_terminator_out_custom.Text = mmio.CustomTerminatorOut;
+            _MMIO_ignore_change_events = false;
+
+            switch (mmio.Direction)
+            {
+                case MultiMeterIO.MMIODirection.IN:
+                    radMMIO_network_in.Checked = true;
+                    break;
+                case MultiMeterIO.MMIODirection.OUT:
+                    radMMIO_network_out.Checked = true;
+                    break;
+                case MultiMeterIO.MMIODirection.BOTH:
+                    radMMIO_network_both.Checked = true;
+                    break;
+            }
+
+            _MMIO_ignore_change_events = true;
+            chkMMIO_network_enabled.Checked = mmio.Enabled;
+            _MMIO_ignore_change_events = false;
+
+            updateVariableList();
+            updateDirection(mmio);
+            updateTerminators(mmio);
+        }
+        private void showSerialPortPicker(MultiMeterIO.MMIOType type, string existsing_com_port, int baud_rate, int data_bits, StopBits stop_bits, Parity parity)
+        {
+            bool adding = string.IsNullOrEmpty(existsing_com_port);
+            bool stoppedConnection = false;
+
+            //MultiMeterIO.clsMMIO mmio;
+            //mmio = new MultiMeterIO.clsMMIO(MultiMeterIO.MMIOType.SERIAL, "com3", 38000, 8, StopBits.One, Parity.None, true);
+            //MultiMeterIO.AddMMIO(mmio);
+
+            //bool ok = mmio.StartConnection();
+
+            //clsMultiMeterIOComboboxItem mmioci = new clsMultiMeterIOComboboxItem(mmio.Guid, MultiMeterIO.MMIOType.SERIAL, mmio.ComPort, mmio.Direction);
+            //int index = lstMMIO_network_list.Items.Add(mmioci);
+            //lstMMIO_network_list.SelectedIndex = index;
+
+            frmSerialPortPicker sp = new frmSerialPortPicker();
+            sp.ComPort = existsing_com_port;
+            if (adding)
+            {
+                sp.BaudRate = 9600;
+                sp.DataBits = 8;
+                sp.StopBits  = StopBits.One;
+                sp.Parity = Parity.None;
+            }
+            else
+            {
+                sp.BaudRate = baud_rate;
+                sp.DataBits = data_bits;
+                sp.StopBits = stop_bits;
+                sp.Parity = parity;
+            }
+            // if edit, shut down com port
+            if (!adding)
+            {
+                clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                if (mmioci != null)
+                {
+                    if (MultiMeterIO.Data.ContainsKey(mmioci.Guid))
+                    {
+                        MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+                        mmio.StopConnection();
+                        stoppedConnection = true;
+                    }
+                }
+            }
+            //
+            sp.Init();
+            DialogResult dr = sp.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                bool ok = false;
+                MultiMeterIO.clsMMIO mmio = null;
+                if (adding)
+                {
+                    mmio = new MultiMeterIO.clsMMIO(MultiMeterIO.MMIOType.SERIAL, sp.ComPort, sp.BaudRate, sp.DataBits, sp.StopBits, sp.Parity, true);
+                    MultiMeterIO.AddMMIO(mmio);
+                    ok = mmio.StartConnection();
+                }
+                else
+                {
+                    clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                    if (mmioci != null)
+                    {
+                        if (MultiMeterIO.Data.ContainsKey(mmioci.Guid))
+                        {
+                            mmio = MultiMeterIO.Data[mmioci.Guid];
+                            mmio.StopConnection();
+                            mmio.ComPort = sp.ComPort;
+                            mmio.BaudRate = sp.BaudRate;
+                            mmio.DataBits = sp.DataBits;
+                            mmio.StopBits = sp.StopBits;
+                            mmio.Parity = sp.Parity;
+                            ok = mmio.StartConnection();
+                            stoppedConnection = false;
+                        }
+                    }
+                }
+                if (ok && mmio != null)
+                {
+                    if (adding)
+                    {
+                        clsMultiMeterIOComboboxItem mmioci = new clsMultiMeterIOComboboxItem(mmio.Guid, type, mmio.ComPort, mmio.Direction);
+                        int index = lstMMIO_network_list.Items.Add(mmioci);
+                        lstMMIO_network_list.SelectedIndex = index;
+                    }
+                    else
+                    {
+                        clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                        if (mmioci != null)
+                        {
+                            mmioci.ComPort = mmio.ComPort;
+                            lstMMIO_network_list.Items[lstMMIO_network_list.SelectedIndex] = mmioci;
+                        }
+                    }
+                }
+                else
+                {
+                    MultiMeterIO.RemoveMMIO(mmio.Guid);
+                    MessageBox.Show("There was a problem starting the serial port connector.",
+                    "Serial Start Problem",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+            }
+            if (stoppedConnection)
+            {
+                clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                if (mmioci != null)
+                {
+                    if (MultiMeterIO.Data.ContainsKey(mmioci.Guid))
+                    {
+                        MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+                        mmio.StartConnection();
+                    }
+                }
+            }
+        }
+        private void addEditConnector(MultiMeterIO.MMIOType type, bool check_same, string existing_ip_port = "", string existsing_com_port = "", int baud_rate = 0, int data_bits = 0, StopBits stop_bits = StopBits.One, Parity parity = Parity.None)
+        {
+            string protocol = "";
+            string bind = "";
+            switch (type)
+            {
+                case MultiMeterIO.MMIOType.UDP_LISTENER:
+                    protocol = "UDP Listener";
+                    bind = "bind";
+                    break;
+                case MultiMeterIO.MMIOType.TCPIP_LISTENER:
+                    protocol = "TCP/IP Server";
+                    bind = "bind";
+                    break;
+                case MultiMeterIO.MMIOType.TCPIP_CLIENT:
+                    protocol = "TCP/IP Client";
+                    bind = "destination";
+                    break;
+                case MultiMeterIO.MMIOType.SERIAL:
+                    protocol = "SERIAL";
+                    bind = "";
+                    break;
+            }
+
+            if (type == MultiMeterIO.MMIOType.SERIAL)
+            {
+                showSerialPortPicker(type, existsing_com_port, baud_rate, data_bits, stop_bits, parity);
+            }
+            else
+            {
+                string ip_port;
+                bool adding = string.IsNullOrEmpty(existing_ip_port);
+                if (adding)
+                    ip_port = InputBox.Show("Add " + protocol, "Please provide " + bind + " details:", "127.0.0.1:9000");
+                else
+                    ip_port = InputBox.Show("Edit " + protocol, "Please edit " + bind + " details:", existing_ip_port);
+                if (string.IsNullOrEmpty(ip_port)) return;
+
+                string[] parts = ip_port.Split(':');
+                if (parts.Length == 2)
+                {
+                    string ip = parts[0];
+                    string port = parts[1];
+
+                    bool ok = int.TryParse(port, out int portInt);
+                    if (ok)
+                    {
+                        if (check_same && (ip + ":" + portInt.ToString() == existing_ip_port)) return; // same as input, forget it
+
+                        if (!MultiMeterIO.AlreadyConfigured(ip, portInt, type))
+                        {
+                            MultiMeterIO.clsMMIO mmio;
+                            if (adding)
+                            {
+                                mmio = new MultiMeterIO.clsMMIO(type, ip, portInt, true);
+                                MultiMeterIO.AddMMIO(mmio);
+                            }
+                            else
+                            {
+                                //edit
+                                clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                                if (mmioci != null)
+                                {
+                                    if (MultiMeterIO.Data.ContainsKey(mmioci.Guid))
+                                    {
+                                        mmio = MultiMeterIO.Data[mmioci.Guid];
+                                        mmio.StopConnection();
+                                        mmio.IP = ip;
+                                        mmio.Port = portInt;
+                                    }
+                                    else
+                                        return;
+                                }
+                                else
+                                    return;
+                            }
+
+                            ok = mmio.StartConnection();
+
+                            if (ok)
+                            {
+                                if (adding)
+                                {
+                                    clsMultiMeterIOComboboxItem mmioci = new clsMultiMeterIOComboboxItem(mmio.Guid, type, ip, portInt, mmio.Direction, mmio.UdpEndpointIP, mmio.UdpEndpointPort);
+                                    int index = lstMMIO_network_list.Items.Add(mmioci);
+                                    lstMMIO_network_list.SelectedIndex = index;
+                                }
+                                else
+                                {
+                                    clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+                                    if (mmioci != null)
+                                    {
+                                        mmioci.IP = ip;
+                                        mmioci.Port = portInt;
+                                        lstMMIO_network_list.Items[lstMMIO_network_list.SelectedIndex] = mmioci;
+                                    }
+                                    else
+                                        return;
+                                }
+                            }
+                            else
+                            {
+                                MultiMeterIO.RemoveMMIO(mmio.Guid);
+                                MessageBox.Show("There was a problem starting the " + protocol + ". Perhaps there is an ip:port conflict.",
+                                "Listener Start Problem",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                            }
+                        }
+                        else
+                        {
+                            if (!adding)
+                            {
+                                MessageBox.Show("This IP:PORT combination already has a " + protocol + ".\n\nThe edited IP/Port needs to be to a combination that is not already in use.",
+                                    "Duplicate Listener",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                            }
+                            else
+                            {
+                                MessageBox.Show("This IP:PORT combination already has a " + protocol + ".",
+                                    "Duplicate Listener",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect port format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                            "Incorrect Format",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Incorrect format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                        "Incorrect Format",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+            }
+        }
+        private void radMMIO_network_add_udp_Click(object sender, EventArgs e)
+        {
+            addEditConnector(MultiMeterIO.MMIOType.UDP_LISTENER, true);
+        }
+
+        private void btnMMIO_network_add_tcpip_Click(object sender, EventArgs e)
+        {
+            addEditConnector(MultiMeterIO.MMIOType.TCPIP_LISTENER, true);
+        }
+
+        private void btnMMIO_network_delete_Click(object sender, EventArgs e)
+        {
+            if (lstMMIO_network_list.SelectedIndex < 0) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci != null)
+            {
+                MultiMeterIO.RemoveMMIO(mmioci.Guid);
+                lstMMIO_network_list.Items.Remove(mmioci);
+            }
+        }
+
+        private void txtMMIO_network_ip_port_TextChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+        }
+
+        private void txtMMIO_network_ip_port_Click(object sender, EventArgs e)
+        {
+            pnlMMIO_network_container.Focus();
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+
+            if (mmio.Type == MultiMeterIO.MMIOType.SERIAL)
+            {
+                addEditConnector(mmio.Type, true, "", txtMMIO_network_ip_port.Text, mmio.BaudRate, mmio.DataBits, mmio.StopBits, mmio.Parity);
+            }
+            else
+            {
+                addEditConnector(mmio.Type, true, txtMMIO_network_ip_port.Text);
+            }
+        }
+
+        private void btnMMIO_network_ip_port_ip4_Click(object sender, EventArgs e)
+        {
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            string orig = mmioci.IP + ":" + mmioci.Port.ToString();
+            frmIPv4Picker f = new frmIPv4Picker();
+            f.Init(orig);
+            DialogResult dr = f.ShowDialog(this);
+
+            if (dr == DialogResult.OK)
+            {
+                string sTmp = f.IP;
+                if (sTmp == "") sTmp = "127.0.0.1:9000";
+                
+                if (sTmp != orig)
+                    addEditConnector(mmioci.Type, false, sTmp);
+            }
+        }
+
+        private void txtMMIO_network_4char_TextChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+        }
+
+        private void radMMIO_network_in_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (!radMMIO_network_in.Checked) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            MultiMeterIO.Data[mmioci.Guid].Direction = MultiMeterIO.MMIODirection.IN;
+            mmioci.Direction = MultiMeterIO.MMIODirection.IN;
+
+            int i = lstMMIO_network_list.Items.IndexOf(mmioci);
+            adjustHeightOfMMIOcomboItem(i,itemHeight(mmioci));
+            lstMMIO_network_list.Invalidate();
+
+            updateDirection(MultiMeterIO.Data[mmioci.Guid]);
+            updateTerminators(MultiMeterIO.Data[mmioci.Guid]);
+        }
+        private const int LB_SETITEMHEIGHT = 0x01A0;
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int wMsg, IntPtr wParam, IntPtr lParam);
+        private void adjustHeightOfMMIOcomboItem(int i, int height)
+        {
+            //to fix issue where MesureItem although called and updates the height does not result in the
+            //listbox item actually changing visually.
+            //https://stackoverflow.com/questions/28490543/windows-forms-listbox-with-ownerdrawvariable-bug
+            SendMessage((IntPtr)lstMMIO_network_list.Handle, LB_SETITEMHEIGHT, (IntPtr)i, (IntPtr)height);
+        }
+        private void radMMIO_network_out_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (!radMMIO_network_out.Checked) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            MultiMeterIO.Data[mmioci.Guid].Direction = MultiMeterIO.MMIODirection.OUT;
+            mmioci.Direction = MultiMeterIO.MMIODirection.OUT;
+
+            int i = lstMMIO_network_list.Items.IndexOf(mmioci);
+            adjustHeightOfMMIOcomboItem(i, itemHeight(mmioci));
+            lstMMIO_network_list.Invalidate();
+
+            updateDirection(MultiMeterIO.Data[mmioci.Guid]);
+            updateTerminators(MultiMeterIO.Data[mmioci.Guid]);
+        }
+
+        private void radMMIO_network_both_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (!radMMIO_network_both.Checked) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            MultiMeterIO.Data[mmioci.Guid].Direction = MultiMeterIO.MMIODirection.BOTH;
+            mmioci.Direction = MultiMeterIO.MMIODirection.BOTH;
+
+            int i = lstMMIO_network_list.Items.IndexOf(mmioci);
+            adjustHeightOfMMIOcomboItem(i, itemHeight(mmioci));
+            lstMMIO_network_list.Invalidate();
+
+            updateDirection(MultiMeterIO.Data[mmioci.Guid]);
+            updateTerminators(MultiMeterIO.Data[mmioci.Guid]);
+        }
+        private void updateTerminators(MultiMeterIO.clsMMIO mmio)
+        {
+            if (mmio == null) return;
+
+            txtMMIO_network_terminator_in_custom.Visible = mmio.TerminatorIn == MultiMeterIO.MMIOTerminator.CUSTOM && mmio.Direction != MultiMeterIO.MMIODirection.OUT;
+            txtMMIO_network_terminator_out_custom.Visible = mmio.TerminatorOut == MultiMeterIO.MMIOTerminator.CUSTOM && mmio.Direction != MultiMeterIO.MMIODirection.IN;
+        }
+        private void updateDirection(MultiMeterIO.clsMMIO mmio)
+        {
+            if (mmio == null) return;
+            if (mmio.Type == MultiMeterIO.MMIOType.SERIAL)
+            { 
+                lblMMIO_network_ip_port.Text = "Com Port:";
+                btnMMIO_network_ip_port_ip4.Visible = false;
+            }
+            else
+            {
+                if (mmio.Type == MultiMeterIO.MMIOType.TCPIP_CLIENT)
+                {
+                    lblMMIO_network_ip_port.Text = "Destination:";
+                }
+                else
+                {
+                    lblMMIO_network_ip_port.Text = "Bind IP:Port";
+                }
+                btnMMIO_network_ip_port_ip4.Visible = true;
+            }
+            switch (mmio.Direction)
+            {
+                case MultiMeterIO.MMIODirection.IN:
+                    lblMMIO_network_format_in.Enabled = true;
+                    comboMMIO_network_format_in.Enabled = true;
+                    lblMMIO_network_format_out.Enabled = false;
+                    comboMMIO_network_format_out.Enabled = false;
+
+                    lblMMIO_network_terminator_in.Enabled = true;
+                    comboMMIO_network_terminator_in.Enabled = true;
+                    lblMMIO_network_terminator_out.Enabled = false;
+                    comboMMIO_network_terminator_out.Enabled = false;
+
+                    lblMMIO_network_rxdata.Enabled = true;
+                    pnlMMIO_network_rxdata.Enabled = true;
+
+                    lblMMIO_network_txdata.Enabled = false;
+                    pnlMMIO_network_txdata.Enabled = false;
+
+                    lblMMIO_network_udp_endpoint_ip_port.Enabled = false;
+                    txtMMIO_network_udp_endpoint_ip_port.Enabled = false;
+                    btnMMIO_network_udp_endpoint_ip_port.Enabled = false;
+
+                    lblMMIO_network_ip_port.Enabled = true;
+                    txtMMIO_network_ip_port.Enabled = true;
+                    btnMMIO_network_ip_port_ip4.Enabled = true;
+
+                    txtMMIO_network_udp_endpoint_ip_port.Text = "";
+                    picMutliMeterIO_udp_out_warning.Visible = false;
+
+                    break;
+                case MultiMeterIO.MMIODirection.OUT:
+                    lblMMIO_network_format_in.Enabled = false;
+                    comboMMIO_network_format_in.Enabled = false;
+                    lblMMIO_network_format_out.Enabled = true;
+                    comboMMIO_network_format_out.Enabled = true;
+
+                    lblMMIO_network_terminator_in.Enabled = false;
+                    comboMMIO_network_terminator_in.Enabled = false;
+                    lblMMIO_network_terminator_out.Enabled = true;
+                    comboMMIO_network_terminator_out.Enabled = true;
+
+                    lblMMIO_network_rxdata.Enabled = false;
+                    pnlMMIO_network_rxdata.Enabled = false;
+
+                    lblMMIO_network_txdata.Enabled = true;
+                    pnlMMIO_network_txdata.Enabled = true;
+
+                    lblMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+                    txtMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+                    btnMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+
+                    if (mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER)
+                    {
+                        lblMMIO_network_ip_port.Enabled = false;
+                        txtMMIO_network_ip_port.Enabled = false;
+                        btnMMIO_network_ip_port_ip4.Enabled = false;
+                        picMutliMeterIO_udp_out_warning.Visible = true;
+
+                        txtMMIO_network_udp_endpoint_ip_port.Text = mmio.UdpEndpointIP + ":" + mmio.UdpEndpointPort.ToString();
+                    }
+                    else
+                    {
+                        lblMMIO_network_ip_port.Enabled = true;
+                        txtMMIO_network_ip_port.Enabled = true;
+                        btnMMIO_network_ip_port_ip4.Enabled = true;
+                        picMutliMeterIO_udp_out_warning.Visible = false;
+
+                        txtMMIO_network_udp_endpoint_ip_port.Text = "";
+                    }
+
+                    break;
+                case MultiMeterIO.MMIODirection.BOTH:
+                    lblMMIO_network_format_in.Enabled = true;
+                    comboMMIO_network_format_in.Enabled = true;
+                    lblMMIO_network_format_out.Enabled = true;
+                    comboMMIO_network_format_out.Enabled = true;
+
+                    lblMMIO_network_terminator_in.Enabled = true;
+                    comboMMIO_network_terminator_in.Enabled = true;
+                    lblMMIO_network_terminator_out.Enabled = true;
+                    comboMMIO_network_terminator_out.Enabled = true;
+
+                    lblMMIO_network_rxdata.Enabled = true;
+                    pnlMMIO_network_rxdata.Enabled = true;
+
+                    lblMMIO_network_txdata.Enabled = true;
+                    pnlMMIO_network_txdata.Enabled = true;
+
+                    lblMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+                    txtMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+                    btnMMIO_network_udp_endpoint_ip_port.Enabled = mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER;
+
+                    lblMMIO_network_ip_port.Enabled = true;
+                    txtMMIO_network_ip_port.Enabled = true;
+                    btnMMIO_network_ip_port_ip4.Enabled = true;
+                    picMutliMeterIO_udp_out_warning.Visible = false;
+
+                    if (mmio.Type == MultiMeterIO.MMIOType.UDP_LISTENER)
+                        txtMMIO_network_udp_endpoint_ip_port.Text = mmio.UdpEndpointIP + ":" + mmio.UdpEndpointPort.ToString();
+                    else
+                        txtMMIO_network_udp_endpoint_ip_port.Text = "";
+
+                    break;
+            }
+        }
+        private void comboMMIO_network_format_in_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            bool ok = Enum.TryParse<MultiMeterIO.MMIOFormat>(comboMMIO_network_format_in.Text, out MultiMeterIO.MMIOFormat fmt);
+
+            if (ok) MultiMeterIO.Data[mmioci.Guid].FormatIn = fmt;
+        }
+        private class clsMultiMeterIOComboboxItem
+        {
+            private Guid _guid;
+            private MultiMeterIO.MMIOType _type;
+            private string _ip;
+            private int _port;
+            private MultiMeterIO.MMIODirection _direction;
+            private string _udp_endpoint_ip;
+            private int _udp_endpoint_port;
+            private string _com_port;
+            
+            public clsMultiMeterIOComboboxItem(Guid guid, MultiMeterIO.MMIOType type, string ip, int port, MultiMeterIO.MMIODirection direction, string udp_endpoint_ip, int udp_endpoint_port)
+            {
+                _guid = guid;
+                _type = type;
+                _ip = ip;
+                _port = port;
+                _direction = direction;
+                _udp_endpoint_ip = udp_endpoint_ip;
+                _udp_endpoint_port = udp_endpoint_port;
+                _com_port = "";
+            }
+            public clsMultiMeterIOComboboxItem(Guid guid, MultiMeterIO.MMIOType type, string com_port, MultiMeterIO.MMIODirection direction)
+            {
+                _guid = guid;
+                _type = type;
+                _ip = "";
+                _port = 0;
+                _direction = direction;
+                _udp_endpoint_ip = "";
+                _udp_endpoint_port = 0;
+                _com_port = com_port;
+            }
+            public Guid Guid
+            {
+                get { return _guid; }
+                set { _guid = value; }
+            }
+            public MultiMeterIO.MMIOType Type
+            {
+                get { return _type; }
+                set { _type = value; }
+            }
+            public string ComPort
+            {
+                get { return _com_port; }
+                set { _com_port = value; }
+            }
+            public string IP
+            {
+                get { return _ip; }
+                set { _ip = value; }
+            }
+            public int Port
+            {
+                get { return _port; }
+                set { _port = value; }
+            }
+            public string UDPEndpointIP
+            {
+                get { return _udp_endpoint_ip; }
+                set { _udp_endpoint_ip = value; }
+            }
+            public int UDPEndpointPort
+            {
+                get { return _udp_endpoint_port; }
+                set { _udp_endpoint_port = value; }
+            }
+            public MultiMeterIO.MMIODirection Direction
+            {
+                get { return _direction; }
+                set { _direction = value; }
+            }
+            public override string ToString()
+            {
+                if (_type == MultiMeterIO.MMIOType.SERIAL)
+                {
+                    return _com_port;
+                }
+                else
+                {
+                    return _ip + ":" + _port;
+                }
+            }
+        }
+        private void lstMMIO_network_list_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+            e.DrawBackground();
+
+            Graphics g = e.Graphics;
+
+            if (e.Index >= 0)
+            {
+                SolidBrush sbt;
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                    sbt = new SolidBrush(Color.White);
+                else
+                    sbt = new SolidBrush(Color.Black);
+
+                clsMultiMeterIOComboboxItem mmioci = (clsMultiMeterIOComboboxItem)((ListBox)sender).Items[e.Index];
+                if (mmioci != null)
+                {
+                    string type = "";
+                    Font small = new Font(e.Font.FontFamily, e.Font.Size * 0.8f, FontStyle.Regular);
+                    switch (mmioci.Type)
+                    {
+                        case MultiMeterIO.MMIOType.UDP_LISTENER:
+                            type = "udp";
+                            break;
+                        case MultiMeterIO.MMIOType.TCPIP_LISTENER:
+                            type = "tcp/ip server";
+                            break;
+                        case MultiMeterIO.MMIOType.TCPIP_CLIENT:
+                            type = "tcp/ip client";
+                            break;
+                        case MultiMeterIO.MMIOType.SERIAL:
+                            type = "serial";
+                            break;
+                    }
+                    g.DrawString(type, small, sbt, e.Bounds, StringFormat.GenericDefault);
+
+                    int offset;
+                    Rectangle rect;
+
+                    //in/out/both
+                    Rectangle rect2 = new Rectangle(60, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+                    g.DrawString(mmioci.Direction.ToString().ToLower(), small, sbt, rect2, StringFormat.GenericDefault);
+                    small.Dispose();
+                    
+                    if (mmioci.Type == MultiMeterIO.MMIOType.SERIAL)
+                    {
+                        offset = (int)(lstMMIO_network_list.Font.Height * 0.8f);
+                        rect = new Rectangle(e.Bounds.X, e.Bounds.Top + offset, e.Bounds.Width, e.Bounds.Height - offset);
+                        g.DrawString(((ListBox)sender).Items[e.Index].ToString(), e.Font, sbt, rect, StringFormat.GenericDefault);
+                    }
+                    else
+                    {                       
+                        if (mmioci.Type == MultiMeterIO.MMIOType.UDP_LISTENER && mmioci.Direction != MultiMeterIO.MMIODirection.IN)
+                        {
+                            offset = (int)(lstMMIO_network_list.Font.Height * 1.8f);
+                            rect = new Rectangle(e.Bounds.X, e.Bounds.Top + offset, e.Bounds.Width, e.Bounds.Height - offset);
+                            g.DrawString(mmioci.UDPEndpointIP + ":" + mmioci.UDPEndpointPort.ToString(), e.Font, sbt, rect, StringFormat.GenericDefault);
+
+                            if (mmioci.Direction == MultiMeterIO.MMIODirection.OUT)
+                            {
+                                sbt.Dispose();
+                                sbt = new SolidBrush(Color.Gray);
+                            }
+                        }
+
+                        offset = (int)(lstMMIO_network_list.Font.Height * 0.8f);
+                        rect = new Rectangle(e.Bounds.X, e.Bounds.Top + offset, e.Bounds.Width, e.Bounds.Height - offset);
+                        g.DrawString(((ListBox)sender).Items[e.Index].ToString(), e.Font, sbt, rect, StringFormat.GenericDefault);
+                    }
+
+                    sbt.Dispose();
+                }
+
+                e.DrawFocusRectangle();
+            }
+        }
+        private int itemHeight(clsMultiMeterIOComboboxItem mmioci)
+        {
+            int ret = lstMMIO_network_list.Font.Height;
+            switch (mmioci.Type)
+            {
+                case MultiMeterIO.MMIOType.UDP_LISTENER:
+                    if (mmioci.Direction == MultiMeterIO.MMIODirection.IN)
+                    {
+                       ret = (int)(lstMMIO_network_list.Font.Height * 1.8f);
+                    }
+                    else
+                    {
+                        ret = (int)(lstMMIO_network_list.Font.Height * 2.8f);
+                    }
+                    break;
+                default:
+                    ret = (int)(lstMMIO_network_list.Font.Height * 1.8f);
+                    break;
+            }
+            return ret;
+        }
+        private void lstMMIO_network_list_MeasureItem(object sender, MeasureItemEventArgs e)
+        {
+            if (e.Index < 0) return;
+            clsMultiMeterIOComboboxItem mmioci = (clsMultiMeterIOComboboxItem)((ListBox)sender).Items[e.Index];
+            int newHeight;
+            if(mmioci != null)
+                newHeight = itemHeight(mmioci);
+            else
+                newHeight = (int)(lstMMIO_network_list.Font.Height * 1.8f);
+
+            if(newHeight != e.ItemHeight)
+                e.ItemHeight = newHeight;
+        }
+
+        private void chkMMIO_network_enabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+            if (lstMMIO_network_list.SelectedIndex < 0) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            bool old_state = MultiMeterIO.Data[mmioci.Guid].Enabled;
+            MultiMeterIO.Data[mmioci.Guid].Enabled = !old_state;
+            if (!old_state)
+            {
+                // start
+                MultiMeterIO.Data[mmioci.Guid].StartConnection();
+            }
+            else
+            {
+                // stop
+                MultiMeterIO.StopConnection(MultiMeterIO.Data[mmioci.Guid].Guid);
+            }
+            _MMIO_ignore_change_events = true;
+            chkMMIO_network_enabled.Checked = MultiMeterIO.Data[mmioci.Guid].Enabled;
+            _MMIO_ignore_change_events = false;
+        }
+        private void txtMMIO_network_ip_port_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void txtMMIO_network_4char_Click(object sender, EventArgs e)
+        {
+            //pnlMMIO_network_container.Focus();
+        }
+
+        private void txtMMIO_network_4char_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+        private void btnMMIO_network_copy4char_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(txtMMIO_network_4char.Text);
+        }
+        private void btnMMIO_network_remove_variable_Click(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection items = lstMMIO_network_variables.SelectedItems;
+            if (items.Count <= 0 || items.Count > 1)
+            {
+                btnMMIO_network_remove_variable.Enabled = false;
+                btnMMIO_network_copyvariable_clipboard.Enabled = false;
+                return;
+            }
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
+            btnMMIO_network_remove_variable.Enabled = items.Count > 0;
+            btnMMIO_network_copyvariable_clipboard.Enabled = items.Count > 0;
+
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+            if (mmio != null)
+            {
+                mmio.RemoveVariable(items[0].Text);
+                lstMMIO_network_variables.Items.Remove(items[0]);
+                updateVariableList();
+            }
+        }
+
+        private void lstMMIO_network_variables_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            ListView.SelectedListViewItemCollection items = lstMMIO_network_variables.SelectedItems;
+            if (items.Count <= 0 || items.Count > 1)
+            {
+                btnMMIO_network_remove_variable.Enabled = false;
+                btnMMIO_network_copyvariable_clipboard.Enabled = false;
+                return;
+            }
+            btnMMIO_network_remove_variable.Enabled = true;
+            btnMMIO_network_copyvariable_clipboard.Enabled = true;
+        }
+
+        private void btnMMIO_network_copyvariable_clipboard_Click(object sender, EventArgs e)
+        {
+            ListView.SelectedListViewItemCollection items = lstMMIO_network_variables.SelectedItems;
+            if (items.Count <= 0 || items.Count > 1) return;
+
+            Clipboard.SetText("%" + items[0].Text + "%");
+        }
+        private void btnMMIO_variable_Click(object sender, EventArgs e)
+        {
+            mmioSetupVariable(0);
+        }
+        private void comboMMIO_network_terminator_in_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            bool ok = Enum.TryParse<MultiMeterIO.MMIOTerminator>(comboMMIO_network_terminator_in.Text, out MultiMeterIO.MMIOTerminator term);
+
+            if (ok)
+            {
+                MultiMeterIO.Data[mmioci.Guid].TerminatorIn = term;
+                updateTerminators(MultiMeterIO.Data[mmioci.Guid]);
+            }
+        }
+        private void btnMMIO_variable_2_Click(object sender, EventArgs e)
+        {
+            mmioSetupVariable(1);
+        }
+        private bool variableInUse(int variable)
+        {
+            string mgID = meterItemGroupIDfromSelected();
+            if (mgID == "") return false;
+
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return false;
+
+            MeterManager.clsMeter m = meterFromSelectedContainer();
+            if (m == null) return false;
+
+            MeterType mt = meterItemGroupTypefromSelected();
+            if (mt == MeterType.NONE) return false;
+
+            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt, mtci.Order);
+            if (igs == null) return false;
+
+            return igs.GetMMIOVariable(variable) == "--DEFAULT--" ? false : true;
+        }
+        private void mmioSetupVariable(int variable)
+        {
+            string mgID = meterItemGroupIDfromSelected();
+            if (mgID == "") return;
+
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return;
+
+            MeterManager.clsMeter m = meterFromSelectedContainer();
+            if (m == null) return;
+
+            MeterType mt = meterItemGroupTypefromSelected();
+            if (mt == MeterType.NONE) return;
+
+            MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt, mtci.Order);
+            if (igs == null) return;
+
+            frmVariablePicker f = new frmVariablePicker();
+            f.Init(variable, igs.GetMMIOGuid(variable), igs.GetMMIOVariable(variable));
+            DialogResult dr = f.ShowDialog(this);
+            if (dr == DialogResult.OK || dr == DialogResult.Ignore)
+            {
+                igs.SetMMIOGuid(variable, f.Guid);
+                igs.SetMMIOVariable(variable, f.Variable);
+
+                m.ApplySettingsForMeterGroup(mt, igs, mtci.Order);
+
+                if (mt == MeterType.ROTATOR)
+                {
+                    switch (variable)
+                    {
+                        case 0:
+                            pnlVariableInUse_1_rotator.Visible = variableInUse(0);
+                            break;
+                        case 1:
+                            pnlVariableInUse_2_rotator.Visible = variableInUse(1);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (variable)
+                    {
+                        case 0:
+                            pnlVariableInUse_1.Visible = variableInUse(0);
+                            break;
+                        case 1:
+                            pnlVariableInUse_2.Visible = variableInUse(1);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private void comboMMIO_network_terminator_out_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            bool ok = Enum.TryParse<MultiMeterIO.MMIOTerminator>(comboMMIO_network_terminator_out.Text, out MultiMeterIO.MMIOTerminator term);
+
+            if (ok)
+            {
+                MultiMeterIO.Data[mmioci.Guid].TerminatorOut = term;
+                updateTerminators(MultiMeterIO.Data[mmioci.Guid]);
+            }
+        }
+        private void comboMMIO_network_format_out_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            bool ok = Enum.TryParse<MultiMeterIO.MMIOFormat>(comboMMIO_network_format_out.Text, out MultiMeterIO.MMIOFormat fmt);
+
+            if (ok) MultiMeterIO.Data[mmioci.Guid].FormatOut = fmt;
+        }
+        private void txtMMIO_network_terminator_in_custom_TextChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            MultiMeterIO.Data[mmioci.Guid].CustomTerminatorIn = txtMMIO_network_terminator_in_custom.Text;
+        }
+
+        private void txtMMIO_network_terminator_out_custom_TextChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            MultiMeterIO.Data[mmioci.Guid].CustomTerminatorOut = txtMMIO_network_terminator_out_custom.Text;
+        }
+        private void btnMMIO_network_udp_endpoint_ip_port_Click(object sender, EventArgs e)
+        {
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+
+            frmIPv4Picker f = new frmIPv4Picker();
+            f.Init(mmio.UdpEndpointIP + ":" + mmio.UdpEndpointPort.ToString());
+            DialogResult dr = f.ShowDialog(this);
+
+            if (dr == DialogResult.OK)
+            {
+                string sTmp = f.IP;
+                if (sTmp == "") sTmp = "127.0.0.1:9000";
+                setupUDPEndpoint(sTmp);
+            }
+        }
+        private void txtMMIO_network_udp_endpoint_ip_port_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+        private bool setUDPEndpoint()
+        {
+            bool ret_ok = false;
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return ret_ok;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return ret_ok;
+
+            string[] parts = txtMMIO_network_udp_endpoint_ip_port.Text.Split(':');
+            if (parts.Length == 2)
+            {
+                string ip = parts[0];
+                string port = parts[1];
+
+                bool ok = int.TryParse(port, out int portInt);
+                if (ok)
+                {
+                    MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+                    mmio.UdpEndpointIP = ip;
+                    mmio.UdpEndpointPort = portInt;
+                    ret_ok = true;
+                }
+            }
+            return ret_ok;
+        }
+        private void setupUDPEndpoint(string existing_ip_port = "")
+        {
+            pnlMMIO_network_container.Focus();
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            string ip_port = InputBox.Show("Configure UDP Endpoint", "Provide UDP endpoint (outbound) details:", existing_ip_port);
+            if (ip_port == null || ip_port == "") return;
+
+            string[] parts = ip_port.Split(':');
+            if (parts.Length == 2)
+            {
+                if (int.TryParse(parts[1], out int intPort))
+                {
+                    if (Common.IsIpv4Valid(parts[0], intPort))
+                    {
+                        string oldIpPort = txtMMIO_network_udp_endpoint_ip_port.Text;
+                        _MMIO_ignore_change_events = true;
+                        txtMMIO_network_udp_endpoint_ip_port.Text = parts[0] + ":" + intPort.ToString();
+                        _MMIO_ignore_change_events = false;
+                        bool ok = setUDPEndpoint();
+                        if (ok)
+                        {
+                            mmioci.UDPEndpointIP = parts[0];
+                            mmioci.UDPEndpointPort = intPort;
+                            lstMMIO_network_list.Invalidate();
+                        }
+                        else
+                        {
+                            _MMIO_ignore_change_events = true;
+                            txtMMIO_network_udp_endpoint_ip_port.Text = oldIpPort;
+                            _MMIO_ignore_change_events = false;
+                            MessageBox.Show("Incorrect ip/port format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                                "Incorrect Format",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Incorrect ip/port format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                            "Incorrect Format",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Incorrect ip/port format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                        "Incorrect Format",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Incorrect ip/port format. Please use the following format.\n\nIP:PORT\n\nExample: 127.0.0.1:9000",
+                    "Incorrect Format",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+            }
+        }
+        private void txtMMIO_network_udp_endpoint_ip_port_Click(object sender, EventArgs e)
+        {
+            setupUDPEndpoint(txtMMIO_network_udp_endpoint_ip_port.Text);
+        }
+
+        private void txtMMIO_network_udp_endpoint_ip_port_TextChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (_MMIO_ignore_change_events) return;
+            setUDPEndpoint();
+        }
+
+        private void btnMMIO_network_remove_all_variables_Click(object sender, EventArgs e)
+        {
+            clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
+            if (mmioci == null) return;
+
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+            MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
+
+            foreach (ListViewItem lvi in lstMMIO_network_variables.Items)
+            {
+                if (mmio.Variables().ContainsKey(lvi.Text)) mmio.RemoveVariable(lvi.Text);
+            }
+
+            lstMMIO_network_variables.Items.Clear();
+            btnMMIO_network_remove_all_variables.Enabled = false;
+        }
+        private void btnMMIO_network_add_tcpip_client_Click(object sender, EventArgs e)
+        {
+            addEditConnector(MultiMeterIO.MMIOType.TCPIP_CLIENT, true);
+        }
+        #endregion
+
+        private void nudDataOutNode_sendinterval_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtDataOutNode_4charID_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }        
+
+        //rotator
+        private void chkMeterItemRotatorCardinals_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkMeterItemFadeOnRxRotator_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkMeterItemFadeOnTxRotator_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkMeterItemDarkModeRotator_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudMeterItemUpdateRateRotator_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemHBackgroundRotator_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemRotatorArrow_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemRotatorLargeDot_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemRotatorSmallDot_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemRotatorBeamWidth_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkMeterItemRotatorShowBeamWidth_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+            updateShowBeamWidthControls();
+        }
+        private void updateShowBeamWidthControls()
+        {
+            bool en = chkMeterItemRotatorShowBeamWidth.Checked;
+            clrbtnMeterItemRotatorBeamWidth.Enabled = en;
+            nudMeterItemRotatorBeamWidth.Enabled = en;
+        }
+        private void nudMeterItemRotatorBeamWidth_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnMeterItemRotatorText_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnMMIO_variable_rotator_Click(object sender, EventArgs e)
+        {
+            mmioSetupVariable(0);
+        }
+
+        private void btnMMIO_variable_2_rotator_Click(object sender, EventArgs e)
+        {
+            mmioSetupVariable(1);
+        }
+        private void btnTextOverlay_copyfonts_Click(object sender, EventArgs e)
+        {
+            _textOverlayFont2 = new Font(_textOverlayFont1.FontFamily, _textOverlayFont1.Size, _textOverlayFont1.Style);
+            clrbtnTextOverlay_TextColour2.Color = clrbtnTextOverlay_TextColour1.Color;
+            clrbtnTextOverlay_TextBackColour2.Color = clrbtnTextOverlay_TextBackColour1.Color;
+            chkTextOverlay_textback2.Checked = chkTextOverlay_textback1.Checked;
+
+            updateMeterType();
+        }
+
+        private void chkMeterItemRotatorAllowControl_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+            updateRotatorControlControls();
+        }
+
+        private void clrbtnMeterItemRotatorControlColour_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtMeterItemRotatorAZcommand_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtMeterItemRotatorELEcommand_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+        private void updateRotatorControlControls()
+        {
+            bool en = chkMeterItemRotatorAllowControl.Checked;
+            clrbtnMeterItemRotatorControlColour.Enabled = en;
+            txtMeterItemRotatorAZcommand.Enabled = en;
+            txtMeterItemRotatorELEcommand.Enabled = en;
+            picMultiMeterRotatorControlInfo.Enabled = en;
+            lblMeterItemRotatorAZcommand.Enabled = en;
+            lblMeterItemRotatorELEcommand.Enabled = en;
+            picMultiMeterRotatorControlInfo.Enabled = en;
+            bntMultiMeterItemRotator_default_pstRotator.Enabled = en;
+            txtRotator_4charID.Enabled = en;
+            lblRotator_4charID.Enabled = en;
+        }
+
+        private void bntMultiMeterItemRotator_default_pstRotator_Click(object sender, EventArgs e)
+        {
+            txtMeterItemRotatorAZcommand.Text = "<PST><AZIMUTH>%AZ%</AZIMUTH></PST>";
+            txtMeterItemRotatorELEcommand.Text = "<PST><ELEVATION>%ELE%</ELEVATION></PST>";
+        }
+
+        private void txtRotator_4charID_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkLedIndicator_ShowPanel_CheckedChanged(object sender, EventArgs e)
+        {
+            updateLedIndicatorPanelControls();
+            updateMeterType();
+        }
+
+        private void clrbtnLedIndicator_PanelBackground_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnLedIndiciator_PanelBackgroundTX_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudLedIndicator_PanelPadding_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkLedIndicator_FadeOnRX_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkLedIndicator_FadeOnTX_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void txtLedIndicator_condition_TextChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnLedIndicator_true_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void clrbtnLedIndicator_false_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnLedIndicator_copy_truefalse_colours_Click(object sender, EventArgs e)
+        {
+            clrbtnLedIndicator_false.Color = clrbtnLedIndicator_true.Color;
+        }
+
+        private void nudLedIndicator_xOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudLedIndicator_yOffset_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudLedIndicator_xSize_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudLedIndicator_ySize_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnLedIndicator_copy_sizex_to_y_Click(object sender, EventArgs e)
+        {
+            nudLedIndicator_ySize.Value = nudLedIndicator_xSize.Value;
+        }
+        private void updateLedIndicatorPanelControls()
+        {
+            bool enabled = chkLedIndicator_ShowPanel.Checked;
+            clrbtnLedIndicator_PanelBackground.Enabled = enabled;
+            clrbtnLedIndiciator_PanelBackgroundTX.Enabled = enabled;
+            nudLedIndicator_PanelPadding.Enabled = enabled;
+            chkLedIndicator_FadeOnRX.Enabled = enabled;
+            chkLedIndicator_FadeOnTX.Enabled = enabled;
+            lblLedIndicator_panelbackground.Enabled = enabled;
+            lblLedIndicator_panelbackgroundTX.Enabled = enabled;
+            nudLedIndicator_PanelPadding.Enabled = enabled;
+        }
+        private void updateLedValidControls()
+        {
+            MeterManager.clsMeter m = meterFromSelectedContainer();
+            if (m == null) return;
+
+            clsMeterTypeComboboxItem mtci = lstMetersInUse.SelectedItem as clsMeterTypeComboboxItem;
+            if (mtci == null) return;
+
+            MeterType mt = meterItemGroupTypefromSelected();
+            if (mt == MeterType.NONE) return;
+
+            if (mt == MeterType.LED)
+            {
+                MeterManager.clsIGSettings igs = m.GetSettingsForMeterGroup(mt, mtci.Order);
+                if (igs == null) return;
+
+                lblLed_Error.ForeColor = Color.Red;
+                lblLed_Error.Visible = igs.ShowHistory;
+                lblLed_Valid.Text = igs.ShowType ? "Valid" : "Invalid";
+                lblLed_Valid.ForeColor = igs.ShowType ? Color.LimeGreen : Color.Red;
+            }
+
+        }
+
+        private void chkLed_show_true_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkLed_show_false_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void radLed_light_on_off_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radLed_light_on_off.Checked)
+                updateMeterType();
+        }
+
+        private void radLed_light_blink_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radLed_light_blink.Checked)
+                updateMeterType();
+        }
+
+        private void radLed_light_pulsate_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radLed_light_pulsate.Checked)
+                updateMeterType();
+        }
+
+        private void clrbtnMMVfoDigitHighlight_Changed(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnMMIO_network_add_serial_Click(object sender, EventArgs e)
+        {
+            addEditConnector(MultiMeterIO.MMIOType.SERIAL, true);
+        }
+
+        private void txtWebImage_url_TextChanged(object sender, EventArgs e)
+        {
+            if(txtWebImage_url.Text.Contains("hamqsl.com", StringComparison.InvariantCultureIgnoreCase) ||
+                txtWebImage_url.Text.Contains("bsdworld.org", StringComparison.InvariantCultureIgnoreCase) ||
+                txtWebImage_url.Text.Contains("nascom.nasa.gov", StringComparison.InvariantCultureIgnoreCase) ||
+                txtWebImage_url.Text.Contains("swpc.noaa.gov", StringComparison.InvariantCultureIgnoreCase) ||
+                txtWebImage_url.Text.Contains("kc2g.com", StringComparison.InvariantCultureIgnoreCase)                
+                )
+            {
+                // lock and set the update interval
+                nudWebImage_update_interval.Enabled = false;
+                _ignoreMeterItemChangeEvents = true;
+                nudWebImage_update_interval.Value = (decimal)600;
+                _ignoreMeterItemChangeEvents = false;
+            }
+            else
+                nudWebImage_update_interval.Enabled = true;
+
+            updateMeterType();
+        }
+
+        private void nudWebImage_width_scale_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void nudWebImage_update_interval_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkWebImage_fade_rx_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void chkWebImage_fade_tx_CheckedChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        private void btnWebImage_hamqsl_donate_Click(object sender, EventArgs e)
+        {
+            Common.OpenUri("https://www.hamqsl.com/donate.html");
+        }
+        //
+        private void setup_comboWebImage_HamQsl()
+        {
+            comboWebImage_HamQsl.Items.Clear();
+            for(int i = 0; i < _hamqsl_urls.Length; i++)
+            {
+                KeyValuePair<string, string> kvp = _hamqsl_urls[i];
+                comboWebImage_HamQsl.Items.Add(kvp.Key);
+            }
+        }
+        private void setup_comboWebImage_BsdWorld()
+        {
+            comboWebImage_BsdWorld.Items.Clear();
+            for (int i = 0; i < _bsdworld_urls.Length; i++)
+            {
+                KeyValuePair<string, string> kvp = _bsdworld_urls[i];
+                comboWebImage_BsdWorld.Items.Add(kvp.Key);
+            }
+        }
+        private void setup_comboWebImage_nasa()
+        {
+            comboWebImage_nasa.Items.Clear();
+            for (int i = 0; i < _nasa_urls.Length; i++)
+            {
+                KeyValuePair<string, string> kvp = _nasa_urls[i];
+                comboWebImage_nasa.Items.Add(kvp.Key);
+            }
+        }
+        private void setup_comboWebImage_noaa()
+        {
+            comboWebImage_noaa.Items.Clear();
+            for (int i = 0; i < _noaa_urls.Length; i++)
+            {
+                KeyValuePair<string, string> kvp = _noaa_urls[i];
+                comboWebImage_noaa.Items.Add(kvp.Key);
+            }
+        }
+        //
+        private void comboWebImage_HamQsl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (comboWebImage_HamQsl.SelectedIndex == -1) return;
+            if (comboWebImage_HamQsl.SelectedIndex == 0) return;
+
+            KeyValuePair<string, string> kvp = _hamqsl_urls[comboWebImage_HamQsl.SelectedIndex];
+            txtWebImage_url.Text = kvp.Value;
+
+            comboWebImage_HamQsl.SelectedIndex = 0;
+        }
+        private void updateWebImageState(ImageFetcher.State state, bool checkSelected = false, string id = "")
+        {
+            if (checkSelected)
+            {
+                string mgID = meterItemGroupIDfromSelected();
+                if (mgID == "") return;
+                if (mgID != id) return;
+
+                MeterType mt = meterItemGroupTypefromSelected();
+                if (mt == MeterType.NONE) return;
+                if (mt != MeterType.WEB_IMAGE) return;
+            }
+
+            string txt;
+
+            switch (state)
+            {
+                case ImageFetcher.State.IDLE:
+                    txt = "idle";
+                    break;
+                case ImageFetcher.State.OK:
+                    txt = "ok";
+                    break;
+                case ImageFetcher.State.ERROR_URL_ISSUE:
+                    txt = "url issue";
+                    break;
+                case ImageFetcher.State.ERROR_IMAGE_CONVERSION_PROBLEM:
+                    txt = "bad image";
+                    break;
+                case ImageFetcher.State.ERROR_NO_SUITABLE_IMAGE:
+                    txt = "no image";
+                    break;
+                case ImageFetcher.State.WAITING:
+                    txt = "waiting";
+                    break;
+                case ImageFetcher.State.GATHERING_IMAGES:
+                    txt = "gathering";
+                    break;
+                default:
+                    txt = "";
+                    break;
+            }
+            lblWebImage_state.Text = txt;
+        }
+        public void SetWebImageState(string id, ImageFetcher.State state)
+        {
+            if (initializing) return;
+            if (lstMetersInUse == null) return;
+            if (!lstMetersInUse.Visible) return;
+
+            if (this.InvokeRequired)
+                this?.Invoke(new Action(() => updateWebImageState(state, true, id)));
+            else
+                updateWebImageState(state, true, id);
+        }
+
+        private void chkContainerMinimises_CheckedChanged(object sender, EventArgs e)
+        {
+            clsContainerComboboxItem cci = (clsContainerComboboxItem)comboContainerSelect.SelectedItem;
+            if (cci != null)
+            {
+                MeterManager.ContainerMinimises(cci.ID, chkContainerMinimises.Checked);
+            }
+        }
+
+        private void radMeterItemRotator_show_az_CheckedChanged(object sender, EventArgs e)
+        {
+            // only do the checked state for rad controls, as all the others in the group will fire as well
+            if (radMeterItemRotator_show_az.Checked)
+            {
+                updateMeterType();
+                nudMeterItemRotator_padding.Enabled = true;
+            }
+        }
+
+        private void radMeterItemRotator_show_ele_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radMeterItemRotator_show_ele.Checked)
+            {
+                updateMeterType();
+                nudMeterItemRotator_padding.Enabled = true;
+            }
+        }
+
+        private void radMeterItemRotator_show_both_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radMeterItemRotator_show_both.Checked)
+            {
+                updateMeterType();
+                nudMeterItemRotator_padding.Enabled = false;
+            }
+        }
+
+        private void nudMeterItemRotator_padding_ValueChanged(object sender, EventArgs e)
+        {
+            updateMeterType();
+        }
+
+        KeyValuePair<string, string>[] _hamqsl_urls =
+{
+            new KeyValuePair<string, string>("select one", ""),
+            new KeyValuePair<string, string>("Layout 1 - sun", "https://www.hamqsl.com/solarn0nbh.php"),
+            new KeyValuePair<string, string>("Layout 2 - sun", "https://www.hamqsl.com/solarpic.php"),
+            new KeyValuePair<string, string>("Layout 3", "https://www.hamqsl.com/solarvhf.php"),
+            new KeyValuePair<string, string>("Layout 4", "https://www.hamqsl.com/solar.php"),
+            new KeyValuePair<string, string>("Layout 5", "https://www.hamqsl.com/solarsmall.php"),
+            new KeyValuePair<string, string>("Layout 6", "https://www.hamqsl.com/solarbrief.php"),
+            new KeyValuePair<string, string>("Layout 7", "https://www.hamqsl.com/solarbc.php"),
+            new KeyValuePair<string, string>("Layout 8", "https://www.hamqsl.com/solar100sc.php"),
+            new KeyValuePair<string, string>("Layout 9", "https://www.hamqsl.com/solar2.php"),
+            new KeyValuePair<string, string>("Layout 10 - sun", "https://www.hamqsl.com/solarpich.php"),
+            new KeyValuePair<string, string>("Layout 11 - sun", "https://www.hamqsl.com/solar101pic.php"),
+            new KeyValuePair<string, string>("Layout 12", "https://www.hamqsl.com/solar101vhf.php"),
+            new KeyValuePair<string, string>("Layout 13", "https://www.hamqsl.com/solar101vhfper.php"),
+            new KeyValuePair<string, string>("Layout 14 - sun", "https://www.hamqsl.com/solar101vhfpic.php"),
+            new KeyValuePair<string, string>("Layout 15", "https://www.hamqsl.com/solar101sc.php"),
+            new KeyValuePair<string, string>("Layout 16 - sun", "https://www.hamqsl.com/solarsun.php"),
+            new KeyValuePair<string, string>("Layout 17 - graphs", "https://www.hamqsl.com/solargraph.php"),
+            new KeyValuePair<string, string>("Layout 18 - graphs", "https://www.hamqsl.com/marston.php"),
+            new KeyValuePair<string, string>("Greyline 1", "https://www.hamqsl.com/solarmuf.php"),
+            new KeyValuePair<string, string>("Greyline 2", "https://www.hamqsl.com/solarmap.php"),
+            new KeyValuePair<string, string>("Earth 1", "https://www.hamqsl.com/solarglobe.php"),
+            new KeyValuePair<string, string>("Earth 2", "https://www.hamqsl.com/moonglobe.php"),
+            new KeyValuePair<string, string>("Planets", "https://www.hamqsl.com/solarsystem.php"),
+        };
+
+        private KeyValuePair<string, string>[] _bsdworld_urls =
+{
+            new KeyValuePair<string, string>("select one", ""),
+            new KeyValuePair<string, string>("NA Propagation All", "https://bsdworld.org/DXCC/continent/NA/latest.webp"),
+            new KeyValuePair<string, string>("NA Propagation Zone 3", "https://bsdworld.org/DXCC/cqzone/3/latest.webp"),
+            new KeyValuePair<string, string>("NA Propagation Zone 4", "https://bsdworld.org/DXCC/cqzone/4/latest.webp"),
+            new KeyValuePair<string, string>("NA Propagation Zone 5", "https://bsdworld.org/DXCC/cqzone/5/latest.webp"),
+            new KeyValuePair<string, string>("EU Propagation All", "https://bsdworld.org/DXCC/continent/EU/tn_latest.webp"),
+            new KeyValuePair<string, string>("EU Propagation Zone 14", "https://bsdworld.org/DXCC/cqzone/14/latest.webp"),
+            new KeyValuePair<string, string>("EU Propagation Zone 15", "https://bsdworld.org/DXCC/cqzone/15/latest.webp"),
+            new KeyValuePair<string, string>("EU Propagation Zone 16", "https://bsdworld.org/DXCC/cqzone/16/latest.webp"),
+            new KeyValuePair<string, string>("EU Propagation Zone 20", "https://bsdworld.org/DXCC/cqzone/20/latest.webp"),
+            new KeyValuePair<string, string>("OC Propagation All", "https://bsdworld.org/DXCC/continent/OC/tn_latest.webp"),
+            new KeyValuePair<string, string>("AS Propagation All", "https://bsdworld.org/DXCC/continent/AS/tn_latest.webp"),
+            new KeyValuePair<string, string>("SA Propagation All", "https://bsdworld.org/DXCC/continent/SA/tn_latest.webp"),
+            new KeyValuePair<string, string>("AF Propagation All", "https://bsdworld.org/DXCC/continent/AF/tn_latest.webp"),
+            new KeyValuePair<string, string>("A-Index", "https://bsdworld.org/aindex.svgz"),
+            new KeyValuePair<string, string>("PK Index", "https://bsdworld.org/pkindex.svgz"),
+            new KeyValuePair<string, string>("PK Predictions", "https://bsdworld.org/pki-forecast.svgz"),
+            new KeyValuePair<string, string>("Flux", "https://bsdworld.org/flux.svgz"),
+            new KeyValuePair<string, string>("Outlook", "https://bsdworld.org/outlook.svgz"),
+            new KeyValuePair<string, string>("Solar Wind", "https://bsdworld.org/solarwind.svgz"),
+            new KeyValuePair<string, string>("SSN", "https://bsdworld.org/ssn.svgz"),
+            new KeyValuePair<string, string>("SSN History", "https://bsdworld.org/ssnhist.svgz"),
+            new KeyValuePair<string, string>("EISN", "https://bsdworld.org/eisn.svgz"),
+            new KeyValuePair<string, string>("Proton Flux", "https://bsdworld.org/proton_flux.svgz"),
+            new KeyValuePair<string, string>("X-Ray Flux", "https://bsdworld.org/xray_flux.svgz"),
+            new KeyValuePair<string, string>("D-Layer", "https://bsdworld.org/d-rap/latest.svgz"),
+        };
+
+        private KeyValuePair<string, string>[] _nasa_urls =
+        {
+            new KeyValuePair<string, string>("select one", ""),
+            new KeyValuePair<string, string>("SOHO EIT 171", "https://soho.nascom.nasa.gov/data/realtime/eit_171/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO EIT 195", "https://soho.nascom.nasa.gov/data/realtime/eit_195/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO EIT 284", "https://soho.nascom.nasa.gov/data/realtime/eit_284/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO EIT 304", "https://soho.nascom.nasa.gov/data/realtime/eit_304/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO SDO/HMI Continuum", "https://soho.nascom.nasa.gov/data/realtime/hmi_igr/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO SDO/HMI Magnetogram", "https://soho.nascom.nasa.gov/data/realtime/hmi_mag/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO LASCO C2", "https://soho.nascom.nasa.gov/data/realtime/c2/512/latest.jpg"),
+            new KeyValuePair<string, string>("SOHO LASCO C3", "https://soho.nascom.nasa.gov/data/realtime/c3/512/latest.jpg")
+        };
+        private KeyValuePair<string, string>[] _noaa_urls =
+        {
+            new KeyValuePair<string, string>("select one", ""),
+            new KeyValuePair<string, string>("Northern Aurora Latest", "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg"),
+            new KeyValuePair<string, string>("Southern Aurora Latest", "https://services.swpc.noaa.gov/images/animations/ovation/south/latest.jpg"),
+            new KeyValuePair<string, string>("Northern Aurora Forecast", "https://services.swpc.noaa.gov/images/aurora-forecast-northern-hemisphere.jpg"),
+            new KeyValuePair<string, string>("Southern Aurora Forecast", "https://services.swpc.noaa.gov/images/aurora-forecast-southern-hemisphere.jpg"),
+            new KeyValuePair<string, string>("SWX Solar Overiew", "https://services.swpc.noaa.gov/images/swx-overview-large.gif"),
+            new KeyValuePair<string, string>("K Indicies", "https://services.swpc.noaa.gov/images/station-k-index.png")
+        };
+
+        private void comboWebImage_BsdWorld_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (comboWebImage_BsdWorld.SelectedIndex == -1) return;
+            if (comboWebImage_BsdWorld.SelectedIndex == 0) return;
+
+            KeyValuePair<string, string> kvp = _bsdworld_urls[comboWebImage_BsdWorld.SelectedIndex];
+            txtWebImage_url.Text = kvp.Value;
+
+            comboWebImage_BsdWorld.SelectedIndex = 0;
+        }
+
+        private void btnWebImage_bsdworld_visit_Click(object sender, EventArgs e)
+        {
+            Common.OpenUri("https://bsdworld.org/help.html");
+        }
+
+        private void comboWebImage_nasa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (comboWebImage_nasa.SelectedIndex == -1) return;
+            if (comboWebImage_nasa.SelectedIndex == 0) return;
+
+            KeyValuePair<string, string> kvp = _nasa_urls[comboWebImage_nasa.SelectedIndex];
+            txtWebImage_url.Text = kvp.Value;
+
+            comboWebImage_nasa.SelectedIndex = 0;
+        }
+
+        private void comboWebImage_noaa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            if (comboWebImage_noaa.SelectedIndex == -1) return;
+            if (comboWebImage_noaa.SelectedIndex == 0) return;
+
+            KeyValuePair<string, string> kvp = _noaa_urls[comboWebImage_noaa.SelectedIndex];
+            txtWebImage_url.Text = kvp.Value;
+
+            comboWebImage_noaa.SelectedIndex = 0;
+        }
+
         //wd5y
         private void chkAmpDRVLim_CheckedChanged(object sender, EventArgs e)
         {
@@ -26760,11 +30224,11 @@ namespace Thetis
                     console.RXOnly = true;
                     console.chkExternalPA.Checked = false;
                     console.ptbPWR.Value = 0;                    
-                    console.lblPWR.Text = "Drive:  " + 0 + "w";
-                    console.lblPWR2.Text = "Drive:  " + 0 + "w";
+                    console.lblPWR.Text = "Drive: " + 0 + "w";
+                    console.lblPWR2.Text = "Drive:" + 0 + "w";
                     console.ptbTune.Value = 0;                    
-                    console.lblTune.Text = "Tune:  " + 0 + "w";
-                    console.lblTune2.Text = "Tune:  " + 0 + "w";
+                    console.lblTune.Text = "Tune: " + 0 + "w";
+                    console.lblTune2.Text = "Tune:" + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     console.RXOnly = false;
@@ -26782,8 +30246,8 @@ namespace Thetis
                     console.RXOnly = true;
                     console.chkExternalPA.Checked = false;
                     console.ptbPWR.Value = 0;                    
-                    console.lblPWR.Text = "Drive:  " + 0 + "w";
-                    console.lblPWR2.Text = "Drive:  " + 0 + "w";
+                    console.lblPWR.Text = "Drive: " + 0 + "w";
+                    console.lblPWR2.Text = "Drive:" + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     console.RXOnly = false;
@@ -26800,8 +30264,8 @@ namespace Thetis
                     console.RXOnly = true;
                     console.chkExternalPA.Checked = false;
                     console.ptbTune.Value = 0;                    
-                    console.lblTune.Text = "Tune:  " + 0 + "w";
-                    console.lblTune2.Text = "Tune:  " + 0 + "w";
+                    console.lblTune.Text = "Tune: " + 0 + "w";
+                    console.lblTune2.Text = "Tune:" + 0 + "w";
 
                     MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     console.RXOnly = false;
@@ -26842,7 +30306,7 @@ namespace Thetis
             //[2.10.3.6]MW0LGE fixes #414, note might have issues when first running up, but should be ok after a profile save
             byte[] bytes = Encoding.Default.GetBytes(_Name);
             return Encoding.UTF8.GetString(bytes);
-        }
+        }       
     }
 
     #endregion
@@ -26870,7 +30334,5 @@ namespace Thetis
             }
         }
     }
-
     #endregion
-
 }

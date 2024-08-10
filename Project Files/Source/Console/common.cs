@@ -24,6 +24,9 @@
 //    4616 W. Howard Lane  Suite 1-150
 //    Austin, TX 78728
 //    USA
+//
+//=================================================================
+// Continual modifications Copyright (C) 2019-2024 Richard Samphire (MW0LGE)
 //=================================================================
 
 using System;
@@ -41,6 +44,10 @@ using System.Text.RegularExpressions;
 using System.Security.Principal;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Net;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO.Compression;
 
 namespace Thetis
 {
@@ -566,57 +573,97 @@ namespace Thetis
 		public static void ForceFormOnScreen(Form f)
 		{
             Screen[] screens = Screen.AllScreens;
-			bool on_screen = false;
 
-			int left = 0, right = 0, top = 0, bottom = 0;
+            if (screens.Length == 0)
+            {
+                f.Location = new Point(0, 0);
+                return;
+            }
 
-			for(int i=0; i<screens.Length; i++)
-			{
-				if(screens[i].Bounds.Left < left)
-					left = screens[i].Bounds.Left;
+            int left = int.MaxValue, top = int.MaxValue;
+            int right = int.MinValue, bottom = int.MinValue;
 
-				if(screens[i].Bounds.Top < top)
-					top = screens[i].Bounds.Top;
+            foreach (Screen screen in screens)
+            {
+                if (screen.Bounds.Left < left)
+                    left = screen.Bounds.Left;
+                if (screen.Bounds.Top < top)
+                    top = screen.Bounds.Top;
+                if (screen.Bounds.Right > right)
+                    right = screen.Bounds.Right;
+                if (screen.Bounds.Bottom > bottom)
+                    bottom = screen.Bounds.Bottom;
+            }
 
-				if(screens[i].Bounds.Bottom > bottom)
-					bottom = screens[i].Bounds.Bottom;
+            bool onScreen = f.Left >= left &&
+                            f.Top >= top &&
+                            f.Right <= right &&
+                            f.Bottom <= bottom;
 
-				if(screens[i].Bounds.Right > right)
-					right = screens[i].Bounds.Right;
-			}
+            if (!onScreen)
+            {
+                if (f.Left < left)
+                    f.Left = left;
+                if (f.Top < top)
+                    f.Top = top;
+                if (f.Right > right)
+                    f.Left = right - f.Width;
+                if (f.Bottom > bottom)
+                    f.Top = bottom - f.Height;
+            }
 
-			//MW0LGE_21d >= and <= all over
-			if(f.Left >= left &&
-				f.Top >= top &&
-				f.Right <= right &&
-				f.Bottom <= bottom)
-            	on_screen = true;				
+            //         Screen[] screens = Screen.AllScreens;
+            //bool on_screen = false;
 
-			if(!on_screen)
-			{
-				//f.Location = new Point(0, 0);
+            //int left = 0, right = 0, top = 0, bottom = 0;
 
-				if(f.Left < left)
-					f.Left = left;
+            //for(int i=0; i<screens.Length; i++)
+            //{
+            //	if(screens[i].Bounds.Left < left)
+            //		left = screens[i].Bounds.Left;
 
-				if(f.Top < top)
-					f.Top = top;
+            //	if(screens[i].Bounds.Top < top)
+            //		top = screens[i].Bounds.Top;
 
-				if(f.Bottom > bottom)
-				{
-					if((f.Top - (f.Bottom-bottom)) >= top)
-						f.Top -= (f.Bottom-bottom);
-					else f.Top = 0;
-				}
+            //	if(screens[i].Bounds.Bottom > bottom)
+            //		bottom = screens[i].Bounds.Bottom;
 
-				if(f.Right > right)
-				{
-					if((f.Left - (f.Right-right)) >= left)
-						f.Left -= (f.Right-right);
-					else f.Left = 0;
-				}
-			}
-		}
+            //	if(screens[i].Bounds.Right > right)
+            //		right = screens[i].Bounds.Right;
+            //}
+
+            ////MW0LGE_21d >= and <= all over
+            //if(f.Left >= left &&
+            //	f.Top >= top &&
+            //	f.Right <= right &&
+            //	f.Bottom <= bottom)
+            //         	on_screen = true;				
+
+            //if(!on_screen)
+            //{
+            //	//f.Location = new Point(0, 0);
+
+            //	if(f.Left < left)
+            //		f.Left = left;
+
+            //	if(f.Top < top)
+            //		f.Top = top;
+
+            //	if(f.Bottom > bottom)
+            //	{
+            //		if((f.Top - (f.Bottom-bottom)) >= top)
+            //			f.Top -= (f.Bottom-bottom);
+            //		else f.Top = 0;
+            //	}
+
+            //	if(f.Right > right)
+            //	{
+            //		if((f.Left - (f.Right-right)) >= left)
+            //			f.Left -= (f.Right-right);
+            //		else f.Left = 0;
+            //	}
+            //}
+        }
 
 		public static void TabControlInsert(TabControl tc, TabPage tp, int index)
 		{
@@ -833,7 +880,7 @@ namespace Thetis
 		public static void DoubleBuffered(Control c, bool bEnabled)
         {
 			// MW0LGE_[2.9.0.6]
-			// not all controls (such as panels) have double buffered method
+			// not all controls (such as panels) have double buffered property
 			// try to use reflection, so we can keep the base panel
 			try
 			{
@@ -893,11 +940,11 @@ namespace Thetis
             //return uV (rms) from dBm (50 ohms)
             return Math.Sqrt(Math.Pow(10, dbm / 10) * 50 * 1e-3) * 1e6;
         }
-		public static string SMeterFromDBM(double dbm, bool bAbove30)
+		public static string SMeterFromDBM(double dbm, bool bAboveS9Frequency)
         {
             string sRet;
 
-            if (bAbove30)
+            if (bAboveS9Frequency)
             {
                 if (dbm <= -144.0f) sRet = "S 0";
                 else if (dbm > -144.0f & dbm <= -138.0f) sRet = "S 1";
@@ -941,18 +988,18 @@ namespace Thetis
             }
             return "    " + sRet;
         }
-        public static double GetSMeterUnits(double dbm, bool bAbove30)
+        public static double GetSMeterUnits(double dbm, bool bAboveS9Frequency)
         {
-            if (bAbove30)
+            if (bAboveS9Frequency)
                 return 9 + ((dbm + 93) / 6f); //MW0LGE_[2.9.0.7] fixed to 93
             else
                 return 9 + ((dbm + 73) / 6f);
         }
-        public static void SMeterFromDBM2(double dbm, bool bAbove30, out int S, out int over9dBm)
+        public static void SMeterFromDBM2(double dbm, bool bAboveS9Frequency, out int S, out int over9dBm)
         {
 			// version that returns via out parameters the S reading, and the dbm over reading
 
-            if (bAbove30)
+            if (bAboveS9Frequency)
             {
 				if (dbm <= -144.0f) { S = 0; over9dBm = 0; }
                 else if (dbm > -144.0f & dbm <= -138.0f) { S = 1; over9dBm = 0; }
@@ -1151,6 +1198,67 @@ namespace Thetis
             n |= n >> 8;
             n |= n >> 16;
             return n - (n >> 1);
+        }
+
+        public static bool IsIpv4Valid(string ip, int port)
+        {
+            IPAddress address;
+            if (!IPAddress.TryParse(ip, out address))
+            {
+                return false; // IP address format is not valid
+            }
+            // Ensure the address is an IPv4 address
+            if (address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+            {
+                return false; // Not an IPv4 address
+            }
+            if (port < 1 || port > 65535)
+            {
+                return false; // Port number is out of range
+            }
+
+			// Check if x.x.x.x format, where x can be 0>255
+            string pattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+			if (!Regex.IsMatch(ip, pattern)) return false;
+
+            return true; // IP and port are valid
+        }
+        public static string SerializeToBase64<T>(T obj)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Compress))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(gzipStream, obj);
+                }
+                byte[] compressedArray = memoryStream.ToArray();
+                return Convert.ToBase64String(compressedArray);
+            }
+        }
+        public static T DeserializeFromBase64<T>(string base64String)
+        {
+            byte[] compressedArray = Convert.FromBase64String(base64String);
+            using (MemoryStream memoryStream = new MemoryStream(compressedArray))
+            {
+                using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    return (T)formatter.Deserialize(gzipStream);
+                }
+            }
+        }
+        //
+        public static bool HasArg(string[] args, string arg)
+        {
+            if (args == null || args.Length < 1 || string.IsNullOrEmpty(arg)) return false;
+
+            //return args[0].Contains(arg, StringComparison.OrdinalIgnoreCase);
+            foreach (string s in args)
+            {
+                if (s.Contains(arg, StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
         }
     }
 }
