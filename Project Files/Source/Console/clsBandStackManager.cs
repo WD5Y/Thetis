@@ -357,11 +357,20 @@ namespace Thetis
 
             if (bCheckForFreqDupe)
             {
-                BandStackEntry possibleDupeBse = FindForFrequency(m_lastVisited.Frequency);
-                if(possibleDupeBse != null)
+                //BandStackEntry possibleDupeBse = FindEntriesForFrequency(m_lastVisited.Frequency);
+                //if(possibleDupeBse != null)
+                //{
+                //    int nDupe = IndexFromGUID(possibleDupeBse.GUID);
+                //    if (nDupe != -1 && nDupe != m_nCurrentlySelectedIndex) return bRet; // abort if there is an entry that has the same frequency at a different index
+                //}
+                List<BandStackEntry> entries = FindEntriesForFrequency(m_lastVisited.Frequency);
+                if (entries.Count > 0)
                 {
-                    int nDupe = IndexFromGUID(possibleDupeBse.GUID);
-                    if (nDupe != -1 && nDupe != m_nCurrentlySelectedIndex) return bRet; // abort if there is an entry that has the same frequency at a different index
+                    foreach (BandStackEntry entry in entries)
+                    {
+                        int index = IndexFromGUID(entry.GUID);
+                        if (index != -1 && index != m_nCurrentlySelectedIndex) return false;// abort if there is an entry that has the same frequency at a different index
+                    }
                 }
             }
 
@@ -564,18 +573,25 @@ namespace Thetis
                 return null;
         }
 
-        public BandStackEntry FindForFrequency(double frequency)
+        public List<BandStackEntry> FindEntriesForFrequency(double frequency)
         {
-            BandStackEntry bse = null;
+            //BandStackEntry bse = null;
             IEnumerable<BandStackEntry> data = from item in m_lstFilteredList
                                                where item.Frequency == frequency
                                                select item;
-            if (data.Count() == 1)
-            {
-                bse = data.First();
-            }
+            //if (data.Count() == 1)
+            //{
+            //    bse = data.First();
+            //}
 
-            return bse;
+            //return bse;
+
+            List<BandStackEntry> bse_list = new List<BandStackEntry>();
+            foreach(BandStackEntry bse in data)
+            {
+                bse_list.Add(bse.Copy(false));
+            }
+            return bse_list;
         }
         public List<BandStackEntry> FindForFrequencyRange(double frequencyLow, double frequencyHigh)
         {
@@ -1176,6 +1192,70 @@ namespace Thetis
                 default:
                     return BandType.GEN;
             }
+        }        
+        public static Band GetNearestBandForFrequency(double freq, bool ignoreGen, bool ignoreWWV)
+        {
+            Band nearestBand = default(Band);
+            double smallestDifference = double.MaxValue;
+
+            foreach (BandFrequencyData data in m_frequencyData)
+            {
+                if (ignoreGen && data.bandType == BandType.GEN)
+                {
+                    continue;
+                }
+                if (ignoreGen && data.band == Band.WWV)
+                {
+                    continue;
+                }
+
+                double low = data.low;
+                double high = data.high;
+
+                if (data.lowOnly)
+                {
+                    double difference = Math.Abs(freq - low);
+                    if (difference < smallestDifference)
+                    {
+                        smallestDifference = difference;
+                        nearestBand = data.band;
+                    }
+                }
+                else
+                {
+                    if (freq >= low && freq <= high)
+                    {
+                        return data.band;
+                    }
+                    else
+                    {
+                        double differenceToLow = Math.Abs(freq - low);
+                        double differenceToHigh = Math.Abs(freq - high);
+                        double difference = Math.Min(differenceToLow, differenceToHigh);
+
+                        if (difference < smallestDifference)
+                        {
+                            smallestDifference = difference;
+                            nearestBand = data.band;
+                        }
+                    }
+                }
+            }
+
+            return nearestBand;
+        }
+
+        public static BandType GetBandTypeForFrequency(double frequency)
+        {
+            BandType ret = BandType.GEN;
+            if (m_frequencyData == null || m_frequencyData.Count == 0) return ret;
+
+            List<BandFrequencyData> bfd_for_freq = m_frequencyData.Where(bfd => (bfd.lowOnly == true && bfd.low == frequency) 
+                                    || (bfd.lowOnly == false && (frequency >= bfd.low && frequency < bfd.high))).ToList();
+
+            if (bfd_for_freq.Count > 0) return bfd_for_freq.First().bandType;
+
+            return ret;
         }
         private static List<BandFrequencyData> frequencyData(FRSRegion region)
         {

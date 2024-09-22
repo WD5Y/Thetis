@@ -27,6 +27,7 @@
 //=================================================================
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -93,6 +94,7 @@ namespace Thetis
 				radFilter9.Enabled = false;
 				radFilter10.Enabled = false;
 			}
+			Common.RestoreForm(this, "FilterForm", false);
 		}
 
 		/// <summary>
@@ -499,6 +501,7 @@ namespace Thetis
             this.MaximizeBox = false;
             this.Name = "FilterForm";
             this.Text = "Filter Setup";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FilterForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.udLow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udHigh)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -699,17 +702,18 @@ namespace Thetis
 
 		private void txtName_LostFocus(object sender, System.EventArgs e)
 		{
-			preset[(int)dsp_mode].SetName(current_filter, txtName.Text);
+			string old_name = preset[(int)dsp_mode].GetName(current_filter);
+            preset[(int)dsp_mode].SetName(current_filter, txtName.Text);
 			GetFilterInfo();
 			if(!rx2)
 			{
 				if(console.RX1DSPMode == dsp_mode)
-					console.UpdateRX1FilterNames(current_filter);
+					console.UpdateRX1FilterNames(current_filter, old_name, txtName.Text);
 			}
 			else
 			{
 				if(console.RX2DSPMode == dsp_mode)
-					console.UpdateRX2FilterNames(current_filter);
+					console.UpdateRX2FilterNames(current_filter, old_name, txtName.Text);
 			}
 
 			switch(current_filter)
@@ -926,7 +930,10 @@ namespace Thetis
 			}
 			
 		}
-		
-		#endregion		
-	}
+        private void FilterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Common.SaveForm(this, "FilterForm");
+        }
+        #endregion
+    }
 }

@@ -59,6 +59,9 @@ namespace Thetis
         private readonly ConcurrentDictionary<Guid, Thread> _threads;
         private readonly ConcurrentDictionary<Guid, ManualResetEvent> _reset_events;
         private readonly ConcurrentDictionary<Guid, int> _timeouts;
+        private readonly ConcurrentDictionary<Guid, bool> _bypass_cache;
+
+        private string _version;
 
         public class StateEventArgs : EventArgs
         {
@@ -77,13 +80,15 @@ namespace Thetis
 
         public ImageFetcher()
         {
+            _version = "";
             _image_stores = new ConcurrentDictionary<Guid, ImageStore>();
             _threads = new ConcurrentDictionary<Guid, Thread>();
             _reset_events = new ConcurrentDictionary<Guid, ManualResetEvent>();
             _timeouts = new ConcurrentDictionary<Guid, int>();
-        }        
+            _bypass_cache = new ConcurrentDictionary<Guid, bool>();
+        }
 
-        public Guid RegisterURL(string url, int timeout_secs, int image_limit, bool file)
+        public Guid RegisterURL(string url, int timeout_secs, int image_limit, bool file, bool bypass_cache = false)
         {
             Guid id = Guid.NewGuid();
             ImageStore store = new ImageStore(image_limit);
@@ -93,7 +98,8 @@ namespace Thetis
             if (_image_stores.TryAdd(id, store) &&
                 _threads.TryAdd(id, thread) &&
                 _reset_events.TryAdd(id, reset_event) && 
-                _timeouts.TryAdd(id, timeout_secs))
+                _timeouts.TryAdd(id, timeout_secs) &&
+                _bypass_cache.TryAdd(id, bypass_cache))
             {
                 thread.Start();
                 return id;
@@ -129,6 +135,18 @@ namespace Thetis
                 }
             }
         }
+        public void UpdateBypassCache(Guid id, bool bypass)
+        {
+            if (_bypass_cache.TryGetValue(id, out bool current))
+            {
+                if (current != bypass)
+                {
+                    _bypass_cache[id] = bypass;
+                    if (_reset_events.TryGetValue(id, out ManualResetEvent reset_event))
+                        reset_event.Set();  // Signal the thread
+                }
+            }
+        }
         private void clearAllImages()
         {
             Debug.Print("!!!!!!! CLEAR ALL IMAGES");
@@ -148,6 +166,8 @@ namespace Thetis
 
             _reset_events.TryRemove(id, out ManualResetEvent reset_event);
             _threads.TryRemove(id, out Thread thread);
+            _timeouts.TryRemove(id, out int value);
+            _bypass_cache.TryRemove(id, out bool bypass);
             Debug.Print("!!!!!!! CLEANUP COMPLETE");
 
         }
@@ -176,12 +196,18 @@ namespace Thetis
             }
             Debug.Print("!!!!!!! SHUTDOWN COMPLETE");
         }
-
+        public string Version
+        {
+            get { return _version; }
+            set { _version = value; }
+        }
         private void fetch_images(string url, ImageStore store, ManualResetEvent reset_event, Guid id, bool file)
         {
             try
             {
+                if (!_timeouts.TryGetValue(id, out _) || !_bypass_cache.TryGetValue(id, out _)) return;
                 int timeout = _timeouts[id];
+                bool bypass_cache = _bypass_cache[id];
                 reset_event.Reset();
                 while (true)
                 {
@@ -191,7 +217,19 @@ namespace Thetis
                         StateChanged?.Invoke(this, new StateEventArgs(id, State.IDLE));
                         if (!file)
                         {
-                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                            string unique_url = url;
+                            if (bypass_cache) // essentially build a unique url each time
+                            {
+                                string request_id = Guid.NewGuid().ToString();
+                                if (url.Contains("?"))
+                                    unique_url = $"{url}&thetis_id={request_id}";
+                                else
+                                    unique_url = $"{url}?thetis_id={request_id}";
+                            }
+
+                            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(unique_url);
+                            request.UserAgent = "Thetis v" + _version;                            
+
                             request.Timeout = 2000;
                             request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
 
@@ -369,13 +407,17 @@ namespace Thetis
                     StateChanged?.Invoke(this, new StateEventArgs(id, State.WAITING));
                     if (reset_event.WaitOne(timeout * 1000)) // Convert seconds to milliseconds
                     {
+                        bool timout_exists = _timeouts.TryGetValue(id, out _);  // check we have not removed these
+                        bool bypass_exists = _bypass_cache.TryGetValue(id, out _);
+
                         //check if _timeout is the same, if so break. It will be different if we have signaled
                         //due to timeout change
-                        if (_timeouts[id] == timeout)
-                            break;  // Exit the loop if signaled to stop
+                        if (!timout_exists || !bypass_exists || _timeouts[id] == timeout)
+                            break;  // Exit the loop if signaled to stop, or items have been removed
                         else
                         {
                             timeout = _timeouts[id];
+                            bypass_cache = _bypass_cache[id];
                             reset_event.Reset();
                         }
                     }

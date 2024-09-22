@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Timers;
@@ -3813,7 +3814,8 @@ namespace Thetis
                     if (IsSetupFormNull)
                         //SetupForm = new Setup(this);
                         //Invoke(new MethodInvoker(SetupForm.Show));
-                        setupToolStripMenuItem_Click(this, EventArgs.Empty);
+                        //setupToolStripMenuItem_Click(this, EventArgs.Empty);
+                        setupToolStripMenuItem1_Click(this, EventArgs.Empty);
                     break;
 
                 case EButtonBarActions.eBBATUOnOff:                  // Auto ATU on/off
@@ -3939,7 +3941,7 @@ namespace Thetis
             // MW0LGE [2.10.1.0]
             bool bHaveModeDependentForm = modeDependentSettingsForm != null && !modeDependentSettingsForm.IsDisposed;
 
-            if (iscollapsed && !isexpanded)
+            if (_iscollapsed && !_isexpanded)
             {
                 // MW0LGE [2.9.0.7] in collapsed view, hide them all
                 //https://github.com/ramdor/Thetis-2.9.0/issues/90
@@ -4390,7 +4392,7 @@ namespace Thetis
             DataTable table = AndromedaSet.Tables["Menu Bar Settings"];
             int RowCount = table.Rows.Count;
 
-            if (this.showAndromedaButtonBar)
+            if (this._showAndromedaButtonBar)
             {
                 buttonNumber = currentButtonBarMenu * 8;            // point to 1st button
                                                                     // for each button: get its text; give it an opportunity to edit; and set highlight

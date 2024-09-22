@@ -44,18 +44,28 @@ namespace Thetis
         private string _id;
         private bool _container_minimises = true;
         private bool _is_enabled = true;
+        private bool _floating = false;
 
         public frmMeterDisplay(Console c, int rx)
         {
             InitializeComponent();
 
+            this.MinimumSize = new Size(ucMeter.MIN_CONTAINER_WIDTH, ucMeter.MIN_CONTAINER_HEIGHT);
+
             _id = System.Guid.NewGuid().ToString();
             _console = c;
             _rx = rx;
 
+            Common.DoubleBufferAll(this, true);
+
             _console.WindowStateChangedHandlers += OnWindowStateChanged;
 
             setTitle();
+        }
+        public bool Floating
+        {
+            get { return _floating; }
+            set { _floating = value; }
         }
         public bool FormEnabled
         {
@@ -69,10 +79,15 @@ namespace Thetis
         }
         private void OnWindowStateChanged(FormWindowState state)
         {
-            if (_container_minimises && state == FormWindowState.Minimized)
-                this.Hide();
-            else
-                if(_is_enabled) this.Show();
+            if (this.Disposing || this.IsDisposed) return;
+
+            if (_is_enabled && _floating && _container_minimises)
+            {
+                if (state == FormWindowState.Minimized)
+                    this.Hide();
+                else
+                    this.Show();
+            }
         }
         private void setTitle()
         {
@@ -99,7 +114,6 @@ namespace Thetis
                 this.Hide();
                 e.Cancel = true;
             }
-
             Common.SaveForm(this, "MeterDisplay_" + _id);
         }
 
