@@ -126,387 +126,11 @@
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>832, 17</value>
   </metadata>
-  <metadata name="btnDisplayZTB.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="btnDisplayZTB.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="btnDisplayZTB.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnDisplayZTB.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="btnDisplayZTB.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="btnDisplayZTB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="btnDisplayZTB.Location" type="System.Drawing.Point, System.Drawing">
-    <value>499, 271</value>
-  </data>
-  <data name="btnDisplayZTB.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 24</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="btnDisplayZTB.TabIndex" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
-  <data name="btnDisplayZTB.Text" xml:space="preserve">
-    <value>ZTB</value>
-  </data>
-  <data name="btnDisplayZTB.ToolTip" xml:space="preserve">
-    <value>Zoom to the band. CTUN needs to be enabled. If two RX's use Shift for RX2 (also needs CTUN).</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayZTB.Name" xml:space="preserve">
-    <value>btnDisplayZTB</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayZTB.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayZTB.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayZTB.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <metadata name="radDisplayZoom4x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="radDisplayZoom4x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="radDisplayZoom4x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
-    <value>Button</value>
-  </data>
-  <data name="radDisplayZoom4x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="radDisplayZoom4x.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="radDisplayZoom4x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="radDisplayZoom4x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="radDisplayZoom4x.Location" type="System.Drawing.Point, System.Drawing">
-    <value>663, 271</value>
-  </data>
-  <data name="radDisplayZoom4x.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 24</value>
-  </data>
-  <data name="radDisplayZoom4x.TabIndex" type="System.Int32, mscorlib">
-    <value>67</value>
-  </data>
-  <data name="radDisplayZoom4x.Text" xml:space="preserve">
-    <value>4x</value>
-  </data>
-  <data name="radDisplayZoom4x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
-  <data name="radDisplayZoom4x.ToolTip" xml:space="preserve">
-    <value>Zoom to 4x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom4x.Name" xml:space="preserve">
-    <value>radDisplayZoom4x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom4x.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom4x.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom4x.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <metadata name="radDisplayZoom2x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="radDisplayZoom2x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="radDisplayZoom2x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
-    <value>Button</value>
-  </data>
-  <data name="radDisplayZoom2x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="radDisplayZoom2x.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="radDisplayZoom2x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="radDisplayZoom2x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="radDisplayZoom2x.Location" type="System.Drawing.Point, System.Drawing">
-    <value>622, 271</value>
-  </data>
-  <data name="radDisplayZoom2x.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 24</value>
-  </data>
-  <data name="radDisplayZoom2x.TabIndex" type="System.Int32, mscorlib">
-    <value>66</value>
-  </data>
-  <data name="radDisplayZoom2x.Text" xml:space="preserve">
-    <value>2x</value>
-  </data>
-  <data name="radDisplayZoom2x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
-  <data name="radDisplayZoom2x.ToolTip" xml:space="preserve">
-    <value>Zoom to 2x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom2x.Name" xml:space="preserve">
-    <value>radDisplayZoom2x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom2x.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom2x.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom2x.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <metadata name="radDisplayZoom1x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="radDisplayZoom1x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="radDisplayZoom1x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
-    <value>Button</value>
-  </data>
-  <data name="radDisplayZoom1x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="radDisplayZoom1x.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="radDisplayZoom1x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="radDisplayZoom1x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="radDisplayZoom1x.Location" type="System.Drawing.Point, System.Drawing">
-    <value>581, 271</value>
-  </data>
-  <data name="radDisplayZoom1x.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 24</value>
-  </data>
-  <data name="radDisplayZoom1x.TabIndex" type="System.Int32, mscorlib">
-    <value>65</value>
-  </data>
-  <data name="radDisplayZoom1x.Text" xml:space="preserve">
-    <value>1x</value>
-  </data>
-  <data name="radDisplayZoom1x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
-  <data name="radDisplayZoom1x.ToolTip" xml:space="preserve">
-    <value>Zoom to 1x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom1x.Name" xml:space="preserve">
-    <value>radDisplayZoom1x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom1x.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom1x.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom1x.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <metadata name="radDisplayZoom05.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="radDisplayZoom05.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="radDisplayZoom05.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
-    <value>Button</value>
-  </data>
-  <data name="radDisplayZoom05.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="radDisplayZoom05.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="radDisplayZoom05.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="radDisplayZoom05.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="radDisplayZoom05.Location" type="System.Drawing.Point, System.Drawing">
-    <value>540, 271</value>
-  </data>
-  <data name="radDisplayZoom05.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 24</value>
-  </data>
-  <data name="radDisplayZoom05.TabIndex" type="System.Int32, mscorlib">
-    <value>64</value>
-  </data>
-  <data name="radDisplayZoom05.Text" xml:space="preserve">
-    <value>0.5x</value>
-  </data>
-  <data name="radDisplayZoom05.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
-  <data name="radDisplayZoom05.ToolTip" xml:space="preserve">
-    <value>Zoom to 0.5x</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom05.Name" xml:space="preserve">
-    <value>radDisplayZoom05</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom05.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom05.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;radDisplayZoom05.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <metadata name="ptbDisplayZoom.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="ptbDisplayZoom.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
-  </data>
-  <data name="ptbDisplayZoom.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbDisplayZoom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbDisplayZoom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>335, 271</value>
-  </data>
-  <data name="ptbDisplayZoom.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbDisplayZoom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 24</value>
-  </data>
-  <data name="ptbDisplayZoom.TabIndex" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
-  <data name="ptbDisplayZoom.ToolTip" xml:space="preserve">
-    <value>Extends/Contracts the displayed frequency width with the slider.</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayZoom.Name" xml:space="preserve">
-    <value>ptbDisplayZoom</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayZoom.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayZoom.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayZoom.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <metadata name="ptbDisplayPan.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="ptbDisplayPan.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
-  </data>
-  <data name="ptbDisplayPan.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbDisplayPan.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbDisplayPan.Location" type="System.Drawing.Point, System.Drawing">
-    <value>41, 271</value>
-  </data>
-  <data name="ptbDisplayPan.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbDisplayPan.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 24</value>
-  </data>
-  <data name="ptbDisplayPan.TabIndex" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="ptbDisplayPan.ToolTip" xml:space="preserve">
-    <value>Shifts the displayed frequency with the slider.</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayPan.Name" xml:space="preserve">
-    <value>ptbDisplayPan</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayPan.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayPan.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;ptbDisplayPan.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <metadata name="btnDisplayPanCenter.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="btnDisplayPanCenter.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
-  </data>
-  <data name="btnDisplayPanCenter.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
-    <value>Flat</value>
-  </data>
-  <data name="btnDisplayPanCenter.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
-  <data name="btnDisplayPanCenter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="btnDisplayPanCenter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="btnDisplayPanCenter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>245, 271</value>
-  </data>
-  <data name="btnDisplayPanCenter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 24</value>
-  </data>
-  <data name="btnDisplayPanCenter.TabIndex" type="System.Int32, mscorlib">
-    <value>55</value>
-  </data>
-  <data name="btnDisplayPanCenter.Text" xml:space="preserve">
-    <value>Center</value>
-  </data>
-  <data name="btnDisplayPanCenter.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
-  </data>
-  <data name="btnDisplayPanCenter.ToolTip" xml:space="preserve">
-    <value>Center the Pan control</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayPanCenter.Name" xml:space="preserve">
-    <value>btnDisplayPanCenter</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayPanCenter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayPanCenter.Parent" xml:space="preserve">
-    <value>panelDisplay</value>
-  </data>
-  <data name="&gt;&gt;btnDisplayPanCenter.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
   <data name="lblPAProfile.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lblPAProfile.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
@@ -519,6 +143,7 @@
   <data name="lblPAProfile.Size" type="System.Drawing.Size, System.Drawing">
     <value>197, 14</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lblPAProfile.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
   </data>
@@ -542,78 +167,6 @@
   </data>
   <data name="&gt;&gt;lblPAProfile.ZOrder" xml:space="preserve">
     <value>5</value>
-  </data>
-  <data name="ptbFilterShift.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbFilterShift.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbFilterShift.Location" type="System.Drawing.Point, System.Drawing">
-    <value>40, 135</value>
-  </data>
-  <data name="ptbFilterShift.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbFilterShift.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbFilterShift.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 24</value>
-  </data>
-  <data name="ptbFilterShift.TabIndex" type="System.Int32, mscorlib">
-    <value>108</value>
-  </data>
-  <data name="ptbFilterShift.ToolTip" xml:space="preserve">
-    <value>Shifts the filter up or down the band with the slider.</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterShift.Name" xml:space="preserve">
-    <value>ptbFilterShift</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterShift.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterShift.Parent" xml:space="preserve">
-    <value>panelFilter</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterShift.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="ptbFilterWidth.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbFilterWidth.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbFilterWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 105</value>
-  </data>
-  <data name="ptbFilterWidth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbFilterWidth.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbFilterWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 24</value>
-  </data>
-  <data name="ptbFilterWidth.TabIndex" type="System.Int32, mscorlib">
-    <value>114</value>
-  </data>
-  <data name="ptbFilterWidth.ToolTip" xml:space="preserve">
-    <value>Extends/Contracts the filter width with the slider.</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterWidth.Name" xml:space="preserve">
-    <value>ptbFilterWidth</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterWidth.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterWidth.Parent" xml:space="preserve">
-    <value>panelFilter</value>
-  </data>
-  <data name="&gt;&gt;ptbFilterWidth.ZOrder" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="btnFilterShiftReset.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -719,42 +272,6 @@
   </data>
   <data name="&gt;&gt;udFilterLow.ZOrder" xml:space="preserve">
     <value>5</value>
-  </data>
-  <data name="ptbRX2RF.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbRX2RF.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbRX2RF.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 24</value>
-  </data>
-  <data name="ptbRX2RF.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbRX2RF.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbRX2RF.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
-  </data>
-  <data name="ptbRX2RF.TabIndex" type="System.Int32, mscorlib">
-    <value>118</value>
-  </data>
-  <data name="ptbRX2RF.ToolTip" xml:space="preserve">
-    <value>AGC Max Gain - Operates similarly to traditional RF Gain. Right click AUTO based on noise floor</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2RF.Name" xml:space="preserve">
-    <value>ptbRX2RF</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2RF.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2RF.Parent" xml:space="preserve">
-    <value>panelRX2RF</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2RF.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="lblRX2RF.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -4458,6 +3975,54 @@
   <data name="&gt;&gt;comboVACSampleRate.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <metadata name="btnDisplayPanCenter.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="btnDisplayPanCenter.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="btnDisplayPanCenter.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnDisplayPanCenter.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="btnDisplayPanCenter.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnDisplayPanCenter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnDisplayPanCenter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>245, 271</value>
+  </data>
+  <data name="btnDisplayPanCenter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 24</value>
+  </data>
+  <data name="btnDisplayPanCenter.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="btnDisplayPanCenter.Text" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="btnDisplayPanCenter.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="btnDisplayPanCenter.ToolTip" xml:space="preserve">
+    <value>Center the Pan control</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayPanCenter.Name" xml:space="preserve">
+    <value>btnDisplayPanCenter</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayPanCenter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayPanCenter.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayPanCenter.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
   <data name="radModeAM.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
   </data>
@@ -6358,6 +5923,210 @@ CTRL + Right Click on any Band Button to add Band Stack.</value>
   <data name="&gt;&gt;radBand80.ZOrder" xml:space="preserve">
     <value>13</value>
   </data>
+  <metadata name="radDisplayZoom05.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="radDisplayZoom05.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="radDisplayZoom05.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
+    <value>Button</value>
+  </data>
+  <data name="radDisplayZoom05.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="radDisplayZoom05.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="radDisplayZoom05.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="radDisplayZoom05.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="radDisplayZoom05.Location" type="System.Drawing.Point, System.Drawing">
+    <value>540, 271</value>
+  </data>
+  <data name="radDisplayZoom05.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 24</value>
+  </data>
+  <data name="radDisplayZoom05.TabIndex" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
+  <data name="radDisplayZoom05.Text" xml:space="preserve">
+    <value>0.5x</value>
+  </data>
+  <data name="radDisplayZoom05.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="radDisplayZoom05.ToolTip" xml:space="preserve">
+    <value>Zoom to 0.5x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom05.Name" xml:space="preserve">
+    <value>radDisplayZoom05</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom05.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom05.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom05.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <metadata name="radDisplayZoom4x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="radDisplayZoom4x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="radDisplayZoom4x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
+    <value>Button</value>
+  </data>
+  <data name="radDisplayZoom4x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="radDisplayZoom4x.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="radDisplayZoom4x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="radDisplayZoom4x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="radDisplayZoom4x.Location" type="System.Drawing.Point, System.Drawing">
+    <value>663, 271</value>
+  </data>
+  <data name="radDisplayZoom4x.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 24</value>
+  </data>
+  <data name="radDisplayZoom4x.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="radDisplayZoom4x.Text" xml:space="preserve">
+    <value>4x</value>
+  </data>
+  <data name="radDisplayZoom4x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="radDisplayZoom4x.ToolTip" xml:space="preserve">
+    <value>Zoom to 4x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom4x.Name" xml:space="preserve">
+    <value>radDisplayZoom4x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom4x.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom4x.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom4x.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="radDisplayZoom2x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="radDisplayZoom2x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="radDisplayZoom2x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
+    <value>Button</value>
+  </data>
+  <data name="radDisplayZoom2x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="radDisplayZoom2x.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="radDisplayZoom2x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="radDisplayZoom2x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="radDisplayZoom2x.Location" type="System.Drawing.Point, System.Drawing">
+    <value>622, 271</value>
+  </data>
+  <data name="radDisplayZoom2x.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 24</value>
+  </data>
+  <data name="radDisplayZoom2x.TabIndex" type="System.Int32, mscorlib">
+    <value>66</value>
+  </data>
+  <data name="radDisplayZoom2x.Text" xml:space="preserve">
+    <value>2x</value>
+  </data>
+  <data name="radDisplayZoom2x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="radDisplayZoom2x.ToolTip" xml:space="preserve">
+    <value>Zoom to 2x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom2x.Name" xml:space="preserve">
+    <value>radDisplayZoom2x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom2x.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom2x.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom2x.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <metadata name="radDisplayZoom1x.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="radDisplayZoom1x.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="radDisplayZoom1x.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
+    <value>Button</value>
+  </data>
+  <data name="radDisplayZoom1x.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="radDisplayZoom1x.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="radDisplayZoom1x.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="radDisplayZoom1x.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="radDisplayZoom1x.Location" type="System.Drawing.Point, System.Drawing">
+    <value>581, 271</value>
+  </data>
+  <data name="radDisplayZoom1x.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 24</value>
+  </data>
+  <data name="radDisplayZoom1x.TabIndex" type="System.Int32, mscorlib">
+    <value>65</value>
+  </data>
+  <data name="radDisplayZoom1x.Text" xml:space="preserve">
+    <value>1x</value>
+  </data>
+  <data name="radDisplayZoom1x.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="radDisplayZoom1x.ToolTip" xml:space="preserve">
+    <value>Zoom to 1x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom1x.Name" xml:space="preserve">
+    <value>radDisplayZoom1x</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom1x.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom1x.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;radDisplayZoom1x.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
   <data name="chkMUT.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
   </data>
@@ -8202,6 +7971,159 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;chkQSK.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <metadata name="btnDisplayZTB.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="btnDisplayZTB.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="btnDisplayZTB.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
+  <data name="btnDisplayZTB.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="btnDisplayZTB.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="btnDisplayZTB.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="btnDisplayZTB.Location" type="System.Drawing.Point, System.Drawing">
+    <value>499, 271</value>
+  </data>
+  <data name="btnDisplayZTB.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 24</value>
+  </data>
+  <data name="btnDisplayZTB.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="btnDisplayZTB.Text" xml:space="preserve">
+    <value>ZTB</value>
+  </data>
+  <data name="btnDisplayZTB.ToolTip" xml:space="preserve">
+    <value>Zoom to the band. CTUN needs to be enabled. If two RX's use Shift for RX2 (also needs CTUN).</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayZTB.Name" xml:space="preserve">
+    <value>btnDisplayZTB</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayZTB.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ButtonTS, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayZTB.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;btnDisplayZTB.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ptbFilterShift.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbFilterShift.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbFilterShift.Location" type="System.Drawing.Point, System.Drawing">
+    <value>40, 135</value>
+  </data>
+  <data name="ptbFilterShift.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbFilterShift.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbFilterShift.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 24</value>
+  </data>
+  <data name="ptbFilterShift.TabIndex" type="System.Int32, mscorlib">
+    <value>108</value>
+  </data>
+  <data name="ptbFilterShift.ToolTip" xml:space="preserve">
+    <value>Shifts the filter up or down the band with the slider.</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterShift.Name" xml:space="preserve">
+    <value>ptbFilterShift</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterShift.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterShift.Parent" xml:space="preserve">
+    <value>panelFilter</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterShift.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ptbFilterWidth.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbFilterWidth.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbFilterWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 105</value>
+  </data>
+  <data name="ptbFilterWidth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbFilterWidth.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbFilterWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 24</value>
+  </data>
+  <data name="ptbFilterWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>114</value>
+  </data>
+  <data name="ptbFilterWidth.ToolTip" xml:space="preserve">
+    <value>Extends/Contracts the filter width with the slider.</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterWidth.Name" xml:space="preserve">
+    <value>ptbFilterWidth</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterWidth.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterWidth.Parent" xml:space="preserve">
+    <value>panelFilter</value>
+  </data>
+  <data name="&gt;&gt;ptbFilterWidth.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ptbRX2RF.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbRX2RF.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbRX2RF.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 24</value>
+  </data>
+  <data name="ptbRX2RF.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbRX2RF.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbRX2RF.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="ptbRX2RF.TabIndex" type="System.Int32, mscorlib">
+    <value>118</value>
+  </data>
+  <data name="ptbRX2RF.ToolTip" xml:space="preserve">
+    <value>AGC Max Gain - Operates similarly to traditional RF Gain. Right click AUTO based on noise floor</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2RF.Name" xml:space="preserve">
+    <value>ptbRX2RF</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2RF.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2RF.Parent" xml:space="preserve">
+    <value>panelRX2RF</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2RF.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="ptbCWSpeed.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
   </data>
@@ -8237,6 +8159,84 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;ptbCWSpeed.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <metadata name="ptbDisplayZoom.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ptbDisplayZoom.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
+  <data name="ptbDisplayZoom.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbDisplayZoom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbDisplayZoom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>335, 271</value>
+  </data>
+  <data name="ptbDisplayZoom.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbDisplayZoom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 24</value>
+  </data>
+  <data name="ptbDisplayZoom.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="ptbDisplayZoom.ToolTip" xml:space="preserve">
+    <value>Extends/Contracts the displayed frequency width with the slider.</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayZoom.Name" xml:space="preserve">
+    <value>ptbDisplayZoom</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayZoom.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayZoom.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayZoom.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <metadata name="ptbDisplayPan.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ptbDisplayPan.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
+  <data name="ptbDisplayPan.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbDisplayPan.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbDisplayPan.Location" type="System.Drawing.Point, System.Drawing">
+    <value>41, 271</value>
+  </data>
+  <data name="ptbDisplayPan.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbDisplayPan.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 24</value>
+  </data>
+  <data name="ptbDisplayPan.TabIndex" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="ptbDisplayPan.ToolTip" xml:space="preserve">
+    <value>Shifts the displayed frequency with the slider.</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayPan.Name" xml:space="preserve">
+    <value>ptbDisplayPan</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayPan.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayPan.Parent" xml:space="preserve">
+    <value>panelDisplay</value>
+  </data>
+  <data name="&gt;&gt;ptbDisplayPan.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="ptbPWR.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -8871,9 +8871,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="chkMNU.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="chkMNU.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
   <data name="chkMNU.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, -2</value>
   </data>
@@ -9089,17 +9086,29 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="TopControlstoolStripMenuItem.Text" xml:space="preserve">
     <value>Top Controls</value>
   </data>
+  <data name="RXTXGainToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>129, 20</value>
+  </data>
+  <data name="RXTXGainToolStripMenuItem.Text" xml:space="preserve">
+    <value>RX / TX Gain Settings</value>
+  </data>
   <data name="modeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 20</value>
   </data>
   <data name="modeToolStripMenuItem.Text" xml:space="preserve">
     <value>Mode</value>
   </data>
+  <data name="modeToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="bandToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 20</value>
   </data>
   <data name="bandToolStripMenuItem.Text" xml:space="preserve">
     <value>Band</value>
+  </data>
+  <data name="bandToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="NRToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>121, 22</value>
@@ -9507,7 +9516,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>0, 0</value>
   </data>
   <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1025, 24</value>
+    <value>1398, 24</value>
   </data>
   <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>136</value>
@@ -9528,40 +9537,76 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>17</value>
   </data>
   <data name="lSBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="lSBToolStripMenuItem.Text" xml:space="preserve">
+    <value>LSB</value>
   </data>
   <data name="uSBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="uSBToolStripMenuItem.Text" xml:space="preserve">
+    <value>USB</value>
   </data>
   <data name="dSBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="dSBToolStripMenuItem.Text" xml:space="preserve">
+    <value>DSB</value>
   </data>
   <data name="cWLToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="cWLToolStripMenuItem.Text" xml:space="preserve">
+    <value>CWL</value>
   </data>
   <data name="cWUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="cWUToolStripMenuItem.Text" xml:space="preserve">
+    <value>CWU</value>
   </data>
   <data name="fMToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="fMToolStripMenuItem.Text" xml:space="preserve">
+    <value>FM</value>
   </data>
   <data name="aMToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="aMToolStripMenuItem.Text" xml:space="preserve">
+    <value>AM</value>
   </data>
   <data name="sAMToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="sAMToolStripMenuItem.Text" xml:space="preserve">
+    <value>SAM</value>
   </data>
   <data name="sPECToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="sPECToolStripMenuItem.Text" xml:space="preserve">
+    <value>SPEC</value>
   </data>
   <data name="dIGLToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="dIGLToolStripMenuItem.Text" xml:space="preserve">
+    <value>DIGL</value>
   </data>
   <data name="dIGUToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="dIGUToolStripMenuItem.Text" xml:space="preserve">
+    <value>DIGU</value>
   </data>
   <data name="dRMToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>32, 19</value>
+    <value>101, 22</value>
+  </data>
+  <data name="dRMToolStripMenuItem.Text" xml:space="preserve">
+    <value>DRM</value>
   </data>
   <data name="lSBToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
     <value>101, 22</value>
@@ -9639,13 +9684,13 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>False</value>
   </data>
   <data name="includeBordersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>162, 22</value>
   </data>
   <data name="includeBordersToolStripMenuItem.Text" xml:space="preserve">
     <value>Include borders</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>159, 6</value>
   </data>
   <data name="x768ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>144, 22</value>
@@ -9678,7 +9723,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>1600 x 1200</value>
   </data>
   <data name="toolStripMenuItem_4by3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>162, 22</value>
   </data>
   <data name="toolStripMenuItem_4by3.Text" xml:space="preserve">
     <value>4:3</value>
@@ -9720,7 +9765,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>3840 x 2160</value>
   </data>
   <data name="toolStripMenuItem_16by9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>162, 22</value>
   </data>
   <data name="toolStripMenuItem_16by9.Text" xml:space="preserve">
     <value>16:9</value>
@@ -9762,7 +9807,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>3840 x 2400</value>
   </data>
   <data name="toolStripMenuItem_16by10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>162, 22</value>
   </data>
   <data name="toolStripMenuItem_16by10.Text" xml:space="preserve">
     <value>16:10</value>
@@ -9792,7 +9837,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>2160p</value>
   </data>
   <data name="youTubeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>162, 22</value>
   </data>
   <data name="youTubeToolStripMenuItem.Text" xml:space="preserve">
     <value>YouTube</value>
@@ -9828,13 +9873,13 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>False</value>
   </data>
   <data name="systemToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>138, 22</value>
   </data>
   <data name="systemToolStripMenuItem.Text" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="thetisOnlyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>138, 22</value>
   </data>
   <data name="thetisOnlyToolStripMenuItem.Text" xml:space="preserve">
     <value>Thetis Only</value>
@@ -9983,12 +10028,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="toolStripStatusLabelTXAnt.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="toolStripStatusLabel_Fill.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="toolStripStatusLabel_Fill.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 15</value>
-  </data>
   <data name="toolStripStatusLabelAndromedaMulti.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
@@ -10002,7 +10041,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>None</value>
   </data>
   <data name="toolStripStatusLabelAndromedaMulti.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 15</value>
+    <value>27, 15</value>
   </data>
   <data name="toolStripStatusLabelAndromedaMulti.Text" xml:space="preserve">
     <value>Multifunction</value>
@@ -10027,6 +10066,12 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   </data>
   <data name="toolStripStatusLabel_N1MM.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
+  </data>
+  <data name="toolStripStatusLabel_Fill.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="toolStripStatusLabel_Fill.Size" type="System.Drawing.Size, System.Drawing">
+    <value>221, 15</value>
   </data>
   <data name="toolStripStatusLabel_TCI.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -10185,54 +10230,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <metadata name="tmrAutoAGC.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1362, 17</value>
   </metadata>
-  <data name="picRX2Squelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="picRX2Squelch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>169, 685</value>
-  </data>
-  <data name="picRX2Squelch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 3</value>
-  </data>
-  <data name="picRX2Squelch.TabIndex" type="System.Int32, mscorlib">
-    <value>137</value>
-  </data>
-  <data name="&gt;&gt;picRX2Squelch.Name" xml:space="preserve">
-    <value>picRX2Squelch</value>
-  </data>
-  <data name="&gt;&gt;picRX2Squelch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;picRX2Squelch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;picRX2Squelch.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="picSquelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="picSquelch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>22, 568</value>
-  </data>
-  <data name="picSquelch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 3</value>
-  </data>
-  <data name="picSquelch.TabIndex" type="System.Int32, mscorlib">
-    <value>73</value>
-  </data>
-  <data name="&gt;&gt;picSquelch.Name" xml:space="preserve">
-    <value>picSquelch</value>
-  </data>
-  <data name="&gt;&gt;picSquelch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;picSquelch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;picSquelch.ZOrder" xml:space="preserve">
-    <value>37</value>
-  </data>
   <metadata name="panelDisplay.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -11264,39 +11261,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;panelRX2RF.ZOrder" xml:space="preserve">
     <value>11</value>
-  </data>
-  <data name="ptbRX2Squelch.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="ptbRX2Squelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
-  <data name="ptbRX2Squelch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>160, 665</value>
-  </data>
-  <data name="ptbRX2Squelch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbRX2Squelch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="ptbRX2Squelch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
-  </data>
-  <data name="ptbRX2Squelch.TabIndex" type="System.Int32, mscorlib">
-    <value>132</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2Squelch.Name" xml:space="preserve">
-    <value>ptbRX2Squelch</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2Squelch.Type" xml:space="preserve">
-    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2Squelch.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;ptbRX2Squelch.ZOrder" xml:space="preserve">
-    <value>14</value>
   </data>
   <data name="panelRX2DSP.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -13368,9 +13332,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="lblRF3.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="lblRF3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
   <data name="lblRF3.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -14826,9 +14787,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="lblAF3.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="lblAF3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
-  </data>
   <data name="lblAF3.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
@@ -14927,9 +14885,6 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   </data>
   <data name="lblTune2.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
-  </data>
-  <data name="lblTune2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Off</value>
   </data>
   <data name="lblTune2.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -17550,6 +17505,87 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;panelAndromedaMisc.ZOrder" xml:space="preserve">
     <value>55</value>
   </data>
+  <data name="picRX2Squelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="picRX2Squelch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 685</value>
+  </data>
+  <data name="picRX2Squelch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 3</value>
+  </data>
+  <data name="picRX2Squelch.TabIndex" type="System.Int32, mscorlib">
+    <value>137</value>
+  </data>
+  <data name="&gt;&gt;picRX2Squelch.Name" xml:space="preserve">
+    <value>picRX2Squelch</value>
+  </data>
+  <data name="&gt;&gt;picRX2Squelch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;picRX2Squelch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;picRX2Squelch.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="ptbRX2Squelch.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
+  </data>
+  <data name="ptbRX2Squelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="ptbRX2Squelch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 665</value>
+  </data>
+  <data name="ptbRX2Squelch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbRX2Squelch.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="ptbRX2Squelch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="ptbRX2Squelch.TabIndex" type="System.Int32, mscorlib">
+    <value>132</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2Squelch.Name" xml:space="preserve">
+    <value>ptbRX2Squelch</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2Squelch.Type" xml:space="preserve">
+    <value>Thetis.PrettyTrackBar, Thetis, Version=2.10.3.6, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2Squelch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ptbRX2Squelch.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="picSquelch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="picSquelch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>22, 568</value>
+  </data>
+  <data name="picSquelch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 3</value>
+  </data>
+  <data name="picSquelch.TabIndex" type="System.Int32, mscorlib">
+    <value>73</value>
+  </data>
+  <data name="&gt;&gt;picSquelch.Name" xml:space="preserve">
+    <value>picSquelch</value>
+  </data>
+  <data name="&gt;&gt;picSquelch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;picSquelch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;picSquelch.ZOrder" xml:space="preserve">
+    <value>37</value>
+  </data>
   <data name="ptbSquelch.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
   </data>
@@ -18792,16 +18828,16 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;toolStripStatusLabelAndromedaMulti.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel_Fill.Name" xml:space="preserve">
-    <value>toolStripStatusLabel_Fill</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel_Fill.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;toolStripStatusLabel_N1MM.Name" xml:space="preserve">
     <value>toolStripStatusLabel_N1MM</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel_N1MM.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel_Fill.Name" xml:space="preserve">
+    <value>toolStripStatusLabel_Fill</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel_Fill.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel_TCI.Name" xml:space="preserve">
@@ -18857,6 +18893,12 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   </data>
   <data name="&gt;&gt;tmrAutoAGC.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RXTXGainToolStripMenuItem.Name" xml:space="preserve">
+    <value>RXTXGainToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;RXTXGainToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Console</value>
