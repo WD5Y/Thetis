@@ -42649,31 +42649,20 @@ namespace Thetis
                 comboRX2MeterMode_SelectedIndexChanged(this, EventArgs.Empty);
                 comboMeterTXMode_SelectedIndexChanged(this, EventArgs.Empty);
             }
-            //wd5y
-
-            if (this._showAndromedaButtonBar)
-            {
-                statusStripMain.Show();
-                minWidth = panelButtonBar.Width;
-                minHeight += panelButtonBar.Height;
-                minHeight += statusStripMain.Height;
-            }
-            else
-            {
-                statusStripMain.Hide();
-                if (this.m_bShowBandControls)
+            
+            if (this.m_bShowBandControls)
                 {
                     minWidth = Math.Max(minWidth, radBand160.Width * 14 + this.Width - this.ClientSize.Width);
                     minHeight += 5 + radBand160.Height;
                 }
 
-                if (this.m_bShowModeControls)
+            if (this.m_bShowModeControls)
                 {
                     minWidth = Math.Max(minWidth, radModeLSB.Width * 12 + this.Width - this.ClientSize.Width);
                     minHeight += 5 + radModeLSB.Height;
                 }
-            }
-        
+            //wd5y
+
             this.MinimumSize = new Size(minWidth, minHeight);
 
             panelPower.Hide();
@@ -43190,7 +43179,6 @@ namespace Thetis
 
             if (_showAndromedaButtonBar)
             {
-                height -= statusStripMain.Height;
                 height -= panelButtonBar.Height;
             }
             else
@@ -43201,6 +43189,11 @@ namespace Thetis
                 if (this.m_bShowModeControls)
                     height -= radModeLSB.Height;
             }
+
+            //wd5y
+            height -= statusStripMain.Height;
+            statusStripMain.Show();
+            //wd5y
 
             panelDisplay.Size = new Size(this.ClientSize.Width, height);
 
