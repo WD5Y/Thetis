@@ -1,12 +1,55 @@
 **UPDATE: The CW issue has been resolved for Protocol 2. It requires a firmware update and this modified version of Thetis. Please see the [ApacheLab community forums here](https://community.apache-labs.com/viewtopic.php?f=32&t=4972)**
 
-**Note: You can revisit these release notes by clicking the button in the setup form within the General -> H/W Select tab.**
+**Note: You can revisit these release notes by using the button inside the About box**
 
 Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/issues/new/choose).
 
 ## Join us on Discord for active test builds and much more : [Click Here](https://discord.gg/6fHCRKnDc9)
 
-## v2.10.3.6 Change Log (rc4)(wip)
+## v2.10.3.7 Change Log
+- [add] added OE3IDE Connectors and Tools link to the about box links
+- [add] manuals added to about box links/manuals
+- [add] new auto attenuate TX when PS is off options in Setup->Ant/Filters->Antenna
+- [add] new auto attenuate RX options in Setup->General->Options-1
+- [add] Discord integration, let others know when you are on air using the Discord button box. Get scrolling text for #general and #thetis-bot. Config in Setup->Networking->Discord
+- [add] Backup prune implemented GFS (grandfather, father son). Check to enable in the DBMan form. Tool tip explains all
+- [add] font colour added to button boxes (except for antenna box)
+- [add] click colour added to button boxes (default orange)
+- [add] warning shown in Linearity form if SetPk is different to that expected for the hardware
+- [change] moved release notes button from setup to the about box
+- [change] skin images are resized to button/panel/slider etc instead of relying on tile property
+- [change] button clicks are ignored in button boxes that are faded
+- [change] nf_1 and nf_2 has become nf, and will read from the trx container it is in (noise floor)
+- [fix] variables that have name with _double now consider %precis=N%
+- [fix] resolved issue where redraw of console controls became very slow after 8thOct Windows update
+- [fix] button boxes filter/antenna would not save columns correctly
+- [fix] fade on rx and fade on tx fixed for button boxes
+- [fix] when in Tx rx1, selecting a bandstack entry will not updated it or attempt to change to it
+- [fix] mox & ping tot now work for times greater than 59 seconds
+- [fix] text overlay will now retrieve rx1 and rx2 data correctly
+- [fix] setup dropdown menu will show if window doesn't have focus and setup is clicked
+- [fix] single cal retries up to 5 times if feedback levels are not suitable. Fixes issue where it would need to be clicked multiple times if tx-att was not where it needed to be
+- [fix] fixed issues when serialising an object out to a string to be stored in the database. Resolves missing memories for Diversity
+
+## v2.10.3.6 Main New Features
+- database manager
+- many new meter items, including rotator, band/filter/mode/antenna button boxes, text overlay and led indicator, much much more
+- vfo meter item control now has user interactive elements
+- new multimeter/data IO system
+- some legacy UI items can be removed. This will be extended in the future
+- improvements to NR2 including trained machine data
+- coordinate system for multimeters to align things easier
+- kenwood broadcast data options for cat1-4/tcpip cat
+- autostart applications
+- diversity memories
+- additional midi and cat options/commands
+- fn keys for cwx, including options to not need window focus
+- cmASIO, including P1 & P2 support, for low latency audio
+- an about box finally arrives
+- endless bugs fixed and improvements throughout
+- lots more, see full change log below
+
+## v2.10.3.6 Change Log
 - [add] total re-work of database management. There is now a database manager. I advise you to watch video : https://youtu.be/pwe3bd-tkGY
 - [add] rotator can now be stopped. Hover mouse over arrow pivot point to see red circle. Click in circle and STOP will be sent. Note: reset the pstRotator commands if you are already using before this update
 - [add] cache bypass option added to web image meter item
@@ -66,8 +109,20 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [add] -help command line option
 - [add] option to auto turn off the radio when DB manager is requested to help users that have the power button unavailable. (collapsed view, no top tools and use autostart)
 - [add] shift left click on SPLIT in the vfo will toggle QSPLIT, only when rx2 is off
+- [add] hold shift when clicking setup from the menu strip to show setup. Especially useful if one extra mouse click is too much for you
+- [add] support for tci msg line_out_start:0;  line_out_stop:0;    which have been repurposed to control vac1 on/off, support for tci msg line_out_start:1;  line_out_stop:1;   which have been repurposed to control  vac2 on/off
+- [add] show container on rx/tx options
+- [add] lock container to prevent removal, and to prevent add/remove of items. You can still adjust items
+- [add] dark mode option added to BsdWorld urls in Web Image item
+- [add] use command line option -cmasioconfig to add a new cmasio tab to audio setting. Remove old cmasio settings from the registry if you want to use this feature as they have moved. See notes in the tab
+- [add] option in led indicator to stop tx if conditions met
+- [add] mmio variable now use %precis=N% in text overlay
+- [add] about box. It will also check GitHub for updated versions
+- [add] cmASIO now supports Protocol 1. Note: performance may not match that of the Protocol 2 implementation
+- [change] when using [extended] Thetis will now allow tx anywhere. It will select the nearest band to the frequency you have selected and use that band info for bpf/lpfs. This will now permit power output on 8m for example. If you use this feature be aware of the out of band transmission possibilities and potential issues for the hardware
 - [change] meter container borders have been reduced
 - [change] importing a db with meter containers will no longer clear existing ones, they will be added if possible
+- [change] containers no longer store/convert all skin meter images, only the ones required for that specific container. Considerable memory savings
 - [change] filter setup form now stores/recalls location
 - [change] Button actions processed more simply when G2 enabled (no shift action etc) - G8NJJ
 - [change] rotator meter item now can be shown in az/ele/both mode. Requires you to remove-add the rotator if you were using it
@@ -86,6 +141,9 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [change] variable cw edge length has been disabled in the Dsp-CW settings (only utilised by the G2). This is now fixed at 9ms for the DL1YCF CW edge
 - [change] right axis on history chart is not shown if not used
 - [change] -help text adjusted for the new -dbid flag
+- [change] spectrum and grid directX renderers now use directX clip to limit draw items such as line. Previously LOTS of IF statements were used. For a 2000 pixel wide spectrum, at 60fps, it is a saving of over 720,000 IF statements per second, per receiver, and has been replaced by a single directX clip statement. It also fixes the line that used to draw at the bottom of the spectrum if data was below the low limit, and also fixes some rx2 items moving into the rx1 space
+- [change] bypass vac will only get applied in PollPTT loop if needed (for both mic and vox)
+- [change] 4char is not updated when IP/Port is changed
 - [fix] fix issue where you could not remove tx profile entries if they only had case changes in their name, such as ABc and abc
 - [fix] import of container locations now works when importing a database
 - [fix] fixed issue where a meter container would re-appear if console was minimised and then restored and that container had been docked at some point
@@ -128,6 +186,11 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [fix] backup info stored in associated json is removed with backup is removed. There may be some orphan backup json files left behind from before this fix
 - [fix] when alex is turned off then on antenna config is now sent to hardware
 - [fix] when calibrating level, ctun is turned off if on
+- [fix] when dragging docked meter containers the user control area of the console form would show unpainted areas. The area covered by the container is now instantly repainted when the container moved/resized/hidden
+- [fix] range limits for spectrum and waterfall high/low values. High now cant go below low, and low cant go above high
+- [fix] port limit ranges for tci/cat/n1mm/mmio, of 0-65535
+- [fix] a ToT/led indicator that terminates mox will not key back up instantly if using external keying hardware. It will require PTT to be released first. Fixes #518
+- [fix] 1x1 pixel, or very small images in the web image control would cause thetis to crash/shutdown, fixed
 
 ## v2.10.3.5 Change Log
 - [add] midi device DJ2GO2 Touch MIDI is now handled uniquely, and main sliders will have values reversed

@@ -75,6 +75,8 @@ namespace Thetis
             _border = true;
             _no_controls = false;
             _enabled = true;
+            _show_on_rx = true;
+            _show_on_tx = true;
             _container_minimises = true;
             _notes = "";
 
@@ -128,7 +130,10 @@ namespace Thetis
         private string _id;
         private bool _border;
         private bool _no_controls;
+        private bool _locked;
         private bool _enabled;
+        private bool _show_on_rx;
+        private bool _show_on_tx;
         private bool _container_minimises;
         private string _notes;
         private int _height;
@@ -188,7 +193,15 @@ namespace Thetis
             }
             _dragging = true;
         }
-
+        public void Repaint()
+        {
+            if (_floating) return;
+            if (this.Parent != null)
+            {
+                this.Parent.Invalidate(this.Bounds, true);
+                this.Parent.Update();
+            }
+        }
         private void pnlBar_MouseLeave(object sender, EventArgs e)
         {
             uiComponentMouseLeave();
@@ -223,7 +236,10 @@ namespace Thetis
 
                     if(newPos != Parent.Location) Parent.Location = newPos;
 
-                    showToolTip($"{newPos.X}, {newPos.Y}", this.Parent);
+                    if (this.Parent != null)
+                    {
+                        showToolTip($"{newPos.X}, {newPos.Y}", this.Parent);
+                    }
                 }
                 else
                 {
@@ -239,7 +255,11 @@ namespace Thetis
                     if (y > Parent.ClientSize.Height - this.Height) y = Parent.ClientSize.Height - this.Height;
 
                     Point newPos = new Point(x, y);
-                    if (newPos != this.Location) this.Location = newPos;
+                    if (newPos != this.Location)
+                    {
+                        this.Location = newPos;
+                        Repaint();
+                    }
 
                     showToolTip($"{newPos.X}, {newPos.Y}", this);
                 }
@@ -379,7 +399,12 @@ namespace Thetis
                 resize(x, y);
 
                 if (_floating)
-                    showToolTip($"{this.Parent.Size.Width}, {this.Parent.Size.Height}", this.Parent, true);
+                {
+                    if (this.Parent != null)
+                    {
+                        showToolTip($"{this.Parent.Size.Width}, {this.Parent.Size.Height}", this.Parent, true);
+                    }
+                }
                 else
                     showToolTip($"{this.Size.Width}, {this.Size.Height}", this, true);
             }
@@ -395,7 +420,10 @@ namespace Thetis
             {
                 Parent.ClientSize = new Size(x, y);
                 Parent.PerformLayout();
-                (bool was_relocated, bool was_shrunk) = Common.ForceFormOnScreen((Form)this.Parent, shrink);
+                if (this.Parent != null)
+                {
+                    (bool was_relocated, bool was_shrunk) = Common.ForceFormOnScreen((Form)this.Parent, shrink);
+                }
             }
             else
             {
@@ -403,9 +431,13 @@ namespace Thetis
                 if (this.Top + y > Parent.ClientSize.Height) y = Parent.ClientSize.Height - this.Top;
 
                 Size newSize = new Size(x, y);
-                if (newSize != this.Size) this.Size = newSize;
-                this.PerformLayout();
-            }
+                if (newSize != this.Size)
+                {
+                    this.Size = newSize;
+                    this.PerformLayout();
+                    Repaint();
+                }
+            }            
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public Point DockedLocation
@@ -433,10 +465,23 @@ namespace Thetis
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public void RestoreLocation()
         {
-            if(_dockedLocation != this.Location) this.Location = _dockedLocation;
+            bool moved = false;
+            if (_dockedLocation != this.Location)
+            {
+                this.Location = _dockedLocation;
+                moved = true;
+            }
             //this.Location = new Point(_dockedLocation.X + _delta.X, _dockedLocation.Y + _delta.Y);
-            if(_dockedSize != this.Size) this.Size = _dockedSize;
-            this.PerformLayout();
+            if (_dockedSize != this.Size)
+            {
+                this.Size = _dockedSize;
+                moved = true;
+            }
+            if (moved)
+            {
+                this.PerformLayout();
+                Repaint();
+            }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool Floating
@@ -613,7 +658,10 @@ namespace Thetis
 
                     if(newPos != Parent.Location) Parent.Location = newPos;
 
-                    showToolTip($"{newPos.X}, {newPos.Y}", this.Parent);
+                    if (this.Parent != null)
+                    {
+                        showToolTip($"{newPos.X}, {newPos.Y}", this.Parent);
+                    }
                 }
                 else
                 {
@@ -632,7 +680,11 @@ namespace Thetis
                     if (y > Parent.ClientSize.Height - this.Height) y = Parent.ClientSize.Height - this.Height;
 
                     Point newPos = new Point(x, y);
-                    if(newPos != this.Location) this.Location = newPos;
+                    if (newPos != this.Location)
+                    {
+                        this.Location = newPos;
+                        Repaint();
+                    }
 
                     showToolTip($"{newPos.X}, {newPos.Y}", this);
                 }
@@ -695,6 +747,15 @@ namespace Thetis
             }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public bool Locked
+        {
+            get { return _locked; }
+            set
+            {
+                _locked = value;
+            }
+        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool MeterEnabled
         {
             get { return _enabled; }
@@ -703,6 +764,25 @@ namespace Thetis
                 _enabled = value;                
             }
         }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ShowOnRX
+        {
+            get { return _show_on_rx; }
+            set
+            {
+                _show_on_rx = value;
+            }
+        }
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        public bool ShowOnTX
+        {
+            get { return _show_on_tx; }
+            set
+            {
+                _show_on_tx = value;
+            }
+        }
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool ContainerMinimises
         {
@@ -813,10 +893,13 @@ namespace Thetis
         {
             if (_floating)
             {
-                frmMeterDisplay md = this.Parent as frmMeterDisplay;
-                if (md != null)
+                if (this.Parent != null)
                 {
-                    md.TopMost = _pinOnTop;
+                    frmMeterDisplay md = this.Parent as frmMeterDisplay;
+                    if (md != null)
+                    {
+                        md.TopMost = _pinOnTop;
+                    }
                 }
             }
         }
@@ -824,10 +907,15 @@ namespace Thetis
         {
             get
             {
-                frmMeterDisplay md = this.Parent as frmMeterDisplay;
-                if (md != null)
+                if (this.Parent != null)
                 {
-                    return md.TopMost;
+                    frmMeterDisplay md = this.Parent as frmMeterDisplay;
+                    if (md != null)
+                    {
+                        return md.TopMost;
+                    }
+                    else
+                        return false;
                 }
                 else
                     return false;
@@ -853,7 +941,10 @@ namespace Thetis
                 MeterEnabled.ToString() + "|" +
                 Notes + "|" +
                 ContainerMinimises.ToString().ToLower() + "|" +
-                AutoHeight.ToString().ToLower();
+                AutoHeight.ToString().ToLower() + "|" +
+                ShowOnRX.ToString().ToLower() + "|" +
+                ShowOnTX.ToString().ToLower() + "|" +
+                Locked.ToString().ToLower();
         }
         public bool TryParse(string str)
         {
@@ -866,11 +957,14 @@ namespace Thetis
             bool enabled = true;
             bool minimises = true;
             bool auto_height = false;
+            bool show_on_rx = true;
+            bool show_on_tx = true;
+            bool locked = false;
 
             if (str != "")
             {
                 string[] tmp = str.Split('|');
-                if(tmp.Length >= 13 && tmp.Length <= 18)
+                if(tmp.Length >= 13)// && tmp.Length <= 21)  //[2.10.3.6_rc4] MW0LGE removed so that clients going forward can use older data as long as 13 entries exist
                 {
                     bOk = tmp[0] != "";
                     if (bOk) ID = tmp[0];
@@ -940,6 +1034,20 @@ namespace Thetis
                     {
                         bOk = bool.TryParse(tmp[17], out auto_height);
                         if (bOk) AutoHeight = auto_height;
+                    }
+
+                    if (bOk && tmp.Length > 18) // also showonrx and showontx for [2.10.3.6]
+                    {
+                        bOk = bool.TryParse(tmp[18], out show_on_rx);
+                        if (bOk) ShowOnRX = show_on_rx;
+                        bOk = bool.TryParse(tmp[19], out show_on_tx);
+                        if (bOk) ShowOnTX = show_on_tx;
+                    }
+
+                    if(bOk && tmp.Length > 20) // also for [2.10.3.6]
+                    {
+                        bOk = bool.TryParse(tmp[20], out locked);
+                        if (bOk) Locked = locked;
                     }
                 }
             }

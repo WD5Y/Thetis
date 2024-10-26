@@ -41,7 +41,6 @@ namespace Thetis
 {
     using RawInput_dll;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Data;
     using System.Diagnostics;
@@ -62,17 +61,19 @@ namespace Thetis
     using System.Windows.Forms;
     using System.Xml.Linq;
     using System.Collections.Concurrent;
-    using System.Security.Policy;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     public partial class Console : Form
     {
-        public const int MAX_FPS = 144;
+        public const bool CHECK_DEV_VERSION = true; // this will check github for dev versions, set to false when performing a release
+
+        public const int MAX_FPS = 360;
 
         #region Variable Declarations
         // ======================================================
         // Variable Declarations
         // ======================================================
+        private frmAbout _frmAbout;
+
         static private List<PrivateFontCollection> _fontCollections;
         Font LEDLFont = null;
         Font LEDSFont = null;
@@ -98,6 +99,7 @@ namespace Thetis
         private Thread rx2_sql_update_thread;				// polls the RX2 signal strength
         private Thread vox_update_thread;					// polls the mic input
         private Thread noise_gate_update_thread;			// polls the mic input during TX
+        private Thread _overload_thread;
         public bool _pause_DisplayThread = true;             // MW0LGE_21d initally paused
         private bool calibration_running = false;
         private bool displaydidit = false;
@@ -522,6 +524,9 @@ namespace Thetis
 
         private bool _restart;
 
+        private bool _check_error_log = true;
+        private long _error_log_initial_size = -1;
+
         public CWX CWXForm
         {
             // implemented so that the creation of the form happens in a single place
@@ -652,10 +657,16 @@ namespace Thetis
             AppDataPath = app_data_path;
             //AppDataPath has been set at this point
 
+            if (_check_error_log)
+            {
+                //store size of ErrorLog.txt at this point, and compare at shutdown. If different display a msg
+                _error_log_initial_size = getErrorLogSize();
+            }
+
             if (!Directory.Exists(AppDataPath))
                 Directory.CreateDirectory(AppDataPath);
 
-            Splash.ShowSplashScreen();							// Start splash screen
+            Splash.ShowSplashScreen(Common.GetVerNum(true, true));							// Start splash screen with version number
 
             // PA init thread - from G7KLJ changes - done as early as possible
             Splash.SetStatus("Initializing PortAudio");			// Set progress point as early as possible
@@ -740,7 +751,7 @@ namespace Thetis
             bool ok = DBMan.LoadDB(args, out string broken_folder);
             if (!ok)
             {
-                if(string.IsNullOrEmpty(broken_folder))
+                if (string.IsNullOrEmpty(broken_folder))
                     MessageBox.Show($"There was an issue loading the database.", "Database Issue", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
                 else
                     MessageBox.Show($"There was an issue loading the database. The database has been moved to [{AppDataPath}DB\\broken\\{broken_folder}].", "Database Issue", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
@@ -751,7 +762,7 @@ namespace Thetis
             }
 
             Splash.SetStatus("Initializing Hardware");			// Set progress point
-            InitCTCSS();            
+            InitCTCSS();
 
             //TODO !!!!!!!!!!!!!!
             bool RX2Enabled = false;
@@ -808,12 +819,6 @@ namespace Thetis
 
             CWFWKeyer = true;
 
-            //// Activates double buffering
-            //this.SetStyle(ControlStyles.UserPaint |
-            //   ControlStyles.AllPaintingInWmPaint |
-            //   ControlStyles.OptimizedDoubleBuffer, true);
-            //this.UpdateStyles();
-
             Common.DoubleBufferAll(this, true);
 
             // update titlebar
@@ -847,6 +852,9 @@ namespace Thetis
             if (_portAudioIssue)
                 MessageBox.Show("There was an issue initialising PortAudio", "PortAudio", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
 
+            //            
+            if (!IsSetupFormNull) SetupForm.SetupCMAsio(_portAudioIssue, Common.HasArg(args, "-cmasioconfig"));
+
             // still waiting cpu
             if (!_getInstanceNameComplete && instanceNameThread != null && instanceNameThread.IsAlive)
             {
@@ -874,9 +882,6 @@ namespace Thetis
 
             Common.FadeIn(this);
 
-            // fix flicker with panels/groups MW0LGE_[2.9.0.6]
-            Common.DoubleBuffered(grpMultimeter, true);
-            //
             txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             txtVFOBFreq_LostFocus(this, EventArgs.Empty);
             chkSquelch_CheckStateChanged(this, EventArgs.Empty);
@@ -971,7 +976,7 @@ namespace Thetis
                 {
                     Name = "Run Display Thread",
                     Priority = m_tpDisplayThreadPriority, //MW0LGE now defaulted with m_tpDisplayThreadPriority, and updated by setupform
-                    IsBackground = false//true MW0LGE_21b rundisplay now stops nicely, ensuring dx gpu resources are released
+                    IsBackground = false//true MW0LGE_21b rundisplay now stops nicely, ensuring dx gpu resources are released                    
                 };
                 draw_display_thread.SetApartmentState(ApartmentState.STA);
                 draw_display_thread.Start();
@@ -1056,7 +1061,7 @@ namespace Thetis
                     m_frmBandStack2.IgnoreDupeHandlers += OnIgnoreDupes;
                     m_frmBandStack2.HideOnSelectHandlers += OnHideOnSelect;
                     m_frmBandStack2.ShowInSpectrumHandlers += OnShowInSpectrum;
-                    m_frmBandStack2.InitForm(); // perform init after all handlers attached
+                    m_frmBandStack2.InitForm(this); // perform init after all handlers attached
                 }
                 return m_frmBandStack2;
             }
@@ -1133,6 +1138,24 @@ namespace Thetis
                 _frmShutDownForm.Close(); // last thing to get rid of
                 _frmShutDownForm.Dispose();
                 shutdownLogStringToPath("After _frmShutDownForm.Dispose()");
+            }
+
+            if (_check_error_log)
+            {
+                shutdownLogStringToPath("Before error log size check");
+                //check error log size
+                long new_szie = getErrorLogSize();
+                if (new_szie != _error_log_initial_size)
+                {
+                    //log file has changed
+                    MessageBox.Show("The ErrorLog.txt has been updated during this sesson.\n\n" +
+                    "Please email it to MW0LGE at : [mw0lge@grange-lane.co.uk].\n\n" +
+                    "It is located in this folder : [" + AppDataPath + "].",
+                    "Error Log Change",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                }
+                shutdownLogStringToPath("After error log size check");
             }
 
             if (disposing)
@@ -1244,38 +1267,9 @@ namespace Thetis
                 Application.EnableVisualStyles();
                 Application.DoEvents();
 
-                // check for timeout bypass
-                bool bBypass = false;
-                foreach (string s in args)
-                {
-                    if (s.StartsWith("-timeoutBypass:"))
-                    {
-                        string sKey = s.Trim().Substring(s.Trim().IndexOf(":") + 1);
-                        byte[] byteBuffer = System.Security.Cryptography.SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(sKey));
-                        string hash = Convert.ToBase64String(byteBuffer);
-                        bBypass = (hash == "1rbCFcNDoiPcNOhzY26GiAw2pxA=");
-                    }
-                }
-                Common.BypassTimeOut = bBypass;
-                //
-
-                if (!bBypass && Common.IsVersionTimedOut)
-                {
-                    DialogResult dr = MessageBox.Show("This version of Thetis has timed out.\n" +
-                        "Please download and install a more recent version.",
-                        "Thetis timed out",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Stop, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
-                    Application.Exit();
-                }
-                else
-                {
-                    _theConsole = new Console(args);
-
-                    Application.Run(_theConsole);
-
-                    restart = _theConsole.Restart && !Common.ShiftKeyDown;
-                }
+                _theConsole = new Console(args);
+                Application.Run(_theConsole);
+                restart = _theConsole.Restart && !Common.ShiftKeyDown;
             }
             catch (Exception ex)
             {
@@ -1349,7 +1343,18 @@ namespace Thetis
         //MW0LGE_21g
         public string VersionWithoutFW
         {
-            get { return TitleBar.GetString(false); }
+            get
+            {
+                //[2.10.3.6]MW0LGE changed to use invoke if needed as CATTCPIPserver uses this from another thread
+                if (this.InvokeRequired)
+                {
+                    return (string)this.Invoke(new Func<string>(() => TitleBar.GetString(false)));
+                }
+                else
+                {
+                    return TitleBar.GetString(false);
+                }
+            }
         }
 
         private string getTitleWithFWVersion()
@@ -1423,6 +1428,7 @@ namespace Thetis
 
         private void InitConsole()
         {
+            _frmAbout = new frmAbout(this, CHECK_DEV_VERSION);
             m_frmNotchPopup = new frmNotchPopup();
             m_frmSeqLog = new frmSeqLog();
             _frmFinder = new frmFinder();
@@ -1605,8 +1611,6 @@ namespace Thetis
 
             // get culture specific decimal separator
             separator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-
-            //MW0LGE_21d BandStack2 last_band = "";						// initialize bandstack
 
             tune_step_list = new List<TuneStep>
             {
@@ -2499,7 +2503,7 @@ namespace Thetis
             stream2.Close();   // close stream
 
 
-            ArrayList a = new ArrayList();
+            List<string> a = new List<string>();
 
             foreach (Control c in this.Controls)			// For each control
             {
@@ -3014,7 +3018,7 @@ namespace Thetis
             a.Add("console_state/" + ((int)this.WindowState).ToString()); //MW0LGE_21 window state
 
             if (SetupForm.WindowState != FormWindowState.Minimized)//[2.10.3.6]MW0LGE prevent garbage being stored if shutdown when minimsed
-            { 
+            {
                 a.Add("setup_top/" + SetupForm.Top.ToString());
                 a.Add("setup_left/" + SetupForm.Left.ToString());
             }
@@ -3044,12 +3048,14 @@ namespace Thetis
             a.Add("Metis_IP_address/" + NetworkIO.HpSdrHwIpAddress.ToString(nfi));
             a.Add("EthernetHostIPAddress/" + NetworkIO.EthernetHostIPAddress.ToString(nfi));
 
+            a.Add("PruneBackups/" + DBMan.PruneBackups.ToString());
+
             DB.PurgeNotches();                  // remove old notches from DB
                                                 // this is done because we have not stored an upper limit the number of notches
                                                 // and if we had 20 in there before, and now only write 3, how do we know?
                                                 // as it will still be [0]..[19]
 
-            DB.SaveVars("State", ref a, true);		// save the values to the DB
+            DB.SaveVars("State", a, true);		// save the values to the DB
         }
 
         private FormWindowState m_WindowState = FormWindowState.Normal;
@@ -3127,7 +3133,7 @@ namespace Thetis
                 }
             }
 
-            ArrayList a = DB.GetVars("State");							// Get the saved list of controls
+            List<string> a = DB.GetVars("State");							// Get the saved list of controls
             a.Sort();
 
             // MW0LGE_21a
@@ -5023,7 +5029,7 @@ namespace Thetis
             //
 
             // These are needed for managing QSK when band changes also trigger mode changes.
-            RX1_band_change = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
+            RX1_band_change = BandByFreq(freq, tx_xvtr_index, current_region);
             qsk_band_changing = true;
 
             // Set mode, filter, and frequency according to passed parameters
@@ -5598,16 +5604,16 @@ namespace Thetis
                 if (VFOBFreq == t_freq)
                 {
                     // no transverter as xvtr_index might not be changed in time when calling this RX1BandForVFOB()
-                    return BandByFreq(VFOBFreq, -1, false, current_region, false);
+                    return BandByFreq(VFOBFreq, -1, current_region);
                 }
                 else
                 {
-                    return BandByFreq(VFOBFreq, rx1_xvtr_index, false, current_region, false);
+                    return BandByFreq(VFOBFreq, rx1_xvtr_index, current_region);
                 }
             }
             else
             {
-                return BandByFreq(VFOBFreq, rx1_xvtr_index, false, current_region, false);
+                return BandByFreq(VFOBFreq, rx1_xvtr_index, current_region);
             }
         }
         public Band GetTransverterTranslatedRXBand(double freq)
@@ -5615,63 +5621,24 @@ namespace Thetis
             if (XVTRForm == null) return 0;
 
             double t_freq = XVTRForm.TranslateFreq(freq);
-            return BandByFreq(t_freq, -1, false, current_region, false);
+            return BandByFreq(t_freq, -1, current_region);
         }
         public Band GetTransverterTranslatedTXBand()
         {
             if (XVTRForm == null) return 0;
 
             double t_freq = XVTRForm.TranslateFreq(TXFreq);
-            return BandByFreq(t_freq, -1, false, current_region, false);
+            return BandByFreq(t_freq, -1, current_region);
         }
-        private Band BandByFreq(double freq, int xvtr_index, bool tx, FRSRegion region, bool updatePanelsForVFOA)
+        private Band BandByFreq(double freq, int xvtr_index, FRSRegion region)
         {
-            if (xvtr_index >= 0)
-            {
-                //[2.10.3.6]MW0LGE removed from here, put in to band change handler
-                //if (updatePanelsForVFOA)
-                //{
-                //    setBandPanelVisible(false, false, true);
-                //}
-                return (Band)(Band.VHF0 + xvtr_index);
-            }
-
-            //MW0LGE_21d
-            if (!BandStackManager.Ready)
-            {
-                // ready when it has not been assigned a region/extended flag
-
-                //[2.10.3.6]MW0LGE removed from here, put in to band change handler
-                //setBandPanelVisible(true, false, false);
-
-                return Band.GEN;
-            }
+            if (xvtr_index >= 0) return (Band)(Band.VHF0 + xvtr_index);
+            if (!BandStackManager.Ready) return Band.GEN;
 
             List<BandFrequencyData> bands = BandStackManager.GetBandFrequencyDataForFrequency(freq, extended, region);
 
             // use the first always as it will be same as old code
             BandFrequencyData bfd = bands.First<BandFrequencyData>();
-
-            //[2.10.3.6]MW0LGE removed from here, put in to band change handler
-            //if (updatePanelsForVFOA && !tx) // setup the BAND button box for vfoA only 
-            //{
-            //    switch (bfd.bandType)
-            //    {
-            //        case BandType.GEN:
-            //            setBandPanelVisible(true, false, false);
-            //            break;
-            //        case BandType.HF:
-            //            setBandPanelVisible(false, true, false);
-            //            break;
-            //        case BandType.VHF:
-            //            setBandPanelVisible(false, false, true);
-            //            break;
-            //        default:
-            //            setBandPanelVisible(true, false, false);   //!(iscollapsed && showAndromedaButtonBar);//
-            //            break;
-            //    }
-            //}
-
             return bfd.band;
         }
 
@@ -6197,19 +6164,19 @@ namespace Thetis
             return true;
         }
 
-        public int VersionTextToInt(string version)	// takes a version string like "1.0.6" 
-        {											// and converts it to an int like 010006.
-            string[] nums = version.Split('.');
-            if (nums.Length < 3 || nums.Length > 4) return -1;
+        //public int VersionTextToInt(string version)	// takes a version string like "1.0.6" 
+        //{											// and converts it to an int like 010006.
+        //    string[] nums = version.Split('.');
+        //    if (nums.Length < 3 || nums.Length > 4) return -1;
 
-            int num1 = Int32.Parse(nums[0]);
-            int num2 = Int32.Parse(nums[1]);
-            int num3 = Int32.Parse(nums[2]);
-            int num4 = 0;
-            if (nums.Length == 4) num4 = Int32.Parse(nums[3]);
+        //    int num1 = Int32.Parse(nums[0]);
+        //    int num2 = Int32.Parse(nums[1]);
+        //    int num3 = Int32.Parse(nums[2]);
+        //    int num4 = 0;
+        //    if (nums.Length == 4) num4 = Int32.Parse(nums[3]);
 
-            return num1 * 1000000 + num2 * 10000 + num3 * 100 + num4;
-        }
+        //    return num1 * 1000000 + num2 * 10000 + num3 * 100 + num4;
+        //}
 
         public bool CheckValidTXFreq(FRSRegion r, double f, DSPMode mode, bool bIgnoreFilter = false)
         {
@@ -10580,6 +10547,7 @@ namespace Thetis
 
         private bool _setFromOtherAttenuator = false; // used to prevent other attenuator from re-setting the caller
         private int rx1_attenuator_data = 0;
+        private int _sa_rx1_last_adjust = 0;
         public int RX1AttenuatorData
         {
             get { return rx1_attenuator_data; }
@@ -10588,7 +10556,7 @@ namespace Thetis
                 int oldData = rx1_attenuator_data;
                 rx1_attenuator_data = value;
                 if (initializing) return;
-
+                
                 if (alexpresent &&
                     current_hpsdr_model != HPSDRModel.ANAN10 &&
                     current_hpsdr_model != HPSDRModel.ANAN10E &&
@@ -10842,7 +10810,7 @@ namespace Thetis
                 txtWheelTune.Text = tune_step_list[tune_step_index].Name;
                 lblStepValue.Text = txtWheelTune.Text;
 
-                if(old_index != tune_step_index)
+                if (old_index != tune_step_index)
                 {
                     TuneStepIndexChangedHandlers?.Invoke(1, old_index, tune_step_index);
                     TuneStepIndexChangedHandlers?.Invoke(2, old_index, tune_step_index);
@@ -11532,11 +11500,11 @@ namespace Thetis
             set { peak_tx_meter = value; }
         }
 
-        private bool allow_vac_bypass = true;
+        private bool _allow_vac_bypass = true;
         public bool AllowVACBypass
         {
-            get { return allow_vac_bypass; }
-            set { allow_vac_bypass = value; }
+            get { return _allow_vac_bypass; }
+            set { _allow_vac_bypass = value; }
         }
 
         private bool allow_space_bypass = false;
@@ -11553,11 +11521,11 @@ namespace Thetis
             set { allow_mox_bypass = value; }
         }
 
-        private bool m_allow_micvox_bypass = false;
+        private bool _allow_micvox_bypass = false;
         public bool AllowMICVOXBypass
         {
-            get { return m_allow_micvox_bypass; }
-            set { m_allow_micvox_bypass = value; }
+            get { return _allow_micvox_bypass; }
+            set { _allow_micvox_bypass = value; }
         }
 
         public float NewMeterData
@@ -11570,11 +11538,11 @@ namespace Thetis
             get { return rx2_meter_new_data; }
         }
 
-        private bool all_mode_mic_ptt = false;
+        private bool _all_mode_mic_ptt = false;
         public bool AllModeMicPTT
         {
-            get { return all_mode_mic_ptt; }
-            set { all_mode_mic_ptt = value; }
+            get { return _all_mode_mic_ptt; }
+            set { _all_mode_mic_ptt = value; }
         }
 
         //private int last_rx1_xvtr_index = -1;			// index of last xvtr in use
@@ -12613,11 +12581,6 @@ namespace Thetis
                     ATTOnTX = true;         // Enable attenuation on transmit via the setting
                     SetupForm.ATTOnTX = 31; // W2PA_21a                 
                     BreakInDelay = 0;       // Set break-in delay to zero in case it's something else                    
-
-                    if (chkCWSidetone.Checked)
-                    {
-                        NetworkIO.SetCWSidetoneVolume((int)(qsk_sidetone_volume * 1.27));
-                    } else NetworkIO.SetCWSidetoneVolume((int)(0));
                 }
                 else // Disable
                 {
@@ -12629,18 +12592,37 @@ namespace Thetis
                     ATTOnTX = non_qsk_ATTOnTX;
                     SetupForm.ATTOnTX = non_qsk_ATTOnTXVal;
                     BreakInDelay = non_qsk_breakin_delay;
-
-                    //MW0LGE_21k9 - did not turn off sidetone if it needed to be
-                    if (chkCWSidetone.Checked)
-                    {
-                        qsk_sidetone_volume = SetupForm.TXAF;
-                        NetworkIO.SetCWSidetoneVolume((int)(ptbAF.Value * 1.27));
-                    } else NetworkIO.SetCWSidetoneVolume((int)(0));
-
                 }
+
+                setCWSideToneVolume();
             }
         }
-
+        private void setCWSideToneVolume()
+        {
+            //[2.10.3.6]MW0LGE changed to one location as code was everywhere previously
+            if (cw_sidetone)
+            {
+                if (qsk_enabled)
+                {
+                    NetworkIO.SetCWSidetoneVolume((int)(qsk_sidetone_volume * 1.27));
+                }
+                else
+                {
+                    if (current_breakin_mode == BreakIn.Manual)
+                    {
+                        NetworkIO.SetCWSidetoneVolume((int)(txaf * 0.73));
+                    }
+                    else
+                    {
+                        NetworkIO.SetCWSidetoneVolume((int)(txaf * 1.27));
+                    }
+                }
+            }
+            else
+            {
+                NetworkIO.SetCWSidetoneVolume(0);
+            }
+        }
         public CheckState BreakInEnabledState
         {
             get
@@ -14552,8 +14534,8 @@ namespace Thetis
 
                 if (!initializing)
                 {
-                    Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-                    Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+                    Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
+                    Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
                     int bits = Penny.getPenny().ExtCtrlEnable(lo_band, lo_bandb, _mox, value, tuning, SetupForm.TestIMD, chkExternalPA.Checked); // MW0LGE_21j
                     if (!IsSetupFormNull) SetupForm.UpdateOCLedStrip(_mox, bits);
                 }
@@ -14571,7 +14553,7 @@ namespace Thetis
                 UpdateTRXAnt();
                 if (rx1_xvtr_index >= 0)
                 {
-                    Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                    Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
                     Alex.getAlex().UpdateAlexAntSelection(lo_band, _mox, alex_ant_ctrl_enabled, true);
                 }
                 else
@@ -14636,19 +14618,15 @@ namespace Thetis
                 if (tx_mode == DSPMode.CWL || tx_mode == DSPMode.CWU)
                     chkMON.Checked = value;
 
-                if (QSKEnabled)
-                {
-                    if (cw_sidetone) NetworkIO.SetCWSidetoneVolume(qsk_sidetone_volume);
-                    else NetworkIO.SetCWSidetoneVolume(0); // so we don't get audio artifacts with QSK on and sidetone off
-                }
+                setCWSideToneVolume();
             }
         }
 
-        private PTTMode current_ptt_mode = PTTMode.NONE;
+        private PTTMode _current_ptt_mode = PTTMode.NONE;
         public PTTMode CurrentPTTMode
         {
-            get { return current_ptt_mode; }
-            set { current_ptt_mode = value; }
+            get { return _current_ptt_mode; }
+            set { _current_ptt_mode = value; }
         }
 
         private bool rx2_preamp_present = false;
@@ -14705,6 +14683,8 @@ namespace Thetis
             }
             else if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
             {
+                // protocol 1 assigned ADCs for each DDC
+                // RXADCCtrl_P1 is a 14 bit int, 2 bits per DDC 66554433221100
                 adcControl = RXADCCtrl_P1;
             }
             else return -1;
@@ -14749,7 +14729,7 @@ namespace Thetis
             {
                 bool old_state = vfoA_lock;
                 //bool enabled = true;
-                vfoA_lock = value;
+                vfoA_lock = value;                
                 //switch (vfoA_lock)
                 //{
                 //    case false:
@@ -14760,8 +14740,7 @@ namespace Thetis
                 //        txtVFOAFreq.Enabled = false;
                 //        break;
                 //}
-                //[2.3.10.6]MW0LGE whoever did the commented code above needs to step away from the computer
-                //
+                //[2.3.10.6]MW0LGE whoever did the commented code above needs to step away from the computer, how about if else????
                 bool enabled = !vfoA_lock;
                 txtVFOAFreq.Enabled = enabled;
                 if (vfoA_lock) chkVFOSync.Checked = false;
@@ -14820,10 +14799,10 @@ namespace Thetis
                 //        chkVFOSync.Checked = false;
                 //        break;
                 //}
-                //[2.3.10.6]MW0LGE whoever did the commented code above needs to step away from the computer
+                //[2.3.10.6]MW0LGE whoever did the commented code above needs to step away from the computer, how about if else????
                 bool enabled = !vfoB_lock;
                 txtVFOBFreq.Enabled = enabled;
-                if(vfoB_lock) chkVFOSync.Checked = false;
+                if (vfoB_lock) chkVFOSync.Checked = false;
 
                 comboRX2Band.Enabled = enabled;
                 btnVFOAtoB.Enabled = enabled;
@@ -14846,7 +14825,7 @@ namespace Thetis
                 if (vfoB_lock)
                     lblRX2LockLabel.BackColor = System.Drawing.Color.Blue;
                 else
-                    lblRX2LockLabel.BackColor = System.Drawing.Color.Transparent;                
+                    lblRX2LockLabel.BackColor = System.Drawing.Color.Transparent;
 
                 AndromedaIndicatorCheck(EIndicatorActions.eINVFOLock, false, vfoB_lock); // <- this use of false is totally wrong, because if RX2 is in use, then lock B is RX2.
                                                                                          // I just cba to fix it, as this sort of thing keeps being done. -LGE
@@ -16804,7 +16783,7 @@ namespace Thetis
                 Band lo_band = Band.FIRST;
                 if (rx1_xvtr_index >= 0)
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
 
                 if (!initializing && rx1_preamp_mode > PreampMode.FIRST)
                 {
@@ -16818,13 +16797,13 @@ namespace Thetis
                     rx1_agcm_by_band[(int)old_band] = (AGCMode)comboAGC.SelectedIndex;
                     rx1_agct_by_band[(int)old_band] = ptbRF.Value;
                     SetupForm.ATTOnTX = getTXstepAttenuatorForBand(tx_band); //[2.10.3.6]MW0LGE att_fixes
-                    RX1PreampMode = rx1_preamp_by_band[(int)value];
-                    RX1AttenuatorData = getRX1stepAttenuatorForBand(value);
+                    RX1PreampMode = rx1_preamp_by_band[(int)rx1_band];
+                    RX1AttenuatorData = getRX1stepAttenuatorForBand(rx1_band);
                     //[2.10.3.6]MW0LGE this tmp is needed because RX1AGCMode causes an update to the setup form
                     //with the current max value for AGC (depending on agcmode) if the agcmode selected index changes
                     //which in turn sets RF again
-                    int tmp = rx1_agct_by_band[(int)value];
-                    RX1AGCMode = rx1_agcm_by_band[(int)value];
+                    int tmp = rx1_agct_by_band[(int)rx1_band];
+                    RX1AGCMode = rx1_agcm_by_band[(int)rx1_band];
                     RF = tmp;
 
                     //================================================================================           
@@ -16976,8 +16955,8 @@ namespace Thetis
 
                 Band lo_band = Band.FIRST;
                 if (rx2_xvtr_index >= 0)
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);//MW0LGE use rx2_xvtr_index
-                                                                                                                         //MW0LGE this was changed in RX1Band but not here
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);//MW0LGE use rx2_xvtr_index
+                                                                                                           //MW0LGE this was changed in RX1Band but not here
 
                 if (!initializing && rx2_preamp_mode > PreampMode.FIRST)
                 {
@@ -16991,10 +16970,10 @@ namespace Thetis
                     rx2_agcm_by_band[(int)old_band] = (AGCMode)comboRX2AGC.SelectedIndex;
                     rx2_agct_by_band[(int)old_band] = ptbRX2RF.Value;
 
-                    RX2PreampMode = rx2_preamp_by_band[(int)value];
-                    RX2AttenuatorData = getRX2stepAttenuatorForBand(value);
-                    int tmp = rx2_agct_by_band[(int)value]; //[2.10.3.6]MW0LGE see comment in RX1Band
-                    RX2AGCMode = rx2_agcm_by_band[(int)value];
+                    RX2PreampMode = rx2_preamp_by_band[(int)rx2_band];
+                    RX2AttenuatorData = getRX2stepAttenuatorForBand(rx2_band);
+                    int tmp = rx2_agct_by_band[(int)rx2_band]; //[2.10.3.6]MW0LGE see comment in RX1Band
+                    RX2AGCMode = rx2_agcm_by_band[(int)rx2_band];
                     RX2RF = tmp;
 
                     repopulateForms();
@@ -17029,7 +17008,7 @@ namespace Thetis
                 Band lo_band = Band.FIRST;
                 if (tx_xvtr_index >= 0)
                     // Fix Penny O/C VHF control Vk4xv
-                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
+                    lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
 
                 if (tx_band != old_band || initializing)
                 {
@@ -17827,14 +17806,19 @@ namespace Thetis
 
         static double freqFromString(string s)
         {
-            try
+            if (double.TryParse(s, out double f))
             {
-                return Double.Parse(s);
+                return f;
             }
-            catch
-            {
-                return 0;
-            }
+            return 0;
+            //try
+            //{
+            //    return Double.Parse(s);
+            //}
+            //catch
+            //{
+            //    return 0;
+            //}
         }
 
         private double m_dVFOAFreq = 0;
@@ -17846,7 +17830,7 @@ namespace Thetis
             }
             set
             {
-                if (vfoA_lock == true || IsSetupFormNull) return; //[2.10.3.5]MW0LGE removed the state check
+                if (vfoA_lock || IsSetupFormNull) return; //[2.10.3.5]MW0LGE removed the state check
                 if (!this.InvokeRequired)
                 {
                     VFOAUpdate(value);
@@ -17884,8 +17868,8 @@ namespace Thetis
             //MW0LGE [2.9.0.7] also in UpdateVFOASub
             if (dOldVFOASubFreq != VFOASubFreq)
             {
-                Band ob = BandByFreq(XVTRForm.TranslateFreq(dOldVFOASubFreq), rx1_xvtr_index, false, current_region, false);
-                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, false, current_region, false);
+                Band ob = BandByFreq(XVTRForm.TranslateFreq(dOldVFOASubFreq), rx1_xvtr_index, current_region);
+                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, current_region);
 
                 VFOASubFrequencyChangeHandlers?.Invoke(ob, nb, RX1DSPMode, RX1Filter, dOldVFOASubFreq, VFOASubFreq,
                     CentreFrequency, ClickTuneDisplay, ptbDisplayZoom.Value, radio.GetDSPRX(0, 1).RXOsc, 1);
@@ -17906,7 +17890,7 @@ namespace Thetis
 
             set
             {
-                if ((VFOLock != CheckState.Unchecked) || vfoA_lock == true || IsSetupFormNull) return;
+                if (vfoA_lock || IsSetupFormNull) return; //[2.10.3.6]MW0LGE removed the state check
                 if (!this.InvokeRequired)
                 {
                     VFOASubUpdate(value);
@@ -17928,7 +17912,7 @@ namespace Thetis
             }
             set
             {
-                if (vfoB_lock == true || IsSetupFormNull) return; //[2.10.3.5]MW0LGE removed state check
+                if (vfoB_lock || IsSetupFormNull) return; //[2.10.3.5]MW0LGE removed state check
                 value = Math.Max(0, value);
                 if (!this.InvokeRequired)
                 {
@@ -18017,27 +18001,13 @@ namespace Thetis
                 int oldMONVolume = txaf;
 
                 txaf = value;
-                if (QSKEnabled && chkCWSidetone.Checked)
-                {
-                    qsk_sidetone_volume = value;  // For QSK sidetone separate from rx audio level
-                    NetworkIO.SetCWSidetoneVolume((int)(qsk_sidetone_volume * 1.27));
-                }
-                if (!IsSetupFormNull)
-                {
-                    SetupForm.TXAF = txaf;
-                    if (MOX || Audio.MOX)
-                    {
-                        ptbAF.Value = txaf;
-                    }
+                qsk_sidetone_volume = value;
 
-                    if (cw_sidetone)
-                    {
-                        if (current_breakin_mode == BreakIn.Manual)
-                            NetworkIO.SetCWSidetoneVolume((int)(txaf * 0.73));
-                        else NetworkIO.SetCWSidetoneVolume((int)(txaf * 1.27));
-                    }
-                    else NetworkIO.SetCWSidetoneVolume(0);
-                }
+                if (!IsSetupFormNull) SetupForm.TXAF = txaf;
+
+                if (MOX || Audio.MOX) ptbAF.Value = txaf;
+
+                setCWSideToneVolume();
 
                 if (txaf != oldMONVolume)
                     MONVolumeChangedHandlers?.Invoke(oldMONVolume, txaf);
@@ -18103,11 +18073,11 @@ namespace Thetis
             }
         }
 
-        private bool cat_ptt = false;
+        private bool _cat_ptt = false;
         public bool CATPTT
         {
-            get { return cat_ptt; }
-            set { cat_ptt = value; }
+            get { return _cat_ptt; }
+            set { _cat_ptt = value; }
         }
 
         private bool reverse_paddles = false;
@@ -18237,8 +18207,8 @@ namespace Thetis
             set
             {
                 disable_6m_lna_on_rx = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
-                double freq2 = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
+                double freq2 = VFOBFreq;// Double.Parse(txtVFOBFreq.Text);
                 SetAlexHPF(freq);
                 if (current_hpsdr_model == HPSDRModel.ANAN7000D || current_hpsdr_model == HPSDRModel.ANAN8000D ||
                     current_hpsdr_model == HPSDRModel.ANAN_G2 || current_hpsdr_model == HPSDRModel.ANAN_G2_1K)
@@ -18258,7 +18228,7 @@ namespace Thetis
             set
             {
                 disable_6m_lna_on_tx = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18270,7 +18240,7 @@ namespace Thetis
             set
             {
                 disable_hpf_on_tx = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18281,7 +18251,7 @@ namespace Thetis
             set
             {
                 disable_hpf_on_ps = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18294,7 +18264,7 @@ namespace Thetis
                 lpf_bypass = value;
                 if (chkPower.Checked)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     if (_mox) freq = tx_dds_freq_mhz;
                     SetAlexLPF(freq, _mox);
                     if (!initializing)
@@ -18310,7 +18280,7 @@ namespace Thetis
             set
             {
                 alex_hpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
                 if (!initializing)
                     txtVFOAFreq_LostFocus(this, EventArgs.Empty);
@@ -18325,7 +18295,7 @@ namespace Thetis
             set
             {
                 alex2_hpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
                 if (!initializing)
                     txtVFOBFreq_LostFocus(this, EventArgs.Empty);
@@ -18340,7 +18310,7 @@ namespace Thetis
             set
             {
                 alex1_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18352,7 +18322,7 @@ namespace Thetis
             set
             {
                 bpf1_1_5bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18364,7 +18334,7 @@ namespace Thetis
             set
             {
                 alex21_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18376,7 +18346,7 @@ namespace Thetis
             set
             {
                 alex6_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18388,7 +18358,7 @@ namespace Thetis
             set
             {
                 bpf1_6_5bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18400,7 +18370,7 @@ namespace Thetis
             set
             {
                 alex26_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18412,7 +18382,7 @@ namespace Thetis
             set
             {
                 alex9_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18424,7 +18394,7 @@ namespace Thetis
             set
             {
                 bpf1_9_5bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18436,7 +18406,7 @@ namespace Thetis
             set
             {
                 alex29_5bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18448,7 +18418,7 @@ namespace Thetis
             set
             {
                 alex13bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18460,7 +18430,7 @@ namespace Thetis
             set
             {
                 bpf1_13bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18472,7 +18442,7 @@ namespace Thetis
             set
             {
                 alex213bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18484,7 +18454,7 @@ namespace Thetis
             set
             {
                 alex20bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18496,7 +18466,7 @@ namespace Thetis
             set
             {
                 bpf1_20bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18508,7 +18478,7 @@ namespace Thetis
             set
             {
                 alex220bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18520,7 +18490,7 @@ namespace Thetis
             set
             {
                 alex6bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
                 txtVFOAFreq_LostFocus(this, EventArgs.Empty);
             }
@@ -18533,7 +18503,7 @@ namespace Thetis
             set
             {
                 bpf1_6bp_bypass = value;
-                double freq = Double.Parse(txtVFOAFreq.Text);
+                double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                 SetAlexHPF(freq);
             }
         }
@@ -18545,7 +18515,7 @@ namespace Thetis
             set
             {
                 alex26bphpf_bypass = value;
-                double freq = Double.Parse(txtVFOBFreq.Text);
+                double freq = VFOBFreq;// Double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 SetAlex2HPF(freq);
             }
         }
@@ -18576,6 +18546,7 @@ namespace Thetis
             get { return m_bAttontx; }
             set
             {
+                if (!value && _auto_attTX_when_not_in_ps) return; // ignore in this case
                 m_bAttontx = value;
                 updateAttNudsCombos();
 
@@ -20218,7 +20189,17 @@ namespace Thetis
 
                 //NOTE: run 'lodctr /R' on admin command prompt to rebuild performance counters
 
-                total_cpu_usage = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total", sMachineName);
+                Version osVersion = Environment.OSVersion.Version;
+                bool isWindows7 = osVersion.Major == 6 && osVersion.Minor == 1;
+
+                if (isWindows7)
+                {
+                    total_cpu_usage = new PerformanceCounter("Processor", "% Processor Time", "_Total", sMachineName);
+                }
+                else
+                {
+                    total_cpu_usage = new PerformanceCounter("Processor Information", "% Processor Utility", "_Total", sMachineName);
+                }
                 float tmp = total_cpu_usage.NextValue();
 
                 if (!string.IsNullOrEmpty(_sInstanceName))
@@ -20516,11 +20497,6 @@ namespace Thetis
             m_frmSeqLog.BringToFront();
         }
 
-        private int HaveSync = 1;
-        private int change_overload_color_count = 0;
-        private int oload_select = 0;                   // selection of which overload to display this time
-        private const int num_oloads = 2;               // number of possible overload displays        
-
         private float _avNumRX1 = -200;
         private float _avNumRX2 = -200;
 
@@ -20640,8 +20616,514 @@ namespace Thetis
             rx_dBHz = 10 * Math.Log10((double)passbandWidth);//MW0LGE_22b
             rbw_dBHz = 10 * Math.Log10(dRWB);
         }
+        private class HistoricAttenuatorReading
+        {
+            public int stepAttenuator = -1;
+            public PreampMode preampMode = PreampMode.FIRST;
+        }
+        private bool _have_sync = false;
+        private bool _had_radio_sync = false;
+        private int[] _adc_overload_level = new int[3] { 0, 0, 0 }; // increases by one each cycle to max of 10
+        private bool[] _adc_overloaded = new bool[3] { false, false, false };
+        private int[] _adc_step_shift = new int[3] { 0, 0, 0 }; // from 0 to 31, which will get applied to any att
+        private Stack<HistoricAttenuatorReading> _historic_attenuator_readings_rx1 = new Stack<HistoricAttenuatorReading>();
+        private Stack<HistoricAttenuatorReading> _historic_attenuator_readings_rx2 = new Stack<HistoricAttenuatorReading>();
+        private Stack<HistoricAttenuatorReading> _historic_attenuator_readings_tx = new Stack<HistoricAttenuatorReading>();       
+        private bool _auto_attTX_when_not_in_ps = false;
+        private bool _auto_undoTXatt = false;
+        private bool _auto_attTX_rx1 = false;
+        private bool _auto_attTX_rx2 = false;
+        private bool _auto_att_undo_rx1 = false;
+        private bool _auto_att_undo_rx2 = false;
+        private int _auto_att_hold_delay_rx1 = 5;
+        private int _auto_att_hold_delay_rx2 = 5;
+        private DateTime _auto_att_last_hold_time_rx1 = DateTime.Now;
+        private DateTime _auto_att_last_hold_time_rx2 = DateTime.Now;
+        public bool AutoAttRX1
+        {
+            get { return _auto_attTX_rx1; }
+            set { _auto_attTX_rx1 = value; }
+        }
+        public bool AutoAttUndoRX1
+        {
+            get { return _auto_att_undo_rx1; }
+            set { _auto_att_undo_rx1 = value; }
+        }
+        public int AutoAttUndoDelayRX1
+        {
+            get { return _auto_att_hold_delay_rx1; }
+            set { _auto_att_hold_delay_rx1 = value; }
+        }
+        public bool AutoAttRX2
+        {
+            get { return _auto_attTX_rx2; }
+            set { _auto_attTX_rx2 = value; }
+        }
+        public bool AutoAttUndoRX2
+        {
+            get { return _auto_att_undo_rx2; }
+            set { _auto_att_undo_rx2 = value; }
+        }
+        public int AutoAttUndoDelayRX2
+        {
+            get { return _auto_att_hold_delay_rx2; }
+            set { _auto_att_hold_delay_rx2 = value; }
+        }
+        public bool HaveSync
+        {
+            get 
+            {
+                return _have_sync;
+            }
+            set 
+            {
+                _have_sync = value;
+            }
+        }
+        public bool AutoAttTXWhenNotInPS
+        {
+            get { return _auto_attTX_when_not_in_ps; }
+            set 
+            { 
+                _auto_attTX_when_not_in_ps = value;
+                if (_auto_attTX_when_not_in_ps && !ATTOnTX) ATTOnTX = true;
+
+                //check setup if we are turning this off
+                if (!_auto_attTX_when_not_in_ps && !IsSetupFormNull)
+                {
+                    if (ATTOnTX && !SetupForm.ATTOnTXChecked) ATTOnTX = false;
+                }
+            }
+        }
+        public bool UndoAutoATttTX
+        {
+            get { return _auto_undoTXatt; }
+            set { _auto_undoTXatt = value; }
+        }
+        private async void checkOverloads()
+        {
+            string sWarning = "";
+            bool red_warning = false;
+            bool overload_only = true;
+
+            _have_sync = NetworkIO.getHaveSync() == 1;
+            if (!_have_sync)
+            {
+                // set ui to power off if lost connection to radio
+                if (chkPower.Checked) chkPower.Checked = false;
+                if (_had_radio_sync)
+                {
+                    sWarning = "Lost Radio Sync   ";
+                    _had_radio_sync = false;
+                    overload_only = false;
+                }
+            }
+            else if (!_had_radio_sync) _had_radio_sync = true;
+
+            // check for amp overload
+            bool amp_oload = amp_protect && cmaster.GetAndResetAmpProtect(0) == 1;
+            if (amp_oload)
+            {
+                ptbPWR.Value -= 2;
+                ptbPWR_Scroll(this, EventArgs.Empty);
+                await Task.Delay(100);
+                cmaster.GetAndResetAmpProtect(0);
+
+                sWarning += "AMP Overload  ";
+                overload_only = false;
+            }
+
+            string[] adc_names = { "ADC0", "ADC1", "ADC2" }; // adc2 not used for anything atm, but here for completeness
+
+            int adc_oload_num = NetworkIO.getAndResetADC_Overload();
+            if(adc_oload_num > 0)
+            {
+                // this is done so that if in a constant overload state, the above call to getAndResetADC_Overload would return 0,
+                // this call below will 'use' this up just like amp overload above
+                NetworkIO.getAndResetADC_Overload();
+            }
+            /*
+                    overload adc_oload_num
+            | adc[0] | adc[1] | adc[2] |          |
+            |--------|--------|--------|----------|
+            |   0    |   0    |   0    |    0     |
+            |   1    |   0    |   0    |    1     |
+            |   0    |   1    |   0    |    2     |
+            |   1    |   1    |   0    |    3     |
+            |   0    |   0    |   1    |    4     |
+            |   1    |   0    |   1    |    5     |
+            |   0    |   1    |   1    |    6     |
+            |   1    |   1    |   1    |    7     |
+            */
+
+            for (int i = 0; i < 3; i++)
+            {
+                _adc_overloaded[i] = ((adc_oload_num >> i) & 1) != 0;
+
+                if (_adc_overloaded[i])
+                {
+                    _adc_overload_level[i] += 2;
+                    if (_adc_overload_level[i] > 5)
+                        _adc_overload_level[i] = 5;
+
+                    red_warning = _adc_overload_level[i] > 3; // turn red
+                }
+                else
+                {
+                    if(_adc_overload_level[i] > 0) _adc_overload_level[i]--;
+                }
+
+                if (_adc_overload_level[i] > 0)
+                {
+                    sWarning += $"{adc_names[i]} Overload   ";
+                }
+            }
+
+            // set the adc warning
+            if (!string.IsNullOrEmpty(sWarning))
+            {
+                sWarning = sWarning.Trim();
+                infoBar.Warning(sWarning, red_warning, overload_only ? 1000 : 2000);
+            }
+
+            //adjust s-att offset
+            handleOverload();
+        }
+        private void handleOverload()
+        {            
+            for (int i = 0; i < 3; i++)
+            {
+                if (_adc_overloaded[i])
+                {
+                    _adc_step_shift[i]++;
+                    if (_adc_step_shift[i] > 31) _adc_step_shift[i] = 31;
+                }
+                else
+                {
+                    if (_adc_step_shift[i] > 0) _adc_step_shift[i]--;
+                }
+            }
+
+            // deal with TX when not in PS-AUTO
+            if (_auto_attTX_when_not_in_ps)
+            {
+                if (psform != null && !psform.AutoCalEnabled)
+                {
+                    if (_mox)
+                    {
+                        if (_adc_overloaded[0]) // always adc0 when in tx
+                        {
+                            HistoricAttenuatorReading har = new HistoricAttenuatorReading();
+                            har.stepAttenuator = TxAttenData;
+
+                            int att = har.stepAttenuator + _adc_step_shift[0];
+                            if (att > 31) att = 31;
+
+                            if (att != har.stepAttenuator)
+                            {
+                                if (!ATTOnTX) ATTOnTX = true;
+                                TxAttenData = att;
+                                _historic_attenuator_readings_tx.Push(har);
+                            }
+                        }
+                    }
+                    else if (_historic_attenuator_readings_tx.Any())
+                    {
+                        // no overload, unwind
+                        HistoricAttenuatorReading har = _historic_attenuator_readings_tx.Pop();
+                        if (_auto_undoTXatt && har != null && har.stepAttenuator != TxAttenData)
+                        {
+                            TxAttenData = har.stepAttenuator;
+                        }
+                    }
+                }
+                else
+                    _historic_attenuator_readings_tx.Clear();
+            }
+
+            if (!_mox)
+            {
+                // deal with rx
+                int nRX1DDCinUse = -1, nRX2DDCinUse = -1, sync1 = -1, sync2 = -1, psrx = -1, pstx = -1;
+                GetDDC(out nRX1DDCinUse, out nRX2DDCinUse, out sync1, out sync2, out psrx, out pstx);                               
+
+                DateTime now = DateTime.Now;
+
+                bool radioHasRx1Att = current_hpsdr_model == HPSDRModel.ANAN10 || current_hpsdr_model == HPSDRModel.ANAN10E ||
+                            current_hpsdr_model == HPSDRModel.ANAN100 || current_hpsdr_model == HPSDRModel.ANAN100B ||
+                            current_hpsdr_model == HPSDRModel.ANAN100D || current_hpsdr_model == HPSDRModel.ANAN200D ||
+                            current_hpsdr_model == HPSDRModel.ANAN7000D || current_hpsdr_model == HPSDRModel.ANAN8000D ||
+                            current_hpsdr_model == HPSDRModel.ANAN_G2 || current_hpsdr_model == HPSDRModel.ANAN_G2_1K;
+
+                if (_auto_attTX_rx1 && radioHasRx1Att)
+                {
+                    int nRX1ADCinUse = GetADCInUse(nRX1DDCinUse); // (rx1)
+
+                    // rx1
+                    if ((_adc_overloaded[0] && nRX1ADCinUse == 0) || (_adc_overloaded[1] && nRX1ADCinUse == 1)) // rx1 overload
+                    {
+                        HistoricAttenuatorReading har = new HistoricAttenuatorReading();
+                        if (RX1StepAttPresent)
+                        {
+                            har.stepAttenuator = RX1AttenuatorData;
+
+                            int att = har.stepAttenuator + (_adc_overloaded[0] ? _adc_step_shift[0] : _adc_step_shift[1]);
+                            if (att > 31) att = 31;
+
+                            if (att != har.stepAttenuator)
+                            {
+                                RX1AttenuatorData = att;
+                                _auto_att_last_hold_time_rx1 = now;
+                                _historic_attenuator_readings_rx1.Push(har);
+                            }
+                        }
+                        else
+                        {
+                            har.preampMode = RX1PreampMode;
+
+                            PreampMode pam = har.preampMode;
+                            switch (pam)
+                            {
+                                case PreampMode.HPSDR_OFF:
+                                case PreampMode.HPSDR_ON:
+                                    pam = PreampMode.SA_MINUS10;
+                                    break;
+                                case PreampMode.SA_MINUS10:
+                                    pam = PreampMode.SA_MINUS20;
+                                    break;
+                                case PreampMode.SA_MINUS20:
+                                    pam = PreampMode.SA_MINUS30;
+                                    break;
+                            }
+                            if (pam != har.preampMode)
+                            {
+                                RX1PreampMode = pam;
+                                _auto_att_last_hold_time_rx1 = now;
+                                _historic_attenuator_readings_rx1.Push(har);
+                            }
+                        }
+                    }
+                    else if ((nRX1ADCinUse == 0 || nRX1ADCinUse == 1) && _historic_attenuator_readings_rx1.Any()) // no overload rx1
+                    {
+                        if (!_auto_att_undo_rx1 || (_auto_att_undo_rx1 && ((now - _auto_att_last_hold_time_rx1).TotalSeconds > _auto_att_hold_delay_rx1)))
+                        {
+                            // unwind
+                            HistoricAttenuatorReading har = _historic_attenuator_readings_rx1.Pop();
+                            if (har != null && _auto_att_undo_rx1)
+                            {
+                                if (RX1StepAttPresent && har.stepAttenuator != -1)
+                                {
+                                    if (har.stepAttenuator != RX1AttenuatorData) RX1AttenuatorData = har.stepAttenuator;
+                                }
+                                else if (har.preampMode != PreampMode.FIRST)
+                                {
+                                    if (har.preampMode != RX1PreampMode) RX1PreampMode = har.preampMode;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                bool radioHasRx2Att = current_hpsdr_model == HPSDRModel.ANAN100D || current_hpsdr_model == HPSDRModel.ANAN200D || 
+                            current_hpsdr_model == HPSDRModel.ANAN7000D || current_hpsdr_model == HPSDRModel.ANAN8000D ||
+                            current_hpsdr_model == HPSDRModel.ANAN_G2 || current_hpsdr_model == HPSDRModel.ANAN_G2_1K;
+
+                if (_auto_attTX_rx2 && radioHasRx2Att)
+                {
+                    int nRX2ADCinUse = GetADCInUse(nRX2DDCinUse); // (rx2)
+
+                    // rx2
+                    if ((_adc_overloaded[0] && nRX2ADCinUse == 0) || (_adc_overloaded[1] && nRX2ADCinUse == 1)) // rx2 overload
+                    {
+                        HistoricAttenuatorReading har = new HistoricAttenuatorReading();
+                        if (RX2StepAttPresent)
+                        {
+                            har.stepAttenuator = RX2AttenuatorData;                            
+
+                            int att = har.stepAttenuator + (_adc_overloaded[0] ? _adc_step_shift[0] : _adc_step_shift[1]);
+                            if (att > 31) att = 31;
+
+                            if (att != har.stepAttenuator)
+                            {
+                                RX2AttenuatorData = att;
+                                _auto_att_last_hold_time_rx2 = now;
+                                _historic_attenuator_readings_rx2.Push(har);
+                            }
+                        }
+                        else
+                        {
+                            har.preampMode = RX2PreampMode;
+
+                            PreampMode pam = har.preampMode;
+                            switch (pam)
+                            {
+                                case PreampMode.HPSDR_OFF:
+                                case PreampMode.HPSDR_ON:
+                                    pam = PreampMode.SA_MINUS10;
+                                    break;
+                                case PreampMode.SA_MINUS10:
+                                    pam = PreampMode.SA_MINUS20;
+                                    break;
+                                case PreampMode.SA_MINUS20:
+                                    pam = PreampMode.SA_MINUS30;
+                                    break;
+                            }
+                            if (pam != har.preampMode)
+                            {
+                                RX2PreampMode = pam;
+                               _auto_att_last_hold_time_rx2 = now;
+                                _historic_attenuator_readings_rx2.Push(har);
+                            }
+                        }
+                    }
+                    else if ((nRX2ADCinUse == 0 || nRX2ADCinUse == 1) && _historic_attenuator_readings_rx2.Any()) // no overload rx2
+                    {
+                        if (!_auto_att_undo_rx2 || (_auto_att_undo_rx2 && ((now - _auto_att_last_hold_time_rx2).TotalSeconds > _auto_att_hold_delay_rx2)))
+                        {
+                            // unwind
+                            HistoricAttenuatorReading har = _historic_attenuator_readings_rx2.Pop();
+                            if (har != null && _auto_att_undo_rx2)
+                            {
+                                if (RX2StepAttPresent && har.stepAttenuator != -1)
+                                {
+                                    if (har.stepAttenuator != RX2AttenuatorData) RX2AttenuatorData = har.stepAttenuator;
+                                }
+                                else if (har.preampMode != PreampMode.FIRST)
+                                {
+                                    if (har.preampMode != RX2PreampMode) RX2PreampMode = har.preampMode;
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+        }
+        private async void pollOverloadSyncSeqErr()
+        {
+            int count = 0;
+            bool run = false;
+
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        run = this.chkPower.Checked;
+                    }));
+                }
+                else
+                    run = this.chkPower.Checked;
+            }
+            catch { }
+
+            while (run)
+            {
+                try
+                {
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(new MethodInvoker(() =>
+                        {
+                            checkOverloads();
+                            if (count == 0) checkSeqErrors();
+                            run = this.chkPower.Checked;
+                        }));
+                    }
+                    else
+                    {
+                        checkOverloads();
+                        if (count == 0) checkSeqErrors();
+                        run = this.chkPower.Checked;
+                    }
+
+                    count++;
+                    if (count == 5) count = 0;
+                }
+                catch { }
+
+                await Task.Delay(100);
+            }
+        }
+        private void checkSeqErrors()
+        {
+            int ooo = NetworkIO.getOOO(); //Out Of Order packet
+            if (ooo > 0)
+            {
+                //MW0LGE
+                string s = "";
+                if (isBitSet(ooo, 0)) s += "CC ";
+                if (isBitSet(ooo, 1)) s += "DDC0 ";
+                if (isBitSet(ooo, 2)) s += "DDC1 ";
+                if (isBitSet(ooo, 3)) s += "DDC2 ";
+                if (isBitSet(ooo, 4)) s += "DDC3 ";
+                if (isBitSet(ooo, 5)) s += "DDC4 ";
+                if (isBitSet(ooo, 6)) s += "DDC5 ";
+                if (isBitSet(ooo, 7)) s += "DDC6 ";
+                if (isBitSet(ooo, 8)) s += "Mic ";
+
+                int[] nSeqLogData = new int[40]; //MAX_IN_SEQ_LOG
+                StringBuilder sDateTimeStamp = new StringBuilder(24); // same size as dateTimeStamp in network.h
+
+                bool bNegative = false;
+                bool bDCCSeqErrors = false;
+                for (int nDCC = 0; nDCC < 7; nDCC++)
+                {
+                    if (isBitSet(ooo, nDCC + 1))
+                    {
+                        bDCCSeqErrors = true;
+                        string ss = "DCC" + nDCC.ToString() + System.Environment.NewLine;
+
+                        int n = 0;
+                        bool bInit = true;
+                        uint rec_seq;
+                        uint last_seq;
+                        while (NetworkIO.getSeqInDelta(bInit, nDCC, nSeqLogData, sDateTimeStamp, out rec_seq, out last_seq))
+                        {
+                            bInit = false;
+                            ss += "s" + n.ToString() + "=";
+                            for (int ff = 0; ff < nSeqLogData.Length; ff++)
+                            {
+                                ss += nSeqLogData[ff].ToString() + " ";
+                                if (nSeqLogData[ff] < 0) bNegative = true;// there have been negative packets, these are out of order, important !
+                            }
+                            ss += " r:" + rec_seq.ToString() + " l:" + last_seq.ToString() + " " + sDateTimeStamp.ToString() + System.Environment.NewLine;
+                            n++;
+                        }
+                        m_frmSeqLog.LogString(ss);
+                    }
+                }
+
+                if (bDCCSeqErrors)
+                {
+                    bool bShow = true;
+                    if (bNegative)
+                    {
+                        toolStripStatusLabel_SeqWarning.BackColor = Color.Red;
+                        DumpCap.StopDumpcap();
+                    }
+                    else
+                    {
+                        toolStripStatusLabel_SeqWarning.BackColor = Color.Transparent;
+                        if (!DumpCap.KillOnNegativeSeqOnly) DumpCap.StopDumpcap();
+                        bShow = !m_frmSeqLog.StatusBarWarningOnNegativeOnly;
+                    }
+
+                    DumpCap.StartDumpcap(2000);
+
+                    toolStripStatusLabel_SeqWarning.Visible = bShow;
+                }
+
+                if (_bInfoBarShowSEQErrors) infoBar.Warning("Sequence error : " + ooo.ToString() + " (" + s.Trim() + ")"); //MW0LGE_21k9c show/hide flag
+            }
+        }
         private async void UpdatePeakText()
         {
+            if (string.IsNullOrEmpty(txtVFOAFreq.Text) ||
+                    txtVFOAFreq.Text == "." ||
+                    txtVFOAFreq.Text == ",")
+                return;
+
             bool bOverRX1 = !rx2_enabled;
             bool bOverRX2 = false;
             if (rx2_enabled)
@@ -20652,122 +21134,7 @@ namespace Thetis
                     bOverRX2 = overRX(DisplayCursorX, DisplayCursorY, 2, false);
                 }
                 if (!bOverRX1 && !bOverRX2) bOverRX1 = true;
-            }
-
-            int ooo = 0;
-            ooo = NetworkIO.getOOO();
-            HaveSync = NetworkIO.getHaveSync();
-            if (HaveSync == 0) chkPower.Checked = false;
-
-            int adc_oload_num = NetworkIO.getAndResetADC_Overload();
-            bool adc_oload = adc_oload_num > 0;
-            bool amp_oload = amp_protect && cmaster.GetAndResetAmpProtect(0) == 1;
-            if (amp_oload)
-            {
-                ptbPWR.Value -= 2;
-                ptbPWR_Scroll(this, EventArgs.Empty);
-                await Task.Delay(100);
-                cmaster.GetAndResetAmpProtect(0);
-            }
-            bool overload = adc_oload || amp_oload;
-            if (adc_oload && amp_oload) oload_select = ++oload_select % num_oloads;
-            else if (adc_oload) oload_select = 0;
-            else if (amp_oload) oload_select = 1;
-            if (overload)
-            {
-                change_overload_color_count = ++change_overload_color_count % 2;
-                switch (oload_select)
-                {
-                    case 0:
-                        if (adc_oload_num == 0)
-                            infoBar.Warning("ADC Overload !");
-                        else
-                            infoBar.Warning("ADC" + adc_oload_num.ToString() + " Overload !", change_overload_color_count);
-                        break;
-                    case 1:
-                        infoBar.Warning("AMP OVERLOAD !", change_overload_color_count);
-                        break;
-                }
-            }
-            else
-            {
-
-                change_overload_color_count = 0;
-
-                if (ooo > 0)
-                {
-                    //MW0LGE
-                    string s = "";
-                    if (isBitSet(ooo, 0)) s += "CC ";
-                    if (isBitSet(ooo, 1)) s += "DDC0 ";
-                    if (isBitSet(ooo, 2)) s += "DDC1 ";
-                    if (isBitSet(ooo, 3)) s += "DDC2 ";
-                    if (isBitSet(ooo, 4)) s += "DDC3 ";
-                    if (isBitSet(ooo, 5)) s += "DDC4 ";
-                    if (isBitSet(ooo, 6)) s += "DDC5 ";
-                    if (isBitSet(ooo, 7)) s += "DDC6 ";
-                    if (isBitSet(ooo, 8)) s += "Mic ";
-
-                    int[] nSeqLogData = new int[40]; //MAX_IN_SEQ_LOG
-                    StringBuilder sDateTimeStamp = new StringBuilder(24); // same size as dateTimeStamp in network.h
-
-                    bool bNegative = false;
-                    bool bDCCSeqErrors = false;
-                    for (int nDCC = 0; nDCC < 7; nDCC++)
-                    {
-                        if (isBitSet(ooo, nDCC + 1))
-                        {
-                            bDCCSeqErrors = true;
-                            string ss = "DCC" + nDCC.ToString() + System.Environment.NewLine;
-
-                            int n = 0;
-                            bool bInit = true;
-                            uint rec_seq;
-                            uint last_seq;
-                            while (NetworkIO.getSeqInDelta(bInit, nDCC, nSeqLogData, sDateTimeStamp, out rec_seq, out last_seq))
-                            {
-                                bInit = false;
-                                ss += "s" + n.ToString() + "=";
-                                for (int ff = 0; ff < nSeqLogData.Length; ff++)
-                                {
-                                    ss += nSeqLogData[ff].ToString() + " ";
-                                    if (nSeqLogData[ff] < 0) bNegative = true;// there have been negative packets, these are out of order, important !
-                                }
-                                ss += " r:" + rec_seq.ToString() + " l:" + last_seq.ToString() + " " + sDateTimeStamp.ToString() + System.Environment.NewLine;
-                                n++;
-                            }
-                            m_frmSeqLog.LogString(ss);
-                        }
-                    }
-
-                    if (bDCCSeqErrors)
-                    {
-                        bool bShow = true;
-                        if (bNegative)
-                        {
-                            toolStripStatusLabel_SeqWarning.BackColor = Color.Red;
-                            DumpCap.StopDumpcap();
-                        }
-                        else
-                        {
-                            toolStripStatusLabel_SeqWarning.BackColor = Color.Transparent;
-                            if (!DumpCap.KillOnNegativeSeqOnly) DumpCap.StopDumpcap();
-                            bShow = !m_frmSeqLog.StatusBarWarningOnNegativeOnly;
-                        }
-
-                        DumpCap.StartDumpcap(2000);
-
-                        toolStripStatusLabel_SeqWarning.Visible = bShow;
-                    }
-
-                    if (_bInfoBarShowSEQErrors) infoBar.Warning("Sequence error : " + ooo.ToString() + " (" + s.Trim() + ")"); //MW0LGE_21k9c show/hide flag
-                }
-            }
-
-            if (string.IsNullOrEmpty(txtVFOAFreq.Text) ||
-               txtVFOAFreq.Text == "." ||
-               txtVFOAFreq.Text == ",")
-                return;
+            }                                    
 
             // update peak value
             float x = PixelToHz(Display.MaxX);
@@ -20818,8 +21185,7 @@ namespace Thetis
                     infoBar.Right1(0, x.ToString("f1") + "Hz");
                     infoBar.Right2(0, y.ToString("f1") + "dBm");
 
-                    //double Freq = double.Parse(txtVFOAFreq.Text);
-                    double Freq = VFOAFreq;
+                    double Freq = VFOAFreq;// double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     string temp_text;
                     if ((click_tune_display && !_mox) || (click_tune_display && display_duplex))    // Correct Right hand peak frequency when CTUN on -G3OQD // MW0LGE_21a also when in CTD and DUP
                         temp_text = (freq + (CentreFrequency - Freq)).ToString("f6") + " MHz";      // Disply Right hand peak frequency under Spectrum - G3OQD                            
@@ -24357,12 +24723,12 @@ namespace Thetis
         {
             while (chkPower.Checked && rx2_enabled)
             {
-                float rx2PreampOffset;
-                if (rx2_step_att_present) rx2PreampOffset = (float)rx2_attenuator_data;
-                else rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
-
                 if (!_mox)
                 {
+                    float rx2PreampOffset;
+                    if (rx2_step_att_present) rx2PreampOffset = (float)rx2_attenuator_data;
+                    else rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
+
                     float num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
                     num = num +
                     rx2_meter_cal_offset +
@@ -24408,7 +24774,7 @@ namespace Thetis
                 await Task.Delay(100);
             }
         }
-
+        
         private bool mon_recall = false;
         private static readonly HiPerfTimer vox_timer = new HiPerfTimer();
 
@@ -24417,48 +24783,59 @@ namespace Thetis
             while (chkPower.Checked)
             {
                 int dotdashptt = NetworkIO.nativeGetDotDashPTT();
-                DSPMode tx_mode = rx1_dsp_mode;
-
-                if (chkVFOBTX.Checked && chkRX2.Checked) tx_mode = rx2_dsp_mode;
+                DSPMode tx_mode = chkVFOBTX.Checked && chkRX2.Checked ? rx2_dsp_mode : rx1_dsp_mode;
 
                 if (!manual_mox && !disable_ptt && !rx_only && !_tx_inhibit && !QSKEnabled)
                 {
                     bool mic_ptt = (dotdashptt & 0x01) != 0; // PTT from radio
-                    bool cat_hs_ptt = CWInput.CATPTT; // CAT serial PTT
                     bool cw_ptt = CWInput.KeyerPTT; // CW serial PTT
                     bool vox_ptt = Audio.VOXActive;
-                    bool cat_ptt_local = (ptt_bit_bang_enabled && serialPTT != null && serialPTT.isPTT()) |
-                        (!ptt_bit_bang_enabled && cat_hs_ptt) | cat_ptt;
+                    bool cat_ptt = (ptt_bit_bang_enabled && serialPTT != null && serialPTT.isPTT()) | // CAT serial PTT
+                                   (!ptt_bit_bang_enabled && CWInput.CATPTT) | _cat_ptt;
 
                     if (!_mox)
-                    {
-                        Audio.VACBypass = (chkVAC1.Checked && m_allow_micvox_bypass);
+                    {                        
+                        // we can come in here from a ToT ( StopAllTX() ) //[2.10.3.6]MWLGE fixes #518
+                        // however we dont want switch anything back on, unless all of the above have been released
+                        if (_stop_all_tx)
+                        {
+                            if (mic_ptt || cw_ptt || cat_ptt || vox_ptt || _tci_ptt)
+                            {
+                                await Task.Delay(1);
+                                continue; // skip all, and restart the loop
+                            }
+                            else
+                                _stop_all_tx = false;
+                        }
+
+                        //Audio.VACBypass = (chkVAC1.Checked && m_allow_micvox_bypass); //[2.10.3.6]MW0LGE originally from PR #87, by W4WMT. We dont want to do this every 1ms
+                        if (chkVAC1.Checked && (((mic_ptt || cw_ptt) && _allow_vac_bypass) || (VOXEnable && _allow_micvox_bypass)))
+                        {
+                            if(!Audio.VACBypass) Audio.VACBypass = true;
+                        }
+                        else if (chkVAC1.Checked && Audio.VACBypass)
+                        {
+                            Audio.VACBypass = false;
+                        }
+
                         if (_tci_ptt)
                         {
-                            current_ptt_mode = PTTMode.TCI;
+                            _current_ptt_mode = PTTMode.TCI;
                             chkMOX.Checked = true;
                         }
-                        if (cat_ptt_local)
+
+                        if (cat_ptt)
                         {
-                            current_ptt_mode = PTTMode.CAT;
+                            _current_ptt_mode = PTTMode.CAT;
                             chkMOX.Checked = true;
-                            //[2.10.3.5]MW0LGE removed as seems somewhat strange to do. Vox/cw/micptt do not consider it, and they could quite easily fail from out of band issue
-                            //if (!_mox)   // although we are in a !mox block, the mox bool gets updated by the _checked event on chkMOX.Checked=true (the line above)
-                            //            // if mox(tx) failed then assume it is ok to pull the power
-                            //{
-                            //    chkPower.Checked = false;
-                            //    return;
-                            //}
                         }
 
-                        if ((tx_mode == DSPMode.CWL ||
-                              tx_mode == DSPMode.CWU) &&
-                            (cw_ptt || mic_ptt))
+                        if ((tx_mode == DSPMode.CWL || tx_mode == DSPMode.CWU) && (cw_ptt || mic_ptt))
                         {
-                            current_ptt_mode = PTTMode.CW;
+                            _current_ptt_mode = PTTMode.CW;
 
-                            if (chkVAC1.Checked && allow_vac_bypass)
-                                Audio.VACBypass = true;
+                            //if (chkVAC1.Checked && allow_vac_bypass) //[2.10.3.6]MW0LGE see above
+                            //    Audio.VACBypass = true;
 
                             chkMOX.Checked = true;
                         }
@@ -24471,14 +24848,14 @@ namespace Thetis
                             tx_mode == DSPMode.DIGU ||
                             tx_mode == DSPMode.DIGL ||
                             tx_mode == DSPMode.FM ||
-                            all_mode_mic_ptt) &&
+                            _all_mode_mic_ptt) &&
                             mic_ptt &&
-                            current_ptt_mode != PTTMode.CW)
+                            _current_ptt_mode != PTTMode.CW)
                         {
-                            current_ptt_mode = PTTMode.MIC;
+                            _current_ptt_mode = PTTMode.MIC;
 
-                            if (chkVAC1.Checked && allow_vac_bypass)
-                                Audio.VACBypass = true;
+                            //if (chkVAC1.Checked && allow_vac_bypass) //[2.10.3.6]MW0LGE see above
+                            //    Audio.VACBypass = true;
 
                             chkMOX.Checked = true;
                         }
@@ -24493,40 +24870,45 @@ namespace Thetis
                             tx_mode == DSPMode.FM) &&
                             vox_ptt)
                         {
-                            current_ptt_mode = PTTMode.VOX;
+                            _current_ptt_mode = PTTMode.VOX;
                             chkMOX.Checked = true;
                         }
                     }
                     else // else if(mox)
                     {
-                        switch (current_ptt_mode)
+                        bool vac_bypass_disable = false;
+                        switch (_current_ptt_mode)
                         {
                             case PTTMode.TCI:
                                 if (!_tci_ptt)
                                 {
                                     chkMOX.Checked = false;
                                 }
+                                vac_bypass_disable = true;
                                 break;
                             case PTTMode.CAT:
-                                if (chkVAC1.Checked && m_allow_micvox_bypass)
-                                    Audio.VACBypass = false;
-                                if (!cat_ptt_local)
+                                //if (chkVAC1.Checked && _allow_micvox_bypass)
+                                //    Audio.VACBypass = false;
+                                if (!cat_ptt)
                                 {
                                     chkMOX.Checked = false;
                                 }
+                                vac_bypass_disable = true;
                                 break;
                             case PTTMode.MIC:
                                 if (!mic_ptt)
                                 {
                                     chkMOX.Checked = false;
-                                    if (chkVAC1.Checked && Audio.VACBypass)
-                                        Audio.VACBypass = false;
+                                    vac_bypass_disable = true;
+                                    //if (chkVAC1.Checked && Audio.VACBypass)
+                                    //    Audio.VACBypass = false;
                                 }
                                 break;
                             case PTTMode.CW:
                                 if (!cw_ptt && !mic_ptt)
                                 {
                                     chkMOX.Checked = false;
+                                    vac_bypass_disable = true;
                                 }
                                 break;
                             case PTTMode.VOX:
@@ -24535,6 +24917,11 @@ namespace Thetis
                                     chkMOX.Checked = false;
                                 }
                                 break;
+                        }
+
+                        if (chkVAC1.Checked && vac_bypass_disable)
+                        {
+                            if (Audio.VACBypass) Audio.VACBypass = false;
                         }
                     }
                 }
@@ -24876,7 +25263,7 @@ namespace Thetis
 
         void HandleXml(string str)
         {
-            var elem = XElement.Parse(str);
+            XElement elem = XElement.Parse(str);
             if (elem.Name == "RadioInfo")
             {
                 //MW0LGE_21d
@@ -25938,7 +26325,7 @@ namespace Thetis
                             {
                                 if (spacebar_ptt)
                                 {
-                                    current_ptt_mode = PTTMode.SPACE;
+                                    _current_ptt_mode = PTTMode.SPACE;
                                     chkMOX.Checked = !chkMOX.Checked;
                                     if (chkMOX.Checked)
                                     {
@@ -26011,85 +26398,85 @@ namespace Thetis
 
                 if (e.KeyCode == key_tune_up_1)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 1.0;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_1)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 1.0;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_2)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.1;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_2)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.1;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_3)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.01;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_3)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.01;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_4)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_4)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_5)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.0001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_5)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.0001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_6)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.00001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_6)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.00001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_up_7)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq += 0.000001;
                     VFOAFreq = freq;
                 }
                 else if (e.KeyCode == key_tune_down_7)
                 {
-                    double freq = Double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// Double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     freq -= 0.000001;
                     VFOAFreq = freq;
                 }
@@ -26607,6 +26994,17 @@ namespace Thetis
                     poll_pa_pwr_thread.Start();
                 }
 
+                if (_overload_thread == null || !_overload_thread.IsAlive)
+                {
+                    _overload_thread = new Thread(new ThreadStart(pollOverloadSyncSeqErr))
+                    {
+                        Name = "Overload Thread",
+                        Priority = ThreadPriority.BelowNormal,
+                        IsBackground = true
+                    };
+                    _overload_thread.Start();
+                }
+
                 if (poll_tx_inhibit_thead == null || !poll_tx_inhibit_thead.IsAlive)
                 {
                     poll_tx_inhibit_thead = new Thread(new ThreadStart(PollTXInhibit))
@@ -26666,7 +27064,7 @@ namespace Thetis
                 DataFlowing = false;
                 SetupForm.TestIMD = false;
 
-                if (HaveSync == 1) //fix
+                if (HaveSync) //fix
                 {
                     WDSP.SetChannelState(WDSP.id(0, 0), 0, 1);
                     if (radio.GetDSPRX(0, 1).Active) WDSP.SetChannelState(WDSP.id(0, 1), 0, 1);
@@ -26782,6 +27180,11 @@ namespace Thetis
                 {
                     if (!poll_pa_pwr_thread.Join(500))
                         poll_pa_pwr_thread.Abort();
+                }
+                if(_overload_thread != null)
+                {
+                    if (!_overload_thread.Join(500))
+                        _overload_thread.Abort();
                 }
                 if (poll_tx_inhibit_thead != null)
                 {
@@ -27285,8 +27688,11 @@ namespace Thetis
 
         private ShutdownForm _frmShutDownForm = null;
         private void Console_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
+        {            
             shutdownLogStringToPath("Inside Console_Closing()");
+
+            shutdownLogStringToPath("Before ThetisBotDiscord.Disconnect()");
+            ThetisBotDiscord.Shutdown();
 
             // MW0LGE
             // show a shutdown window
@@ -27396,7 +27802,7 @@ namespace Thetis
             if (!IsSetupFormNull) SetupForm.RemoveDelegates(); // MW0LGE_22b
             //
 
-            shutdownLogStringToPath("BeforeTimeOutTimerManager.StopToT()");
+            shutdownLogStringToPath("Before TimeOutTimerManager.Shutdown()");
             TimeOutTimerManager.Shutdown();
 
             //MW0LGE
@@ -27472,10 +27878,21 @@ namespace Thetis
             chkPower.Checked = false;	// make sure power is off		
             ckQuickRec.Checked = false; // make sure recording is stopped
 
+            shutdownLogStringToPath("Before hide()");
             this.Hide();
             //note frm shutdown close is done in dispose now
 
             shutdownLogStringToPath("Leaving Console_Closing()");
+        }
+        private long getErrorLogSize()
+        {
+            string errorLogPath = Path.Combine(AppDataPath, "ErrorLog.txt");
+            if (File.Exists(errorLogPath))
+            {
+                FileInfo fileInfo = new FileInfo(errorLogPath);
+                return fileInfo.Length;
+            }
+            return -1;
         }
         private void shutdownLogStringToPath(string entry)
         {
@@ -28222,8 +28639,8 @@ namespace Thetis
                 UpdateRX2DDSFreq();
                 UpdateTXDDSFreq();
 
-                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-                Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
+                Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
 
                 if (penny_ext_ctrl_enabled) //MW0LGE_21k
                 {
@@ -28246,9 +28663,9 @@ namespace Thetis
                 if (cw_fw_keyer &&
                     (RX1DSPMode == DSPMode.CWL || RX1DSPMode == DSPMode.CWU) &&
                      !chkTUN.Checked &&
-                     current_ptt_mode != PTTMode.SPACE &&
-                    current_ptt_mode != PTTMode.CAT &&
-                    current_ptt_mode != PTTMode.CW)
+                     _current_ptt_mode != PTTMode.SPACE &&
+                    _current_ptt_mode != PTTMode.CAT &&
+                    _current_ptt_mode != PTTMode.CW)
                     NetworkIO.SetPttOut(0);
                 else NetworkIO.SetPttOut(1);
                 if (serialPTT != null) serialPTT.setDTR(true);
@@ -28273,8 +28690,8 @@ namespace Thetis
 
                 Band lo_band = Band.FIRST;
                 Band lo_bandb = Band.FIRST;
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
+                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
 
                 if (penny_ext_ctrl_enabled) //MW0LGE_21k
                 {
@@ -28492,9 +28909,9 @@ namespace Thetis
                 return;
             }
 
-            if (allow_mox_bypass && current_ptt_mode != PTTMode.MIC &&
-                                    current_ptt_mode != PTTMode.SPACE &&
-                                    current_ptt_mode != PTTMode.CAT)
+            if (allow_mox_bypass && _current_ptt_mode != PTTMode.MIC &&
+                                    _current_ptt_mode != PTTMode.SPACE &&
+                                    _current_ptt_mode != PTTMode.CAT)
             {
                 if (chkMOX.Checked)
                 {
@@ -28544,11 +28961,11 @@ namespace Thetis
                 }
 
                 if (chkVFOBTX.Checked || (!chkRX2.Checked && chkVFOSplit.Checked))
-                    freq = double.Parse(txtVFOBFreq.Text);
+                    freq = VFOBFreq;// double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                 else if (chkRX2.Checked && chkVFOSplit.Checked)
-                    freq = double.Parse(txtVFOABand.Text);
+                    freq = VFOASubFreq;// double.Parse(txtVFOABand.Text); //[2.10.3.6]freq changes.
                 else
-                    freq = double.Parse(txtVFOAFreq.Text);
+                    freq = VFOAFreq;// double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
 
                 if (chkXIT.Checked)
                     freq += (int)udXIT.Value * 0.000001;
@@ -28651,7 +29068,7 @@ namespace Thetis
             }
             else
             {
-                current_ptt_mode = PTTMode.NONE;
+                _current_ptt_mode = PTTMode.NONE;
 
                 //Undo FM Offsets
                 if (radio.GetDSPTX(0).CurrentDSPMode == DSPMode.FM && current_fm_tx_mode != FMTXMode.Simplex
@@ -29189,10 +29606,10 @@ namespace Thetis
                 // MW0LGE_21k8 moved below mox
                 updateVFOFreqs(chkTUN.Checked, true);
 
-                current_ptt_mode = PTTMode.MANUAL;
+                _current_ptt_mode = PTTMode.MANUAL;
                 manual_mox = true;
 
-                NetworkIO.SetUserOut0(1);       // <--- love the way this is commented MW0LGE_22b - why are we switching DB9 pins? 1 & 3 ?
+                NetworkIO.SetUserOut0(1);       // why this?? CHECK
                 NetworkIO.SetUserOut2(1);
 
                 if (apollopresent && apollo_tuner_enabled)
@@ -29231,7 +29648,7 @@ namespace Thetis
                 if (current_meter_tx_mode != old_meter_tx_mode_before_tune) //MW0LGE_21j
                     CurrentMeterTXMode = old_meter_tx_mode_before_tune;
 
-                NetworkIO.SetUserOut0(0);
+                NetworkIO.SetUserOut0(0);      // why this?? CHECK
                 NetworkIO.SetUserOut2(0);
 
                 manual_mox = false;
@@ -30096,7 +30513,7 @@ namespace Thetis
             {
                 case TuneLocation.VFOA:
                     if (_mox) return;
-                    double freq = double.Parse(txtVFOAFreq.Text);
+                    double freq = VFOAFreq;// double.Parse(txtVFOAFreq.Text); //[2.10.3.6]freq changes.
                     double mult = 1000.0;
                     int right = grpVFOA.Left + txtVFOAFreq.Left + txtVFOAFreq.Width;
                     if (vfoa_hover_digit < 0)
@@ -30125,7 +30542,7 @@ namespace Thetis
 
                 case TuneLocation.VFOB:
                     if (_mox && VFOBTX) return;
-                    freq = double.Parse(txtVFOBFreq.Text);
+                    freq = VFOBFreq;// double.Parse(txtVFOBFreq.Text); //[2.10.3.6]freq changes.
                     mult = 1000.0;
                     right = grpVFOB.Left + txtVFOBFreq.Left + txtVFOBFreq.Width;
                     if (vfob_hover_digit < 0)
@@ -30604,17 +31021,16 @@ namespace Thetis
             if (!(rx2_enabled && (chkEnableMultiRX.Checked || chkVFOSplit.Checked))) 
                 txtVFOABand.Text = bandInfo;
 
-            Band b = BandByFreq(freq, rx1_xvtr_index, false, current_region, true);
+            Band b = BandByFreq(freq, rx1_xvtr_index, current_region);
             if (b != rx1_band)
                 SetRX1Band(b);
 
             Band old_tx_band = tx_band;
             if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
             {
-                b = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
+                b = BandByFreq(freq, tx_xvtr_index, current_region);
 
-                Band b1 = getTXBandWhenExtended(b);
-
+                Band b1 = getTXBandWhenExtended(b, freq);
                 if (b1 != tx_band)
                     SetTXBand(b1, b != b1);
             }
@@ -30633,8 +31049,8 @@ namespace Thetis
 
             if (chkPower.Checked)
             {
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
+                lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
 
                 if (penny_ext_ctrl_enabled) //MW0LGE_21k
                 {
@@ -30920,7 +31336,7 @@ namespace Thetis
                 int required_ant = XVTRForm.GetRXAntenna(rx_xvtr_index);
                 if (required_ant >= 1 && required_ant <= 3)
                 {
-                    Band xvtr_rx_band = BandByFreq(XVTRForm.TranslateFreq(freq), -1, false, current_region, false);
+                    Band xvtr_rx_band = BandByFreq(XVTRForm.TranslateFreq(freq), -1, current_region);
                     int xvtr_rx_band_ant = SetupForm.GetRXAntenna(xvtr_rx_band);
                     if (required_ant != xvtr_rx_band_ant)
                     {
@@ -30951,7 +31367,7 @@ namespace Thetis
                 _band_used_for_xvtr_modify[rx] = Band.LAST;
             }
         }
-        private Band getTXBandWhenExtended(Band b)
+        private Band getTXBandWhenExtended(Band b, double frequency = -1)
         {
             if (!extended) return b;
 
@@ -30972,7 +31388,22 @@ namespace Thetis
             else if (Band.B13M == b) b1 = Band.B12M;
             else if (Band.B11M == b) b1 = Band.B10M;
 
-            return b1;
+            if (b1 != b) return b1; // changed from above to a ham band
+
+            // check if ham band, return if that is the case
+            if (b >= Band.B160M && b <= Band.B6M) return b;
+
+            // check if xvtr band, return if that is the case
+            if (b >= Band.VHF0 && b <= Band.VHF13) return b;
+
+            // otherwise find nearest band to frequency and use that
+            if (frequency != -1)
+            {
+                Band bn = BandStackManager.GetNearestBandForFrequency(frequency, true, true);
+                if (bn != Band.FIRST) b = bn;
+            }
+
+            return b;
         }
 
         private void txtVFOAFreq_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
@@ -31069,7 +31500,7 @@ namespace Thetis
             double freq;
             if (m_bVFOABandChangedByKeys)
             {
-                freq = double.Parse(txtVFOABand.Text); //MW0LGE
+                freq = VFOASubFreq;// double.Parse(txtVFOABand.Text); //MW0LGE //[2.10.3.6]freq changes.
                 m_dVFOASubFreq = freq;
                 m_bVFOABandChangedByKeys = false;
             }
@@ -31133,9 +31564,9 @@ namespace Thetis
             {
                 tx_xvtr_index = XVTRForm.XVTRFreq(freq);
                 Band old_tx_band = tx_band;
-                Band b = BandByFreq(freq, tx_xvtr_index, true, current_region, true);
+                Band b = BandByFreq(freq, tx_xvtr_index, current_region);
 
-                Band b1 = getTXBandWhenExtended(b);
+                Band b1 = getTXBandWhenExtended(b, freq);
 
                 if (chkVFOSplit.Checked && old_tx_band != b1)
                     SetTXBand(b1, b != b1); // ke9ns mod b1
@@ -31599,8 +32030,8 @@ namespace Thetis
 
             if (chkPower.Checked)
             {
-                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
-                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, false);
+                lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
+                lo_banda = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
 
                 if (penny_ext_ctrl_enabled) //MW0LGE_21k
                 {
@@ -31621,9 +32052,9 @@ namespace Thetis
             tx_xvtr_index = rx2_xvtr_index;
             double tx_freq = freq;
             Band old_tx_band = tx_band;
-            Band b = BandByFreq(tx_freq, tx_xvtr_index, true, current_region, false);
+            Band b = BandByFreq(tx_freq, tx_xvtr_index, current_region);
 
-            Band b1 = getTXBandWhenExtended(b);
+            Band b1 = getTXBandWhenExtended(b, tx_freq);
 
             if (old_tx_band != b1)
                 SetTXBand(b1, b != b1); // ke9ns mod b1
@@ -31776,7 +32207,7 @@ namespace Thetis
             goto end;
 
         set_rx2_freq:
-            Band band = BandByFreq(freq, rx2_xvtr_index, false, current_region, false);
+            Band band = BandByFreq(freq, rx2_xvtr_index, current_region);
             if (band != rx2_band)
                 SetRX2Band(band);
             double f_LO = 0.0;
@@ -31871,7 +32302,7 @@ namespace Thetis
             {
                 if (dOldFreq != VFOBFreq)
                 {
-                    Band tmpBand = BandByFreq(VFOBFreq, rx1_xvtr_index, false, current_region, false);
+                    Band tmpBand = BandByFreq(VFOBFreq, rx1_xvtr_index, current_region);
 
                     VFOBFrequencyChangeHandlers?.Invoke(oldBand, tmpBand, oldMode, RX1DSPMode, oldFilter, RX1Filter, dOldFreq, VFOBFreq,
                         oldCentreFreq, CentreFrequency, oldCtun, ClickTuneDisplay, oldZoomSlider, ptbDisplayZoom.Value, radio.GetDSPRX(0, 0).RXOsc, 1);
@@ -33966,13 +34397,13 @@ namespace Thetis
                                     if (click_tune_rx2_display && current_click_tune_mode != ClickTuneMode.Off)
                                         freq = CentreRX2Frequency + (double)x * 0.0000010;
                                     else if (current_click_tune_mode != ClickTuneMode.Off)
-                                        freq = double.Parse(txtVFOBFreq.Text) + (double)x * 0.0000010; // click tune w/x-hairs
+                                        freq = /*double.Parse(txtVFOBFreq.Text)*/ VFOBFreq + (double)x * 0.0000010; // click tune w/x-hairs //[2.10.3.6]freq changes.
                                     else if (click_tune_drag)
                                         freq = CentreRX2Frequency + (double)x * 0.0000010; // click tune & drag vfo
                                     else
                                     {
                                         bShift = false; // the shift is already applied to the vfo, we dont want to do it again ! MW0LGE_21k9rc6
-                                        freq = double.Parse(txtVFOBFreq.Text); // click & drag vfo
+                                        freq = /*double.Parse(txtVFOBFreq.Text);*/ VFOBFreq; // click & drag vfo //[2.10.3.6]freq changes.
                                     }
 
                                     if (bShift)
@@ -34002,13 +34433,13 @@ namespace Thetis
                                     if (click_tune_display && current_click_tune_mode != ClickTuneMode.Off)
                                         freq = CentreFrequency + (double)x * 0.0000010;
                                     else if (current_click_tune_mode != ClickTuneMode.Off)
-                                        freq = double.Parse(txtVFOAFreq.Text) + (double)x * 0.0000010; // click tune w/x-hairs
+                                        freq = /*double.Parse(txtVFOAFreq.Text)*/ VFOAFreq + (double)x * 0.0000010; // click tune w/x-hairs //[2.10.3.6]freq changes.
                                     else if (click_tune_drag)
                                         freq = CentreFrequency + (double)x * 0.0000010; // click tune & drag vfo
                                     else
                                     {
                                         bShift = false; // the shift is already applied to the vfo, we dont want to do it again ! MW0LGE_21k9rc6
-                                        freq = double.Parse(txtVFOAFreq.Text); // click & drag vfo
+                                        freq = /*double.Parse(txtVFOAFreq.Text);*/ VFOAFreq; // click & drag vfo //[2.10.3.6]freq changes.
                                     }
 
                                     if (bShift)
@@ -36917,7 +37348,7 @@ namespace Thetis
                     VFOASubFreq = saved_vfoa_sub_freq;
 
                     tx_xvtr_index = XVTRForm.XVTRFreq(VFOASubFreq);
-                    TXBand = BandByFreq(VFOASubFreq, tx_xvtr_index, true, current_region, true);
+                    TXBand = BandByFreq(VFOASubFreq, tx_xvtr_index, current_region);
                     if (chkPower.Checked) txtVFOABand.ForeColor = Color.Red;
                     else txtVFOABand.ForeColor = Color.DarkRed;
                     txtVFOABand.TextAlign = HorizontalAlignment.Right;
@@ -36967,8 +37398,8 @@ namespace Thetis
             //MW0LGE [2.9.0.7] also in VFOASubUpdate
             if (dOldVFOASubFreq != VFOASubFreq)
             {
-                Band ob = BandByFreq(XVTRForm.TranslateFreq(dOldVFOASubFreq), rx1_xvtr_index, false, current_region, false);
-                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, false, current_region, false);
+                Band ob = BandByFreq(XVTRForm.TranslateFreq(dOldVFOASubFreq), rx1_xvtr_index, current_region);
+                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, current_region);
 
                 VFOASubFrequencyChangeHandlers?.Invoke(ob, nb, RX1DSPMode, RX1Filter, dOldVFOASubFreq, VFOASubFreq,
                     CentreFrequency, ClickTuneDisplay, ptbDisplayZoom.Value, radio.GetDSPRX(0, 1).RXOsc, 1);
@@ -37039,7 +37470,7 @@ namespace Thetis
                 if (chkVFOSplit.Checked)
                 {
                     if (chkVFOSync.Checked) chkVFOSync.Checked = false;
-                    TXBand = BandByFreq(VFOBFreq, tx_xvtr_index, true, current_region, false);
+                    TXBand = BandByFreq(VFOBFreq, tx_xvtr_index, current_region);
                     grpVFOB.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold);
                     grpVFOB.ForeColor = Color.Red;
 
@@ -37933,7 +38364,7 @@ namespace Thetis
 
             if (chkEnableMultiRX.Checked != _oldMultiRX)
             {
-                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, false, current_region, false);
+                Band nb = BandByFreq(XVTRForm.TranslateFreq(VFOASubFreq), rx1_xvtr_index, current_region);
 
                 MultiRxHandlers?.Invoke(chkEnableMultiRX.Checked, _oldMultiRX, VFOASubFreq, nb, RX2Enabled);
                 _oldMultiRX = chkEnableMultiRX.Checked;
@@ -40546,7 +40977,9 @@ namespace Thetis
         private FormWindowState _old_window_state = FormWindowState.Normal;
         private void Console_Resize(object sender, System.EventArgs e)
         {
-            if(this.WindowState != _old_window_state)
+            resizeBackgroundImage();
+
+            if (this.WindowState != _old_window_state)
             {               
                 WindowStateChangedHandlers?.Invoke(this.WindowState);
                 _old_window_state = this.WindowState;
@@ -41423,7 +41856,8 @@ namespace Thetis
 
         private void comboFMCTCSS_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CTCSSFreq = double.Parse(comboFMCTCSS.Text);
+            bool ok = double.TryParse(comboFMCTCSS.Text, out double f);
+            if (ok) CTCSSFreq = f;
         }
 
         private void InitCTCSS()
@@ -41717,28 +42151,6 @@ namespace Thetis
                 memoryForm.Show();
                 memoryForm.Focus();
             }
-        }
-
-        private void setupToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //[2.10.3.6]MW0LGE now in submenu ... setupToolStripMenuItem1_Click
-
-            //if (IsSetupFormNull) return;
-            //if (SetupForm.InvokeRequired)
-            //{
-            //    SetupForm.Invoke(new MethodInvoker(() =>
-            //    {
-            //        SetupForm.Show();
-            //        SetupForm.Focus();
-            //        SetFocusMaster(false);
-            //    }));
-            //}
-            //else
-            //{
-            //    SetupForm.Show();
-            //    SetupForm.Focus();
-            //    SetFocusMaster(false);
-            //}
         }
 
         private void memoryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -45024,9 +45436,12 @@ namespace Thetis
             {
                 // W x H
                 int xPos = resolutionString.IndexOf("x");
-                W = int.Parse(resolutionString.Substring(0, xPos - 1));
-                H = int.Parse(resolutionString.Substring(xPos + 2));
-                bOK = true;
+                bOK = int.TryParse(resolutionString.Substring(0, xPos - 1), out W);
+                if (bOK)
+                    bOK = int.TryParse(resolutionString.Substring(xPos + 2), out H);
+                //W = int.Parse(resolutionString.Substring(0, xPos - 1));
+                //H = int.Parse(resolutionString.Substring(xPos + 2));
+                //bOK = true;
             }
 
             if (bOK)
@@ -45884,56 +46299,22 @@ namespace Thetis
             m_frmNotchPopup.NotchDeleteEvent += onNotchDelete;
             m_frmNotchPopup.NotchBWChangedEvent += onBWChanged;
             m_frmNotchPopup.NotchActiveChangedEvent += onActiveChanged;
-
             m_frmSeqLog.ClearButtonEvent += onClearButton;
-
             BandPreChangeHandlers += OnBandBeforeChangeHandler;            // just a band button is pressed
-            //BandNoChangeHandlers += OnBandNoChangeHandler;              // no change made to band
             BandChangeHandlers += OnBandChangeHandler;                  // band was changed
             ModeChangeHandlers += OnModeChangeHandler;                  // mode was changed
             VFOAFrequencyChangeHandlers += OnVFOAFrequencyChangeHandler;    //VFOA changed
             VFOBFrequencyChangeHandlers += OnVFOBFrequencyChangeHandler;    //VFOB changed
-            //VFOASubFrequencyChangeHandlers += OnVFOASubFrequencyChangeHandler;    //VFOASub changed
             MoxChangeHandlers += OnMoxChangeHandler;                    // mox changed
-            //MoxPreChangeHandlers += OnMoxPreChangeHandler;              // mox is about to change
             SetBandChangeHanders += OnSetBandChangeHander;              // SetBand completed
             PowerChangeHanders += OnPowerChangeHander;                  // power state changed
-
             CentreFrequencyHandlers += OnCentreFrequencyChanged;        // centrefreq's changed
             CTUNChangedHandlers += OnCTUNChanged;                       // CTUN state changed
             FilterChangedHandlers += OnFilterChanged;                   // filters changed
             ZoomFactorChangedHandlers += OnZoomChanged;                 // zoom changed
-
-            //AttenuatorDataChangedHandlers += OnAttenuatorDataChanged;                 // att data change
             PreampModeChangedHandlers += OnPreampModeChanged;                 // preamp mode change
-
-            //FilterEdgesChangedHandlers += OnFilterEdgesChanged;
-            //SplitChangedHandlers += OnSplitChanged;
-            //TuneChangedHandlers += OnTuneChanged;
-            //DrivePowerChangedHandlers += OnDrivePowerChanged;
-            //SampleRateChangedHandlers += OnSampleRateChanged;
-            //ThetisFocusChangedHandlers += OnThetisFocusChanged;
-            //RX2EnabledChangedHandlers += OnRX2EnabledChanged;
-            //RX2EnabledPreChangedHandlers += OnRX2EnabledPreChanged;
-            //SpotClickedHandlers += OnSpotClicked;
-            //MultiRxHandlers += OnMultiRxChanged;
-
             VFOTXChangedHandlers += OnVFOTXChanged;
-            //TXBandChangeHandlers += OnTXBandChanged;
-
-            //MeterReadingsChangedHandlers += OnMeterReadings;
-
-            //AlexPresentChangedHandlers += OnAlexPresentChanged;
-            //PAPresentChangedHandlers += OnPAPresentChanged;
-            //ApolloPresentChangedHandlers += OnApolloPresentChanged;
-            //CurrentModelChangedHandlers += OnCurrentModelChanged;
-            //TransverterIndexChangedHandlers += OnTransverterIndexChanged;
-
             TXInhibitChangedHandlers += OnTXInhibitChanged;
-
-            //MuteChangedHandlers += OnMuteChanged;
-            //MONChangedHandlers += OnMONChanged;
-            //MONVolumeChangedHandlers += OnMONVolumeChanged;
 
             Display.SetupDelegates();
             
@@ -45944,55 +46325,22 @@ namespace Thetis
             m_frmNotchPopup.NotchDeleteEvent -= onNotchDelete;
             m_frmNotchPopup.NotchBWChangedEvent -= onBWChanged;
             m_frmNotchPopup.NotchActiveChangedEvent -= onActiveChanged;
-
             m_frmSeqLog.ClearButtonEvent -= onClearButton;
-
             BandPreChangeHandlers -= OnBandBeforeChangeHandler;
-            //BandNoChangeHandlers -= OnBandNoChangeHandler;
             BandChangeHandlers -= OnBandChangeHandler;
             ModeChangeHandlers -= OnModeChangeHandler;
             VFOAFrequencyChangeHandlers -= OnVFOAFrequencyChangeHandler;
             VFOBFrequencyChangeHandlers -= OnVFOBFrequencyChangeHandler;
-            //VFOASubFrequencyChangeHandlers = OnVFOASubFrequencyChangeHandler;
             MoxChangeHandlers -= OnMoxChangeHandler;
-            //MoxPreChangeHandlers -= OnMoxPreChangeHandler;
             SetBandChangeHanders -= OnSetBandChangeHander;
             CentreFrequencyHandlers -= OnCentreFrequencyChanged;
             CTUNChangedHandlers -= OnCTUNChanged;
             FilterChangedHandlers -= OnFilterChanged;
             ZoomFactorChangedHandlers -= OnZoomChanged;
             PowerChangeHanders -= OnPowerChangeHander;
-
-            //AttenuatorDataChangedHandlers -= OnAttenuatorDataChanged;
             PreampModeChangedHandlers -= OnPreampModeChanged;
-
-            //FilterEdgesChangedHandlers -= OnFilterEdgesChanged;
-            //SplitChangedHandlers -= OnSplitChanged;
-            //TuneChangedHandlers -= OnTuneChanged;
-            //DrivePowerChangedHandlers -= OnDrivePowerChanged;
-            //SampleRateChangedHandlers -= OnSampleRateChanged;
-            //ThetisFocusChangedHandlers -= OnThetisFocusChanged;
-            //RX2EnabledChangedHandlers -= OnRX2EnabledChanged;
-            //RX2EnabledPreChangedHandlers -= OnRX2EnabledPreChanged;
-            //SpotClickedHandlers -= OnSpotClicked;
-            //MultiRxHandlers -= OnMultiRxChanged;
-
             VFOTXChangedHandlers -= OnVFOTXChanged;
-            //TXBandChangeHandlers -= OnTXBandChanged;
-
-            //MeterReadingsChangedHandlers -= OnMeterReadings;
-
-            //AlexPresentChangedHandlers -= OnAlexPresentChanged;
-            //PAPresentChangedHandlers -= OnPAPresentChanged;
-            //ApolloPresentChangedHandlers -= OnApolloPresentChanged;
-            //CurrentModelChangedHandlers -= OnCurrentModelChanged;
-            //TransverterIndexChangedHandlers -= OnTransverterIndexChanged;
-
             TXInhibitChangedHandlers -= OnTXInhibitChanged;
-
-            //MuteChangedHandlers -= OnMuteChanged;
-            //MONChangedHandlers -= OnMONChanged;
-            //MONVolumeChangedHandlers -= OnMONVolumeChanged;
 
             if (m_frmBandStack2 != null) // dont use the singleton accessor as we dont want to make one if one does not exist
             {
@@ -46003,17 +46351,21 @@ namespace Thetis
                 BandStack2Form.IgnoreDupeHandlers -= OnIgnoreDupes;
                 BandStack2Form.HideOnSelectHandlers -= OnHideOnSelect;
                 BandStack2Form.ShowInSpectrumHandlers -= OnShowInSpectrum;
+
+                m_frmBandStack2.RemoveDelegates();
             }
 
             Display.RemoveDelegates();
             TimeOutTimerManager.RemoveCallback(timeOutTimer);
         }
         //
-        private void timeOutTimer(string msg)
+        private bool _stop_all_tx = false;
+        public void StopAllTx(string msg = "")
         {
             if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked)
             {
-                //everything off !!
+                _stop_all_tx = true;
+
                 MOX = false;
                 manual_mox = false;
                 if (chkTUN.Checked)
@@ -46021,7 +46373,18 @@ namespace Thetis
                 if (chk2TONE.Checked)
                     chk2TONE.Checked = false;
 
-                infoBar.Warning(msg + " Time Out Timer", 1, true);
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    infoBar.Warning(msg, false, 10000);
+                }
+            }
+        }
+        private void timeOutTimer(string msg)
+        {
+            if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked)
+            {
+                //everything off !!
+                StopAllTx(msg + " Time Out Timer");                
             }
         }
 
@@ -46623,8 +46986,8 @@ namespace Thetis
             //MW0LGE_21j
             if (!chkPower.Checked) return;
 
-            Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, false, current_region, true);
-            Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, false, current_region, false);
+            Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
+            Band lo_bandb = BandByFreq(XVTRForm.TranslateFreq(VFOBFreq), rx2_xvtr_index, current_region);
 
             if (penny_ext_ctrl_enabled) //MW0LGE_21k
             {
@@ -47547,7 +47910,7 @@ namespace Thetis
             {
                 if (slider.Focused)
                     XVTRForm.SetPower(tx_xvtr_index, slider.Value);
-                Band b = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region, true);
+                Band b = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, current_region);
             }
 
             //constrain power
@@ -47558,7 +47921,7 @@ namespace Thetis
             double gbb;
             if (tx_xvtr_index >= 0)
             {
-                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, true, current_region, true);
+                Band lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), tx_xvtr_index, current_region);
                 gbb = GainByBand(lo_band, new_pwr);
             }
             else
@@ -47666,7 +48029,10 @@ namespace Thetis
             {
                 meterDelay.Reset();
 
-                if (!_mox)
+                bool updateRX = false;
+                bool updateTX = false;
+
+                if (!_mox || (_mox && RX2Enabled && VFOBTX))
                 {
                     float offset = RXOffset(1);
 
@@ -47696,80 +48062,112 @@ namespace Thetis
                         else
                             _RX1MeterValues[Reading.ESTIMATED_PBSNR] = 0f;
                     }
+
+                    updateRX = true;
                 }
                 else if (_mox && (!RX2Enabled || (RX2Enabled && VFOATX)))
                 {
-                    // get all readings
-                    if (MeterManager.RequiresUpdate(1, Reading.MIC)) _RX1MeterValues[Reading.MIC] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC));
-                    if (MeterManager.RequiresUpdate(1, Reading.MIC_PK)) _RX1MeterValues[Reading.MIC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK));
-                    if (MeterManager.RequiresUpdate(1, Reading.EQ)) _RX1MeterValues[Reading.EQ] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ));
-                    if (MeterManager.RequiresUpdate(1, Reading.EQ_PK)) _RX1MeterValues[Reading.EQ_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK));
-                    if (MeterManager.RequiresUpdate(1, Reading.LEVELER)) _RX1MeterValues[Reading.LEVELER] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER));
-                    if (MeterManager.RequiresUpdate(1, Reading.LEVELER_PK)) _RX1MeterValues[Reading.LEVELER_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK));
-                    if (MeterManager.RequiresUpdate(1, Reading.LVL_G)) _RX1MeterValues[Reading.LVL_G] = (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G));
-                    if (MeterManager.RequiresUpdate(1, Reading.CFC_G)) _RX1MeterValues[Reading.CFC_G] = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G));
-                    if (MeterManager.RequiresUpdate(1, Reading.CFC_PK)) _RX1MeterValues[Reading.CFC_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK));
-                    if (MeterManager.RequiresUpdate(1, Reading.CFC_AV)) _RX1MeterValues[Reading.CFC_AV] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV));
-                    if (MeterManager.RequiresUpdate(1, Reading.COMP)) _RX1MeterValues[Reading.COMP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP));
-                    if (MeterManager.RequiresUpdate(1, Reading.COMP_PK)) _RX1MeterValues[Reading.COMP_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK));
+                    updateMetersReading(Reading.MIC, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC)), 0);
+                    updateMetersReading(Reading.MIC_PK, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK)), 0);
+                    updateMetersReading(Reading.EQ, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ)), 0);
+                    updateMetersReading(Reading.EQ_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK)), 0);
+                    updateMetersReading(Reading.LEVELER, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER)), 0);
+                    updateMetersReading(Reading.LEVELER_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK)), 0);
+                    updateMetersReading(Reading.LVL_G, (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G)), 0);
+                    updateMetersReading(Reading.CFC_G, (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G)), 0);
+                    updateMetersReading(Reading.CFC_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK)), 0);
+                    updateMetersReading(Reading.CFC_AV, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV)), 0);
+                    updateMetersReading(Reading.COMP, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP)), 0);
+                    updateMetersReading(Reading.COMP_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK)), 0);
 
-                    //CPDR is the same as comp
-                    //if (MeterManager.RequiresUpdate(1, Reading.CPDR)) _RX1MeterValues[Reading.CPDR] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR));
-                    //if (MeterManager.RequiresUpdate(1, Reading.CPDR_PK)) _RX1MeterValues[Reading.CPDR_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR_PK));
+                    updateMetersReading(Reading.ALC, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC)), 0);
+                    updateMetersReading(Reading.ALC_PK, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)), 0);
+                    updateMetersReading(Reading.ALC_G, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G)), 0);
 
-                    if (MeterManager.RequiresUpdate(1, Reading.ALC)) _RX1MeterValues[Reading.ALC] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));
-                    if (MeterManager.RequiresUpdate(1, Reading.ALC_PK)) _RX1MeterValues[Reading.ALC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK));
-                    if (MeterManager.RequiresUpdate(1, Reading.ALC_G)) _RX1MeterValues[Reading.ALC_G] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+                    updateMetersReading(Reading.ALC_GROUP, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G)), 0);
 
-                    if (MeterManager.RequiresUpdate(1, Reading.ALC_GROUP)) _RX1MeterValues[Reading.ALC_GROUP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+                    updateMetersReading(Reading.PWR, (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower, 0);
+                    updateMetersReading(Reading.REVERSE_PWR, (alexpresent || apollopresent) ? alex_rev : -200f, 0);
+                    updateMetersReading(Reading.SWR, alex_swr, 0);
 
-                    if (MeterManager.RequiresUpdate(1, Reading.PWR)) _RX1MeterValues[Reading.PWR] = (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower;
-                    if (MeterManager.RequiresUpdate(1, Reading.REVERSE_PWR)) _RX1MeterValues[Reading.REVERSE_PWR] = (alexpresent || apollopresent) ? alex_rev : -200f;
-                    if (MeterManager.RequiresUpdate(1, Reading.SWR)) _RX1MeterValues[Reading.SWR] = alex_swr;
+                    updateMetersReading(Reading.DRIVE_FWD_ADC, average_drvadc, 0);
+                    updateMetersReading(Reading.FWD_ADC, average_fwdadc, 0);
+                    updateMetersReading(Reading.REV_ADC, average_revadc, 0);
+                    updateMetersReading(Reading.DRIVE_PWR, average_drivepwr, 0);
+                    updateMetersReading(Reading.PA_FWD_PWR, alex_fwd, 0);
+                    updateMetersReading(Reading.PA_REV_PWR, alex_rev, 0);
+                    updateMetersReading(Reading.CAL_FWD_PWR, calfwdpower, 0);
 
-                    //test code, uses 2 number controls on main console
-                    //if (EnableControlDebug)
-                    //{
-                    //    _RX1MeterValues[Reading.PWR] = (float)nudPwrTemp.Value;
-                    //    _RX1MeterValues[Reading.REVERSE_PWR] = (float)nudPwrTemp2.Value;
-                    //    float vswr;
-                    //    if (_RX1MeterValues[Reading.PWR] == 0)
-                    //        vswr = 1;
-                    //    else
-                    //        vswr = (1 + (float)Math.Sqrt(_RX1MeterValues[Reading.REVERSE_PWR] / _RX1MeterValues[Reading.PWR])) / (1 - (float)Math.Sqrt(_RX1MeterValues[Reading.REVERSE_PWR] / _RX1MeterValues[Reading.PWR]));
-                    //    _RX1MeterValues[Reading.SWR] = vswr;
-                    //}
+                    //// get all readings
+                    //if (MeterManager.RequiresUpdate(1, Reading.MIC)) _RX1MeterValues[Reading.MIC] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC));
+                    //if (MeterManager.RequiresUpdate(1, Reading.MIC_PK)) _RX1MeterValues[Reading.MIC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK));
+                    //if (MeterManager.RequiresUpdate(1, Reading.EQ)) _RX1MeterValues[Reading.EQ] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ));
+                    //if (MeterManager.RequiresUpdate(1, Reading.EQ_PK)) _RX1MeterValues[Reading.EQ_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK));
+                    //if (MeterManager.RequiresUpdate(1, Reading.LEVELER)) _RX1MeterValues[Reading.LEVELER] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER));
+                    //if (MeterManager.RequiresUpdate(1, Reading.LEVELER_PK)) _RX1MeterValues[Reading.LEVELER_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK));
+                    //if (MeterManager.RequiresUpdate(1, Reading.LVL_G)) _RX1MeterValues[Reading.LVL_G] = (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G));
+                    //if (MeterManager.RequiresUpdate(1, Reading.CFC_G)) _RX1MeterValues[Reading.CFC_G] = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G));
+                    //if (MeterManager.RequiresUpdate(1, Reading.CFC_PK)) _RX1MeterValues[Reading.CFC_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK));
+                    //if (MeterManager.RequiresUpdate(1, Reading.CFC_AV)) _RX1MeterValues[Reading.CFC_AV] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV));
+                    //if (MeterManager.RequiresUpdate(1, Reading.COMP)) _RX1MeterValues[Reading.COMP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP));
+                    //if (MeterManager.RequiresUpdate(1, Reading.COMP_PK)) _RX1MeterValues[Reading.COMP_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK));
 
-                    // pa
-                    // note: there are others distributed around the console.cs, search for MeterManager.RequiresUpdate.
-                    if (MeterManager.RequiresUpdate(1, Reading.DRIVE_FWD_ADC)) _RX1MeterValues[Reading.DRIVE_FWD_ADC] = average_drvadc;
-                    if (MeterManager.RequiresUpdate(1, Reading.FWD_ADC)) _RX1MeterValues[Reading.FWD_ADC] = average_fwdadc;
-                    if (MeterManager.RequiresUpdate(1, Reading.REV_ADC)) _RX1MeterValues[Reading.REV_ADC] = average_revadc;
-                    if (MeterManager.RequiresUpdate(1, Reading.DRIVE_PWR)) _RX1MeterValues[Reading.DRIVE_PWR] = average_drivepwr;
-                    if (MeterManager.RequiresUpdate(1, Reading.PA_FWD_PWR)) _RX1MeterValues[Reading.PA_FWD_PWR] = alex_fwd;
-                    if (MeterManager.RequiresUpdate(1, Reading.PA_REV_PWR)) _RX1MeterValues[Reading.PA_REV_PWR] = alex_rev;
-                    if (MeterManager.RequiresUpdate(1, Reading.CAL_FWD_PWR)) _RX1MeterValues[Reading.CAL_FWD_PWR] = calfwdpower;
-                    //
+                    //if (MeterManager.RequiresUpdate(1, Reading.ALC)) _RX1MeterValues[Reading.ALC] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));
+                    //if (MeterManager.RequiresUpdate(1, Reading.ALC_PK)) _RX1MeterValues[Reading.ALC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK));
+                    //if (MeterManager.RequiresUpdate(1, Reading.ALC_G)) _RX1MeterValues[Reading.ALC_G] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+
+                    //if (MeterManager.RequiresUpdate(1, Reading.ALC_GROUP)) _RX1MeterValues[Reading.ALC_GROUP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+
+                    //if (MeterManager.RequiresUpdate(1, Reading.PWR)) _RX1MeterValues[Reading.PWR] = (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower;
+                    //if (MeterManager.RequiresUpdate(1, Reading.REVERSE_PWR)) _RX1MeterValues[Reading.REVERSE_PWR] = (alexpresent || apollopresent) ? alex_rev : -200f;
+                    //if (MeterManager.RequiresUpdate(1, Reading.SWR)) _RX1MeterValues[Reading.SWR] = alex_swr;
+
+                    ////test code, uses 2 number controls on main console
+                    ////if (EnableControlDebug)
+                    ////{
+                    ////    _RX1MeterValues[Reading.PWR] = (float)nudPwrTemp.Value;
+                    ////    _RX1MeterValues[Reading.REVERSE_PWR] = (float)nudPwrTemp2.Value;
+                    ////    float vswr;
+                    ////    if (_RX1MeterValues[Reading.PWR] == 0)
+                    ////        vswr = 1;
+                    ////    else
+                    ////        vswr = (1 + (float)Math.Sqrt(_RX1MeterValues[Reading.REVERSE_PWR] / _RX1MeterValues[Reading.PWR])) / (1 - (float)Math.Sqrt(_RX1MeterValues[Reading.REVERSE_PWR] / _RX1MeterValues[Reading.PWR]));
+                    ////    _RX1MeterValues[Reading.SWR] = vswr;
+                    ////}
+
+                    //// pa
+                    //// note: there are others distributed around the console.cs, search for MeterManager.RequiresUpdate.
+                    //if (MeterManager.RequiresUpdate(1, Reading.DRIVE_FWD_ADC)) _RX1MeterValues[Reading.DRIVE_FWD_ADC] = average_drvadc;
+                    //if (MeterManager.RequiresUpdate(1, Reading.FWD_ADC)) _RX1MeterValues[Reading.FWD_ADC] = average_fwdadc;
+                    //if (MeterManager.RequiresUpdate(1, Reading.REV_ADC)) _RX1MeterValues[Reading.REV_ADC] = average_revadc;
+                    //if (MeterManager.RequiresUpdate(1, Reading.DRIVE_PWR)) _RX1MeterValues[Reading.DRIVE_PWR] = average_drivepwr;
+                    //if (MeterManager.RequiresUpdate(1, Reading.PA_FWD_PWR)) _RX1MeterValues[Reading.PA_FWD_PWR] = alex_fwd;
+                    //if (MeterManager.RequiresUpdate(1, Reading.PA_REV_PWR)) _RX1MeterValues[Reading.PA_REV_PWR] = alex_rev;
+                    //if (MeterManager.RequiresUpdate(1, Reading.CAL_FWD_PWR)) _RX1MeterValues[Reading.CAL_FWD_PWR] = calfwdpower;
+                    ////
+
+                    updateTX = true;
                 }
 
                 bool bNeedVolts = MeterManager.RequiresUpdate(1, Reading.VOLTS);
                 bool bNeedAmps = MeterManager.RequiresUpdate(1, Reading.AMPS);
                 if (bNeedVolts || bNeedAmps) 
                 {
-                    computeMKIIPAVoltsAmps();
+                    //computeMKIIPAVoltsAmps(); // computed by timer_cpu_volts_meter_Tick
 
                     if (bNeedVolts) _RX1MeterValues[Reading.VOLTS] = _MKIIPAVolts;
                     if (bNeedAmps) _RX1MeterValues[Reading.AMPS] = _MKIIPAAmps;
 
-                    //update rx2 as well
-                    if (rx2_enabled)
-                    {
-                        if (bNeedVolts) _RX2MeterValues[Reading.VOLTS] = _MKIIPAVolts;
-                        if (bNeedAmps) _RX2MeterValues[Reading.AMPS] = _MKIIPAAmps;
-                    }
+                    updateRX = true;
                 }
 
-                MeterReadingsChangedHandlers?.Invoke(1, _mox && (!RX2Enabled || (RX2Enabled && VFOATX)), ref _RX1MeterValues);
+                //MeterReadingsChangedHandlers?.Invoke(1, _mox && (!RX2Enabled || (RX2Enabled && VFOATX)), ref _RX1MeterValues);
+                if (updateRX) MeterReadingsChangedHandlers?.Invoke(1, false, ref _RX1MeterValues);
+                if (updateTX)
+                {
+                    MeterReadingsChangedHandlers?.Invoke(1, true, ref _RX1MeterValues);
+                    MeterReadingsChangedHandlers?.Invoke(2, true, ref _RX2MeterValues); // also for rx2 as data is the same for tx
+                }
 
                 meterDelay.Stop();
 
@@ -47787,7 +48185,10 @@ namespace Thetis
             {
                 meterDelay.Reset();
 
-                if (!_mox)
+                bool updateRX = false;
+                bool updateTX = false;
+
+                if (!_mox || (_mox && RX2Enabled && VFOATX))
                 {
                     float offset = RXOffset(2);
 
@@ -47817,50 +48218,99 @@ namespace Thetis
                         else
                             _RX2MeterValues[Reading.ESTIMATED_PBSNR] = 0f;
                     }
+
+                    updateRX = true;
                 }
                 else if(_mox && RX2Enabled && VFOBTX)
                 {
-                    // get all readings
-                    if (MeterManager.RequiresUpdate(2, Reading.MIC)) _RX2MeterValues[Reading.MIC] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC));
-                    if (MeterManager.RequiresUpdate(2, Reading.MIC_PK)) _RX2MeterValues[Reading.MIC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK));
-                    if (MeterManager.RequiresUpdate(2, Reading.EQ)) _RX2MeterValues[Reading.EQ] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ));
-                    if (MeterManager.RequiresUpdate(2, Reading.EQ_PK)) _RX2MeterValues[Reading.EQ_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK));
-                    if (MeterManager.RequiresUpdate(2, Reading.LEVELER)) _RX2MeterValues[Reading.LEVELER] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER));
-                    if (MeterManager.RequiresUpdate(2, Reading.LEVELER_PK)) _RX2MeterValues[Reading.LEVELER_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK));
-                    if (MeterManager.RequiresUpdate(2, Reading.LVL_G)) _RX2MeterValues[Reading.LVL_G] = (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G));
-                    if (MeterManager.RequiresUpdate(2, Reading.CFC_G)) _RX2MeterValues[Reading.CFC_G] = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G));
-                    if (MeterManager.RequiresUpdate(2, Reading.CFC_PK)) _RX2MeterValues[Reading.CFC_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK));
-                    if (MeterManager.RequiresUpdate(2, Reading.CFC_AV)) _RX2MeterValues[Reading.CFC_AV] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV));
-                    if (MeterManager.RequiresUpdate(2, Reading.COMP)) _RX2MeterValues[Reading.COMP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP));//peak_tx_meter ? (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR_PK)) : (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR));
-                    if (MeterManager.RequiresUpdate(2, Reading.COMP_PK)) _RX2MeterValues[Reading.COMP_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK));
+                    updateMetersReading(Reading.MIC, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC)), 0);
+                    updateMetersReading(Reading.MIC_PK, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK)), 0);
+                    updateMetersReading(Reading.EQ, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ)), 0);
+                    updateMetersReading(Reading.EQ_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK)), 0);
+                    updateMetersReading(Reading.LEVELER, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER)), 0);
+                    updateMetersReading(Reading.LEVELER_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK)), 0);
+                    updateMetersReading(Reading.LVL_G, (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G)), 0);
+                    updateMetersReading(Reading.CFC_G, (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G)), 0);
+                    updateMetersReading(Reading.CFC_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK)), 0);
+                    updateMetersReading(Reading.CFC_AV, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV)), 0);
+                    updateMetersReading(Reading.COMP, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP)), 2);
+                    updateMetersReading(Reading.COMP_PK, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK)), 0);
 
-                    //CPDR is the same as comp
-                    //if (MeterManager.RequiresUpdate(2, Reading.CPDR)) _RX2MeterValues[Reading.CPDR] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR));
-                    //if (MeterManager.RequiresUpdate(2, Reading.CPDR_PK)) _RX2MeterValues[Reading.CPDR_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR_PK));
+                    updateMetersReading(Reading.ALC, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC)), 0);
+                    updateMetersReading(Reading.ALC_PK, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)), 0);
+                    updateMetersReading(Reading.ALC_G, (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G)), 0);
 
-                    if (MeterManager.RequiresUpdate(2, Reading.ALC)) _RX2MeterValues[Reading.ALC] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));//peak_tx_meter ? (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC)) : (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));
-                    if (MeterManager.RequiresUpdate(2, Reading.ALC_PK)) _RX2MeterValues[Reading.ALC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK));
-                    if (MeterManager.RequiresUpdate(2, Reading.ALC_G)) _RX2MeterValues[Reading.ALC_G] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+                    updateMetersReading(Reading.ALC_GROUP, (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G)), 0);
 
-                    if (MeterManager.RequiresUpdate(2, Reading.ALC_GROUP)) _RX2MeterValues[Reading.ALC_GROUP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+                    updateMetersReading(Reading.PWR, (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower, 0);
+                    updateMetersReading(Reading.REVERSE_PWR, (alexpresent || apollopresent) ? alex_rev : -200f, 0);
+                    updateMetersReading(Reading.SWR, alex_swr, 0);
 
-                    if (MeterManager.RequiresUpdate(2, Reading.PWR)) _RX2MeterValues[Reading.PWR] = (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower;
-                    if (MeterManager.RequiresUpdate(2, Reading.REVERSE_PWR)) _RX2MeterValues[Reading.REVERSE_PWR] = (alexpresent || apollopresent) ? alex_rev : -200f;
-                    if (MeterManager.RequiresUpdate(2, Reading.SWR)) _RX2MeterValues[Reading.SWR] = alex_swr;
+                    updateMetersReading(Reading.DRIVE_FWD_ADC, average_drvadc, 0);
+                    updateMetersReading(Reading.FWD_ADC, average_fwdadc, 0);
+                    updateMetersReading(Reading.REV_ADC, average_revadc, 0);
+                    updateMetersReading(Reading.DRIVE_PWR, average_drivepwr, 0);
+                    updateMetersReading(Reading.PA_FWD_PWR, alex_fwd, 0);
+                    updateMetersReading(Reading.PA_REV_PWR, alex_rev, 0);
+                    updateMetersReading(Reading.CAL_FWD_PWR, calfwdpower, 0);
 
-                    // pa
-                    // note: there are others distributed around the console.cs, search for MeterManager.RequiresUpdate.
-                    if (MeterManager.RequiresUpdate(2, Reading.DRIVE_FWD_ADC)) _RX2MeterValues[Reading.DRIVE_FWD_ADC] = average_drvadc;
-                    if (MeterManager.RequiresUpdate(2, Reading.FWD_ADC)) _RX2MeterValues[Reading.FWD_ADC] = average_fwdadc;
-                    if (MeterManager.RequiresUpdate(2, Reading.REV_ADC)) _RX2MeterValues[Reading.REV_ADC] = average_revadc;
-                    if (MeterManager.RequiresUpdate(2, Reading.DRIVE_PWR)) _RX2MeterValues[Reading.DRIVE_PWR] = average_drivepwr;
-                    if (MeterManager.RequiresUpdate(2, Reading.PA_FWD_PWR)) _RX2MeterValues[Reading.PA_FWD_PWR] = alex_fwd;
-                    if (MeterManager.RequiresUpdate(2, Reading.PA_REV_PWR)) _RX2MeterValues[Reading.PA_REV_PWR] = alex_rev;
-                    if (MeterManager.RequiresUpdate(2, Reading.CAL_FWD_PWR)) _RX2MeterValues[Reading.CAL_FWD_PWR] = calfwdpower;
-                    //
+                    //// get all readings
+                    //if (MeterManager.RequiresUpdate(2, Reading.MIC)) _RX2MeterValues[Reading.MIC] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC));
+                    //if (MeterManager.RequiresUpdate(2, Reading.MIC_PK)) _RX2MeterValues[Reading.MIC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.MIC_PK));
+                    //if (MeterManager.RequiresUpdate(2, Reading.EQ)) _RX2MeterValues[Reading.EQ] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ));
+                    //if (MeterManager.RequiresUpdate(2, Reading.EQ_PK)) _RX2MeterValues[Reading.EQ_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.EQ_PK));
+                    //if (MeterManager.RequiresUpdate(2, Reading.LEVELER)) _RX2MeterValues[Reading.LEVELER] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER));
+                    //if (MeterManager.RequiresUpdate(2, Reading.LEVELER_PK)) _RX2MeterValues[Reading.LEVELER_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.LEVELER_PK));
+                    //if (MeterManager.RequiresUpdate(2, Reading.LVL_G)) _RX2MeterValues[Reading.LVL_G] = (float)Math.Max(0, WDSP.CalculateTXMeter(1, WDSP.MeterType.LVL_G));
+                    //if (MeterManager.RequiresUpdate(2, Reading.CFC_G)) _RX2MeterValues[Reading.CFC_G] = (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_G));
+                    //if (MeterManager.RequiresUpdate(2, Reading.CFC_PK)) _RX2MeterValues[Reading.CFC_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_PK));
+                    //if (MeterManager.RequiresUpdate(2, Reading.CFC_AV)) _RX2MeterValues[Reading.CFC_AV] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CFC_AV));
+                    //if (MeterManager.RequiresUpdate(2, Reading.COMP)) _RX2MeterValues[Reading.COMP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP));//peak_tx_meter ? (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR_PK)) : (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.CPDR));
+                    //if (MeterManager.RequiresUpdate(2, Reading.COMP_PK)) _RX2MeterValues[Reading.COMP_PK] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.COMP_PK));
+
+                    //if (MeterManager.RequiresUpdate(2, Reading.ALC)) _RX2MeterValues[Reading.ALC] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));//peak_tx_meter ? (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC)) : (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC));
+                    //if (MeterManager.RequiresUpdate(2, Reading.ALC_PK)) _RX2MeterValues[Reading.ALC_PK] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK));
+                    //if (MeterManager.RequiresUpdate(2, Reading.ALC_G)) _RX2MeterValues[Reading.ALC_G] = (float)Math.Max(-195.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+
+                    //if (MeterManager.RequiresUpdate(2, Reading.ALC_GROUP)) _RX2MeterValues[Reading.ALC_GROUP] = (float)Math.Max(-30.0f, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_PK)) + (float)Math.Max(0, -WDSP.CalculateTXMeter(1, WDSP.MeterType.ALC_G));
+
+                    //if (MeterManager.RequiresUpdate(2, Reading.PWR)) _RX2MeterValues[Reading.PWR] = (alexpresent || apollopresent) && current_hpsdr_model == HPSDRModel.ANAN8000D && tx_xvtr_index >= 0 ? drivepwr : calfwdpower;
+                    //if (MeterManager.RequiresUpdate(2, Reading.REVERSE_PWR)) _RX2MeterValues[Reading.REVERSE_PWR] = (alexpresent || apollopresent) ? alex_rev : -200f;
+                    //if (MeterManager.RequiresUpdate(2, Reading.SWR)) _RX2MeterValues[Reading.SWR] = alex_swr;
+
+                    //// pa
+                    //// note: there are others distributed around the console.cs, search for MeterManager.RequiresUpdate.
+                    //if (MeterManager.RequiresUpdate(2, Reading.DRIVE_FWD_ADC)) _RX2MeterValues[Reading.DRIVE_FWD_ADC] = average_drvadc;
+                    //if (MeterManager.RequiresUpdate(2, Reading.FWD_ADC)) _RX2MeterValues[Reading.FWD_ADC] = average_fwdadc;
+                    //if (MeterManager.RequiresUpdate(2, Reading.REV_ADC)) _RX2MeterValues[Reading.REV_ADC] = average_revadc;
+                    //if (MeterManager.RequiresUpdate(2, Reading.DRIVE_PWR)) _RX2MeterValues[Reading.DRIVE_PWR] = average_drivepwr;
+                    //if (MeterManager.RequiresUpdate(2, Reading.PA_FWD_PWR)) _RX2MeterValues[Reading.PA_FWD_PWR] = alex_fwd;
+                    //if (MeterManager.RequiresUpdate(2, Reading.PA_REV_PWR)) _RX2MeterValues[Reading.PA_REV_PWR] = alex_rev;
+                    //if (MeterManager.RequiresUpdate(2, Reading.CAL_FWD_PWR)) _RX2MeterValues[Reading.CAL_FWD_PWR] = calfwdpower;
+                    ////
+
+                    updateTX = true;
                 }
 
-                MeterReadingsChangedHandlers?.Invoke(2, _mox && RX2Enabled && VFOBTX, ref _RX2MeterValues);
+                bool bNeedVolts = MeterManager.RequiresUpdate(1, Reading.VOLTS);
+                bool bNeedAmps = MeterManager.RequiresUpdate(1, Reading.AMPS);
+                if (bNeedVolts || bNeedAmps)
+                {
+                    //computeMKIIPAVoltsAmps(); // computed by timer_cpu_volts_meter_Tick
+
+                    if (bNeedVolts) _RX2MeterValues[Reading.VOLTS] = _MKIIPAVolts;
+                    if (bNeedAmps) _RX2MeterValues[Reading.AMPS] = _MKIIPAAmps;
+
+                    updateRX = true;
+                }
+
+                //MeterReadingsChangedHandlers?.Invoke(2, _mox && RX2Enabled && VFOBTX, ref _RX2MeterValues);
+                if (updateRX) MeterReadingsChangedHandlers?.Invoke(2, false, ref _RX2MeterValues);
+                if (updateTX)
+                {
+                    MeterReadingsChangedHandlers?.Invoke(2, true, ref _RX2MeterValues);
+                    MeterReadingsChangedHandlers?.Invoke(1, true, ref _RX1MeterValues); // also for rx1 as data is the same
+                }
 
                 meterDelay.Stop();
 
@@ -47869,6 +48319,11 @@ namespace Thetis
                 if (delayMS < 1) delayMS = 1;
                 await Task.Delay(delayMS);
             }
+        }
+        private void updateMetersReading(Reading reading, float value, int rx)
+        {
+            if ((rx == 0 || rx == 1) && MeterManager.RequiresUpdate(1, reading)) _RX1MeterValues[reading] = value;
+            if ((rx == 0 || rx == 2) && MeterManager.RequiresUpdate(2, reading)) _RX2MeterValues[reading] = value;
         }
         private void picMultiMeterDigital_Click(object sender, EventArgs e)
         {
@@ -48836,7 +49291,8 @@ namespace Thetis
 
                 s += "  -dbid:xyz    keep the active database unique to the install run via this shortcut\n";
                 s += "  -dbid:HL2    another example to keep the active database unique to the install run via this shortcut\n";
-                s += "  -dbid:G2    another example to keep the active database unique to the install run via this shortcut\n\n\n";
+                s += "  -dbid:G2    another example to keep the active database unique to the install run via this shortcut\n";
+                s += "  -cmasioconfig    show the cmASIO setup tab in audio setup\n\n\n";
                 s += "  Press Enter...";
                 //s += "  -dbfilename:c:\\folder\\database.xml    use this database instead\n";
                 //s += "  \"-dbfilename:c:\\folder\\database.xml\"    use this database instead, but with spaces in the path\n";
@@ -48981,9 +49437,10 @@ namespace Thetis
             for (int i = 0; i < sSplit.Length; i += 2)
             {
                 string sForm = sSplit[i];
-                bool bVal = bool.Parse(sSplit[i + 1]);
-
-                SetAutoFormStartSetting(sForm, bVal);
+                //bool bVal = bool.Parse(sSplit[i + 1]);
+                bool ok = bool.TryParse(sSplit[i + 1], out bool bVal);
+                if(ok)
+                    SetAutoFormStartSetting(sForm, bVal);
             }
             if (!IsSetupFormNull) SetupForm.UpdateAutoStartForms();
         }
@@ -49264,7 +49721,7 @@ namespace Thetis
 
         private void setupToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (IsSetupFormNull) return;
+            if (IsSetupFormNull) return;            
             if (SetupForm.InvokeRequired)
             {
                 SetupForm.Invoke(new MethodInvoker(() =>
@@ -49333,6 +49790,158 @@ namespace Thetis
             }
         }
 
+        private void miAbout_Click(object sender, EventArgs e)
+        {
+            if (IsSetupFormNull) return;
+
+            string sFW;
+            string sProto;
+            string sModel;
+            string sSupportedProtocol;
+
+            if (NetworkIO.getHaveSync() == 1)
+            {
+                sModel = current_hpsdr_model.ToString();
+
+                if (NetworkIO.CurrentRadioProtocol == RadioProtocol.ETH)
+                {
+                    sFW = NetworkIO.FWCodeVersion.ToString("0\\.0") + "." + NetworkIO.BetaVersion.ToString();
+                    sProto = "2";
+                    sSupportedProtocol = NetworkIO.ProtocolSupported.ToString("0\\.0");
+                }
+                else
+                {
+                    sFW = NetworkIO.FWCodeVersion.ToString("0\\.0");
+                    sProto = "1";
+                    sSupportedProtocol = "";
+                }
+            }
+            else
+            {
+                sFW = "? (not connected)";
+                sProto = "? (not connected)";
+                sSupportedProtocol = "";
+                sModel = current_hpsdr_model.ToString() + " (not connected)";
+            }
+
+            string version = Common.GetVerNum(true, false);
+
+            int nPAVersion = PA19.PA_GetVersion();
+            int major = (nPAVersion >> 16) & 0xFF;
+            int minor = (nPAVersion >> 8) & 0xFF;
+            int subminor = nPAVersion & 0xFF;
+            nPAVersion = major * 100 + minor * 10 + subminor;
+            string sPortAudio = major.ToString() + "." + minor.ToString() + "." + subminor.ToString();
+
+            string sOriginalAndromG2Verson = SetupForm.AndromedaVersionNumber;
+            string sAndromG2Verson = sOriginalAndromG2Verson;
+            sAndromG2Verson = sAndromG2Verson.Replace("Andromeda: ", "");
+            sAndromG2Verson = sAndromG2Verson.Replace("G2 panel: ", "");
+            sAndromG2Verson = sAndromG2Verson.Replace("h/w=", "h=");
+            sAndromG2Verson = sAndromG2Verson.Replace("  s/w=", " s=");
+            if (!string.IsNullOrEmpty(sAndromG2Verson))
+            {
+                sAndromG2Verson = sOriginalAndromG2Verson.Contains("G2") ? "G2 Panel Version: " + sAndromG2Verson : "Andromeda Panel Version: " + sAndromG2Verson;
+            }
+
+            int dx_version = Display.DXVersion();
+            string sdxversion;
+            if (dx_version != -1)
+                sdxversion = (dx_version / 10f).ToString("f1");
+            else
+                sdxversion = "";
+
+            _frmAbout.InitVersions(version, TitleBar.BUILD_NAME, DB.VersionNumber.ToString(), sdxversion, sModel, sFW, sProto, sSupportedProtocol,
+                    (WDSP.GetWDSPVersion() / 100f).ToString("f2"), (cmaster.GetCMVersion() / 1000f).ToString("f2"),
+                    (cmaster.GetCMasioVersion() / 1000f).ToString("f2"), sPortAudio, sAndromG2Verson);
+
+            _frmAbout.ShowDialog(this);
+        }
+
+        private Image _cached_background_image = null;
+        private Size _background_image_size = Size.Empty;
+        public Image CachedBackgroundImage
+        {
+            get { return _cached_background_image; }
+            set
+            {
+                // no dispose here as we dont want to free up the cache in skins
+                _cached_background_image = value;
+                _background_image_size = Size.Empty;
+                resizeBackgroundImage();
+            }
+        }
+        private void resizeBackgroundImage()
+        {
+            // fixes issue where if the background image skin is larger than the client size of the window
+            // then there would be very slow redraw/updates. So instead of the form resizing it, we do it ourseves                
+            if (this.ClientSize == _background_image_size) return;
+            if (this.ClientSize.Width == 0 || this.ClientSize.Height == 0) return;
+
+            Graphics graphics = null;
+            _background_image_size = this.ClientSize;
+
+            if (this.BackgroundImage != null)
+            {
+                this.BackgroundImage.Dispose();
+                this.BackgroundImage = null;
+            }
+
+            if (_cached_background_image == null) return;
+            try
+            {
+                Image resized_image = new Bitmap(this.ClientSize.Width, this.ClientSize.Height);
+
+                graphics = Graphics.FromImage(resized_image);
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(_cached_background_image, 0, 0, resized_image.Width, resized_image.Height);
+
+                this.BackgroundImageLayout = ImageLayout.None;
+                this.BackgroundImage = resized_image;
+            }
+            catch (Exception e)
+            {
+                if (this.BackgroundImage == null)
+                {
+                    // issue resizing it, just use the original and turn on stretch mode
+                    this.BackgroundImageLayout = ImageLayout.Stretch;
+                    this.BackgroundImage = _cached_background_image;
+                }
+            }
+            finally
+            {
+                if (graphics != null) graphics.Dispose();
+            }
+        }
+
+        private void setupToolStripMenuItem_MouseUp(object sender, MouseEventArgs e)
+        {
+            //[2.10.3.6]MW0LGE now in submenu, however do this if shift held,
+            //because so many people moan about 1 more mouse click
+            if (Common.ShiftKeyDown)
+            {
+                if (IsSetupFormNull) return;
+                if (SetupForm.InvokeRequired)
+                {
+                    SetupForm.Invoke(new MethodInvoker(() =>
+                    {
+                        SetupForm.Show();
+                        SetupForm.Focus();
+                        SetFocusMaster(false);
+                    }));
+                }
+                else
+                {
+                    SetupForm.Show();
+                    SetupForm.Focus();
+                    SetFocusMaster(false);
+                }
+            }
+            else if (!setupToolStripMenuItem.DropDown.Visible) setupToolStripMenuItem.ShowDropDown();
+            //[2.10.3.7]MW0LGE show dropdown above fixes issue where the popup does not show if the window
+            //does not have focus and setup is clicked. Note, also needs to be in MouseUp
+        }
+        //wd5y
         private void TopControlstoolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetupForm.chkShowAndromedaTop.Checked = !SetupForm.chkShowAndromedaTop.Checked;
@@ -49359,6 +49968,7 @@ namespace Thetis
             Skin.Restore(CurrentSkin, AppDataPath, sliderForm);
             Invoke(new MethodInvoker(sliderForm.Show));
         }
+        //wd5y
     }
 
     public class DigiMode

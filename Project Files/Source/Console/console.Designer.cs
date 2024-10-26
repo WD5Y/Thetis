@@ -644,7 +644,6 @@
             this.radBand160 = new System.Windows.Forms.RadioButtonTS();
             this.radBandGEN = new System.Windows.Forms.RadioButtonTS();
             this.radBandWWV = new System.Windows.Forms.RadioButtonTS();
-            this.radBand2 = new System.Windows.Forms.RadioButtonTS();
             this.radBand6 = new System.Windows.Forms.RadioButtonTS();
             this.radBand10 = new System.Windows.Forms.RadioButtonTS();
             this.radBand12 = new System.Windows.Forms.RadioButtonTS();
@@ -729,6 +728,7 @@
             this.ptbTune = new Thetis.PrettyTrackBar();
             this.udTXStepAttData = new System.Windows.Forms.NumericUpDownTS();
             this.chkMNU = new System.Windows.Forms.CheckBoxTS();
+            this.radBand2 = new System.Windows.Forms.RadioButtonTS();
             this.timer_clock = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFilterRX1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemRX1FilterConfigure = new System.Windows.Forms.ToolStripMenuItem();
@@ -757,6 +757,7 @@
             this.spotterMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopControlstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RXTXGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -823,6 +824,7 @@
             this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.finderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.lSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1123,7 +1125,6 @@
             this.ptbRX2Squelch = new Thetis.PrettyTrackBar();
             this.picSquelch = new System.Windows.Forms.PictureBox();
             this.ptbSquelch = new Thetis.PrettyTrackBar();
-            this.RXTXGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterLow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).BeginInit();
@@ -2761,16 +2762,6 @@
             this.radBandWWV.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBandWWV.Click += new System.EventHandler(this.radBandWWV_Click);
             // 
-            // radBand2
-            // 
-            resources.ApplyResources(this.radBand2, "radBand2");
-            this.radBand2.FlatAppearance.BorderSize = 0;
-            this.radBand2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radBand2.Name = "radBand2";
-            this.radBand2.TabStop = true;
-            this.toolTip1.SetToolTip(this.radBand2, resources.GetString("radBand2.ToolTip"));
-            this.radBand2.UseVisualStyleBackColor = true;
-            // 
             // radBand6
             // 
             resources.ApplyResources(this.radBand6, "radBand6");
@@ -4004,6 +3995,15 @@
             this.chkMNU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             //wd5y
             // 
+            // radBand2
+            // 
+            resources.ApplyResources(this.radBand2, "radBand2");
+            this.radBand2.FlatAppearance.BorderSize = 0;
+            this.radBand2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radBand2.Name = "radBand2";
+            this.radBand2.TabStop = true;
+            this.radBand2.UseVisualStyleBackColor = true;
+            // 
             // timer_clock
             // 
             this.timer_clock.Enabled = true;
@@ -4128,7 +4128,8 @@
             this.wBToolStripMenuItem,
             this.pIToolStripMenuItem,
             this.BPFToolStripMenuItem,
-            this.finderMenuItem});
+            this.finderMenuItem,
+            this.miAbout});
             this.menuStrip1.Name = "menuStrip1";
             //wd5y
             this.menuStrip1.Dock = DockStyle.None;
@@ -4143,7 +4144,7 @@
             this.setupToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             resources.ApplyResources(this.setupToolStripMenuItem, "setupToolStripMenuItem");
-            this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
+            this.setupToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.setupToolStripMenuItem_MouseUp);
             // 
             // setupToolStripMenuItem1
             // 
@@ -4224,6 +4225,13 @@
             this.TopControlstoolStripMenuItem.Name = "TopControlstoolStripMenuItem";
             resources.ApplyResources(this.TopControlstoolStripMenuItem, "TopControlstoolStripMenuItem");
             this.TopControlstoolStripMenuItem.Click += new System.EventHandler(this.TopControlstoolStripMenuItem_Click);
+            // 
+            // RXTXGainToolStripMenuItem
+            // 
+            this.RXTXGainToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RXTXGainToolStripMenuItem.Name = "RXTXGainToolStripMenuItem";
+            resources.ApplyResources(this.RXTXGainToolStripMenuItem, "RXTXGainToolStripMenuItem");
+            this.RXTXGainToolStripMenuItem.Click += new System.EventHandler(this.RXTXGainToolStripMenuItem_Click);
             // 
             // modeToolStripMenuItem
             // 
@@ -4687,6 +4695,13 @@
             this.finderMenuItem.Name = "finderMenuItem";
             resources.ApplyResources(this.finderMenuItem, "finderMenuItem");
             this.finderMenuItem.Click += new System.EventHandler(this.finderMenuItem_Click);
+            // 
+            // miAbout
+            // 
+            this.miAbout.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.miAbout.Name = "miAbout";
+            resources.ApplyResources(this.miAbout, "miAbout");
+            this.miAbout.Click += new System.EventHandler(this.miAbout_Click);
             // 
             // lSBToolStripMenuItem
             // 
@@ -7390,13 +7405,6 @@
             this.ptbSquelch.Value = 0;
             this.ptbSquelch.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbSquelch_Scroll);
             // 
-            // RXTXGainToolStripMenuItem
-            // 
-            this.RXTXGainToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RXTXGainToolStripMenuItem.Name = "RXTXGainToolStripMenuItem";
-            resources.ApplyResources(this.RXTXGainToolStripMenuItem, "RXTXGainToolStripMenuItem");
-            this.RXTXGainToolStripMenuItem.Click += new System.EventHandler(this.RXTXGainToolStripMenuItem_Click);
-            // 
             // Console
             // 
             resources.ApplyResources(this, "$this");
@@ -7734,6 +7742,7 @@
         private ToolStripMenuItem databaseManagerToolStripMenuItem;
         private ToolStripMenuItem setupToolStripMenuItem1;
         private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem miAbout;
         //wd5y
         private ToolStripMenuItem TopControlstoolStripMenuItem;
         private CheckBoxTS chkMNU;

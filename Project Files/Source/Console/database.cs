@@ -74,6 +74,111 @@ namespace Thetis
         // Private Member Functions
         // ======================================================
 
+        //private static Dictionary<string, DataTable> _table_snapshots = new Dictionary<string, DataTable>();
+        //public static bool DifferentInSnapshot(string tableName, string keyPrefix, ref Dictionary<string, string> differences)
+        //{
+        //    bool bret = false;
+
+        //    if (ds.Tables.Contains(tableName) && _table_snapshots.ContainsKey(tableName))
+        //    {
+        //        // Create DataViews for filtering
+        //        DataView currentView = new DataView(ds.Tables[tableName]);
+        //        DataView snapshotView = new DataView(_table_snapshots[tableName]);
+
+        //        // Filter rows starting with the keyPrefix
+        //        currentView.RowFilter = $"Key LIKE '{keyPrefix}%'";
+        //        snapshotView.RowFilter = $"Key LIKE '{keyPrefix}%'";
+
+        //        // Track the keys in both tables
+        //        HashSet<string> currentKeys = new HashSet<string>();
+        //        HashSet<string> snapshotKeys = new HashSet<string>();
+
+        //        // Check for differences in both tables
+        //        foreach (DataRowView row_dataset in currentView)
+        //        {
+        //            string currentKey = row_dataset["Key"].ToString();
+        //            currentKeys.Add(currentKey);
+
+        //            DataRow[] matchingSnapshotRows = snapshotView.Table.Select($"Key = '{currentKey}'");
+
+        //            if (matchingSnapshotRows.Length > 0)
+        //            {
+        //                DataRow row_snapshot = matchingSnapshotRows[0];
+        //                if (row_dataset["Value"].ToString() != row_snapshot["Value"].ToString())
+        //                {
+        //                    if (!differences.ContainsKey(currentKey))
+        //                    {
+        //                        differences.Add(currentKey, row_snapshot["Value"].ToString());
+        //                    }
+        //                    bret = true;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (!differences.ContainsKey(currentKey))
+        //                {
+        //                    differences.Add(currentKey, row_dataset["Value"].ToString());
+        //                }
+        //                bret = true;
+        //            }
+        //        }
+
+        //        // Check for keys that are in the snapshot but not in ds
+        //        foreach (DataRowView row_snapshot in snapshotView)
+        //        {
+        //            string snapshotKey = row_snapshot["Key"].ToString();
+        //            snapshotKeys.Add(snapshotKey);
+        //            if (!currentKeys.Contains(snapshotKey))
+        //            {
+        //                if (!differences.ContainsKey(snapshotKey))
+        //                {
+        //                    differences.Add(snapshotKey, row_snapshot["Value"].ToString());
+        //                }
+        //                bret = true;
+        //            }
+        //        }
+        //    }
+
+        //    return bret;
+        //}
+        //public static void SnapshotTable(string table)
+        //{
+        //    if (ds == null) return;
+        //    if (!ds.Tables.Contains(table)) return;
+
+        //    DataTable tableCopy = ds.Tables[table].Copy();
+
+        //    if (_table_snapshots.ContainsKey(table))
+        //    {
+        //        _table_snapshots[table] = tableCopy;
+        //    }
+        //    else
+        //    {
+        //        _table_snapshots.Add(table, tableCopy);
+        //    }
+        //}
+        //public static void RecoverTableSnapshot(string table)
+        //{
+        //    if (ds == null) return;
+        //    if (!_table_snapshots.ContainsKey(table)) return;
+
+        //    if (ds.Tables.Contains(table))
+        //    {
+        //        ds.Tables.Remove(table);
+        //    }
+
+        //    DataTable snapshotCopy = _table_snapshots[table].Copy();
+        //    ds.Tables.Add(snapshotCopy);
+
+        //    RemoveTableSnapshot(table);
+        //}
+        //public static void RemoveTableSnapshot(string table)
+        //{
+        //    if (ds == null) return;
+        //    if (!_table_snapshots.ContainsKey(table)) return;
+
+        //    _table_snapshots.Remove(table);
+        //}
         private static void VerifyTables()
         {
             if (!ds.Tables.Contains("BandText"))
@@ -9114,7 +9219,7 @@ namespace Thetis
 
         private static void CheckBandTextValid()
         {
-            ArrayList bad_rows = new ArrayList();
+            List<DataRow> bad_rows = new List<DataRow>();
 
             if (ds == null) return;
             foreach (DataRow dr in ds.Tables["BandText"].Rows)
@@ -9626,7 +9731,7 @@ namespace Thetis
                 }
             }
         }
-        public static void SaveVars(string tableName, ref ArrayList list, bool bSaveEmptyValues = true)
+        public static void SaveVars(string tableName, List<string> list, bool bSaveEmptyValues = true)
         {
             if (_merged) return; // we just merged, dont want to change anything
 
@@ -9673,25 +9778,43 @@ namespace Thetis
                 }
              }
         }
-
-        public static Dictionary<string, string> GetVarsDictionary(string tableName)
+        public static Dictionary<string, string> GetVarsDictionary(string table_name)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            if (!ds.Tables.Contains(tableName))
+
+            if (!ds.Tables.Contains(table_name))
                 return dict;
 
-            DataTable t = ds.Tables[tableName];
+            DataTable table = ds.Tables[table_name];
+            dict = new Dictionary<string, string>(table.Rows.Count);
 
-            for (int i = 0; i < t.Rows.Count; i++)
+            foreach (DataRow row in table.Rows)
             {
-                dict.Add(t.Rows[i][0].ToString(), t.Rows[i][1].ToString());
+                string key = row[0].ToString();
+                string value = row[1].ToString();
+                dict.Add(key, value);
             }
 
             return dict;
         }
-        public static ArrayList GetVars(string tableName)
+        //public static Dictionary<string, string> GetVarsDictionary(string tableName)
+        //{
+        //    Dictionary<string, string> dict = new Dictionary<string, string>();
+        //    if (!ds.Tables.Contains(tableName))
+        //        return dict;
+
+        //    DataTable t = ds.Tables[tableName];
+
+        //    for (int i = 0; i < t.Rows.Count; i++)
+        //    {
+        //        dict.Add(t.Rows[i][0].ToString(), t.Rows[i][1].ToString());
+        //    }
+
+        //    return dict;
+        //}
+        public static List<string> GetVars(string tableName)
         {
-            ArrayList list = new ArrayList();
+            List<string> list = new List<string>();
             if (!ds.Tables.Contains(tableName))
                 return list;
 

@@ -2283,10 +2283,18 @@ namespace Thetis
                             font95 = new Font("Arial", 9.5f),
                             font32b = new Font("Arial", 32, FontStyle.Bold);
 
-#endregion
+        #endregion
 
         #region General Routines
+        private static bool localMox(int rx)
+        {
+            if (rx == 1)
+                return _mox && (!_tx_on_vfob || (_tx_on_vfob && !_rx2_enabled));
+            else if (rx == 2)
+                return _mox && (_tx_on_vfob && _rx2_enabled);
 
+            return false;
+        }
 
         #region GDI+ General Routines
 
@@ -2859,7 +2867,7 @@ namespace Thetis
                     _factory1 = new SharpDX.DXGI.Factory1();
 
                     _device = new Device(driverType, debug | DeviceCreationFlags.PreventAlteringLayerSettingsFromRegistry | DeviceCreationFlags.BgraSupport/* | DeviceCreationFlags.SingleThreaded*/, featureLevels);
-
+                    
                     SharpDX.DXGI.Device1 device1 = _device.QueryInterfaceOrNull<SharpDX.DXGI.Device1>();
                     if (device1 != null)
                     {
@@ -2965,6 +2973,32 @@ namespace Thetis
                     ShutdownDX2D();
                     MessageBox.Show("Problem initialising DirectX !" + System.Environment.NewLine + System.Environment.NewLine + "[" + e.ToString() + "]", "DirectX", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
                 }
+            }
+        }
+        public static int DXVersion()
+        {
+            lock (_objDX2Lock)
+            {
+                if (!_bDX2Setup) return -1;
+
+                try
+                {
+                    SharpDX.Direct3D.FeatureLevel featureLevel = _device.FeatureLevel;
+                    switch (featureLevel)
+                    {
+                        case SharpDX.Direct3D.FeatureLevel.Level_9_1: return 91;
+                        case SharpDX.Direct3D.FeatureLevel.Level_9_2: return 92;
+                        case SharpDX.Direct3D.FeatureLevel.Level_9_3: return 93;
+                        case SharpDX.Direct3D.FeatureLevel.Level_10_0: return 100;
+                        case SharpDX.Direct3D.FeatureLevel.Level_10_1: return 101;
+                        case SharpDX.Direct3D.FeatureLevel.Level_11_0: return 110;
+                        case SharpDX.Direct3D.FeatureLevel.Level_11_1: return 111;
+                        case SharpDX.Direct3D.FeatureLevel.Level_12_0: return 120;
+                        case SharpDX.Direct3D.FeatureLevel.Level_12_1: return 121;
+                    }
+                }
+                catch { }
+                return -1;
             }
         }
         public static void ResetDX2DModeDescription()
@@ -4087,9 +4121,9 @@ namespace Thetis
             int Y;
             max = data[0] + fOffset;
             Y = (int)(((grid_max - max) * dbmToPixel) - 0.5f); // -0.5 to mimic floor
-            if (Y >= H) Y = H;
+            //crop if (Y >= H) Y = H;
             Y += nVerticalShift;
-            if (Y < nVerticalShift) Y = nVerticalShift; // crop top
+            //crop if (Y < nVerticalShift) Y = nVerticalShift; // crop top
 
             bool bIgnoringPoints = false;
             SharpDX.Vector2 point = new SharpDX.Vector2();
@@ -4149,6 +4183,9 @@ namespace Thetis
 
             unchecked // we dont expect any overflows
             {
+                SharpDX.RectangleF clipRect = new SharpDX.RectangleF(0, nVerticalShift, W, H);
+                _d2dRenderTarget.PushAxisAlignedClip(clipRect, AntialiasMode.Aliased);
+
                 // modify the data for visual notches
                 if (bDoVisualNotch && m_bShowVisualNotch && !local_mox)
                 {
@@ -4175,9 +4212,9 @@ namespace Thetis
                     //
 
                     Y = (int)(((grid_max - max) * dbmToPixel) - 0.5f); // -0.5 to mimic floor
-                    if (Y > H) Y = H;
+                    //crop if (Y > H) Y = H;
                     Y += nVerticalShift;
-                    if (Y < nVerticalShift) Y = nVerticalShift; // crop top
+                    //crop if (Y < nVerticalShift) Y = nVerticalShift; // crop top
 
                     point.Y = Y;
 
@@ -4256,9 +4293,9 @@ namespace Thetis
                             // draw to peak, but re-work Y as we might rescale the spectrum vertically
                             spectralPeakPoint.X = point.X;
                             spectralPeakPoint.Y = (int)(((grid_max - spectralPeaks[i].max_dBm) * dbmToPixel) - 0.5f);
-                            if (spectralPeakPoint.Y > H) spectralPeakPoint.Y = H;
+                            //crop if (spectralPeakPoint.Y > H) spectralPeakPoint.Y = H;
                             spectralPeakPoint.Y += nVerticalShift;
-                            if (spectralPeakPoint.Y < nVerticalShift) spectralPeakPoint.Y = nVerticalShift; // crop top
+                            //crop if (spectralPeakPoint.Y < nVerticalShift) spectralPeakPoint.Y = nVerticalShift; // crop top
 
                             if (bActivePeakFill)
                             {
@@ -4340,16 +4377,16 @@ namespace Thetis
 
                     if ((rx == 1 && m_bShowRX1NoiseFloor) || (rx == 2 && m_bShowRX2NoiseFloor))
                     {
-                        yPixelLerp = yPixelLerp < H ? yPixelLerp : H;
+                        //crop yPixelLerp = yPixelLerp < H ? yPixelLerp : H;
                         yPixelLerp += nVerticalShift;
 
-                        bool bDraw = !(yPixelLerp < nVerticalShift || yPixelLerp >= nVerticalShift + H); // crop anything off the top
+                        //crop bool bDraw = !(yPixelLerp < nVerticalShift || yPixelLerp >= nVerticalShift + H); // crop anything off the top
 
-                        if (bDraw)
-                        {
+                        //crop if (bDraw)
+                        //{
                             bool bFast = rx == 1 ? m_bFastAttackNoiseFloorRX1 : m_bFastAttackNoiseFloorRX2;
 
-                            yPixelActual = yPixelActual < H ? yPixelActual : H;
+                            //crop yPixelActual = yPixelActual < H ? yPixelActual : H;
                             yPixelActual += nVerticalShift;
 
                             SharpDX.Direct2D1.Brush nf_colour = bFast ? m_bDX2_Gray : m_bDX2_noisefloor;
@@ -4370,7 +4407,7 @@ namespace Thetis
                             {
                                 drawStringDX2D("-NF", fontDX2d_panafont, nf_colour_text, nf_box.X + nf_box.Width, nf_box.Y - 4);
                             }
-                        }
+                        //}
                     }
                 }
 
@@ -4397,7 +4434,7 @@ namespace Thetis
 
                                     // recalc Y
                                     int nNewY = (int)(((grid_max - maximums[n].max_dBm) * dbmToPixel) - 0.5f);
-                                    nNewY = nNewY < H ? nNewY + nVerticalShift : H + nVerticalShift;
+                                    //crop nNewY = nNewY < H ? nNewY + nVerticalShift : H + nVerticalShift;
                                     maximums[n].MaxY_pixel = nNewY;
                                 }
                                 else if (maximums[n].max_dBm <= -200.0)
@@ -4410,12 +4447,12 @@ namespace Thetis
                             m_objEllipse.Point.X = maximums[n].X * m_nDecimation;
                             m_objEllipse.Point.Y = maximums[n].MaxY_pixel;
 
-                            bool bDraw = true;
-                            if (m_objEllipse.Point.Y < nVerticalShift) bDraw = false; // crop top
-                            if (m_objEllipse.Point.Y >= nVerticalShift + H) bDraw = false; // crop top
+                            //crop bool bDraw = true;
+                            //crop if (m_objEllipse.Point.Y < nVerticalShift) bDraw = false; // crop top
+                            //crop if (m_objEllipse.Point.Y >= nVerticalShift + H) bDraw = false; // crop top
 
-                            if (bDraw)
-                            {
+                            //crop if (bDraw)
+                            //{
                                 string sAppend;
                                 if (rx == 1)
                                 {
@@ -4427,10 +4464,12 @@ namespace Thetis
                                 }
                                 _d2dRenderTarget.DrawEllipse(m_objEllipse, m_bDX2_PeakBlob);
                                 _d2dRenderTarget.DrawText(maximums[n].max_dBm.ToString("f1") + sAppend, fontDX2d_callout, new RectangleF(m_objEllipse.Point.X + 6, m_objEllipse.Point.Y - 8, float.PositiveInfinity, float.PositiveInfinity), m_bDX2_PeakBlobText, DrawTextOptions.None);
-                            }
+                            //}
                         }
                     }
                 }
+
+                _d2dRenderTarget.PopAxisAlignedClip();
             }
 
             if (!bottom)
@@ -6815,6 +6854,9 @@ namespace Thetis
             //--
             #endregion
 
+            SharpDX.RectangleF clipRect = new SharpDX.RectangleF(0, nVerticalShift, W, H);
+            _d2dRenderTarget.PushAxisAlignedClip(clipRect, AntialiasMode.Aliased);
+
             #region RX filter, filter lines and sub rx overlay
             if (!local_mox && sub_rx1_enabled && rx == 1) //multi-rx
             {
@@ -8110,6 +8152,8 @@ namespace Thetis
                 }// for loop through DX_Index
             }
             #endregion
+
+            _d2dRenderTarget.PopAxisAlignedClip();
         }
 
         private static void DrawCursorInfo(int W)
@@ -9569,15 +9613,6 @@ namespace Thetis
             set { _wdsp_mox_transition_buffer_clear = value; }
         }
 #endregion
-        private static bool localMox(int rx)
-        {
-            if(rx == 1)
-                return _mox && (!_tx_on_vfob || (_tx_on_vfob && !_rx2_enabled));
-            else if(rx == 2)
-                return _mox && (_tx_on_vfob && _rx2_enabled);
-
-            return false;
-        }
 
 #if SNOWFALL
         private class SnowFlake
@@ -9820,5 +9855,54 @@ namespace Thetis
             }
         }
 #endif
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct DEVMODE
+        {
+            private const int CCHDEVICENAME = 32;
+            private const int CCHFORMNAME = 32;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHDEVICENAME)]
+            public string dmDeviceName;
+            public ushort dmSpecVersion;
+            public ushort dmDriverVersion;
+            public ushort dmSize;
+            public ushort dmDriverExtra;
+            public uint dmFields;
+            public int dmPositionX;
+            public int dmPositionY;
+            public uint dmDisplayOrientation;
+            public uint dmDisplayFixedOutput;
+            public short dmColor;
+            public short dmDuplex;
+            public short dmYResolution;
+            public short dmTTOption;
+            public short dmCollate;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
+            public string dmFormName;
+            public ushort dmLogPixels;
+            public uint dmBitsPerPel;
+            public uint dmPelsWidth;
+            public uint dmPelsHeight;
+            public uint dmDisplayFlags;
+            public uint dmDisplayFrequency;
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern bool EnumDisplaySettings(string deviceName, int modeNum, ref DEVMODE devMode);
+
+        public static int GetCurrentMonitorRefreshRate(Form form)
+        {
+            // get the refresh rate of the monitor that the form is on
+            Screen screen = Screen.FromControl(form);
+            DEVMODE devMode = new DEVMODE();
+            devMode.dmDeviceName = new string(new char[32]);
+
+            if (EnumDisplaySettings(screen.DeviceName, -1, ref devMode))
+            {
+                return (int)devMode.dmDisplayFrequency;
+            }
+            return 60;
+        }
     }
 }
