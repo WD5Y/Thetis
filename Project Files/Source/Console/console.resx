@@ -9516,7 +9516,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>0, 0</value>
   </data>
   <data name="menuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1444, 24</value>
+    <value>1104, 24</value>
   </data>
   <data name="menuStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>136</value>
@@ -14542,7 +14542,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>128, 420</value>
   </data>
   <data name="panelVFO.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 156</value>
+    <value>130, 168</value>
   </data>
   <data name="panelVFO.TabIndex" type="System.Int32, mscorlib">
     <value>120</value>

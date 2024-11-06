@@ -79,7 +79,7 @@
         private System.Windows.Forms.ButtonTS btnXITReset;
         private System.Windows.Forms.ButtonTS btnRITReset;
         private System.Windows.Forms.ComboBoxTS comboTuneMode;
-        private System.Windows.Forms.ComboBoxTS comboPreamp;
+        public System.Windows.Forms.ComboBoxTS comboPreamp;
         private System.Windows.Forms.LabelTS lblPreamp;
         private System.Windows.Forms.CheckBoxTS chkDSPNB2;
         private System.Windows.Forms.CheckBoxTS chkVFOLock;
@@ -456,7 +456,7 @@
         private LabelTS lblVACTXIndicator;
         private LabelTS lblVACRXIndicator;
         private CheckBoxTS chkVAC2;
-        private NumericUpDownTS udRX1StepAttData;
+        public NumericUpDownTS udRX1StepAttData;
         private CheckBoxTS chkFullDuplex;
         private ToolStripMenuItem RX1AVGToolStripMenuItem;
         private ToolStripMenuItem RX1PeakToolStripMenuItem;
@@ -465,7 +465,7 @@
         private ToolStripMenuItem linearityToolStripMenuItem;
         public ComboBoxTS comboRX2Preamp;
         private LabelTS lblRX2Preamp;
-        private NumericUpDownTS udRX2StepAttData;
+        public NumericUpDownTS udRX2StepAttData;
         private ToolStripMenuItem RAtoolStripMenuItem;
         private GroupBoxTS grpCWAPF;
         private PrettyTrackBar ptbCWAPFFreq;
@@ -1846,12 +1846,12 @@
             0,
             0});
             this.udRX2FilterHigh.Maximum = new decimal(new int[] {
-            9999,
+            10000,
             0,
             0,
             0});
             this.udRX2FilterHigh.Minimum = new decimal(new int[] {
-            9999,
+            10000,
             0,
             0,
             -2147483648});
@@ -1876,12 +1876,12 @@
             0,
             0});
             this.udRX2FilterLow.Maximum = new decimal(new int[] {
-            9999,
+            10000,
             0,
             0,
             0});
             this.udRX2FilterLow.Minimum = new decimal(new int[] {
-            9999,
+            10000,
             0,
             0,
             -2147483648});
