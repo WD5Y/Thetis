@@ -551,7 +551,8 @@ namespace Thetis
             console.PreampModeChangedHandlers += OnPreampModeChanged;
             console.CentreFrequencyHandlers += OnCentreFrequencyChanged;
             console.CTUNChangedHandlers += OnCTUNChanged;
-            console.MinimumNotchWidthChangedHandlers += OnMinNotchWidthChanged;
+            console.MinimumRXNotchWidthChangedHandlers += OnMinRXNotchWidthChanged;
+            console.MinimumTXNotchWidthChangedHandlers += OnMinTXNotchWidthChanged;
         }
         public static void RemoveDelegates()
         {
@@ -561,11 +562,16 @@ namespace Thetis
             console.PreampModeChangedHandlers -= OnPreampModeChanged;
             console.CentreFrequencyHandlers -= OnCentreFrequencyChanged;
             console.CTUNChangedHandlers -= OnCTUNChanged;
-            console.MinimumNotchWidthChangedHandlers -= OnMinNotchWidthChanged;
+            console.MinimumRXNotchWidthChangedHandlers -= OnMinRXNotchWidthChanged;
+            console.MinimumTXNotchWidthChangedHandlers -= OnMinTXNotchWidthChanged;
         }
-        private static void OnMinNotchWidthChanged(int rx, double width)
+        private static void OnMinRXNotchWidthChanged(int rx, double width)
         {
-            _mnfMinSize = width;
+            _mnfMinSizeRX = width;
+        }
+        private static void OnMinTXNotchWidthChanged(double width)
+        {
+            _mnfMinSizeTX = width;
         }
         private static bool _rx1ClickDisplayCTUN = false;
         private static bool _rx2ClickDisplayCTUN = false;
@@ -792,7 +798,8 @@ namespace Thetis
         private static int displayTargetHeight = 0;	// target height
         private static int displayTargetWidth = 0;	// target width
         private static Control displayTarget = null;
-        private static double _mnfMinSize = 100;
+        private static double _mnfMinSizeRX = 100;
+        private static double _mnfMinSizeTX = 100;
         public static Control Target
         {
             get { return displayTarget; }
@@ -808,7 +815,8 @@ namespace Thetis
                     initDisplayArrays(displayTargetWidth, displayTargetHeight);
 
                     //UpdateMNFminWidth();
-                    _mnfMinSize = console.GetMinimumNotchWidth(1); // just for rx1
+                    _mnfMinSizeRX = console.GetMinimumRXNotchWidth(1); // just for rx1
+                    _mnfMinSizeTX = console.GetMinimumTXNotchWidth();
 
                     if (!_bDX2Setup)
                     {
@@ -1537,6 +1545,10 @@ namespace Thetis
             set
             {
                 tx_wf_amp_max = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesTX();
+                }
             }
         }
 
@@ -1547,6 +1559,10 @@ namespace Thetis
             set
             {
                 tx_wf_amp_min = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesTX();
+                }
             }
         }
 
@@ -2098,14 +2114,28 @@ namespace Thetis
         public static float WaterfallHighThreshold
         {
             get { return waterfall_high_threshold; }
-            set { waterfall_high_threshold = value; }
+            set 
+            { 
+                waterfall_high_threshold = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesRX(1);
+                }
+            }
         }
 
         private static float waterfall_low_threshold = -130.0F;
         public static float WaterfallLowThreshold
         {
             get { return waterfall_low_threshold; }
-            set { waterfall_low_threshold = value; }
+            set 
+            { 
+                waterfall_low_threshold = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesRX(1);
+                }
+            }
         }
 
         //================================================================
@@ -2145,14 +2175,28 @@ namespace Thetis
         public static float RX2WaterfallHighThreshold
         {
             get { return rx2_waterfall_high_threshold; }
-            set { rx2_waterfall_high_threshold = value; }
+            set 
+            { 
+                rx2_waterfall_high_threshold = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesRX(2);
+                }
+            }
         }
 
         private static float rx2_waterfall_low_threshold = -130.0F;
         public static float RX2WaterfallLowThreshold
         {
             get { return rx2_waterfall_low_threshold; }
-            set { rx2_waterfall_low_threshold = value; }
+            set 
+            { 
+                rx2_waterfall_low_threshold = value;
+                if (console != null)
+                {
+                    console.CheckForMinMaxWaterfallUpdatesRX(2);
+                }
+            }
         }
 
         private static float _display_line_width = 1.0F;
@@ -3895,53 +3939,124 @@ namespace Thetis
                 }
             }
         }
+        private readonly static object _rx1_offset_locker = new object();
+        private readonly static object _rx2_offset_locker = new object();
         public static float RX1Offset
         {
             get
             {
-                float fOffset;
-                bool local_mox = localMox(1);
-                bool displayduplex = isRxDuplex(1);
-
-                if (local_mox)
+                lock (_rx1_offset_locker)
                 {
-                    fOffset = tx_display_cal_offset;
-                    if (displayduplex)
+                    float fOffset;
+                    bool local_mox = localMox(1);
+                    bool displayduplex = isRxDuplex(1);
+
+                    if (local_mox)
                     {
-                        fOffset += rx1_display_cal_offset; //[2.10.1.0] MW0LGE fix issue #137
-                        fOffset += tx_attenuator_offset; //[2.10.3.6]MW0LGE att_fix // change fixes #482
+                        fOffset = tx_display_cal_offset;
+                        if (displayduplex)
+                        {
+                            fOffset += rx1_display_cal_offset; //[2.10.1.0] MW0LGE fix issue #137
+                            fOffset += tx_attenuator_offset; //[2.10.3.6]MW0LGE att_fix // change fixes #482
+                        }
                     }
+                    else if (_mox && _tx_on_vfob && !displayduplex)
+                    {
+                        if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
+                        else fOffset = tx_display_cal_offset;
+                    }
+                    else fOffset = rx1_display_cal_offset;
+
+                    if (!local_mox) fOffset += rx1_preamp_offset;
+
+                    return fOffset;
                 }
-                else if (_mox && _tx_on_vfob && !displayduplex)
+            }
+        }
+        public static float RX1OffsetWithDup // used by minispec which is always in duplex mode
+        {
+            get
+            {
+                lock (_rx1_offset_locker)
                 {
-                    if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
-                    else fOffset = tx_display_cal_offset;
+                    float fOffset;
+                    bool local_mox = localMox(1);
+                    bool displayduplex = true;
+
+                    if (local_mox)
+                    {
+                        fOffset = tx_display_cal_offset;
+                        if (displayduplex)
+                        {
+                            fOffset += rx1_display_cal_offset;
+                            fOffset += tx_attenuator_offset;
+                        }
+                    }
+                    else if (_mox && _tx_on_vfob && !displayduplex)
+                    {
+                        if (console.RX2Enabled) fOffset = rx1_display_cal_offset;
+                        else fOffset = tx_display_cal_offset;
+                    }
+                    else fOffset = rx1_display_cal_offset;
+
+                    if (!local_mox) fOffset += rx1_preamp_offset;
+
+                    return fOffset;
                 }
-                else fOffset = rx1_display_cal_offset;
-
-                if (!local_mox) fOffset += rx1_preamp_offset;
-
-                return fOffset;
             }
         }
         public static float RX2Offset
         {
             get
             {
-                float fOffset;
-                bool local_mox = localMox(2);
-                bool displayduplex = isRxDuplex(2);
-
-                if (local_mox)
+                lock (_rx2_offset_locker)
                 {
-                    fOffset = tx_display_cal_offset;
-                    //tx offset in dup would go here
+                    float fOffset;
+                    bool local_mox = localMox(2);
+                    bool displayduplex = isRxDuplex(2); // always returns false
+
+                    if (local_mox)
+                    {
+                        fOffset = tx_display_cal_offset;
+                        if (displayduplex)
+                        {
+                            fOffset += rx2_display_cal_offset;
+                            fOffset += tx_attenuator_offset;
+                        }
+                    }
+                    else fOffset = rx2_display_cal_offset;
+
+                    if (!local_mox) fOffset += rx2_preamp_offset;
+
+                    return fOffset;
                 }
-                else fOffset = rx2_display_cal_offset;
+            }
+        }
+        public static float RX2OffsetWithDup // used by minispec which is always in duplex mode
+        {
+            get
+            {
+                lock (_rx2_offset_locker)
+                {
+                    float fOffset;
+                    bool local_mox = localMox(2);
+                    bool displayduplex = true;
 
-                if (!local_mox) fOffset += rx2_preamp_offset;
+                    if (local_mox)
+                    {
+                        fOffset = tx_display_cal_offset;
+                        if (displayduplex)
+                        {
+                            fOffset += rx2_display_cal_offset;
+                            fOffset += tx_attenuator_offset;
+                        }
+                    }
+                    else fOffset = rx2_display_cal_offset;
 
-                return fOffset;
+                    if (!local_mox) fOffset += rx2_preamp_offset;
+
+                    return fOffset;
+                }
             }
         }
         unsafe static private bool DrawPanadapterDX2D(int nVerticalShift, int W, int H, int rx, bool bottom)
@@ -6567,6 +6682,8 @@ namespace Thetis
             List<MNotch> notches = MNotchDB.NotchesInBW(rf_freq, Low - console.MaxFilterWidth, High + console.MaxFilterWidth);
             List<clsNotchCoords> notchData = new List<clsNotchCoords>();
 
+            double min_notch_wdith = localMox(rx) ? _mnfMinSizeTX : _mnfMinSizeRX;
+
             foreach (MNotch n in notches)
             {
                 int notch_centre_x;
@@ -6581,7 +6698,7 @@ namespace Thetis
                 }
                 else
                 {
-                    double dNewWidth = n.FWidth < _mnfMinSize ? _mnfMinSize : n.FWidth; // use the min width of filter from WDSP
+                    double dNewWidth = n.FWidth < min_notch_wdith ? min_notch_wdith : n.FWidth; // use the min width of filter from WDSP
                     dNewWidth += 20; // fudge factor to align better with spectrum notch
                     notch_centre_x = (int)((float)((n.FCenter) - rf_freq - Low - localRit) / width * W);
                     notch_left_x = (int)((float)((n.FCenter) - rf_freq - dNewWidth / 2 - Low - localRit) / width * W);
