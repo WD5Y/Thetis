@@ -8811,6 +8811,87 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
   <data name="&gt;&gt;udTXStepAttData.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="pbAutoAttWarningRX1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAAABGdBTUEAALGPC/xhBQAAAWZJREFUOE+l
+        kc8rRGEYhZ+yQaREksZ/YKtIZKvs2MxfwMLKgoWyVsQCWwvKzlLJLHTHj9gMQ9e4QxQ7Gr9jDHN17o25
+        8ykzxqmn3t73nNPtu/CLFmchEWU+EWVOc8mKrcN1jIzQXJJGh8C2iL47vAnbwtLuT6qsgP0IpA64d09x
+        hWbtdCtK1ZVldLV5X3OXcUgvTuEuTOBqti1udZOnoDrb4Gyb0F2cC30J+Gh+OORSN3kKKrFRjrNJNpsk
+        axZpp9vaMvR115vRnDpavd/dk07w9PU2wSKhmzwr0yEznpMTqeV8h/RXSDTU+QR38sjb3lJjVkBTo/fA
+        o882qWBoIIw7GM4vkse2GJkZbjZrILkFl3vcBgMim/Qx91d73CuTp8lxOI6y9OGQMQPVVT7mXl5llP3W
+        7irc7PNimoX52EGUUdZTf6/3NvHMCa+mUcyM+Zh7oYxtcaAOlfB49NNULMqqQ0Ua/s0n0OWyxKRb9V4A
+        AAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="pbAutoAttWarningRX1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 271</value>
+  </data>
+  <data name="pbAutoAttWarningRX1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>20, 20</value>
+  </data>
+  <data name="pbAutoAttWarningRX1.TabIndex" type="System.Int32, mscorlib">
+    <value>171</value>
+  </data>
+  <data name="pbAutoAttWarningRX1.ToolTip" xml:space="preserve">
+    <value>Auto Attenuation has been triggered from an ADC overload !</value>
+  </data>
+  <data name="pbAutoAttWarningRX1.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX1.Name" xml:space="preserve">
+    <value>pbAutoAttWarningRX1</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX1.Parent" xml:space="preserve">
+    <value>panelSoundControls</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAAABGdBTUEAALGPC/xhBQAAAWZJREFUOE+l
+        kc8rRGEYhZ+yQaREksZ/YKtIZKvs2MxfwMLKgoWyVsQCWwvKzlLJLHTHj9gMQ9e4QxQ7Gr9jDHN17o25
+        8ykzxqmn3t73nNPtu/CLFmchEWU+EWVOc8mKrcN1jIzQXJJGh8C2iL47vAnbwtLuT6qsgP0IpA64d09x
+        hWbtdCtK1ZVldLV5X3OXcUgvTuEuTOBqti1udZOnoDrb4Gyb0F2cC30J+Gh+OORSN3kKKrFRjrNJNpsk
+        axZpp9vaMvR115vRnDpavd/dk07w9PU2wSKhmzwr0yEznpMTqeV8h/RXSDTU+QR38sjb3lJjVkBTo/fA
+        o882qWBoIIw7GM4vkse2GJkZbjZrILkFl3vcBgMim/Qx91d73CuTp8lxOI6y9OGQMQPVVT7mXl5llP3W
+        7irc7PNimoX52EGUUdZTf6/3NvHMCa+mUcyM+Zh7oYxtcaAOlfB49NNULMqqQ0Ua/s0n0OWyxKRb9V4A
+        AAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Off</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 55</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>20, 20</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.TabIndex" type="System.Int32, mscorlib">
+    <value>172</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.ToolTip" xml:space="preserve">
+    <value>Auto Attenuation has been triggered from an ADC overload !</value>
+  </data>
+  <data name="pbAutoAttWarningRX2.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX2.Name" xml:space="preserve">
+    <value>pbAutoAttWarningRX2</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX2.Parent" xml:space="preserve">
+    <value>panelRX2Power</value>
+  </data>
+  <data name="&gt;&gt;pbAutoAttWarningRX2.ZOrder" xml:space="preserve">
+    <value>0</value>
+    </data>
   <data name="chkMNU.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
   </data>
@@ -8950,40 +9031,40 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>1044, 17</value>
   </metadata>
   <data name="toolStripNotchDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="toolStripNotchDelete.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="toolStripNotchRemember.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="toolStripNotchRemember.Text" xml:space="preserve">
     <value>Remember</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 6</value>
+    <value>145, 6</value>
   </data>
   <data name="toolStripNotchNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="toolStripNotchNormal.Text" xml:space="preserve">
     <value>Normal (x1)</value>
   </data>
   <data name="toolStripNotchDeep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="toolStripNotchDeep.Text" xml:space="preserve">
     <value>Deep (x2)</value>
   </data>
   <data name="toolStripNotchVeryDeep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="toolStripNotchVeryDeep.Text" xml:space="preserve">
     <value>Very Deep (x3)</value>
   </data>
   <data name="contextMenuStripNotch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 120</value>
+    <value>149, 120</value>
   </data>
   <data name="&gt;&gt;contextMenuStripNotch.Name" xml:space="preserve">
     <value>contextMenuStripNotch</value>
@@ -10429,7 +10510,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;nudPwrTemp2.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="nudPwrTemp.Location" type="System.Drawing.Point, System.Drawing">
     <value>86, 527</value>
@@ -10453,7 +10534,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;nudPwrTemp.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="pnlResizeMeter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -10561,7 +10642,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;grpMultimeter.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="panelFilter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11233,7 +11314,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelFilter.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="panelRX2RF.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11260,7 +11341,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2RF.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <data name="panelRX2DSP.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11287,7 +11368,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2DSP.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>15</value>
   </data>
   <data name="btnHidden.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -11317,7 +11398,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnHidden.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>17</value>
   </data>
   <data name="panelOptions.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11392,7 +11473,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelOptions.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>18</value>
   </data>
   <data name="panelModeSpecificPhone.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -11920,7 +12001,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificPhone.ZOrder" xml:space="preserve">
-    <value>56</value>
+    <value>52</value>
   </data>
   <data name="panelButtonBar.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12214,7 +12295,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelButtonBar.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>46</value>
   </data>
   <data name="panelVFOLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12514,7 +12595,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOLabels.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>50</value>
   </data>
   <data name="panelVFOALabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -12820,7 +12901,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOALabels.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>49</value>
   </data>
   <data name="panelVFOBLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -13126,7 +13207,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFOBLabels.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>47</value>
   </data>
   <data name="panelRX2Power.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -13165,7 +13246,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>panelRX2Power</value>
   </data>
   <data name="&gt;&gt;lblRX2Band.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lblRX2Preamp.Image" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
@@ -13198,7 +13279,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>panelRX2Power</value>
   </data>
   <data name="&gt;&gt;lblRX2Preamp.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="panelRX2Power.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 591</value>
@@ -13219,7 +13300,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Power.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>40</value>
   </data>
   <data name="chkRX2.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
@@ -13675,7 +13756,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificCW.ZOrder" xml:space="preserve">
-    <value>59</value>
+    <value>55</value>
   </data>
   <data name="panelRX2Filter.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14146,7 +14227,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Filter.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>19</value>
   </data>
   <data name="panelRX2Mode.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14173,7 +14254,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Mode.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>20</value>
   </data>
   <data name="panelRX2Display.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14200,7 +14281,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Display.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>21</value>
   </data>
   <data name="panelRX2Mixer.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14290,7 +14371,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelRX2Mixer.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>22</value>
   </data>
   <data name="panelMultiRX.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14407,7 +14488,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelMultiRX.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>23</value>
   </data>
   <data name="panelDisplay2.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14437,7 +14518,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelDisplay2.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>26</value>
   </data>
   <data name="panelDSP.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14467,7 +14548,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelDSP.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>27</value>
   </data>
   <data name="panelVFO.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -14557,7 +14638,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelVFO.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>28</value>
   </data>
   <data name="panelSoundControls.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -15199,7 +15280,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandHF.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>42</value>
   </data>
   <data name="txtVFOAFreq.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 20.25pt</value>
@@ -16954,7 +17035,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandVHF.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>43</value>
   </data>
   <data name="panelModeSpecificFM.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -17224,7 +17305,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelModeSpecificFM.ZOrder" xml:space="preserve">
-    <value>57</value>
+    <value>53</value>
   </data>
   <data name="panelBandGEN.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
@@ -17287,7 +17368,7 @@ Ctrl + Left Click on any Band Button adds to Stack</value>
     <value>$this</value>
   </data>
   <data name="&gt;&gt;panelBandGEN.ZOrder" xml:space="preserve">
-    <value>48</value>
+    <value>44</value>
   </data>
   <data name="panelMeterLabels.AutoScrollMargin" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>

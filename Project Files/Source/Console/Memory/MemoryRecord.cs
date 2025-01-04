@@ -78,7 +78,7 @@ namespace Thetis
         // ke9ns add start/stop date and time and determine if repeating and if you want to record audio
         public MemoryRecord(string _group, double _rxfreq, string _name, DSPMode _dsp_mode, bool _scan,
                  string _tune_step, FMTXMode _repeater_mode, double _fm_tx_offset_mhz, bool _ctcss_on, double _ctcss_freq,
-                 int _power, int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh,
+                 int _deviation, bool _split, double _txfreq, Filter _filter, int _filterlow, int _filterhigh,
                  string _comments, AGCMode _agc_mode, int _agc_thresh, bool _rx1agcaut, bool _rx2agcaut,
                  DateTime _StartDate, bool _ScheduleOn, int _Duration, bool _Repeating, bool _Recording, bool _Repeatingm, int _Extra) // string _StartTime, 
         {
@@ -91,8 +91,7 @@ namespace Thetis
             repeater_mode = _repeater_mode;
             rptr_offset = _fm_tx_offset_mhz;
             ctcss_on = _ctcss_on;
-            ctcss_freq = _ctcss_freq;
-            power = _power;
+            ctcss_freq = _ctcss_freq;            
             deviation = _deviation;
             split = _split;
             tx_freq = _txfreq;
@@ -139,8 +138,7 @@ namespace Thetis
             repeater_mode = rec.repeater_mode;
             rptr_offset = rec.rptr_offset;
             ctcss_on = rec.ctcss_on;
-            ctcss_freq = rec.ctcss_freq;
-            power = rec.power;
+            ctcss_freq = rec.ctcss_freq;            
             deviation = rec.deviation;
             split = rec.split;
             tx_freq = rec.tx_freq;
@@ -390,18 +388,7 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("Deviation"));
             }
         }
-
-        private int power = 0;
-        public int Power
-        {
-            get { return power; }
-            set
-            {
-                power = value;
-                OnPropertyChanged(this, new PropertyChangedEventArgs("Power"));
-            }
-        }
-
+        
         private bool split = false;
         public bool Split
         {

@@ -1202,6 +1202,12 @@ namespace Thetis
             get { return high_swr; }
             set { high_swr = value; }
         }
+        private static bool _power_folded_back = false;
+        public static bool PowerFoldedBack
+        {
+            get { return _power_folded_back; }
+            set { _power_folded_back = value; }
+        }        
 
         private static bool _old_mox = false;
         private static bool _mox = false;
@@ -3193,7 +3199,12 @@ namespace Thetis
                 _d2dRenderTarget.TextAntialiasMode = TextAntialiasMode.Default;
             }
         }
-
+        private static bool _maintain_background_aspectratio = false;
+        public static bool MaintainBackgroundAspectRatio
+        {
+            get { return _maintain_background_aspectratio; }
+            set { _maintain_background_aspectratio = value; }
+        }
         public static void RenderDX2D()
         {
             try
@@ -3221,7 +3232,36 @@ namespace Thetis
                     else
                     {
                         // draw background image
-                        RectangleF rectDest = new RectangleF(0, 0, displayTargetWidth, displayTargetHeight);
+                        //RectangleF rectDest = new RectangleF(0, 0, displayTargetWidth, displayTargetHeight);
+                        RectangleF rectDest;
+
+                        if (_maintain_background_aspectratio && _bitmapBackground != null)
+                        {
+                            float imageWidth = _bitmapBackground.PixelSize.Width;
+                            float imageHeight = _bitmapBackground.PixelSize.Height;
+                            float aspectRatio = imageWidth / imageHeight;
+
+                            float targetAspectRatio = displayTargetWidth / displayTargetHeight;
+
+                            if (aspectRatio > targetAspectRatio)
+                            {
+                                float scaledHeight = displayTargetWidth / aspectRatio;
+                                rectDest = new RectangleF(0, (displayTargetHeight - scaledHeight) / 2, displayTargetWidth, scaledHeight);
+                            }
+                            else
+                            {
+                                float scaledWidth = displayTargetHeight * aspectRatio;
+                                rectDest = new RectangleF((displayTargetWidth - scaledWidth) / 2, 0, scaledWidth, displayTargetHeight);
+                            }
+
+                            _d2dRenderTarget.Clear(m_cDX2_display_background_colour);
+                        }
+                        else
+                        {
+                            rectDest = new RectangleF(0, 0, displayTargetWidth, displayTargetHeight);
+                        }
+                        //
+
                         _d2dRenderTarget.DrawBitmap(_bitmapBackground, rectDest, 1f, BitmapInterpolationMode.Linear);
                         _d2dRenderTarget.FillRectangle(rectDest, m_bDX2_display_background_brush); // used for the transparency
                     }
@@ -3431,9 +3471,16 @@ namespace Thetis
                     }
 
                     // HIGH swr display warning
-                    if (high_swr)
+                    if (high_swr || _power_folded_back)
                     {
-                        drawStringDX2D("High SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+                        if(_power_folded_back)
+                        {
+                            drawStringDX2D("HIGH SWR\n\nPOWER FOLD BACK", fontDX2d_font14, m_bDX2_Red, 245, 20);
+                        }
+                        else
+                        {
+                            drawStringDX2D("HIGH SWR", fontDX2d_font14, m_bDX2_Red, 245, 20);
+                        }
                         _d2dRenderTarget.DrawRectangle(new RectangleF(3, 3, displayTargetWidth - 6, displayTargetHeight - 6), m_bDX2_Red, 6f);
                     }
 
@@ -6683,7 +6730,7 @@ namespace Thetis
             List<clsNotchCoords> notchData = new List<clsNotchCoords>();
 
             double min_notch_wdith = localMox(rx) ? _mnfMinSizeTX : _mnfMinSizeRX;
-
+            
             foreach (MNotch n in notches)
             {
                 int notch_centre_x;
@@ -9484,22 +9531,55 @@ namespace Thetis
             int rxDisplayHigh;
 
             bool local_mox = localMox(rx);
+            bool duplex = isRxDuplex(rx);
             int local_rit;
 
             if (rx == 1)
             {
-                vfo_hz = (int)vfoa_hz;
-                rxDisplayLow = RXDisplayLow;
-                rxDisplayHigh = RXDisplayHigh;
+                vfo_hz = vfoa_hz;
+                if (local_mox)
+                {
+                    if (duplex)
+                    {
+                        rxDisplayLow = RXDisplayLow;
+                        rxDisplayHigh = RXDisplayHigh;
+                    }
+                    else
+                    {
+                        rxDisplayLow = TXDisplayLow;
+                        rxDisplayHigh = TXDisplayHigh;
+                    }
+                }
+                else
+                {
+                    rxDisplayLow = RXDisplayLow;
+                    rxDisplayHigh = RXDisplayHigh;
+                }
                 _spotLayerRightRX1.Clear();
 
                 local_rit = _rx1ClickDisplayCTUN ? 0 : rit_hz;
             }
             else// rx == 2
             {
-                vfo_hz = (int)vfob_hz;
-                rxDisplayLow = RX2DisplayLow;
-                rxDisplayHigh = RX2DisplayHigh;
+                vfo_hz = vfob_hz;
+                if (local_mox)
+                {
+                    if (duplex)
+                    {
+                        rxDisplayLow = RX2DisplayLow;
+                        rxDisplayHigh = RX2DisplayHigh;
+                    }
+                    else // always false on rx2
+                    {
+                        rxDisplayLow = TXDisplayLow;
+                        rxDisplayHigh = TXDisplayHigh;
+                    }
+                }
+                else
+                {
+                    rxDisplayLow = RX2DisplayLow;
+                    rxDisplayHigh = RX2DisplayHigh;
+                }
                 _spotLayerRightRX2.Clear();
 
                 local_rit = 0;

@@ -728,6 +728,8 @@
             this.ptbTune = new Thetis.PrettyTrackBar();
             this.udTXStepAttData = new System.Windows.Forms.NumericUpDownTS();
             this.chkMNU = new System.Windows.Forms.CheckBoxTS();
+            this.pbAutoAttWarningRX1 = new System.Windows.Forms.PictureBox();
+            this.pbAutoAttWarningRX2 = new System.Windows.Forms.PictureBox();
             this.radBand2 = new System.Windows.Forms.RadioButtonTS();
             this.timer_clock = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFilterRX1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -1162,13 +1164,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXStepAttData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX2)).BeginInit();
             this.contextMenuStripFilterRX1.SuspendLayout();
             this.contextMenuStripFilterRX2.SuspendLayout();
             this.contextMenuStripNotch.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStripMain.SuspendLayout();
-            this.panelDisplay.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).BeginInit();
             this.grpMultimeter.SuspendLayout();
@@ -1205,6 +1207,8 @@
             this.panelModeSpecificDigital.SuspendLayout();
             this.grpVACStereo.SuspendLayout();
             this.grpDIGSampleRate.SuspendLayout();
+            this.panelDisplay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).BeginInit();
             this.panelMode.SuspendLayout();
             this.panelBandHF.SuspendLayout();
             this.grpVFOA.SuspendLayout();
@@ -1701,6 +1705,7 @@
             this.chkX2TR.Name = "chkX2TR";
             this.toolTip1.SetToolTip(this.chkX2TR, resources.GetString("chkX2TR.ToolTip"));
             this.chkX2TR.CheckedChanged += new System.EventHandler(this.chkX2TR_CheckedChanged);
+            this.chkX2TR.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chkX2TR_MouseUp);
             // 
             // chkFWCATU
             // 
@@ -1710,6 +1715,7 @@
             this.chkFWCATU.Name = "chkFWCATU";
             this.toolTip1.SetToolTip(this.chkFWCATU, resources.GetString("chkFWCATU.ToolTip"));
             this.chkFWCATU.CheckedChanged += new System.EventHandler(this.chkFWCATU_CheckedChanged);
+            this.chkFWCATU.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chkFWCATU_MouseUp);
             // 
             // comboRX2Band
             // 
@@ -3978,6 +3984,21 @@
             this.udTXStepAttData.ValueChanged += new System.EventHandler(this.udTXStepAttData_ValueChanged);
             //wd5y
             // 
+            // pbAutoAttWarningRX1
+            // 
+            resources.ApplyResources(this.pbAutoAttWarningRX1, "pbAutoAttWarningRX1");
+            this.pbAutoAttWarningRX1.Name = "pbAutoAttWarningRX1";
+            this.pbAutoAttWarningRX1.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbAutoAttWarningRX1, resources.GetString("pbAutoAttWarningRX1.ToolTip"));
+            // 
+            // pbAutoAttWarningRX2
+            // 
+            resources.ApplyResources(this.pbAutoAttWarningRX2, "pbAutoAttWarningRX2");
+            this.pbAutoAttWarningRX2.Name = "pbAutoAttWarningRX2";
+            this.pbAutoAttWarningRX2.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbAutoAttWarningRX2, resources.GetString("pbAutoAttWarningRX2.ToolTip"));
+            //wd5y
+            // 
             // chkMNU
             // 
             resources.ApplyResources(this.chkMNU, "chkMNU");
@@ -6071,6 +6092,7 @@
             // 
             resources.ApplyResources(this.panelRX2Power, "panelRX2Power");
             this.panelRX2Power.BackColor = System.Drawing.Color.Transparent;
+            this.panelRX2Power.Controls.Add(this.pbAutoAttWarningRX2);
             this.panelRX2Power.Controls.Add(this.lblRX2Band);
             this.panelRX2Power.Controls.Add(this.comboRX2Band);
             this.panelRX2Power.Controls.Add(this.lblRX2Preamp);
@@ -6479,6 +6501,7 @@
             // 
             resources.ApplyResources(this.panelSoundControls, "panelSoundControls");
             this.panelSoundControls.BackColor = System.Drawing.Color.Transparent;
+            this.panelSoundControls.Controls.Add(this.pbAutoAttWarningRX1);
             this.panelSoundControls.Controls.Add(this.ptbTune);
             this.panelSoundControls.Controls.Add(this.lblTune);
             this.panelSoundControls.Controls.Add(this.ptbRX2AF);
@@ -7518,6 +7541,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXStepAttData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX2)).EndInit();
             this.contextMenuStripFilterRX1.ResumeLayout(false);
             this.contextMenuStripFilterRX2.ResumeLayout(false);
             this.contextMenuStripNotch.ResumeLayout(false);
@@ -7525,8 +7550,6 @@
             this.menuStrip1.PerformLayout();
             this.statusStripMain.ResumeLayout(false);
             this.statusStripMain.PerformLayout();
-            this.panelDisplay.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).EndInit();
             this.grpMultimeter.ResumeLayout(false);
@@ -7570,6 +7593,8 @@
             this.panelModeSpecificDigital.PerformLayout();
             this.grpVACStereo.ResumeLayout(false);
             this.grpDIGSampleRate.ResumeLayout(false);
+            this.panelDisplay.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picDisplay)).EndInit();
             this.panelMode.ResumeLayout(false);
             this.panelBandHF.ResumeLayout(false);
             this.grpVFOA.ResumeLayout(false);
@@ -7743,6 +7768,8 @@
         private ToolStripMenuItem setupToolStripMenuItem1;
         private ToolStripSeparator toolStripMenuItem1;
         private ToolStripMenuItem miAbout;
+        private PictureBox pbAutoAttWarningRX1;
+        private PictureBox pbAutoAttWarningRX2;
         //wd5y
         private ToolStripMenuItem TopControlstoolStripMenuItem;
         private CheckBoxTS chkMNU;

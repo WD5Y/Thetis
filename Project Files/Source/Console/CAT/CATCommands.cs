@@ -2803,7 +2803,7 @@ namespace Thetis
 				n = Math.Max(-10000, n);
 				console.RX1FilterLow = n;
                 console.TitleBarEncoderString = "VFO A Filter low cut = " + n + "Hz";
-				console.UpdateRX1Filters(n, console.RX1FilterHigh);
+				console.UpdateRX1Filters(n, console.RX1FilterHigh, true, false);
 				return "";
 			}
 			else if(s.Length == parser.nGet)
@@ -2840,7 +2840,7 @@ namespace Thetis
 					n = Math.Max(-10000, n);
 					console.RX1FilterHigh = n;
                     console.TitleBarEncoderString = "VFO A Filter high cut = " + n + "Hz";
-					console.UpdateRX1Filters(console.RX1FilterLow, n);
+					console.UpdateRX1Filters(console.RX1FilterLow, n, true, false);
 					return "";
 				}
 				else if(s.Length == parser.nGet)
@@ -2872,7 +2872,7 @@ namespace Thetis
             else if (radio == "ANAN10" || radio == "ANAN10E")
                 return "0";
 
-            else if (radio == "ANAN100" || radio == "ANAN100B" || radio == "ANAN100D" || radio == "ANAN200D" || radio == "ANAN7000D" || radio == "ANAN8000D" || radio == "ANAN_G2" || radio == "ANAN_G2_1K")  // DH1KLM_21a added 7000D
+            else if (radio == "ANAN100" || radio == "ANAN100B" || radio == "ANAN100D" || radio == "ANAN200D" || radio == "ANAN7000D" || radio == "ANAN8000D" || radio == "ANVELINAPRO3" || radio == "ANAN_G2" || radio == "ANAN_G2_1K")  // DH1KLM_21a added 7000D
                 return "1";
             else
                 return parser.Error1;
@@ -2896,7 +2896,7 @@ namespace Thetis
                 n = Math.Max(-10000, n);
                 console.RX2FilterHigh = n;
                 console.TitleBarEncoderString = "VFO B Filter high cut = " + n + "Hz";
-                console.UpdateRX2Filters(console.RX2FilterLow, n);
+                console.UpdateRX2Filters(console.RX2FilterLow, n, true, false);
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -2932,7 +2932,7 @@ namespace Thetis
                 n = Math.Max(-10000, n);
                 console.RX2FilterLow = n;
                 console.TitleBarEncoderString = "VFO B Filter low cut =" + n + "Hz";
-                console.UpdateRX2Filters(n, console.RX2FilterHigh);
+                console.UpdateRX2Filters(n, console.RX2FilterHigh, true, false);
                 return "";
             }
             else if (s.Length == parser.nGet)
@@ -4330,7 +4330,7 @@ namespace Thetis
 
 
                 console.MemoryList.List.Add(new MemoryRecord("", console.VFOAFreq, "", console.RX1DSPMode, true, console.TuneStepList[console.TuneStepIndex].Name,
- console.CurrentFMTXMode, console.FMTXOffsetMHz, console.radio.GetDSPTX(0).CTCSSFlag, console.radio.GetDSPTX(0).CTCSSFreqHz, console.PWR,
+ console.CurrentFMTXMode, console.FMTXOffsetMHz, console.radio.GetDSPTX(0).CTCSSFlag, console.radio.GetDSPTX(0).CTCSSFreqHz,
  (int)console.radio.GetDSPTX(0).TXFMDeviation, console.VFOSplit, console.TXFreq, console.RX1Filter, console.RX1FilterLow,
  console.RX1FilterHigh, newCh + ":", console.radio.GetDSPRX(0, 0).RXAGCMode, console.RF, console.AutoAGCRX1, console.AutoAGCRX2,
 
@@ -4368,7 +4368,6 @@ namespace Thetis
 						RPTROffset = console.FMTXOffsetMHz,
 						CTCSSOn = console.radio.GetDSPTX(0).CTCSSFlag,
 						CTCSSFreq = console.radio.GetDSPTX(0).CTCSSFreqHz,
-						Power = console.PWR,
 						Deviation = (int)console.radio.GetDSPTX(0).TXFMDeviation,
 						Split = console.VFOSplit,
 						TXFreq = console.TXFreq,
@@ -5579,7 +5578,8 @@ namespace Thetis
         {
             //MW0LGE [2.10.1.0]
             if (console.CurrentHPSDRModel == HPSDRModel.ANAN7000D || console.CurrentHPSDRModel == HPSDRModel.ANAN8000D ||
-                    console.CurrentHPSDRModel == HPSDRModel.ANAN_G2 || console.CurrentHPSDRModel == HPSDRModel.ANAN_G2_1K)
+                   console.CurrentHPSDRModel == HPSDRModel.ANVELINAPRO3 || console.CurrentHPSDRModel == HPSDRModel.ANAN_G2 ||
+				   console.CurrentHPSDRModel == HPSDRModel.ANAN_G2_1K)
             {
 				return String.Format("{0:00.0}", console.MKIIPAVolts);
             }
@@ -8832,7 +8832,7 @@ namespace Thetis
 			 
 			// System.Console.WriteLine("zzsf: " + new_lo + " " + new_hi); 
 			console.SelectRX1VarFilter();
-			console.UpdateRX1Filters(new_lo, new_hi); 	
+			console.UpdateRX1Filters(new_lo, new_hi, true, false); 	
 
 			return; 
 		} 
