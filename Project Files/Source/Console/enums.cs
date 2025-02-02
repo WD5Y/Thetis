@@ -62,27 +62,10 @@
         DIRECT_X,
     }
 
-    public enum Model
-    {
-        HPSDR = 0,
-        HERMES,
-        ANAN10,
-        ANAN10E,
-        ANAN100,
-        ANAN100B,
-        ANAN100D,
-        ANAN200D,
-        ORIONMKII,
-        ANAN7000D,
-        ANAN8000D,
-        ANAN_G2,        //G8NJJ
-        ANAN_G2_1K,     //G8NJJ
-        ANVELINAPRO3,
-        LAST
-    }
-
     public enum HPSDRModel
     {
+        //IMPORTANT: Please keep the int value order on these enums, ie add new items before LAST,
+        //otherwise 'bad' things might happen
         FIRST = -1,
         HPSDR,
         HERMES,
@@ -98,6 +81,8 @@
         ANAN_G2,        //G8NJJ
         ANAN_G2_1K,     //G8NJJ
         ANVELINAPRO3,
+        HERMESLITE,     //MI0BOT
+        REDPITAYA,      //DH1KLM
         LAST
     }
 
@@ -363,9 +348,11 @@
         HermesII = 2,       // ANAN-10E ANAN-100B HeremesII
         Angelia = 3,        // ANAN-100D
         Orion = 4,          // ANAN-200D
-        OrionMKII = 5,      // AMAM-7000DLE 7000DLEMkII ANAN-8000DLE OrionMkII Anvelina-Pro3
-        Saturn = 10,         // ANAN-G2: added G8NJJ
-        Unknown = 999,      //MW0LGE
+        OrionMKII = 5,      // AMAM-7000DLE 7000DLEMkII ANAN-8000DLE OrionMkII Anvelina-Pro3 RedPitaya
+        HermesLite = 6,     // MI0BOT
+        RedPitaya = 7,      // DH1KLM RedPitaya - Matches network.h (channelmaster)
+        Saturn = 10,        // ANAN-G2: added G8NJJ
+        Unknown = 999,      // MW0LGE
     }
 
     public enum DSPFilterType

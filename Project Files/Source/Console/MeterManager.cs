@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2024 Richard Samphire MW0LGE
+Copyright (C) 2020-2025 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -2543,7 +2543,7 @@ namespace Thetis
 
             _rx1VHForAbove = _console.VFOAFreq >= _console.S9Frequency;
             _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _console.S9Frequency;
-            _currentHPSDRmodel = _console.CurrentHPSDRModel;
+            _currentHPSDRmodel = HardwareSpecific.Model;
             _apolloPresent = _console.ApolloPresent;
             _alexPresent = _console.AlexPresent;
             _paPresent = _console.PAPresent;
@@ -7718,8 +7718,10 @@ namespace Thetis
             private int _button_index;
             private bool _rebuild_buttons;
 
+            private int _total_buttons_visible;
             public clsButtonBox()
             {
+                _total_buttons_visible = 1;
                 _number_of_buttons = 1;
                 _columns = 1;
                 _margin = 0;
@@ -7732,7 +7734,7 @@ namespace Thetis
                 _font_shift_x = 0f;
                 _font_shift_y = 0f;
 
-                _rebuild_buttons = true;
+                _rebuild_buttons = true;                
 
                 UpdateInterval = 50;
 
@@ -7795,6 +7797,7 @@ namespace Thetis
 
                     _indicator_type[n] = new IndicatorType[_number_of_buttons];
 
+                    _total_buttons_visible = 0;
                     for (int b = 0; b < _number_of_buttons; b++) {
                         _fill_colour[n][b] = System.Drawing.Color.Black;
                         _hover_colour[n][b] = System.Drawing.Color.LightGray;
@@ -7819,6 +7822,7 @@ namespace Thetis
 
                         _enabled[n][b] = true;
                         _visible[n][b] = true;
+                        _total_buttons_visible++;
 
                         _indicator_type[n][b] = IndicatorType.RING;
                     }
@@ -8052,6 +8056,17 @@ namespace Thetis
             {
                 if (button < 0 || button >= _number_of_buttons) return;
                 _visible[bank][button] = enabled;
+
+                int total_buttons_visible = 0;
+                for (int i = 0; i < _number_of_buttons; i++)
+                {
+                    if (_visible[bank][i]) total_buttons_visible++;
+                }
+                _total_buttons_visible = total_buttons_visible;
+            }
+            public int TotalButtonsVisible
+            {
+                get { return _total_buttons_visible; }
             }
             public bool GetVisible(int bank, int button)
             {
@@ -12129,7 +12144,8 @@ namespace Thetis
             private System.Drawing.Color _waterfall_low_colour;
             private System.Drawing.Color _text_colour;
             private System.Drawing.Color _number_highlight_colour;
-            private System.Drawing.Color _edges_colour;
+            private System.Drawing.Color _edges_colour_rx;
+            private System.Drawing.Color _edges_colour_tx;
             private System.Drawing.Color _edge_highlight_colour;
             private System.Drawing.Color _extents_colour;
             private System.Drawing.Color _snapline_colour;
@@ -12266,7 +12282,8 @@ namespace Thetis
                 _waterfall_low_colour = System.Drawing.Color.Black;
                 _text_colour = System.Drawing.Color.White;
                 _number_highlight_colour = System.Drawing.Color.DarkRed;
-                _edges_colour = System.Drawing.Color.Yellow;
+                _edges_colour_rx = System.Drawing.Color.Yellow;
+                _edges_colour_tx = System.Drawing.Color.Red;
                 _edge_highlight_colour = System.Drawing.Color.White;
                 _extents_colour = System.Drawing.Color.Gray;
                 _snapline_colour = System.Drawing.Color.Gray;
@@ -12323,7 +12340,8 @@ namespace Thetis
             public System.Drawing.Color WaterfallLowColour { get { return _waterfall_low_colour; } set { _waterfall_low_colour = value; } }
             public System.Drawing.Color TextColour { get { return _text_colour; } set { _text_colour = value; } }
             public System.Drawing.Color NumberHighlightColour { get { return _number_highlight_colour; } set { _number_highlight_colour = value; } }
-            public System.Drawing.Color EdgesColour { get { return _edges_colour; } set { _edges_colour = value; } }
+            public System.Drawing.Color EdgesColourRX { get { return _edges_colour_rx; } set { _edges_colour_rx = value; } }
+            public System.Drawing.Color EdgesColourTX { get { return _edges_colour_tx; } set { _edges_colour_tx = value; } }
             public System.Drawing.Color EdgeHighlightColour { get { return _edge_highlight_colour; } set { _edge_highlight_colour = value; } }
             public System.Drawing.Color ExtentsColour { get { return _extents_colour; } set { _extents_colour = value; } }
             public System.Drawing.Color MeterbackColour { get { return _meterback_colour; } set { _meterback_colour = value; } }
@@ -13169,14 +13187,15 @@ namespace Thetis
                 bool ok = false;
                 double new_freq = (int)delta + _notch_start_freq;
                 new_freq = Common.CtrlKeyDown ? (float)(Math.Round(new_freq / 10) * 10) : new_freq;
-
+                
                 lock (MiniSpec.NotchLocker)
                 {
                     MiniSpec.Notch n = MiniSpec.GetNotch(_notch_highlighted_index);
                     if (n != null)
                     {
                         double vfoFreq = (_showVfoA ? _owningmeter.VfoA : _owningmeter.VfoB) * 1e6;
-                        ok = n.frequency_hz != new_freq && ((new_freq >= vfoFreq - _extent_hz) && (new_freq <= vfoFreq + _extent_hz));
+                        ok = (n.frequency_hz != new_freq) && ((new_freq >= vfoFreq - _extent_hz) && (new_freq <= vfoFreq + _extent_hz));
+                        if (ok) n.frequency_hz = new_freq; //[2.10.3.9]MW0LGE update the data, prevents loads of updates
                     }
                 }
 
@@ -20734,7 +20753,8 @@ namespace Thetis
                                             fi.WaterfallLowColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_wflow_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.Black);
                                             fi.TextColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_text_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.White);
                                             fi.NumberHighlightColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_numberhighlight_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.DarkRed);
-                                            fi.EdgesColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_edges_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.Yellow);
+                                            fi.EdgesColourRX = igs.GetSetting<System.Drawing.Color>("filterdisplay_edges_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.Yellow);
+                                            fi.EdgesColourTX = igs.GetSetting<System.Drawing.Color>("filterdisplay_edges_colour_tx", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.Red);
                                             fi.EdgeHighlightColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_edgehighlight_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.White);
                                             fi.MeterbackColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_meterback_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.Black);
                                             fi.NotchColour = igs.GetSetting<System.Drawing.Color>("filterdisplay_notch_colour", false, System.Drawing.Color.Empty, System.Drawing.Color.Empty, System.Drawing.Color.OrangeRed);
@@ -21782,7 +21802,8 @@ namespace Thetis
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_wflow_colour", fi.WaterfallLowColour);
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_text_colour", fi.TextColour);
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_numberhighlight_colour", fi.NumberHighlightColour);
-                                            igs.SetSetting<System.Drawing.Color>("filterdisplay_edges_colour", fi.EdgesColour);
+                                            igs.SetSetting<System.Drawing.Color>("filterdisplay_edges_colour", fi.EdgesColourRX);
+                                            igs.SetSetting<System.Drawing.Color>("filterdisplay_edges_colour_tx", fi.EdgesColourTX);
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_edgehighlight_colour", fi.EdgeHighlightColour);
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_meterback_colour", fi.MeterbackColour);
                                             igs.SetSetting<System.Drawing.Color>("filterdisplay_notch_colour", fi.NotchColour);
@@ -23417,7 +23438,7 @@ namespace Thetis
 
                     // to get this to work, need to target the os
                     // https://www.prugg.at/2019/09/09/properly-detect-windows-version-in-c-net-even-windows-10/
-                    // you need to enable operating system support in the app1.manifest file, otherwise majVers will not report 10+
+                    // you need to enable operating system support in the app.manifest file, otherwise majVers will not report 10+
                     // note: windows 10, 11, server 2016, server 2019, server 2022 all use the windows 10 os id in the manifest file at this current time
                     int majVers = Environment.OSVersion.Version.Major;
                     int minVers = Environment.OSVersion.Version.Minor;
@@ -24518,31 +24539,32 @@ namespace Thetis
 
                         _waterfall_row_added = false;
 
+                        float rw = m.XRatio;
+                        float rh = m.YRatio;
+                        SharpDX.RectangleF rect = new SharpDX.RectangleF(0, 0, tw * rw, tw * rh);
+
                         foreach (clsMeterItem mi in m.SortedMeterItemsForZOrder)
                         {                          
                             bool bRender = ((m.MOX && mi.OnlyWhenTX) || (!m.MOX && mi.OnlyWhenRX)) || (!mi.OnlyWhenTX && !mi.OnlyWhenRX);
 
                             if (bRender && ((m.DisplayGroup == 0 || mi.DisplayGroup == 0) || (mi.DisplayGroup == m.DisplayGroup)))
                             {
-                                float rw = m.XRatio;
-                                float rh = m.YRatio;
-
-                                SharpDX.RectangleF rect = new SharpDX.RectangleF(0, 0, tw * rw, tw * rh);
-
-                                if (mi.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP)
-                                {
-                                    float y = (mi.DisplayTopLeft.Y / m.YRatio) * rect.Height;
-                                    float h = rect.Height * (mi.Size.Height / m.YRatio);
-
-                                    float w = rect.Width * (mi.Size.Width / m.XRatio);
-
-                                    float padY = ((m.PadY - (m.Height * 0.75f)) * w);
-                                    int hh = (int)Math.Ceiling((y + h + padY)) + 1; // 1 extra
-                                    if (hh > height) height = hh;
-                                }
-
                                 switch (mi.ItemType)
                                 {
+                                    case clsMeterItem.MeterItemType.ITEM_GROUP:
+                                        //    renderGroup(rect, mi, m);
+                                        {
+                                            float y = (mi.DisplayTopLeft.Y / m.YRatio) * rect.Height;
+                                            float h = rect.Height * (mi.Size.Height / m.YRatio);
+
+                                            float w = rect.Width * (mi.Size.Width / m.XRatio);
+
+                                            float padY = ((m.PadY - (m.Height * 0.75f)) * w);
+                                            int hh = (int)Math.Ceiling((y + h + padY)) + 1; // 1 extra
+                                            if (hh > height) height = hh;
+                                        }
+                                        break;
+
                                     //case clsMeterItem.MeterItemType.V_BAR:
                                     //    renderVBar(rect, mi, m);
                                     //    break;
@@ -24594,9 +24616,6 @@ namespace Thetis
                                     case clsMeterItem.MeterItemType.ROTATOR:
                                         renderRotator(rect, mi, m);
                                         break;
-                                    //case clsMeterItem.MeterItemType.ITEM_GROUP:
-                                    //    renderGroup(rect, mi, m);
-                                    //    break;
                                     case clsMeterItem.MeterItemType.VFO_DISPLAY:
                                         renderVfoDisplay(rect, mi, m);
                                         break;
@@ -24632,14 +24651,9 @@ namespace Thetis
                                 }
                             }
                         }
-                        
-                        foreach(clsMeterItem mi in additionalDraws)
+
+                        foreach (clsMeterItem mi in additionalDraws)
                         {                           
-                            float rw = m.XRatio;
-                            float rh = m.YRatio;
-
-                            SharpDX.RectangleF rect = new SharpDX.RectangleF(0, 0, tw * rw, tw * rh);
-
                             switch (mi.ItemType)
                             {
                                 case clsMeterItem.MeterItemType.TEXT_OVERLAY:
@@ -24674,7 +24688,7 @@ namespace Thetis
                 // calculate how big the string would be @ emSize pt
                 SharpDX.DirectWrite.TextFormat tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyle, emSize);
                 tf.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
-                
+
                 SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(_fontFactory, sText, tf, float.MaxValue, float.MaxValue);
                 float width = layout.Metrics.Width;
                 float height = layout.Metrics.Height;
@@ -26946,7 +26960,8 @@ namespace Thetis
                 System.Drawing.Color extent_colour = filter.ExtentsColour;// System.Drawing.Color.Gray;
                 System.Drawing.Color snapline_colour = filter.SnapLineColour;// System.Drawing.Color.Gray;
                 System.Drawing.Color text_overlay_colour = filter.Colour; // same as the background
-                System.Drawing.Color filter_line_colour = filter.EdgesColour;// System.Drawing.Color.Yellow;
+                System.Drawing.Color filter_line_colour_rx = filter.EdgesColourRX;// System.Drawing.Color.Yellow;
+                System.Drawing.Color filter_line_colour_tx = filter.EdgesColourTX;// System.Drawing.Color.Red;
                 System.Drawing.Color filter_line_colour_highlight = filter.EdgeHighlightColour;// System.Drawing.Color.White;
                 System.Drawing.Color text_overlay_highlight_colour = filter.NumberHighlightColour;// System.Drawing.Color.DarkRed;
                 System.Drawing.Color meter_back_colour = filter.MeterbackColour;// System.Drawing.Color.Black;
@@ -26969,7 +26984,7 @@ namespace Thetis
                 System.Drawing.Color grey_fill_colour = System.Drawing.Color.FromArgb(grey_val, grey_val, grey_val);
 
                 SharpDX.Direct2D1.Brush filter_line_colour_brush;
-                SharpDX.Direct2D1.Brush filter_line_colour_faded_brush = getDXBrushForColour(filter_line_colour, 128);
+                SharpDX.Direct2D1.Brush filter_line_colour_faded_brush = getDXBrushForColour(m.MOX ? filter_line_colour_tx : filter_line_colour_rx, 128);
                 SharpDX.Direct2D1.Brush filter_line_highlight_colour_brush = getDXBrushForColour(filter_line_colour_highlight);
                 SharpDX.Direct2D1.Brush line_base_colour_brush = getDXBrushForColour(line_base_colour);
                 SharpDX.Direct2D1.Brush fill_base_colour_brush = getDXBrushForColour(fill_base_colour);
@@ -26984,13 +26999,13 @@ namespace Thetis
                 {
                     if (!filter.AutoZoom && filter.FixedTXZoom) zoom = filter.TXZoom + filter.ModeZoom;
                     min_notch_width = filter.MinNotchWidthTX / 2f;
-                    filter_line_colour_brush = getDXBrushForColour(System.Drawing.Color.Red);
+                    filter_line_colour_brush = getDXBrushForColour(filter_line_colour_tx);
                 }
                 else
                 {
                     if (!filter.AutoZoom && filter.FixedRXZoom) zoom = filter.RXZoom + filter.ModeZoom;
                     min_notch_width = filter.MinNotchWidthRX / 2f;
-                    filter_line_colour_brush = getDXBrushForColour(filter_line_colour);
+                    filter_line_colour_brush = getDXBrushForColour(filter_line_colour_rx);
                 }
 
                 //calc pixels per hz etc
@@ -29071,7 +29086,7 @@ namespace Thetis
                     {
                         case clsBarItem.Units.S_UNTS:
                             if (cbi.ReadingSource != Reading.ESTIMATED_PBSNR)
-                                sText = Common.SMeterFromDBM(cbi.Value, MeterManager.IsAboveS9Frequency(_rx)).Replace(" ", "");
+                                sText = Common.SMeterFromDBM_Spaceless(cbi.Value, MeterManager.IsAboveS9Frequency(_rx));
                             else
                                 sText = (cbi.Value / 6f).ToString("f1") + "su";
                             break;
@@ -29096,7 +29111,7 @@ namespace Thetis
                     {
                         case clsBarItem.Units.S_UNTS:
                             if (cbi.ReadingSource != Reading.ESTIMATED_PBSNR)
-                                sText = Common.SMeterFromDBM(cbi.MaxHistory, MeterManager.IsAboveS9Frequency(_rx)).Replace(" ", "");
+                                sText = Common.SMeterFromDBM_Spaceless(cbi.MaxHistory, MeterManager.IsAboveS9Frequency(_rx));
                             else
                                 sText = (cbi.Value / 6f).ToString("f1") + "su";
                             break;
@@ -29875,7 +29890,7 @@ namespace Thetis
 
                 return button_state;
             }
-            private SharpDX.RectangleF shrinkRectangle(SharpDX.RectangleF original, float ratio, float absolute = 0f)
+            private void shrinkRectangle(SharpDX.RectangleF original, float ratio, ref SharpDX.RectangleF shrunk, float absolute = 0f)
             {
                 float newWidth = original.Width * ratio;
                 float newHeight = original.Height * ratio;
@@ -29888,18 +29903,14 @@ namespace Thetis
                 float offsetX = (original.Width - newWidth) / 2f;
                 float offsetY = (original.Height - newHeight) / 2f;
 
-                SharpDX.RectangleF shrunkRectangle = new SharpDX.RectangleF(
-                    original.X + offsetX,
-                    original.Y + offsetY,
-                    newWidth,
-                    newHeight
-                );
-
-                return shrunkRectangle;
+                shrunk.X = original.X + offsetX;
+                shrunk.Y = original.Y + offsetY;
+                shrunk.Width = newWidth;
+                shrunk.Height = newHeight;
             }
             private void drawRoundedRectangle(RoundedRectangle rr, SharpDX.Direct2D1.Brush b, float stroke, bool centred = false)
             {
-                if(rr.RadiusX>0 || rr.RadiusY>0)
+                if(rr.RadiusX > 0 || rr.RadiusY > 0)
                     _renderTarget.DrawRoundedRectangle(rr, b, stroke);
                 else
                     _renderTarget.DrawRectangle(rr.Rect, b, stroke);
@@ -29935,11 +29946,8 @@ namespace Thetis
 
                 //SharpDX.RectangleF rectSC = new SharpDX.RectangleF(x, y, w, h);
                 //_renderTarget.FillRectangle(rectSC, getDXBrushForColour(System.Drawing.Color.Green));
-                int total_buttons = 0;
-                for(int i = 0; i < bb.Buttons; i++)
-                {
-                    if (bb.GetVisible(1, i)) total_buttons++;
-                }
+
+                int total_buttons = bb.TotalButtonsVisible;
                 if (total_buttons == 0) return; // nothing visible
 
                 int rows = total_buttons / bb.Columns;
@@ -29969,7 +29977,14 @@ namespace Thetis
                     mouse.Y = bb.MouseMovePoint.Y / h;
                 }
 
-                for(int row  = 0; row < rows; row++)
+                RoundedRectangle rr = new RoundedRectangle();
+                SharpDX.RectangleF indicator_adjust = new SharpDX.RectangleF();
+                SharpDX.RectangleF rectBB = new SharpDX.RectangleF();
+                SharpDX.RectangleF shrunk_rect = new SharpDX.RectangleF();
+                SharpDX.Vector2 start = new Vector2();
+                SharpDX.Vector2 end = new Vector2();
+
+                for (int row  = 0; row < rows; row++)
                 {
                     int col = 0;
                     while(col < buttons_per_row)
@@ -29985,14 +30000,14 @@ namespace Thetis
                         float xP = x + half_border + (button_width * col);
                         float yP = y + half_border + (button_height * row);
 
-                        SharpDX.RectangleF rectBB = new SharpDX.RectangleF(xP, yP, button_width - margin - half_border, button_height - margin - half_border);
+                        rectBB.X = xP;
+                        rectBB.Y = yP;
+                        rectBB.Width = button_width - margin - half_border;
+                        rectBB.Height = button_height - margin - half_border;
 
-                        RoundedRectangle rr = new RoundedRectangle
-                        {
-                            Rect = rectBB,
-                            RadiusX = radius,
-                            RadiusY = radius
-                        };
+                        rr.Rect = rectBB;
+                        rr.RadiusX = radius;
+                        rr.RadiusY = radius;
 
                         // luminance
                         System.Drawing.Color bg_colour = bb.GetFillColour(1, button_index);
@@ -30003,6 +30018,7 @@ namespace Thetis
                         System.Drawing.Color click_colour = bb.GetClickColour(1, button_index);
 
                         bool on = bb.GetOn(1, button_index);
+
                         System.Drawing.Color actual_bg;
                         if (!indicator)
                         {
@@ -30028,11 +30044,11 @@ namespace Thetis
                         if (!indicator)
                         {
                             if (on)
-                                fillRoundedRectangle(rr, getDXBrushForColour(bb.GetOnColour(1, button_index), 255));
+                                fillRoundedRectangle(rr, getDXBrushForColour(on_colour, 255));
                             else
                             {
                                 if(bb.GetUseOffColour(1, button_index))
-                                    fillRoundedRectangle(rr, getDXBrushForColour(bb.GetOffColour(1, button_index), 255));
+                                    fillRoundedRectangle(rr, getDXBrushForColour(off_colour, 255));
                             }
                         }
 
@@ -30040,40 +30056,46 @@ namespace Thetis
                         if(bb.MouseEntered)
                         {
                             if (bb.ClickHighlight) hover_colour = click_colour;
-                        }
 
-                        // mouse highlight
-                        if (bb.MouseEntered && rectBB.Contains((float)bb.MouseMovePoint.X, (float)bb.MouseMovePoint.Y))
-                        {
-                            fillRoundedRectangle(rr, getDXBrushForColour(hover_colour, 192));
-                            highlighted_index = button_index;
+                            // mouse highlight
+                            if (rectBB.Contains((float)bb.MouseMovePoint.X, (float)bb.MouseMovePoint.Y))
+                            {
+                                fillRoundedRectangle(rr, getDXBrushForColour(hover_colour, 192));
+                                highlighted_index = button_index;
+                            }
                         }
 
                         //border
                         drawRoundedRectangle(rr, getDXBrushForColour(bb.GetBorderColour(1, button_index)), bb.Border * w);
 
                         //indicator
-                        SharpDX.RectangleF indicator_adjust = new SharpDX.RectangleF(0, 0, 0, 0);
+                        indicator_adjust.Left = 0;
+                        indicator_adjust.Right = 0;
+                        indicator_adjust.Width = 0;
+                        indicator_adjust.Height = 0;
+
                         float text_size_modifier = 0.9f; // text gets shrunk slightly if no indicator ring is in use
                         if (indicator)
-                        {                                                        
-                            System.Drawing.Color indicator_colour = System.Drawing.Color.Transparent;
-                            bool indicator_draw = false;
+                        {
+                            System.Drawing.Color indicator_colour;
+                            bool indicator_draw;
 
                             if(bb.GetOn(1, button_index))
                             {
-                                indicator_colour = bb.GetOnColour(1, button_index);
+                                indicator_colour = on_colour;
                                 indicator_draw = true;
                             }
                             else
                             {
                                 if (bb.GetUseOffColour(1, button_index))
                                 {
-                                    //if (highlighted_index != button_index)
-                                    //{
-                                        indicator_colour = bb.GetOffColour(1, button_index);
-                                        indicator_draw = true;
-                                    //}
+                                    indicator_colour = off_colour;
+                                    indicator_draw = true;
+                                }
+                                else
+                                {
+                                    indicator_colour = System.Drawing.Color.Transparent;
+                                    indicator_draw = false;
                                 }
                             }
 
@@ -30087,7 +30109,7 @@ namespace Thetis
                                         text_size_modifier = 0.9f;
                                         indicator_shrink = (0.015f * wh);
                                         drawSafeLine(new RawVector2(rectBB.Left + indicator_shrink + (indicator_width / 2f), rectBB.Top + indicator_shrink + (radius * 0.45f)), new RawVector2(rectBB.Left + indicator_shrink + (indicator_width / 2f), rectBB.Bottom - indicator_shrink - (radius * 0.45f)), getDXBrushForColour(indicator_colour), indicator_width);
-                                        //indicator_adjust.Left = indicator_width + (indicator_shrink * 1.5f);
+                                        drawSafeLine(start, end, getDXBrushForColour(indicator_colour), indicator_width);
                                         indicator_adjust.Left = indicator_width;
                                         break;
                                     case clsButtonBox.IndicatorType.BAR_RIGHT:
@@ -30095,7 +30117,6 @@ namespace Thetis
                                         indicator_shrink = (0.015f * wh);
                                         drawSafeLine(new RawVector2(rectBB.Right - indicator_shrink - (indicator_width / 2f), rectBB.Top + indicator_shrink + (radius * 0.45f)), new RawVector2(rectBB.Right - indicator_shrink - (indicator_width / 2f), rectBB.Bottom - indicator_shrink - (radius * 0.45f)), getDXBrushForColour(indicator_colour), indicator_width);
                                         indicator_adjust.Right = indicator_width;
-                                        //indicator_adjust.Right = indicator_width + (indicator_shrink * 1.5f);
                                         break;
                                     case clsButtonBox.IndicatorType.BAR_TOP:
                                         text_size_modifier = 0.9f;
@@ -30207,7 +30228,8 @@ namespace Thetis
                                     default:
                                         text_size_modifier = 0.85f;
                                         indicator_shrink = (0.02f * wh) + border + indicator_width;
-                                        rr.Rect = shrinkRectangle(rectBB, 1f, indicator_shrink);
+                                        shrinkRectangle(rectBB, 1f, ref shrunk_rect, indicator_shrink);
+                                        rr.Rect = shrunk_rect;
                                         drawRoundedRectangle(rr, getDXBrushForColour(indicator_colour), indicator_width);
                                         indicator_adjust.Top = indicator_width;
                                         indicator_adjust.Left = indicator_width;
@@ -30222,15 +30244,14 @@ namespace Thetis
                         string text = bb.GetText(1, button_index);
                         if (!string.IsNullOrEmpty(text))
                         {
-                            //rectBB = shrinkRectangle(rectBB, 1f, border + (indicator_width * 2f));
                             rectBB.Top += indicator_adjust.Top;
                             rectBB.Left += indicator_adjust.Left;
                             rectBB.Right -= indicator_adjust.Right;
                             rectBB.Bottom -= indicator_adjust.Bottom;
-                            float cx = rectBB.Left + (rectBB.Width / 2f);
-                            float cy = rectBB.Top + (rectBB.Height / 2f);
                             if (rectBB.Width > 0 && rectBB.Height > 0)
                             {
+                                float cx = rectBB.Left + (rectBB.Width / 2f);
+                                float cy = rectBB.Top + (rectBB.Height / 2f);
                                 plotText(text, cx + (bb.FontShiftX * wh / (float)(buttons_per_row * 2f)), cy + (bb.FontShiftY * wh / (float)(buttons_per_row * 2f)), rect.Width, bb.GetFontSize(1, button_index), text_colour, 255, bb.GetFontFamily(1, button_index), bb.GetFontStyle(1, button_index), false, true, rectBB.Width * text_size_modifier * bb.FontScale, true, rectBB.Height * text_size_modifier * bb.FontScale);
                             }
                         }

@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2024 Richard Samphire MW0LGE
+Copyright (C) 2020-2025 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -487,25 +487,25 @@ namespace Thetis
                 _restoreON = true;
             }
         }
-        public double GetDefaultPeak()
-        {
-            if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
-            {
-                //protocol 1
-                return 0.4072;
-            }
-            else
-            {
-                //protocol 2
-                if (console.CurrentHPSDRHardware == HPSDRHW.Saturn)
-                    return 0.6121;
-                else
-                    return 0.2899;
-            }
-        }
+        //public double GetDefaultPeak()
+        //{
+        //    if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
+        //    {
+        //        //protocol 1
+        //        return 0.4072;
+        //    }
+        //    else
+        //    {
+        //        //protocol 2
+        //        if (HardwareSpecific.Hardware == HPSDRHW.Saturn)
+        //            return 0.6121;
+        //        else
+        //            return 0.2899;
+        //    }
+        //}
         public void SetDefaultPeaks()
         {
-            PSdefpeak(GetDefaultPeak());
+            PSdefpeak(/*GetDefaultPeak()*/HardwareSpecific.PSDefaultPeak);
         }
         #region PSLoops
 
@@ -751,9 +751,13 @@ namespace Thetis
                 _PShwpeak = tmp;
                 puresignal.SetPSHWPeak(_txachannel, _PShwpeak);
 
-                double set_pk = GetDefaultPeak();
-                pbWarningSetPk.Visible = _PShwpeak != set_pk; //[2.10.3.7]MW0LGE show a warning if the setpk is different to what we expect for this hardware
+                //double set_pk = GetDefaultPeak();
+                UpdateWarningSetPk();
             }                       
+        }
+        public void UpdateWarningSetPk()
+        {
+            pbWarningSetPk.Visible = _PShwpeak != HardwareSpecific.PSDefaultPeak;//set_pk; //[2.10.3.7]MW0LGE show a warning if the setpk is different to what we expect for this hardware
         }
 
         private void chkPSRelaxPtol_CheckedChanged(object sender, EventArgs e)
