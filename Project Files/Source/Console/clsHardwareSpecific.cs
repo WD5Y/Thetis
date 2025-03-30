@@ -47,11 +47,11 @@ namespace Thetis
         private static HPSDRHW _old_hardware;
         static HardwareSpecific()
         {
-            _model = HPSDRModel.HERMES;
-            _old_model = _model;
+            _model = HPSDRModel.FIRST;
+            _old_model = HPSDRModel.FIRST;
 
-            _hardware = HPSDRHW.Atlas;
-            _old_hardware = _hardware;
+            _hardware = HPSDRHW.Unknown;
+            _old_hardware = HPSDRHW.Unknown;
         }
 
         #region MODEL
@@ -174,6 +174,7 @@ namespace Thetis
         }
         public static HPSDRModel OldModel
         {
+            // obtains the model prior to the one now set
             get
             {
                 return _old_model;

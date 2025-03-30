@@ -130,7 +130,13 @@ namespace Thetis
             get { return m_bQuckAttenuate; }
             set { m_bQuckAttenuate = value; }
         }
-
+        public ToolTip ToolTip //[2.10.3.9]MW0LGE used by finder
+        {
+            get
+            {
+                return toolTip1;
+            }
+        }
         public void StopPSThread()
         {
             _bPSRunning = false;
@@ -312,7 +318,7 @@ namespace Thetis
             }
         }
 
-        public void PSdefpeak(double value)
+        private void psdefpeak(double value)
         {
             // note : PSpeak_TextChanged will fire if db recovers value into text box
             string sVal = value.ToString();
@@ -320,6 +326,8 @@ namespace Thetis
                 txtPSpeak.Text = value.ToString(); // causes text change event
             else
                 PSpeak_TextChanged(this, EventArgs.Empty); // there would be no event as text the same, so fire it here
+
+            UpdateWarningSetPk();
         }
 
         #endregion
@@ -327,22 +335,7 @@ namespace Thetis
         #region event handlers
         private void PSForm_Load(object sender, EventArgs e)
         {
-            SetupForm();// e); // all moved into function that can be used outside as we now do not dispose the form each time   //MW0LGE_[2.9.0.7]
-
-            //if (ttgenON == true)
-            //    btnPSTwoToneGen.BackColor = Color.FromArgb(gcolor);
-
-            //MW0LGE_21k9d5 (rc3)
-            //unsafe
-            //{
-            //    fixed (double* ptr = &PShwpeak)
-            //        puresignal.GetPSHWPeak(txachannel, ptr);
-            //}
-            //
-            //PSpeak.Text = PShwpeak.ToString();
-
-
-            //btnPSAdvanced_Click(this, e);
+            SetupForm();
         }
 
         public void SetupForm()//EventArgs e)  //MW0LGE_[2.9.0.7]
@@ -487,25 +480,9 @@ namespace Thetis
                 _restoreON = true;
             }
         }
-        //public double GetDefaultPeak()
-        //{
-        //    if (NetworkIO.CurrentRadioProtocol == RadioProtocol.USB)
-        //    {
-        //        //protocol 1
-        //        return 0.4072;
-        //    }
-        //    else
-        //    {
-        //        //protocol 2
-        //        if (HardwareSpecific.Hardware == HPSDRHW.Saturn)
-        //            return 0.6121;
-        //        else
-        //            return 0.2899;
-        //    }
-        //}
         public void SetDefaultPeaks()
         {
-            PSdefpeak(/*GetDefaultPeak()*/HardwareSpecific.PSDefaultPeak);
+            psdefpeak(HardwareSpecific.PSDefaultPeak);
         }
         #region PSLoops
 
@@ -757,7 +734,7 @@ namespace Thetis
         }
         public void UpdateWarningSetPk()
         {
-            pbWarningSetPk.Visible = _PShwpeak != HardwareSpecific.PSDefaultPeak;//set_pk; //[2.10.3.7]MW0LGE show a warning if the setpk is different to what we expect for this hardware
+            pbWarningSetPk.Visible = _PShwpeak != HardwareSpecific.PSDefaultPeak; //[2.10.3.7]MW0LGE show a warning if the setpk is different to what we expect for this hardware
         }
 
         private void chkPSRelaxPtol_CheckedChanged(object sender, EventArgs e)
@@ -908,6 +885,7 @@ namespace Thetis
             comboPSTint_SelectedIndexChanged(this, e);
             chkPSOnTop_CheckedChanged(this, e);
             chkQuickAttenuate_CheckedChanged(this, e);
+            chkShow2ToneMeasurements_CheckedChanged(this, e);
         }
 
         #endregion
@@ -920,6 +898,11 @@ namespace Thetis
         private void btnDefaultPeaks_Click(object sender, EventArgs e)
         {
             SetDefaultPeaks();
+        }
+
+        private void chkShow2ToneMeasurements_CheckedChanged(object sender, EventArgs e)
+        {
+            Display.ShowIMDMeasurments = chkShow2ToneMeasurements.Checked;
         }
     }
 

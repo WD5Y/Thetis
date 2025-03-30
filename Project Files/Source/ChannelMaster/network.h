@@ -418,7 +418,7 @@ enum _RXPort
 	WB0Port = 1027, // 16-Raw ADC Samples
 };
 
-enum _HPSDRHW
+enum HPSDRHW
 {
 	Atlas = 0,
 	Hermes = 1,     // ANAN-10/100
@@ -426,9 +426,28 @@ enum _HPSDRHW
 	Angelia = 3,    // ANAN-100D
 	Orion = 4,      // ANAN-200D
 	OrionMKII = 5,  // ANAN-7000DLE/8000DLE AnvelinaPro3
-	HermesLite = 6, // MI0BOT
-	RedPitaya = 7   // RedPitaya a variant of OrionMKII, used in networkproto1.c to identify it
-} HPSDRHW;
+	HermesLite = 6  // MI0BOT: HL2 allocated number
+};
+
+enum _HPSDRModel //from enums.cs
+{
+	HPSDRModel_HPSDR = 0,
+	HPSDRModel_HERMES = 1,
+	HPSDRModel_ANAN10 = 2,
+	HPSDRModel_ANAN10E = 3,
+	HPSDRModel_ANAN100 = 4,
+	HPSDRModel_ANAN100B = 5,
+	HPSDRModel_ANAN100D = 6,
+	HPSDRModel_ANAN200D = 7,
+	HPSDRModel_ORIONMKII = 8,
+	HPSDRModel_ANAN7000D = 9,
+	HPSDRModel_ANAN8000D = 10,
+	HPSDRModel_ANAN_G2 = 11,
+	HPSDRModel_ANAN_G2_1K = 12,
+	HPSDRModel_ANVELINAPRO3 = 13,
+	HPSDRModel_HERMESLITE = 14,
+	HPSDRModel_REDPITAYA = 15
+} HPSDRModel;
 
 enum _RadioProtocol
 {

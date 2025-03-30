@@ -61,10 +61,7 @@ namespace Thetis
     using System.Windows.Forms;
     using System.Xml.Linq;
     using System.Collections.Concurrent;
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using System.Diagnostics.Contracts;
-    using Newtonsoft.Json.Bson;
-
+    
     public partial class Console : Form
     {
         public const bool CHECK_DEV_VERSION = true; // this will check github for dev versions, set to false when performing a release
@@ -385,6 +382,9 @@ namespace Thetis
         private Point chk_rx2_mut_basis = new Point(100, 100);
         private Point chk_mox_basis = new Point(100, 100);
         private Point chk_tun_basis = new Point(100, 100);
+        //wd5y
+        private Point chk_tc_basis = new Point(100, 100);
+        //wd5y
         private Point chk_vox_basis = new Point(100, 100);
         private Point chk_ps2_basis = new Point(100, 100);
         private Point chk_dup_basis = new Point(100, 100);
@@ -838,7 +838,7 @@ namespace Thetis
             //[2.10.3.4]MW0LGE shutdown log remove
             removeShutdownLog();
 
-            addDelegates();
+            //addDelegates(); // moved to init console
 
             CWFWKeyer = true;            
 
@@ -893,7 +893,7 @@ namespace Thetis
             _frmFinder.GatherSearchData(SetupForm, SetupForm.ToolTip);
             _frmFinder.GatherSearchData(EQForm, EQForm.ToolTip);
             _frmFinder.GatherSearchData(BandStack2Form, BandStack2Form.ToolTip);
-            _frmFinder.GatherSearchData(psform, null);
+            _frmFinder.GatherSearchData(psform, psform.ToolTip);
             _frmFinder.WriteXmlFinderFile(AppDataPath); // note: this will only happen if not already there
 
             Splash.SetStatus("Finished");
@@ -1518,8 +1518,9 @@ namespace Thetis
             m_frmNotchPopup = new frmNotchPopup();
             m_frmSeqLog = new frmSeqLog();
             _frmFinder = new frmFinder();
-
             psform = new PSForm(this);
+
+            addDelegates();
 
             Audio.console = this;
 
@@ -1553,15 +1554,20 @@ namespace Thetis
 
             for (int i = 0; i < (int)Band.LAST; i++)
             {
-                switch ((Band)i)
-                {
-                    default:
-                        rx1_preamp_by_band[i] = PreampMode.HPSDR_ON;
-                        rx2_preamp_by_band[i] = PreampMode.HPSDR_ON;
-                        setRX1stepAttenuatorForBand((Band)i, 0);
-                        setRX2stepAttenuatorForBand((Band)i, 0);
-                        break;
-                }
+                //switch ((Band)i)
+                //{
+                //    default:
+                //        rx1_preamp_by_band[i] = PreampMode.HPSDR_ON;
+                //        rx2_preamp_by_band[i] = PreampMode.HPSDR_ON;
+                //        setRX1stepAttenuatorForBand((Band)i, 0);
+                //        setRX2stepAttenuatorForBand((Band)i, 0);
+                //        break;
+                //}
+
+                rx1_preamp_by_band[i] = PreampMode.HPSDR_ON;
+                rx2_preamp_by_band[i] = PreampMode.HPSDR_ON;
+                setRX1stepAttenuatorForBand((Band)i, 0);
+                setRX2stepAttenuatorForBand((Band)i, 0);
 
                 setTXstepAttenuatorForBand((Band)i, 31);
             }
@@ -1808,7 +1814,7 @@ namespace Thetis
 
             // ***** THIS IS WHERE SETUP FORM IS CREATED
             _onlyOneSetupInstance = true; // make sure that we limit to one instance
-            SetupForm.StartPosition = FormStartPosition.Manual; // *********** IMPORTANT   first use of singleton will create Setup form       INIT_SLOW            
+            SetupForm.StartPosition = FormStartPosition.Manual; // *********** IMPORTANT   first use of singleton will create Setup form       INIT_SLOW
 
             BuildTXProfileCombos(); // MW0LGE_21k9rc4b build them, so that GetState can apply the combobox text
 
@@ -1958,6 +1964,9 @@ namespace Thetis
             chkMOX.Enabled = false;
             chkTUN.Enabled = false; // MW0LGE_21a
             chk2TONE.Enabled = false; // MW0LGE_21a
+            //wd5y
+            chkTC.Enabled = false;
+            //wd5y
 
             if (!collapsedDisplay)
             {
@@ -2154,16 +2163,16 @@ namespace Thetis
 
                     m_tcpCATServer.StartServer(this, m_bTCPIPcatWelcomeMessage);
 
-                    if (!m_tcpCATServer.IsServerRunning)
+                    if (m_tcpCATServer.IsServerRunning)
+                    {
+                        NetworkIO.SetCATPort(m_nTCPIPCatPort); // tell the hardware the cat port
+                    }
+                    else
                     {
                         if (!IsSetupFormNull) SetupForm.DisableTCPIPCatServerDueToError();
                         removeTCPIPcatDelegates();
                         MessageBox.Show("Unable to start the server." + Environment.NewLine + Environment.NewLine + "[ " + m_tcpCATServer.LastError + " ]", "TCPIP CAT Server",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
-                    }
-                    else
-                    {
-                        NetworkIO.SetCATPort(m_nTCPIPCatPort);
                     }
                 }
                 //
@@ -2172,14 +2181,20 @@ namespace Thetis
             {
                 if (m_tcpCATServer != null)
                 {
+                    NetworkIO.SetCATPort(0); // tell the hardware the cat port is now 'gone'
+                    Thread.Sleep(100); // give some flight time delay
+
                     m_tcpCATServer.CloseLog();
                     m_tcpCATServer.StopServer();
-                    removeTCPIPcatDelegates();
+                    removeTCPIPcatDelegates();                    
                 }
             }
             UpdateStatusBarStatusIcons(StatusBarIconGroup.TCPIPCat);
         }
+        private void closeTcpIpCatServer()
+        {
 
+        }
         //TCI
         private bool _tci_ptt = false;
         public bool TCIPTT
@@ -2346,7 +2361,7 @@ namespace Thetis
 
                     addTCIDelegates();
 
-                    m_tcpTCIServer.StartServer(this, rateLimit, m_bTCIcopyRX2VFObToVFOa, m_bTCIuseRX1vfoaForRX2vfoa, m_bTCIsendInitialStateOnConnect, m_bTCICWLUbecomesCW, m_bEmulateSunSDR2Pro, m_bEmulateExpertSDR3Protocol, m_bTCIreplaceRX2VFObToVFOa);
+                    m_tcpTCIServer.StartServer(this, rateLimit, m_bTCIcopyRX2VFObToVFOa, m_bTCIuseRX1vfoaForRX2vfoa, m_bTCIsendInitialStateOnConnect, m_bTCICWLUbecomesCW, m_bEmulateSunSDR2Pro, m_bEmulateExpertSDR3Protocol, m_bTCIreplaceRX2VFObToVFOa, m_bTCICWbecomesCWUabove10mhz);
 
                     if (!m_tcpTCIServer.IsServerRunning)
                     {
@@ -2703,7 +2718,7 @@ namespace Thetis
                 }
             }
 
-            a.Remove("udRX1StepAttData/" + udRX1StepAttData.Value.ToString());
+            a.Remove("udRX1StepAttData/" + udRX1StepAttData.Value.ToString()); // removed from saved data as restored from att per band
             a.Remove("udRX2StepAttData/" + udRX2StepAttData.Value.ToString());
             a.Remove("udTXStepAttData/" + udTXStepAttData.Value.ToString()); //[2.3.6.10]MW0LGE            
 
@@ -3291,7 +3306,20 @@ namespace Thetis
                         Audio.LastRadioProtocol = (RadioProtocol)Enum.Parse(typeof(RadioProtocol), val);
                         break;
                     case "last_radio_hardware":
-                        Audio.LastRadioHardware = (HPSDRHW)Enum.Parse(typeof(HPSDRHW), val);
+                        //Audio.LastRadioHardware = (HPSDRHW)Enum.Parse(typeof(HPSDRHW), val);
+                        if (Enum.TryParse<HPSDRHW>(val, out HPSDRHW hw))
+                        {
+                            Audio.LastRadioHardware = hw;
+                        }
+                        else
+                        {
+                            DialogResult dr = MessageBox.Show($"The version of hardware stored in the database is not known by this version of Thetis [{hw.ToString()}]. Are you using the correct version ?",
+                            "Hardware version issue",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+
+                            Audio.LastRadioHardware = HPSDRHW.Unknown;
+                        }
                         break;
                     case "wheel_tune_index":
                         tune_step_index = Int32.Parse(val);
@@ -5831,7 +5859,7 @@ namespace Thetis
                 }
             }
 
-            Band old_band = tx_band;
+            Band old_band = _tx_band;
             TXBand = b;
             if (old_band != b)
                 UpdateBandButtonColors();
@@ -6058,7 +6086,7 @@ namespace Thetis
         {
             double v_det = adc * 0.062963;			// scale factor in V/bit including pot ratio
             double v_out = v_det * 10.39853;		// scale factor in V/V for bridge output to detector voltage
-            return v_out * PABandOffset(tx_band);
+            return v_out * PABandOffset(_tx_band);
             //double v_det = adc * 0.0304;
             //			double v_out = 0;
             //			if(v_det >= 1.6)
@@ -6073,7 +6101,7 @@ namespace Thetis
             if (adc_data == 0)
                 return 0;
 
-            double mult = 100000 / Math.Pow(225 / PABandOffset(tx_band), 2);
+            double mult = 100000 / Math.Pow(225 / PABandOffset(_tx_band), 2);
             return 10 * Math.Log10(mult * Math.Pow(adc_data, 2));
         }
 
@@ -6355,7 +6383,7 @@ namespace Thetis
 
         private void setAlex1HPF(double freq)
         {
-            if ((HardwareSpecific.Hardware == HPSDRHW.OrionMKII) || (HardwareSpecific.Hardware == HPSDRHW.Saturn))
+            if ((HardwareSpecific.Hardware == HPSDRHW.OrionMKII) || (HardwareSpecific.Hardware == HPSDRHW.Saturn)) //DK1HLM
             {
                 setBPF1ForOrionIISaturn(freq);
             }
@@ -9675,7 +9703,7 @@ namespace Thetis
             double[,] buf = new double[fft_size, 2];        // buffer for complex spectrum data
             double[] sum = new double[fft_size];            // buffer for "averaged" spectrum data
 
-            int iterations = 20;                            // number of samples to average
+            int iterations = 50;                            // number of samples to average //[2.10.3.9]MW0LGE changed from 20 to 50
 
             //~~~~~
 
@@ -10676,24 +10704,29 @@ namespace Thetis
         {
             set { udTXStepAttData.BackColor = value; }
         }
-        private int tx_attenuator_data = 31;
+        private int _tx_attenuator_data = 31;
         private bool _updatingTxAtt = false;
         public int TxAttenData
         {
-            get { return tx_attenuator_data; }
+            get { return _tx_attenuator_data; }
             set
             {
                 if (_updatingTxAtt) return;
                 _updatingTxAtt = true;
-                tx_attenuator_data = value;
+
+                _tx_attenuator_data = validateTXStepAttData(value); //[2.10.3.9]MW0LGE validated
+
                 if (!initializing)
                 {
-                    setTXstepAttenuatorForBand(tx_band, tx_attenuator_data); //[2.10.3.6]MW0LGE att_fixes #399
+                    setTXstepAttenuatorForBand(_tx_band, _tx_attenuator_data); //[2.10.3.6]MW0LGE att_fixes #399
                     if (m_bAttontx)
                     {
-                        int txatt = getTXstepAttenuatorForBand(tx_band);
-                        NetworkIO.SetTxAttenData(txatt); //[2.10.3.6]MW0LGE att_fixes
-                        Display.TXAttenuatorOffset = txatt; //[2.10.3.6]MW0LGE att_fixes
+                        //int txatt = getTXstepAttenuatorForBand(_tx_band);
+                        //NetworkIO.SetTxAttenData(txatt); //[2.10.3.6]MW0LGE att_fixes
+                        //Display.TXAttenuatorOffset = txatt; //[2.10.3.6]MW0LGE att_fixes
+
+                        NetworkIO.SetTxAttenData(_tx_attenuator_data); //[2.10.3.6]MW0LGE att_fixes
+                        Display.TXAttenuatorOffset = _tx_attenuator_data; //[2.10.3.6]MW0LGE att_fixes
                     }
                     else
                     {
@@ -10704,6 +10737,24 @@ namespace Thetis
                     //if (m_bAttontx && _mox) //[2.10.3.6]MW0LGE att_fixes
                     //udRX1StepAttData.Value = value; //[2.10.3.6]MW0LGE att_fixes
                     udTXStepAttData.Value = value;
+
+                    //******Red Pitaya BODGE*******
+                    //[2.10.3.9]MW0LGE This is not ideal, but a bodge to get the PedPitaya to TX attenuate correctly
+                    //I am not entirely sure why this is needed, perhaps an issue in the RP firmware
+                    if (_mox && m_bAttontx && HardwareSpecific.Model == HPSDRModel.REDPITAYA)
+                    {
+                        //note: I am usure if the RP would handle rx2 being changed as below, but it is here for completeness
+
+                        //if(RX2Enabled && VFOBTX)
+                        //{
+                        //    udRX2StepAttData.Value = value;
+                        //}
+                        //else
+                        //{
+                            udRX1StepAttData.Value = value;
+                        //}
+                    }
+                    //******END BODGE*******
                 }
                 _updatingTxAtt = false;
             }
@@ -10968,6 +11019,27 @@ namespace Thetis
 
         public bool DisplayVoltsAmps { get; set; }
 
+        //[2.10.3.9]MW0LGE validate step attenuator values, so many HL2 issues with these being out of range
+        private int validateRX1StepAttData(int att)
+        {
+            if (att > udRX1StepAttData.Maximum) att = (int)udRX1StepAttData.Maximum;
+            if (att < udRX1StepAttData.Minimum) att = (int)udRX1StepAttData.Minimum;
+            return att;
+        }
+        private int validateRX2StepAttData(int att)
+        {
+            if (att > udRX2StepAttData.Maximum) att = (int)udRX2StepAttData.Maximum;
+            if (att < udRX2StepAttData.Minimum) att = (int)udRX2StepAttData.Minimum;
+            return att;
+        }
+        private int validateTXStepAttData(int att)
+        {
+            if (att > udTXStepAttData.Maximum) att = (int)udTXStepAttData.Maximum;
+            if (att < udRX1StepAttData.Minimum) att = (int)udTXStepAttData.Minimum;
+            return att;
+        }        
+        //
+
         private bool rx1_step_att_present = false;
         public bool RX1StepAttPresent
         {
@@ -10977,7 +11049,7 @@ namespace Thetis
                 rx1_step_att_present = value;
                 if (rx1_step_att_present)
                 {
-                    udRX1StepAttData.Value = getRX1stepAttenuatorForBand(rx1_band); //MW0LGE [2.10.3.6] added
+                    udRX1StepAttData.Value = validateRX1StepAttData(getRX1stepAttenuatorForBand(rx1_band)); //MW0LGE [2.10.3.6] added //[2.10.3.9]MW0LGE validated
                     udRX1StepAttData_ValueChanged(this, EventArgs.Empty);
                 }
                 else
@@ -11024,6 +11096,8 @@ namespace Thetis
                     udRX1StepAttData.Maximum = (decimal)61;
                 else udRX1StepAttData.Maximum = (decimal)31;
 
+                rx1_attenuator_data = validateRX1StepAttData(rx1_attenuator_data); //[2.10.3.9]MW0LGE validated
+
                 //MW0LGE_22b step atten
                 int nRX1DDCinUse = -1, nRX2DDCinUse = -1, sync1 = -1, sync2 = -1, psrx = -1, pstx = -1;
                 GetDDC(out nRX1DDCinUse, out nRX2DDCinUse, out sync1, out sync2, out psrx, out pstx);
@@ -11068,7 +11142,7 @@ namespace Thetis
                     }
                 }
 
-                if (!_mox)
+                if (!_mox) //[2.10.3.9]MW0LGE note, this is not technically required for all radios except for the RedPitaya. See BODGE
                     setRX1stepAttenuatorForBand(rx1_band, rx1_attenuator_data);
 
                 udRX1StepAttData.Value = rx1_attenuator_data;
@@ -11116,7 +11190,7 @@ namespace Thetis
                 {
                     if (rx2_step_att_present)
                     {
-                        udRX2StepAttData.Value = getRX2stepAttenuatorForBand(rx2_band);
+                        udRX2StepAttData.Value = validateRX2StepAttData(getRX2stepAttenuatorForBand(rx2_band)); //[2.10.3.9]MW0LGE validated
                         udRX2StepAttData_ValueChanged(this, EventArgs.Empty);
                     }
                     else
@@ -11168,9 +11242,12 @@ namespace Thetis
                     HardwareSpecific.Model != HPSDRModel.ORIONMKII &&
                     HardwareSpecific.Model != HPSDRModel.ANAN_G2 &&
                     HardwareSpecific.Model != HPSDRModel.ANAN_G2_1K &&
-                    HardwareSpecific.Model != HPSDRModel.ANVELINAPRO3)
+                    HardwareSpecific.Model != HPSDRModel.ANVELINAPRO3 &&
+                    HardwareSpecific.Model != HPSDRModel.REDPITAYA) //DH1KLM
                     udRX2StepAttData.Maximum = (decimal)61; //MW0LGE_[2.9.0.7]  changed to udRX2
                 else udRX2StepAttData.Maximum = (decimal)31;
+
+                rx2_attenuator_data = validateRX2StepAttData(rx2_attenuator_data); //[2.10.3.9]MW0LGE validated
 
                 //MW0LGE_22b step atten
                 int nRX1DDCinUse = -1, nRX2DDCinUse = -1, sync1 = -1, sync2 = -1, psrx = -1, pstx = -1;
@@ -11189,7 +11266,8 @@ namespace Thetis
                         HardwareSpecific.Model != HPSDRModel.ORIONMKII &&
                         HardwareSpecific.Model != HPSDRModel.ANAN_G2 &&
                         HardwareSpecific.Model != HPSDRModel.ANAN_G2_1K &&
-                        HardwareSpecific.Model != HPSDRModel.ANVELINAPRO3)
+                        HardwareSpecific.Model != HPSDRModel.ANVELINAPRO3 &&
+                        HardwareSpecific.Model != HPSDRModel.REDPITAYA) //DH1KLM
                     {
                         if (rx2_attenuator_data <= 31)
                         {
@@ -11212,9 +11290,9 @@ namespace Thetis
                     }
                 }
 
-                if (!_mox)
+                if (!_mox || (_mox && VFOATX)) //[2.10.3.9]MW0LGE we should be able to do this if txing on rx1
                     setRX2stepAttenuatorForBand(rx2_band, rx2_attenuator_data);
-
+                
                 udRX2StepAttData.Value = rx2_attenuator_data;
                 lblRX2AttenLabel.Text = rx2_attenuator_data.ToString() + " dB";
 
@@ -12083,28 +12161,28 @@ namespace Thetis
             set { last_tx_xvtr_index = value; }
         }
 
-        private float rx1_path_offset = 0.0f;
-        public float RX1PathOffset
-        {
-            get { return rx1_path_offset; }
-        }
+        //private float rx1_path_offset = 0.0f;
+        //public float RX1PathOffset
+        //{
+        //    get { return rx1_path_offset; }
+        //}
 
-        private float rx2_path_offset = 0.0f;
-        public float RX2PathOffset
-        {
-            get { return rx2_path_offset; }
-        }
+        //private float rx2_path_offset = 0.0f;
+        //public float RX2PathOffset
+        //{
+        //    get { return rx2_path_offset; }
+        //}
 
         private PreampMode[] rx1_preamp_by_band;
-        public void SetRX1Preamp(Band b, PreampMode mode)
-        {
-            rx1_preamp_by_band[(int)b] = mode;
-        }
+        //public void SetRX1Preamp(Band b, PreampMode mode)
+        //{
+        //    rx1_preamp_by_band[(int)b] = mode;
+        //}
 
-        public PreampMode GetPreamp(Band b)
-        {
-            return rx1_preamp_by_band[(int)b];
-        }
+        //public PreampMode GetPreamp(Band b)
+        //{
+        //    return rx1_preamp_by_band[(int)b];
+        //}
 
         private PreampMode[] rx2_preamp_by_band;
 
@@ -12118,7 +12196,7 @@ namespace Thetis
         public void SetPower(Band b, int pwr)
         {
             power_by_band[(int)b] = pwr;
-            if (tx_band == b) PWR = pwr;
+            if (_tx_band == b) PWR = pwr;
         }
 
         public int GetPower(Band b)
@@ -12289,7 +12367,8 @@ namespace Thetis
                     HardwareSpecific.Model != HPSDRModel.ANAN_G2_1K &&
                     HardwareSpecific.Model != HPSDRModel.ANVELINAPRO3 &&
                     HardwareSpecific.Model != HPSDRModel.REDPITAYA && //DH1KLM
-                    !rx2_preamp_present || _mox)
+                    !rx2_preamp_present)// || _mox) //[2.10.3.9]MW0LGE er, why mox? why do we want to change RX2 offset when we are moxing?
+                                        // Surely rx2 should be left alone unless rx2 doesnt have a preamp in which case we can use rx1 data
                     Display.RX2PreampOffset = rx1_attenuator_data;
             }
             else
@@ -13331,30 +13410,40 @@ namespace Thetis
             set { quick_qsy = value; }
         }
 
-        private ColorSheme color_palette = ColorSheme.enhanced;
-        public ColorSheme color_sheme
+        private ColorScheme _rx1_color_palette = ColorScheme.enhanced;
+        public ColorScheme RX1ColourScheme
         {
-            get { return color_palette; }
+            get { return _rx1_color_palette; }
 
             set
             {
-                Display.ColorSheme = value;
-                color_palette = value;
+                Display.RX1ColorScheme = value;
+                _rx1_color_palette = value;
             }
         }
 
-        private ColorSheme rx2_color_palette = ColorSheme.enhanced;
-        public ColorSheme rx2_color_sheme
+        private ColorScheme _rx2_color_palette = ColorScheme.enhanced;
+        public ColorScheme RX2ColourScheme
         {
-            get { return rx2_color_palette; }
+            get { return _rx2_color_palette; }
 
             set
             {
-                Display.RX2ColorSheme = value;
-                rx2_color_palette = value;
+                Display.RX2ColorScheme = value;
+                _rx2_color_palette = value;
             }
         }
+        private ColorScheme _tx_color_palette = ColorScheme.enhanced;
+        public ColorScheme TXColourScheme
+        {
+            get { return _tx_color_palette; }
 
+            set
+            {
+                Display.TXColorScheme = value;
+                _tx_color_palette = value;
+            }
+        }
         public SIOListenerII Siolisten { get; set; } = null;
         public SIO2ListenerII Sio2listen { get; set; } = null;
         public SIO3ListenerII Sio3listen { get; set; } = null;
@@ -14913,19 +15002,20 @@ namespace Thetis
 
             cmaster.CMSetTXOutputLevelRun();
 
-            if (HardwareSpecific.OldModel != HardwareSpecific.Model) CurrentModelChangedHandlers?.Invoke(HardwareSpecific.OldModel, HardwareSpecific.Model); //MW0LGE_[2.9.0.7]
+            //do always, to update everything
+            CurrentModelChangedHandlers?.Invoke(HardwareSpecific.OldModel, HardwareSpecific.Model); //MW0LGE_[2.9.0.7]
         }
 
-        private int alex_preamp_offset = 0;
-        public int AlexPreampOffset
-        {
-            get { return alex_preamp_offset; }
-            set
-            {
-                alex_preamp_offset = value;
-                Display.AlexPreampOffset = alex_preamp_offset;
-            }
-        }
+        //private int alex_preamp_offset = 0;
+        //public int AlexPreampOffset
+        //{
+        //    get { return alex_preamp_offset; }
+        //    set
+        //    {
+        //        alex_preamp_offset = value;
+        //        Display.AlexPreampOffset = alex_preamp_offset;
+        //    }
+        //}
 
         private double saved_vfoa_freq = 7.1;
         private double saved_vfoa_sub_freq = 7.1;
@@ -17268,7 +17358,7 @@ namespace Thetis
                     // save values for old band
                     rx1_agcm_by_band[(int)old_band] = (AGCMode)comboAGC.SelectedIndex;
                     rx1_agct_by_band[(int)old_band] = ptbRF.Value;
-                    SetupForm.ATTOnTX = getTXstepAttenuatorForBand(tx_band); //[2.10.3.6]MW0LGE att_fixes
+                    SetupForm.ATTOnTX = getTXstepAttenuatorForBand(_tx_band); //[2.10.3.6]MW0LGE att_fixes
                     RX1PreampMode = rx1_preamp_by_band[(int)rx1_band];
                     RX1AttenuatorData = getRX1stepAttenuatorForBand(rx1_band);
                     //[2.10.3.6]MW0LGE this tmp is needed because RX1AGCMode causes an update to the setup form
@@ -17463,26 +17553,26 @@ namespace Thetis
             }
         }
 
-        private Band tx_band;
+        private Band _tx_band;
         public Band TXBand
         {
-            get { return tx_band; }
+            get { return _tx_band; }
             set
             {
                 //[2.10.3.6]MW0LGE no band change on TX fix
                 if (MOX) return;
 
-                Band old_band = tx_band;
+                Band old_band = _tx_band;
                 if (initializing) old_band = value; // we cant use tx_band, because it is unset (GEN), unless we save it out it is irrelevant MW0LGE
 
-                tx_band = value;
+                _tx_band = value;
 
                 Band lo_band = Band.FIRST;
                 if (tx_xvtr_index >= 0)
                     // Fix Penny O/C VHF control Vk4xv
                     lo_band = BandByFreq(XVTRForm.TranslateFreq(VFOAFreq), rx1_xvtr_index, current_region);
 
-                if (tx_band != old_band || initializing)
+                if (_tx_band != old_band || initializing)
                 {
                     // save values for old band
                     int old_pwr = ptbPWR.Value;
@@ -17511,7 +17601,7 @@ namespace Thetis
                     SetupForm.TXFilterLowSave = tx_filter_low;
                 }
 
-                if (tx_band == Band.B60M)
+                if (_tx_band == Band.B60M)
                 {
                     if (tx_filter_high > 2900)
                         SetupForm.TXFilterHigh = 2900;
@@ -17519,7 +17609,7 @@ namespace Thetis
                         SetupForm.TXFilterLow = 100;
                 }
 
-                if (tx_band != old_band || initializing)
+                if (_tx_band != old_band || initializing)
                 {
                     if (old_band == Band.B60M)
                     {
@@ -17531,7 +17621,7 @@ namespace Thetis
                 }
                 DisplayAriesTXAntenna();
 
-                if (tx_band != old_band) TXBandChangeHandlers?.Invoke(old_band, tx_band, TXFreq); //MW0LGE_22b
+                if (_tx_band != old_band) TXBandChangeHandlers?.Invoke(old_band, _tx_band, TXFreq); //MW0LGE_22b
             }
         }
 
@@ -17572,16 +17662,17 @@ namespace Thetis
         public string CATReadSigStrength()
         {
             float num = 0f;
-            float rx1PreampOffset = 0.0f;
+            //float rx1PreampOffset = 0.0f;
 
-            if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
-            else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+            //if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
+            //else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
 
             num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.SIGNAL_STRENGTH);
-            num = num +
-                rx1_meter_cal_offset +
-                rx1PreampOffset +
-                rx1_xvtr_gain_offset;
+            //num = num +
+            //    rx1_meter_cal_offset +
+            //    rx1PreampOffset +
+            //    rx1_xvtr_gain_offset;
+            num += RXOffset(1);
             return num.ToString("f1") + " dBm";
         }
 
@@ -17589,11 +17680,12 @@ namespace Thetis
         {
             float num = 0f;
             num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-            num = num +
-                rx1_meter_cal_offset +
-                rx1_preamp_offset[(int)rx1_preamp_mode] +
-                rx1_path_offset +
-                rx1_xvtr_gain_offset;
+            //num = num +
+            //    rx1_meter_cal_offset +
+            //    rx1_preamp_offset[(int)rx1_preamp_mode] +
+            //    rx1_path_offset +
+            //    rx1_xvtr_gain_offset;
+            num += RXOffset(1);
             return num.ToString("f1") + " dBm";
         }
 
@@ -17697,11 +17789,12 @@ namespace Thetis
         {
             float num = 0f;
             num = WDSP.CalculateRXMeter(0, sub, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-            num = num +
-                rx1_meter_cal_offset +
-                rx1_preamp_offset[(int)rx1_preamp_mode] +
-                rx1_path_offset +
-                rx1_xvtr_gain_offset;
+            //num = num +
+            //    rx1_meter_cal_offset +
+            //    rx1_preamp_offset[(int)rx1_preamp_mode] +
+            //    rx1_path_offset +
+            //    rx1_xvtr_gain_offset;
+            num += RXOffset(1);
             return (int)num;
         }
 
@@ -17711,11 +17804,12 @@ namespace Thetis
         {
             float num = 0f;
             num = WDSP.CalculateRXMeter(0, sub, WDSP.MeterType.SIGNAL_STRENGTH);
-            num = num +
-                rx1_meter_cal_offset +
-                rx1_preamp_offset[(int)rx1_preamp_mode] +
-                rx1_path_offset +
-                rx1_xvtr_gain_offset;
+            //num = num +
+            //    rx1_meter_cal_offset +
+            //    rx1_preamp_offset[(int)rx1_preamp_mode] +
+            //    rx1_path_offset +
+            //    rx1_xvtr_gain_offset;
+            num += RXOffset(1);
             return (int)num;
 
         }
@@ -17780,7 +17874,11 @@ namespace Thetis
                         r = radModeDRM;
                         break;
                 }
-                r.Checked = true;
+
+                if (r != null)
+                {
+                    r.Checked = true;
+                }
 
                 if (modePopupForm != null) modePopupForm.RepopulateForm();
                 if (filterPopupForm != null) filterPopupForm.RepopulateForm();
@@ -17834,7 +17932,11 @@ namespace Thetis
                         break;
                 }
 
-                r.Checked = true;
+                if (r != null)
+                {
+                    r.Checked = true;
+                }
+
                 if (modePopupForm != null) modePopupForm.RepopulateForm();
                 if (filterPopupForm != null) filterPopupForm.RepopulateForm();
             }
@@ -19044,7 +19146,7 @@ namespace Thetis
                 {
                     if (m_bAttontx)
                     {
-                        int txatt = getTXstepAttenuatorForBand(tx_band);
+                        int txatt = getTXstepAttenuatorForBand(_tx_band);
                         NetworkIO.SetTxAttenData(txatt); //[2.10.3.6]MW0LGE att_fixes
                         Display.TXAttenuatorOffset = txatt; //[2.10.3.6]MW0LGE att_fixes
                     }
@@ -21031,12 +21133,15 @@ namespace Thetis
                 }
                 else
                 {
+                    // use rx1 offsets
                     if (rx1_step_att_present)
                         fOffset = (float)rx1_attenuator_data;
                     else
                         fOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
                 }
+
                 fOffset += rx2_meter_cal_offset + rx2_xvtr_gain_offset;
+
                 if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
                     HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
                     HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) //DH1KLM
@@ -21246,8 +21351,7 @@ namespace Thetis
             int adc_oload_num = NetworkIO.getAndResetADC_Overload();
             if(adc_oload_num > 0)
             {
-                // this is done so that if in a constant overload state, the above call to getAndResetADC_Overload would return 0,
-                // this call below will 'use' this up just like amp overload above
+                // if there is an overload, then call it again, as a subsequent call to getAndResetADC_Overload would always return a 0 as the above getAndResetADC_Overload resets it
                 NetworkIO.getAndResetADC_Overload();
             }
             /*
@@ -21403,10 +21507,29 @@ namespace Thetis
                         AutoAttAppliedRX1 = false;
                 }
             }
+            else if (_historic_attenuator_readings_tx.Any()) _historic_attenuator_readings_tx.Clear();
 
             // deal with RX
             if (!_mox)
             {
+                if(!_auto_att_rx1)
+                {
+                    if (_historic_attenuator_readings_rx1.Any())
+                    {
+                        _historic_attenuator_readings_rx1.Clear();
+                        AutoAttAppliedRX1 = false;
+                    }
+                }
+                if (!_auto_att_rx2)
+                {
+                    if (_historic_attenuator_readings_rx2.Any())
+                    {
+                        _historic_attenuator_readings_rx2.Clear();
+                        AutoAttAppliedRX2 = false;
+                    }
+                }
+                if (!_auto_att_rx1 && !_auto_att_rx2) return;
+
                 // clear any for different band
                 keep_att_entries_for_band(_historic_attenuator_readings_rx1, RX1Band);
                 keep_att_entries_for_band(_historic_attenuator_readings_rx2, RX2Band);
@@ -21414,7 +21537,7 @@ namespace Thetis
                 if (_historic_attenuator_readings_rx2.Count == 0 && AutoAttAppliedRX2) AutoAttAppliedRX2 = false;
 
                 int nRX1DDCinUse = -1, nRX2DDCinUse = -1, sync1 = -1, sync2 = -1, psrx = -1, pstx = -1;
-                GetDDC(out nRX1DDCinUse, out nRX2DDCinUse, out sync1, out sync2, out psrx, out pstx);                               
+                GetDDC(out nRX1DDCinUse, out nRX2DDCinUse, out sync1, out sync2, out psrx, out pstx);
 
                 DateTime now = DateTime.Now;
 
@@ -21453,7 +21576,7 @@ namespace Thetis
                         }
                         else
                         {
-                            har.preampMode = RX1PreampMode;                            
+                            har.preampMode = RX1PreampMode;
 
                             PreampMode pam = har.preampMode;
                             switch (pam)
@@ -21477,29 +21600,29 @@ namespace Thetis
 
                                 AutoAttAppliedRX1 = true;
                             }
-                        }                        
+                        }
                     }
                     else if ((nRX1ADCinUse == 0 || nRX1ADCinUse == 1) && _historic_attenuator_readings_rx1.Any()) // no overload rx1
                     {
                         if (!_auto_att_undo_rx1 || (_auto_att_undo_rx1 && ((now - _auto_att_last_hold_time_rx1).TotalSeconds >= _auto_att_hold_delay_rx1)))
                         {
                             // unwind
-                            HistoricAttenuatorReading har = _historic_attenuator_readings_rx1.Pop();                            
+                            HistoricAttenuatorReading har = _historic_attenuator_readings_rx1.Pop();
                             if (har != null && _auto_att_undo_rx1)
                             {
                                 if (RX1StepAttPresent && har.stepAttenuator != -1)
                                 {
-                                    if (har.stepAttenuator != RX1AttenuatorData) RX1AttenuatorData = har.stepAttenuator;                                    
+                                    if (har.stepAttenuator != RX1AttenuatorData) RX1AttenuatorData = har.stepAttenuator;
                                 }
                                 else if (har.preampMode != PreampMode.FIRST)
                                 {
                                     if (har.preampMode != RX1PreampMode) RX1PreampMode = har.preampMode;
-                                }                                
+                                }
                             }
                             _auto_att_last_hold_time_rx1 = now;
 
                             AutoAttAppliedRX1 = _historic_attenuator_readings_rx1.Any();
-                        }                        
+                        }
                     }
                 }
 
@@ -21555,7 +21678,7 @@ namespace Thetis
                             if (pam != har.preampMode)
                             {
                                 RX2PreampMode = pam;
-                               _auto_att_last_hold_time_rx2 = now;
+                                _auto_att_last_hold_time_rx2 = now;
                                 _historic_attenuator_readings_rx2.Push(har);
 
                                 AutoAttAppliedRX2 = true;
@@ -21581,13 +21704,13 @@ namespace Thetis
                                 else if (har.preampMode != PreampMode.FIRST)
                                 {
                                     if (har.preampMode != RX2PreampMode) RX2PreampMode = har.preampMode;
-                                }                                
+                                }
                             }
                             _auto_att_last_hold_time_rx2 = now;
 
                             AutoAttAppliedRX2 = _historic_attenuator_readings_rx2.Any();
                         }
-                    }                    
+                    }
                 }
             }            
         }
@@ -21816,16 +21939,17 @@ namespace Thetis
                     if (!MOX)
                     {
                         //
-                        float rx1PreampOffset;
-                        if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
-                        else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+                        //float rx1PreampOffset;
+                        //if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
+                        //else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
 
                         num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-                        num = num +
-                        rx1_meter_cal_offset +
-                        rx1PreampOffset +
-                        rx1_xvtr_gain_offset +
-                        rx1_6m_gain_offset;
+                        //num = num +
+                        //rx1_meter_cal_offset +
+                        //rx1PreampOffset +
+                        //rx1_xvtr_gain_offset +
+                        //rx1_6m_gain_offset;
+                        num += RXOffset(1);
 
                         if (num > _avNumRX1) // quick rise
                             num = _avNumRX1 = num * 0.8f + _avNumRX1 * 0.2f;
@@ -21856,39 +21980,40 @@ namespace Thetis
                     if (!MOX)
                     {
                         //
-                        float rx2PreampOffset;
-                        if (HardwareSpecific.Model == HPSDRModel.ANAN100D ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN200D ||
-                            HardwareSpecific.Model == HPSDRModel.ORIONMKII ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN7000D ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K ||
-                            HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 ||
-                            HardwareSpecific.Model == HPSDRModel.REDPITAYA || //DH1KLM
-                            rx2_preamp_present)
-                        {
-                            if (rx2_step_att_present)
-                                rx2PreampOffset = (float)rx2_attenuator_data;
-                            else
-                                rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
-                        }
-                        else
-                        {
-                            if (rx1_step_att_present)
-                                rx2PreampOffset = (float)rx1_attenuator_data;
-                            else
-                                rx2PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
-                        }
+                        //float rx2PreampOffset;
+                        //if (HardwareSpecific.Model == HPSDRModel.ANAN100D ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN200D ||
+                        //    HardwareSpecific.Model == HPSDRModel.ORIONMKII ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN7000D ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 ||
+                        //    HardwareSpecific.Model == HPSDRModel.REDPITAYA || //DH1KLM
+                        //    rx2_preamp_present)
+                        //{
+                        //    if (rx2_step_att_present)
+                        //        rx2PreampOffset = (float)rx2_attenuator_data;
+                        //    else
+                        //        rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
+                        //}
+                        //else
+                        //{
+                        //    if (rx1_step_att_present)
+                        //        rx2PreampOffset = (float)rx1_attenuator_data;
+                        //    else
+                        //        rx2PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+                        //}
                         num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-                        num = num +
-                        rx2_meter_cal_offset +
-                        rx2PreampOffset +
-                        rx2_xvtr_gain_offset;
-                        if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
-                            HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
-                            HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) //DH1KLM
-                                num += rx2_6m_gain_offset;
+                        //num = num +
+                        //rx2_meter_cal_offset +
+                        //rx2PreampOffset +
+                        //rx2_xvtr_gain_offset;
+                        num += RXOffset(2);
+                        //if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
+                        //    HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) //DH1KLM
+                        //        num += rx2_6m_gain_offset;
 
                         if (num > _avNumRX2) // quick rise
                             num = _avNumRX2 = num * 0.8f + _avNumRX2 * 0.2f;
@@ -24465,30 +24590,31 @@ namespace Thetis
                     {
                         MeterRXMode mode = CurrentMeterRXMode;
                         float num = 0.0f;
-                        float rx1PreampOffset = 0.0f;
+                        //float rx1PreampOffset = 0.0f;
 
-                        if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
-                        else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+                        //if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
+                        //else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
 
                         switch (mode)
                         {
                             case MeterRXMode.SIGNAL_STRENGTH:
                                 num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.SIGNAL_STRENGTH);
-                                num = num +
-                                 rx1_meter_cal_offset +
-                                 rx1PreampOffset +
-                                 rx1_xvtr_gain_offset +
-                                 rx1_6m_gain_offset;
-
+                                //num = num +
+                                // rx1_meter_cal_offset +
+                                // rx1PreampOffset +
+                                // rx1_xvtr_gain_offset +
+                                // rx1_6m_gain_offset;
+                                num += RXOffset(1);
                                 new_meter_data = num;
                                 break;
                             case MeterRXMode.SIGNAL_AVERAGE:
                                 num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-                                num = num +
-                                  rx1_meter_cal_offset +
-                                   rx1PreampOffset +
-                                   rx1_xvtr_gain_offset +
-                                   rx1_6m_gain_offset;
+                                //num = num +
+                                //  rx1_meter_cal_offset +
+                                //   rx1PreampOffset +
+                                //   rx1_xvtr_gain_offset +
+                                //   rx1_6m_gain_offset;
+                                num += RXOffset(1);
                                 new_meter_data = num;
                                 break;
                             case MeterRXMode.ADC_L:
@@ -24628,7 +24754,7 @@ namespace Thetis
 
         private HiPerfTimer rx2_meter_timer = new HiPerfTimer();
 
-        private async void UpdateRX2MeterData()
+        private async void UpdateRX2Multimeter()
         {
             rx2_meter_timer.Start();
             while (_useLegacyMeters && chkPower.Checked && rx2_enabled)
@@ -24637,59 +24763,60 @@ namespace Thetis
                 {
                     //MW0LGE_21d step atten
                     MeterRXMode mode = RX2MeterMode;
-                    float rx2PreampOffset = 0;
-                    if (HardwareSpecific.Model == HPSDRModel.ANAN100D ||
-                        HardwareSpecific.Model == HPSDRModel.ANAN200D ||
-                        HardwareSpecific.Model == HPSDRModel.ORIONMKII ||
-                        HardwareSpecific.Model == HPSDRModel.ANAN7000D ||
-                        HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
-                        HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
-                        HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K ||
-                        HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 ||
-                        HardwareSpecific.Model == HPSDRModel.REDPITAYA || //DH1KLM
-                        rx2_preamp_present)
-                    {
-                        if (rx2_step_att_present)
-                            rx2PreampOffset = (float)rx2_attenuator_data;
-                        else
-                            rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
-                    }
-                    else
-                    {
-                        if (rx1_step_att_present)
-                        {
-                            rx2PreampOffset = (float)rx1_attenuator_data;
-                        }
-                        else
-                        {
-                            rx2PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
-                        }
-                    }
+                    //float rx2PreampOffset = 0;
+                    //if (HardwareSpecific.Model == HPSDRModel.ANAN100D ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANAN200D ||
+                    //    HardwareSpecific.Model == HPSDRModel.ORIONMKII ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANAN7000D ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K ||
+                    //    HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 ||
+                    //    HardwareSpecific.Model == HPSDRModel.REDPITAYA || //DH1KLM
+                    //    rx2_preamp_present)
+                    //{
+                    //    if (rx2_step_att_present)
+                    //        rx2PreampOffset = (float)rx2_attenuator_data;
+                    //    else
+                    //        rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
+                    //}
+                    //else
+                    //{
+                    //    if (rx1_step_att_present)
+                    //    {
+                    //        rx2PreampOffset = (float)rx1_attenuator_data;
+                    //    }
+                    //    else
+                    //    {
+                    //        rx2PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+                    //    }
+                    //}
 
                     float num;
                     switch (mode)
                     {
                         case MeterRXMode.SIGNAL_STRENGTH:
                             num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
-
-                            num = num +
-                              rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
-                              rx2PreampOffset +
-                              rx2_xvtr_gain_offset;
-                            if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
-                                HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
-                                HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) num += rx2_6m_gain_offset; //DH1KLM
+                            //num = num +
+                            //  rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
+                            //  rx2PreampOffset +
+                            //  rx2_xvtr_gain_offset;
+                            num += RXOffset(2);
+                            //if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
+                            //    HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
+                            //    HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) num += rx2_6m_gain_offset; //DH1KLM
                             rx2_meter_new_data = num;
                             break;
                         case MeterRXMode.SIGNAL_AVERAGE:
                             num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.AVG_SIGNAL_STRENGTH);
-                            num = num +
-                            rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
-                            rx2PreampOffset +
-                            rx2_xvtr_gain_offset;
-                            if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
-                                HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
-                                HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) num += rx2_6m_gain_offset; //DH1KLM
+                            //num = num +
+                            //rx2_meter_cal_offset + // MW0LGE was rx1_meter_cal_offset
+                            //rx2PreampOffset +
+                            //rx2_xvtr_gain_offset;
+                            num += RXOffset(2);
+                            //if (HardwareSpecific.Model == HPSDRModel.ANAN7000D || HardwareSpecific.Model == HPSDRModel.ANAN8000D ||
+                            //    HardwareSpecific.Model == HPSDRModel.ANVELINAPRO3 || HardwareSpecific.Model == HPSDRModel.ANAN_G2 ||
+                            //    HardwareSpecific.Model == HPSDRModel.ANAN_G2_1K || HardwareSpecific.Model == HPSDRModel.REDPITAYA) num += rx2_6m_gain_offset; //DH1KLM
                             rx2_meter_new_data = num;
                             break;
                         case MeterRXMode.ADC_L:
@@ -24930,21 +25057,21 @@ namespace Thetis
                 case HPSDRModel.ANAN100:
                 case HPSDRModel.ANAN100B:
                     bridge_volt = 0.095f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.5f;
                     refvoltage = 3.3f;
                     adc_cal_offset = 3;
                     break;
                 case HPSDRModel.ANAN100D:
                     bridge_volt = 0.095f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.5f;
                     refvoltage = 3.3f;
                     adc_cal_offset = 3;
                     break;
                 case HPSDRModel.ANAN200D:
                     bridge_volt = 0.108f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.5f;
                     refvoltage = 5.0f;
                     adc_cal_offset = 2;
@@ -24955,7 +25082,7 @@ namespace Thetis
                 case HPSDRModel.ANAN_G2_1K:                 // will need to be edited for scaling
                 case HPSDRModel.REDPITAYA: //DH1KLM
                     bridge_volt = 0.15f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.7f;
                     refvoltage = 5.0f;
                     adc_cal_offset = 28;
@@ -24963,14 +25090,14 @@ namespace Thetis
                 case HPSDRModel.ORIONMKII:
                 case HPSDRModel.ANAN8000D:
                     bridge_volt = 0.08f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.08f;
                     refvoltage = 5.0f;
                     adc_cal_offset = 16;
                     break;
                 default:
                     bridge_volt = 0.09f;
-                    if (tx_band == Band.B6M)
+                    if (_tx_band == Band.B6M)
                         bridge_volt = 0.09f;
                     refvoltage = 3.3f;
                     adc_cal_offset = 3;
@@ -25308,15 +25435,16 @@ namespace Thetis
             {
                 if (!_mox)
                 {
-                    float rx1PreampOffset;
-                    if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
-                    else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
+                    //float rx1PreampOffset;
+                    //if (rx1_step_att_present) rx1PreampOffset = (float)rx1_attenuator_data;
+                    //else rx1PreampOffset = rx1_preamp_offset[(int)rx1_preamp_mode];
 
                     float num = WDSP.CalculateRXMeter(0, 0, WDSP.MeterType.SIGNAL_STRENGTH);
-                    num = num +
-                    rx1_meter_cal_offset +
-                    rx1PreampOffset;
-                    sql_data = num;
+                    //num = num +
+                    //rx1_meter_cal_offset +
+                    //rx1PreampOffset;
+                    num += RXOffset(1);
+                    sql_data = num;                    
                     picSquelch.Invalidate();
                 }
 
@@ -25331,14 +25459,15 @@ namespace Thetis
             {
                 if (!_mox)
                 {
-                    float rx2PreampOffset;
-                    if (rx2_step_att_present) rx2PreampOffset = (float)rx2_attenuator_data;
-                    else rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
+                    //float rx2PreampOffset;
+                    //if (rx2_step_att_present) rx2PreampOffset = (float)rx2_attenuator_data;
+                    //else rx2PreampOffset = rx2_preamp_offset[(int)rx2_preamp_mode];
 
                     float num = WDSP.CalculateRXMeter(2, 0, WDSP.MeterType.SIGNAL_STRENGTH);
-                    num = num +
-                    rx2_meter_cal_offset +
-                    rx2PreampOffset;
+                    //num = num +
+                    //rx2_meter_cal_offset +
+                    //rx2PreampOffset;
+                    num += RXOffset(2);
                     rx2_sql_data = num;
                     picRX2Squelch.Invalidate();
                 }
@@ -27470,7 +27599,7 @@ namespace Thetis
                 {
                     if (rx == 2 && (rx2_meter_thread == null || !rx2_meter_thread.IsAlive))
                     {
-                        rx2_meter_thread = new Thread(new ThreadStart(UpdateRX2MeterData))
+                        rx2_meter_thread = new Thread(new ThreadStart(UpdateRX2Multimeter))
                         {
                             Name = "RX2 Meter Thread",
                             Priority = ThreadPriority.Lowest,
@@ -27531,7 +27660,7 @@ namespace Thetis
 
                 if (m_bAttontx)
                 {
-                    int txatt = getTXstepAttenuatorForBand(tx_band);
+                    int txatt = getTXstepAttenuatorForBand(_tx_band);
                     NetworkIO.SetTxAttenData(txatt); //[2.10.3.6]MW0LGE att_fixes
                     Display.TXAttenuatorOffset = txatt;
                 }
@@ -27543,11 +27672,13 @@ namespace Thetis
 
                 enableAudioAmplfier(); // MW0LGE_22b
 
+                if (!IsSetupFormNull) SetupForm.BoardWarning = ""; // no board warning
                 if (!Audio.Start())   // starts JanusAudio running
                 {
                     chkPower.Checked = false;
                     return;
                 }
+                if (!IsSetupFormNull) SetupForm.BoardWarning = NetworkIO.BoardMismatch; //[2.10.3.9]MW0LGE show warning in setup if board does not match expected
 
                 //MW0LGE_21k9 these two moved after the audio start
                 //seems to fix issue that was causing multiRX to be silent when starting up and it was switched on
@@ -27705,11 +27836,14 @@ namespace Thetis
                     chkMOX.Enabled = true;
                     chkTUN.Enabled = true;
                     chk2TONE.Enabled = true; //MW0LGE_21a
+                    //wd5y
+                    chkTC.Enabled = true;
+                    //wd5y
                 }
                 chkVFOLock.Enabled = true;
                 chkVFOBLock.Enabled = true;
                 timer_peak_text.Enabled = true;
-                HardwareSpecific.Hardware = NetworkIO.BoardID; // [2.10.3.9]MW0LGE check this, dont like it here !
+                //HardwareSpecific.Hardware = NetworkIO.BoardID; // [2.10.3.9]MW0LGE check this, dont like it here ! //[2.10.3.9]MW0LGE - REMOVED !!!
                 UpdateDDCs(rx2_enabled);
                 UpdateAAudioMixerStates();
 
@@ -27752,6 +27886,10 @@ namespace Thetis
                 chkTUN.Enabled = false;
                 chk2TONE.Checked = false;  // MW0LGE_21a
                 chk2TONE.Enabled = false;
+                //wd5y
+                chkTC.Checked = false;
+                chkTC.Enabled = false;
+                //wd5y
 
                 if (serialPTT != null)  // let go of serial port
                 {
@@ -27919,6 +28057,7 @@ namespace Thetis
                         case HPSDRModel.ORIONMKII:
                         case HPSDRModel.ANAN7000D:
                         case HPSDRModel.ANAN8000D:
+                        case HPSDRModel.REDPITAYA: //DH1KLM
                             cmaster.SetAAudioMixStates((void*)0, 0, RX1 + RX1S + RX2 + MON, RX1 + RX1S + RX2 + MON);
                             cmaster.SetAntiVOXSourceStates(0, RX1 + RX1S + RX2, RX1 + RX1S + RX2);
                             break;
@@ -28385,16 +28524,16 @@ namespace Thetis
             if (m_tcpTCIServer != null)
             {
                 shutdownLogStringToPath("Before m_tcpTCIServer.StopServer()");
-                bool wasRunning = m_tcpTCIServer.IsServerRunning;
                 m_tcpTCIServer.StopServer();
-                if (wasRunning) removeTCIDelegates();
+                removeTCIDelegates();
             }
             if (m_tcpCATServer != null)
             {
                 shutdownLogStringToPath("Before m_tcpCATServer.StopServer()");
-                bool wasRunning = m_tcpCATServer.IsServerRunning;
+                NetworkIO.SetCATPort(0); // tell the hardware the cat port is now 'gone'
+                Thread.Sleep(100); // give some flight time delay
                 m_tcpCATServer.StopServer();
-                if (wasRunning) removeTCPIPcatDelegates();
+                removeTCPIPcatDelegates();
             }
 
             shutdownLogStringToPath("Before infoBar.ShutDown()");
@@ -28922,10 +29061,10 @@ namespace Thetis
             PrettyTrackBar.LimitConstraint lc = e as PrettyTrackBar.LimitConstraint; // the event args will contain a LimitConstraint if we are using the right click/drag of a limit
 
             if (lc != null)
-                limitPower_by_band[(int)tx_band] = lc.LimitValue; // store the adjusted limit level
+                limitPower_by_band[(int)_tx_band] = lc.LimitValue; // store the adjusted limit level
 
             int new_pwr = setPowerFromDriveSlider(out bool bUseConstrain, e != EventArgs.Empty);
-            power_by_band[(int)tx_band] = ptbPWR.Value;
+            power_by_band[(int)_tx_band] = ptbPWR.Value;
 
             UpdateDriveLabel(lc != null && bUseConstrain, e);
 
@@ -29342,7 +29481,7 @@ namespace Thetis
                 }
                 else
                 {
-                    Alex.getAlex().UpdateAlexAntSelection(tx_band, _mox, alex_ant_ctrl_enabled, false);
+                    Alex.getAlex().UpdateAlexAntSelection(_tx_band, _mox, alex_ant_ctrl_enabled, false);
                 }
                 UpdateTRXAnt(); //[2.3.10.6]MW0LGE added
 
@@ -29524,7 +29663,7 @@ namespace Thetis
                     udTXStepAttData.Parent = udRX1StepAttData.Parent;
                     udTXStepAttData.BringToFront();
                     udTXStepAttData.Visible = m_bAttontx;
-                    lblPreamp.Text = m_bAttontx ? "Tx-ATT" : (rx1_step_att_present ? "S-ATT" : "ATT");
+                    lblPreamp.Text = m_bAttontx ? "[S-ATT]" : (rx1_step_att_present ? "S-ATT" : "ATT");
                 }
                 else if (VFOBTX && rx2_enabled)
                 {
@@ -29539,7 +29678,7 @@ namespace Thetis
                     udTXStepAttData.Parent = udRX2StepAttData.Parent;
                     udTXStepAttData.BringToFront();
                     udTXStepAttData.Visible = m_bAttontx;
-                    lblRX2Preamp.Text = m_bAttontx ? "Tx-ATT" : (rx2_step_att_present ? "S-ATT" : "ATT");
+                    lblRX2Preamp.Text = m_bAttontx ? "[S-ATT]" : (rx2_step_att_present ? "S-ATT" : "ATT");
                 }
                 else
                 {
@@ -29687,7 +29826,7 @@ namespace Thetis
                         return;
                     }
 
-                    if (tx_band == Band.B60M && current_region == FRSRegion.US && !extended)
+                    if (_tx_band == Band.B60M && current_region == FRSRegion.US && !extended)
                     {
                         switch (radio.GetDSPTX(0).CurrentDSPMode)
                         {
@@ -29708,7 +29847,7 @@ namespace Thetis
 
                     if (!CheckValidTXFreq(current_region, freq, radio.GetDSPTX(0).CurrentDSPMode, chkTUN.Checked))	// out of band
                     {
-                        if (tx_band == Band.B60M && current_region == FRSRegion.US &&
+                        if (_tx_band == Band.B60M && current_region == FRSRegion.US &&
                             CheckValidTXFreq_Private(current_region, freq) && !extended)
                         {
                             MessageBox.Show("The transmit filter you have selected exceeds the bandwidth\n" +
@@ -29838,14 +29977,14 @@ namespace Thetis
                         //                 radio.GetDSPTX(0).CurrentDSPMode == DSPMode.CWU)) SetupForm.ATTOnTX = 31; // reset when PS is OFF or in CW mode
 
                         //MW0LGE [2.9.0.7] added option to always apply 31 att from setup form when not in ps
-                        int txAtt = getTXstepAttenuatorForBand(tx_band);
+                        int txAtt = getTXstepAttenuatorForBand(_tx_band);
                         if ((!chkFWCATUBypass.Checked && _forceATTwhenPSAoff) ||
                                         (radio.GetDSPTX(0).CurrentDSPMode == DSPMode.CWL ||
                                          radio.GetDSPTX(0).CurrentDSPMode == DSPMode.CWU)) txAtt = 31; // reset when PS is OFF or in CW mode
 
                         SetupForm.ATTOnRX1 = getRX1stepAttenuatorForBand(rx1_band); //[2.10.3.6]MW0LGE att_fixes
-                        SetupForm.ATTOnTX = txAtt; //[2.10.3.6]MW0LGE att_fixes NOTE: this will eventually call Display.TXAttenuatorOffset with the value
-                        NetworkIO.SetTxAttenData(txAtt); //[2.10.3.6]MW0LGE att_fixes
+                        SetupForm.ATTOnTX = txAtt; //[2.10.3.6]MW0LGE att_fixes NOTE: this will eventually call Display.TXAttenuatorOffset with the value                        
+                        //NetworkIO.SetTxAttenData(txAtt); //[2.10.3.6]MW0LGE att_fixes  //[2.10.3.9]MW0LGE note: this is done by line above
 
                         //SetupForm.RX1EnableAtt = true; //[2.10.3.6]MW0LGE att_fixes
                         //comboRX2Preamp.Enabled = false; //[2.10.3.6]MW0LGE att_fixes
@@ -29976,6 +30115,10 @@ namespace Thetis
                     chkTUN.Checked = false;
                 if (chk2TONE.Checked) //MW0LGE_21a
                     chk2TONE.Checked = false;
+                //wd5y
+                if (chkTC.Checked)
+                    chkTC.Checked = false;
+                //wd5y
             }
 
         }
@@ -30205,6 +30348,22 @@ namespace Thetis
         private DSPMode old_dsp_mode;
         private async void chkTUN_CheckedChanged(object sender, System.EventArgs e)
         {
+            //wd5y
+            if (SetupForm.chkSWRTuneProtection.Checked == true && ptbTune.Value < (float)(SetupForm.udTunePowerSwrIgnore.Value / SetupForm.nudMaxPowerForBandPA.Value) * 100)
+            {
+                if (chkTUN.Checked == true)
+                {
+                    SetupForm.chkSWRProtection.Checked = false;
+                    SetupForm.chkWindBackPowerSWR.Checked = false;
+                }
+                else
+                {
+                    SetupForm.chkSWRProtection.Checked = true;
+                    SetupForm.chkWindBackPowerSWR.Checked = true;
+                }
+            }
+            //wd5y
+
             bool oldTune = tuning; //MW0LGE_21k9d
 
             if (chkTUN.Checked)
@@ -30304,6 +30463,9 @@ namespace Thetis
                 if (!_mox)
                 {
                     chkTUN.Checked = false;
+                    //wd5y
+                    chkTC.Checked = false;
+                    //wd5y
                     return;
                 }
                 // MW0LGE_21k8 moved below mox
@@ -31719,13 +31881,13 @@ namespace Thetis
             if (b != rx1_band)
                 SetRX1Band(b);
 
-            Band old_tx_band = tx_band;
+            Band old_tx_band = _tx_band;
             if (!chkVFOSplit.Checked && !chkVFOBTX.Checked)
             {
                 b = BandByFreq(freq, tx_xvtr_index, current_region);
 
                 Band b1 = getTXBandWhenExtended(b, freq);
-                if (b1 != tx_band)
+                if (b1 != _tx_band)
                     SetTXBand(b1, b != b1);
             }
 
@@ -31766,9 +31928,9 @@ namespace Thetis
                 UpdateTRXAnt();
             }
 
-            if (tx_band != old_tx_band)
+            if (_tx_band != old_tx_band)
             {
-                if (tx_band == Band.B60M)
+                if (_tx_band == Band.B60M)
                 {
                     chkXIT.Enabled = false;
                     chkXIT.Checked = false;
@@ -32259,7 +32421,7 @@ namespace Thetis
             if (chkVFOSplit.Checked)
             {
                 tx_xvtr_index = XVTRForm.XVTRFreq(freq);
-                Band old_tx_band = tx_band;
+                Band old_tx_band = _tx_band;
                 Band b = BandByFreq(freq, tx_xvtr_index, current_region);
 
                 Band b1 = getTXBandWhenExtended(b, freq);
@@ -32279,9 +32441,9 @@ namespace Thetis
                 if (tx_xvtr_index >= 0)
                     freq = XVTRForm.TranslateFreq(freq);
 
-                if (old_tx_band != tx_band)
+                if (old_tx_band != _tx_band)
                 {
-                    if (tx_band == Band.B60M)
+                    if (_tx_band == Band.B60M)
                     {
                         chkXIT.Enabled = false;
                         chkXIT.Checked = false;
@@ -32760,7 +32922,7 @@ namespace Thetis
             set_tx_freq:
             tx_xvtr_index = rx2_xvtr_index;
             double tx_freq = freq;
-            Band old_tx_band = tx_band;
+            Band old_tx_band = _tx_band;
             Band b = BandByFreq(tx_freq, tx_xvtr_index, current_region);
 
             Band b1 = getTXBandWhenExtended(b, tx_freq);
@@ -32824,9 +32986,9 @@ namespace Thetis
                     NetworkIO.SetXVTREnable(0); // disable
             }
 
-            if (old_tx_band != tx_band)
+            if (old_tx_band != _tx_band)
             {
-                if (tx_band == Band.B60M)
+                if (_tx_band == Band.B60M)
                 {
                     chkXIT.Enabled = false;
                     chkXIT.Checked = false;
@@ -35060,6 +35222,40 @@ namespace Thetis
                         else if (bOverRX2 && agc_knee_drag) AutoAGCRX2 = false;
                     }
 
+                    //BAND STACK OVERLAY
+                    //only do this if not doing something else
+                    if (m_bShowBandStackOverlays && bOverRX1 && !(rx1_sub_drag || m_bDraggingNotch || m_bDraggingNotchBW || m_bDraggingPanafallSplit ||
+                        gridminmaxadjust || agc_knee_drag || agc_hang_drag || rx1_spectrum_tune_drag || rx1_click_tune_drag || rx2_spectrum_tune_drag || rx2_click_tune_drag ||
+                        tx_high_filter_drag || tx_low_filter_drag || rx1_low_filter_drag || rx1_high_filter_drag || rx2_low_filter_drag || rx1_high_filter_drag))
+                    {
+                        if (Display.BandStackOverlays != null && Display.BandStackOverlays.Length > 0)
+                        {
+                            bool panafall_check = Display.CurrentDisplayMode == DisplayMode.PANAFALL && ((!rx2_enabled && e.Y < Display.PanafallSplitBarPos) || (rx2_enabled && e.Y < picDisplay.Height / 4)); //[2.10.3.6]MW0LGE fixes issue where you could try to qsy click on the waterfall
+                            if (bOverRX1 && (Display.CurrentDisplayMode == DisplayMode.PANADAPTER || panafall_check))                                                                                          //under a band stack entry that was shown on the panadaptor area in a panafall display
+                            {                                                                                                                                                                                  //and it would not qsy             
+                                // convert mouse pos into HZ
+                                double nMousePosHZ = (CentreFrequency * 1e6) + PixelToHz(e.X, 1); // only rx1
+
+                                m_bBandStackOverlayClicked = false;
+
+                                for (int n = 0; n < Display.BandStackOverlays.Length; n++)
+                                {
+                                    BandStackEntry bse = Display.BandStackOverlays[n];
+
+                                    double dL = (bse.Frequency * 1e6) + bse.LowFilter;
+                                    double dH = (bse.Frequency * 1e6) + bse.HighFilter;
+
+                                    if (dL <= nMousePosHZ && dH >= nMousePosHZ)
+                                    {
+                                        m_bBandStackOverlayClicked = true;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //
+
                     if (Display.HightlightFilterEdgeRX1 == 0 && Display.HightlightFilterEdgeRX2 == 0 &&
                         !agc_knee_drag &&
                         !agc_hang_drag &&
@@ -35427,37 +35623,6 @@ namespace Thetis
                         }
                     }
 
-                    //BandstackOverlay click MW0LGE_21h //[2.10.3.7]MW0LGE moved down here so as not to 'fight' with all other UI
-                    //only do this if not doing something else
-                    if (m_bShowBandStackOverlays && bOverRX1 && !(rx1_sub_drag || m_bDraggingNotch || m_bDraggingNotchBW || m_bDraggingPanafallSplit))
-                    {
-                        if (Display.BandStackOverlays != null && Display.BandStackOverlays.Length > 0)
-                        {
-                            bool panafall_check = Display.CurrentDisplayMode == DisplayMode.PANAFALL && ((!rx2_enabled && e.Y < Display.PanafallSplitBarPos) || (rx2_enabled && e.Y < picDisplay.Height / 4)); //[2.10.3.6]MW0LGE fixes issue where you could try to qsy click on the waterfall
-                            if (bOverRX1 && (Display.CurrentDisplayMode == DisplayMode.PANADAPTER || panafall_check))                                                                                          //under a band stack entry that was shown on the panadaptor area in a panafall display
-                            {                                                                                                                                                                                  //and it would not qsy             
-                                // convert mouse pos into HZ
-                                double nMousePosHZ = (CentreFrequency * 1e6) + PixelToHz(e.X, 1); // only rx1
-
-                                m_bBandStackOverlayClicked = false;
-
-                                for (int n = 0; n < Display.BandStackOverlays.Length; n++)
-                                {
-                                    BandStackEntry bse = Display.BandStackOverlays[n];
-
-                                    double dL = (bse.Frequency * 1e6) + bse.LowFilter;
-                                    double dH = (bse.Frequency * 1e6) + bse.HighFilter;
-
-                                    if (dL <= nMousePosHZ && dH >= nMousePosHZ)
-                                    {
-                                        m_bBandStackOverlayClicked = true;
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    //
                     break;
                 case MouseButtons.Right:
                     // if we have a notch highlighted, then all other right click is ignored
@@ -39583,6 +39748,9 @@ namespace Thetis
             chk_rx2_mut_basis = chkRX2Mute.Location; //MW0LGE
             chk_mox_basis = this.chkMOX.Location;
             chk_tun_basis = this.chkTUN.Location;
+            //wd5y
+            chk_tc_basis = this.chkTC.Location;
+            //wd5y
             chk_vox_basis = this.chkVOX.Location;
             chk_ps2_basis = this.chkFWCATUBypass.Location;
             chk_dup_basis = this.chkRX2SR.Location;
@@ -39741,7 +39909,7 @@ namespace Thetis
                     {
                         if (rx2_meter_thread == null || !rx2_meter_thread.IsAlive)
                         {
-                            rx2_meter_thread = new Thread(new ThreadStart(UpdateRX2MeterData))
+                            rx2_meter_thread = new Thread(new ThreadStart(UpdateRX2Multimeter))
                             {
                                 Name = "RX2 Meter Thread",
                                 Priority = ThreadPriority.Lowest,
@@ -39859,6 +40027,15 @@ namespace Thetis
 
             RX2Enabled = chkRX2.Checked;
 
+            //[2.10.3.9]MW0LGE restore VAC on/off state for VAC2 if the TX profile is configured to do so
+            if (RX2Enabled && !IsSetupFormNull && oldRX2Enabled != chkRX2.Checked)
+            {
+                int vac_enabled_bits = SetupForm.GetVACEnabledBitfield();                
+                bool is_vac2_enabled = (vac_enabled_bits & (1 << 1)) != 0;
+                chkVAC2.Checked = is_vac2_enabled;
+            }
+            //
+
             if (chkVFOBTX.Checked && chkVAC2.Checked && chkRX2.Checked)
             {
                 ptbVACRXGain.Value = vac2_rx_gain;
@@ -39919,10 +40096,9 @@ namespace Thetis
             update_rx2_display = true;
 
             //MW0LGE_21d linear gradient rebuild
-            Display.RebuildLinearGradientBrushRX1 = true;
+            Display.RebuildLinearGradientBrushRX = true;
             if (RX2Enabled)
             {
-                Display.RebuildLinearGradientBrushRX2 = true;
                 Display.FastAttackNoiseFloorRX2 = true; // MW0LGE_21k
             }
 
@@ -41034,8 +41210,9 @@ namespace Thetis
         private void picRX2Squelch_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
             int signal_x = (int)((rx2_sql_data + 160.0) * (picRX2Squelch.Width - 1) / 160.0);
-            int sql_x = (int)(((float)ptbRX2Squelch.Value + 160.0) * (ptbRX2Squelch.Width - 1) / 160.0);
+            int sql_x = (int)(((float)ptbRX2Squelch.Value + 160.0) * (picRX2Squelch.Width - 1) / 160.0);
 
+            //if (_mox) signal_x = sql_x = 0;
             e.Graphics.FillRectangle(Brushes.LimeGreen, 0, 0, signal_x, picRX2Squelch.Height);
             if (sql_x < signal_x)
                 e.Graphics.FillRectangle(Brushes.Red, sql_x + 1, 0, signal_x - sql_x - 1, picRX2Squelch.Height);
@@ -43689,6 +43866,10 @@ namespace Thetis
             chkMOX.Location = chk_mox_basis;
             chkTUN.Parent = panelOptions;
             chkTUN.Location = chk_tun_basis;
+            //wd5y
+            chkTC.Parent = panelOptions;
+            chkTC.Location = chk_tc_basis;
+            //wd5y
 
             chkRX2SR.Parent = panelOptions;
             chkRX2SR.Location = chk_dup_basis;
@@ -43720,7 +43901,10 @@ namespace Thetis
             chk2TONE.Location = new Point(59, 30);
             chkExternalPA.Parent = panelOptions;
             chkExternalPA.Show();
-            chkExternalPA.Location = new Point(59, 76);
+            chkExternalPA.Location = new Point(8, 7);
+            chkMOX.Parent = panelOptions;
+            chkMOX.Show();
+            chkMOX.Location = new Point(8, 76);
             //wd5y
 
             ptbRF.Parent = panelSoundControls;
@@ -44154,6 +44338,8 @@ namespace Thetis
                 chkMOX.Show();
                 chkTUN.Parent = this;
                 chkTUN.Show();
+                chkTC.Parent = this;
+                chkTC.Show();
                 chkFWCATUBypass.Parent = this;                  // PS-A
                 chkFWCATUBypass.Show();
                 chkRX2SR.Parent = this;             // DUP
@@ -44293,6 +44479,7 @@ namespace Thetis
 
                 chkExternalPA.Location = new Point(chkPower.Location.X + 5, chkPower.Location.Y + chkPower.Height + 2);
                 chkTUN.Location = new Point(chkExternalPA.Location.X + chkExternalPA.Width + 10, chkExternalPA.Location.Y);
+                chkTC.Location = new Point(chkTUN.Location.X + chkTUN.Width, chkTUN.Location.Y);
 
                 chkMON.Location = new Point(chkExternalPA.Location.X, chkExternalPA.Location.Y + chkExternalPA.Height + 2);
                 chk2TONE.Location = new Point(chkMON.Location.X + chkMON.Width + 10, chkMON.Location.Y);
@@ -47061,6 +47248,18 @@ namespace Thetis
                 await Task.Delay(300);
             }
 
+            //wd5y
+            if (chk2TONE.Checked && chkTC.Checked)
+            {
+                //dont want this to fire the checked changed event late, so unlink it, call it, then relink it
+                chkTC.CheckedChanged -= new System.EventHandler(chkTUN_CheckedChanged);
+                chkTC.Checked = false;
+                chkTC_CheckedChanged(this, EventArgs.Empty); // it needs to happen here and now
+                chkTC.CheckedChanged += new System.EventHandler(chkTUN_CheckedChanged);
+                await Task.Delay(300);
+            }
+            //wd5y
+
             SetupForm.TestIMD = chk2TONE.Checked; // this will start/stop the test
 
             if (SetupForm.TestIMD && chk2TONE.Checked)
@@ -47268,6 +47467,9 @@ namespace Thetis
 
         public delegate void CWPitchChanged(int old_pitch, int new_pitch, bool show_cwzero);
 
+        public delegate void WaterfallRXGradientChanged(int rx, Color[] colours); // colours is a 101 element array, each index is 0-100 represent a percent from LOW to HIGH
+        public delegate void WaterfallTXGradientChanged(Color[] colours); // colours is a 101 element array, each index is 0-100 represent a percent from LOW to HIGH
+
         public BandPreChange BandPreChangeHandlers; // when someone clicks a band button, before a change is made
         public BandNoChange BandNoChangeHandlers;
         public BandChanged BandChangeHandlers;
@@ -47370,6 +47572,9 @@ namespace Thetis
 
         public CWPitchChanged CWPitchChangedHandlers;
 
+        public WaterfallRXGradientChanged WaterfallRXGradientChangedHandlers;
+        public WaterfallTXGradientChanged WaterfallTXGradientChangedHandlers;
+
         private bool m_bIgnoreFrequencyDupes = false;               // if an update is to be made, but the frequency is already in the filter, ignore it
         private bool m_bHideBandstackWindowOnSelect = false;        // hide the window if an entry is selected
         private bool m_bShowBandStackOverlays = false;                     // show bandstack entries on the spectrum
@@ -47441,9 +47646,10 @@ namespace Thetis
         }
         //
         private bool _stop_all_tx = false;
+        //wd5y
         public void StopAllTx(string msg = "")
         {
-            if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked)
+            if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked || chkTC.Checked)
             {
                 _stop_all_tx = true;
 
@@ -47453,6 +47659,10 @@ namespace Thetis
                     chkTUN.Checked = false;
                 if (chk2TONE.Checked)
                     chk2TONE.Checked = false;
+                //wd5y
+                if (chkTC.Checked)
+                    chkTC.Checked = false;
+                //wd5y
 
                 if (!string.IsNullOrEmpty(msg))
                 {
@@ -47460,6 +47670,7 @@ namespace Thetis
                 }
             }
         }
+        //wd5y
         private void timeOutTimer(string msg)
         {
             if (MOX || manual_mox || chkTUN.Checked || chk2TONE.Checked)
@@ -48762,10 +48973,10 @@ namespace Thetis
             PrettyTrackBar.LimitConstraint lc = e as PrettyTrackBar.LimitConstraint; // the event args will contain a LimitConstraint if we are using the right click/drag of a limit
 
             if (lc != null)
-                    limitTunePower_by_band[(int)tx_band] = lc.LimitValue; // store the adjusted limit level
+                    limitTunePower_by_band[(int)_tx_band] = lc.LimitValue; // store the adjusted limit level
 
             int new_pwr = setPowerFromTuneSlider(out bool bUseConstrain, e != EventArgs.Empty);
-            tunePower_by_band[(int)tx_band] = ptbTune.Value;
+            tunePower_by_band[(int)_tx_band] = ptbTune.Value;
 
             UpdateTuneLabel(lc != null && bUseConstrain, e);
 
@@ -48951,7 +49162,7 @@ namespace Thetis
             {
                 case 0: //normal
                     new_pwr = ptbPWR.Value;
-                    power_by_band[(int)tx_band] = new_pwr;
+                    power_by_band[(int)_tx_band] = new_pwr;
                     break;
                 case 1: //tune
                     switch (_tuneDrivePowerSource)
@@ -49521,17 +49732,19 @@ namespace Thetis
                         rx1_squelch_threshold_scroll = ptbSquelch.Value;
 
                         //[2.10.3.5]MW0LGE reverted back to a -160 to 0 scale
-                        nValue = ptbSquelch.Value;                        
+                        nValue = ptbSquelch.Value;
 
                         radio.GetDSPRX(0, 0).RXSquelchThreshold = (float)nValue -
-                          rx1_preamp_offset[(int)rx1_preamp_mode] -
-                          rx1_meter_cal_offset -
-                          (-alex_preamp_offset);
+                          //rx1_preamp_offset[(int)rx1_preamp_mode] -
+                          //rx1_meter_cal_offset -
+                          //(-alex_preamp_offset);
+                          RXOffset(1);
 
                         radio.GetDSPRX(0, 1).RXSquelchThreshold = (float)nValue -
-                            rx1_preamp_offset[(int)rx1_preamp_mode] -
-                            rx1_meter_cal_offset -
-                            (-alex_preamp_offset);
+                            //rx1_preamp_offset[(int)rx1_preamp_mode] -
+                            //rx1_meter_cal_offset -
+                            //(-alex_preamp_offset);
+                            RXOffset(1);
                     }
 
                     chkSquelch.Text = "SQL:  " + nValue.ToString();
@@ -49880,14 +50093,16 @@ namespace Thetis
                         nValue = ptbRX2Squelch.Value;
 
                         radio.GetDSPRX(1, 0).RXSquelchThreshold = (float)nValue -
-                          rx2_preamp_offset[(int)rx2_preamp_mode] -
-                          rx2_meter_cal_offset -
-                          rx2_path_offset;
+                          //rx2_preamp_offset[(int)rx2_preamp_mode] -
+                          //rx2_meter_cal_offset -
+                          //rx2_path_offset;
+                          RXOffset(2);
 
                         radio.GetDSPRX(1, 1).RXSquelchThreshold = (float)nValue -
-                            rx2_preamp_offset[(int)rx2_preamp_mode] -
-                            rx2_meter_cal_offset -
-                            rx2_path_offset;
+                            //rx2_preamp_offset[(int)rx2_preamp_mode] -
+                            //rx2_meter_cal_offset -
+                            //rx2_path_offset;
+                            RXOffset(2);
                     }
 
                     chkRX2Squelch.Text = "SQL:  " + nValue.ToString();
@@ -51035,6 +51250,19 @@ namespace Thetis
             }
         }
 
+        public Color[] WaterfallRXGradient()
+        {
+            //used by multimeter to get the initial state for the waterfall gradient
+            if (IsSetupFormNull) return null;
+            return SetupForm.WaterfallRXGradient();
+        }
+        public Color[] WaterfallTXGradient()
+        {
+            //used by multimeter to get the initial state for the TX waterfall gradient
+            if (IsSetupFormNull) return null;
+            return SetupForm.WaterfallTXGradient();
+        }
+
         //wd5y
         private void TopControlstoolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -51061,6 +51289,30 @@ namespace Thetis
             if (sliderForm == null || sliderForm.IsDisposed) sliderForm = new SliderSettingsForm(this);
             Skin.Restore(CurrentSkin, AppDataPath, sliderForm);
             Invoke(new MethodInvoker(sliderForm.Show));
+        }
+
+        private void chkTC_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkTC.Checked == true)
+            {
+                if (!PowerOn)
+                {
+                    MessageBox.Show("Power must be on to turn on the Tune Check function.",
+                        "Power is off",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                    chkTC.Checked = false;
+                    return;
+                }
+
+                chkExternalPA.Checked = false;
+                chkTUN.Checked = true;
+            }
+            else
+            {
+                chkTUN.Checked = false;
+                chkExternalPA.Checked = true;
+            }
         }
         //wd5y
     }
