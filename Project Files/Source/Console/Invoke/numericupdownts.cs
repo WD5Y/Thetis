@@ -1231,10 +1231,5 @@ namespace System.Windows.Forms
 
 			this.Value = newValue;
 		}
-
-        public static implicit operator float(NumericUpDownTS v)
-        {
-            throw new NotImplementedException();
-        }
-    }
+	}
 }

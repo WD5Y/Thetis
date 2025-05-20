@@ -48,6 +48,8 @@ using System.Xml;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.IO.Ports;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 
 //directX
 using SharpDX;
@@ -56,6 +58,7 @@ using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
+using Newtonsoft.Json.Bson;
 
 namespace Thetis
 {
@@ -243,7 +246,9 @@ namespace Thetis
         private static Dictionary<int, bool> _readingIgnore;
         private static Thread _meterThread;
         private static bool _meterThreadRunning;
-        //private static object _readingsLock = new object();        
+        //private static object _readingsLock = new object();
+
+        private static double _s9Frequency;
         private static bool _rx1VHForAbove;
         private static bool _rx2VHForAbove;
 
@@ -296,6 +301,7 @@ namespace Thetis
             _image_fetcher = new ImageFetcher();
 
             // static constructor
+            _s9Frequency = 30.0;
             _rx1VHForAbove = false;
             _rx2VHForAbove = false;
             _delegatesAdded = false;
@@ -1515,8 +1521,7 @@ namespace Thetis
         }
         public static CustomReadings ReadingsCustom(int rx)
         {
-            rx -= 1;
-            return _custom_readings[rx];
+            return _custom_readings[rx - 1];
         }
         // zero reading
         public static void ZeroReading(out float value, int rx, Reading reading)
@@ -2547,8 +2552,8 @@ namespace Thetis
             _console = c;
             _image_fetcher.Version = c.ProductVersion;
 
-            _rx1VHForAbove = _console.VFOAFreq >= _console.S9Frequency;
-            _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _console.S9Frequency;
+            _rx1VHForAbove = _console.VFOAFreq >= _s9Frequency;
+            _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _s9Frequency;
             _currentHPSDRmodel = HardwareSpecific.Model;
             _apolloPresent = _console.ApolloPresent;
             _alexPresent = _console.AlexPresent;
@@ -2567,17 +2572,20 @@ namespace Thetis
             _meterThread.Start();
         }
         private static Dictionary<string, DXRenderer> _DXrenderers = new Dictionary<string, DXRenderer>();
-        private static void addRenderer(string sId, int rx, PictureBox target, clsMeter meter, System.Drawing.Color backColour)
+        private static void addRenderer(string sId, int rx, Panel target, clsMeter meter, System.Drawing.Color backColour)
         {
             DXRenderer renderer = new DXRenderer(sId, rx, target, _console, meter);
             renderer.BackgroundColour = backColour;
 
             _DXrenderers.Add(sId, renderer);
         }
-        public static void UpdateS9()
+        public static void UpdateS9(double s9freq)
         {
-            _rx1VHForAbove = _console.VFOAFreq >= _console.S9Frequency;
-            _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _console.S9Frequency;
+            _s9Frequency = s9freq;
+
+            _rx1VHForAbove = _console.VFOAFreq >= _s9Frequency;
+            _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _s9Frequency;
+
             zeroAllMeters();
         }
         public static void RefreshAllImages()
@@ -3136,6 +3144,8 @@ namespace Thetis
         }
         private static void OnTXFrequencyChanged(double old_frequency, double new_frequency, Band old_band, Band new_band, bool rx2_enabled, bool tx_vfob, double centre_freq)
         {
+            if (old_frequency == new_frequency && old_band == new_band) return; // pointless if no change, note, we can not check c_f here as we are not provided with old
+
             MiniSpec.clsMiniSpec miniRx;
             if (rx2_enabled && tx_vfob)
             {
@@ -3584,68 +3594,82 @@ namespace Thetis
         {
             if (rx == 1)
             {
-                _rx1VHForAbove = newFreq >= _console.S9Frequency;
+                _rx1VHForAbove = newFreq >= _s9Frequency;
 
-                MiniSpec.clsMiniSpec miniRx = MiniSpec.GetMiniRX(0, false);
-                if (miniRx != null)
+                if (oldFreq != newFreq)
                 {
-                    miniRx.RXFrequency = newFreq;
-                }
-            }
-
-            lock (_metersLock)
-            {
-                foreach (KeyValuePair<string, clsMeter> mkvp in _meters.Where(o => o.Value.RX == rx))
-                {
-                    clsMeter m = mkvp.Value;
-                    m.VfoA = newFreq;
-                    m.ModeVfoA = newMode;
-                    m.BandVfoA = newBand;
-                }
-
-                if (oldFreq != newFreq) // do all meters, as same data for all
-                {
-                    foreach (KeyValuePair<string, clsMeter> ms in _meters)
+                    MiniSpec.clsMiniSpec miniRx = MiniSpec.GetMiniRX(0, false);
+                    if (miniRx != null)
                     {
-                        clsMeter m = ms.Value;
-                        m.AntennasChanged(newBand, Band.FIRST, newFreq, -1);
+                        miniRx.RXFrequency = newFreq;
                     }
                 }
             }
-            bandChange(rx, oldBand, newBand, true, false);
+
+            if (oldFreq != newFreq || oldMode != newMode || oldBand != newBand)
+            {
+                lock (_metersLock)
+                {
+                    foreach (KeyValuePair<string, clsMeter> mkvp in _meters.Where(o => o.Value.RX == rx))
+                    {
+                        clsMeter m = mkvp.Value;
+                        if (oldFreq != newFreq) m.VfoA = newFreq;
+                        if (oldMode != newMode) m.ModeVfoA = newMode;
+                        if (oldBand != newBand) m.BandVfoA = newBand;
+                    }
+
+                    if (oldFreq != newFreq) // do all meters, as same data for all
+                    {
+                        foreach (KeyValuePair<string, clsMeter> ms in _meters)
+                        {
+                            clsMeter m = ms.Value;
+                            m.AntennasChanged(newBand, Band.FIRST, newFreq, -1);
+                        }
+                    }
+                }
+            }
+
+            if (oldBand != newBand) bandChange(rx, oldBand, newBand, true, false);
         }
         private static void OnVFOB(Band oldBand, Band newBand, DSPMode oldMode, DSPMode newMode, Filter oldFilter, Filter newFilter, double oldFreq, double newFreq, double oldCentreF, double newCentreF, bool oldCTUN, bool newCTUN, int oldZoomSlider, int newZoomSlider, double offset, int rx)
         {
             //_rx2VHForAbove = _console.RX2Enabled && newFreq/*_console.VFOBFreq*/ >= 30;
             if (rx == 2)
             {
-                _rx2VHForAbove = _console.RX2Enabled && newFreq >= _console.S9Frequency;
+                _rx2VHForAbove = _console.RX2Enabled && newFreq >= _s9Frequency;
 
-                MiniSpec.clsMiniSpec miniRx = MiniSpec.GetMiniRX(1, false);
-                if (miniRx != null)
+                if (oldFreq != newFreq)
                 {
-                    miniRx.RXFrequency = newFreq;
+                    MiniSpec.clsMiniSpec miniRx = MiniSpec.GetMiniRX(1, false);
+                    if (miniRx != null)
+                    {
+                        miniRx.RXFrequency = newFreq;
+                    }
                 }
             }
 
-            lock (_metersLock)
+            if (oldFreq != newFreq || oldMode != newMode || oldBand != newBand)
             {
-                foreach (KeyValuePair<string, clsMeter> mkvp in _meters.Where(o => o.Value.RX == rx))
+                lock (_metersLock)
                 {
-                    clsMeter m = mkvp.Value;
-                    m.VfoB = newFreq;
-                    m.ModeVfoB = newMode;
-                    m.BandVfoB = newBand;
+                    foreach (KeyValuePair<string, clsMeter> mkvp in _meters.Where(o => o.Value.RX == rx))
+                    {
+                        clsMeter m = mkvp.Value;
+                        if (oldFreq != newFreq) m.VfoB = newFreq;
+                        if (oldMode != newMode) m.ModeVfoB = newMode;
+                        if (oldBand != newBand) m.BandVfoB = newBand;
+                    }
                 }
             }
-            bandChange(rx, oldBand, newBand, true, false);
+
+            if (oldBand != newBand) bandChange(rx, oldBand, newBand, true, false);
         }
         public static void OnVFOASub(Band oldBand, Band newBand, DSPMode newMode, Filter newFilter, double oldFreq, double newFreq, double newCentreF, bool newCTUN, int newZoomSlider, double offset, int rx)
         {
             MiniSpec.clsMiniSpec miniRx = MiniSpec.GetMiniRX(0, true);
             if (miniRx != null)
             {
-                miniRx.RXFrequency = newFreq;
+                if (oldFreq != newFreq) miniRx.RXFrequency = newFreq;
             }
 
             lock (_metersLock)
@@ -3653,9 +3677,9 @@ namespace Thetis
                 foreach (KeyValuePair<string, clsMeter> mkvp in _meters.Where(o => o.Value.RX == 1)) // only applies to rx1
                 {
                     clsMeter m = mkvp.Value;
-                    m.VfoSub = newFreq;
+                    if (oldFreq != newFreq) m.VfoSub = newFreq;
                     //m.ModeVfoA = newMode;
-                    m.BandVfoASub = newBand;
+                    if (oldBand != newBand) m.BandVfoASub = newBand;
                 }
             }
         }
@@ -3792,6 +3816,9 @@ namespace Thetis
             m.WaterfallTXGradient = _console.WaterfallTXGradient();
 
             m.TuneStepIndex = _console.TuneStepIndex;
+
+            m.UpdateBandText(true);
+            m.UpdateBandText(false);
 
             m.AntennasChanged(_console.RX1Band, _console.TXBand, _console.VFOAFreq, _console.TXFreq);
 
@@ -4884,8 +4911,19 @@ namespace Thetis
                 public PointF _min;
                 public PointF _max;
             }
-            private Dictionary<float, clsPercCache> _percCache;
-            private Queue<float> _percCacheKey;
+
+            //
+            internal float[] _scales_calibKeys;
+            internal PointF[] _scales_calibValues;
+            internal float _scales_minX;
+            internal float _scales_maxX;
+            internal float _scales_minY;
+            internal float _scales_maxY;
+
+            private const int MAX_PERC_CACHE_ENTRIES = 500;
+            private Dictionary<int, clsPercCache> _percCache;
+            private Queue<int> _percCacheKey;
+            //
 
             private string _sId;
             private string _sParentId;
@@ -4899,7 +4937,6 @@ namespace Thetis
             private SizeF _size;  // 0-1,0-1
             private int _zOrder; // lower first
             private int _msUpdateInterval; //ms
-            private bool _update_always;
             private float _attackRatio; // 0f - 1f
             private float _decayRatio; // 0f - 1f
             private float _value;
@@ -4958,7 +4995,6 @@ namespace Thetis
                 _displayTopLeft.Y = _topLeft.Y;
                 _zOrder = 0;
                 _msUpdateInterval = 5000; //ms
-                _update_always = false;
                 _attackRatio = 0.8f;
                 _decayRatio = 0.2f;
                 _value = -200f;
@@ -4974,8 +5010,8 @@ namespace Thetis
                 _bFadeOnTx = false;
                 _bPrimary = false;
                 _maxPower = CurrentPowerRating;//100f;
-                _percCache = new Dictionary<float, clsPercCache>();
-                _percCacheKey = new Queue<float>();
+                _percCache = new Dictionary<int, clsPercCache>(MAX_PERC_CACHE_ENTRIES + 1);
+                _percCacheKey = new Queue<int>(MAX_PERC_CACHE_ENTRIES + 1);
                 _updateStopwatch = new Stopwatch();
                 _fadeValue = 255;
                 _disabled = false;
@@ -5007,7 +5043,42 @@ namespace Thetis
                 _mouse_entered = false;
                 _mouseButtonDown = false;
                 _mouseButton = MouseButtons.None;
+
+                _scales_calibKeys = Array.Empty<float>();
+                _scales_calibValues = Array.Empty<PointF>();
+                _scales_minX = _scales_minY = _scales_maxX = _scales_maxY = 0f;
             }
+            public void PrepareCalibration()
+            {
+                //[2.10.3.9]MW0LGE order these once, pointless doing it every time we get a percentage !
+                if (ScaleCalibration == null || ScaleCalibration.Count == 0)
+                {
+                    _scales_calibKeys = Array.Empty<float>();
+                    _scales_calibValues = Array.Empty<PointF>();
+                    _scales_minX = _scales_minY = _scales_maxX = _scales_maxY = 0f;
+                    return;
+                }
+
+                int count = ScaleCalibration.Count;
+                _scales_calibKeys = new float[count];
+                _scales_calibValues = new PointF[count];
+                int i = 0;
+
+                //note we need this prefilled array to be ordered/sorted otherwise the binary search will not be valid if item not found
+                //ie: it wont return closest
+                foreach (KeyValuePair<float, PointF> kvp in ScaleCalibration.OrderBy(p => p.Key))
+                {
+                    _scales_calibKeys[i] = kvp.Key;
+                    _scales_calibValues[i] = kvp.Value;
+                    i++;
+                }
+                
+                _scales_minX = _scales_calibValues.Min(p => p.X);
+                _scales_maxX = _scales_calibValues.Max(p => p.X);
+                _scales_minY = _scales_calibValues.Min(p => p.Y);
+                _scales_maxY = _scales_calibValues.Max(p => p.Y);
+            }
+
             //public Guid GetMMIOGuid(int index)
             //{
             //    return _mmio_guid[index];
@@ -5060,27 +5131,40 @@ namespace Thetis
                 get { return _disabled; }
                 set { _disabled = value; }
             }
+            //[2.10.30.9]MW0LGE this perc cache code totally refactored, and only caches to 2 decimal precision for the dB value, and is keyed on the int version of that
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void AddPerc(clsPercCache pc)
             {
-                if (_percCache.ContainsKey(pc._value)) return;
-
-                _percCache.Add(pc._value, pc);
-                _percCacheKey.Enqueue(pc._value);
-                if (_percCache.Count > 500)
+                float f = pc._value * 100f;
+                int i = (int)(f + (f >= 0f ? 0.5f : -0.5f));
+                if (_percCache.TryGetValue(i, out _))
+                    return;
+                _percCache[i] = pc;
+                _percCacheKey.Enqueue(i);
+                if (_percCache.Count > MAX_PERC_CACHE_ENTRIES)
                 {
-                    float sOldestKey = _percCacheKey.Dequeue();
-                    _percCache.Remove(sOldestKey);
+                    int oldest_key = _percCacheKey.Dequeue();
+                    _percCache.Remove(oldest_key);
                 }
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public clsPercCache GetPerc(float value)
             {
-                if (!_percCache.ContainsKey(value)) return null;
-                return _percCache[value];
+                float f = value * 100f;
+                int i = (int)(f + (f >= 0f ? 0.5f : -0.5f));
+                _percCache.TryGetValue(i, out clsPercCache cached);
+                return cached;
             }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public bool HasPerc(float value)
             {
-                return _percCache.ContainsKey(value);
+                float f = value * 100f;
+                int i = (int)(f + (f >= 0f ? 0.5f : -0.5f));
+                return _percCache.TryGetValue(i, out _);
             }
+            //
             public string ID {
                 get { return _sId; }
                 set { _sId = value; }
@@ -6247,6 +6331,7 @@ namespace Thetis
                 _tx_freq = -1;
                 _rxtx_swap = false;
                 _ig = ig;
+                _timer = null;
 
                 ItemType = MeterItemType.ANTENNA_BUTTONS;
 
@@ -9354,23 +9439,6 @@ namespace Thetis
                 get { return _fontSize; }
                 set { _fontSize = value; }
             }
-
-            //public override string ToString()
-            //{
-            //    string sRet;
-
-            //    sRet = ID + "|" +
-            //        ParentID + "|" +
-            //        ItemType.ToString() + "|" +
-            //        TopLeft.X.ToString("f4") + "|" +
-            //        TopLeft.Y.ToString("f4") + "|" +
-            //        Size.Width.ToString("f4") + "|" +
-            //        Size.Height.ToString("f4") + "|" +
-            //        //
-            //        _colour.ToString();
-
-            //    return sRet;
-            //}
         }
         internal class clsClock : clsMeterItem
         {
@@ -9617,7 +9685,7 @@ namespace Thetis
                                         {
                                             setimage = !_console.SpotForm.TrackingAndMapShown; // do not set if the spot tracking is being used
                                         }
-                                        if (setimage) _console.PicDisplayBackgroundImage = bmp;
+                                        if (setimage) _console.PnlDisplayBackgroundImage = bmp;
                                         bmp.Dispose();
                                     }));
                                 }
@@ -9769,7 +9837,7 @@ namespace Thetis
                         {
                             setimage = !_console.SpotForm.TrackingAndMapShown; // do not set if the spot tracking is being used
                         }
-                        if (setimage) _console.PicDisplayBackgroundImage = null;
+                        if (setimage) _console.PnlDisplayBackgroundImage = null;
                     }));
                 }
 
@@ -9818,7 +9886,8 @@ namespace Thetis
                         MeterManager.ImgFetch.UpdateInterval(_image_fetcher_guid, _secs_interval);
                     }
                 }
-            } public bool BypassCache
+            } 
+            public bool BypassCache
             {
                 get { return _bypass_cache; }
                 set
@@ -10387,6 +10456,8 @@ namespace Thetis
             private float _beam_width_alpha;
             private float _padding;
 
+            private bool _mouse_over_stop;
+
             public clsRotatorItem()
             {
                 _fontFamily = "Trebuchet MS";
@@ -10421,6 +10492,8 @@ namespace Thetis
                 ReadingSource = Reading.AZ;
                 UpdateInterval = 1000;
                 StoreSettings = false;
+
+                _mouse_over_stop = false;
             }
             public RotatorMode ViewMode
             {
@@ -10681,6 +10754,24 @@ namespace Thetis
             public override bool ZeroOut(ref Dictionary<Reading, float> values, int rx)
             {
                 return false;
+            }
+            public bool MouseOverStop
+            {
+                set { _mouse_over_stop = value; }
+            }
+            public override void MouseUp(MouseEventArgs e)
+            {
+                if (_alow_control && _mouse_over_stop)
+                {
+                    SendRotatorMessage(false, -1, true);
+                }
+            }
+            public override void MouseDown(MouseEventArgs e)
+            {
+                if (_alow_control && _mouse_over_stop)
+                {
+                    SendRotatorMessage(false, -1, true);
+                }
             }
         }
         internal class clsDialDisplay : clsMeterItem
@@ -11186,13 +11277,10 @@ namespace Thetis
                 else
                 {
                     reading = 0;
-                    //if (MultiMeterIO.Data.ContainsKey(GetMMIOGuid(0)))
                     if (MultiMeterIO.Data.ContainsKey(MMIOGuid))
                     {
-                        //MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[GetMMIOGuid(0)];
                         MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[MMIOGuid];
 
-                        //object val = mmio.GetVariable(GetMMIOVariable(0));
                         object val = mmio.GetVariable(MMIOVariable);
                         if (val is int)
                         {
@@ -13377,7 +13465,7 @@ namespace Thetis
                     int high = (int)fHigh;
                     _console.BeginInvoke(new MethodInvoker(() =>
                     {
-                        _console.LimitFilterToSidebands(ref low, ref high, _owningmeter.RX, true);
+                        _console.ConstrainFilter(ref low, ref high, _owningmeter.RX, true);
                         if (_owningmeter.RX == 1)
                         {
                             _console.SelectRX1VarFilter(true, true);
@@ -14941,6 +15029,7 @@ namespace Thetis
                                                                     .AddReferences(typeof(object).Assembly)
                                                                     .AddReferences(typeof(string).Assembly);
                                                                     //.AddImports("System");
+                            Debug.Print($"bool result = (bool)({script_expression});");
                             _script = CSharpScript.Create($"bool result = (bool)({script_expression});", options, typeof(Globals));
                             _script.Compile();                            
 
@@ -15258,13 +15347,10 @@ namespace Thetis
                 else
                 {
                     reading = 0;
-                    //if (MultiMeterIO.Data.ContainsKey(GetMMIOGuid(0)))
                     if (MultiMeterIO.Data.ContainsKey(MMIOGuid))
                     {
-                        //MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[GetMMIOGuid(0)];
                         MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[MMIOGuid];
 
-                        //object val = mmio.GetVariable(GetMMIOVariable(0));
                         object val = mmio.GetVariable(MMIOVariable);
                         if (val is int)
                         {
@@ -15994,13 +16080,10 @@ namespace Thetis
                 else
                 {
                     reading = 0;
-                    //if (MultiMeterIO.Data.ContainsKey(GetMMIOGuid(0)))
                     if (MultiMeterIO.Data.ContainsKey(MMIOGuid))
                     {
-                        //MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[GetMMIOGuid(0)];
                         MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[MMIOGuid];
 
-                        //object val = mmio.GetVariable(GetMMIOVariable(0));
                         object val = mmio.GetVariable(MMIOVariable);
                         if (val is int)
                         {
@@ -16266,7 +16349,7 @@ namespace Thetis
             private string _fontFamily;
             private FontStyle _fontStyle;
             private System.Drawing.Color _color;
-            private bool _fixedSize;
+            private bool _centred;
             private float _fontSize;
             public clsText()
             {
@@ -16274,7 +16357,7 @@ namespace Thetis
                 _fontFamily = "Trebuchet MS";
                 _fontStyle = FontStyle.Regular;
                 _color = System.Drawing.Color.White;
-                _fixedSize = false;
+                _centred = false;
                 _fontSize = 9f;
                 _readingText = "";
 
@@ -16346,10 +16429,10 @@ namespace Thetis
                 get { return _color; }
                 set { _color = value; }
             }
-            public bool FixedSize
+            public bool Centre
             {
-                get { return _fixedSize; }
-                set { _fixedSize = value; }
+                get { return _centred; }
+                set { _centred = value; }
             }
             public float FontSize
             {
@@ -16411,6 +16494,15 @@ namespace Thetis
             private double _vfoB;
             private double _vfoSub;
             private bool _txVfoB;
+
+            private const int BAND_TEXT_RATE_LIMIT = 250; // limit the band text update to 250 ms
+            private System.Threading.Timer _timer_band_text_vfoA;
+            private System.Threading.Timer _timer_band_text_vfoB;
+            private readonly object _timerLock_vfoA = new object();
+            private readonly object _timerLock_vfoB = new object();
+            private DateTime _last_band_text_update_vfoA;
+            private DateTime _last_band_text_update_vfoB;
+
             private DSPMode _modeVfoA;
             private DSPMode _modeVfoB;
             private Band _bandVfoA;
@@ -16482,6 +16574,7 @@ namespace Thetis
             {
                 lock (_meterItemsLock)
                 {
+                    mi.PrepareCalibration(); // pre calc the scale ranges, if this meter item has any
                     _meterItems.Add(mi.ID, mi);
                 }
             }
@@ -17669,7 +17762,7 @@ namespace Thetis
                 clsClickBox clb = new clsClickBox();
                 clb.ParentID = ig.ID;
                 clb.TopLeft = new PointF(ni.TopLeft.X + 0.76f, ni.TopLeft.Y + 0.46f); // tl;
-                clb.Size = new SizeF(0.18f, 0.044f);
+                clb.Size = new SizeF(0.148f, 0.036f);
                 clb.OnlyWhenTX = true;
                 clb.Button = MouseButtons.Left;
                 addMeterItem(clb);
@@ -17692,8 +17785,8 @@ namespace Thetis
                 tx.ZOrder = 10;
                 tx.Style = FontStyle.Bold;
                 tx.Colour = System.Drawing.Color.DarkGray;
-                tx.FixedSize = true;
-                tx.FontSize = 8f;
+                tx.Centre = true;
+                tx.FontSize = 18f;
                 addMeterItem(tx);
 
                 clsNeedleItem ni4 = new clsNeedleItem();
@@ -19578,6 +19671,10 @@ namespace Thetis
                 _vfoB = 0;
                 _vfoSub = 0;
                 _txVfoB = false;
+                _timer_band_text_vfoA = null;
+                _timer_band_text_vfoB = null;
+                _last_band_text_update_vfoA = DateTime.UtcNow;
+                _last_band_text_update_vfoB = DateTime.UtcNow;
                 _bandVfoA = Band.FIRST;
                 _bandVfoB = Band.FIRST;
                 _bandVfoASub = Band.FIRST;
@@ -20278,12 +20375,25 @@ namespace Thetis
             {
                 lock (_meterItemsLock)
                 {
-                    if (_meterItems == null) return 0;
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    if (meterItems == null) return 0;
 
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                    int count = 0;
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
+                    {
+                        if (entry.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP) count++;
+                    }
 
-                    return items.Count;
+                    return count;
                 }
+                //lock (_meterItemsLock)
+                //{
+                //    if (_meterItems == null) return 0;
+
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+
+                //    return items.Count;
+                //}
             }
             private void removeMeterItem(string sId, bool bRebuild = false)
             {
@@ -20359,75 +20469,131 @@ namespace Thetis
                 lock (_meterItemsLock)
                 {
                     if (_meterItems == null) return;
-
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    List<string> groupIds = new List<string>();
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
-                        if (ig != null)
-                        {
-                            removeMeterItem(ig.ID, false);
-                        }
+                        clsItemGroup group = entry.Value as clsItemGroup;
+                        if (group != null) groupIds.Add(group.ID);
                     }
-
+                    foreach (string id in groupIds) removeMeterItem(id, false);
                     if (bRebuild) Rebuild();
                 }
+
+                //lock (_meterItemsLock)
+                //{
+                //    if (_meterItems == null) return;
+
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+                //        if (ig != null)
+                //        {
+                //            removeMeterItem(ig.ID, false);
+                //        }
+                //    }
+
+                //    if (bRebuild) Rebuild();
+                //}
             }
             public bool HasMeterType(MeterType mt)
             {
                 lock (_meterItemsLock)
-                { 
+                {
                     if (_meterItems == null) return false;
-
-                    //IEnumerable<KeyValuePair<string, clsMeterItem>> items = _meterItems.Where(o => o.Value.ItemType == MeterItemType.ITEM_GROUP);
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
-                        if (ig != null && ig.MeterType == mt) return true;
+                        if (entry.Value is clsItemGroup group && group.MeterType == mt) return true;
                     }
-
                     return false;
                 }
+                //lock (_meterItemsLock)
+                //{ 
+                //    if (_meterItems == null) return false;
+
+                //    //IEnumerable<KeyValuePair<string, clsMeterItem>> items = _meterItems.Where(o => o.Value.ItemType == MeterItemType.ITEM_GROUP);
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+                //        if (ig != null && ig.MeterType == mt) return true;
+                //    }
+
+                //    return false;
+                //}
             }
             public void DisableMeterType(MeterType mt, bool bDisable)
             {
                 lock (_meterItemsLock)
                 {
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    bool disableFlag = bDisable;
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
-
-                        if (ig.MeterType == mt)
+                        clsItemGroup group = entry.Value as clsItemGroup;
+                        if (group != null && group.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP && group.MeterType == mt)
                         {
-                            Dictionary<string, clsMeterItem> mtItems = itemsFromID(ig.ID, false, true);
-
-                            foreach (KeyValuePair<string, clsMeterItem> kvpmi in mtItems)
+                            Dictionary<string, clsMeterItem> groupItems = itemsFromID(group.ID, false, true);
+                            Dictionary<string, clsMeterItem>.ValueCollection values = groupItems.Values;
+                            foreach (clsMeterItem item in values)
                             {
-                                clsMeterItem mi = kvpmi.Value as clsMeterItem;
-                                mi.Disabled = bDisable;
+                                item.Disabled = disableFlag;
                             }
                         }
                     }
                 }
+                //lock (_meterItemsLock)
+                //{
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+
+                //        if (ig.MeterType == mt)
+                //        {
+                //            Dictionary<string, clsMeterItem> mtItems = itemsFromID(ig.ID, false, true);
+
+                //            foreach (KeyValuePair<string, clsMeterItem> kvpmi in mtItems)
+                //            {
+                //                clsMeterItem mi = kvpmi.Value as clsMeterItem;
+                //                mi.Disabled = bDisable;
+                //            }
+                //        }
+                //    }
+                //}
             }
             public string MeterGroupID(MeterType mt = MeterType.NONE, int order = -1)
             {
                 lock (_meterItemsLock)
                 {
-                    if (_meterItems == null) return "";
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    if (meterItems == null) return string.Empty;
 
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
-                        if (ig != null && (ig.MeterType == mt || mt == MeterType.NONE) && (order == -1 || ig.Order == order)) return ig.ID;
+                        clsItemGroup group = entry.Value as clsItemGroup;
+                        if (group != null && (mt == MeterType.NONE || group.MeterType == mt) && (order == -1 || group.Order == order)) return group.ID;
                     }
 
-                    return "";
+                    return string.Empty;
                 }
+
+                //lock (_meterItemsLock)
+                //{
+                //    if (_meterItems == null) return "";
+
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+                //        if (ig != null && (ig.MeterType == mt || mt == MeterType.NONE) && (order == -1 || ig.Order == order)) return ig.ID;
+                //    }
+
+                //    return "";
+                //}
             }
             public void ApplySettingsForMeterGroup(MeterType mt, clsIGSettings igs, int order = -1)
             {
@@ -22597,19 +22763,31 @@ namespace Thetis
             {
                 lock (_meterItemsLock)
                 {
-                    List<int> orders = new List<int>();
-
-                    if (_meterItems == null) return orders;
-
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    if (meterItems == null) return new List<int>();
+                    List<int> orders = new List<int>(meterItems.Count);
+                    foreach (clsMeterItem mi in meterItems.Values)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
+                        clsItemGroup ig = mi as clsItemGroup;
                         if (ig != null && ig.MeterType == mt) orders.Add(ig.Order);
                     }
-
                     return orders;
                 }
+                //lock (_meterItemsLock)
+                //{
+                //    List<int> orders = new List<int>();
+
+                //    if (_meterItems == null) return orders;
+
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+                //        if (ig != null && ig.MeterType == mt) orders.Add(ig.Order);
+                //    }
+
+                //    return orders;
+                //}
             }
             public void SetOrderForMeterType(MeterType mt, int nOrder, bool bRebuild, bool bUp, int order = -1)
             {
@@ -22617,34 +22795,67 @@ namespace Thetis
                 lock (_meterItemsLock)
                 {
                     if (_meterItems == null) return;
-
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
                     if (nOrder < 0) nOrder = 0;
-                    int nTmp = numberOfMeterGroups() - 1;
-                    if (nOrder > nTmp) nOrder = nTmp;
-                    bool done = false;
-
-                    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                    int groupCount = 0;
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
                     {
-                        clsItemGroup ig = kvp.Value as clsItemGroup;
-                        if (ig != null)
+                        if (entry.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP) groupCount++;
+                    }
+                    int maxOrder = groupCount > 0 ? groupCount - 1 : 0;
+                    if (nOrder > maxOrder) nOrder = maxOrder;
+                    bool done = false;
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
+                    {
+                        clsItemGroup group = entry.Value as clsItemGroup;
+                        if (group != null)
                         {
-                            if (ig.MeterType == mt && (order == -1 || ig.Order == order) && !done)
+                            if (!done && group.MeterType == mt && (order == -1 || group.Order == order))
                             {
-                                ig.Order = nOrder;
+                                group.Order = nOrder;
                                 done = true;
                             }
-                            else if (ig.Order == nOrder)
+                            else if (group.Order == nOrder)
                             {
-                                if (bUp)
-                                    ig.Order++;
-                                else
-                                    ig.Order--;
+                                if (bUp) group.Order++;
+                                else group.Order--;
                             }
                         }
                     }
                 }
                 if (bRebuild) Rebuild();
+
+                //lock (_meterItemsLock)
+                //{
+                //    if (_meterItems == null) return;
+
+                //    if (nOrder < 0) nOrder = 0;
+                //    int nTmp = numberOfMeterGroups() - 1;
+                //    if (nOrder > nTmp) nOrder = nTmp;
+                //    bool done = false;
+
+                //    Dictionary<string, clsMeterItem> items = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in items)
+                //    {
+                //        clsItemGroup ig = kvp.Value as clsItemGroup;
+                //        if (ig != null)
+                //        {
+                //            if (ig.MeterType == mt && (order == -1 || ig.Order == order) && !done)
+                //            {
+                //                ig.Order = nOrder;
+                //                done = true;
+                //            }
+                //            else if (ig.Order == nOrder)
+                //            {
+                //                if (bUp)
+                //                    ig.Order++;
+                //                else
+                //                    ig.Order--;
+                //            }
+                //        }
+                //    }
+                //}
+                //if (bRebuild) Rebuild();
             }
             public bool Enabled
             {
@@ -22807,15 +23018,28 @@ namespace Thetis
             {
                 lock (_meterItemsLock)
                 {
-                    Dictionary<string, clsMeterItem> meterItems = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
-                    Dictionary<string, clsItemGroup> groupItems = new Dictionary<string, clsItemGroup>();
-
-                    foreach (KeyValuePair<string, clsMeterItem> kvp in meterItems)
+                    Dictionary<string, clsItemGroup> groupItems = new Dictionary<string, clsItemGroup>(_meterItems.Count);
+                    foreach (KeyValuePair<string, clsMeterItem> entry in _meterItems)
                     {
-                        groupItems.Add(kvp.Value.ID, (clsItemGroup)kvp.Value);
+                        if (entry.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP)
+                        {
+                            clsItemGroup group = (clsItemGroup)entry.Value;
+                            groupItems.Add(group.ID, group);
+                        }
                     }
                     return groupItems;
-                }                
+                }
+                //lock (_meterItemsLock)
+                //{
+                //    Dictionary<string, clsMeterItem> meterItems = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
+                //    Dictionary<string, clsItemGroup> groupItems = new Dictionary<string, clsItemGroup>();
+
+                //    foreach (KeyValuePair<string, clsMeterItem> kvp in meterItems)
+                //    {
+                //        groupItems.Add(kvp.Value.ID, (clsItemGroup)kvp.Value);
+                //    }
+                //    return groupItems;
+                //}                
             }
             public void UpdateIntervals()
             {
@@ -22831,7 +23055,6 @@ namespace Thetis
                 lock (_meterItemsLock)
                 {
                     // shift top
-                    //Dictionary<string, clsMeterItem> meterItems = _meterItems.Where(o => o.Value.ItemType == clsMeterItem.MeterItemType.ITEM_GROUP).ToDictionary(x => x.Key, x => x.Value);
                     Dictionary<string, clsItemGroup> groupItems = getMeterGroups();
 
                     float fTop = 0;
@@ -22861,9 +23084,20 @@ namespace Thetis
             {
                 lock (_meterItemsLock)
                 {
-                    //_sortedMeterItemsForZOrder = _meterItems.OrderBy(o => o.Value.ZOrder).ToDictionary(x => x.Key, x => x.Value);
-                    _sortedMeterItemsForZOrder = _meterItems.OrderBy(o => o.Value.ZOrder).Select(x => x.Value).ToList();
+                    Dictionary<string, clsMeterItem> meterItems = _meterItems;
+                    List<clsMeterItem> sortedList = new List<clsMeterItem>(meterItems.Count);
+                    foreach (KeyValuePair<string, clsMeterItem> entry in meterItems)
+                    {
+                        sortedList.Add(entry.Value);
+                    }
+                    sortedList.Sort((clsMeterItem a, clsMeterItem b) => a.ZOrder.CompareTo(b.ZOrder));
+                    _sortedMeterItemsForZOrder = sortedList;
                 }
+                //lock (_meterItemsLock)
+                //{
+                //    //_sortedMeterItemsForZOrder = _meterItems.OrderBy(o => o.Value.ZOrder).ToDictionary(x => x.Key, x => x.Value);
+                //    _sortedMeterItemsForZOrder = _meterItems.OrderBy(o => o.Value.ZOrder).Select(x => x.Value).ToList();
+                //}
             }
             internal void MouseUp(System.Windows.Forms.MouseEventArgs e, clsMeter m, clsClickBox cb)
             {
@@ -22974,10 +23208,73 @@ namespace Thetis
             public double VfoA
             {
                 get { return _vfoA; }
-                set 
-                { 
+                set
+                {
                     _vfoA = value;
-                    if(_rx == 1) _rx1VHForAbove = _vfoA >= _console.S9Frequency;
+                    if (_rx == 1) _rx1VHForAbove = _vfoA >= _s9Frequency;
+
+                    // band text on vfo change
+                    lock (_timerLock_vfoA)
+                    {                       
+                        if ((DateTime.UtcNow - _last_band_text_update_vfoA).TotalMilliseconds > BAND_TEXT_RATE_LIMIT)
+                        {
+                            // always update, at least every 500ms
+                            updateVfoABandText(null);
+                        }
+                        else
+                        {
+                            if (_timer_band_text_vfoA == null)
+                            {
+                                // start a time if one not already running
+                                _timer_band_text_vfoA = new System.Threading.Timer(updateVfoABandText, null, BAND_TEXT_RATE_LIMIT, System.Threading.Timeout.Infinite);
+                            }
+                            else
+                            {
+                                //postpone by BAND_TEXT_RATE_LIMIT ms
+                                _timer_band_text_vfoA.Change(BAND_TEXT_RATE_LIMIT, System.Threading.Timeout.Infinite);
+                            }
+                        }
+                    }
+                }
+            }
+            private void updateVfoABandText(object _)
+            {
+                lock (_timerLock_vfoA)
+                {
+                    System.Threading.Timer toDispose = null;
+                    try
+                    {
+                        UpdateBandText(true);
+                        _last_band_text_update_vfoA = DateTime.UtcNow;
+
+                        toDispose = _timer_band_text_vfoA;
+                        _timer_band_text_vfoA = null;
+                    }
+                    catch { }
+                    finally
+                    {
+                        if (toDispose != null) toDispose.Dispose();
+                    }
+                }
+            }
+            private void updateVfoBBandText(object _)
+            {
+                lock (_timerLock_vfoB)
+                {
+                    System.Threading.Timer toDispose = null;
+                    try
+                    {
+                        UpdateBandText(false);
+                        _last_band_text_update_vfoB = DateTime.UtcNow;
+
+                        toDispose = _timer_band_text_vfoB;
+                        _timer_band_text_vfoB = null;
+                    }
+                    catch { }
+                    finally 
+                    {
+                        if (toDispose != null) toDispose.Dispose();
+                    }
                 }
             }
             public double VfoB
@@ -22986,7 +23283,32 @@ namespace Thetis
                 set 
                 { 
                     _vfoB = value;
-                    if (_rx == 2) _rx2VHForAbove = _vfoB >= _console.S9Frequency;
+                    if (_rx == 2) _rx2VHForAbove = _vfoB >= _s9Frequency;
+
+                    // band text on vfo change
+                    lock (_timerLock_vfoB)
+                    {
+                        DateTime now = DateTime.UtcNow;
+
+                        if ((now - _last_band_text_update_vfoB).TotalMilliseconds > BAND_TEXT_RATE_LIMIT)
+                        {
+                            // always update, at least every BAND_TEXT_RATE_LIMIT ms
+                            updateVfoBBandText(null);
+                        }
+                        else
+                        {
+                            if (_timer_band_text_vfoB == null)
+                            {
+                                // start a time if one not already running
+                                _timer_band_text_vfoB = new System.Threading.Timer(updateVfoBBandText, null, BAND_TEXT_RATE_LIMIT, System.Threading.Timeout.Infinite);
+                            }
+                            else
+                            {
+                                // postpone by BAND_TEXT_RATE_LIMIT ms
+                                _timer_band_text_vfoB.Change(BAND_TEXT_RATE_LIMIT, System.Threading.Timeout.Infinite);
+                            }
+                        }
+                    }
                 }
             }
             public double VfoSub
@@ -23010,7 +23332,7 @@ namespace Thetis
                 set 
                 { 
                     _bandVfoA = value;
-                    updateBandText(true);
+                    UpdateBandText(true);
                 }
             }
             public Band BandVfoB
@@ -23019,7 +23341,7 @@ namespace Thetis
                 set 
                 { 
                     _bandVfoB = value;
-                    updateBandText(false);
+                    UpdateBandText(false);
                 }
             }
             public Band BandVfoASub
@@ -23153,7 +23475,7 @@ namespace Thetis
                 get { return _txeqEnabled; }
                 set { _txeqEnabled = value; }
             }
-            private void updateBandText(bool is_vfoA)
+            public void UpdateBandText(bool is_vfoA)
             {
                 bool ok;
                 if(_rx == 1)
@@ -23539,20 +23861,26 @@ namespace Thetis
             private bool _bAntiAlias;
             private Vector2 _pixelShift;
             private int _nVBlanks;
-            private PictureBox _displayTarget;
+            private Panel _displayTarget;
             private int _oldRedrawDelay;
             private object _DXlock = new object();
             //
-            private Dictionary<System.Drawing.Color, SharpDX.Direct2D1.Brush> _DXBrushes;
-            private Color4 _backColour;
+            private Dictionary<int, SharpDX.Direct2D1.Brush> _DXBrushes;
+            private Color4 _backColour_clear_colour;
             private System.Drawing.Color _backgroundColour;
             private Dictionary<string, SharpDX.Direct2D1.Bitmap> _images;
             private Dictionary<string, BitmapBrush> _bitmap_brushes;
             //
-            private Dictionary<string, SharpDX.DirectWrite.TextFormat> _textFormats; // fonts
+
+            private float _dpi_width;
+            private float _dpi_height;
+            private float _pixels_per_point_width;
+            private float _pixels_per_point_height;
+
+            private Dictionary<(string, float, FontStyle), SharpDX.DirectWrite.TextFormat> _textFormats; // fonts
             private SharpDX.DirectWrite.Factory _fontFactory;
-            private Dictionary<string, SizeF> _stringMeasure;
-            private Queue<string> _stringMeasureKeys;
+            private readonly Dictionary<(string, float, FontStyle, string), SizeF> _stringMeasure;
+            private readonly Queue<(string, float, FontStyle, string)> _stringMeasureKeys;
             //
             private SharpDX.Direct2D1.Bitmap _filter_display_waterfall_bmp;
             private SharpDX.Direct2D1.Bitmap _filter_display_waterfall_bmp_tx;
@@ -23561,8 +23889,8 @@ namespace Thetis
             private int _rx;
             private Console _console;
 
-            private HiPerfTimer _objFrameStartTimer = new HiPerfTimer();
-            private double _dElapsedFrameStart;
+            //private HiPerfTimer _objFrameStartTimer = new HiPerfTimer();
+            //private double _dElapsedFrameStart;
             private double _delta_time_ms;
 
             //fps          
@@ -23590,13 +23918,13 @@ namespace Thetis
 
             private Guid _touch_guid;
 
-            public DXRenderer(string sId, int rx, PictureBox target, Console c, clsMeter meter)
+            public DXRenderer(string sId, int rx, Panel target, Console c, clsMeter meter)
             {
                 if (c == null || target == null) return;
 
                 _delta_time_ms = 0;
-                _dElapsedFrameStart = 0;
-                _objFrameStartTimer.Start();
+                //_dElapsedFrameStart = 0;
+                //_objFrameStartTimer.Start();
 
                 _waterfall_row_added = false;
 
@@ -23616,10 +23944,10 @@ namespace Thetis
                 _filter_display_waterfall_bmp = null;
                 _filter_display_waterfall_bmp_tx = null;
 
-                _DXBrushes = new Dictionary<System.Drawing.Color, SharpDX.Direct2D1.Brush>();
-                _textFormats = new Dictionary<string, SharpDX.DirectWrite.TextFormat>();
-                _stringMeasure = new Dictionary<string, SizeF>();
-                _stringMeasureKeys = new Queue<string>();
+                _DXBrushes = new Dictionary<int, SharpDX.Direct2D1.Brush>();
+                _textFormats = new Dictionary<(string, float, FontStyle), SharpDX.DirectWrite.TextFormat>();
+                _stringMeasure = new Dictionary<(string, float, FontStyle, string), SizeF>();
+                _stringMeasureKeys = new Queue<(string, float, FontStyle, string)>();
 
                 _dxDisplayThreadRunning = false;
                 _bAntiAlias = true;
@@ -23640,8 +23968,8 @@ namespace Thetis
                 //
 
                 _backgroundColour = System.Drawing.Color.Black;
-                _backColour = convertColour(_backgroundColour);
-                
+                _backColour_clear_colour = convertColour(System.Drawing.Color.FromArgb(255, System.Drawing.Color.Black));
+
                 _images = new Dictionary<string, SharpDX.Direct2D1.Bitmap>();
                 _bitmap_brushes = new Dictionary<string, BitmapBrush>();
                 
@@ -23701,7 +24029,7 @@ namespace Thetis
                     Priority = ThreadPriority.Lowest,
                     IsBackground = false
                 };
-                _dxRenderThread.SetApartmentState(ApartmentState.STA); //[2.10.3]
+                //_dxRenderThread.SetApartmentState(ApartmentState.STA); //[2.10.3]
                 _dxRenderThread.Start();
             }
             public string ID
@@ -23724,7 +24052,6 @@ namespace Thetis
                 set 
                 {
                     _backgroundColour = value;
-                    _backColour = convertColour(_backgroundColour);
                 }
             }
             internal void RemoveAnySkinImages()
@@ -23958,6 +24285,11 @@ namespace Thetis
                         DashOffset = 2
                     };
                     _dash_style = new StrokeStyle(_factory, stroke_style_dash);
+
+                    _dpi_width = _renderTarget.DotsPerInch.Width;
+                    _dpi_height = _renderTarget.DotsPerInch.Width;
+                    _pixels_per_point_width = _dpi_width / 72f;
+                    _pixels_per_point_height = _dpi_height / 72f;
 
                     _bDXSetup = true;
 
@@ -24237,16 +24569,19 @@ namespace Thetis
                                 t.TranslationVector = _pixelShift;
                                 _renderTarget.Transform = t;
 
-                                // background for entire form/area?
-                                _renderTarget.Clear(_backColour);
+                                // ensure background for entire form/area is cleared in black, without alpha
+                                _renderTarget.Clear(_backColour_clear_colour);
+
+                                // overlay background colour
+                                SharpDX.RectangleF rect = new SharpDX.RectangleF(-0.5f, -0.5f, targetWidth + 1, targetHeight + 1);
+                                _renderTarget.FillRectangle(rect, getDXBrushForColour(_backgroundColour));
 
                                 nSleepTime = drawMeters(out height);
                                 if (nSleepTime > 250) nSleepTime = 250; // sleep max of 250ms for some sensible redraw
                                                                         // maxint can be returned if no meteritem entries
 
                                 if (_highlightEdge)
-                                {
-                                    SharpDX.RectangleF rect = new SharpDX.RectangleF(0, 0, targetWidth - 1f, targetHeight - 1f);
+                                {                                    
                                     rect.Inflate(-8, -8);
                                     _renderTarget.DrawRectangle(rect, getDXBrushForColour(System.Drawing.Color.FromArgb(192, System.Drawing.Color.DarkOrange)), 16f);
                                 }
@@ -24388,7 +24723,7 @@ namespace Thetis
             {
                 if (!_bDXSetup || _DXBrushes == null) return;
 
-                foreach (KeyValuePair<System.Drawing.Color, SharpDX.Direct2D1.Brush> kvp in _DXBrushes)
+                foreach (KeyValuePair<int, SharpDX.Direct2D1.Brush> kvp in _DXBrushes)
                 {
                     SharpDX.Direct2D1.Brush b = kvp.Value;
                     Utilities.Dispose(ref b);
@@ -24402,7 +24737,7 @@ namespace Thetis
             {
                 if (!_bDXSetup || _textFormats == null) return;
 
-                foreach (KeyValuePair<string, SharpDX.DirectWrite.TextFormat> kvp in _textFormats)
+                foreach (KeyValuePair<(string, float, FontStyle), SharpDX.DirectWrite.TextFormat> kvp in _textFormats)
                 {
                     SharpDX.DirectWrite.TextFormat tf = kvp.Value;
                     Utilities.Dispose(ref tf);
@@ -24415,62 +24750,73 @@ namespace Thetis
                 if (_fontFactory != null) Utilities.Dispose(ref _fontFactory);
                 _fontFactory = null;
             }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private SharpDX.Direct2D1.Brush getDXBrushForColour(System.Drawing.Color c, int replaceAlpha = -1)
             {
                 if (!_bDXSetup) return null;
-                if (c == System.Drawing.Color.Transparent) replaceAlpha = 0;
 
-                System.Drawing.Color newC;
-                if (replaceAlpha >= 0 && replaceAlpha <= 255)
-                    newC = System.Drawing.Color.FromArgb(replaceAlpha, c.R, c.G, c.B); // override the alpha
-                else
-                    newC = c;
+                int a = c.A;
+                if (c == System.Drawing.Color.Transparent)
+                    a = 0;
+                else if (replaceAlpha >= 0 && replaceAlpha <= 255)
+                    a = replaceAlpha;
 
-                if (_DXBrushes.ContainsKey(newC)) return _DXBrushes[newC];
+                int key = (a << 24) | (c.R << 16) | (c.G << 8) | c.B; //System.Drawing.Color.FromArgb(a, c.R, c.G, c.B).ToArgb();
 
-                SolidBrush sb = new SolidBrush(newC);
-                SharpDX.Direct2D1.Brush b = convertBrush(sb);
-                sb.Dispose();
+                SharpDX.Direct2D1.Brush existingBrush;
+                if (_DXBrushes.TryGetValue(key, out existingBrush))
+                    return existingBrush;
 
-                _DXBrushes.Add(newC, b);
+                float fa = a / 255f;
+                float fr = c.R / 255f;
+                float fg = c.G / 255f;
+                float fb = c.B / 255f;
 
-                return b;
+                SharpDX.Mathematics.Interop.RawColor4 color4 = new SharpDX.Mathematics.Interop.RawColor4(fr, fg, fb, fa);
+                SharpDX.Direct2D1.SolidColorBrush newBrush = new SharpDX.Direct2D1.SolidColorBrush(_renderTarget, color4);
+
+                _DXBrushes.Add(key, newBrush);
+                return newBrush;
             }
-            private SharpDX.Direct2D1.SolidColorBrush convertBrush(SolidBrush b)
-            {
-                return new SharpDX.Direct2D1.SolidColorBrush(_renderTarget, convertColour(b.Color));
-            }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private SharpDX.Color4 convertColour(System.Drawing.Color c)
             {
                 return new SharpDX.Color4(c.R / 255f, c.G / 255f, c.B / 255f, c.A / 255f);
             }
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private SharpDX.DirectWrite.TextFormat getDXTextFormatForFont(string sFontFamily, float emSize, FontStyle style, bool bAlignRight = false)
             {
                 if (!_bDXSetup) return null;
 
-                string sKey = sFontFamily + emSize.ToString("0.0") + style.ToString();
+                float roundedSize = (float)Math.Round(emSize, 1);
 
-                if (_textFormats.ContainsKey(sKey)) return _textFormats[sKey];
-
-                try
+                SharpDX.DirectWrite.TextFormat tf;
+                (string, float, FontStyle) key = (sFontFamily, roundedSize, style);
+                
+                if (!_textFormats.TryGetValue(key, out tf))
                 {
-                    SharpDX.DirectWrite.FontWeight fontWeight = SharpDX.DirectWrite.FontWeight.Regular;
-                    SharpDX.DirectWrite.FontStyle fontStyle = SharpDX.DirectWrite.FontStyle.Normal;
-                    if (((int)style & (int)FontStyle.Bold) == (int)FontStyle.Bold) fontWeight = SharpDX.DirectWrite.FontWeight.Bold;
-                    if (((int)style & (int)FontStyle.Italic) == (int)FontStyle.Italic) fontStyle = SharpDX.DirectWrite.FontStyle.Italic;
+                    SharpDX.DirectWrite.FontWeight fontWeight;
+                    if ((style & FontStyle.Bold) != 0)
+                        fontWeight = SharpDX.DirectWrite.FontWeight.Bold;
+                    else
+                        fontWeight = SharpDX.DirectWrite.FontWeight.Regular;
 
-                    SharpDX.DirectWrite.TextFormat tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyle, (emSize / 72) * _renderTarget.DotsPerInch.Width);
+                    SharpDX.DirectWrite.FontStyle fontStyleValue;
+                    if ((style & FontStyle.Italic) != 0)
+                        fontStyleValue = SharpDX.DirectWrite.FontStyle.Italic;
+                    else
+                        fontStyleValue = SharpDX.DirectWrite.FontStyle.Normal;
+
+                    tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyleValue, roundedSize * _pixels_per_point_width);
                     tf.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
-                    if(bAlignRight)
-                        tf.TextAlignment = SharpDX.DirectWrite.TextAlignment.Trailing;
-
-                    _textFormats.Add(sKey, tf);
-
-                    return tf;                    
+                    _textFormats.Add(key, tf);
                 }
-                catch { }
 
-                return null;
+                tf.TextAlignment = bAlignRight
+                    ? SharpDX.DirectWrite.TextAlignment.Trailing
+                    : SharpDX.DirectWrite.TextAlignment.Leading;
+
+                return tf;
             }
             private bool resizeDX()
             {
@@ -24530,7 +24876,7 @@ namespace Thetis
             }
             private void OnMouseEnter(object sender, System.EventArgs e)
             {
-                PictureBox pb = sender as PictureBox;
+                Panel pb = sender as Panel;
                 if (pb == null) return;
                 string sId = pb.Tag.ToString();
                 if (!_meters.ContainsKey(sId)) return;
@@ -24550,7 +24896,7 @@ namespace Thetis
             }
             private void OnMouseLeave(object sender, System.EventArgs e)
             {
-                PictureBox pb = sender as PictureBox;
+                Panel pb = sender as Panel;
                 if (pb == null) return;
                 string sId = pb.Tag.ToString();
                 if (!_meters.ContainsKey(sId)) return;
@@ -24571,7 +24917,7 @@ namespace Thetis
             }
             private void OnMouseCaptureChanged(object sender, System.EventArgs e)
             {
-                PictureBox pb = sender as PictureBox;
+                Panel pb = sender as Panel;
                 if (pb == null) return;
                 string sId = pb.Tag.ToString();
                 if (!_meters.ContainsKey(sId)) return;
@@ -24594,7 +24940,7 @@ namespace Thetis
             {
                 lock (_metersLock)
                 {
-                    PictureBox pb = sender as PictureBox;
+                    Panel pb = sender as Panel;
                     if (pb == null) return;
                     string sId = pb.Tag.ToString();
                     if (!_meters.ContainsKey(sId)) return;
@@ -24644,7 +24990,7 @@ namespace Thetis
             {
                 lock (_metersLock)
                 {
-                    PictureBox pb = sender as PictureBox;
+                    Panel pb = sender as Panel;
                     if (pb == null) return;
                     string sId = pb.Tag.ToString();
                     if (!_meters.ContainsKey(sId)) return;
@@ -24694,7 +25040,7 @@ namespace Thetis
             {
                 lock (_metersLock)
                 {
-                    PictureBox pb = sender as PictureBox;
+                    Panel pb = sender as Panel;
                     if (pb == null) return;
                     string sId = pb.Tag.ToString();
                     if (!_meters.ContainsKey(sId)) return;
@@ -24748,7 +25094,7 @@ namespace Thetis
             {
                 lock (_metersLock)
                 {
-                    PictureBox pb = sender as PictureBox;
+                    Panel pb = sender as Panel;
                     if (pb == null) return;
                     string sId = pb.Tag.ToString();
                     if (!_meters.ContainsKey(sId)) return;
@@ -24802,7 +25148,7 @@ namespace Thetis
             {
                 lock (_metersLock)
                 {
-                    PictureBox pb = sender as PictureBox;
+                    Panel pb = sender as Panel;
                     if (pb == null) return;
                     string sId = pb.Tag.ToString();
                     if (!_meters.ContainsKey(sId)) return;
@@ -25024,67 +25370,121 @@ namespace Thetis
                 }
                 return nRedrawDelay;
             }
-            private SizeF measureString(string sText, string sFontFamily, FontStyle style, float emSize, bool ignore_caching = false)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private System.Drawing.SizeF measureString(string sText, string sFontFamily, FontStyle style, float emSize, bool ignore_caching = false)
             {
-                if (!_bDXSetup) return SizeF.Empty;                
-                if (string.IsNullOrEmpty(sText)) return SizeF.Empty;
-                emSize = (float)Math.Round(emSize, 2);
-                if (emSize == 0) return SizeF.Empty; // zero size text is zero measurement
+                if (!_bDXSetup || sText == null || sText.Length == 0) return System.Drawing.SizeF.Empty;
+                float roundedSize = (float)Math.Round(emSize, 2);
+                if (roundedSize == 0) return System.Drawing.SizeF.Empty;
 
-                string sKey = sFontFamily + "_" + style + "_" + sText + "_" + emSize.ToString("0.00");
+                (string, float, FontStyle, string) key = (sFontFamily, roundedSize, style, sText);
+                System.Drawing.SizeF sizeValue;
 
-                if (!ignore_caching && _stringMeasure.ContainsKey(sKey)) return _stringMeasure[sKey];
+                if (!ignore_caching && _stringMeasure.TryGetValue(key, out sizeValue)) return sizeValue;
 
-                SharpDX.DirectWrite.FontWeight fontWeight = SharpDX.DirectWrite.FontWeight.Regular;
-                SharpDX.DirectWrite.FontStyle fontStyle = SharpDX.DirectWrite.FontStyle.Normal;
-                if (((int)style & (int)FontStyle.Bold) == (int)FontStyle.Bold) fontWeight = SharpDX.DirectWrite.FontWeight.Bold;
-                if (((int)style & (int)FontStyle.Italic) == (int)FontStyle.Italic) fontStyle = SharpDX.DirectWrite.FontStyle.Italic;
+                SharpDX.DirectWrite.FontWeight fontWeight = (style & FontStyle.Bold) != 0
+                    ? SharpDX.DirectWrite.FontWeight.Bold
+                    : SharpDX.DirectWrite.FontWeight.Regular;
+                SharpDX.DirectWrite.FontStyle fontStyle = (style & FontStyle.Italic) != 0
+                    ? SharpDX.DirectWrite.FontStyle.Italic
+                    : SharpDX.DirectWrite.FontStyle.Normal;
 
-                // calculate how big the string would be @ emSize pt
-                SharpDX.DirectWrite.TextFormat tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyle, emSize);
+                SharpDX.DirectWrite.TextFormat tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyle, roundedSize);
                 tf.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
 
                 SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(_fontFactory, sText, tf, float.MaxValue, float.MaxValue);
                 float width = layout.Metrics.Width;
                 float height = layout.Metrics.Height;
                 Utilities.Dispose(ref layout);
-                layout = null;
                 Utilities.Dispose(ref tf);
-                tf = null;
 
-                SizeF size = new SizeF(width, height);
+                sizeValue = new System.Drawing.SizeF(
+                    width * _pixels_per_point_width,
+                    height * _pixels_per_point_height);
 
-                //this is a 96 to 72 scaling factor for text to screen dpi
-                size.Width *= _renderTarget.DotsPerInch.Width / 72f;
-                size.Height *= _renderTarget.DotsPerInch.Height / 72f;
-
-                bool bAdd = true;
                 if (ignore_caching)
                 {
-                    // try to update existing
-                    if(_stringMeasure.ContainsKey(sKey))
+                    if (_stringMeasure.ContainsKey(key)) 
+                        _stringMeasure[key] = sizeValue;
+                    else
                     {
-                        SizeF f = _stringMeasure[sKey];
-                        f.Width = size.Width;
-                        f.Height = size.Height;
-                        _stringMeasure[sKey] = f;
-                        bAdd = false;
+                        _stringMeasure.Add(key, sizeValue);
+                        _stringMeasureKeys.Enqueue(key);
                     }
                 }
-                if (bAdd)
+                else
                 {
-                    // keys are also stored in a queue, this ensures order, oldest get removed first
-                    _stringMeasure.Add(sKey, size);
-                    _stringMeasureKeys.Enqueue(sKey);
-                    if (_stringMeasure.Count > 2000)
-                    {
-                        string oldKey = _stringMeasureKeys.Dequeue();
-                        _stringMeasure.Remove(oldKey);
-                    }
+                    _stringMeasure.Add(key, sizeValue);
+                    _stringMeasureKeys.Enqueue(key);
                 }
-
-                return size;
+                if (_stringMeasure.Count > 2000)
+                {
+                    (string, float, FontStyle, string) oldKey = _stringMeasureKeys.Dequeue();
+                    _stringMeasure.Remove(oldKey);
+                }
+                return sizeValue;
             }
+            //private SizeF measureString(string sText, string sFontFamily, FontStyle style, float emSize, bool ignore_caching = false)
+            //{
+            //    if (!_bDXSetup) return SizeF.Empty;                
+            //    if (string.IsNullOrEmpty(sText)) return SizeF.Empty;
+            //    emSize = (float)Math.Round(emSize, 2);
+            //    if (emSize == 0) return SizeF.Empty; // zero size text is zero measurement
+
+            //    string sKey = sFontFamily + "_" + style + "_" + sText + "_" + emSize.ToString("0.00");
+
+            //    if (!ignore_caching && _stringMeasure.ContainsKey(sKey)) return _stringMeasure[sKey];
+
+            //    SharpDX.DirectWrite.FontWeight fontWeight = SharpDX.DirectWrite.FontWeight.Regular;
+            //    SharpDX.DirectWrite.FontStyle fontStyle = SharpDX.DirectWrite.FontStyle.Normal;
+            //    if (((int)style & (int)FontStyle.Bold) == (int)FontStyle.Bold) fontWeight = SharpDX.DirectWrite.FontWeight.Bold;
+            //    if (((int)style & (int)FontStyle.Italic) == (int)FontStyle.Italic) fontStyle = SharpDX.DirectWrite.FontStyle.Italic;
+
+            //    // calculate how big the string would be @ emSize pt
+            //    SharpDX.DirectWrite.TextFormat tf = new SharpDX.DirectWrite.TextFormat(_fontFactory, sFontFamily, fontWeight, fontStyle, emSize);
+            //    tf.WordWrapping = SharpDX.DirectWrite.WordWrapping.NoWrap;
+
+            //    SharpDX.DirectWrite.TextLayout layout = new SharpDX.DirectWrite.TextLayout(_fontFactory, sText, tf, float.MaxValue, float.MaxValue);
+            //    float width = layout.Metrics.Width;
+            //    float height = layout.Metrics.Height;
+            //    Utilities.Dispose(ref layout);
+            //    layout = null;
+            //    Utilities.Dispose(ref tf);
+            //    tf = null;
+
+            //    SizeF size = new SizeF(width, height);
+
+            //    //this is a 96 to 72 scaling factor for text to screen dpi
+            //    size.Width *= _dpiScale_width / 72f;
+            //    size.Height *= _dpiScale_height / 72f;
+
+            //    bool bAdd = true;
+            //    if (ignore_caching)
+            //    {
+            //        // try to update existing
+            //        if(_stringMeasure.ContainsKey(sKey))
+            //        {
+            //            SizeF f = _stringMeasure[sKey];
+            //            f.Width = size.Width;
+            //            f.Height = size.Height;
+            //            _stringMeasure[sKey] = f;
+            //            bAdd = false;
+            //        }
+            //    }
+            //    if (bAdd)
+            //    {
+            //        // keys are also stored in a queue, this ensures order, oldest get removed first
+            //        _stringMeasure.Add(sKey, size);
+            //        _stringMeasureKeys.Enqueue(sKey);
+            //        if (_stringMeasure.Count > 2000)
+            //        {
+            //            string oldKey = _stringMeasureKeys.Dequeue();
+            //            _stringMeasure.Remove(oldKey);
+            //        }
+            //    }
+
+            //    return size;
+            //}
             // [2.10.1.0] MW0LGE
             private int fade(clsMeterItem mi, clsMeter m)
             {
@@ -25697,7 +26097,7 @@ namespace Thetis
                     float fontSize = 8f;
                     SizeF adjustedFontSize = measureString("0", scale.FontFamily, scale.FntStyle, fontSize);
                     float ratio = w / adjustedFontSize.Width;
-                    float newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _renderTarget.DotsPerInch.Width), 1);
+                    float newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _dpi_width), 1);
 
                     if (scale.ShowType)
                     {
@@ -25710,7 +26110,7 @@ namespace Thetis
                     fontSize = 10f;
                     adjustedFontSize = measureString("0", scale.FontFamily, scale.FntStyle, fontSize);
                     ratio = w / adjustedFontSize.Width;
-                    newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _renderTarget.DotsPerInch.Width), 1);
+                    newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _dpi_width), 1);
 
                     float fBottomY = y + h;
                     float xCentreLine = x + (w * 0.5f);                    
@@ -28124,8 +28524,8 @@ namespace Thetis
                 plotText(" FIT " + "\u200B", zoom_rect.X, text_y, rect.Width, font_size_scaled, extent_text_colour, 255, "Trebuchet MS", FontStyle.Regular, false, false, 0, false, 0, 0, true, filter.AutoZoom ? zoom_on_colour : zoom_highlight);
 
                 //filter edge values
-                SizeF lowSize = measureString(local_low.ToString(), "Trebuchet MS", FontStyle.Regular, fontSizeEmScaled, false);
-                SizeF highSize = measureString((local_high > 0 ? "+" : "") + local_high.ToString(), "Trebuchet MS", FontStyle.Regular, fontSizeEmScaled, false);
+                SizeF lowSize = measureString(local_low.ToString(), "Trebuchet MS", FontStyle.Regular, fontSizeEmScaled);
+                SizeF highSize = measureString((local_high > 0 ? "+" : "") + local_high.ToString(), "Trebuchet MS", FontStyle.Regular, fontSizeEmScaled);
 
                 int collide_count = 0;
                 if ((filter_l + (lowSize.Width / 2f) >= filter_h - (highSize.Width / 2f)) && (filter_l - (lowSize.Width / 2f) <= filter_h + (highSize.Width / 2f))) collide_count++;
@@ -28332,7 +28732,7 @@ namespace Thetis
                             {
                                 //right numbers
                                 float val = min1 + (i * number_step1);
-                                plotText(val.ToString("f1"), x + w - spacer + quarter_spacer, t_y, rect.Width, 11f, his.Axis1Colour, 255, "Trebuchet MS", FontStyle.Regular, false, false, spacer);
+                                plotText(val.ToString("f1"), x + w - spacer + quarter_spacer, t_y, rect.Width, 18f, his.Axis1Colour, 255, "Trebuchet MS", FontStyle.Regular, false, false, spacer - quarter_spacer, false, 0, 0, false, null, true);
                             }
 
                             //ticks/grid line
@@ -28384,7 +28784,7 @@ namespace Thetis
 
                             //left numbers
                             float val = min0 + (i * number_step0);
-                            plotText(val.ToString("f1"), x + spacer - quarter_spacer, t_y, rect.Width, 11f, his.Axis0Colour, 255, "Trebuchet MS", FontStyle.Regular, true, false, spacer);
+                            plotText(val.ToString("f1"), x + spacer - quarter_spacer, t_y, rect.Width, 18f, his.Axis0Colour, 255, "Trebuchet MS", FontStyle.Regular, true, false, spacer - quarter_spacer, false, 0, 0, false, null, true);
 
                             //ticks/grid line
                             if (i > 0)
@@ -28622,7 +29022,7 @@ namespace Thetis
             }
             private bool _showing_rotator_ele_drag = false;
             private bool _rotator_was_dragging = false;
-            private float _dragging_rotator_degrees = -1;
+            private float _dragging_rotator_degrees = -999;
             private bool _dragging_rotator_ele = false;
             private int _dragging_old_update_rate = -1;
             private float _rotator_az_angle_deg = -999;
@@ -28645,8 +29045,8 @@ namespace Thetis
                 SharpDX.Direct2D1.Brush beam_widh_br = getDXBrushForColour(rotator.BeamWidthColour, (int)(255 * rotator.BeamWidthAlpha));
 
                 float xShift = rotator.ViewMode == clsRotatorItem.RotatorMode.BOTH ? 2f * (w * 0.0125f) : 0;
-                bool send_stop = false;
                 float radius_stop_circle = rotator.ViewMode == clsRotatorItem.RotatorMode.ELE ? (h * 0.09f) / 2f : (h * 0.15f) / 2f; // to include the numbers when clicking to move the rotator
+                bool mouse_over_stop = false;
 
                 if (rotator.Primary)
                 {
@@ -28842,12 +29242,10 @@ namespace Thetis
                     }
 
                     // check if arrow at desination
-                    if (degrees_az >= _rotator_az_angle_deg - 3 && degrees_az <= _rotator_az_angle_deg + 3)
-                        _rotator_az_angle_deg = -999;
+                    if (degrees_az >= _rotator_az_angle_deg - 3 && degrees_az <= _rotator_az_angle_deg + 3) _rotator_az_angle_deg = -999;
 
                     if (rotator.AllowControl)
-                    {
-                        bool stop_drawn = false;
+                    {                        
                         if (rotator.MouseEntered)
                         {
                             // draw red circle at centre for stop command                            
@@ -28861,16 +29259,11 @@ namespace Thetis
                                 elipse.Point.Y = centre.Y;
                                 elipse.RadiusX = radius_stop_circle; elipse.RadiusY = radius_stop_circle;
                                 _renderTarget.FillEllipse(elipse, getDXBrushForColour(System.Drawing.Color.Red));
-                                stop_drawn = true;
-
-                                if (rotator.MouseButtonDown)
-                                {
-                                    send_stop = true;
-                                    _rotator_az_angle_deg = -999;
-                                }
+                                mouse_over_stop = true;
+                                _dragging_rotator_degrees = -999;
                             }
 
-                            if (!stop_drawn && rotator.MouseButtonDown)
+                            if (!mouse_over_stop && rotator.MouseButtonDown)
                             {
                                 float temp_degrees = 0;
                                 SharpDX.Direct2D1.Brush rotator_control_br = getDXBrushForColour(rotator.ControlColour, 255);
@@ -28930,7 +29323,7 @@ namespace Thetis
 
                             _renderTarget.DrawLine(centre, new Vector2(cx, cy), rotator_control_br, h * 0.01f);
 
-                            if (stop_drawn) //draw over the top again
+                            if (mouse_over_stop) //draw over the top again
                             {
                                 elipse.Point.X = centre.X;
                                 elipse.Point.Y = centre.Y;
@@ -29038,12 +29431,10 @@ namespace Thetis
                     }
 
                     // check if arrow at desination
-                    if (degrees_ele >= _rotator_ele_angle_deg - 3 && degrees_ele <= _rotator_ele_angle_deg + 3)
-                        _rotator_ele_angle_deg = -999;
+                    if (degrees_ele >= _rotator_ele_angle_deg - 3 && degrees_ele <= _rotator_ele_angle_deg + 3) _rotator_ele_angle_deg = -999;
 
                     if (rotator.AllowControl)
                     {
-                        bool stop_drawn = false;
                         if (rotator.MouseEntered)
                         {
                             // draw red circle at pointer origin for stop command                            
@@ -29057,16 +29448,11 @@ namespace Thetis
                                 elipse.Point.Y = centre.Y;
                                 elipse.RadiusX = radius_stop_circle; elipse.RadiusY = radius_stop_circle;
                                 _renderTarget.FillEllipse(elipse, getDXBrushForColour(System.Drawing.Color.Red));
-                                stop_drawn = true;
-
-                                if (rotator.MouseButtonDown)
-                                {
-                                    send_stop = true;
-                                    _rotator_ele_angle_deg = -999;
-                                }
+                                mouse_over_stop = true;
+                                _dragging_rotator_degrees = -999;
                             }
 
-                            if (!stop_drawn && rotator.MouseButtonDown)
+                            if (!mouse_over_stop && rotator.MouseButtonDown)
                             {
                                 float temp_degrees = 0;
                                 SharpDX.Direct2D1.Brush rotator_control_br = getDXBrushForColour(rotator.ControlColour, 255);
@@ -29130,7 +29516,7 @@ namespace Thetis
 
                             _renderTarget.DrawLine(centre, new Vector2(cx, cy), rotator_control_br, h * 0.01f);
 
-                            if(stop_drawn) // draw over the top again
+                            if (mouse_over_stop) // draw over the top again
                             {
                                 elipse.Point.X = centre.X;
                                 elipse.Point.Y = centre.Y;
@@ -29142,26 +29528,26 @@ namespace Thetis
                 }
 
                 //send rotator position message
-                if (rotator.AllowControl && !rotator.MouseButtonDown && _rotator_was_dragging && _dragging_rotator_degrees >= 0)
+                rotator.MouseOverStop = mouse_over_stop;
+                if (rotator.AllowControl)
                 {
-                    _rotator_was_dragging = false;
+                    if (!mouse_over_stop && !rotator.MouseButtonDown && _rotator_was_dragging && _dragging_rotator_degrees >= 0)
+                    {
+                        _rotator_was_dragging = false;
 
-                    if (_dragging_rotator_ele)
-                        _rotator_ele_angle_deg = _dragging_rotator_degrees;
-                    else
-                        _rotator_az_angle_deg = _dragging_rotator_degrees;
+                        if (_dragging_rotator_ele)
+                            _rotator_ele_angle_deg = _dragging_rotator_degrees;
+                        else
+                            _rotator_az_angle_deg = _dragging_rotator_degrees;
 
-                    rotator.SendRotatorMessage(_dragging_rotator_ele, _dragging_rotator_degrees, send_stop);
+                        rotator.SendRotatorMessage(_dragging_rotator_ele, _dragging_rotator_degrees, false);
 
-                    _dragging_rotator_ele = false;
-                    _dragging_rotator_degrees = -1;
-                    rotator.UpdateInterval = _dragging_old_update_rate;
-                    _dragging_old_update_rate = -1;
-                    m.UpdateIntervals();
-                }
-                if(rotator.AllowControl && send_stop)
-                {
-                    rotator.SendRotatorMessage(false, -1, true);
+                        _dragging_rotator_ele = false;
+                        _dragging_rotator_degrees = -1;
+                        rotator.UpdateInterval = _dragging_old_update_rate;
+                        _dragging_old_update_rate = -1;
+                        m.UpdateIntervals();
+                    }
                 }
             }
             private float calculateDistance(PointF point1, PointF point2)
@@ -29303,6 +29689,9 @@ namespace Thetis
                 float w = rect.Width * (mi.Size.Width / m.XRatio);
                 float h = rect.Height * (mi.Size.Height / m.YRatio);
 
+                //SharpDX.RectangleF mirect = new SharpDX.RectangleF(x, y, w, h);
+                //_renderTarget.DrawRectangle(mirect, getDXBrushForColour(System.Drawing.Color.Red));
+
                 string sText;
                 switch (txt.Text.ToLower())
                 {
@@ -29317,24 +29706,10 @@ namespace Thetis
                         break;
                 }
 
-                float fontSize;
-                SizeF size;
-                if (txt.FixedSize)
-                {
-                    fontSize = txt.FontSize;
-                    size = measureString("0", txt.FontFamily, txt.Style, fontSize);
-                }
-                else
-                {
-                    fontSize = 72f;
-                    size = measureString(sText, txt.FontFamily, txt.Style, fontSize);
-                }
+                float xx = txt.Centre ? x + (w / 2) : x;
+                float yy = txt.Centre ? y + (h / 2) : y;
 
-                float ratio = w / size.Width;
-                float newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _renderTarget.DotsPerInch.Width), 1);
-
-                SharpDX.RectangleF txtrect = new SharpDX.RectangleF(x, y, w, h);
-                _renderTarget.DrawText(sText, getDXTextFormatForFont(txt.FontFamily, newSize, txt.Style), txtrect, getDXBrushForColour(txt.Colour, 255));
+                plotText(sText, xx, yy, rect.Width, txt.FontSize, txt.Colour, 255, txt.FontFamily, txt.Style, false, txt.Centre, w, false, 0, 0, false, null, true);
             }
             private void renderHBarMarkersOnly(SharpDX.RectangleF rect, clsMeterItem mi, clsMeter m)
             {
@@ -29755,7 +30130,7 @@ namespace Thetis
             //        float fontSize = 38f;//cbi.FontSize; //38f;
             //        SizeF adjustedFontSize = measureString("0", cbi.FontFamily, cbi.FntStyle, fontSize);
             //        float ratio = h / adjustedFontSize.Height;
-            //        float newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _renderTarget.DotsPerInch.Width), 1);
+            //        float newSize = (float)Math.Round((fontSize * ratio) * (fontSize / _dpiScale_width), 1);
 
             //        SharpDX.RectangleF txtrect = new SharpDX.RectangleF(x, y + (h * 0.2f), w, h);
             //        _renderTarget.DrawText(sText, getDXTextFormatForFont(cbi.FontFamily, newSize, cbi.FntStyle), txtrect, getDXBrushForColour(cbi.FontColour));
@@ -29803,87 +30178,130 @@ namespace Thetis
                 kHz = vfo.Substring(index + 1, 3);
                 hz = vfo.Substring(index + 4, 3);
             }
-            private (float, float) plotText(string sText, float x, float y, float containerWidth, float fTextSize, System.Drawing.Color c, int nFade, string sFontFamily, FontStyle style, bool bAlignRight = false, bool bAlignCentre = false, float fit_size_width = 0, bool ignore_cache = false, float fit_size_height = 0, float rotate_deg = 0, bool fill_background = false, object back_colour = null)
+            private (float, float) plotText(string sText, float x, float y, float containerWidth, float fTextSize, System.Drawing.Color c, int nFade, string sFontFamily, FontStyle style, bool bAlignRight = false, bool bAlignCentre = false, float fitSizeWidth = 0, bool ignoreCache = false, float fitSizeHeight = 0, float rotateDeg = 0, bool fillBackground = false, object backColour = null, bool only_shrink = false)
             {
-                if (string.IsNullOrEmpty(sText)) return (0, 0);
+                if (string.IsNullOrEmpty(sText)) return (0f, 0f);
 
-                float fontSizeEmScaled = (fTextSize / 16f) * (containerWidth / 52f);
-                SizeF szTextSize;
+                float fontSizeEm = (fTextSize / 16f) * (containerWidth / 52f);
+                SizeF sz = measureString(sText, sFontFamily, style, fontSizeEm, ignoreCache);
 
-                float ratio_w = 1f;
-                float ratio_h = 1f;
-                float ratio;
-                szTextSize = measureString(sText, sFontFamily, style, fontSizeEmScaled, ignore_cache);
-                if (fit_size_width > 0)
-                {
-                    // need to adjust the size by some ratio?
-                    ratio_w = fit_size_width / szTextSize.Width;
-                }
-                if (fit_size_height > 0)
-                {
-                    // need to adjust the size by some ratio?
-                    ratio_h = fit_size_height / szTextSize.Height;
-                }
+                float ratio = 1f;
+                if (fitSizeWidth > 0f && fitSizeHeight > 0f)
+                    ratio = (float)Math.Min(fitSizeWidth / sz.Width, fitSizeHeight / sz.Height);
+                else if (fitSizeWidth > 0f)
+                    ratio = fitSizeWidth / sz.Width;
+                else if (fitSizeHeight > 0f)
+                    ratio = fitSizeHeight / sz.Height;
 
-                if ((Math.Abs(1f - ratio_w)) > (Math.Abs(1f - ratio_h)))
+                if ((only_shrink && ratio < 1f) || (!only_shrink && ratio != 1f))
                 {
-                    if(szTextSize.Height * ratio_w <= fit_size_height)
-                        ratio = ratio_w;
-                    else
-                        ratio = ratio_h;
-                }
-                else
-                {
-                    if (szTextSize.Width * ratio_h <= fit_size_width)
-                        ratio = ratio_h;
-                    else
-                        ratio = ratio_w;
-                }
-
-                if (ratio != 1f) {
                     fTextSize *= ratio;
-                    fontSizeEmScaled = (fTextSize / 16f) * (containerWidth / 52f);
-                    szTextSize = measureString(sText, sFontFamily, style, fontSizeEmScaled, ignore_cache);
+                    fontSizeEm = (fTextSize / 16f) * (containerWidth / 52f);
+                    sz = measureString(sText, sFontFamily, style, fontSizeEm, ignoreCache);
                 }
 
-
-                SharpDX.RectangleF txtrect;
-                if (!bAlignRight)
+                float left = bAlignRight ? x - sz.Width : bAlignCentre ? x - sz.Width * 0.5f : x;
+                float top = bAlignCentre ? y - sz.Height * 0.5f : y;
+                SharpDX.RectangleF rect = new SharpDX.RectangleF(left, top, sz.Width, sz.Height);
+                Matrix3x2 oldTransform = _renderTarget.Transform;
+                
+                if (rotateDeg != 0f)
                 {
-                    if (bAlignCentre)
-                    {
-                        txtrect = new SharpDX.RectangleF(x - szTextSize.Width / 2f, y - szTextSize.Height / 2f, szTextSize.Width, szTextSize.Height);
-                    }
-                    else
-                    {
-                        txtrect = new SharpDX.RectangleF(x, y, szTextSize.Width, szTextSize.Height);
-                    }
-                }
-                else
-                {
-                    // use x is now right edge
-                    txtrect = new SharpDX.RectangleF(x - szTextSize.Width, y, szTextSize.Width, szTextSize.Height);
+                    const float DEG2RAD = SharpDX.MathUtil.Pi / 180f;
+                    float rad = rotateDeg * DEG2RAD;
+                    Vector2 center = new Vector2(rect.Left + rect.Width * 0.5f, rect.Top + rect.Height * 0.5f);
+                    _renderTarget.Transform = oldTransform * Matrix3x2.Rotation(rad, center);
                 }
 
-                Matrix3x2 originalTransform = Matrix3x2.Identity;
-                if (rotate_deg != 0) 
-                {
-                    Vector2 textCenter = new Vector2(txtrect.Width / 2, txtrect.Height / 2);
-                    originalTransform = _renderTarget.Transform;
-                    _renderTarget.Transform = originalTransform * Matrix3x2.Rotation(MathUtil.DegreesToRadians(rotate_deg), new Vector2(txtrect.Left, txtrect.Top) + textCenter);
-                }
-                if (fill_background)
-                    _renderTarget.FillRectangle(txtrect, getDXBrushForColour((System.Drawing.Color)back_colour, nFade));
+                if (fillBackground) _renderTarget.FillRectangle(rect, getDXBrushForColour((System.Drawing.Color)backColour, nFade));
 
-                _renderTarget.DrawText(sText, getDXTextFormatForFont(sFontFamily, fontSizeEmScaled, style), txtrect, getDXBrushForColour(c, nFade));
-                if(rotate_deg != 0)
-                {
-                    _renderTarget.Transform = originalTransform;
-                }
-                //_renderTarget.DrawRectangle(txtrect, getDXBrushForColour(System.Drawing.Color.Red));
+                _renderTarget.DrawText(sText, getDXTextFormatForFont(sFontFamily, fontSizeEm, style), rect, getDXBrushForColour(c, nFade));
 
-                return (szTextSize.Width, szTextSize.Height);
+                if (rotateDeg != 0f) _renderTarget.Transform = oldTransform;
+
+                return (sz.Width, sz.Height);
             }
+            //private (float, float) plotText(string sText, float x, float y, float containerWidth, float fTextSize, System.Drawing.Color c, int nFade, string sFontFamily, FontStyle style, bool bAlignRight = false, bool bAlignCentre = false, float fit_size_width = 0, bool ignore_cache = false, float fit_size_height = 0, float rotate_deg = 0, bool fill_background = false, object back_colour = null)
+            //{
+            //    if (string.IsNullOrEmpty(sText)) return (0, 0);
+
+            //    float fontSizeEmScaled = (fTextSize / 16f) * (containerWidth / 52f);
+            //    SizeF szTextSize;
+
+            //    float ratio_w = 1f;
+            //    float ratio_h = 1f;
+            //    float ratio;
+            //    szTextSize = measureString(sText, sFontFamily, style, fontSizeEmScaled, ignore_cache);
+            //    if (fit_size_width > 0)
+            //    {
+            //        // need to adjust the size by some ratio?
+            //        ratio_w = fit_size_width / szTextSize.Width;
+            //    }
+            //    if (fit_size_height > 0)
+            //    {
+            //        // need to adjust the size by some ratio?
+            //        ratio_h = fit_size_height / szTextSize.Height;
+            //    }
+
+            //    if ((Math.Abs(1f - ratio_w)) > (Math.Abs(1f - ratio_h)))
+            //    {
+            //        if(szTextSize.Height * ratio_w <= fit_size_height)
+            //            ratio = ratio_w;
+            //        else
+            //            ratio = ratio_h;
+            //    }
+            //    else
+            //    {
+            //        if (szTextSize.Width * ratio_h <= fit_size_width)
+            //            ratio = ratio_h;
+            //        else
+            //            ratio = ratio_w;
+            //    }
+
+            //    if (ratio != 1f) {
+            //        fTextSize *= ratio;
+            //        fontSizeEmScaled = (fTextSize / 16f) * (containerWidth / 52f);
+            //        szTextSize = measureString(sText, sFontFamily, style, fontSizeEmScaled, ignore_cache);
+            //    }
+
+
+            //    SharpDX.RectangleF txtrect;
+            //    if (!bAlignRight)
+            //    {
+            //        if (bAlignCentre)
+            //        {
+            //            txtrect = new SharpDX.RectangleF(x - szTextSize.Width / 2f, y - szTextSize.Height / 2f, szTextSize.Width, szTextSize.Height);
+            //        }
+            //        else
+            //        {
+            //            txtrect = new SharpDX.RectangleF(x, y, szTextSize.Width, szTextSize.Height);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        // use x is now right edge
+            //        txtrect = new SharpDX.RectangleF(x - szTextSize.Width, y, szTextSize.Width, szTextSize.Height);
+            //    }
+
+            //    Matrix3x2 originalTransform = Matrix3x2.Identity;
+            //    if (rotate_deg != 0) 
+            //    {
+            //        Vector2 textCenter = new Vector2(txtrect.Width / 2, txtrect.Height / 2);
+            //        originalTransform = _renderTarget.Transform;
+            //        _renderTarget.Transform = originalTransform * Matrix3x2.Rotation(MathUtil.DegreesToRadians(rotate_deg), new Vector2(txtrect.Left, txtrect.Top) + textCenter);
+            //    }
+            //    if (fill_background)
+            //        _renderTarget.FillRectangle(txtrect, getDXBrushForColour((System.Drawing.Color)back_colour, nFade));
+
+            //    _renderTarget.DrawText(sText, getDXTextFormatForFont(sFontFamily, fontSizeEmScaled, style), txtrect, getDXBrushForColour(c, nFade));
+            //    if(rotate_deg != 0)
+            //    {
+            //        _renderTarget.Transform = originalTransform;
+            //    }
+            //    //_renderTarget.DrawRectangle(txtrect, getDXBrushForColour(System.Drawing.Color.Red));
+
+            //    return (szTextSize.Width, szTextSize.Height);
+            //}
             private void highlightBox(float x, float y, float w, float h, SharpDX.RectangleF rect, clsVfoDisplay vfo, int bx, int by, float gap, clsMeter m, float shift)
             {
                 SharpDX.RectangleF rct;
@@ -31945,135 +32363,210 @@ namespace Thetis
             {
                 return rad * (180f / Math.PI);
             }
-            private void getPerc(clsMeterItem mi, float value, out float percX, out float percY, out PointF min, out PointF max)
+            private void getPerc(clsMeterItem mi, float rawValue, out float percX, out float percY, out PointF min, out PointF max)
             {
-                percX = 0;
-                percY = 0;
+                percX = 0f;
+                percY = 0f;
                 min = new PointF(0f, 0f);
                 max = new PointF(0f, 0f);
 
-                value = (float)Math.Round(value, 2); // NOTE: this will limit the finding of keys in the scale calibration below
-
-                // adjust for >= 30mhz
+                float value = (float)Math.Round(rawValue, 2);
                 if (mi.ReadingSource == Reading.SIGNAL_STRENGTH || mi.ReadingSource == Reading.AVG_SIGNAL_STRENGTH)
                     value += MeterManager.dbmOffsetForAboveS9Frequency(_rx);
-                // normalise to 100w
                 else if (mi.NormaliseTo100W)
-                {
-                    //value *= MeterManager.normalisePower();
-                    value *= (100 / mi.MaxPower);
-                }
-                // custom bar, will always have range 0-100 scale, so convert value
+                    value *= 100f / mi.MaxPower;
                 else if (mi.IsCustom)
                 {
-                    float clamped_value = Math.Max(mi.CustomMin, Math.Min(mi.CustomMax, value));
-                    float range = mi.CustomMax - mi.CustomMin;
-                    value = range != 0 ? (clamped_value - mi.CustomMin) / range * 100f : 0;
+                    float c = Math.Max(mi.CustomMin, Math.Min(mi.CustomMax, value));
+                    float r = mi.CustomMax - mi.CustomMin;
+                    value = r != 0f ? (c - mi.CustomMin) / r * 100f : 0f;
                 }
 
-                clsMeterItem.clsPercCache pc = mi.GetPerc(value);
-                if (pc != null)
-                {                    
-                    percX = pc._percX;
-                    percY = pc._percY;
-                    min = pc._min;
-                    max = pc._max;
+                //[2.10.3.9]MW0LGE refactor for speed
+                clsMeterItem.clsPercCache cacheEntry = mi.GetPerc(value);
+                if (cacheEntry != null)
+                {
+                    percX = cacheEntry._percX;
+                    percY = cacheEntry._percY;
+                    min = cacheEntry._min;
+                    max = cacheEntry._max;
                     return;
                 }
 
-                if (mi.ScaleCalibration.Count > 0)
+                if (mi._scales_calibKeys.Length == 0)
+                    return;
+
+                float[] keys = mi._scales_calibKeys;
+                PointF[] vals = mi._scales_calibValues;
+                int idx = Array.BinarySearch(keys, value);
+                bool exact = idx >= 0;
+                int lowIdx = exact ? idx : ~idx - 1;
+                int highIdx = exact ? idx : ~idx;
+                if (lowIdx < 0) lowIdx = 0;
+                if (highIdx < 0) highIdx = 0;
+                if (lowIdx >= keys.Length) lowIdx = keys.Length - 1;
+                if (highIdx >= keys.Length) highIdx = keys.Length - 1;
+
+                PointF pLow = vals[lowIdx];
+                PointF pHigh = vals[highIdx];
+                float vLow = keys[lowIdx];
+                float vHigh = keys[highIdx];
+                bool singlePoint = lowIdx == highIdx;
+                float rangeX = mi._scales_maxX - mi._scales_minX;
+                float rangeY = mi._scales_maxY - mi._scales_minY;
+
+                float interpX = singlePoint
+                    ? pLow.X
+                    : pLow.X + (pHigh.X - pLow.X) * ((value - vLow) / (vHigh - vLow));
+                float interpY = singlePoint
+                    ? pLow.Y
+                    : pLow.Y + (pHigh.Y - pLow.Y) * ((value - vLow) / (vHigh - vLow));
+
+                percX = rangeX > 0f ? (interpX - mi._scales_minX) / rangeX : 0f;
+                percY = rangeY > 0f ? (interpY - mi._scales_minY) / rangeY : 0f;
+                min = new PointF(mi._scales_minX, mi._scales_minY);
+                max = new PointF(mi._scales_maxX, mi._scales_maxY);
+
+                clsMeterItem.clsPercCache newCacheEntry = new clsMeterItem.clsPercCache
                 {
-                    // todo, only implemented for clockwise needles atm
-                    PointF p_low = PointF.Empty;
-                    PointF p_high = PointF.Empty;
-                    float value_low = -200f;
-                    float value_high = -200f;
-                    bool bEqual = false;
+                    _value = value,
+                    _percX = percX,
+                    _percY = percY,
+                    _min = min,
+                    _max = max
+                };
+                mi.AddPerc(newCacheEntry);
+            }
 
-                    if (mi.ScaleCalibration.ContainsKey(value))
-                    {
-                        p_low = mi.ScaleCalibration[value];
-                        p_high = mi.ScaleCalibration[value];
-                        value_low = value;
-                        value_high = value;
-                        bEqual = true;
-                    }
-                    else if (value < mi.ScaleCalibration.OrderBy(p => p.Key).First().Key) // below lowest
-                    {
-                        p_low = p_high = mi.ScaleCalibration.OrderBy(p => p.Key).First().Value;
-                        value_low = value_high = mi.ScaleCalibration.OrderBy(p => p.Key).First().Key;
-                        bEqual = true;
-                    }
-                    else if (value > mi.ScaleCalibration.OrderBy(p => p.Key).Last().Key) // above highest
-                    {
-                        p_low = p_high = mi.ScaleCalibration.OrderBy(p => p.Key).Last().Value;
-                        value_low = value_high = mi.ScaleCalibration.OrderBy(p => p.Key).Last().Key;
-                        bEqual = true;
-                    }
-                    else
-                    {
-                        //low side
-                        foreach (KeyValuePair<float, PointF> kvp in mi.ScaleCalibration.OrderByDescending(p => p.Key))
-                        {
-                            if (kvp.Key <= value)
-                            {
-                                p_low = kvp.Value;
-                                value_low = kvp.Key;
-                                break;
-                            }
-                        }
+            //private void getPerc(clsMeterItem mi, float value, out float percX, out float percY, out PointF min, out PointF max)
+            //{
+            //    percX = 0;
+            //    percY = 0;
+            //    min = new PointF(0f, 0f);
+            //    max = new PointF(0f, 0f);
 
-                        // high
-                        foreach (KeyValuePair<float, PointF> kvp in mi.ScaleCalibration.OrderBy(p => p.Key))
-                        {
-                            if (kvp.Key >= value)
-                            {
-                                p_high = kvp.Value;
-                                value_high = kvp.Key;
-                                break;
-                            }
-                        }
-                    }
-                    //get mins/maxs
-                    float minX = (float)Math.Round(mi.ScaleCalibration.OrderBy(p => p.Value.X).First().Value.X, 3);
-                    float maxX = (float)Math.Round(mi.ScaleCalibration.OrderByDescending(p => p.Value.X).First().Value.X, 3);
+            //    value = (float)Math.Round(value, 2); // NOTE: this will limit the finding of keys in the scale calibration below
 
-                    float minY = (float)Math.Round(mi.ScaleCalibration.OrderBy(p => p.Value.Y).First().Value.Y, 3);
-                    float maxY = (float)Math.Round(mi.ScaleCalibration.OrderByDescending(p => p.Value.Y).First().Value.Y, 3);
+            //    // adjust for >= 30mhz
+            //    if (mi.ReadingSource == Reading.SIGNAL_STRENGTH || mi.ReadingSource == Reading.AVG_SIGNAL_STRENGTH)
+            //        value += MeterManager.dbmOffsetForAboveS9Frequency(_rx);
+            //    // normalise to 100w
+            //    else if (mi.NormaliseTo100W)
+            //    {
+            //        //value *= MeterManager.normalisePower();
+            //        value *= (100 / mi.MaxPower);
+            //    }
+            //    // custom bar, will always have range 0-100 scale, so convert value
+            //    else if (mi.IsCustom)
+            //    {
+            //        float clamped_value = Math.Max(mi.CustomMin, Math.Min(mi.CustomMax, value));
+            //        float range = mi.CustomMax - mi.CustomMin;
+            //        value = range != 0 ? (clamped_value - mi.CustomMin) / range * 100f : 0;
+            //    }
 
-                    float rangeX = maxX - minX;
-                    float rangeY = maxY - minY;
-                    percX = 0;
-                    percY = 0;
-                    if (bEqual)
-                    {
-                        if (rangeX > 0) percX = (p_low.X - minX) / rangeX;
-                        if (rangeY > 0) percY = (p_low.Y - minY) / rangeY;
-                    }
-                    else
-                    {
-                        float value_range = value_high - value_low;
-                        float ratio = (value - value_low) / value_range;
-                        float newRangeX = p_high.X - p_low.X;
-                        float newRangeY = p_high.Y - p_low.Y;
+            //    clsMeterItem.clsPercCache pc = mi.GetPerc(value);
+            //    if (pc != null)
+            //    {                    
+            //        percX = pc._percX;
+            //        percY = pc._percY;
+            //        min = pc._min;
+            //        max = pc._max;
+            //        return;
+            //    }
 
-                        if (rangeX > 0) percX = ((p_low.X - minX) + (newRangeX * ratio)) / rangeX;
-                        if (rangeY > 0) percY = ((p_low.Y - minY) + (newRangeY * ratio)) / rangeY;
-                    }
+            //    if (mi.ScaleCalibration.Count > 0)
+            //    {
+            //        // todo, only implemented for clockwise needles atm
+            //        PointF p_low = PointF.Empty;
+            //        PointF p_high = PointF.Empty;
+            //        float value_low = -200f;
+            //        float value_high = -200f;
+            //        bool bEqual = false;
 
-                    percX = (float)Math.Round(percX, 3);
-                    percY = (float)Math.Round(percY, 3);
-                    min = new PointF(minX, minY);
-                    max = new PointF(maxX, maxY);
+            //        if (mi.ScaleCalibration.ContainsKey(value))
+            //        {
+            //            p_low = mi.ScaleCalibration[value];
+            //            p_high = mi.ScaleCalibration[value];
+            //            value_low = value;
+            //            value_high = value;
+            //            bEqual = true;
+            //        }
+            //        else if (value < mi.ScaleCalibration.OrderBy(p => p.Key).First().Key) // below lowest
+            //        {
+            //            p_low = p_high = mi.ScaleCalibration.OrderBy(p => p.Key).First().Value;
+            //            value_low = value_high = mi.ScaleCalibration.OrderBy(p => p.Key).First().Key;
+            //            bEqual = true;
+            //        }
+            //        else if (value > mi.ScaleCalibration.OrderBy(p => p.Key).Last().Key) // above highest
+            //        {
+            //            p_low = p_high = mi.ScaleCalibration.OrderBy(p => p.Key).Last().Value;
+            //            value_low = value_high = mi.ScaleCalibration.OrderBy(p => p.Key).Last().Key;
+            //            bEqual = true;
+            //        }
+            //        else
+            //        {
+            //            //low side
+            //            foreach (KeyValuePair<float, PointF> kvp in mi.ScaleCalibration.OrderByDescending(p => p.Key))
+            //            {
+            //                if (kvp.Key <= value)
+            //                {
+            //                    p_low = kvp.Value;
+            //                    value_low = kvp.Key;
+            //                    break;
+            //                }
+            //            }
 
-                    pc = new clsMeterItem.clsPercCache() { _value = value,
-                                                            _percX = percX,
-                                                            _percY = percY,
-                                                            _min = min,
-                                                            _max = max };
-                    mi.AddPerc(pc);
-                }
-            }            
+            //            // high
+            //            foreach (KeyValuePair<float, PointF> kvp in mi.ScaleCalibration.OrderBy(p => p.Key))
+            //            {
+            //                if (kvp.Key >= value)
+            //                {
+            //                    p_high = kvp.Value;
+            //                    value_high = kvp.Key;
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //        //get mins/maxs
+            //        float minX = (float)Math.Round(mi.ScaleCalibration.OrderBy(p => p.Value.X).First().Value.X, 3);
+            //        float maxX = (float)Math.Round(mi.ScaleCalibration.OrderByDescending(p => p.Value.X).First().Value.X, 3);
+
+            //        float minY = (float)Math.Round(mi.ScaleCalibration.OrderBy(p => p.Value.Y).First().Value.Y, 3);
+            //        float maxY = (float)Math.Round(mi.ScaleCalibration.OrderByDescending(p => p.Value.Y).First().Value.Y, 3);
+
+            //        float rangeX = maxX - minX;
+            //        float rangeY = maxY - minY;
+            //        percX = 0;
+            //        percY = 0;
+            //        if (bEqual)
+            //        {
+            //            if (rangeX > 0) percX = (p_low.X - minX) / rangeX;
+            //            if (rangeY > 0) percY = (p_low.Y - minY) / rangeY;
+            //        }
+            //        else
+            //        {
+            //            float value_range = value_high - value_low;
+            //            float ratio = (value - value_low) / value_range;
+            //            float newRangeX = p_high.X - p_low.X;
+            //            float newRangeY = p_high.Y - p_low.Y;
+
+            //            if (rangeX > 0) percX = ((p_low.X - minX) + (newRangeX * ratio)) / rangeX;
+            //            if (rangeY > 0) percY = ((p_low.Y - minY) + (newRangeY * ratio)) / rangeY;
+            //        }
+
+            //        percX = (float)Math.Round(percX, 3);
+            //        percY = (float)Math.Round(percY, 3);
+            //        min = new PointF(minX, minY);
+            //        max = new PointF(maxX, maxY);
+
+            //        pc = new clsMeterItem.clsPercCache() { _value = value,
+            //                                                _percX = percX,
+            //                                                _percY = percY,
+            //                                                _min = min,
+            //                                                _max = max };
+            //        mi.AddPerc(pc);
+            //    }
+            //}            
             private SharpDX.Direct2D1.Bitmap bitmapFromSystemBitmap(RenderTarget rt, System.Drawing.Bitmap bitmap, string sId)
             {
                 //[2.10.3.6]MW0LGE refactored to use Windows Imaging Component (WIC)
@@ -32211,7 +32704,6 @@ namespace Thetis
             private bool _listener_active;
             private string _four_char;
             private bool _enabled;
-            private bool _connector_running;
             private MMIOTerminator _terminator_in;
             private MMIOTerminator _terminator_out;
             private string _custom_terminator_in;
@@ -32229,12 +32721,20 @@ namespace Thetis
             //
 
             private ConcurrentDictionary<string, object> _io_variables;
+            [NonSerialized]
             private ConcurrentQueue<string> _outbound_queue;
             public clsMMIO()
             {
                 init();
 
                 _four_char = Common.FourChar(_ip, _port, _guid);
+            }
+            [OnDeserialized]
+            private void OnDeserialized(StreamingContext context)
+            {
+                // This runs after Deserialize. We need to init the outbound queue as it is now not serialised/deserialised.
+                // Deserialising bypasses the constructor
+                _outbound_queue = new ConcurrentQueue<string>();
             }
             private void init()
             {
@@ -32438,13 +32938,18 @@ namespace Thetis
                 }
             }
             public void EnqueueOutbound(string data)
-            {
-                if (_direction == MMIODirection.IN) return;
+            {                
+                if (!_enabled || _direction == MMIODirection.IN) return;
+
+                // limit to a max of 1000. Not nice, but this will only happen if the sink/client is not available
+                // and this mmio is enabled and we trying to send data
+                if (_outbound_queue.Count >= 1000) _outbound_queue.TryDequeue(out _);
+
                 _outbound_queue.Enqueue(data);
             }
             public string DequeueOutbound()
             {
-                if (_direction == MMIODirection.IN) return "";
+                if (!_enabled || _direction == MMIODirection.IN) return "";
 
                 bool ok = _outbound_queue.TryDequeue(out string data);
                 if (ok) return data;
@@ -32963,14 +33468,13 @@ namespace Thetis
             {
                 get
                 {
+                    bool connected = false;
                     try
                     {
-                        return _tcpClient.Connected;
+                        connected = _tcpClient.Connected;
                     }
-                    catch
-                    {
-                        return false;
-                    }
+                    catch { }
+                    return connected;
                 }
             }
             private void Connect()
@@ -34189,6 +34693,7 @@ namespace Thetis
         public const int TX_BANDWIDTH = 20000;
         public const int PIXELS = 1024;
         public const int FRAME_RATE = 30;
+        public const int PAN_RATE_LIMIT_MS = 1000 / (FRAME_RATE / 8);
         public const int SUB_RX_OFFSET = 1024; // there can be 1024 regular, before the subrx's start
 
         public class FilterCharacteristics
@@ -34265,6 +34770,7 @@ namespace Thetis
                 _console.CWPitchChangedHandlers += OnCWPitchChanged;
                 _console.ModeChangeHandlers += OnModeChanged;
                 _console.PowerChangeHanders += OnPowerChanged;
+                _console.CTUNChangedHandlers += OnCTUNChanged;
 
                 //get all the notches
                 lock (_notch_locker)
@@ -34562,6 +35068,7 @@ namespace Thetis
                 _console.CWPitchChangedHandlers -= OnCWPitchChanged;
                 _console.ModeChangeHandlers -= OnModeChanged;
                 _console.PowerChangeHanders -= OnPowerChanged;
+                _console.CTUNChangedHandlers -= OnCTUNChanged;
             }
 
             List<int> ids = _mini_spec.Keys.ToList();
@@ -34580,6 +35087,14 @@ namespace Thetis
                     clsMiniSpec mrx = kvp.Value;
                     mrx.ClearData();
                 }
+            }
+        }
+        private static void OnCTUNChanged(int rx, bool oldCTUN, bool newCTUN, Band band)
+        {
+            foreach (KeyValuePair<int, clsMiniSpec> kvp in _mini_spec.Where(minispec => minispec.Value.RX == rx))
+            {
+                clsMiniSpec mrx = kvp.Value;
+                mrx.Ctun = newCTUN;
             }
         }
         private static void OnModeChanged(int rx, DSPMode oldMode, DSPMode newMode, Band oldBand, Band newBand)
@@ -34616,10 +35131,13 @@ namespace Thetis
         }
         private static void OnCentreFrequency(int rx, double oldFreq, double newFreq, Band band, double offset)
         {
-            foreach (KeyValuePair<int, clsMiniSpec> kvp in _mini_spec.Where(minispec => minispec.Value.RX == rx))
+            if (oldFreq != newFreq)
             {
-                clsMiniSpec mrx = kvp.Value;
-                mrx.CentreFreq = newFreq;
+                foreach (KeyValuePair<int, clsMiniSpec> kvp in _mini_spec.Where(minispec => minispec.Value.RX == rx))
+                {
+                    clsMiniSpec mrx = kvp.Value;
+                    mrx.CentreFreq = newFreq;
+                }
             }
         }
         private static void OnNotchChanged(int notch_index, double old_bw, double new_bw, bool active, double old_centre_freq, double new_centre_freq, bool added, bool removed)
@@ -34733,14 +35251,22 @@ namespace Thetis
 
             private int _cw_pitch;
             private DSPMode _mode;
+            private bool _ctun;
 
             private bool _sub_receiver;
 
             private readonly object _data_lock = new object();
             private readonly object _new_data_lock = new object();
 
+            //set pan rate limit, 1/8 of frame rate
+            private readonly Stopwatch _pan_stopwatch;
+            private System.Threading.Timer _pan_final_timer;
+            private readonly object _pan_lock = new object();
+
             public clsMiniSpec(int rx, int id, bool sub_receiver, Console console)
             {
+                _pan_stopwatch = Stopwatch.StartNew();
+
                 _enabled = UsingAFilter(id, sub_receiver);
 
                 _hwsample_rate = 0; // updated by setupSpecDetails()
@@ -34751,6 +35277,7 @@ namespace Thetis
                 _max_filter_width = _console.MaxFilterWidth;
                 _mode = _rx == 1 ? _console.RX1DSPMode : _console.RX2DSPMode;
                 _cw_pitch = _console.CWPitch;
+                _ctun = _rx == 1 ? _console.ClickTuneDisplay : _console.ClickTuneRX2Display;
 
                 _centre_freq = _rx == 1 ? _console.CentreFrequency : _console.CentreRX2Frequency;
                 _rx_frequency = _rx == 1 ? _console.VFOAFreq : _console.VFOBFreq;
@@ -34841,6 +35368,13 @@ namespace Thetis
                     _mode = value;
                 }
             }
+            public bool Ctun
+            {
+                set
+                {
+                    _ctun = value;
+                }
+            }
             public int CWPitchOffset
             {
                 get
@@ -34883,7 +35417,10 @@ namespace Thetis
                         _max_filter_width = value;
 
                         zoom();
-                        setPan();
+                        lock (_pan_lock)
+                        {
+                            setPan();
+                        }
                     }
                 }
             }
@@ -35061,7 +35598,10 @@ namespace Thetis
             {
                 setupSpecDetails();
                 zoom();
-                setPan();
+                lock (_pan_lock)
+                {
+                    setPan();
+                }
             }
             public int HWSampleRate
             {
@@ -35142,16 +35682,8 @@ namespace Thetis
 
                     if (!_mox)
                     {
-                        bool clickTune = _rx == 1 ? _console.ClickTuneDisplay : _console.ClickTuneRX2Display;
-                        if (!clickTune)
-                        {
-                            //if ctun is off, 0.5 is the centre, always
-                            _spec.PanSlider = 0.5;
-                        }
-                        else
-                        {
-                            setPan();
-                        }
+                        //setPan();
+                        rateLimitSetPan();
                     }
                 }
             }
@@ -35166,7 +35698,7 @@ namespace Thetis
 
                     if (_mox)
                     {
-                        bool clickTune = _rx == 1 ? _console.ClickTuneDisplay : _console.ClickTuneRX2Display;
+                        //bool clickTune = _rx == 1 ? _console.ClickTuneDisplay : _console.ClickTuneRX2Display;
                         //CTUN does not play a part in tx
                         //if (!clickTune)
                         //{
@@ -35175,45 +35707,99 @@ namespace Thetis
                         //}
                         //else
                         //{
-                            setPan();
+                            //setPan();
+                            rateLimitSetPan();
                         //}
                     }
                 }
             }
+            // rate limit setPan() to 1/8 frame rate
+            public void rateLimitSetPan()
+            {
+                lock (_pan_lock)
+                {
+                    if (_pan_stopwatch.ElapsedMilliseconds >= PAN_RATE_LIMIT_MS)
+                    {
+                        updatePan(null);
+                    }
+                    else
+                    {
+                        if (_pan_final_timer == null)
+                        {
+                            long delay = PAN_RATE_LIMIT_MS - _pan_stopwatch.ElapsedMilliseconds;
+                            if (delay <= 0)
+                                updatePan(null);
+                            else
+                                _pan_final_timer = new System.Threading.Timer(updatePan, null, delay, Timeout.Infinite);
+                        }
+                    }
+                }
+            }
+            private void updatePan(object _)
+            {
+                lock (_pan_lock)
+                {
+                    System.Threading.Timer toDispose = null;
+                    try
+                    {
+                        _pan_stopwatch.Restart();
+                        setPan();
+
+                        toDispose = _pan_final_timer;
+                        _pan_final_timer = null;
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        if (toDispose != null) toDispose.Dispose();
+                    }
+                }
+            }
+            //
             private void setPan()
             {
-                int centre_freq_hz = (int)(_centre_freq * 1e6);
-
-                int freq_hz;
-                if (_mox)
+                if (!_mox && !_ctun)
                 {
-                    freq_hz = (int)(_tx_frequency * 1e6);
+                    //if ctun is off, 0.5 is the centre, always
+                    _spec.PanSlider = 0.5;
                 }
                 else
                 {
-                    freq_hz = (int)(_rx_frequency * 1e6);
-                }
+                    int centre_freq_hz = (int)(_centre_freq * 1e6);
 
-                (int spec_low_hz, int spec_high_hz) = _spec.GetFrequencyExtents(0, 0.5); // get the full extents using 0 zoom slider, 0.5 pan (centre)
+                    int freq_hz;
+                    if (_mox)
+                    {
+                        freq_hz = (int)(_tx_frequency * 1e6);
+                    }
+                    else
+                    {
+                        freq_hz = (int)(_rx_frequency * 1e6);
+                    }
 
-                int bw_hz = spec_high_hz - spec_low_hz;
-                int low_freq_hz = centre_freq_hz - (bw_hz / 2);
-                int high_freq_hz = centre_freq_hz + (bw_hz / 2);
+                    (int spec_low_hz, int spec_high_hz) = _spec.GetFrequencyExtents(0, 0.5); // get the full extents using 0 zoom slider, 0.5 pan (centre)
 
-                if (freq_hz >= low_freq_hz && freq_hz <= high_freq_hz)
-                {
-                    // the frequency as a ratio through the entire spctrum view, from 0 to 1.0
-                    //double ratio_in_source = (freq_hz - low_freq_hz) / (double)bw_hz;
+                    int bw_hz = spec_high_hz - spec_low_hz;
+                    int low_freq_hz = centre_freq_hz - (bw_hz / 2);
+                    int high_freq_hz = centre_freq_hz + (bw_hz / 2);
 
-                    // adjust for destination, we need to drag the edges in, so that the edge becomes centre
-                    // the limit edges of the source spectrum become centre in the mini spectrum
-                    low_freq_hz += _mox ? TX_BANDWIDTH : _max_filter_width;
-                    high_freq_hz -= _mox ? TX_BANDWIDTH : _max_filter_width;
-                    bw_hz = high_freq_hz - low_freq_hz;
+                    if (freq_hz >= low_freq_hz && freq_hz <= high_freq_hz)
+                    {
+                        // the frequency as a ratio through the entire spctrum view, from 0 to 1.0
+                        //double ratio_in_source = (freq_hz - low_freq_hz) / (double)bw_hz;
 
-                    double ratio_in_dest = (freq_hz - low_freq_hz) / (double)bw_hz;
+                        // adjust for destination, we need to drag the edges in, so that the edge becomes centre
+                        // the limit edges of the source spectrum become centre in the mini spectrum
+                        low_freq_hz += _mox ? TX_BANDWIDTH : _max_filter_width;
+                        high_freq_hz -= _mox ? TX_BANDWIDTH : _max_filter_width;
+                        bw_hz = high_freq_hz - low_freq_hz;
 
-                    _spec.PanSlider = ratio_in_dest;
+                        double ratio_in_dest = (freq_hz - low_freq_hz) / (double)bw_hz;
+
+                        _spec.PanSlider = ratio_in_dest;
+                    }
                 }
             }
             private void zoom()
@@ -35252,7 +35838,8 @@ namespace Thetis
                     double rounded = Math.Round(value, 6);
                     if (rounded == _centre_freq) return;
                     _centre_freq = rounded;
-                    setPan();
+                    //setPan();
+                    rateLimitSetPan();
                 }
             }
         }

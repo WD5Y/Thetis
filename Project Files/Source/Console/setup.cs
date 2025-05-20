@@ -55,7 +55,8 @@ namespace Thetis
     using System.IO.Compression;
     using System.Timers;
     using System.Runtime.InteropServices;
-
+    using System.Runtime.ExceptionServices;
+    using System.Security.Cryptography;
     public partial class Setup : Form
     {
         // for these callsigns always show cmasio tab, as a perk to the testers from discord
@@ -85,6 +86,8 @@ namespace Thetis
         public Setup(Console c)
         {
             InitializeComponent();
+
+            _original_pnlP1_adcs_location = pnlP1_adcs.Location;
 
             Common.DoubleBufferAll(this, true);
 
@@ -155,7 +158,7 @@ namespace Thetis
             GetTxProfileDefs();
             RefreshCOMPortLists();
 
-            InitAudioTab();
+            InitAudioTab(null, true);
 
             initComboHistoryReadings0();
 
@@ -826,7 +829,7 @@ namespace Thetis
             if (needsRecovering(recoveryList, "radP1DDC6ADC2")) radP1DDC6ADC2.Checked = false;
         }
 
-        public void InitAudioTab(List<string> recoveryList = null)
+        public void InitAudioTab(List<string> recoveryList = null, bool only_rates = false)
         {
             // refactored 2.10.3.7
             int selected_rate1_index = comboAudioSampleRate1.SelectedIndex;
@@ -848,15 +851,23 @@ namespace Thetis
                 comboAudioSampleRateRX2.Items.Add(rate);
             }
 
-            if (selected_rate1_index >= 0 && selected_rate1_index < comboAudioSampleRate1.Items.Count)
-                comboAudioSampleRate1.SelectedIndex = selected_rate1_index;
-            else
-                comboAudioSampleRate1.SelectedIndex = Array.IndexOf(rates, 192000);
+            if (only_rates) return; // exit as we dont want to select anything, this is only used in AfterConstructor
 
-            if (selected_rate2_index >= 0 && selected_rate2_index < comboAudioSampleRateRX2.Items.Count)
-                comboAudioSampleRateRX2.SelectedIndex = selected_rate2_index;
+            int rx1_index;
+            if (selected_rate1_index >= 0 && selected_rate1_index < comboAudioSampleRate1.Items.Count)
+                rx1_index = selected_rate1_index;
             else
-                comboAudioSampleRateRX2.SelectedIndex = Array.IndexOf(rates, 192000);
+                rx1_index = Array.IndexOf(rates, 192000);
+
+            comboAudioSampleRate1.SelectedIndex = rx1_index; // this will always cause a changed event because we removed everything
+
+            int rx2_index;
+            if (selected_rate2_index >= 0 && selected_rate2_index < comboAudioSampleRateRX2.Items.Count)
+                rx2_index = selected_rate2_index;
+            else
+                rx2_index = Array.IndexOf(rates, 192000);
+
+            comboAudioSampleRateRX2.SelectedIndex = rx2_index; // this will always cause a changed event because we removed everything
 
             //if (!comboAudioSampleRate1.Items.Contains(96000))
             //    comboAudioSampleRate1.Items.Add(96000);
@@ -2181,7 +2192,10 @@ namespace Thetis
                 this.txtCollapsedHeight.Text = value.ToString();
             }
         }
-
+        public void SetPriorityClass()
+        {
+            comboGeneralProcessPriority_SelectedIndexChanged(this, EventArgs.Empty);
+        }
         private void ForceAllEvents()
         {
             EventArgs e = EventArgs.Empty;
@@ -2193,7 +2207,6 @@ namespace Thetis
             chkGeneralRXOnly_CheckedChanged(this, e);
             comboGeneralXVTR_SelectedIndexChanged(this, e);
             chkGeneralDisablePTT_CheckedChanged(this, e);
-            comboGeneralProcessPriority_SelectedIndexChanged(this, e);
             chkFullDiscovery_CheckedChanged(this, e);
             btnSetIPAddr_Click(this, e);
             radOrionPTTOff_CheckedChanged(this, e);
@@ -2212,10 +2225,13 @@ namespace Thetis
 
             // Audio Tab
             comboAudioBuffer2_SelectedIndexChanged(this, e);
-            comboAudioSampleRate1_SelectedIndexChanged(this, e);
+            comboAudioBuffer3_SelectedIndexChanged(this, e);
+
+            //comboAudioSampleRate1_SelectedIndexChanged(this, e); // not needed, as done by InitAudioTab() which is part of radRadioProtocolSelect_CheckedChanged called a few lines above
+            //comboAudioSampleRateRX2_SelectedIndexChanged(this, e);
 
             comboAudioSampleRate2_SelectedIndexChanged(this, e);
-            comboAudioSampleRateRX2_SelectedIndexChanged(this, e);
+            comboAudioSampleRate3_SelectedIndexChanged(this, e);
 
             udAudioLatency2_ValueChanged(this, e);
             udAudioLatency2_Out_ValueChanged(this, e);
@@ -2306,6 +2322,8 @@ namespace Thetis
             chkLogVoltsAmps_CheckedChanged(this, e);
 
             // Filter tab
+            udOptMaxFilterWidth_ValueChanged(this, e); //[2.10.3.9]MW0LGE
+            udOptMaxFilterShift_ValueChanged(this, e); //[2.10.3.9]MW0LGE
             udFilterDefaultLowCut_ValueChanged(this, e); //MW0LGE_21d5
             udRX2FilterDefaultLowCut_ValueChanged(this, e);
 
@@ -2408,6 +2426,9 @@ namespace Thetis
             chkAdjustGridMinToNFRX2_CheckedChanged(this, e);
 
             // DSP Tab
+            chkWDSP_cache_impulse_CheckedChanged(this, e);
+            chkWDSP_save_restore_cache_impulse_CheckedChanged(this, e);
+
             udLMSANF_ValueChanged(this, e);
             udLMSNR_ValueChanged(this, e);
             udLMSANF2_ValueChanged(this, e);
@@ -6641,6 +6662,7 @@ namespace Thetis
 
         private void udOptMaxFilterWidth_ValueChanged(object sender, System.EventArgs e)
         {
+            if (initializing) return;
             console.MaxFilterWidth = (int)udOptMaxFilterWidth.Value;
         }
 
@@ -6662,6 +6684,7 @@ namespace Thetis
 
         private void udOptMaxFilterShift_ValueChanged(object sender, System.EventArgs e)
         {
+            if (initializing) return;
             console.MaxFilterShift = (int)udOptMaxFilterShift.Value;
         }
 
@@ -7525,13 +7548,7 @@ namespace Thetis
             Audio.VACRXScale = Math.Pow(10.0, (int)udAudioVACGainRX.Value / 20.0);
             console.VACRXGain = (int)udAudioVACGainRX.Value;
             if (console.sliderForm != null)
-            {
                 console.sliderForm.RX1VACRX = (int)udAudioVACGainRX.Value;
-
-                //wd5y
-                console.sliderForm.lblRX1VACRX.Text = console.VACRXGain.ToString();
-                //wd5y
-            }
         }
 
         private void udVAC2GainRX_ValueChanged(object sender, System.EventArgs e)
@@ -7540,13 +7557,7 @@ namespace Thetis
             Audio.VAC2RXScale = Math.Pow(10.0, (int)udVAC2GainRX.Value / 20.0);
             console.VAC2RXGain = (int)udVAC2GainRX.Value;
             if (console.sliderForm != null)
-            {
                 console.sliderForm.RX2VACRX = (int)udVAC2GainRX.Value;
-
-                //wd5y
-                console.sliderForm.lblRX2VACRX.Text = console.VAC2RXGain.ToString();
-                //wd5y
-            }
         }
 
         private void udAudioVACGainTX_ValueChanged(object sender, System.EventArgs e)
@@ -7555,13 +7566,7 @@ namespace Thetis
             Audio.VACPreamp = Math.Pow(10.0, (int)udAudioVACGainTX.Value / 20.0);
             console.VACTXGain = (int)udAudioVACGainTX.Value;
             if (console.sliderForm != null)
-            {
                 console.sliderForm.RX1VACTX = (int)udAudioVACGainTX.Value;
-
-                //wd5y
-                console.sliderForm.lblRX1VACTX.Text = console.VACTXGain.ToString();
-                //wd5y
-            }
         }
 
         private void udVAC2GainTX_ValueChanged(object sender, System.EventArgs e)
@@ -7570,13 +7575,7 @@ namespace Thetis
             Audio.VAC2TXScale = Math.Pow(10.0, (int)udVAC2GainTX.Value / 20.0);
             console.VAC2TXGain = (int)udVAC2GainTX.Value;
             if (console.sliderForm != null)
-            {
                 console.sliderForm.RX2VACTX = (int)udVAC2GainTX.Value;
-
-                //wd5y
-                console.sliderForm.lblRX2VACTX.Text = console.VAC2TXGain.ToString();
-                //wd5y
-            }
         }
 
         private void chkAudioVACAutoEnable_CheckedChanged(object sender, System.EventArgs e)
@@ -7765,6 +7764,7 @@ namespace Thetis
             Display.ResetDX2DModeDescription();
 
             udDisplayAVGTime_ValueChanged(this, EventArgs.Empty);
+            udRX2DisplayAVGTime_ValueChanged(this, EventArgs.Empty);
 
             setWaterFallCalculatedDelayText();
         }
@@ -9716,7 +9716,7 @@ namespace Thetis
             if (initializing) return;
             console.LineInBoost = (double)udLineInBoost.Value;
         }
-
+        
         private void chkShowBandControls_CheckedChanged(object sender, EventArgs e)
         {
             if (initializing) return;
@@ -11468,6 +11468,17 @@ namespace Thetis
 
         private void Setup_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (Display.RunningFPSProfile)
+            {
+                MessageBox.Show("Stop the FPS profile test first !",
+                "FPS Profile Test",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+
+                e.Cancel = true;
+                return;
+            }
+
             console.SetFocusMaster(true);
             this.Hide();
             e.Cancel = true;
@@ -15907,28 +15918,26 @@ namespace Thetis
             }
 
             //wd5y
-            if (console.sliderForm != null)
-            {
-                console.sliderForm.chkATT1.Checked = chkHermesStepAttenuator.Checked;
-            }
-
-            if (console.CollapsedDisplay == true)
-            {
+            if (console.CollapsedDisplay)
                 if (console.show_rx1)
                 {
-                    console.udRX2StepAttData.Hide();
-                    console.comboRX2Preamp.Hide();
-                    console.comboPreamp.Hide();
-                    console.udRX1StepAttData.Show();
+                    {
+                        if (console.RX1StepAttPresent)
+                        {
+                            console.udRX2StepAttData.Hide();
+                            console.comboRX2Preamp.Hide();
+                            console.comboPreamp.Hide();
+                            console.udRX1StepAttData.Show();
+                        }
+                        else
+                        {
+                            console.udRX2StepAttData.Hide();
+                            console.comboRX2Preamp.Hide();
+                            console.udRX1StepAttData.Hide();
+                            console.comboPreamp.Show();
+                        }
+                    }
                 }
-                    if (chkHermesStepAttenuator.Checked == false)
-                {
-                    console.udRX2StepAttData.Hide();
-                    console.comboRX2Preamp.Hide();
-                    console.udRX1StepAttData.Hide();
-                    console.comboPreamp.Show();
-                }
-            }
             //wd5y
         }
 
@@ -15980,30 +15989,29 @@ namespace Thetis
             }
 
             //wd5y
-            if (console.sliderForm != null)
-            {
-                console.sliderForm.chkATT2.Checked = chkRX2StepAtt.Checked;
-            }
-
-            if (console.CollapsedDisplay == true)
-            {
+            if (console.CollapsedDisplay)
                 if (console.show_rx2)
                 {
-                    console.udRX1StepAttData.Hide();
-                    console.comboPreamp.Hide();
-                    console.comboRX2Preamp.Hide();
-                    console.udRX2StepAttData.Show();
+                    {
+                        if (console.RX2StepAttPresent)
+                        {
+                            console.udRX1StepAttData.Hide();
+                            console.comboPreamp.Hide();
+                            console.comboRX2Preamp.Hide();
+                            console.udRX2StepAttData.Show();
+                        }
+                        else
+                        {
+                            console.udRX1StepAttData.Hide();
+                            console.comboPreamp.Hide();
+                            console.udRX2StepAttData.Hide();
+                            console.comboRX2Preamp.Show();
+                        }
+                    }
                 }
-                if (chkRX2StepAtt.Checked == false)
-                {
-                    console.udRX1StepAttData.Hide();
-                    console.comboPreamp.Hide();
-                    console.udRX2StepAttData.Hide();
-                    console.comboRX2Preamp.Show();
-                }
-            }
             //wd5y
         }
+
         private bool _updatingRX2HermesStepAttData = false;
         private void udHermesStepAttenuatorDataRX2_ValueChanged(object sender, EventArgs e)
         {
@@ -18641,7 +18649,6 @@ namespace Thetis
         private double m_dVAC1Perc2 = 0;
         private double m_dVAC2Perc1 = 0;
         private double m_dVAC2Perc2 = 0;
-        private int m_nAverageCount = 0;
 
         private int _oldVAC1OutOverflows = 0;
         private int _oldVAC1OutUnderflows = 0;
@@ -18653,25 +18660,32 @@ namespace Thetis
         private int _oldVAC2InOverflows = 0;
         private int _oldVAC2InUnderflows = 0;
 
+        //[2.10.3.9]MW0LGE this attribue, together with the app.config change 'legacyCorruptedStateExceptionsPolicy' enables
+        //the catch of address acceptions inside the try/catch block which is in an unsafe block
+        [HandleProcessCorruptedStateExceptions]
         private void timer_VAC_Monitor_Tick(object sender, EventArgs e)
         {
-            bool updateUI = true;
+            bool updateUI;
+            double alpha = 0.05; //smothing to use on the % ringbuffer display
 
             if (!lblVAC1ovfl.Visible && !lblVAC2ovfl.Visible && !lblAdvancedAudioWarning.Visible)
             {
+                // setup audio controls not visible, so update slower. We need this as front end will show the overflow/underflow 4box icon if there is an issue
                 timer_VAC_Monitor.Interval = 100;
                 updateUI = false;
             }
             else
             {
                 timer_VAC_Monitor.Interval = 50;
+                updateUI = true;
             }
 
             int underflows = 0, overflows = 0, ringsize = 0, nring = 0;
             double var = 0, dP = 0;
 
+            //VAC 1
             bool ok = true;
-            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command
+            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command, and when ZZVA is used via CAT
             {
                 unsafe
                 {
@@ -18682,6 +18696,9 @@ namespace Thetis
 
             if (ok)
             {
+                dP = (nring / (double)ringsize) * 100.0;
+                m_dVAC1Perc1 = (alpha * dP) + ((1 - alpha) * m_dVAC1Perc1);
+
                 // front end isplay of overflow/underflow MW0LGE_21k9rc5
                 if (overflows != _oldVAC1OutOverflows)
                 {
@@ -18693,7 +18710,6 @@ namespace Thetis
                     if (underflows != 0) console.VAC1UnderOver.OutUnderflow = true;
                     _oldVAC1OutUnderflows = underflows;
                 }
-                //
 
                 if (updateUI)
                 {
@@ -18702,17 +18718,25 @@ namespace Thetis
                     lblVAC1var.Text = var.ToString("F6");
                     lblVAC1NRing1.Text = nring.ToString("00000");
                     lblVAC1RingSize1.Text = ringsize.ToString("00000");
-                    dP = (nring / (double)ringsize) * 100.0;
-                    m_dVAC1Perc1 += dP;
                     lblVAC1RingPerc1.Text = dP.ToString("000");
-                    if (chkAudioEnableVAC.Checked) ucVAC1VARGrapherOut.AddDataPoint(var - 1f);
+                    lblVAC1RingPercAV1.Text = m_dVAC1Perc1.ToString("000");
+                    if (chkAudioEnableVAC.Checked)
+                    {
+                        ucVAC1VARGrapherOut.AddDataPoint(var - 1f);
+                        ucVAC1VARGrapherOut.RingBufferPerc = m_dVAC1Perc1;
+                    }
+                    try
+                    {
+                        if (Audio.VAC1ControlFlagOut)
+                            txtVAC1OldVarOut.Text = var.ToString("F6");
+                    }
+                    catch { }
                 }
-                if (Audio.VAC1ControlFlagOut)
-                    txtVAC1OldVarOut.Text = var.ToString("F6");
             }
+            else
 
             ok = true;
-            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command
+            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command, and when ZZVA is used via CAT
             {
                 unsafe
                 {
@@ -18723,6 +18747,9 @@ namespace Thetis
 
             if (ok)
             {
+                dP = (nring / (double)ringsize) * 100.0;
+                m_dVAC1Perc2 = (alpha * dP) + ((1 - alpha) * m_dVAC1Perc2);
+
                 // front end isplay of overflow/underflow MW0LGE_21k9rc5
                 if (overflows != _oldVAC1InOverflows)
                 {
@@ -18734,7 +18761,6 @@ namespace Thetis
                     if (underflows != 0) console.VAC1UnderOver.InUnderflow = true;
                     _oldVAC1InUnderflows = underflows;
                 }
-                //
 
                 if (updateUI)
                 {
@@ -18743,17 +18769,25 @@ namespace Thetis
                     lblVAC1var2.Text = var.ToString("F6");
                     lblVAC1NRing2.Text = nring.ToString("00000");
                     lblVAC1RingSize2.Text = ringsize.ToString("00000");
-                    dP = (nring / (double)ringsize) * 100.0;
-                    m_dVAC1Perc2 += dP;
                     lblVAC1RingPerc2.Text = dP.ToString("000");
-                    if (chkAudioEnableVAC.Checked) ucVAC1VARGrapherIn.AddDataPoint(var - 1f);
+                    lblVAC1RingPercAV2.Text = m_dVAC1Perc2.ToString("000");
+                    if (chkAudioEnableVAC.Checked)
+                    {
+                        ucVAC1VARGrapherIn.AddDataPoint(var - 1f);
+                        ucVAC1VARGrapherIn.RingBufferPerc = m_dVAC1Perc2;
+                    }
+                    try
+                    {
+                        if (Audio.VAC1ControlFlagIn)
+                            txtVAC1OldVarIn.Text = var.ToString("F6");
+                    }
+                    catch { }
                 }
-                if (Audio.VAC1ControlFlagIn)
-                    txtVAC1OldVarIn.Text = var.ToString("F6");
             }
 
+            //VAC 2
             ok = true;
-            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command
+            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command, and when ZZVA is used via CAT
             {
                 unsafe
                 {
@@ -18764,6 +18798,9 @@ namespace Thetis
 
             if (ok)
             {
+                dP = (nring / (double)ringsize) * 100.0;
+                m_dVAC2Perc1 = (alpha * dP) + ((1 - alpha) * m_dVAC2Perc1);
+
                 // front end isplay of overflow/underflow MW0LGE_21k9rc5
                 if (overflows != _oldVAC2OutOverflows)
                 {
@@ -18775,7 +18812,6 @@ namespace Thetis
                     if (underflows != 0) console.VAC2UnderOver.OutUnderflow = true;
                     _oldVAC2OutUnderflows = underflows;
                 }
-                //
 
                 if (updateUI)
                 {
@@ -18784,15 +18820,24 @@ namespace Thetis
                     lblVAC2var.Text = var.ToString("F6");
                     lblVAC2NRing1.Text = nring.ToString("00000");
                     lblVAC2RingSize1.Text = ringsize.ToString("00000");
-                    dP = (nring / (double)ringsize) * 100.0;
-                    m_dVAC2Perc1 += dP;
                     lblVAC2RingPerc1.Text = dP.ToString("000");
-                    if (chkVAC2Enable.Checked) ucVAC2VARGrapherOut.AddDataPoint(var - 1f);
+                    lblVAC2RingPercAV1.Text = m_dVAC2Perc1.ToString("000");
+                    if (chkVAC2Enable.Checked)
+                    {
+                        ucVAC2VARGrapherOut.AddDataPoint(var - 1f);
+                        ucVAC2VARGrapherOut.RingBufferPerc = m_dVAC2Perc1;
+                    }
+                    try
+                    {
+                        if (Audio.VAC2ControlFlagOut)
+                            txtVAC2OldVarOut.Text = var.ToString("F6");
+                    }
+                    catch { }
                 }
             }
 
             ok = true;
-            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command
+            try //[2.10.3.7]MW0LGE this can fail if the vac is turned on/off. Mostly seen when TCI server does it via line_out command, and when ZZVA is used via CAT
             {
                 unsafe
                 {
@@ -18803,6 +18848,9 @@ namespace Thetis
 
             if (ok)
             {
+                dP = (nring / (double)ringsize) * 100.0;
+                m_dVAC2Perc2 = (alpha * dP) + ((1 - alpha) * m_dVAC2Perc2);
+
                 // front end isplay of overflow/underflow MW0LGE_21k9rc5
                 if (overflows != _oldVAC2InOverflows)
                 {
@@ -18814,7 +18862,6 @@ namespace Thetis
                     if (underflows != 0) console.VAC2UnderOver.InUnderflow = true;
                     _oldVAC2InUnderflows = underflows;
                 }
-                //
 
                 if (updateUI)
                 {
@@ -18823,40 +18870,19 @@ namespace Thetis
                     lblVAC2var2.Text = var.ToString("F6");
                     lblVAC2NRing2.Text = nring.ToString("00000");
                     lblVAC2RingSize2.Text = ringsize.ToString("00000");
-                    dP = (nring / (double)ringsize) * 100.0;
-                    m_dVAC2Perc2 += dP;
                     lblVAC2RingPerc2.Text = dP.ToString("000");
-                    if (chkVAC2Enable.Checked) ucVAC2VARGrapherIn.AddDataPoint(var - 1f);
-                }
-
-                if (updateUI)
-                {
-                    m_nAverageCount++;
-                    if (m_nAverageCount > 9)
+                    lblVAC2RingPercAV2.Text = m_dVAC2Perc2.ToString("000");
+                    if (chkVAC2Enable.Checked)
                     {
-                        m_dVAC1Perc1 /= (m_nAverageCount + 1);
-                        m_dVAC1Perc2 /= (m_nAverageCount + 1);
-                        m_dVAC2Perc1 /= (m_nAverageCount + 1);
-                        m_dVAC2Perc2 /= (m_nAverageCount + 1);
-
-                        lblVAC1RingPercAV1.Text = m_dVAC1Perc1.ToString("000");
-                        lblVAC1RingPercAV2.Text = m_dVAC1Perc2.ToString("000");
-                        lblVAC2RingPercAV1.Text = m_dVAC2Perc1.ToString("000");
-                        lblVAC2RingPercAV2.Text = m_dVAC2Perc2.ToString("000");
-
-                        if (chkAudioEnableVAC.Checked)
-                        {
-                            ucVAC1VARGrapherOut.RingBufferPerc = m_dVAC1Perc1;
-                            ucVAC1VARGrapherIn.RingBufferPerc = m_dVAC1Perc2;
-                        }
-                        if (chkVAC2Enable.Checked)
-                        {
-                            ucVAC2VARGrapherOut.RingBufferPerc = m_dVAC2Perc1;
-                            ucVAC2VARGrapherIn.RingBufferPerc = m_dVAC2Perc2;
-                        }
-
-                        m_nAverageCount = 0;
+                        ucVAC2VARGrapherIn.AddDataPoint(var - 1f);
+                        ucVAC2VARGrapherIn.RingBufferPerc = m_dVAC2Perc2;
                     }
+                    try
+                    {
+                        if (Audio.VAC2ControlFlagIn)
+                            txtVAC2OldVarIn.Text = var.ToString("F6");
+                    }
+                    catch { }
                 }
             }
         }
@@ -20882,8 +20908,6 @@ namespace Thetis
             }
         }
 
-        public static RadioProtocol RadioProtocolSelected { get; set; } = RadioProtocol.ETH;
-
         private void btnResetP2ADC_Click(object sender, EventArgs e)
         {
             switch (HardwareSpecific.Model)
@@ -21310,8 +21334,29 @@ namespace Thetis
             console.EnableControlDebug = chkShowControlDebug.Checked;
         }
 
+        private Point _original_pnlP1_adcs_location;
         public void UpdateDDCTab()
         {
+            // if we are connected, use current, else use selected
+            RadioProtocol protocol = NetworkIO.getHaveSync() == 1 ? NetworkIO.CurrentRadioProtocol : NetworkIO.RadioProtocolSelected;
+            switch (protocol)
+            {
+                case RadioProtocol.USB: //p1
+                    pnlP1_adcs.Location = pnlP2_adcs.Location; // move to the same spot
+                    pnlP1_adcs.Visible = true;
+                    pnlP2_adcs.Visible = false;
+                    break;
+                case RadioProtocol.ETH: //p2
+                    pnlP2_adcs.Visible = true;
+                    pnlP1_adcs.Visible = false;
+                    break;
+                default: // auto
+                    pnlP1_adcs.Location = _original_pnlP1_adcs_location;
+                    pnlP1_adcs.Visible = true;
+                    pnlP2_adcs.Visible = true;
+                    break;
+            }
+
             lblRxDDC0.Text = "";
             lblRxDDC1.Text = "";
             lblRxDDC2.Text = "";
@@ -21353,17 +21398,8 @@ namespace Thetis
                     LabelTS l = c as LabelTS;
                     if (l != null)
                     {
-                        if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(rx1.ToString()))
-                        {
-                            l.Text = "RX1";
-                            l.BackColor = SystemColors.ControlDark;
-                        }
-                        else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(rx2.ToString()))
-                        {
-                            l.Text = "RX2";
-                            l.BackColor = SystemColors.ControlDark;
-                        }
-                        else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(sync1.ToString()))
+                        //[2.10.3.9]MW0LGE show the syncs first
+                        if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(sync1.ToString()))
                         {
                             l.Text = "RX1 Sync1";
                             l.BackColor = SystemColors.ControlDark;
@@ -21371,6 +21407,16 @@ namespace Thetis
                         else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(sync2.ToString()))
                         {
                             l.Text = "RX1 Sync2";
+                            l.BackColor = SystemColors.ControlDark;
+                        }
+                        else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(rx1.ToString()))
+                        {
+                            l.Text = "RX1";
+                            l.BackColor = SystemColors.ControlDark;
+                        }
+                        else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(rx2.ToString()))
+                        {
+                            l.Text = "RX2";
                             l.BackColor = SystemColors.ControlDark;
                         }
                         else if (l.Name.StartsWith("lblRxDDC") && l.Name.EndsWith(psrx.ToString()))
@@ -27751,6 +27797,9 @@ namespace Thetis
                     comboSkinServerList.DataSource = e.SkinServers;
                     bIgnoreSkinServerListUpdate = false;
                     Debug.Print($"{e.SkinServers.Count} skin servers");
+
+                    //skin test code
+                    //e.SkinServers[3].SkinServerUrl = "https://raw.githubusercontent.com/N2MDX/N2MDX-Skins/refs/heads/main/n2mdx_skin_server.json";
                 }
                 else
                 {
@@ -27843,52 +27892,91 @@ namespace Thetis
                     if (sFile == "")
                         sFile = getFileFromUrl(e.FinalUri);
 
-                    if (isSkinZipFile(e.Path, sFile, out bool bUsesFileInRoot, out bool bMeterFolderFound, e.BypassRootFolderCheck || e.IsMeterSkin))
+                    if (isSkinZipFile(e.Path, sFile, out bool bUsesFilesInRoot, out bool bSkinsFolderFoundInRoot, out bool bConsoleFolderFoundInRoot, out bool bMeterFolderFoundInRoot, e.BypassRootFolderCheck || e.IsMeterSkin))
                     {
                         string sOutputPath = "";
 
-                        if (bUsesFileInRoot || (e.BypassRootFolderCheck && !bMeterFolderFound))
-                        {
-                            //expand into OpenHPSDR\Skins
-                            sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Skins";
-                            bExtract = true;
-                        }
-                        else if (bMeterFolderFound || e.IsMeterSkin)
+                        if (e.IsMeterSkin || bMeterFolderFoundInRoot)
                         {
                             if (chkReplaceCurrentMeterInSelectedSkin.Checked)
                             {
-                                if (Directory.Exists(_skinPath + "\\" + comboAppSkin.Text))
-                                {
-                                    if (bMeterFolderFound)
-                                        sOutputPath = _skinPath + "\\" + comboAppSkin.Text;
-                                    else
-                                        sOutputPath = _skinPath + "\\" + comboAppSkin.Text + "\\Meters";
-
-                                    bExtract = true;
-                                }
+                                if (bMeterFolderFoundInRoot)
+                                    sOutputPath = _skinPath + "\\" + comboAppSkin.Text;
+                                else
+                                    sOutputPath = _skinPath + "\\" + comboAppSkin.Text + "\\Meters";                                
                             }
                             else
                             {
-                                if (bMeterFolderFound)
+                                if (bMeterFolderFoundInRoot)
                                     sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR";
                                 else
                                     sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Meters";
-                                bExtract = true;
                             }
+                            bExtract = true;
                             bExpandedMeterSkins = true;
                         }
-                        else
+
+                        if (!e.IsMeterSkin) // a console skin, may include include Meters inside sub folder
                         {
-                            //expand into OpenHPSDR\
-                            sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR";
-                            bExtract = true;
+                            if (bUsesFilesInRoot || e.BypassRootFolderCheck)
+                            {
+                                sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Skins";
+                                bExtract = true;
+                            }
+                            else
+                            {
+                                if (bConsoleFolderFoundInRoot || bMeterFolderFoundInRoot)
+                                    sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Skins\\" + sFile;
+                                else
+                                    sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR";
+                                bExtract = true;
+                            }
                         }
+
+                        //if (bUsesFilesInRoot || (e.BypassRootFolderCheck && !bMeterFolderFoundInRoot))
+                        //{
+                        //    //expand direct into OpenHPSDR\Skins
+                        //    sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Skins";
+                        //    bExtract = true;
+                        //}
+                        //else if (bMeterFolderFoundInRoot || e.IsMeterSkin)
+                        //{
+                        //    if (chkReplaceCurrentMeterInSelectedSkin.Checked)
+                        //    {
+                        //        if (Directory.Exists(_skinPath + "\\" + comboAppSkin.Text))
+                        //        {
+                        //            if (bMeterFolderFoundInRoot)
+                        //                sOutputPath = _skinPath + "\\" + comboAppSkin.Text;
+                        //            else
+                        //                sOutputPath = _skinPath + "\\" + comboAppSkin.Text + "\\Meters";
+
+                        //            bExtract = true;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        if (bMeterFolderFoundInRoot)
+                        //            sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR";
+                        //        else
+                        //            sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR\\Meters";
+                        //        bExtract = true;
+                        //    }
+                        //    bExpandedMeterSkins = true;
+                        //}
+                        //else
+                        //{
+                        //    //expand into OpenHPSDR\
+                        //    sOutputPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\OpenHPSDR";
+                        //    bExtract = true;
+                        //}
 
                         if (bExtract)
                         {
                             Cursor c = Cursor.Current;
                             Cursor.Current = Cursors.WaitCursor;
                             sRootFolder = extractImagesFilesFromZip(e.Path, sOutputPath);
+                            string lowRootFolder = sRootFolder.ToLower();
+                            if (lowRootFolder == "console" || lowRootFolder == "meters") sRootFolder = sFile;
                             Cursor.Current = c;
                         }
                         else
@@ -28035,59 +28123,100 @@ namespace Thetis
 
             updateSelectedSkin();
         }
-        private bool isSkinZipFile(string filePath, string sFilename, out bool usesFilenameInRoot, out bool isMeterSkin, bool bypassRootFolderCheck)
+        private bool isSkinZipFile(string filePath, string sFilename, out bool usesFilesInRoot, out bool bSkinsFolderFoundInRoot, out bool bConsoleFolderFoundInRoot, out bool bMeterFolderFoundInRoot, bool bypassRootFolderCheck)
         {
             bool bOk = false;
-            usesFilenameInRoot = false;
-            isMeterSkin = false;
+            usesFilesInRoot = false;
+
+            bMeterFolderFoundInRoot = false;
+            bConsoleFolderFoundInRoot = false;
+            bSkinsFolderFoundInRoot = false;
 
             try
             {
                 using (ZipArchive zipFile = ZipFile.OpenRead(filePath))
                 {
-                    // Check if there is a directory entry starting with "Meters/"
+                    // Check if there is a root directory entry starting with "Meters/" in root
                     if (zipFile.Entries.Any(entry => entry.FullName.StartsWith("Meters/") && entry.FullName.EndsWith("/")))
                     {
-                        bOk = true;
-                        isMeterSkin = true;
+                        bMeterFolderFoundInRoot = true;
                     }
-
-                    if (!bOk)
+                    // Check if there is a root directory entry starting with "Console/" in root
+                    if (zipFile.Entries.Any(entry => entry.FullName.StartsWith("Console/") && entry.FullName.EndsWith("/")))
                     {
-                        if (!bypassRootFolderCheck)
-                        {
-                            // Check for "Skins/" directory
-                            if (!bOk && zipFile.Entries.Any(entry => entry.FullName.StartsWith("Skins/") && entry.FullName.EndsWith("/")))
-                            {
-                                bOk = true;
-                            }
+                        bConsoleFolderFoundInRoot = true;
+                    }
+                    // Check for "Skins/" directory
+                    if (!bOk && zipFile.Entries.Any(entry => entry.FullName.StartsWith("Skins/") && entry.FullName.EndsWith("/")))
+                    {
+                        bSkinsFolderFoundInRoot = true;
+                    }
 
-                            if (!bOk && !string.IsNullOrEmpty(sFilename))
-                            {
-                                // Different filename checks
-                                string sReplacedWithSpaces = sFilename.Replace("_", " ");
-                                string sReplacedWithoutSpaces = sFilename.Replace(" ", "_");
-                                string sReplacedWithMinus = sFilename.Replace(" ", "-");
-                                string sReplacedWithoutMinus = sFilename.Replace("-", " ");
+                    if(!bMeterFolderFoundInRoot && !bConsoleFolderFoundInRoot && !bSkinsFolderFoundInRoot && !string.IsNullOrEmpty(sFilename))
+                    {
+                        // Check if any suitable files in root
+                        string sReplacedWithSpaces = sFilename.Replace("_", " ");
+                        string sReplacedWithoutSpaces = sFilename.Replace(" ", "_");
+                        string sReplacedWithMinus = sFilename.Replace(" ", "-");
+                        string sReplacedWithoutMinus = sFilename.Replace("-", " ");
 
-                                if (zipFile.Entries.Any(entry =>
-                                    (entry.FullName.StartsWith(sFilename + "/") ||
-                                     entry.FullName.StartsWith(sReplacedWithSpaces + "/") ||
-                                     entry.FullName.StartsWith(sReplacedWithoutSpaces + "/") ||
-                                     entry.FullName.StartsWith(sReplacedWithMinus + "/") ||
-                                     entry.FullName.StartsWith(sReplacedWithoutMinus + "/")) &&
-                                     entry.FullName.EndsWith("/")))
-                                {
-                                    usesFilenameInRoot = true;
-                                    bOk = true;
-                                }
-                            }
-                        }
-                        else
+                        if (zipFile.Entries.Any(entry =>
+                            (entry.FullName.StartsWith(sFilename + "/") ||
+                                entry.FullName.StartsWith(sReplacedWithSpaces + "/") ||
+                                entry.FullName.StartsWith(sReplacedWithoutSpaces + "/") ||
+                                entry.FullName.StartsWith(sReplacedWithMinus + "/") ||
+                                entry.FullName.StartsWith(sReplacedWithoutMinus + "/")) &&
+                                entry.FullName.EndsWith("/")))
                         {
-                            bOk = true;
+                            usesFilesInRoot = true;
                         }
                     }
+
+                    bOk = bypassRootFolderCheck || bMeterFolderFoundInRoot || bConsoleFolderFoundInRoot || bSkinsFolderFoundInRoot || usesFilesInRoot;
+
+                    //// Check if there is a directory entry starting with "Meters/"
+                    //if (zipFile.Entries.Any(entry => entry.FullName.StartsWith("Meters/") && entry.FullName.EndsWith("/")))
+                    //{
+                    //    bOk = true;
+                    //    bMeterFolderFound = true;
+                    //}
+
+                    //if (!bOk)
+                    //{
+                    //    if (!bypassRootFolderCheck)
+                    //    {
+                    //        // Check for "Skins/" directory
+                    //        if (!bOk && zipFile.Entries.Any(entry => entry.FullName.StartsWith("Skins/") && entry.FullName.EndsWith("/")))
+                    //        {
+                    //            bOk = true;
+                    //        }
+
+                    //        if (!bOk && !string.IsNullOrEmpty(sFilename))
+                    //        {
+                    //            // Different filename checks
+                    //            string sReplacedWithSpaces = sFilename.Replace("_", " ");
+                    //            string sReplacedWithoutSpaces = sFilename.Replace(" ", "_");
+                    //            string sReplacedWithMinus = sFilename.Replace(" ", "-");
+                    //            string sReplacedWithoutMinus = sFilename.Replace("-", " ");
+
+                    //            if (zipFile.Entries.Any(entry =>
+                    //                (entry.FullName.StartsWith(sFilename + "/") ||
+                    //                 entry.FullName.StartsWith(sReplacedWithSpaces + "/") ||
+                    //                 entry.FullName.StartsWith(sReplacedWithoutSpaces + "/") ||
+                    //                 entry.FullName.StartsWith(sReplacedWithMinus + "/") ||
+                    //                 entry.FullName.StartsWith(sReplacedWithoutMinus + "/")) &&
+                    //                 entry.FullName.EndsWith("/")))
+                    //            {
+                    //                usesFilesInRoot = true;
+                    //                bOk = true;
+                    //            }
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        bOk = true;
+                    //    }
+                    //}
                 }
             }
             catch (InvalidDataException)
@@ -28511,17 +28640,14 @@ namespace Thetis
 
             if (radRadioProtocol1Select.Checked)
             {
-                RadioProtocolSelected = RadioProtocol.USB;
                 NetworkIO.RadioProtocolSelected = RadioProtocol.USB;
             }
             else if (radRadioProtocol2Select.Checked)
             {
-                RadioProtocolSelected = RadioProtocol.ETH;
                 NetworkIO.RadioProtocolSelected = RadioProtocol.ETH;
             }
             else if (radRadioProtocolAutoSelect.Checked)
             {
-                RadioProtocolSelected = RadioProtocol.Auto;
                 NetworkIO.RadioProtocolSelected = RadioProtocol.Auto;
             }
             else
@@ -28530,6 +28656,8 @@ namespace Thetis
                 radRadioProtocolAutoSelect.Checked = true;
                 return;
             }
+
+            UpdateDDCTab();
 
             InitAudioTab();
         }
@@ -29912,8 +30040,8 @@ namespace Thetis
 
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
-
             if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
             MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
 
             _MMIO_ignore_change_events = true;
@@ -30511,6 +30639,7 @@ namespace Thetis
             if (initializing) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             bool ok = Enum.TryParse<MultiMeterIO.MMIOFormat>(comboMMIO_network_format_in.Text, out MultiMeterIO.MMIOFormat fmt);
 
@@ -30720,6 +30849,7 @@ namespace Thetis
             if (lstMMIO_network_list.SelectedIndex < 0) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             bool old_state = MultiMeterIO.Data[mmioci.Guid].Enabled;
             MultiMeterIO.Data[mmioci.Guid].Enabled = !old_state;
@@ -30810,6 +30940,7 @@ namespace Thetis
             if (initializing) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             bool ok = Enum.TryParse<MultiMeterIO.MMIOTerminator>(comboMMIO_network_terminator_in.Text, out MultiMeterIO.MMIOTerminator term);
 
@@ -30919,6 +31050,7 @@ namespace Thetis
             if (initializing) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             bool ok = Enum.TryParse<MultiMeterIO.MMIOTerminator>(comboMMIO_network_terminator_out.Text, out MultiMeterIO.MMIOTerminator term);
 
@@ -30933,6 +31065,7 @@ namespace Thetis
             if (initializing) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             bool ok = Enum.TryParse<MultiMeterIO.MMIOFormat>(comboMMIO_network_format_out.Text, out MultiMeterIO.MMIOFormat fmt);
 
@@ -30944,6 +31077,7 @@ namespace Thetis
             if (_MMIO_ignore_change_events) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             MultiMeterIO.Data[mmioci.Guid].CustomTerminatorIn = txtMMIO_network_terminator_in_custom.Text;
         }
@@ -30954,6 +31088,7 @@ namespace Thetis
             if (_MMIO_ignore_change_events) return;
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
+            if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
 
             MultiMeterIO.Data[mmioci.Guid].CustomTerminatorOut = txtMMIO_network_terminator_out_custom.Text;
         }
@@ -30961,8 +31096,8 @@ namespace Thetis
         {
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
-
             if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
             MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
 
             frmIPv4Picker f = new frmIPv4Picker();
@@ -31098,8 +31233,8 @@ namespace Thetis
         {
             clsMultiMeterIOComboboxItem mmioci = lstMMIO_network_list.SelectedItem as clsMultiMeterIOComboboxItem;
             if (mmioci == null) return;
-
             if (!MultiMeterIO.Data.ContainsKey(mmioci.Guid)) return;
+
             MultiMeterIO.clsMMIO mmio = MultiMeterIO.Data[mmioci.Guid];
 
             foreach (ListViewItem lvi in lstMMIO_network_variables.Items)
@@ -33703,69 +33838,465 @@ namespace Thetis
             updateMeterType();
         }
 
-        //wd5y
-        private void chkAmpDRVLim_CheckedChanged(object sender, EventArgs e)
+        private Dictionary<string, object> _fps_profile_settings = null;
+        private void btnFPSProfile_Click(object sender, EventArgs e)
         {
-            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)
+            // if running, revert settings
+            if(_fps_profile_settings != null)
             {
-                int drvlimpwr = (int)(console.ptbPWR.Value / (float)(console.ptbPWR.Maximum - console.ptbPWR.Minimum) * GetPABandMaxPower(console.TXBand));
-                int tunlimpwr = (int)(console.ptbTune.Value / (float)(console.ptbTune.Maximum - console.ptbTune.Minimum) * GetPABandMaxPower(console.TXBand));
+                udDisplayFPS.Value = (decimal)_fps_profile_settings["udDisplayFPS"];
+                chkDisplayPanFill.Checked = (bool)_fps_profile_settings["chkDisplayPanFill"];
+                chkShowFPS.Checked = (bool)_fps_profile_settings["chkShowFPS"];
+                chkVSyncDX.Checked = (bool)_fps_profile_settings["chkVSyncDX"];
+                chkAntiAlias.Checked = (bool)_fps_profile_settings["chkAntiAlias"];
+                chkAccurateFrameTiming.Checked = (bool)_fps_profile_settings["chkAccurateFrameTiming"];
+                chkSpecWarningLEDRenderDelay.Checked = (bool)_fps_profile_settings["chkSpecWarningLEDRenderDelay"];
+                chkSpecWarningLEDGetPixels.Checked = (bool)_fps_profile_settings["chkSpecWarningLEDGetPixels"];
+                udDisplayDecimation.Value = (decimal)_fps_profile_settings["udDisplayDecimation"];
+                comboDisplayThreadPriority.Text = (string)_fps_profile_settings["comboDisplayThreadPriority"];
+                comboGeneralProcessPriority.Text = (string)_fps_profile_settings["comboGeneralProcessPriority"];
+                comboAudioSampleRate1.Text = (string)_fps_profile_settings["comboAudioSampleRate1"];
+                comboAudioSampleRateRX2.Text = (string)_fps_profile_settings["comboAudioSampleRateRX2"];
+                comboDispWinType.Text = (string)_fps_profile_settings["comboDispWinType"];
+                comboRX2DispWinType.Text = (string)_fps_profile_settings["comboRX2DispWinType"];
+                chkActivePeakHoldRX1.Checked = (bool)_fps_profile_settings["chkActivePeakHoldRX1"];
+                chkActivePeakHoldRX2.Checked = (bool)_fps_profile_settings["chkActivePeakHoldRX2"];
+                chkPeakBlobsEnabled.Checked = (bool)_fps_profile_settings["chkPeakBlobsEnabled"];
+                udPeakBlobs.Value = (decimal)_fps_profile_settings["udPeakBlobs"];
+                chkPeakBlobInsideFilterOnly.Checked = (bool)_fps_profile_settings["chkPeakBlobInsideFilterOnly"];
+                chkPeakHoldDrop.Checked = (bool)_fps_profile_settings["chkPeakHoldDrop"];
+                udPeakBlobDropDBMs.Value = (decimal)_fps_profile_settings["udPeakBlobDropDBMs"];
+                chkBlobPeakHold.Checked = (bool)_fps_profile_settings["chkBlobPeakHold"];
+                chkPanadpatorGradient.Checked = (bool)_fps_profile_settings["chkPanadpatorGradient"];
+                chkDataLineGradient.Checked = (bool)_fps_profile_settings["chkDataLineGradient"];
+                chkPanadpatorGradient_tx.Checked = (bool)_fps_profile_settings["chkPanadpatorGradient_tx"];
+                chkDataLineGradient_tx.Checked = (bool)_fps_profile_settings["chkDataLineGradient_tx"];
+                chkDisablePicDisplayBackgroundImage.Checked = (bool)_fps_profile_settings["chkDisablePicDisplayBackgroundImage"];
+                chkMaintainBackgroundAspectRatio.Checked = (bool)_fps_profile_settings["chkMaintainBackgroundAspectRatio"];
+                chkNoiseFloorShowDBM.Checked = (bool)_fps_profile_settings["chkNoiseFloorShowDBM"];
+                chkNFShowDecimal.Checked = (bool)_fps_profile_settings["chkNFShowDecimal"];
+                chkShowRX1NoiseFloor.Checked = (bool)_fps_profile_settings["chkShowRX1NoiseFloor"];
+                chkShowRX2NoiseFloor.Checked = (bool)_fps_profile_settings["chkShowRX2NoiseFloor"];
+                console.IncludeWindowBorders = (bool)_fps_profile_settings["IncludeWindowBorders"];
+                console.Top = (int)_fps_profile_settings["console_top"];
+                console.Left = (int)_fps_profile_settings["console_left"];
+                console.Width = (int)_fps_profile_settings["console_width"];
+                console.Height = (int)_fps_profile_settings["console_height"];
+                console.RX2Enabled = (bool)_fps_profile_settings["rx2"];
+                console.PowerOn = (bool)_fps_profile_settings["power"];
+                VACEnable = (bool)_fps_profile_settings["vac1"];
+                VAC2Enable = (bool)_fps_profile_settings["vac2"];
+                //console.MOX = (bool)_fps_profile_settings["mox"];
+                console.CTuneDisplay = (bool)_fps_profile_settings["CTuneDisplay"];
+                console.CTuneRX2Display = (bool)_fps_profile_settings["CTuneRX2Display"];
+                console.VFOSync = (bool)_fps_profile_settings["VFOSync"];
+                console.RX1DSPMode = (DSPMode)_fps_profile_settings["rx1Mode"];
+                console.RX2DSPMode = (DSPMode)_fps_profile_settings["rx2Mode"];
+                console.RX1Filter = (Filter)_fps_profile_settings["rx1Filter"];
+                console.RX2Filter = (Filter)_fps_profile_settings["rx2Filter"];
+                console.VFOAFreq = (double)_fps_profile_settings["vfoA"];
+                console.VFOBFreq = (double)_fps_profile_settings["vfoB"];
+                console.RX1DisplayAVG = (bool)_fps_profile_settings["rx1dispavg"];
+                console.RX2DisplayAVG = (bool)_fps_profile_settings["rx2dispavg"];
+                comboColorPalette.Text = (string)_fps_profile_settings["comboColorPalette"];
+                comboRX2ColorPalette.Text = (string)_fps_profile_settings["comboRX2ColorPalette"];
+                udDisplayGridMax.Value = (decimal)_fps_profile_settings["udDisplayGridMax"];
+                udRX2DisplayGridMax.Value = (decimal)_fps_profile_settings["udRX2DisplayGridMax"];
+                udDisplayGridMin.Value = (decimal)_fps_profile_settings["udDisplayGridMin"];
+                udRX2DisplayGridMin.Value = (decimal)_fps_profile_settings["udRX2DisplayGridMin"];
+                udDisplayGridStep.Value = (decimal)_fps_profile_settings["udDisplayGridStep"];
+                udRX2DisplayGridStep.Value = (decimal)_fps_profile_settings["udRX2DisplayGridStep"];
+                chkAdjustGridMinToNFRX1.Checked = (bool)_fps_profile_settings["chkAdjustGridMinToNFRX1"];
+                chkAdjustGridMinToNFRX2.Checked = (bool)_fps_profile_settings["chkAdjustGridMinToNFRX2"];
+                console.Zoom = (int)_fps_profile_settings["Zoom"];
+                console.Pan = (int)_fps_profile_settings["Pan"];
+                console.DisplayModeText = (string)_fps_profile_settings["DisplayModeText"];
+                console.DisplayRX2ModeText = (string)_fps_profile_settings["DisplayRX2ModeText"];
+                chkLegacyMeters.Checked = (bool)_fps_profile_settings["chkLegacyMeters"];
+                chkLegacyItems_band.Checked = (bool)_fps_profile_settings["chkLegacyItems_band"];
+                chkLegacyItems_mode.Checked = (bool)_fps_profile_settings["chkLegacyItems_mode"];
+                chkLegacyItems_filter.Checked = (bool)_fps_profile_settings["chkLegacyItems_filter"];
+                chkLegacyItems_expand_spectral.Checked = (bool)_fps_profile_settings["chkLegacyItems_expand_spectral"];
+                chkLegacyItems_expand_spectral_top.Checked = (bool)_fps_profile_settings["chkLegacyItems_expand_spectral_top"];
+                chkLegacyItems_vfoa.Checked = (bool)_fps_profile_settings["chkLegacyItems_vfoa"];
+                chkLegacyItems_vfob.Checked = (bool)_fps_profile_settings["chkLegacyItems_vfob"];
+                chkLegacyItems_vfosync.Checked = (bool)_fps_profile_settings["chkLegacyItems_vfosync"];
 
-                if (numUpDnDRVLim.Value < drvlimpwr & numUpDnTUNLim.Value < tunlimpwr)
+                Display.RunningFPSProfile = false;
+
+                _fps_profile_settings.Clear();
+                _fps_profile_settings = null;
+                btnFPSProfile.Text = "FPS Profile";
+
+                btnOK.Enabled = true;
+                btnCancel.Enabled = true;
+                btnApply.Enabled = true;
+
+                return;
+            }
+            // ask user
+            DialogResult dr = MessageBox.Show("This test will change lots of settings, modes, band, resolution, sample rates, etc etc, to maintain consistancy between tests.\n\nPlease use a FRESH database using the DB manager for this test, with just radio model, region and connection details changed. You should be able to connect and power on/off using Thetis. Failure to do so may result in unexpected changes to configuration. No transmissions will be made.\n\nDo you want to perform this test?",
+                "FPS Profile Test",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
+            if (dr != DialogResult.OK) return;
+
+            if (Display.Target != null && Display.Target.IsHandleCreated)
+            {
+                int scaling = Common.GetScalingForWindow(Display.Target.Handle);
+                if (scaling == -1)
                 {
-                    console.RXOnly = true;
-                    console.chkExternalPA.Checked = false;
-                    console.ptbPWR.Value = 0;
-                    console.lblPWR.Text = "Drive: " + 0 + "w";
-                    console.lblPWR2.Text = "Drive:" + 0 + "w";
-                    console.ptbTune.Value = 0;
-                    console.lblTune.Text = "Tune: " + 0 + "w";
-                    console.lblTune2.Text = "Tune:" + 0 + "w";
-
-                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    console.RXOnly = false;
-                    console.chkExternalPA.Checked = true;
-                    return;
+                    dr = MessageBox.Show($"Unable to detect the scaling for the monitor that the console window sits on. Please ensure this is set to 100% if the results are to be compared against other systems.\n\nContinue anyway?",
+                        "100% scaling issue",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
+                    if (dr != DialogResult.Yes) return;
+                }
+                else
+                {
+                    if (scaling != 100)
+                    {
+                        dr = MessageBox.Show($"The console window is on a monitor that is not at 100% scaling. The scaling will need to be reset to 100% if these results are to be compared against other systems. It is currently set to {scaling}%\n\nContinue anyway?",
+                            "100% scaling issue",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
+                        if (dr != DialogResult.Yes) return;
+                    }
                 }
             }
 
-            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)
+            btnOK.Enabled = false;
+            btnCancel.Enabled = false;
+            btnApply.Enabled = false;
+
+            // copy settings
+            _fps_profile_settings = new Dictionary<string, object>();
+            _fps_profile_settings.Add("udDisplayFPS", udDisplayFPS.Value);
+            _fps_profile_settings.Add("chkDisplayPanFill", chkDisplayPanFill.Checked);
+            _fps_profile_settings.Add("chkShowFPS", chkShowFPS.Checked);
+            _fps_profile_settings.Add("chkVSyncDX", chkVSyncDX.Checked);
+            _fps_profile_settings.Add("chkAntiAlias", chkAntiAlias.Checked);
+            _fps_profile_settings.Add("chkAccurateFrameTiming", chkAccurateFrameTiming.Checked);
+            _fps_profile_settings.Add("chkSpecWarningLEDRenderDelay", chkSpecWarningLEDRenderDelay.Checked);
+            _fps_profile_settings.Add("chkSpecWarningLEDGetPixels", chkSpecWarningLEDGetPixels.Checked);
+            _fps_profile_settings.Add("udDisplayDecimation", udDisplayDecimation.Value);
+            _fps_profile_settings.Add("comboDisplayThreadPriority", comboDisplayThreadPriority.Text);
+            _fps_profile_settings.Add("comboGeneralProcessPriority", comboGeneralProcessPriority.Text);
+            _fps_profile_settings.Add("comboAudioSampleRate1", comboAudioSampleRate1.Text);
+            _fps_profile_settings.Add("comboAudioSampleRateRX2", comboAudioSampleRateRX2.Text);
+            _fps_profile_settings.Add("comboDispWinType", comboDispWinType.Text);
+            _fps_profile_settings.Add("comboRX2DispWinType", comboRX2DispWinType.Text);
+            _fps_profile_settings.Add("chkActivePeakHoldRX1", chkActivePeakHoldRX1.Checked);
+            _fps_profile_settings.Add("chkActivePeakHoldRX2", chkActivePeakHoldRX2.Checked);
+            _fps_profile_settings.Add("chkPeakBlobsEnabled", chkPeakBlobsEnabled.Checked);
+            _fps_profile_settings.Add("udPeakBlobs", udPeakBlobs.Value);
+            _fps_profile_settings.Add("chkPeakBlobInsideFilterOnly", chkPeakBlobInsideFilterOnly.Checked);
+            _fps_profile_settings.Add("chkPeakHoldDrop", chkPeakHoldDrop.Checked);
+            _fps_profile_settings.Add("udPeakBlobDropDBMs", udPeakBlobDropDBMs.Value);
+            _fps_profile_settings.Add("chkBlobPeakHold", chkBlobPeakHold.Checked);
+            _fps_profile_settings.Add("chkPanadpatorGradient", chkPanadpatorGradient.Checked);
+            _fps_profile_settings.Add("chkDataLineGradient", chkDataLineGradient.Checked);
+            _fps_profile_settings.Add("chkPanadpatorGradient_tx", chkPanadpatorGradient_tx.Checked);
+            _fps_profile_settings.Add("chkDataLineGradient_tx", chkDataLineGradient_tx.Checked);
+            _fps_profile_settings.Add("chkDisablePicDisplayBackgroundImage", chkDisablePicDisplayBackgroundImage.Checked);
+            _fps_profile_settings.Add("chkMaintainBackgroundAspectRatio", chkMaintainBackgroundAspectRatio.Checked);
+            _fps_profile_settings.Add("chkNoiseFloorShowDBM", chkNoiseFloorShowDBM.Checked);
+            _fps_profile_settings.Add("chkNFShowDecimal", chkNFShowDecimal.Checked);
+            _fps_profile_settings.Add("chkShowRX1NoiseFloor", chkShowRX1NoiseFloor.Checked);
+            _fps_profile_settings.Add("chkShowRX2NoiseFloor", chkShowRX2NoiseFloor.Checked);
+            _fps_profile_settings.Add("console_width", console.Width);
+            _fps_profile_settings.Add("console_height", console.Height);
+            _fps_profile_settings.Add("console_top", console.Top);
+            _fps_profile_settings.Add("console_left", console.Left);
+            _fps_profile_settings.Add("rx2", console.RX2Enabled);
+            _fps_profile_settings.Add("power", console.PowerOn);
+            _fps_profile_settings.Add("vac1", VACEnable);
+            _fps_profile_settings.Add("vac2", VAC2Enable);
+            _fps_profile_settings.Add("mox", console.MOX);
+            _fps_profile_settings.Add("CTuneDisplay", console.CTuneDisplay);
+            _fps_profile_settings.Add("CTuneRX2Display", console.CTuneRX2Display);
+            _fps_profile_settings.Add("VFOSync", console.VFOSync);
+            _fps_profile_settings.Add("rx1Mode", console.RX1DSPMode);
+            _fps_profile_settings.Add("rx2Mode", console.RX2DSPMode);
+            _fps_profile_settings.Add("rx1Filter", console.RX1Filter);
+            _fps_profile_settings.Add("rx2Filter", console.RX2Filter);
+            _fps_profile_settings.Add("vfoA", console.VFOAFreq);
+            _fps_profile_settings.Add("vfoB", console.VFOBFreq);
+            _fps_profile_settings.Add("rx1dispavg", console.RX1DisplayAVG);
+            _fps_profile_settings.Add("rx2dispavg", console.RX2DisplayAVG);
+            _fps_profile_settings.Add("comboColorPalette", comboColorPalette.Text);
+            _fps_profile_settings.Add("comboRX2ColorPalette", comboRX2ColorPalette.Text);
+            _fps_profile_settings.Add("udDisplayGridMax", udDisplayGridMax.Value);
+            _fps_profile_settings.Add("udRX2DisplayGridMax", udRX2DisplayGridMax.Value);
+            _fps_profile_settings.Add("udDisplayGridMin", udDisplayGridMin.Value);
+            _fps_profile_settings.Add("udRX2DisplayGridMin", udRX2DisplayGridMin.Value);
+            _fps_profile_settings.Add("udDisplayGridStep", udDisplayGridStep.Value);
+            _fps_profile_settings.Add("udRX2DisplayGridStep", udRX2DisplayGridStep.Value);
+            _fps_profile_settings.Add("chkAdjustGridMinToNFRX1", chkAdjustGridMinToNFRX1.Checked);
+            _fps_profile_settings.Add("chkAdjustGridMinToNFRX2", chkAdjustGridMinToNFRX2.Checked);
+            _fps_profile_settings.Add("IncludeWindowBorders", console.IncludeWindowBorders);
+            _fps_profile_settings.Add("Zoom", console.Zoom);
+            _fps_profile_settings.Add("Pan", console.Pan);
+            _fps_profile_settings.Add("DisplayModeText", console.DisplayModeText);
+            _fps_profile_settings.Add("DisplayRX2ModeText", console.DisplayRX2ModeText);
+            _fps_profile_settings.Add("chkLegacyMeters", chkLegacyMeters.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_band", chkLegacyItems_band.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_mode", chkLegacyItems_mode.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_filter", chkLegacyItems_filter.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_expand_spectral", chkLegacyItems_expand_spectral.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_expand_spectral_top", chkLegacyItems_expand_spectral_top.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_vfoa", chkLegacyItems_vfoa.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_vfob", chkLegacyItems_vfob.Checked);
+            _fps_profile_settings.Add("chkLegacyItems_vfosync", chkLegacyItems_vfosync.Checked);
+
+            // apply settings            
+            udDisplayFPS.Value = 640;
+            chkDisplayPanFill.Checked = true;
+            chkShowFPS.Checked = true;
+            chkVSyncDX.Checked = false;
+            chkAntiAlias.Checked = true;
+            chkAccurateFrameTiming.Checked = false;
+            chkSpecWarningLEDRenderDelay.Checked = true;
+            chkSpecWarningLEDGetPixels.Checked = false;
+            udDisplayDecimation.Value = 1;
+            comboDisplayThreadPriority.Text = "Above Normal";
+            comboGeneralProcessPriority.Text = "Normal";
+            comboAudioSampleRate1.Text = "192000";
+            comboAudioSampleRateRX2.Text = "192000";
+            comboDispWinType.Text = "Hann";
+            comboRX2DispWinType.Text = "Hann";
+            chkActivePeakHoldRX1.Checked = true;
+            chkActivePeakHoldRX2.Checked = true;
+            chkPeakBlobsEnabled.Checked = true;
+            udPeakBlobs.Value = 20;
+            chkPeakBlobInsideFilterOnly.Checked = false;
+            chkPeakHoldDrop.Checked = false;
+            udPeakBlobDropDBMs.Value = 0;
+            chkBlobPeakHold.Checked = false;
+            chkPanadpatorGradient.Checked = true;
+            chkDataLineGradient.Checked = true;
+            chkPanadpatorGradient_tx.Checked = true;
+            chkDataLineGradient_tx.Checked = true;
+            chkDisablePicDisplayBackgroundImage.Checked = false;
+            chkMaintainBackgroundAspectRatio.Checked = false;
+            chkNoiseFloorShowDBM.Checked = true;
+            chkNFShowDecimal.Checked = true;
+            chkShowRX1NoiseFloor.Checked = true;
+            chkShowRX2NoiseFloor.Checked = true;
+            console.IncludeWindowBorders = true;
+            console.SetResolution("1080p");
+            console.Location = new Point(0, 0);
+            console.RX2Enabled = true;
+            console.PowerOn = true;
+            VACEnable = false;
+            VAC2Enable = false;
+            console.MOX = false;
+            console.CTuneDisplay = false;
+            console.CTuneRX2Display = false;
+            console.VFOSync = false;
+            console.RX1DSPMode = DSPMode.LSB;
+            console.RX2DSPMode = DSPMode.LSB;
+            console.RX1Filter = Filter.F3;
+            console.RX2Filter = Filter.F3;
+            console.VFOAFreq = 7.1;
+            console.VFOBFreq = 7.1;
+            console.RX1DisplayAVG = false;
+            console.RX2DisplayAVG = false;
+            comboColorPalette.Text = "Custom";
+            comboRX2ColorPalette.Text = "Custom";
+            udDisplayGridMax.Value = 200;
+            udRX2DisplayGridMax.Value = 200;
+            udDisplayGridMin.Value = -200;
+            udRX2DisplayGridMin.Value = -200;
+            udDisplayGridStep.Value = 10;
+            udRX2DisplayGridStep.Value = 10;
+            chkAdjustGridMinToNFRX1.Checked = false;
+            chkAdjustGridMinToNFRX2.Checked = false;
+            console.PanCentre();
+            console.ZoomFullyOut();
+            console.DisplayModeText = "Panafall";
+            console.DisplayRX2ModeText = "Panafall";
+            console.ClickTuneDisplay = false;
+            console.ClickTuneRX2Display = false;
+            chkLegacyMeters.Checked = true;
+            chkLegacyItems_band.Checked = false;
+            chkLegacyItems_mode.Checked = false;
+            chkLegacyItems_filter.Checked = false;
+            chkLegacyItems_expand_spectral.Checked = false;
+            chkLegacyItems_expand_spectral_top.Checked = false;
+            chkLegacyItems_vfoa.Checked = false;
+            chkLegacyItems_vfob.Checked = false;
+            chkLegacyItems_vfosync.Checked = false;
+
+            console.Focus();
+
+            Display.RunningFPSProfile = true;
+
+            btnFPSProfile.Text = "STOP FPS Profile";
+        }
+        public bool ValidFpsProfile()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(udDisplayFPS.Value).Append("|");
+            sb.Append(udDisplayDecimation.Value).Append("|");
+            sb.Append(udPeakBlobs.Value).Append("|");
+            sb.Append(udPeakBlobDropDBMs.Value).Append("|");
+            sb.Append(udDisplayGridMax.Value).Append("|");
+            sb.Append(udRX2DisplayGridMax.Value).Append("|");
+            sb.Append(udDisplayGridMin.Value).Append("|");
+            sb.Append(udRX2DisplayGridMin.Value).Append("|");
+            sb.Append(udDisplayGridStep.Value).Append("|");
+            sb.Append(udRX2DisplayGridStep.Value).Append("|");
+
+            CheckBox[] checkboxes = new CheckBox[]
             {
-                int drvlimpwr = (int)(console.ptbPWR.Value / (float)(console.ptbPWR.Maximum - console.ptbPWR.Minimum) * GetPABandMaxPower(console.TXBand));
-
-                if (numUpDnDRVLim.Value < drvlimpwr)
-                {
-                    console.RXOnly = true;
-                    console.chkExternalPA.Checked = false;
-                    console.ptbPWR.Value = 0;
-                    console.lblPWR.Text = "Drive: " + 0 + "w";
-                    console.lblPWR2.Text = "Drive:" + 0 + "w";
-
-                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    console.RXOnly = false;
-                    console.chkExternalPA.Checked = true;
-                    return;
-                }
-            }
-            if (chkAmpDRVLim.Checked == true & console.chkExternalPA.Checked == true)
+            chkDisplayPanFill,
+            chkShowFPS,
+            chkVSyncDX,
+            chkAntiAlias,
+            chkAccurateFrameTiming,
+            chkSpecWarningLEDRenderDelay,
+            chkSpecWarningLEDGetPixels,
+            chkActivePeakHoldRX1,
+            chkActivePeakHoldRX2,
+            chkPeakBlobsEnabled,
+            chkPeakBlobInsideFilterOnly,
+            chkPeakHoldDrop,
+            chkBlobPeakHold,
+            chkPanadpatorGradient,
+            chkDataLineGradient,
+            chkPanadpatorGradient_tx,
+            chkDataLineGradient_tx,
+            chkDisablePicDisplayBackgroundImage,
+            chkMaintainBackgroundAspectRatio,
+            chkNoiseFloorShowDBM,
+            chkNFShowDecimal,
+            chkShowRX1NoiseFloor,
+            chkShowRX2NoiseFloor,
+            chkAdjustGridMinToNFRX1,
+            chkAdjustGridMinToNFRX2,
+            chkLegacyMeters,
+            chkLegacyItems_band,
+            chkLegacyItems_mode,
+            chkLegacyItems_filter,
+            chkLegacyItems_expand_spectral,
+            chkLegacyItems_expand_spectral_top,
+            chkLegacyItems_vfoa,
+            chkLegacyItems_vfob,
+            chkLegacyItems_vfosync
+            };
+            foreach (CheckBox cb in checkboxes)
             {
-                int tunlimpwr = (int)(console.ptbTune.Value / (float)(console.ptbTune.Maximum - console.ptbTune.Minimum) * GetPABandMaxPower(console.TXBand));
-
-                if (numUpDnTUNLim.Value < tunlimpwr)
-                {
-                    console.RXOnly = true;
-                    console.chkExternalPA.Checked = false;
-                    console.ptbTune.Value = 0;
-                    console.lblTune.Text = "Tune: " + 0 + "w";
-                    console.lblTune2.Text = "Tune:" + 0 + "w";
-
-                    MessageBox.Show("The Drive And/Or Tune Power Is Above The Maximum Limit.", "Release PTT And Reset Power.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    console.RXOnly = false;
-                    console.chkExternalPA.Checked = true;
-                    return;
-                }
+                sb.Append(cb.Checked).Append("|");
             }
-        }        
+
+            sb.Append(comboDisplayThreadPriority.Text).Append("|");
+            sb.Append(comboGeneralProcessPriority.Text).Append("|");
+            sb.Append(comboAudioSampleRate1.Text).Append("|");
+            sb.Append(comboAudioSampleRateRX2.Text).Append("|");
+            sb.Append(comboDispWinType.Text).Append("|");
+            sb.Append(comboRX2DispWinType.Text).Append("|");
+            sb.Append(comboColorPalette.Text).Append("|");
+            sb.Append(comboRX2ColorPalette.Text).Append("|");
+
+            sb.Append(console.IncludeWindowBorders).Append("|");
+            sb.Append(console.Location.X).Append(",").Append(console.Location.Y).Append("|");
+            sb.Append(console.Size.Width).Append(",").Append(console.Size.Height).Append("|");
+            sb.Append(Display.TargetSize.Width).Append(",").Append(Display.TargetSize.Height).Append("|");
+            sb.Append(console.RX2Enabled).Append("|");
+            sb.Append(console.PowerOn).Append("|");
+            sb.Append(VACEnable).Append("|");
+            sb.Append(VAC2Enable).Append("|");
+            sb.Append(console.MOX).Append("|");
+            sb.Append(console.CTuneDisplay).Append("|");
+            sb.Append(console.CTuneRX2Display).Append("|");
+            sb.Append(console.VFOSync).Append("|");
+            sb.Append(console.RX1DSPMode).Append("|");
+            sb.Append(console.RX2DSPMode).Append("|");
+            sb.Append(console.RX1Filter).Append("|");
+            sb.Append(console.RX2Filter).Append("|");
+            sb.Append(console.VFOAFreq).Append("|");
+            sb.Append(console.VFOBFreq).Append("|");
+            sb.Append(console.RX1DisplayAVG).Append("|");
+            sb.Append(console.RX2DisplayAVG).Append("|");
+            sb.Append(console.DisplayModeText).Append("|");
+            sb.Append(console.DisplayRX2ModeText).Append("|");
+            sb.Append(console.ClickTuneDisplay).Append("|");
+            sb.Append(console.ClickTuneRX2Display).Append("|");
+            sb.Append(console.Pan).Append("|");
+            sb.Append(console.Zoom).Append("|");
+
+            int scaling;
+            if (Display.Target != null && Display.Target.IsHandleCreated)
+                scaling = Common.GetScalingForWindow(Display.Target.Handle);
+            else
+                scaling = -1;
+
+            sb.Append(scaling).Append("|");
+
+            byte[] hash;
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] data = Encoding.UTF8.GetBytes(sb.ToString());
+                hash = md5.ComputeHash(data);
+            }
+
+            string ret = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+
+            Debug.Print($"FPS profile settings hash : {ret}");
+
+            return ret.Equals("998cafaf3331a9a111366f41ff3ed6ce");
+        }
+
+        private void chkWDSP_cache_impulse_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            RadioDSP.CacheImpulse = chkWDSP_cache_impulse.Checked;
+        }
+
+        private void chkWDSP_save_restore_cache_impulse_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            RadioDSP.CacheImpulseSaveRestore = chkWDSP_save_restore_cache_impulse.Checked;
+        }
+
+        private void btnTwoToneF_defaults_Click(object sender, EventArgs e)
+        {
+            udTestIMDFreq1.Value = 700;
+            udTestIMDFreq2.Value = 1900;
+        }
+
+        private void btnTwoToneF_stealth_Click(object sender, EventArgs e)
+        {
+            udTestIMDFreq1.Value = 70;
+            udTestIMDFreq2.Value = 190;
+        }
+
+        //wd5y
+        private void chkShowAndromedaTop_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            console.ShowAndromedaTopControls = chkShowAndromedaTop.Checked;
+        }
+
+        private void chkShowBandControls_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            console.ShowBandControls = chkShowBandControls.Checked;
+        }
+
+        private void chkShowModeControls_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            console.ShowModeControls = chkShowModeControls.Checked;
+        }
+
+        private void chkShowAndromedaBar_CheckedChanged_1(object sender, EventArgs e)
+        {
+            if (initializing) return;
+            console.ShowAndromedaButtonBar = chkShowAndromedaBar.Checked;
+        }
         //wd5y
     }
 

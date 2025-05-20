@@ -32,7 +32,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
@@ -50,12 +49,29 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
+using System.Runtime.CompilerServices;
+using System.Management;
 
 namespace Thetis
 {
+    public static class FloatExtensions
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Clamp(this float v, float min, float max) => (v < min) ? min : (v > max) ? max : v;
+    }
 	public static class StringExtensions
 	{
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string Truncate(this string source, int maxLength)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (source.Length <= maxLength)
+                return source;
+            return source.Substring(0, maxLength);
+        }
         // extend contains to be able to ignore case etc MW0LGE
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this string source, string toCheck, StringComparison comp)
 		{
             if (source == null)
@@ -69,7 +85,7 @@ namespace Thetis
 
             return source?.IndexOf(toCheck, comp) >= 0;
 		}
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Left(this string source, int length)
         {
             if (source == null)
@@ -84,6 +100,7 @@ namespace Thetis
 
             return source.Length > length ? source.Substring(0, length) : source;
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Right(this string source, int length)
         {
             if (source == null)
@@ -101,6 +118,7 @@ namespace Thetis
     }
     public static class ControlExtentions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string GetFullName(this Control control)
         {
             if (control == null)
@@ -961,8 +979,7 @@ namespace Thetis
 				return principal.IsInRole(WindowsBuiltInRole.Administrator);
 			}
 		}
-
-		public static bool ShiftKeyDown
+        public static bool ShiftKeyDown
 		{
 			get
 			{
@@ -1445,7 +1462,8 @@ namespace Thetis
                 if (s.Contains(arg, StringComparison.OrdinalIgnoreCase)) return true;
             }
             return false;
-        }       
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetLuminance(Color c)
         {
             //https://stackoverflow.com/questions/596216/formula-to-determine-perceived-brightness-of-rgb-color
@@ -1455,6 +1473,7 @@ namespace Thetis
             int b = rGBtoLin(c.B);
             return (r + r + b + g + g + g) / 6; //(fast)
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int rGBtoLin(int col)
         {
             float colorChannel = col / 255f;
@@ -1698,6 +1717,185 @@ namespace Thetis
                 Math.Min(formBounds.Y, screenWorkingArea.Bottom - formBounds.Height));
 
             return new Rectangle(new Point(newX, newY), formBounds.Size);
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern bool SetProcessPriorityBoost(IntPtr processHandle, bool disablePriorityBoost);
+        public static void DisableForegroundPriorityBoost()
+        {
+            // Prevent Windows from downgrading app CPU time when it loses focus
+            Process process = Process.GetCurrentProcess();
+            SetProcessPriorityBoost(process.Handle, true);
+        }
+
+        public static string GetCpuName()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Name FROM Win32_Processor");
+                ManagementObjectCollection results = searcher.Get();
+                string cpuName = "Unknown CPU";
+                foreach (ManagementObject mo in results)
+                {
+                    cpuName = mo["Name"] != null ? mo["Name"].ToString().Trim() : string.Empty;
+                    break;
+                }
+                results.Dispose();
+                searcher.Dispose();
+                return cpuName;
+            }
+            catch { return "Unknown CPU"; }
+        }
+
+        public static List<string> GetGpuNames()
+        {
+            List<string> names = new List<string>();
+
+            try
+            {
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Name FROM Win32_VideoController"))
+                using (ManagementObjectCollection results = searcher.Get())
+                {
+                    foreach (ManagementObject mo in results)
+                    {
+                        string name = mo["Name"] != null ? mo["Name"].ToString().Trim() : string.Empty;
+                        if (name != string.Empty)
+                        {
+                            names.Add(name);
+                        }
+                    }
+                }
+                if (names.Count == 0)
+                    names.Add("Unknown GPU(s)");
+                return names;
+            }
+            catch
+            {
+                names.Clear();
+                names.Add("Unknown GPU(s)");
+                return names;
+            }
+        }
+
+        public static string GetTotalRam()
+        {
+            try
+            {
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT TotalPhysicalMemory FROM Win32_ComputerSystem"))
+                using (ManagementObjectCollection results = searcher.Get())
+                {
+                    foreach (ManagementObject mo in results)
+                    {
+                        string totalMemory = mo["TotalPhysicalMemory"] != null ? mo["TotalPhysicalMemory"].ToString() : "0";
+                        if (ulong.TryParse(totalMemory, out ulong bytes))
+                        {
+                            double gib = bytes / 1024.0 / 1024.0 / 1024.0;
+                            return gib.ToString("F2") + " GiB";
+                        }
+                        break;
+                    }
+                }
+            }
+            catch { }
+            return "Unknown";
+        }
+
+        public static string GetInstalledRam()
+        {
+            try
+            {
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT Capacity FROM Win32_PhysicalMemory"))
+                using (ManagementObjectCollection results = searcher.Get())
+                {
+                    ulong totalBytes = 0;
+                    foreach (ManagementObject mo in results)
+                        totalBytes += (ulong)mo["Capacity"];
+                    double gib = totalBytes / 1024.0 / 1024.0 / 1024.0;
+                    return gib.ToString("F2") + " GiB";
+                }
+            }
+            catch { return "Unknown"; }
+        }
+
+        // form scale
+        private const uint MONITOR_DEFAULTTONEAREST = 2;
+        private enum MonitorDpiType
+        {
+            MDT_EFFECTIVE_DPI = 0,
+            MDT_ANGULAR_DPI = 1,
+            MDT_RAW_DPI = 2
+        }
+
+        [DllImport("Shcore.dll")]
+        private static extern int GetDpiForMonitor(
+            IntPtr hmonitor,
+            MonitorDpiType dpiType,
+            out uint dpiX,
+            out uint dpiY);
+
+        [DllImport("User32.dll")]
+        private static extern IntPtr MonitorFromWindow(
+            IntPtr hwnd,
+            uint dwFlags);
+
+        public static int GetScalingForWindow(IntPtr hwnd)
+        {
+            OperatingSystem os = Environment.OSVersion;
+            Version version = os.Version;
+            bool isWin81OrLater =
+                os.Platform == PlatformID.Win32NT &&
+                (version.Major > 6 || (version.Major == 6 && version.Minor >= 3));
+
+            if (isWin81OrLater)
+            {
+                try
+                {
+                    IntPtr monitorHandle = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+                    uint dpiX;
+                    uint dpiY;
+                    int result = GetDpiForMonitor(
+                        monitorHandle,
+                        MonitorDpiType.MDT_EFFECTIVE_DPI,
+                        out dpiX,
+                        out dpiY);
+
+                    if (result == 0) return (int)(dpiX * 100 / 96);
+                }
+                catch (DllNotFoundException) { }
+                catch (EntryPointNotFoundException) { }
+            }
+
+            using (Graphics graphics = Graphics.FromHwnd(hwnd))
+            {
+                return (int)(graphics.DpiX * 100 / 96);
+            }
+        }
+        //
+
+        private static HiPerfTimer _timer = null;
+        private static TimeSpan _previousCpuTime;
+        private static double _previousElapsedSeconds;
+        public static double ProcessCPUUsage()
+        {
+            if (_timer == null)
+            {
+                _timer = new HiPerfTimer();
+                _timer.Start();
+                _previousCpuTime = Process.GetCurrentProcess().TotalProcessorTime;
+                _previousElapsedSeconds = _timer.Elapsed;
+            }
+
+            Process process = Process.GetCurrentProcess();
+            TimeSpan currentCpuTime = process.TotalProcessorTime;
+            double currentElapsedSeconds = _timer.Elapsed;
+            TimeSpan cpuDelta = currentCpuTime - _previousCpuTime;
+            double elapsedDelta = currentElapsedSeconds - _previousElapsedSeconds;
+            _previousCpuTime = currentCpuTime;
+            _previousElapsedSeconds = currentElapsedSeconds;
+
+            if (elapsedDelta <= 0.0) return 0.0;
+
+            return (cpuDelta.TotalSeconds / (elapsedDelta * Environment.ProcessorCount)) * 100.0;
         }
     }
 }

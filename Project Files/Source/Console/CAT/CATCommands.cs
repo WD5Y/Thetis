@@ -904,7 +904,7 @@ namespace Thetis
 				float num = 0f;
 				if(console.PowerOn)
 					num = WDSP.CalculateRXMeter(0, 0,WDSP.MeterType.SIGNAL_STRENGTH);
-				num = num+console.MultiMeterCalOffset+console.PreampOffset;
+				num = num+console.RX1MeterCalOffset+console.PreampOffset;
 
 				num = Math.Max(-140, num);
 				num = Math.Min(-10, num);
@@ -5747,7 +5747,7 @@ namespace Thetis
                 {
                      case HPSDRModel.HPSDR:
                         num = num +
-                        console.MultiMeterCalOffset +
+                        console.RX1MeterCalOffset +
                         Display.RX1PreampOffset +
                             //console.RX1FilterSizeCalOffset +
                         console.RX1XVTRGainOffset;
@@ -5756,7 +5756,7 @@ namespace Thetis
                         if (s == "0")
                         {
                             num = num +
-                            console.MultiMeterCalOffset +
+                            console.RX1MeterCalOffset +
                             Display.RX1PreampOffset +
                                 //console.RX1FilterSizeCalOffset +
                             console.RX1XVTRGainOffset;
@@ -8199,13 +8199,16 @@ namespace Thetis
 
         private string AddLeadingZeros(int n)
 		{
-			string num = n.ToString();
+			//string num = n.ToString();
 
-			while(num.Length < parser.nAns)
-				num = num.Insert(0,"0");
-			
-			return num;
-		}
+			//while(num.Length < parser.nAns)
+			//	num = num.Insert(0,"0");
+
+			//return num;
+
+			//[2.10.3.9]MW0LGE refcator for speed
+            return n.ToString().PadLeft(parser.nAns, '0');
+        }
 
         private string JustSuffix(string s)
         {
