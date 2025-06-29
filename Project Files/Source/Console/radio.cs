@@ -2127,6 +2127,24 @@ namespace Thetis
             TXFilterHigh = tx_filter_high;
             TXFMLowCut = tx_fm_lowcut;
             TXFMHighCut = tx_fm_highcut;
+            // tone pulse
+            TXPostGenPulseIQOut = tx_postgen_pulse_iqout;
+            TXPostGenPulseToneFreq = tx_postgen_pulse_tonefreq;
+            TXPostGenPulseMag = tx_postgen_pulse_mag;
+            TXPostGenPulseFreq = tx_postgen_pulse_freq;
+            TXPostGenPulseDutyCycle = tx_postgen_pulse_dutycycle;
+            TXPostGenPulseTransition = tx_postgen_pulse_transition;
+            //
+            // two tone pulse
+            TXPostGenTTPulseIQOut = tx_postgen_tt_pulse_iqout;
+            TXPostGenTTPulseToneFreq1 = tx_postgen_tt_pulse_tone_freq1;
+            TXPostGenTTPulseToneFreq2 = tx_postgen_tt_pulse_tone_freq2;
+            TXPostGenTTPulseMag1 = tx_postgen_tt_pulse_mag1;
+            TXPostGenTTPulseMag2 = tx_postgen_tt_pulse_mag2;
+            TXPostGenTTPulseFreq = tx_postgen_tt_pulse_freq;
+            TXPostGenTTPulseDutyCycle = tx_postgen_tt_pulse_dutycycle;
+            TXPostGenTTPulseTransition = tx_postgen_tt_pulse_transition;
+            //
         }
 
         #region Non-Static Properties & Routines
@@ -3404,6 +3422,264 @@ namespace Thetis
                 }
             }
         }
+
+        // tone pulse
+        private double tx_postgen_pulse_mag_dsp = 0.0;
+        private double tx_postgen_pulse_mag = 0.0;
+        public double TXPostGenPulseMag
+        {
+            get { return tx_postgen_pulse_mag; }
+            set
+            {
+                tx_postgen_pulse_mag = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_mag_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseMag(WDSP.id(thread, 0), value);
+                        tx_postgen_pulse_mag_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_pulse_tonefreq_dsp = 0.0;
+        private double tx_postgen_pulse_tonefreq = 0.0;
+        public double TXPostGenPulseToneFreq
+        {
+            get { return tx_postgen_pulse_tonefreq; }
+            set
+            {
+                tx_postgen_pulse_tonefreq = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_tonefreq_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseToneFreq(WDSP.id(thread, 0), value);
+                        tx_postgen_pulse_tonefreq_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_pulse_freq_dsp = 0.0;
+        private double tx_postgen_pulse_freq = 0.0;
+        public double TXPostGenPulseFreq
+        {
+            get { return tx_postgen_pulse_freq; }
+            set
+            {
+                tx_postgen_pulse_freq = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_freq_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseFreq(WDSP.id(thread, 0), value);
+                        tx_postgen_pulse_freq_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_pulse_dutycycle_dsp = 0.0;
+        private double tx_postgen_pulse_dutycycle = 0.0;
+        public double TXPostGenPulseDutyCycle
+        {
+            get { return tx_postgen_pulse_dutycycle; }
+            set
+            {
+                tx_postgen_pulse_dutycycle = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_dutycycle_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseDutyCycle(WDSP.id(thread, 0), value);
+                        tx_postgen_pulse_dutycycle_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_pulse_transition_dsp = 0.0;
+        private double tx_postgen_pulse_transition = 0.0;
+        public double TXPostGenPulseTransition
+        {
+            get { return tx_postgen_pulse_transition; }
+            set
+            {
+                tx_postgen_pulse_transition = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_transition_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseTransition(WDSP.id(thread, 0), value);
+                        tx_postgen_pulse_transition_dsp = value;
+                    }
+                }
+            }
+        }
+        private bool tx_postgen_pulse_iqout_dsp = true;
+        private bool tx_postgen_pulse_iqout = true;
+        public bool TXPostGenPulseIQOut
+        {
+            get { return tx_postgen_pulse_iqout; }
+            set
+            {
+                tx_postgen_pulse_iqout = value;
+                if (update)
+                {
+                    if (value != tx_postgen_pulse_iqout_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenPulseIQout(WDSP.id(thread, 0), value ? 1 : 0);
+                        tx_postgen_pulse_iqout_dsp = value;
+                    }
+                }
+            }
+        }
+        //
+
+        // two tone pulse
+        private double tx_postgen_tt_pulse_mag1_dsp = 0.0;
+        private double tx_postgen_tt_pulse_mag1 = 0.0;
+        public double TXPostGenTTPulseMag1
+        {
+            get { return tx_postgen_tt_pulse_mag1; }
+            set
+            {
+                tx_postgen_tt_pulse_mag1 = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_mag1_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseMag(WDSP.id(thread, 0), value, tx_postgen_tt_pulse_mag2_dsp);
+                        tx_postgen_tt_pulse_mag1_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_mag2_dsp = 0.0;
+        private double tx_postgen_tt_pulse_mag2 = 0.0;
+        public double TXPostGenTTPulseMag2
+        {
+            get { return tx_postgen_tt_pulse_mag2; }
+            set
+            {
+                tx_postgen_tt_pulse_mag2 = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_mag2_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseMag(WDSP.id(thread, 0), tx_postgen_tt_pulse_mag1_dsp, value);
+                        tx_postgen_tt_pulse_mag2_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_tone_freq1_dsp = 0.0;
+        private double tx_postgen_tt_pulse_tone_freq1 = 0.0;
+        public double TXPostGenTTPulseToneFreq1
+        {
+            get { return tx_postgen_tt_pulse_tone_freq1; }
+            set
+            {
+                tx_postgen_tt_pulse_tone_freq1 = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_tone_freq1_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseToneFreq(WDSP.id(thread, 0), value, tx_postgen_tt_pulse_tone_freq2_dsp);
+                        tx_postgen_tt_pulse_tone_freq1_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_tone_freq2_dsp = 0.0;
+        private double tx_postgen_tt_pulse_tone_freq2 = 0.0;
+        public double TXPostGenTTPulseToneFreq2
+        {
+            get { return tx_postgen_tt_pulse_tone_freq2; }
+            set
+            {
+                tx_postgen_tt_pulse_tone_freq2 = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_tone_freq2_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseToneFreq(WDSP.id(thread, 0), tx_postgen_tt_pulse_tone_freq1_dsp, value);
+                        tx_postgen_tt_pulse_tone_freq2_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_freq_dsp = 0.0;
+        private double tx_postgen_tt_pulse_freq = 0.0;
+        public double TXPostGenTTPulseFreq
+        {
+            get { return tx_postgen_tt_pulse_freq; }
+            set
+            {
+                tx_postgen_tt_pulse_freq = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_freq_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseFreq(WDSP.id(thread, 0), value);
+                        tx_postgen_tt_pulse_freq_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_dutycycle_dsp = 0.0;
+        private double tx_postgen_tt_pulse_dutycycle = 0.0;
+        public double TXPostGenTTPulseDutyCycle
+        {
+            get { return tx_postgen_tt_pulse_dutycycle; }
+            set
+            {
+                tx_postgen_tt_pulse_dutycycle = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_dutycycle_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseDutyCycle(WDSP.id(thread, 0), value);
+                        tx_postgen_tt_pulse_dutycycle_dsp = value;
+                    }
+                }
+            }
+        }
+        private double tx_postgen_tt_pulse_transition_dsp = 0.0;
+        private double tx_postgen_tt_pulse_transition = 0.0;
+        public double TXPostGenTTPulseTransition
+        {
+            get { return tx_postgen_tt_pulse_transition; }
+            set
+            {
+                tx_postgen_tt_pulse_transition = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_transition_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseTransition(WDSP.id(thread, 0), value);
+                        tx_postgen_tt_pulse_transition_dsp = value;
+                    }
+                }
+            }
+        }
+        private bool tx_postgen_tt_pulse_iqout_dsp = true;
+        private bool tx_postgen_tt_pulse_iqout = true;
+        public bool TXPostGenTTPulseIQOut
+        {
+            get { return tx_postgen_tt_pulse_iqout; }
+            set
+            {
+                tx_postgen_tt_pulse_iqout = value;
+                if (update)
+                {
+                    if (value != tx_postgen_tt_pulse_iqout_dsp || force)
+                    {
+                        WDSP.SetTXAPostGenTTPulseIQout(WDSP.id(thread, 0), value ? 1 : 0);
+                        tx_postgen_tt_pulse_iqout_dsp = value;
+                    }
+                }
+            }
+        }
+        //
 
         private bool ps_run_cal_dsp = false;
         private bool ps_run_cal = false;

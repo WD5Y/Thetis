@@ -2451,9 +2451,10 @@ namespace Thetis
                            dhp2 = new Pen(Color.FromArgb(150, 255, 0, 0));
 
         private static Font
-                            font1 = new Font("Microsft Sans Serif", 9, FontStyle.Regular),
+                            font1r = new Font("Microsft Sans Serif", 9, FontStyle.Regular),
                             font10 = new Font("Arial", 10),
-                            font14 = new Font("Arial", 14, FontStyle.Bold),
+                            font12 = new Font("Arial", 12),
+                            font14b = new Font("Arial", 14, FontStyle.Bold),
                             font9 = new Font("Arial", 9),
                             font9b = new Font("Arial", 9, FontStyle.Bold),
                             font95 = new Font("Arial", 9.5f),
@@ -4729,22 +4730,27 @@ namespace Thetis
 
                 float averageSum = 0;
                 int averageCount = 1;
-                float currentAverage = rx == 1 ? m_fFFTBinAverageRX1 + 2 : m_fFFTBinAverageRX2 + 2; // +2db to add some extras above the average
+                float currentAverage = rx == 1 ? m_fFFTBinAverageRX1 + 2 : m_fFFTBinAverageRX2 + 2; // +2 so we dont include samples close to our current average, this perhaps should be configurable, buffer?
 
                 bool peaks_imds = bPeakBlobs || show_imd_measurements;
-                
+
+                // make locals
+                int local_Decimation = m_nDecimation;
+                double local_frame_start = m_dElapsedFrameStart;
+                //
+
                 for (int i = 0; i < nDecimatedWidth; i++)
                 {
-                    point.X = i * m_nDecimation;
+                    point.X = i * local_Decimation;
 
                     max = data[i] + fOffset;
                     max_copy = dataCopy[i] + fOffset;
 
                     // noise floor
-                    if (max_copy < currentAverage)
+                    if (!local_mox && (max_copy < currentAverage))
                     {
                         //averageSum += (float)Math.Pow(10f, max_copy / 10f);
-                        averageSum += FastPow10Raw(max_copy);
+                        averageSum += fastPow10Raw(max_copy);
                         averageCount++;
                     }
 
@@ -4760,7 +4766,7 @@ namespace Thetis
                     }
 
                     // peak blobs
-                    if (peaks_imds && (!m_bInsideFilterOnly || point.X >= filter_left_x && point.X <= filter_right_x || show_imd_measurements))
+                    if (peaks_imds && (!m_bInsideFilterOnly || (point.X >= filter_left_x && point.X <= filter_right_x) || show_imd_measurements))
                     {
                         if (max > dbm_max)
                         {
@@ -4784,7 +4790,7 @@ namespace Thetis
                                     mm.X = dbm_max_xpos;
                                     mm.Enabled = true;
                                     mm.MaxY_pixel = dbm_max_ypos;
-                                    mm.Time = m_dElapsedFrameStart;
+                                    mm.Time = local_frame_start;
 
                                     imd_measurements.Add(mm);
                                 }
@@ -4811,7 +4817,7 @@ namespace Thetis
                     {
                         // draw vertical line, this is so much faster than FillGeometry as the geo created would be so complex any fill alogorthm would struggle
                         bottomPoint.X = point.X;
-                        _d2dRenderTarget.DrawLine(bottomPoint, point, fillBrush, m_nDecimation);
+                        _d2dRenderTarget.DrawLine(bottomPoint, point, fillBrush, local_Decimation);
                     }
 
                     //spectral peak
@@ -4822,7 +4828,7 @@ namespace Thetis
                         if (max >= peak.max_dBm)
                         {
                             peak.max_dBm = max;
-                            peak.Time = m_dElapsedFrameStart;
+                            peak.Time = local_frame_start;
                         }
 
                         if (peak.max_dBm >= max)
@@ -4833,7 +4839,7 @@ namespace Thetis
 
                             if (bActivePeakFill)
                             {
-                                _d2dRenderTarget.DrawLine(point, spectralPeakPoint, fillPeaksBrush, m_nDecimation);
+                                _d2dRenderTarget.DrawLine(point, spectralPeakPoint, fillPeaksBrush, local_Decimation);
                             }
                             else
                             {
@@ -4841,7 +4847,7 @@ namespace Thetis
                                 oldSpectralPeakPoint = spectralPeakPoint;
                             }
 
-                            double dElapsed = m_dElapsedFrameStart - peak.Time;
+                            double dElapsed = local_frame_start - peak.Time;
                             if (dElapsed > dSpectralPeakHoldDelay)
                             {
                                 peak.max_dBm -= dBmSpectralPeakFall;
@@ -4968,7 +4974,7 @@ namespace Thetis
                             if (blob_drop)
                             {
                                 //drop
-                                double dElapsed = m_dElapsedFrameStart - entry.Time;
+                                double dElapsed = local_frame_start - entry.Time;
                                 if (entry.max_dBm > -200.0 && (dElapsed > m_fBlobPeakHoldMS))
                                 {
                                     entry.max_dBm -= m_dBmPerSecondPeakBlobFall / (float)m_nFps;
@@ -4983,7 +4989,7 @@ namespace Thetis
                                 }
                             }
 
-                            m_objEllipse.Point.X = entry.X * m_nDecimation;
+                            m_objEllipse.Point.X = entry.X * local_Decimation;
                             m_objEllipse.Point.Y = entry.MaxY_pixel;
 
                             string sAppend;
@@ -5277,85 +5283,133 @@ namespace Thetis
                 _NFsensitivity = t;
             }
         }
+        //private static void processNoiseFloor(int rx, int averageCount, float averageSum, int width, bool waterfall)
+        //{
+        //    if (rx == 1 && _bNoiseFloorAlreadyCalculatedRX1) return; // already done, ignore
+        //    if (rx == 2 && _bNoiseFloorAlreadyCalculatedRX2) return; // already done, ignore
+
+        //    int fps = waterfall ? m_nFps / waterfall_update_period : m_nFps;
+
+        //    int requireSamples = (int)(width * (_NFsensitivity / 20f));
+        //    if (rx == 1)
+        //    {
+        //        if (averageCount >= requireSamples)
+        //        {
+        //            float linearAverage = averageSum / (float)averageCount;
+        //            //float oldLinear = (float)Math.Pow(10f, m_fFFTBinAverageRX1 / 10f);
+        //            float oldLinear = fastPow10Raw(m_fFFTBinAverageRX1);
+        //            float newLinear = (linearAverage + oldLinear) / 2f;
+        //            float tmp = (float)(10f * Math.Log10(newLinear));
+        //            if (!float.IsNaN(tmp)) m_fFFTBinAverageRX1 = tmp;
+        //        }
+        //        else
+        //        {
+        //            m_fFFTBinAverageRX1 += m_bFastAttackNoiseFloorRX1 ? 3f : 1f;
+        //        }
+        //        m_fFFTBinAverageRX1 = m_fFFTBinAverageRX1.Clamp(-200f, 200f);
+
+        //        // so in attackTime period we need to have moved to where we want
+        //        int framesInAttackTime = m_bFastAttackNoiseFloorRX1 ? 0 : (int)((fps / 1000f) * (double)m_fAttackTimeInMSForRX1);
+        //        framesInAttackTime += 1;
+
+        //        if (m_fLerpAverageRX1 > m_fFFTBinAverageRX1)
+        //            m_fLerpAverageRX1 -= (m_fLerpAverageRX1 - m_fFFTBinAverageRX1) / framesInAttackTime;
+        //        else if (m_fLerpAverageRX1 < m_fFFTBinAverageRX1)
+        //            m_fLerpAverageRX1 += (m_fFFTBinAverageRX1 - m_fLerpAverageRX1) / framesInAttackTime;
+
+        //        if (m_bFastAttackNoiseFloorRX1 && (Math.Abs(m_fFFTBinAverageRX1 - m_fLerpAverageRX1) < 1f))
+        //        {
+        //            float tmpDelay = Math.Max(1000f, _fft_fill_timeRX1 + (_wdsp_mox_transition_buffer_clear ? _fft_fill_timeRX1 : 0)); // extra
+        //            bool bElapsed = (m_objFrameStartTimer.ElapsedMsec - _fLastFastAttackEnabledTimeRX1) > tmpDelay; //[2.10.1.0] MW0LGE change to time related, instead of frame related
+        //            if(bElapsed) m_bFastAttackNoiseFloorRX1 = false;
+        //        }
+
+        //        _bNoiseFloorAlreadyCalculatedRX1 = true;
+        //    }
+        //    else
+        //    {
+        //        if (averageCount >= requireSamples)
+        //        {
+        //            float linearAverage = averageSum / (float)averageCount;
+        //            //float oldLinear = (float)Math.Pow(10f, m_fFFTBinAverageRX2 / 10f);
+        //            float oldLinear = fastPow10Raw(m_fFFTBinAverageRX2);
+        //            float newLinear = (linearAverage + oldLinear) / 2f;
+        //            float tmp = (float)(10f * Math.Log10(newLinear));
+        //            if (!float.IsNaN(tmp)) m_fFFTBinAverageRX2 = tmp;
+        //        }
+        //        else
+        //        {
+        //            m_fFFTBinAverageRX2 += m_bFastAttackNoiseFloorRX2 ? 3f : 1f;
+        //        }
+        //        m_fFFTBinAverageRX2 = m_fFFTBinAverageRX2.Clamp(-200f, 200f);
+
+        //        // so in attackTime period we need to have moved to where we want
+        //        int framesInAttackTime = m_bFastAttackNoiseFloorRX2 ? 0 : (int)((fps / 1000f) * (double)m_fAttackTimeInMSForRX2);
+        //        framesInAttackTime += 1;
+
+        //        if (m_fLerpAverageRX2 > m_fFFTBinAverageRX2)
+        //            m_fLerpAverageRX2 -= (m_fLerpAverageRX2 - m_fFFTBinAverageRX2) / framesInAttackTime;
+        //        else if (m_fLerpAverageRX2 < m_fFFTBinAverageRX2)
+        //            m_fLerpAverageRX2 += (m_fFFTBinAverageRX2 - m_fLerpAverageRX2) / framesInAttackTime;
+
+        //        if (m_bFastAttackNoiseFloorRX2 && (Math.Abs(m_fFFTBinAverageRX2 - m_fLerpAverageRX2) < 1f))
+        //        {
+        //            float tmpDelay = Math.Max(1000f, _fft_fill_timeRX2 + (_wdsp_mox_transition_buffer_clear ? _fft_fill_timeRX2 : 0)); // extra
+        //            bool bElapsed = (m_objFrameStartTimer.ElapsedMsec - _fLastFastAttackEnabledTimeRX2) > tmpDelay; //[2.10.1.0] MW0LGE change to time related, instead of frame related
+        //            if(bElapsed) m_bFastAttackNoiseFloorRX2 = false;
+        //        }
+
+        //        _bNoiseFloorAlreadyCalculatedRX2 = true;
+        //    }
+        //}
         private static void processNoiseFloor(int rx, int averageCount, float averageSum, int width, bool waterfall)
         {
-            if (rx == 1 && _bNoiseFloorAlreadyCalculatedRX1) return; // already done, ignore
-            if (rx == 2 && _bNoiseFloorAlreadyCalculatedRX2) return; // already done, ignore
+            //[2.10.3.9]MW0LGE refactor to use refs, simplifies the code, removes unnecessary branching, general speed improvements
+            if (rx != 1 && rx != 2) return;
+            ref bool bAlreadyCalculated = ref (rx == 1 ? ref _bNoiseFloorAlreadyCalculatedRX1 : ref _bNoiseFloorAlreadyCalculatedRX2);
+            if (bAlreadyCalculated) return;
 
-            int fps = waterfall ? m_nFps / waterfall_update_period : m_nFps;
-
+            int fpsComputed = waterfall ? m_nFps / waterfall_update_period : m_nFps;
             int requireSamples = (int)(width * (_NFsensitivity / 20f));
-            if (rx == 1)
+
+            ref bool fastAttack = ref (rx == 1 ? ref m_bFastAttackNoiseFloorRX1 : ref m_bFastAttackNoiseFloorRX2);
+            ref float fftBinAverage = ref (rx == 1 ? ref m_fFFTBinAverageRX1 : ref m_fFFTBinAverageRX2);
+            ref float lerpAverage = ref (rx == 1 ? ref m_fLerpAverageRX1 : ref m_fLerpAverageRX2);
+            ref float attackTimeInMs = ref (rx == 1 ? ref m_fAttackTimeInMSForRX1 : ref m_fAttackTimeInMSForRX2);
+            ref double lastFastAttackTime = ref (rx == 1 ? ref _fLastFastAttackEnabledTimeRX1 : ref _fLastFastAttackEnabledTimeRX2);
+            ref float fftFillTime = ref (rx == 1 ? ref _fft_fill_timeRX1 : ref _fft_fill_timeRX2);
+
+            if (averageCount >= requireSamples)
             {
-                if (averageCount >= requireSamples)
-                {
-                    float linearAverage = averageSum / (float)averageCount;
-                    //float oldLinear = (float)Math.Pow(10f, m_fFFTBinAverageRX1 / 10f);
-                    float oldLinear = FastPow10Raw(m_fFFTBinAverageRX1);
-                    float newLinear = (linearAverage + oldLinear) / 2f;
-                    float tmp = (float)(10f * Math.Log10(newLinear));
-                    if (!float.IsNaN(tmp)) m_fFFTBinAverageRX1 = tmp;
-                }
-                else
-                {
-                    m_fFFTBinAverageRX1 += m_bFastAttackNoiseFloorRX1 ? 3f : 1f;
-                }
-                m_fFFTBinAverageRX1 = m_fFFTBinAverageRX1.Clamp(-200f, 200f);
+                float linearAverage = averageSum / (float)averageCount;
+                float oldLinear = fastPow10Raw(fftBinAverage);
+                float newLinear = (linearAverage + oldLinear) * 0.5f;
 
-                // so in attackTime period we need to have moved to where we want
-                int framesInAttackTime = m_bFastAttackNoiseFloorRX1 ? 0 : (int)((fps / 1000f) * (double)m_fAttackTimeInMSForRX1);
-                framesInAttackTime += 1;
-
-                if (m_fLerpAverageRX1 > m_fFFTBinAverageRX1)
-                    m_fLerpAverageRX1 -= (m_fLerpAverageRX1 - m_fFFTBinAverageRX1) / framesInAttackTime;
-                else if (m_fLerpAverageRX1 < m_fFFTBinAverageRX1)
-                    m_fLerpAverageRX1 += (m_fFFTBinAverageRX1 - m_fLerpAverageRX1) / framesInAttackTime;
-
-                if (m_bFastAttackNoiseFloorRX1 && (Math.Abs(m_fFFTBinAverageRX1 - m_fLerpAverageRX1) < 1f))
-                {
-                    float tmpDelay = Math.Max(1000f, _fft_fill_timeRX1 + (_wdsp_mox_transition_buffer_clear ? _fft_fill_timeRX1 : 0)); // extra
-                    bool bElapsed = (m_objFrameStartTimer.ElapsedMsec - _fLastFastAttackEnabledTimeRX1) > tmpDelay; //[2.10.1.0] MW0LGE change to time related, instead of frame related
-                    if(bElapsed) m_bFastAttackNoiseFloorRX1 = false;
-                }
-
-                _bNoiseFloorAlreadyCalculatedRX1 = true;
+                fftBinAverage = 10f * (float)Math.Log10(newLinear + 1e-60); // 1e-60 fix potential NaN
             }
             else
             {
-                if (averageCount >= requireSamples)
-                {
-                    float linearAverage = averageSum / (float)averageCount;
-                    //float oldLinear = (float)Math.Pow(10f, m_fFFTBinAverageRX2 / 10f);
-                    float oldLinear = FastPow10Raw(m_fFFTBinAverageRX2);
-                    float newLinear = (linearAverage + oldLinear) / 2f;
-                    float tmp = (float)(10f * Math.Log10(newLinear));
-                    if (!float.IsNaN(tmp)) m_fFFTBinAverageRX2 = tmp;
-                }
-                else
-                {
-                    m_fFFTBinAverageRX2 += m_bFastAttackNoiseFloorRX2 ? 3f : 1f;
-                }
-                m_fFFTBinAverageRX2 = m_fFFTBinAverageRX2.Clamp(-200f, 200f);
-
-                // so in attackTime period we need to have moved to where we want
-                int framesInAttackTime = m_bFastAttackNoiseFloorRX2 ? 0 : (int)((fps / 1000f) * (double)m_fAttackTimeInMSForRX2);
-                framesInAttackTime += 1;
-
-                if (m_fLerpAverageRX2 > m_fFFTBinAverageRX2)
-                    m_fLerpAverageRX2 -= (m_fLerpAverageRX2 - m_fFFTBinAverageRX2) / framesInAttackTime;
-                else if (m_fLerpAverageRX2 < m_fFFTBinAverageRX2)
-                    m_fLerpAverageRX2 += (m_fFFTBinAverageRX2 - m_fLerpAverageRX2) / framesInAttackTime;
-
-                if (m_bFastAttackNoiseFloorRX2 && (Math.Abs(m_fFFTBinAverageRX2 - m_fLerpAverageRX2) < 1f))
-                {
-                    float tmpDelay = Math.Max(1000f, _fft_fill_timeRX2 + (_wdsp_mox_transition_buffer_clear ? _fft_fill_timeRX2 : 0)); // extra
-                    bool bElapsed = (m_objFrameStartTimer.ElapsedMsec - _fLastFastAttackEnabledTimeRX2) > tmpDelay; //[2.10.1.0] MW0LGE change to time related, instead of frame related
-                    if(bElapsed) m_bFastAttackNoiseFloorRX2 = false;
-                }
-
-                _bNoiseFloorAlreadyCalculatedRX2 = true;
+                fftBinAverage += fastAttack ? 3f : 1f;
             }
+
+            fftBinAverage = fftBinAverage < -200f ? -200f : fftBinAverage > 200f ? 200f : fftBinAverage;
+
+            int framesInAttack = fastAttack ? 0 : (int)((fpsComputed / 1000f) * (double)attackTimeInMs);
+            framesInAttack++;
+
+            float difference = lerpAverage - fftBinAverage;
+            lerpAverage -= difference / framesInAttack;
+
+            if (fastAttack)
+            {
+                float tmpDelay = Math.Max(1000f, fftFillTime + (_wdsp_mox_transition_buffer_clear ? fftFillTime : 0f));
+                double elapsed = m_objFrameStartTimer.ElapsedMsec - lastFastAttackTime;
+                if (elapsed > tmpDelay) fastAttack = false;
+            }
+
+            bAlreadyCalculated = true;
         }
+
 
         public static void ResetWaterfallTimers()
         {
@@ -5653,7 +5707,7 @@ namespace Thetis
                         if (!local_mox && (max_copy < currentAverage))
                         {
                             //averageSum += (float)Math.Pow(10f, max_copy / 10f);
-                            averageSum += FastPow10Raw(max_copy);
+                            averageSum += fastPow10Raw(max_copy);
                             averageCount++;
                         }
                         //
@@ -7347,6 +7401,7 @@ namespace Thetis
         private static SharpDX.DirectWrite.TextFormat fontDX2d_font9c;
         private static SharpDX.DirectWrite.TextFormat fontDX2d_panafont;
         private static SharpDX.DirectWrite.TextFormat fontDX2d_font10;
+        private static SharpDX.DirectWrite.TextFormat fontDX2d_font12;
         private static SharpDX.DirectWrite.TextFormat fontDX2d_font14;
         private static SharpDX.DirectWrite.TextFormat fontDX2d_font32;
         private static SharpDX.DirectWrite.TextFormat fontDX2d_font1;
@@ -7360,6 +7415,7 @@ namespace Thetis
             if (fontDX2d_font9c != null) Utilities.Dispose(ref fontDX2d_font9c);
             if (fontDX2d_panafont != null) Utilities.Dispose(ref fontDX2d_panafont);
             if (fontDX2d_font10 != null) Utilities.Dispose(ref fontDX2d_font10);
+            if (fontDX2d_font12 != null) Utilities.Dispose(ref fontDX2d_font12);
             if (fontDX2d_font14 != null) Utilities.Dispose(ref fontDX2d_font14);
             if (fontDX2d_font32 != null) Utilities.Dispose(ref fontDX2d_font32);
             if (fontDX2d_font1 != null) Utilities.Dispose(ref fontDX2d_font1);
@@ -7373,6 +7429,7 @@ namespace Thetis
             fontDX2d_font9c = null;
             fontDX2d_panafont = null;
             fontDX2d_font10 = null;
+            fontDX2d_font12 = null;
             fontDX2d_font14 = null;
             fontDX2d_font32 = null;
             fontDX2d_font1 = null;
@@ -7396,9 +7453,10 @@ namespace Thetis
                 fontDX2d_font9c = new SharpDX.DirectWrite.TextFormat(fontFactory, font95.FontFamily.Name, (font95.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
                 fontDX2d_panafont = new SharpDX.DirectWrite.TextFormat(fontFactory, pana_font.FontFamily.Name, (pana_font.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
                 fontDX2d_font10 = new SharpDX.DirectWrite.TextFormat(fontFactory, font10.FontFamily.Name, (font10.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
-                fontDX2d_font14 = new SharpDX.DirectWrite.TextFormat(fontFactory, font14.FontFamily.Name, (font14.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
+                fontDX2d_font12 = new SharpDX.DirectWrite.TextFormat(fontFactory, font12.FontFamily.Name, (font12.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
+                fontDX2d_font14 = new SharpDX.DirectWrite.TextFormat(fontFactory, font14b.FontFamily.Name, (font14b.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
                 fontDX2d_font32 = new SharpDX.DirectWrite.TextFormat(fontFactory, font32b.FontFamily.Name, (font32b.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
-                fontDX2d_font1 = new SharpDX.DirectWrite.TextFormat(fontFactory, font1.FontFamily.Name, (font1.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
+                fontDX2d_font1 = new SharpDX.DirectWrite.TextFormat(fontFactory, font1r.FontFamily.Name, (font1r.Size / 72) * _d2dRenderTarget.DotsPerInch.Width);
                 fontDX2d_fps_profile = new SharpDX.DirectWrite.TextFormat(fontFactory, m_fntCallOutFont.FontFamily.Name, (64f / 72) * _d2dRenderTarget.DotsPerInch.Width);
             }
         }
@@ -7748,7 +7806,7 @@ namespace Thetis
         //    return ret;
         //}
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static unsafe float FastPow10Shifted(float dBdiv10)
+        static unsafe float fastPow10Shifted(float dBdiv10)
         {
             if (dBdiv10 <= -20f || dBdiv10 >= 20f) return (float)Math.Pow(10.0, dBdiv10);
             int bits = (int)(dBdiv10 * Scale10) + Bias;
@@ -7756,7 +7814,7 @@ namespace Thetis
         }
         // version that takes the raw dB value (no /10 at call site)
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //static unsafe float FastPow10Raw(float dB)
+        //static unsafe float fastPow10Raw(float dB)
         //{            
         //    if(dB < -200 || dB > 200)  // mathematical limit calculated: ~ -382.3 to +385.3
         //        return (float)Math.Pow(10.0, dB / 10.0);
@@ -7770,7 +7828,7 @@ namespace Thetis
         //    return ret;
         //}
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static unsafe float FastPow10Raw(float dB)
+        static unsafe float fastPow10Raw(float dB)
         {
             if (dB <= -200f || dB >= 200f) return (float)Math.Pow(10.0, dB / 10.0);
             int bits = (int)(dB * Scale) + Bias;
@@ -9303,6 +9361,8 @@ namespace Thetis
 
         private static void DrawCursorInfo(int W)
         {
+            if (_spot_highlighted) return; // ignore if highlighting a spot
+
             //MHzCursor Display
             if ((m_bAlwaysShowCursorInfo || Common.ShiftKeyDown) && display_cursor_x != -1)
             {
@@ -10414,6 +10474,9 @@ namespace Thetis
         // spot draw2
 
         private static bool _NFDecimal = false;
+        private static int _new_spot_fade = 255;
+        private static double _pulsePhase;
+        private static double _lastRenderTime;
         public static bool NoiseFloorDecimal
         {
             get { return _NFDecimal; }
@@ -10494,6 +10557,7 @@ namespace Thetis
             }
             return sDisplayString;
         }
+        private static bool _spot_highlighted = false;
         public static void drawSpots(int rx, int nVerticalShift, int W, bool bottom)
         {
             if (bottom) return;
@@ -10650,11 +10714,23 @@ namespace Thetis
             SharpDX.Direct2D1.Brush whiteBrush = getDXBrushForColour(Color.White, 255);
             SharpDX.Direct2D1.Brush blackBrush = getDXBrushForColour(Color.Black, 255);
             SharpDX.Direct2D1.Brush brightBorder = getDXBrushForColour(Color.Yellow, 255);
+            //SharpDX.Direct2D1.Brush brightBorder_new_spot = getDXBrushForColour(Color.Yellow, _new_spot_fade);
+
+            // adjust fade
+            double currentTime = m_dElapsedFrameStart;
+            double deltaMs = currentTime - _lastRenderTime;
+            _lastRenderTime = currentTime;
+            _pulsePhase = (_pulsePhase + (Math.PI * 2.0) * deltaMs / 1000.0) % (2.0 * Math.PI);
+            double normalised = (Math.Cos(_pulsePhase) + 1.0) * 0.5;
+            _new_spot_fade = (int)(normalised * 255.0);
+            //
 
             List<SpotManager2.smSpot> visibleSpots = sortedSpots.Where(o => o.Visible[rx - 1]).ToList();
             SpotManager2.smSpot highLightedSpot = null;
             foreach (SpotManager2.smSpot spot in visibleSpots)
             {
+                SharpDX.Direct2D1.Brush brightBorder_new_spot = getDXBrushForColour(spot.colour, _new_spot_fade);
+
                 sDisplayString = getCallsignString(spot);
 
                 int nLuminance = Common.GetLuminance(spot.colour);
@@ -10664,16 +10740,35 @@ namespace Thetis
                 if (spot.Highlight[rx - 1])
                 {
                     highLightedSpot = spot;
+                    spot.previously_highlighted = true;
+                    spot.flashing = false;
                 }
                 else
                 {
                     drawFillRectangleDX2D(spotColour, spot.BoundingBoxInPixels[rx - 1]);
                     drawStringDX2D(sDisplayString, fontDX2d_font9, textBrush, spot.BoundingBoxInPixels[rx - 1].X + 1, spot.BoundingBoxInPixels[rx - 1].Y + 1);
+
+                    if (!_flashNewTCISpots) continue;
+
+                    // now draw a border around any spot that is <= 2 mins
+                    TimeSpan age = DateTime.UtcNow - spot.utc_spot_time;
+                    if (age.TotalSeconds <= 120) spot.flashing = true;
+
+                    if (spot.flashing && !spot.IsSWL && !spot.previously_highlighted)
+                    {
+                        Rectangle r = new Rectangle(spot.BoundingBoxInPixels[rx - 1].X - 2, spot.BoundingBoxInPixels[rx - 1].Y - 2,
+                            spot.BoundingBoxInPixels[rx - 1].Width + 4, spot.BoundingBoxInPixels[rx - 1].Height + 4);
+
+                        drawRectangleDX2D(brightBorder_new_spot, r, 4);
+
+                        if (age.TotalSeconds > 120 && _new_spot_fade < 20) spot.flashing = false; // stop flashing when dim
+                    }
                 }
             }
 
             if (highLightedSpot != null)
             {
+                _spot_highlighted = true;
                 sDisplayString = getCallsignString(highLightedSpot);
 
                 int nLuminance = Common.GetLuminance(highLightedSpot.colour);
@@ -10687,24 +10782,76 @@ namespace Thetis
                 drawRectangleDX2D(brightBorder, r, 2);
                 drawStringDX2D(sDisplayString, fontDX2d_font9, textBrush, highLightedSpot.BoundingBoxInPixels[rx - 1].X + 1, highLightedSpot.BoundingBoxInPixels[rx - 1].Y + 1);
 
-                if (!string.IsNullOrEmpty(highLightedSpot.additionalText))
+                // show additional text in bubble below, and concat parts if available
+                string bubble_text = highLightedSpot.additionalText;
+
+                if (!string.IsNullOrEmpty(highLightedSpot.spotter)) bubble_text += "\nSpotter: " + highLightedSpot.spotter;
+                if (highLightedSpot.heading >= 0) bubble_text += "\nHeading: " + highLightedSpot.heading.ToString();
+                if (!string.IsNullOrEmpty(highLightedSpot.continent)) bubble_text += "\nContinent: " + highLightedSpot.continent;
+                if (!string.IsNullOrEmpty(highLightedSpot.country)) bubble_text += "\nCountry: " + highLightedSpot.country;
+                // age
+                TimeSpan age = DateTime.UtcNow - highLightedSpot.utc_spot_time;
+                string ageText;
+                if (age.TotalDays > 2)
                 {
-                    // show additional text in bubble below
-                    SizeF additionalTextSize = measureStringDX2D(highLightedSpot.additionalText, fontDX2d_font10);
-
-                    int left = (r.X + (r.Width / 2)) - (int)(additionalTextSize.Width / 2);
-                    int top = r.Y + r.Height + 6;
-
-                    Rectangle additionalTextRect = new Rectangle(left - 2,
-                                                top - 2,
-                                                (int)(additionalTextSize.Width + 4),
-                                                (int)(additionalTextSize.Height + 4)
-                                               );
-
-                    drawFillRectangleDX2D(getDXBrushForColour(Color.LightGray), additionalTextRect);
-                    drawRectangleDX2D(getDXBrushForColour(Color.Black), additionalTextRect, 2);
-                    drawStringDX2D(highLightedSpot.additionalText, fontDX2d_font10, getDXBrushForColour(Color.Black), additionalTextRect.X + 2, additionalTextRect.Y + 2);
+                    ageText = "Old spot (>2 days)";
                 }
+                else if (age.TotalDays >= 1)
+                {
+                    int days = (int)age.TotalDays;
+                    ageText = days + " day" + (days == 1 ? "" : "s");
+                }
+                else if (age.TotalHours >= 1)
+                {
+                    int hours = (int)age.TotalHours;
+                    ageText = hours + " hour" + (hours == 1 ? "" : "s");
+                }
+                else if (age.TotalMinutes >= 1)
+                {
+                    int minutes = (int)age.TotalMinutes;
+                    ageText = minutes + " minute" + (minutes == 1 ? "" : "s");
+                }
+                else
+                {
+                    int seconds = (int)age.TotalSeconds;
+                    ageText = seconds + " second" + (seconds == 1 ? "" : "s");
+                }
+                bubble_text += "\nAge: " + ageText;
+                //
+
+                bubble_text = bubble_text.Trim();
+
+                SizeF additionalTextSize = measureStringDX2D(bubble_text, fontDX2d_font12);
+
+                int left = (r.X + (r.Width / 2)) - (int)(additionalTextSize.Width / 2);
+                int top = r.Y + r.Height + 6;
+
+                int rectWidth = (int)(additionalTextSize.Width + 8);
+                int rectHeight = (int)(additionalTextSize.Height + 8);
+                int adjustedLeft = left - 4;
+                if (adjustedLeft < 0) adjustedLeft = 0;
+                else if (adjustedLeft + rectWidth > W) adjustedLeft = W - rectWidth;
+
+                Rectangle additionalTextRect = new Rectangle(
+                    adjustedLeft,
+                    top - 4,
+                    rectWidth,
+                    rectHeight
+                );
+
+                RoundedRectangle rr = new RoundedRectangle();
+                rr.Rect = new RectangleF(additionalTextRect.Left, additionalTextRect.Top, additionalTextRect.Width, additionalTextRect.Height);
+                rr.RadiusX = 8f;
+                rr.RadiusY = 8f;
+
+                _d2dRenderTarget.FillRoundedRectangle(rr, getDXBrushForColour(Color.LightGray));
+                _d2dRenderTarget.DrawRoundedRectangle(rr, getDXBrushForColour(Color.White), 2f);
+
+                drawStringDX2D(bubble_text, fontDX2d_font12, getDXBrushForColour(Color.Black), additionalTextRect.X + 2, additionalTextRect.Y + 2);
+            }
+            else
+            {
+                _spot_highlighted = false;
             }
         }
         private static void clearAllDynamicBrushes()
@@ -10758,6 +10905,12 @@ namespace Thetis
         {
             get { return _showTCISpots; }
             set { _showTCISpots = value; }
+        }
+        private static bool _flashNewTCISpots = false;
+        public static bool FlashNewTCISpots
+        {
+            get { return _flashNewTCISpots; }
+            set { _flashNewTCISpots= value; }
         }
 
         private static bool _bUseLegacyBuffers = false;
