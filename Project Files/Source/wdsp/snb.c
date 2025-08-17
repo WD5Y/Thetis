@@ -410,7 +410,7 @@ int scanFrame(int xsize, int pval, double pmultmin, int* det, int* bimp, int* li
 	double td;
     int ti;
 	double merit[MAXIMP] = { 0 };
-	int nextlist[MAXIMP];
+	int nextlist[MAXIMP] = { 0 };
 	memset (befimp, 0, MAXIMP * sizeof (int));
 	memset (aftimp, 0, MAXIMP * sizeof (int));
     while (i < xsize && nimp < MAXIMP)
@@ -582,8 +582,11 @@ PORT void SetRXASNBARun (int channel, int run)
 	if (a->run != run)
 	{
 		RXAbpsnbaCheck (channel, rxa[channel].mode, rxa[channel].ndb.p->master_run);
-		RXAbp1Check (channel, rxa[channel].amd.p->run, run, rxa[channel].emnr.p->run, 
-			rxa[channel].anf.p->run, rxa[channel].anr.p->run);
+
+		RXAbp1Check (channel, rxa[channel].amd.p->run, run, rxa[channel].emnr.p->run,
+                             rxa[channel].anf.p->run, rxa[channel].anr.p->run,
+                             rxa[channel].rnnr.p->run, rxa[channel].sbnr.p->run); // NR3 + NR4 support
+
 		EnterCriticalSection (&ch[channel].csDSP);
 		a->run = run;
 		RXAbp1Set (channel);
@@ -686,6 +689,11 @@ PORT void SetRXASNBAOutputBandwidth (int channel, double flow, double fhigh)
 		if (absmax <  a->out_low_cut) absmax =  a->out_low_cut;
 		f_low = a->out_low_cut;
 		f_high = min (a->out_high_cut, absmax);
+	}
+	else	// (f_low > 0 && f_high < 0) does not occur.
+	{
+		f_low = a->out_low_cut;
+		f_high = a->out_high_cut;
 	}
 
 	setBandwidth_resample (d, f_low, f_high);

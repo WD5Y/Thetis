@@ -176,7 +176,7 @@ namespace Thetis
         public static extern void SetRXAANFPosition(int channel, int position);
 
         [DllImport("wdsp.dll", EntryPoint = "SetRXAANRRun", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetRXAANRRun(int channel, bool run);
+        public static extern void SetRXAANRRun(int channel, int run);
 
         [DllImport("wdsp.dll", EntryPoint = "SetRXAANRVals", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAANRVals(int channel, int taps, int delay, double gain, double leak);
@@ -226,6 +226,43 @@ namespace Thetis
         [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRRun", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAEMNRRun(int channel, int run);
 
+        // rnnoise
+        [DllImport("wdsp.dll", EntryPoint = "SetRXARNNRRun", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXARNNRRun(int channel, int run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXARNNRPosition", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXARNNRPosition(int channel, int position);
+
+        [DllImport("wdsp.dll", EntryPoint = "RNNRloadModel", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RNNRloadModel(string file_path);
+        //
+
+        //libspecbleach
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRRun", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRRun(int channel, int run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRPosition", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRPosition(int channel, int position);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRreductionAmount", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRreductionAmount(int channel, float amount);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRsmoothingFactor", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRsmoothingFactor(int channel, float factor);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRwhiteningFactor", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRwhiteningFactor(int channel, float factor);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRnoiseRescale", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRnoiseRescale(int channel, float factor);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRpostFilterThreshold", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRpostFilterThreshold(int channel, float threshold);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXASBNRnoiseScalingType", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXASBNRnoiseScalingType(int channel, int noise_scaling_type);        
+        //
+
         [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRPosition", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAEMNRPosition(int channel, int position);
 
@@ -235,8 +272,25 @@ namespace Thetis
         [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRnpeMethod", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAEMNRnpeMethod(int channel, int method);
 
+        //post processing - page 55-57 v1.27 manual
         [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRaeRun", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAEMNRaeRun(int channel, int run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRpost2Run", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAEMNRpost2Run(int channel, int run);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRpost2Nlevel", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAEMNRpost2Nlevel(int channel, double nlevel);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRpost2Factor", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAEMNRpost2Factor(int channel, double factor);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRpost2Rate", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAEMNRpost2Rate(int channel, double tc);
+
+        [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRpost2Taper", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetRXAEMNRpost2Taper(int channel, int taper);
+        //end post processing
 
         [DllImport("wdsp.dll", EntryPoint = "SetRXAEMNRtrainZetaThresh", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRXAEMNRtrainZetaThresh(int channel, double thresh);

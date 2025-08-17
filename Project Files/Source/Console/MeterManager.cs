@@ -288,8 +288,12 @@ namespace Thetis
         private static Dictionary<string, frmMeterDisplay> _lstMeterDisplayForms = new Dictionary<string, frmMeterDisplay>();
         private static Dictionary<string, ucMeter> _lstUCMeters = new Dictionary<string, ucMeter>();
 
+        private static Display.AdaptorInfo _adaptor;
+
         static MeterManager()
         {
+            _adaptor = null;
+
             _uc_sequence = 0; // to order the uc's when returned to setup
 
             // readings used by varius meter items such as Text Overlay
@@ -984,7 +988,6 @@ namespace Thetis
             private clsBarItem.Units _units;
             private bool _showMarker;
             private bool _showSubMarker;
-            private bool _hasSubIndicators;
             private int _ignoreHistoryDuration;
             private string _font_family_1;
             private FontStyle _font_style_1;
@@ -1002,7 +1005,6 @@ namespace Thetis
                 _settings = new ConcurrentDictionary<string, object>();
                 //
 
-                _hasSubIndicators = false;
                 _readingSource = Reading.NONE;
                 _barStyle = clsBarItem.BarStyle.None;
                 _maxPower = CurrentPowerRating;
@@ -2615,10 +2617,12 @@ namespace Thetis
                                                             new bool[] { false, false, false }
                                                      };
         }
-        public static void Init(Console c)
+        public static void Init(Console c, Display.AdaptorInfo adaptor = null)
         {
             _console = c;
             _image_fetcher.Version = c.ProductVersion;
+
+            _adaptor = adaptor;
 
             _rx1VHForAbove = _console.VFOAFreq >= _s9Frequency;
             _rx2VHForAbove = _console.RX2Enabled && _console.VFOBFreq >= _s9Frequency;
@@ -2642,7 +2646,7 @@ namespace Thetis
         private static Dictionary<string, DXRenderer> _DXrenderers = new Dictionary<string, DXRenderer>();
         private static void addRenderer(string sId, int rx, Panel target, clsMeter meter, System.Drawing.Color backColour)
         {
-            DXRenderer renderer = new DXRenderer(sId, rx, target, _console, meter);
+            DXRenderer renderer = new DXRenderer(sId, rx, target, _console, meter, _adaptor);
             renderer.BackgroundColour = backColour;
 
             _DXrenderers.Add(sId, renderer);
@@ -7648,9 +7652,6 @@ namespace Thetis
         }
         internal class clsDiscordButtonBox : clsButtonBox
         {
-            private BandGroups _button_bands;
-            private Band _band;
-            private bool _force_update;
             clsMeter _owningmeter;
             private bool _ready;
             private bool _click_highlight;
@@ -7660,7 +7661,6 @@ namespace Thetis
                 _ready = ThetisBotDiscord.IsReady;
                 _owningmeter = owningmeter;
                 _click_highlight = false;
-                _force_update = false;
 
                 ItemType = MeterItemType.DISCORD_BUTTONS;
 
@@ -11700,7 +11700,6 @@ namespace Thetis
                 public int index;
             }
 
-            private float _padding;
             private float _vertical_ratio;
             private System.Drawing.Color _back_colour;
             private System.Drawing.Color _axis0_colour;
@@ -11750,7 +11749,6 @@ namespace Thetis
                 _owningmeter = owning_meter;
                 _ig = item_group;
 
-                _padding = 0.1f;
                 _vertical_ratio = 0.5f;
                 _back_colour = System.Drawing.Color.Black;
                 _axis0_colour = System.Drawing.Color.Red;
@@ -14305,8 +14303,6 @@ namespace Thetis
             private float _fontSize_2;
             private float _padding;
 
-            private string _band_text;
-
             private clsMeter _owningMeter;
             private bool _ignore_measure_cache_1;
             private bool _ignore_measure_cache_2;
@@ -14369,8 +14365,6 @@ namespace Thetis
                 _fontSize_2 = 18f;
 
                 _padding = 0.1f;
-
-                _band_text = "";
 
                 _ignore_measure_cache_1 = false;
                 _ignore_measure_cache_2 = false;
@@ -14908,8 +14902,6 @@ namespace Thetis
             private bool _notxtrue;
             private bool _notxfalse;
 
-            private Thread _thread;
-
             public clsLed(clsMeter owningMeter)
             {
                 _timer = null;
@@ -14986,7 +14978,7 @@ namespace Thetis
                     }
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //MessageBox.Show($"Exception: {ex.Message}");
                     //MessageBox.Show($"String passed to Parse Text:\n{tmp}\n\nStack Trace: {ex.StackTrace}");
@@ -15016,7 +15008,7 @@ namespace Thetis
                         _error = true;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     _valid = false;
                     _script = null;
@@ -19791,8 +19783,6 @@ namespace Thetis
             }
             public BandGroups GetBandGroupFromBand(Band b)
             {
-                RadioButtonTS r;
-
                 switch (b)
                 {
                     case Band.B160M:
@@ -24141,7 +24131,6 @@ namespace Thetis
             private int _newTargetHeight;
             private bool _targetVisible;
             private bool _enabled;
-            private ColorInterpolator _color_interp;
 
             private bool _waterfall_row_added;
 
@@ -24150,9 +24139,13 @@ namespace Thetis
 
             private Guid _touch_guid;
 
-            public DXRenderer(string sId, int rx, Panel target, Console c, clsMeter meter)
+            private Display.AdaptorInfo _adaptor;
+
+            public DXRenderer(string sId, int rx, Panel target, Console c, clsMeter meter, Display.AdaptorInfo adaptor = null)
             {
                 if (c == null || target == null) return;
+
+                _adaptor = adaptor;
 
                 _delta_time_ms = 0;
                 //_dElapsedFrameStart = 0;
@@ -24252,7 +24245,7 @@ namespace Thetis
             }
             public void RunDisplay()
             {
-                dxInit();
+                dxInit(DriverType.Hardware, _adaptor);
 
                 _dxDisplayThreadRunning = false;
                 _dxRenderThread = new Thread(new ThreadStart(dxRender))
@@ -24352,7 +24345,7 @@ namespace Thetis
                 }
                 return 1;
             }
-            private void dxInit(DriverType driverType = DriverType.Hardware)
+            private void dxInit(DriverType driverType = DriverType.Hardware, Display.AdaptorInfo adaptorInfo = null)
             {
                 // code based on display.cs
                 if (_bDXSetup) return;
@@ -24419,8 +24412,36 @@ namespace Thetis
                     }
 
                     _factory1 = new SharpDX.DXGI.Factory1();
-                    
-                    _device = new SharpDX.Direct3D11.Device(driverType, debug | DeviceCreationFlags.PreventAlteringLayerSettingsFromRegistry | DeviceCreationFlags.BgraSupport/* | DeviceCreationFlags.SingleThreaded*/, featureLevels);
+
+                    Adapter selectedAdapter = null;
+                    if (adaptorInfo != null)
+                    {
+                        int totalAdapters = _factory1.GetAdapterCount();
+                        for (int an = 0; an < totalAdapters; an++)
+                        {
+                            Adapter rawAdapter = _factory1.GetAdapter(an);
+                            Adapter1 adapter1 = rawAdapter.QueryInterface<Adapter1>();
+                            AdapterDescription1 addesc = adapter1.Description1;
+                            if (addesc.VendorId == adaptorInfo.VendorId && addesc.DeviceId == adaptorInfo.DeviceId)
+                            {
+                                selectedAdapter = rawAdapter;
+                                Utilities.Dispose(ref adapter1);
+                                break;
+                            }
+                            Utilities.Dispose(ref adapter1);
+                            Utilities.Dispose(ref rawAdapter);
+                        }
+                    }
+
+                    if (selectedAdapter != null)
+                    {
+                        _device = new SharpDX.Direct3D11.Device(selectedAdapter, debug | DeviceCreationFlags.PreventAlteringLayerSettingsFromRegistry | DeviceCreationFlags.BgraSupport/* | DeviceCreationFlags.SingleThreaded*/, featureLevels);
+                        Utilities.Dispose(ref selectedAdapter);
+                    }
+                    else
+                    {
+                        _device = new SharpDX.Direct3D11.Device(driverType, debug | DeviceCreationFlags.PreventAlteringLayerSettingsFromRegistry | DeviceCreationFlags.BgraSupport/* | DeviceCreationFlags.SingleThreaded*/, featureLevels);
+                    }
 
                     SharpDX.DXGI.Device1 device1 = _device.QueryInterfaceOrNull<SharpDX.DXGI.Device1>();
                     if (device1 != null)
@@ -24603,7 +24624,7 @@ namespace Thetis
                         //resizeDX();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -32930,7 +32951,7 @@ namespace Thetis
 
                     return dxBitmap;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null;
                 }
@@ -33933,7 +33954,7 @@ namespace Thetis
                         if (_tcpClient != null && !clientConnected)
                             reconnect = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         if (_tcpClient != null && !clientConnected)
                             reconnect = true;
@@ -35513,8 +35534,8 @@ namespace Thetis
             private int _pixels;
             private int _hwsample_rate;
             private int _frame_rate;
-            private double _z_factor;
-            private double _p_slider;
+            //private double _z_factor;
+            //private double _p_slider;
             private double _rx_frequency;
             private double _tx_frequency;
 
@@ -35590,8 +35611,8 @@ namespace Thetis
                 
                 _pixels = PIXELS;
                 _frame_rate = FRAME_RATE;
-                _z_factor = 0; // range is 0.0 to 1.0, done UpdateSpecSettings
-                _p_slider = 0.5; // range is 0.0 to 1.0
+                //_z_factor = 0; // range is 0.0 to 1.0, done UpdateSpecSettings
+                //_p_slider = 0.5; // range is 0.0 to 1.0
 
                 _new_display_data = new float[_pixels];
                 _new_display_data_raw = new float[_pixels];
