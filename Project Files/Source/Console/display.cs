@@ -30,6 +30,19 @@
 // Waterfall AGC Modifications Copyright (C) 2013 Phil Harman (VK6APH)
 // Transitions to directX and continual modifications Copyright (C) 2020-2025 Richard Samphire (MW0LGE)
 //=================================================================
+//
+//============================================================================================//
+// Dual-Licensing Statement (Applies Only to Author's Contributions, Richard Samphire MW0LGE) //
+// ------------------------------------------------------------------------------------------ //
+// For any code originally written by Richard Samphire MW0LGE, or for any modifications       //
+// made by him, the copyright holder for those portions (Richard Samphire) reserves the       //
+// right to use, license, and distribute such code under different terms, including           //
+// closed-source and proprietary licences, in addition to the GNU General Public License      //
+// granted above. Nothing in this statement restricts any rights granted to recipients under  //
+// the GNU GPL. Code contributed by others (not Richard Samphire) remains licensed under      //
+// its original terms and is not affected by this dual-licensing statement in any way.        //
+// Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
+//============================================================================================//
 
 
 using System.Linq;
@@ -3371,14 +3384,24 @@ namespace Thetis
                     //[2.10.1.0] MW0LGE spectrum/bitmaps may be cleared or bad, so wait to settle
                     FastAttackNoiseFloorRX1 = true;
                     if(RX2Enabled) FastAttackNoiseFloorRX2 = true;
+
+                    // clear measure string cache
+                    m_stringSizeCache.Clear();
+                    _stringMeasureKeys.Clear();
+                    //
                 }
             }
             catch (Exception e)
             {
+                string msg = "DirectX resizeDX2D() display failure\n\nThis can sometimes be caused by other programs 'hooking' into directX," +
+                    "such as GFX card control software (eg, EVGA Precision Xoc). Close down Thetis, quit as many 'system tray'\nand other " +
+                    "things as possible and try again." + e.Message;
+                if(_device.DeviceRemovedReason == SharpDX.DXGI.ResultCode.DeviceRemoved || _device.DeviceRemovedReason == SharpDX.DXGI.ResultCode.DeviceReset)
+                {
+                    msg += "\n\nDeviceRemoved or DeviceReset reported by DirectX, this indicates a problem with the graphics device or its driver.\n\nRemoval Code : " + _device.DeviceRemovedReason.Code.ToString();
+                }
                 ShutdownDX2D();
-                MessageBox.Show("DirectX resizeDX2D() Meter failure\n\nThis can sometimes be caused by other programs 'hooking' into directX," +
-                    "such as GFX card control software (eg, EVGA Precision Xoc). Close down Thetis, quit as many 'system tray' and other\n" +
-                    "things as possible and try again.\n\n" + e.Message, "Thetis DirectX", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                MessageBox.Show(msg, "Thetis DirectX", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
             }
         }
 
@@ -3490,6 +3513,11 @@ namespace Thetis
                         FastAttackNoiseFloorRX2 = true;
                     }
                 }
+
+                if(console != null)
+                {
+                    console.SetGeneralSetting(0, OtherButtonId.PAUSE, _paused_display);
+                }
             }
         }
         private static void pauseDisplay()
@@ -3531,6 +3559,7 @@ namespace Thetis
 
         private static bool _valid_fps_profile = false;
         private static double _last_valid_check = double.MinValue;
+        private static int _dx_fail_retry = 0;
         public static void RenderDX2D()
         {
             try
@@ -3878,27 +3907,49 @@ namespace Thetis
 
                 jump:
 
-                    _d2dRenderTarget.EndDraw();
+                    try
+                    {
+                        _d2dRenderTarget.EndDraw();
+                    }
+                    catch (SharpDXException ex) when (ex.ResultCode == SharpDX.Direct2D1.ResultCode.RecreateTarget)
+                    {
+                        if (_dx_fail_retry < 10)
+                        {
+                            resizeDX2D();
+                            _dx_fail_retry++;
+                            return;
+                        }
+                    }
 
                     // render
                     // note: the only way to have Present non block when using vsync number of blanks 0 , is to use DoNotWait
                     // however the gpu will error if it is busy doing something and the data can not be queued
-                    // It will error and just ignore everything, we try present and ignore the 0x887A000A error
+                    // It will error and just ignore everything, we try present and ignore the 0x887A000A (was still drawing) error
                     PresentFlags pf = m_nVBlanks == 0 ? _NoVSYNCpresentFlag : PresentFlags.None;
                     Result r = _swapChain1.TryPresent(m_nVBlanks, pf);
 
-                    if (r != Result.Ok && r != 0x887A000A)
+                    if (r != Result.Ok && !(
+                        r == SharpDX.DXGI.ResultCode.WasStillDrawing/*0x887A000A*/ ||
+                        r == 0x087A0001/*DXGI_STATUS_OCCLUDED*/
+                        ))
                     {
-                        string sMsg = "";
-                        if (r == 0x887A0001) sMsg = "Present Device Invalid Call" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";    //DXGI_ERROR_INVALID_CALL
-                        if (r == 0x887A0007) sMsg = "Present Device Reset" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";           //DXGI_ERROR_DEVICE_RESET
-                        if (r == 0x887A0005) sMsg = "Present Device Removed" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";         //DXGI_ERROR_DEVICE_REMOVED
-                        if (r == 0x88760870) sMsg = "Present Device DD3DDI Removed" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";  //D3DDDIERR_DEVICEREMOVED
-                        //if (r == 0x087A0001) sMsg = "Present Device Occluded" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";      //DXGI_STATUS_OCCLUDED
-                        //(ignored in the preceding if statement) if (r == 0x887A000A) sMsg = "Present Device Still Drawping" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]"; //DXGI_ERROR_WAS_STILL_DRAWING
+                        if ((r == SharpDX.DXGI.ResultCode.DeviceRemoved || r == SharpDX.DXGI.ResultCode.DeviceReset) && _dx_fail_retry < 10)
+                        {
+                            resizeDX2D();
+                            _dx_fail_retry++;
+                            return;
+                        }
 
+                        string sMsg = "";
+                        if (r == SharpDX.DXGI.ResultCode.InvalidCall/*0x887A0001*/) sMsg = "Present Device Invalid Call" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";    //DXGI_ERROR_INVALID_CALL
+                        if (r == SharpDX.DXGI.ResultCode.DeviceReset/*0x887A0007*/) sMsg = "Present Device Reset" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";           //DXGI_ERROR_DEVICE_RESET
+                        if (r == SharpDX.DXGI.ResultCode.DeviceRemoved/*0x887A0005*/) sMsg = "Present Device Removed" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";         //DXGI_ERROR_DEVICE_REMOVED
+                        //if (r == 0x88760870) sMsg = "Present Device DD3DDI Removed" + Environment.NewLine + "" + Environment.NewLine + "[ " + r.ToString() + " ]";  //D3DDDIERR_DEVICEREMOVED
+                        
                         if (!string.IsNullOrEmpty(sMsg)) throw (new Exception(sMsg));
                     }
+
+                    _dx_fail_retry = 0;
                 }
             }
             catch (Exception e)
@@ -8518,7 +8569,7 @@ namespace Thetis
             24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.Japan:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1825000, 1907500, 1912500,
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000, 1907500, 1912500,
                         3500000, 3575000, 3599000, 3612000, 3680000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
             7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
             24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 146000000 };

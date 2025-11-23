@@ -737,7 +737,7 @@ namespace Thetis
                                         case 5:
                                             hpsdrd.deviceType = HPSDRHW.Orion;
                                             break;
-                                        case 10:
+                                        case 10: // a G2 will clash here if ever uses P1 and uses 10 for board_id (as it does for P2)
                                             hpsdrd.deviceType = HPSDRHW.OrionMKII;
                                             break;
                                     }
