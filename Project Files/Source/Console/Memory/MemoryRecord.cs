@@ -28,9 +28,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Thetis
 {
@@ -91,7 +88,7 @@ namespace Thetis
             repeater_mode = _repeater_mode;
             rptr_offset = _fm_tx_offset_mhz;
             ctcss_on = _ctcss_on;
-            ctcss_freq = _ctcss_freq;            
+            ctcss_freq = _ctcss_freq;
             deviation = _deviation;
             split = _split;
             tx_freq = _txfreq;
@@ -112,16 +109,16 @@ namespace Thetis
             repeatingm = _Repeatingm;// ke9ns add  for scheduled freq change and optional recording
             extra = _Extra;// ke9ns add  for scheduled freq change and optional recording
 
-      /*   
-       
-            startdate = StartDate; // ke9ns add  for scheduled freq change and optional recording
-            scheduleon = ScheduleOn; // ke9ns add  for scheduled freq change and optional recording 
-            duration = Duration;// ke9ns add  for scheduled freq change and optional recording
-            repeating = Repeating;// ke9ns add  for scheduled freq change and optional recording
-            recording = Recording;// ke9ns add  for scheduled freq change and optional recording
-            repeatingm = Repeatingm;// ke9ns add  for scheduled freq change and optional recording
-            extra = Extra;// ke9ns add  for scheduled freq change and optional recording
-*/
+            /*   
+
+                  startdate = StartDate; // ke9ns add  for scheduled freq change and optional recording
+                  scheduleon = ScheduleOn; // ke9ns add  for scheduled freq change and optional recording 
+                  duration = Duration;// ke9ns add  for scheduled freq change and optional recording
+                  repeating = Repeating;// ke9ns add  for scheduled freq change and optional recording
+                  recording = Recording;// ke9ns add  for scheduled freq change and optional recording
+                  repeatingm = Repeatingm;// ke9ns add  for scheduled freq change and optional recording
+                  extra = Extra;// ke9ns add  for scheduled freq change and optional recording
+      */
 
 
         } // memoryrecord
@@ -138,7 +135,7 @@ namespace Thetis
             repeater_mode = rec.repeater_mode;
             rptr_offset = rec.rptr_offset;
             ctcss_on = rec.ctcss_on;
-            ctcss_freq = rec.ctcss_freq;            
+            ctcss_freq = rec.ctcss_freq;
             deviation = rec.deviation;
             split = rec.split;
             tx_freq = rec.tx_freq;
@@ -246,7 +243,7 @@ namespace Thetis
             }
         }
 
-      
+
         private int duration = 25; // ke9ns Duration of recording if option enabled
         public int Duration
         {
@@ -294,7 +291,7 @@ namespace Thetis
         //============================================================================
 
 
-   
+
 
 
         private string comments = "";
@@ -376,7 +373,7 @@ namespace Thetis
                 ctcss_freq = value;
                 OnPropertyChanged(this, new PropertyChangedEventArgs("CTCSSFreq"));
             }
-        }        
+        }
 
         private int deviation = 5000;
         public int Deviation
@@ -388,7 +385,7 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("Deviation"));
             }
         }
-        
+
         private bool split = false;
         public bool Split
         {
@@ -443,18 +440,18 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("FilterHigh"));
             }
         }
-/*
-        private string comments = "";
-        public string Comments
-        {
-            get { return comments; }
-            set
-            {
-                comments = value;
-                OnPropertyChanged(this, new PropertyChangedEventArgs("Comments"));
-            }
-        }
-*/
+        /*
+                private string comments = "";
+                public string Comments
+                {
+                    get { return comments; }
+                    set
+                    {
+                        comments = value;
+                        OnPropertyChanged(this, new PropertyChangedEventArgs("Comments"));
+                    }
+                }
+        */
         private AGCMode agc_mode = AGCMode.MED;
         public AGCMode AGCMode
         {
@@ -477,8 +474,8 @@ namespace Thetis
             }
         }
 
-       
-      
+
+
 
         private bool scheduleon = false; // ke9ns add Turn Scedule ON/OFF
         public bool ScheduleOn
@@ -500,6 +497,13 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("Extra"));
             }
         }
+
+
+
+
+        // ke9ns add above
+        //================================================================================================
+        //==================================================================================================
 
         //wd5y
         private bool rx1agcaut = false;
@@ -523,16 +527,7 @@ namespace Thetis
                 OnPropertyChanged(this, new PropertyChangedEventArgs("RX2AGC-AUT"));
             }
         }
-        //wd5y
-
-
-
-
-        // ke9ns add above
-        //================================================================================================
-        //==================================================================================================
-
-
+        //wd5y        
 
         #endregion
 

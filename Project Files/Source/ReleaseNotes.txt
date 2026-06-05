@@ -1,28 +1,199 @@
-**UPDATE: The CW issue has been resolved for Protocol 2. It requires a firmware update and this modified version of Thetis. Please see the [ApacheLabs community forums here](https://community.apache-labs.com/viewtopic.php?f=32&t=4972)**
+IMPORTANT : if you are updating from a pre v2.10.3.13 version then make a backup of your database before using this version. If you have an existing database that pre-dates v2.10.3.13 then Thetis will pop up a message asking you to restart whilst holding down the CTRL key. Please follow the onscreen instructions.
+
+Here is a video covering most of the new features in v2.10.3.13 : https://youtu.be/LQlAEiWw3h4
 
 **Note: You can revisit these release notes by using the button inside the About box**
 
 Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/issues/new/choose).
 
-## Join us on Discord for active test builds and much more : [Click Here](https://discord.gg/6fHCRKnDc9)
+## Join us on Discord : [Click Here](https://discord.gg/6fHCRKnDc9)
 
-## v2.10.3.12 - Dev Change Log
+This version, v2.10.3.14, will be the last version released publicly by MW0LGE - Richard Samphire.
+This repo will no longer be updated or monitored.
+
+EDIT: actually v2.10.3.15 will be the last ;)
+
+## v2.10.3.15.n1mm - Change Log
+- [add] option added to setup n1mm to use/ignore the cw frequency tone shift when sending spectrum to n1mm, default now off (was previously always enabled)
+
+## v2.10.3.15 - Change Log
+- [add] option to allow smearing of waterfalls (default off), Setup->Appearance->General
+	Some ctun off users wanted the old display method even though a smeared waterfall is pointless new data, and the old data is now incorrectly aligned so is also pointless.
+- [add] there have been some issues where the CTRL key is not detected to update the database.
+	A database update can now be forced by adding a file to the data path folder which is normally C:\Users\<you>\AppData\Roaming\OpenHPSDR\Thetis-x64
+	The file should be an empty text file called 'updatedb.txt'. It will get renamed if successful.
+- [change] ANAN-G1 has become ANAN-G2E, and HermesIII board has become HermesC10 - Rick N1GP
+- [change] nuget update to use latest libs etc
+
+## v2.10.3.14 - Change Log
+- [add] otherbutton wave record now supported. Extra folder called 'waverecord' will store these. Right click to open folder or via Setup->Audio->Recording. Similar to the [Record] button from the WaveForm of old. Note: tx/rx transition will terminate recording
+- [add] new simple WaveList record item so that wav files can be dragged to a list and played on demand. No repeat via this simple list method. Note: you will not be able to use this if Thetis is run as administrator
+- [add] distance shown when hovering over a TCI spot if that spot has been provided with distance info via the json payload
+- [add] added custom TCI commands related to preamp and step attenuator
+	rx_step_att_enabled_ex
+        rx_step_att_ex  (use +ve attenuation values to attenuate)
+	rx_preamp_att_ex   (use -ve preamp values to attenuate)
+- [add] added rx_nb_enable_ex TCI command to be able to select NB 1 or 2, eg. rx_nb_enable_ex:0,true,1;   will enable NB1 for rx1
+- [add] added TCI commands vfo_sync_ex, vfo_swap_ex, fm_deviation_ex, agc_auto_ex, tx_filter_band_ex
+- [add] TCI command that will run a cat command. run_cat_ex can be used to perform a thetis cat command on itself. Examples:
+	run_cat_ex:PS;  // will return the power on state as : run_cat_ex:PS,PS0;    arg0 on the return data is the command that was used, arg1 is the cat result
+	Note, some cat command do not have a return state, for example
+	run_cat_ex:PS1;  // will turn the power on
+        run_cat_ex:PS0;  // will turn the power off
+	Note, one cat command at a time, one ; to terminate the TCI message
+- [add] ApacheLabs ANAN-G2E (formerly G1) model added - Rick N1GP
+- [add] simple alpha slider for TCI spot background panels
+- [change] TCI emulate ExpertElectroncsSDR3 selected as default for a new db/install. JTDX/WSJT-X will now send TCI audio into Thetis with this option enabled. Turn it on if you are not getting any TX TCI audio
+- [change] ASIO Avid Driver (AVID Pro Tools) will be black listed by portaudio as it was causing issues, see here https://discord.com/channels/1271453528656969789/1491198252593315940 . As a result it will not be able to be used by Thetis
+- [change] portaudio updated to commit 375345a - Apr 10, 2026
+- [change] Mute will mute VAC options moved to Setup->Audio->Options, and TCI 1/2 included
+- [change] restructure of TCI audio/iq threading with potential improvements likely more noticeable when not in use
+- [change] TCI message tx_frequency_thetis has become tx_frequency_ex as it extends tx_frequency. This will break older TCI clients that used this such as HF AUTO Controller (download a new version)
+- [fix] TCI server websocket text frames are now encoded utf-8. Fixes issues where certain characters in TX profiles would cause TCI clients to throw errors
+- [fix] EQ and CFC legacy mode is now stored/recovered from a TX profile. It will require another database update. Follow the on screen instructions when you install this version
+- [fix] tuner power via TCI now follows the tuner power mode, drive/own slider/fixed
+- [fix] tci drive and tune_drive messages are sent on client connect
+- [fix] fixed initialisation state for a number of TCI server settings
+
+## v2.10.3.13 - Change Log
+- [add] audio stream over TCI support added
+- [add] IQ stream over TCI support added
+- [add] full CW macro support added to TCI used by software such as SDC from Yuri UT4LW
+- [add] new radio discovery and networking system/config added to setup. The old method has been removed. Your old radio IP settings will be lost if you have those set
+- [add] Network Settings documentation pdf added for the change network settings. Can be found in shortcuts, or via the About box manual links
+- [add] dragging the spectrum to cause DDC centre frequency changes will attempt to realign the waterfall data to limit waterfall smearing. The waterfall is put to sleep whilst fft bins are emptying or refilling. The sleep time varies depending on hardware sample rate and fft size. There may be up to a 4 pixel alignment error, this is unavoidable do to the nature of power spread into fft bins and the subsequent pixel columns
+- [add] entirely new recording/playback system added. New tab in Setup->Audio->Recording. New container gadget item, voice record/play, and cat support. Cat commands :
+
+    zzjs;  // stops any playback / record in progress
+    zzjr;  // returns zzjr1; if a recording is in progress zzjr0; otherwise
+    zzjp;  // returns zzjp1; if a playback is in progress zzjp0; otherwise
+    zzjq;  // returns zzjq1; if play or record is in progress, zzjq0; otherwise
+
+    ZZJRxynnnq;  // make a recording to AudioStorageFolder\cat
+    x = receiver 1 or 2
+    y = 0 is via WDSP(radio), 1 is via PC
+    nnn = 001 to 128 slot recording number. To record to slot 5 use 005
+    q = 0 to use temporary recording limitation, 1 to ignore them
+
+    ZZJPxynnnqggg;  // make a playback from AudioStorageFolder\cat
+    x = receiver 1 or 2
+    y = 0 is via WDSP(radio), 1 is via PC
+    nnn = 001 to 128 slot recording number. To play slot 5 use 005
+    q = 0 to use temporary playback limitation, 1 to ignore them
+    ggg = gain adjust if played back through WDSP(radio). If PC playback it still needs to be provided but is ignored. Format must be -70 to +70. Zero needs to be +00 or -00
+
+    ZZJQccccrnnn;  // use the slot + settings from a voice record/play gadget item
+    cccc = 4char id
+    r = 0 to playback, 1 to record (a fast record so ui will return to play when done)
+    nnn = 001 to # of slots used by gadget item. eg 005 to use slot five
+    
+- [add] new 5/10/18 band Parametric EQ ui for TX and RX eq, with Q factor. Mouse wheel adjusts Q, click on a node and drag it
+- [add] new 5/10/18 band EQ Parametric EQ ui for CFC, with Q factor. Mouse wheel adjusts Q, click on a node and drag it
+- [add] flags can be shown on the TCI spots if a callsign can be attributed to a country. If information is provided in the JSON payload then it will take precedence. v3.0.4 Cluster TCI Bridge from OE3IDE will support this. Skimmers such as SDC which do not include JSON payload will have flags assigned if they can be recovered from the spotted callsign
+- [add] timing labels on the waterfall, options in Setup->Appearance->General
+- [add] protocol2 has had some extra ADC information added, the raw ADC max magnitude. There is a new meter item for this. The data will be used for full auto attenuation in later versions of Thetis. It is only supported by fpga fw v27 and p2papp v45 on the G2 at the moment, but may be available in other firmwares at a later date
+- [add] now possible to select in/out channel pairs in cmASIO. Note: this must be done when the device is not currently being used. A restart of Thetis would then be required
+- [add] now possible to select channel (both, left, right) for cmasio mic input
+- [add] debug/test option to ignore ATT offset in displays and signal meters. Thetis identifies as an Icom !
+- [add] bandwidth debug/test option to visualise the data in/out of Thetis
+- [add] option for NR3 (RNnoise) to use a fixed gain for samples, the value of which is taken from VU3RDD's modified WDSP version
+- [add] holding SHIFT when clicking an RX filter (main ui console or filter button container) will also set the TX filter. Note: the tx profile will be modified and will need saving if you want to keep this tx width at restart
+- [add] TCI spots also shown on rx2
+- [add] dark mode title bars + windows now applies to diversity form
+- [add] you can now click on a diversity memory pin in the 'radar' to select it
+- [add] textcolor field added to TCI json payload for changing the spot colour text. Details here : https://github.com/ramdor/Thetis/commit/a9ce28bc62b612b1405d4eaf5d21cb12458ff802
+- [add] IsSWL and SWLSecondsToLive added to TCI json payload for spots. Details here : https://github.com/ramdor/Thetis/commit/013fd8b6d092bb57e37c31007ca50f38f8fd02bc
+- [add] option to show active peaks on transmit. Note, the setting is in Display RX1/RX2 tab, not the Display TX tab
+- [add] options added to the DC block to remove it before or after AGC (found in Setup->DSP->AM/SAM)
+- [add] ganymede amplifier support added including ui resets and warnings
+- [add] new tci commands added
+	- rx_channel_enable
+	- rx_sensors_enable
+	- tx_sensors_enable
+	- rx_nr_enable
+	- rx_nr_enable_ex
+	- rx_anf_enable
+	- rx_volume
+	- rx_ctun_ex
+	- tx_profile_ex
+	- calibration_ex
+ 	- tx_profiles_ex
+	- shutdown_ex
+	- tx_profile_ex
+	- rit_enable
+	- xit_enable
+	- rit_offset
+	- xit_offset
+	- volume
+	- rx_balance
+	- agc_mode
+	- agc_gain
+	- rx_nb_enable
+	- rx_bin_enable
+	- rx_apf_enable
+	- lock
+	- sql_enable
+	- sql_level
+	- digl_offset
+	- digu_offset
+	- vfo_lock
+	- rx_nf_enable
+	- cw_macros_speed
+	- cw_macros_delay
+	- cw_keyer_speed
+	- cw_macros_speed_up
+	- cw_macros_speed_down
+	- cw_macros
+	- cw_terminal
+	- cw_msg
+	- cw_macros_stop
+	- cw_macros_empty
+	- callsign_send
+	- keyer
+- [change] better handing of DirectX failure
+- [change] if cpu% fails to show due to PerformanceCounter issues, the Volts/Amps will now not hide as a result of the failure if configured. Note: There is a discord post regarding recovery of the PerformanceCounters : https://discord.com/channels/1271453528656969789/1452525256303710228
+- [change] the legacy spot support and code has been removed as it was not being maintained as had many issue. Use a 3rd party app via TCI such as Cluster-TCI-Bridge by OE3IDE to provide spots to the spectrum
+- [change] wave form has been removed, replaced by new recording/playback system
+- [change] quick record wavs have now moved to a quickrecord folder in the Audio->Recording audio storage path
+- [change] auto rx step attenuation will only happen when there has been at least 400ms of adc overload and it moves from a yellow to red warning
+- [change] removed -SWL[n] tag support from TCI spot mode field, added support to JSON tagged data
+- [change] DB merge code changed such that it attempts to pull all state settings from the source database into the new database if possible
+- [change] wave form removed from other buttons, replaced with amp view
+- [change] more info hover cursor item has a back panel now
+- [change] waterfall agc has had some rework
+- [fix] ZZDM cat message query now returns the correct display mode number (#600)
+- [fix] waterfall prevented from covering TCI spots
+- [fix] diversity form now fades in along side console window at start up
+- [fix] estimated notch width display will now display correctly. Previously was always using data from rx2
+- [fix] 6m button on G2 panel not selecting 6m. Previously would select 60m, now selects 6m as it should
+- [fix] issues handling the highprio network packet (1025) meant that ADC overloads could be missed. This is now resolved
+- [fix] fixed issues with 40/30 and 12/10 bfp ranges in setup causing crashes
+- [fix] fixed issue where some modes had spaces in the TCI modulation outbound message
+- [fix] TCI server can now handle concatenated TCI commands
+- [fix] if within 15 pixels of the top of RX1/RX2 display areas, the cursor changes to EW and you can drag left/right. Filter edges and bandstacks are now not considered in this area and as such dragging of the spectrum will occur if over a bandstack for example
+- [fix] port + delay now validated for focusmaster, could cause crash if non numerics were entered
+- [fix] n1mm spectral output should now follow band changes for both rx1 + rx2
+
+## v2.10.3.12 - Change Log
 - [add] you can pick a directx device using -adaptor:# from the command line. Use Thetis.exe -help for more information
 - [add] ability to load rnnoise model binary files added
-- [add] WDSP 1.27 post processing noise functionality added to NR2. Settings in Setup->DSP->NR/ANF
 - [add] added functionality to reposition 'lost' forms. This can be found in Setup->[Test->Reposition Forms]. Select the forms you want to move back to the primary monitor starting at 100, 100. The Z order of windows will not be changed so they may appear behind a window on the primary monitor
 - [add] you can now hold CTRL+ALT+SHIFT when starting Thetis to show a message to allow you to reset the locations of Thetis console and Setup if they become lost. You can then use Setup->Tests->[Reposition Forms] for any others missing
 - [add] %nr% and %rxn% added as script variables. %nr% returns NR number enabled 0-4, and %rxn% returns receiver number used by the container
 - [add] it is now possible to use the condition of a led indicator to show/hide text overlay
 - [add] new meter item, OtherButtons. Some buttons have icons associated with them. Also button style 13 uses active indicator colour for the text/icon colour. New [fix] option that ignores button size, and uses Scale instead. You can use ALT click drag to move buttons around, let go of click to drop them. SHIFT+ALT will swap two.
 - [add] OtherButton items now has macro buttons. You can show/hide containers, send MMIO strings, run cat commands.
+- [add] right clicking an OtherButton will show related setup if one exists
 - [add] more legacy items can be hidden
 - [add] it is now possible to save, load and duplicate containers. At the moment for various technical reasons it is a single container at a time. Note: items such as Led Indicator, WebImage will have their 4char(s) changed to prevent conflict if you were to re-import where they already exist. Meters that use %variables will also not display correctly if those variables are not present. You will have to edit them by hand. A warning is shown if a container being imported has a web image
 - [add] variable picker for text overlay and led indicator items
-- [add] right clicking an OtherButton will show related setup if one exists
 - [add] it is now possible to set ID's for each receiver for N1MM waterfall data, in the network setup tab. This allows for two+ instances of Thetis (SO2R etc) to output data to N1MM
 - [add] startup log can be shown. Option in Setup->Test
 - [add] VAC and portAudio will now successfully use input devices that report only single input channels. Previously input required a device that reported two channels and would fail with certain USB headsets and USB dongles such as the Syba SD-CM-UAUD USB
+- [add] option added in tci setup to force a CW spot to a specific sideband. See tooltips for more info
+- [add] WDSP 1.27 post processing noise functionality added to NR2. Settings in Setup->DSP->NR/ANF
+- [add] WDSP 1.29 adds 3 new CW APF types to the original Bi-Quad. These new types are Double Pole, Matched and Gaussian. A new button to cycle through them on the main CW ui panel has been added, setup options, cat command ZZAYn; where n=0 to 3, and 4 new midi command buttons to select each. Note: the button may not be part of your skin pack. The new button requires images btnAPF_type-0.png and btnAPF_type-1.png, these can be copied from chkCWAPFEnabled-0.png and chkCWAPFEnabled-1.png. See pdf available in about box manuals section for more info
+- [change] migrated to Visual Studio 2026, and C/C++ runtime v145
 - [change] changed ZZIS cat command so that it takes/returns the actual filter width and not the slider width position. ZZIS; will return ZZISxxxxx; where xxxxx is 0 padded filter width. ZZIS00500; will set filter width to 500HZ. Symmetrical modes such as AM, SAM will take the full size width, so ZZIS20000; will be +-10k on AM. Note. FilterWdithMode is switched to linear whilst this is applied
 - [change] private scope added to in/out firewall rules when [Firewall Check] is used from Setup. Previously was only setting Domain + Public
 - [change] reimplemented the code that ensures a form is on screen as there had been occurrences where a form had got 'lost'. Note. this will still fail if a monitor is turned off and windows thinks it is still available as a display surface
@@ -31,10 +202,11 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [change] led indicator scripting has been totally reworked. Now a single script engine is used instead of one per led. Massive memory and performance improvements if you used lots of leds. Also, batches the re-compile until all leds are loaded
 - [change] available meter items are listed alphabetically per rx/tx/special group
 - [change] on DirectX errors RecreateTarget, DeviceRemoved and DeviceReset, the display engines will now attempt to restart, up to a total of 10 times
-- [change] VFOsync re-work. Now has settings on Options-3 tab
+- [change] VFOsync re-work. Now has settings in Options-3 tab
 - [change] show legacy meters has been changed to hide, to align with other options in Setup->Appearance->Legacy Items. May require you to reapply setting if you want them hidden
 - [change] changes to the way meters are restored. Startup speed improvements for systems using lots of meters
 - [change] multiple instance detection changed to use global mutex instead of scanning process list
+- [change] impulse_cache.dat is removed if wisdom00 is rebuilt
 - [fix] filter command line args to strip any unexpected characters/unicode
 - [fix] you can now enter values into the VAR1/VAR2 filters on the main console. Pressing enter or the box losing focus will set the value
 - [fix] issue where low/high values would sometimes not be stored when using the filter configuration settings window/form
@@ -44,7 +216,11 @@ Please report any issue over on [GitHub here](https://github.com/ramdor/Thetis/i
 - [fix] text overlay now displays vfob mode correctly
 - [fix] unnecessary recursive calling when setting PreampMode and AttenuatorData
 - [fix] fixed issue where if rtty offset was being used and mode was set to DigL/U then a midi vfo change would cause incorrect frequency calculation (7.100.000 would become 71.000.000)
-- [fix] updated to WDSP 1.28 which reverts the removal of fir filter caching
+- [fix] updated to WDSP 1.28 + 1.29, 1.28 reverts the removal of fir filter caching, 1.29 adds new APF types
+- [fix] fix where if a radio did not have an rx2 step att available it could prevent rx1 att/s-att setting from being recovered correctly at startup/radio model swap
+- [fix] VOX will not ptt if MIC is disabled unless a vac is enabled and VOX uses MIC option is not enabled
+- [fix] RIT will not cause spectral overlays such as notches and band stack overlays to move when enabled/disabled after a startup
+- [fix] VAC tx/rx gains now restored from TX profile. Previously those TX profile settings were getting overridden by values recovered into the main console UI at startup
 
 ## v2.10.3.11 - Change Log
 - [add] two new noise reduction methods added, NR3 and NR4. When starting up this version for the first time if NR was enabled, will now be set to off. Settings in the normal NR settings page of Setup

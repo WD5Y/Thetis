@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ namespace Thetis
 {
     public partial class frmQuickRecallPopupList : Form
     {
-        public delegate void EntrySelected(int index);    
+        public delegate void EntrySelected(int index);
         public EntrySelected EntrySelectedHandlers;
 
         public frmQuickRecallPopupList()
@@ -54,8 +54,10 @@ namespace Thetis
             InitializeComponent();
         }
 
-        public ListBox FreqList {
-            get {
+        public ListBox FreqList
+        {
+            get
+            {
                 return lstboxFrequencies;
             }
         }
@@ -68,7 +70,8 @@ namespace Thetis
         {
             lstboxFrequencies.ClearItems();
         }
-        public int FontEntryHeight {
+        public int FontEntryHeight
+        {
             get { return lstboxFrequencies.FontEntryHeight; }
         }
         private void lstboxFrequencies_MouseClick(object sender, MouseEventArgs e)
@@ -102,7 +105,7 @@ namespace Thetis
         public void ClearItems()
         {
             m_nFrequencyMHzWidth = -1;
-            
+
             this.Items.Clear();
             this.Invalidate();
         }
@@ -114,7 +117,8 @@ namespace Thetis
 
             return this.Items.Add(dFreq);
         }
-        public int FontEntryHeight {
+        public int FontEntryHeight
+        {
             get { return m_nFontHeight; }
         }
         protected override void OnDrawItem(DrawItemEventArgs e)
@@ -221,7 +225,8 @@ namespace Thetis
                                 DrawItemState.Selected, this.ForeColor,
                                 this.BackColor));
                         }
-                        else if(m_nHighlighted == i){
+                        else if (m_nHighlighted == i)
+                        {
                             OnDrawItem(new DrawItemEventArgs(e.Graphics, this.Font,
                                 irect, i,
                                 DrawItemState.HotLight, this.ForeColor,

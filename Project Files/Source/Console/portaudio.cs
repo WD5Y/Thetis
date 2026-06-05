@@ -40,20 +40,14 @@
 //============================================================================================//
 
 using System;
-using System.Collections;
-using System.Text;
-using System.Security;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-
-using PaError = System.Int32;
 using PaDeviceIndex = System.Int32;
+using PaError = System.Int32;
 using PaHostApiIndex = System.Int32;
-using PaTime = System.Double;
 using PaSampleFormat = System.UInt32;
-using PaStreamFlags = System.UInt32;
 using PaStreamCallbackFlags = System.UInt32;
-using System.Diagnostics.Contracts;
+using PaStreamFlags = System.UInt32;
+using PaTime = System.Double;
 
 namespace Thetis
 {
@@ -132,7 +126,7 @@ namespace Thetis
 
             public int structVersion;
             public int type;
-           // [MarshalAs(UnmanagedType.LPStr)]
+            // [MarshalAs(UnmanagedType.LPStr)]
             //public string name;
             private readonly IntPtr _name;
             public int deviceCount;
@@ -156,8 +150,8 @@ namespace Thetis
 
             public int structVersion;
             private IntPtr _name;
-           // [MarshalAs(UnmanagedType.LPStr)]
-           // public string name;
+            // [MarshalAs(UnmanagedType.LPStr)]
+            // public string name;
             public PaHostApiIndex hostApi;
             public int maxInputChannels;
             public int maxOutputChannels;

@@ -232,6 +232,37 @@ PaError PaMacCore_GetBufferSizeRange( PaDeviceIndex device,
     return result;
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
+PaError PaMacCore_GetOSWorkgroup( PaDeviceIndex device, os_workgroup_t *workgroup )
+{
+    PaError result;
+    PaUtilHostApiRepresentation *hostApi;
+
+    result = PaUtil_GetHostApiRepresentation( &hostApi, paCoreAudio );
+
+    if( result == paNoError )
+    {
+        PaDeviceIndex hostApiDeviceIndex;
+        result = PaUtil_DeviceIndexToHostApiDeviceIndex( &hostApiDeviceIndex, device, hostApi );
+        if( result == paNoError )
+        {
+            PaMacAUHAL *macCoreHostApi = (PaMacAUHAL*)hostApi;
+            AudioDeviceID macCoreDeviceId = macCoreHostApi->devIds[hostApiDeviceIndex];
+            UInt32 propSize = sizeof( os_workgroup_t );
+
+            // return the workgroup for the output scope unless the device only has inputs,
+            // in which case return the workgroup for the input scope
+            Boolean isInputOnly = 0;
+            if( macCoreHostApi->inheritedHostApiRep.deviceInfos[hostApiDeviceIndex]->maxOutputChannels == 0 )
+                isInputOnly = 1;
+
+            result = WARNING(PaMacCore_AudioDeviceGetProperty( macCoreDeviceId, 0, isInputOnly, kAudioDevicePropertyIOThreadOSWorkgroup, &propSize, workgroup ) );
+        }
+    }
+
+    return result;
+}
+#endif
 
 AudioDeviceID PaMacCore_GetStreamInputDevice( PaStream* s )
 {
@@ -367,8 +398,7 @@ static PaError gatherDeviceInfo(PaMacAUHAL *auhalHostApi)
                                         auhalHostApi->devIds );
 #ifdef MAC_CORE_VERBOSE_DEBUG
     {
-        int i;
-        for( i=0; i<auhalHostApi->devCount; ++i )
+        for( int i=0; i<auhalHostApi->devCount; ++i )
             printf( "Device %d\t: %ld\n", i, (long)auhalHostApi->devIds[i] );
     }
 #endif
@@ -388,7 +418,7 @@ static PaError gatherDeviceInfo(PaMacAUHAL *auhalHostApi)
         auhalHostApi->defaultIn  = kAudioDeviceUnknown;
         VDBUG(("Failed to get default input device from OS."));
         VDBUG((" I will substitute the first available input Device."));
-        for( i=0; i<auhalHostApi->devCount; ++i ) {
+        for( int i=0; i<auhalHostApi->devCount; ++i ) {
             PaDeviceInfo devInfo;
             if( 0 != GetChannelInfo( auhalHostApi, &devInfo,
                                      auhalHostApi->devIds[i], TRUE ) )
@@ -405,7 +435,7 @@ static PaError gatherDeviceInfo(PaMacAUHAL *auhalHostApi)
         auhalHostApi->defaultIn  = kAudioDeviceUnknown;
         VDBUG(("Failed to get default output device from OS."));
         VDBUG((" I will substitute the first available output Device."));
-        for( i=0; i<auhalHostApi->devCount; ++i ) {
+        for( int i=0; i<auhalHostApi->devCount; ++i ) {
             PaDeviceInfo devInfo;
             if( 0 != GetChannelInfo( auhalHostApi, &devInfo,
                                      auhalHostApi->devIds[i], FALSE ) )
@@ -446,7 +476,6 @@ static void DumpDeviceProperties( AudioDeviceID macCoreDeviceId,
                                   int isInput )
 {
     PaError err;
-    int i;
     UInt32 propSize;
     UInt32 deviceLatency;
     UInt32 streamLatency;
@@ -481,7 +510,7 @@ static void DumpDeviceProperties( AudioDeviceID macCoreDeviceId,
     propSize = sizeof(streamIDs);
     err  = WARNING(AudioDeviceGetProperty(macCoreDeviceId, 0, isInput, kAudioDevicePropertyStreams, &propSize, &streamIDs[0]));
     int numStreams = propSize / sizeof(AudioStreamID);
-    for( i=0; i<numStreams; i++ )
+    for( int i=0; i<numStreams; i++ )
     {
         printf("Stream #%d = %d---------------------- \n", i, streamIDs[i] );
 
@@ -721,7 +750,6 @@ static PaError InitializeDeviceInfo( PaMacAUHAL *auhalHostApi,
 PaError PaMacCore_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIndex hostApiIndex )
 {
     PaError result = paNoError;
-    int i;
     PaMacAUHAL *auhalHostApi = NULL;
     PaDeviceInfo *deviceInfoArray;
     int unixErr;
@@ -791,7 +819,7 @@ PaError PaMacCore_Initialize( PaUtilHostApiRepresentation **hostApi, PaHostApiIn
             goto error;
         }
 
-        for( i=0; i < auhalHostApi->devCount; ++i )
+        for( int i=0; i < auhalHostApi->devCount; ++i )
         {
             int err;
             err = InitializeDeviceInfo( auhalHostApi, &deviceInfoArray[i],
@@ -2185,9 +2213,8 @@ static OSStatus AudioIOProc( void *inRefCon,
     printf( "--- %x ioData\n", (unsigned) ioData );
     if( ioData )
     {
-       int i=0;
        printf( "--- ioData.mNumBuffers %lu: \n", ioData->mNumberBuffers );
-       for( i=0; i<ioData->mNumberBuffers; ++i )
+       for( int i=0; i<ioData->mNumberBuffers; ++i )
           printf( "--- ioData buffer %d size: %lu.\n", i, ioData->mBuffers[i].mDataByteSize );
     }
        ----------------------------------------------------------------- */

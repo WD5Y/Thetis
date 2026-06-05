@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,15 +38,15 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
 
 namespace Thetis
 {
@@ -171,16 +171,23 @@ namespace Thetis
 
         public static void Stop()
         {
+            Timer timer_to_dispose = null;
             lock (_lock)
             {
                 _stopping = true;
                 _compile_event.Set();
-                if (_timer != null)
+
+                timer_to_dispose = _timer;
+                _timer = null;
+
+                if (timer_to_dispose != null)
                 {
-                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    _timer.Dispose();
-                    _timer = null;
+                    timer_to_dispose.Change(Timeout.Infinite, Timeout.Infinite);
                 }
+            }
+            if (timer_to_dispose != null)
+            {
+                timer_to_dispose.Dispose();
             }
         }
 
@@ -425,83 +432,95 @@ namespace Thetis
             }
         }
 
+        private static int _tick_in_progress = 0;
         private static void tick()
         {
-            List<int> due_indices = null;
-            List<ScriptRunner<bool>> due_delegates = null;
+            if (Interlocked.CompareExchange(ref _tick_in_progress, 1, 0) != 0) return;
 
-            lock (_lock)
+            try
             {
-                if (_needs_recompile && _batch_depth == 0) schedule_compile_if_needed_nolock();
-                due_indices = get_due_indices_nolock();
-                int n = due_indices.Count;
-                due_delegates = new List<ScriptRunner<bool>>(n);
-                for (int i = 0; i < n; i++)
+                if (Volatile.Read(ref _stopping)) return;
+
+                List<int> due_indices = null;
+                List<ScriptRunner<bool>> due_delegates = null;
+
+                lock (_lock)
+                {
+                    if (_needs_recompile && _batch_depth == 0) schedule_compile_if_needed_nolock();
+                    due_indices = get_due_indices_nolock();
+                    int n = due_indices.Count;
+                    due_delegates = new List<ScriptRunner<bool>>(n);
+                    for (int i = 0; i < n; i++)
+                    {
+                        int idx = due_indices[i];
+                        ScriptRunner<bool> d = _delegates[idx];
+                        due_delegates.Add(d);
+                    }
+                }
+
+                if (due_indices == null || due_indices.Count == 0) return;
+
+                Globals globals = build_globals_once();
+
+                List<EvalResult> outputs = new List<EvalResult>(due_indices.Count);
+                for (int i = 0; i < due_indices.Count; i++)
                 {
                     int idx = due_indices[i];
-                    ScriptRunner<bool> d = _delegates[idx];
-                    due_delegates.Add(d);
-                }
-            }
-
-            if (due_indices == null || due_indices.Count == 0) return;
-
-            Globals globals = build_globals_once();
-
-            List<EvalResult> outputs = new List<EvalResult>(due_indices.Count);
-            for (int i = 0; i < due_indices.Count; i++)
-            {
-                int idx = due_indices[i];
-                ScriptRunner<bool> del = due_delegates[i];
-                if (del == null)
-                {
-                    EvalResult er0 = new EvalResult();
-                    er0.Index = idx;
-                    er0.Value = false;
-                    er0.Error = false;
-                    er0.Diagnostic = string.Empty;
-                    outputs.Add(er0);
-                    continue;
-                }
-                try
-                {
-                    bool r = del(globals).GetAwaiter().GetResult();
-                    EvalResult er1 = new EvalResult();
-                    er1.Index = idx;
-                    er1.Value = r;
-                    er1.Error = false;
-                    er1.Diagnostic = string.Empty;
-                    outputs.Add(er1);
-                }
-                catch (Exception ex)
-                {
-                    EvalResult er2 = new EvalResult();
-                    er2.Index = idx;
-                    er2.Value = false;
-                    er2.Error = true;
-                    er2.Diagnostic = ex.Message ?? string.Empty;
-                    outputs.Add(er2);
-                }
-            }
-
-            long now_ticks = DateTime.UtcNow.Ticks;
-
-            lock (_lock)
-            {
-                for (int i = 0; i < outputs.Count; i++)
-                {
-                    EvalResult er = outputs[i];
-                    if (er.Index < 0 || er.Index >= _occupied.Count) continue;
-                    if (!_occupied[er.Index]) continue;
-                    _results[er.Index] = er.Value;
-                    if (er.Error)
+                    ScriptRunner<bool> del = due_delegates[i];
+                    if (del == null)
                     {
-                        _errors[er.Index] = true;
-                        _diagnostics[er.Index] = er.Diagnostic;
+                        EvalResult er0 = new EvalResult();
+                        er0.Index = idx;
+                        er0.Value = false;
+                        er0.Error = false;
+                        er0.Diagnostic = string.Empty;
+                        outputs.Add(er0);
+                        continue;
                     }
-                    long delay = (long)_update_intervals_ms[er.Index] * _ticks_per_millisecond;
-                    _next_due_ticks[er.Index] = now_ticks + delay;
+                    try
+                    {
+                        bool r = del(globals).GetAwaiter().GetResult();
+                        EvalResult er1 = new EvalResult();
+                        er1.Index = idx;
+                        er1.Value = r;
+                        er1.Error = false;
+                        er1.Diagnostic = string.Empty;
+                        outputs.Add(er1);
+                    }
+                    catch (Exception ex)
+                    {
+                        EvalResult er2 = new EvalResult();
+                        er2.Index = idx;
+                        er2.Value = false;
+                        er2.Error = true;
+                        er2.Diagnostic = ex.Message ?? string.Empty;
+                        outputs.Add(er2);
+                    }
                 }
+
+                long now_ticks = DateTime.UtcNow.Ticks;
+
+                lock (_lock)
+                {
+                    for (int i = 0; i < outputs.Count; i++)
+                    {
+                        EvalResult er = outputs[i];
+                        if (er.Index < 0 || er.Index >= _occupied.Count) continue;
+                        if (!_occupied[er.Index]) continue;
+                        _results[er.Index] = er.Value;
+                        if (er.Error)
+                        {
+                            _errors[er.Index] = true;
+                            _diagnostics[er.Index] = er.Diagnostic;
+                        }
+                        long delay = (long)_update_intervals_ms[er.Index] * _ticks_per_millisecond;
+                        _next_due_ticks[er.Index] = now_ticks + delay;
+                    }
+                }
+            }
+            finally
+            {
+                Interlocked.Exchange(ref _tick_in_progress, 0);
             }
         }
 

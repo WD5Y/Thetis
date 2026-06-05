@@ -5,7 +5,7 @@ This file is part of a program that implements a Software-Defined Radio.
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
 Copyright (C) 2000-2025 Original authors
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,44 +40,35 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
-using System.Xml;
+using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Threading;
-using System.Diagnostics;
 
 namespace Thetis
 {
     public unsafe partial class AmpView : Form
     {
-        private PSForm psform;
+        private PSForm _psform;
         public AmpView(PSForm ps)
         {
             InitializeComponent();
             Common.DoubleBufferAll(this, true);
-
-            psform = ps;
+            _psform = ps;
         }
 
         //GCHandle hx, hym, hyc, hys, hcm, hcc, hcs;
         const int max_ints = 16;
         const int max_samps = 4096;
         const int np = 512;
-        double[] x  = new double[max_samps];
+        double[] x = new double[max_samps];
         double[] ym = new double[max_samps];
         double[] yc = new double[max_samps];
         double[] ys = new double[max_samps];
         double[] cm = new double[4 * max_ints];
         double[] cc = new double[4 * max_ints];
         double[] cs = new double[4 * max_ints];
-        double[] t  = new double[max_ints + 1];
+        double[] t = new double[max_ints + 1];
         int skip = 1;
         bool showgain = false;
         private static Object intslock = new Object();
@@ -86,7 +77,8 @@ namespace Thetis
         {
             Common.FadeIn(this);
 
-            PSForm.ampv.ClientSize = new System.Drawing.Size(560, 445); //
+            /*PSForm.ampv.*/
+            this.ClientSize = new System.Drawing.Size(560, 445); //
             Common.RestoreForm(this, "AmpView", true); //[2.10.3.5]MW0LGE  #292
             //hx  = GCHandle.Alloc(x,  GCHandleType.Pinned);
             //hym = GCHandle.Alloc(ym, GCHandleType.Pinned);
@@ -95,14 +87,15 @@ namespace Thetis
             //hcm = GCHandle.Alloc(cm, GCHandleType.Pinned);
             //hcc = GCHandle.Alloc(cc, GCHandleType.Pinned);
             //hcs = GCHandle.Alloc(cs, GCHandleType.Pinned);
-            double delta = 1.0 / (double)psform.Ints;
+            double delta = 1.0 / (double)_psform.Ints;
             t[0] = 0.0;
-            for (int i = 1; i <= psform.Ints; i++)
+            for (int i = 1; i <= _psform.Ints; i++)
                 t[i] = t[i - 1] + delta;
             EventArgs ex = EventArgs.Empty;
             chkAVShowGain_CheckedChanged(this, ex);
             chkAVLowRes_CheckedChanged(this, ex);
             chkAVPhaseZoom_CheckedChanged(this, ex);
+            chkStayOnTop_CheckedChanged(this, ex);
         }
         private void disp_setup()
         {
@@ -142,7 +135,7 @@ namespace Thetis
             chart1.Series["MagCorr"].Points.AddXY(0.0, 0.0);
             for (int i = 1; i <= np; i++)
             {
-                chart1.Series["MagCorr"].Points.AddXY(0.0, 0.0);                
+                chart1.Series["MagCorr"].Points.AddXY(0.0, 0.0);
                 chart1.Series["PhsCorr"].Points.AddXY(0.0, 0.0); // note: not always np number of entries, disp_data_Update handles this
             }
 
@@ -199,8 +192,8 @@ namespace Thetis
                 phs = 180.0 / Math.PI * Math.Atan2(qys, qyc) - phs_base;
                 if (phs > -180.0 && phs < +180.0)
                 {
-                    chart1.Series["PhsCorr"].Points[i-1].SetValueXY(qx, phs);
-                    nLastGoodPoint = i-1;
+                    chart1.Series["PhsCorr"].Points[i - 1].SetValueXY(qx, phs);
+                    nLastGoodPoint = i - 1;
                 }
                 else
                 {
@@ -214,7 +207,7 @@ namespace Thetis
                     {
                         chart1.Series["PhsCorr"].Points[i - 1].SetValueXY(0.0, 0.0);
                     }
-                    
+
                 }
                 qx += delta;
             }
@@ -325,11 +318,11 @@ namespace Thetis
 
         private bool _init = true;
         private bool _is_closing = false;
-        private bool _in_timer = false;
 
         private void chkStayOnTop_CheckedChanged(object sender, EventArgs e)
         {
-            this.TopMost = chkStayOnTop.Checked;
+            //this.TopMost = chkStayOnTop.Checked;
+            FixOnTop();
         }
 
         public void CloseDown()
@@ -395,8 +388,8 @@ namespace Thetis
             lock (intslock)
             {
                 //disp_data(); // MW0LGE [2.9.0.8] changed to an add once, update points method.
-                               // Prevents the chart from having 1000's of points added and removed
-                               // 10 times a second.
+                // Prevents the chart from having 1000's of points added and removed
+                // 10 times a second.
                 chart1.Series.SuspendUpdates();
                 chart1.Series["Ref"].Points.SuspendUpdates();
                 chart1.Series["MagCorr"].Points.SuspendUpdates();
@@ -404,8 +397,8 @@ namespace Thetis
                 chart1.Series["MagAmp"].Points.SuspendUpdates();
                 chart1.Series["PhsAmp"].Points.SuspendUpdates();
 
-                int ints = psform.Ints;
-                int spi = psform.Spi;
+                int ints = _psform.Ints;
+                int spi = _psform.Spi;
                 int instSpiTot = ints * spi;
                 if (_oldIntsSpi != instSpiTot)
                 {
@@ -429,7 +422,7 @@ namespace Thetis
                 chart1.Invalidate();
             }
 
-            if(!_is_closing) timer1.Start();
+            if (!_is_closing) timer1.Start();
         }
 
         private void chkAVShowGain_CheckedChanged(object sender, EventArgs e)
@@ -485,5 +478,44 @@ namespace Thetis
         {
             PSForm.ampv = null;
         }
+
+        //
+        [DllImport("user32.dll")]
+        private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
+
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+
+        private const uint SWP_NOMOVE = 0x0002;
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOACTIVATE = 0x0010;
+        private const uint SWP_SHOWWINDOW = 0x0040;
+
+        public void FixOnTop()
+        {
+            if (IsDisposed) return;
+
+            if (InvokeRequired)
+            {
+                BeginInvoke((MethodInvoker)FixOnTop);
+                return;
+            }
+
+            if (!IsHandleCreated) return;
+
+            bool want_top = chkStayOnTop.Checked;
+
+            TopMost = want_top;
+
+            IntPtr insert_after = want_top ? HWND_TOPMOST : HWND_NOTOPMOST;
+            SetWindowPos(Handle, insert_after, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+            FixOnTop();
+        }
+        //
     }
 }

@@ -22,11 +22,7 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 */
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace Midi2Cat.Data
 {

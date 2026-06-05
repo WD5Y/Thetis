@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,9 +39,9 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -65,7 +65,7 @@ namespace Thetis
         {
             internal enum VariableListItemType
             {
-                MMIO=0,
+                MMIO = 0,
                 VARS,
                 CAT,
 
@@ -100,7 +100,7 @@ namespace Thetis
             {
                 return _variable;
             }
-        }        
+        }
         public frmVariablePicker()
         {
             _textoverlay_led_picker = false;
@@ -224,8 +224,8 @@ namespace Thetis
 
                 lstVariables.SelectedIndex = 0;
             }
-            else 
-            { 
+            else
+            {
                 lstVariables.SelectedIndex = selected;
             }
         }

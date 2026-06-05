@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,23 +38,24 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Cache;
 using System.Drawing;
 using System.IO;
-using Newtonsoft.Json;
+using System.Net.Cache;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Thetis
-{   
+{
     public class ThetisSkin
     {
         private string _skinName;
-        public string SkinName {
+        public string SkinName
+        {
             get { return _skinName; }
             set
             {
@@ -87,11 +88,11 @@ namespace Thetis
         public string SkinServerUrl { get; set; }
         public string Description
         {
-            get 
+            get
             {
                 return _desc;
             }
-            set 
+            set
             {
                 _desc = value.Left(50);
             }
@@ -116,7 +117,7 @@ namespace Thetis
         public long TotalBytes { get; set; }
         public string Url { get; set; }
         public string FinalUri { get; set; }
-        public bool Complete {  get; set; }
+        public bool Complete { get; set; }
         public bool Cancelled { get; set; }
         public int PercentageDownloaded { get; set; }
         public bool BypassRootFolderCheck { get; set; }
@@ -214,7 +215,7 @@ namespace Thetis
                 };
 
                 client = new HttpClient(wrh);
-                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue(){ NoCache = true };
+                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue() { NoCache = true };
                 client.Timeout = TimeSpan.FromSeconds(10); // 10 seconds
 
                 string jsonContent = await client.GetStringAsync(jsonUrl + "?timestamp=" + DateTime.UtcNow.Ticks);
@@ -345,7 +346,7 @@ namespace Thetis
                 {
                     httpClient.DefaultRequestHeaders.Add("User-Agent", "Thetis v" + _version);
 
-                    using (HttpResponseMessage response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead,_downloadCancellationTokenSource.Token))
+                    using (HttpResponseMessage response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead, _downloadCancellationTokenSource.Token))
                     using (Stream contentStream = await response.Content.ReadAsStreamAsync())
                     {
                         if (response.IsSuccessStatusCode)
@@ -373,7 +374,7 @@ namespace Thetis
                             byte[] buffer = new byte[buffLen];
 
                             using (FileStream fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write, FileShare.None, buffLen, true))
-                            {                                
+                            {
                                 int bytesRead;
                                 while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, _downloadCancellationTokenSource.Token)) > 0)
                                 {

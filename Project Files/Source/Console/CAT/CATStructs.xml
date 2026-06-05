@@ -1456,6 +1456,7 @@
 		<ngetparms>0</ngetparms>
 		<nansparms>1</nansparms>
 	</catstruct>
+	<!--
 	<catstruct code="ZZIV">
 		<desc>IF2VFO</desc>
 		<active>false</active>
@@ -1463,6 +1464,7 @@
 		<ngetparms>-1</ngetparms>
 		<nansparms>-1</nansparms>
 	</catstruct>
+	-->
 	<catstruct code="ZZZB">
 		<desc>Zero Beat</desc>
 		<active>true</active>
@@ -2155,6 +2157,13 @@
     <nsetparms>2</nsetparms>
     <ngetparms>-1</ngetparms>
     <nansparms>-1</nansparms>
+  </catstruct>
+  <catstruct code="ZZAY">
+	<desc>APF type</desc>
+	<active>true</active>
+	<nsetparms>1</nsetparms>
+	<ngetparms>0</ngetparms>
+	<nansparms>1</nansparms>
   </catstruct>
   <catstruct code="ZZAE">
     <desc>Moves VFOA down nn Steps</desc>
@@ -2900,4 +2909,46 @@
 		<ngetparms>0</ngetparms>
 		<nansparms>1</nansparms>
 	</catstruct>	
+	<catstruct code="ZZGA">
+		<desc>Add guid - used by TCPIPcat internally, ignore</desc>
+		<active>true</active>
+		<nsetparms>36</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>40</nansparms>
+	</catstruct>
+	<catstruct code="ZZGR">
+		<desc>Remove guid - used by TCPIPcat internally, ignore</desc>
+		<active>true</active>
+		<nsetparms>36</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>40</nansparms>
+	</catstruct>
+	<catstruct code="ZZJP">
+		<desc>Playback from slot N</desc>
+		<active>true</active>
+		<nsetparms>9</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>1</nansparms>
+	</catstruct>
+	<catstruct code="ZZJQ">
+		<desc>Playback/Record container item slot</desc>
+		<active>true</active>
+		<nsetparms>8</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>1</nansparms>
+	</catstruct>
+	<catstruct code="ZZJR">
+		<desc>Recording to slot N</desc>
+		<active>true</active>
+		<nsetparms>6</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>1</nansparms>
+	</catstruct>
+	<catstruct code="ZZJS">
+		<desc>Stop Wav Recording or Playback</desc>
+		<active>true</active>
+		<nsetparms>0</nsetparms>
+		<ngetparms>0</ngetparms>
+		<nansparms>0</nansparms>
+	</catstruct>
 </catstructs>

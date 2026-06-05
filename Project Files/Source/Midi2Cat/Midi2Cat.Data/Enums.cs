@@ -22,13 +22,7 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Midi2Cat.Data 
+namespace Midi2Cat.Data
 {
     public class FixUp
     {
@@ -47,8 +41,8 @@ namespace Midi2Cat.Data
     public enum CmdState
     {
         NoChange = -1,
-        Off=0,
-        On=1,
+        Off = 0,
+        On = 1,
     }
 
     public enum MidiEvent

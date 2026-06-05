@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,17 +39,8 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace Thetis
 {
@@ -115,7 +106,7 @@ namespace Thetis
 
             _location = this.Location;
         }
-        private void OnMox(int rx, bool oldMox,  bool newMox)
+        private void OnMox(int rx, bool oldMox, bool newMox)
         {
             if (rx == 1) _mox = newMox;
         }
@@ -165,7 +156,7 @@ namespace Thetis
                 int n = bandStackListBox.AddItem(bse);
 
                 if (select && n == m_bsf.IndexOfCurrent)
-                {                    
+                {
                     bandStackListBox.SelectedIndex = n;
                 }
             }
@@ -221,7 +212,7 @@ namespace Thetis
                 BandStackEntry bse = bandStackListBox.Items[bandStackListBox.SelectedIndex] as BandStackEntry;
                 btnDeleteSelected.Enabled = !bse.Locked;
                 btnUpdateEntry.Enabled = !bse.Locked;
-                btnLockSelected.Text = bse.Locked ? "Unlock Selected" : "Lock Selected";                
+                btnLockSelected.Text = bse.Locked ? "Unlock Selected" : "Lock Selected";
 
                 btnLockSelected.Enabled = true;
                 if (radioSpecific.Checked)
@@ -237,7 +228,7 @@ namespace Thetis
             switch (m_bsf.ReturnMode)
             {
                 case BandStackFilter.FilterReturnMode.Current:
-                    if(bCheck) radioLastUsedEntry.Checked = true;
+                    if (bCheck) radioLastUsedEntry.Checked = true;
                     btnSetSpecific.Enabled = false;
                     bandStackListBox.SpecificReturnIndex = -1;
                     break;
@@ -249,12 +240,12 @@ namespace Thetis
                 case BandStackFilter.FilterReturnMode.Specific:
                     if (bCheck) radioSpecific.Checked = true;
                     btnSetSpecific.Enabled = bandStackListBox.Items.Count > 0;
-                    
+
                     bandStackListBox.SpecificReturnIndex = -1;
 
-                    for (int n =0;n<bandStackListBox.Items.Count;n++)
+                    for (int n = 0; n < bandStackListBox.Items.Count; n++)
                     {
-                        if((bandStackListBox.Items[n] as BandStackEntry).GUID == m_bsf.ReturnGUID)
+                        if ((bandStackListBox.Items[n] as BandStackEntry).GUID == m_bsf.ReturnGUID)
                         {
                             bandStackListBox.SpecificReturnIndex = n;
                             break;
@@ -280,7 +271,7 @@ namespace Thetis
 
         private void radioLastUsedEntry_CheckedChanged(object sender, EventArgs e)
         {
-            if(m_bsf == null || m_bsf.ReturnMode == BandStackFilter.FilterReturnMode.Current) return;
+            if (m_bsf == null || m_bsf.ReturnMode == BandStackFilter.FilterReturnMode.Current) return;
 
             m_bsf.ReturnMode = BandStackFilter.FilterReturnMode.Current;
             setupRadioButtons(false);
@@ -329,7 +320,7 @@ namespace Thetis
                 bse.Locked = !bse.Locked;
                 btnDeleteSelected.Enabled = !bse.Locked;
                 btnUpdateEntry.Enabled = !bse.Locked;
-                btnLockSelected.Text = bse.Locked ? "Unlock Selected" : "Lock Selected";                
+                btnLockSelected.Text = bse.Locked ? "Unlock Selected" : "Lock Selected";
 
                 //update filter
                 m_bsf.UpdateEntry(bse);
@@ -417,13 +408,13 @@ namespace Thetis
             {
                 this.Location = _location;
                 Common.ForceFormOnScreen(this, false, false);
-            }            
+            }
 
             base.Show();
         }
         public void Store()
         {
-            if(!_is_popup)
+            if (!_is_popup)
                 Common.SaveForm(this, "BandStack2Form");
         }
 
@@ -470,7 +461,7 @@ namespace Thetis
     //http://yacsharpblog.blogspot.com/2008/07/listbox-flicker.html
     internal class BandStackListBox : System.Windows.Forms.ListBox
     {
-        private int m_nHighlighted = -1;        
+        private int m_nHighlighted = -1;
 
         private int m_nNumberWidth = -1;
         private int m_nFrequencyMHzWidth = -1;
@@ -485,52 +476,67 @@ namespace Thetis
                 ControlStyles.UserPaint,
                 true);
 
-            this.DrawMode = DrawMode.OwnerDrawFixed;            
+            this.DrawMode = DrawMode.OwnerDrawFixed;
         }
         private Image m_LockLockedImage;
         private Image m_LockUnlockedImage;
         private Image m_MemoryImage;
         private Image m_SpecificReturnImage;
 
-        public int m_specficReturnIndex = -1; 
+        public int m_specficReturnIndex = -1;
 
-        public Image LockImageLocked {
-            get {
+        public Image LockImageLocked
+        {
+            get
+            {
                 return m_LockLockedImage;
             }
-            set {
+            set
+            {
                 m_LockLockedImage = value;
             }
         }
-        public Image LockImageUnLocked {
-            get {
+        public Image LockImageUnLocked
+        {
+            get
+            {
                 return m_LockUnlockedImage;
             }
-            set {
+            set
+            {
                 m_LockUnlockedImage = value;
             }
         }
-        public Image Memory {
-            get {
+        public Image Memory
+        {
+            get
+            {
                 return m_MemoryImage;
             }
-            set {
+            set
+            {
                 m_MemoryImage = value;
             }
         }
-        public Image SpecificReturnImage {
-            get {
+        public Image SpecificReturnImage
+        {
+            get
+            {
                 return m_SpecificReturnImage;
             }
-            set {
+            set
+            {
                 m_SpecificReturnImage = value;
             }
         }
-        public int SpecificReturnIndex {
-            get {
+        public int SpecificReturnIndex
+        {
+            get
+            {
                 return m_specficReturnIndex;
             }
-            set {
+            set
+            {
                 m_specficReturnIndex = value;
             }
         }
@@ -575,7 +581,7 @@ namespace Thetis
             if (this.Items.Count > 0 && e.Index >= 0)
             {
                 BandStackEntry bse = this.Items[e.Index] as BandStackEntry;
-                
+
                 if (bse != null)
                 {
                     if (bse.Locked)
@@ -594,42 +600,42 @@ namespace Thetis
 
                     //using (SolidBrush sb = new SolidBrush(this.ForeColor))
                     //{
-                        SolidBrush sb = new SolidBrush(this.ForeColor);
+                    SolidBrush sb = new SolidBrush(this.ForeColor);
 
-                        if (m_SmallModeFont != null)
-                        {
-                            string sNumber = (e.Index + 1).ToString() + ") ";
-                            Size numberSize = TextRenderer.MeasureText(sNumber, m_SmallModeFont);
-                            e.Graphics.DrawString(sNumber, m_SmallModeFont, sb, 0, e.Bounds.Y + (e.Bounds.Height / 2) - (numberSize.Height / 2), StringFormat.GenericDefault);
-                        }
+                    if (m_SmallModeFont != null)
+                    {
+                        string sNumber = (e.Index + 1).ToString() + ") ";
+                        Size numberSize = TextRenderer.MeasureText(sNumber, m_SmallModeFont);
+                        e.Graphics.DrawString(sNumber, m_SmallModeFont, sb, 0, e.Bounds.Y + (e.Bounds.Height / 2) - (numberSize.Height / 2), StringFormat.GenericDefault);
+                    }
 
-                        int nFreq = (int)bse.Frequency;
-                        double remain = bse.Frequency - nFreq;
-                        string remainString = remain.ToString("f6");
-                        string sTmp3After = remainString.Substring(2, 3);
-                        string sTmp3After3 = remainString.Substring(5, 3);
+                    int nFreq = (int)bse.Frequency;
+                    double remain = bse.Frequency - nFreq;
+                    string remainString = remain.ToString("f6");
+                    string sTmp3After = remainString.Substring(2, 3);
+                    string sTmp3After3 = remainString.Substring(5, 3);
 
-                        Size textSizeBeforeDecimalPoint = TextRenderer.MeasureText(nFreq.ToString(), this.Font);
+                    Size textSizeBeforeDecimalPoint = TextRenderer.MeasureText(nFreq.ToString(), this.Font);
 
-                        int nTextPos = m_nNumberWidth + m_nFrequencyMHzWidth - textSizeBeforeDecimalPoint.Width;
-                        Rectangle r = new Rectangle(nTextPos, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+                    int nTextPos = m_nNumberWidth + m_nFrequencyMHzWidth - textSizeBeforeDecimalPoint.Width;
+                    Rectangle r = new Rectangle(nTextPos, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
 
-                        e.Graphics.DrawString(nFreq.ToString(), e.Font, sb, r, StringFormat.GenericDefault);
+                    e.Graphics.DrawString(nFreq.ToString(), e.Font, sb, r, StringFormat.GenericDefault);
 
-                        r.X = m_nNumberWidth + m_nFrequencyMHzWidth - 8;
+                    r.X = m_nNumberWidth + m_nFrequencyMHzWidth - 8;
 
-                        e.Graphics.DrawString("." + sTmp3After + "." + sTmp3After3, e.Font, sb, r, StringFormat.GenericDefault);
+                    e.Graphics.DrawString("." + sTmp3After + "." + sTmp3After3, e.Font, sb, r, StringFormat.GenericDefault);
 
-                        if (m_SmallModeFont != null)
-                        {
-                            string s = bse.Mode.ToString();
-                            Size modeSize = TextRenderer.MeasureText(s, m_SmallModeFont);
-                            e.Graphics.DrawString(bse.Mode.ToString(), m_SmallModeFont, sb, e.Bounds.Width - modeSize.Width - 24, e.Bounds.Y + ((e.Bounds.Height/2) - (modeSize.Height/2)), StringFormat.GenericDefault);
+                    if (m_SmallModeFont != null)
+                    {
+                        string s = bse.Mode.ToString();
+                        Size modeSize = TextRenderer.MeasureText(s, m_SmallModeFont);
+                        e.Graphics.DrawString(bse.Mode.ToString(), m_SmallModeFont, sb, e.Bounds.Width - modeSize.Width - 24, e.Bounds.Y + ((e.Bounds.Height / 2) - (modeSize.Height / 2)), StringFormat.GenericDefault);
 
-                            //e.Graphics.DrawString(bse.GUID, m_SmallModeFont, sb, e.Bounds.Width - 120, e.Bounds.Y + ((e.Bounds.Height / 2) - (modeSize.Height / 2)), StringFormat.GenericDefault);
-                        }
+                        //e.Graphics.DrawString(bse.GUID, m_SmallModeFont, sb, e.Bounds.Width - 120, e.Bounds.Y + ((e.Bounds.Height / 2) - (modeSize.Height / 2)), StringFormat.GenericDefault);
+                    }
 
-                        sb.Dispose();
+                    sb.Dispose();
                     //}
                 }
                 else

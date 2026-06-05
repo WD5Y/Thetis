@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,9 +39,9 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Windows.Forms;
 using System.IO.Ports;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -99,10 +99,10 @@ namespace Thetis
             foreach (string port in ports)
             {
                 int i = comboComPort.Items.Add(port);
-                if(port == _com_port_setting) comboComPort.SelectedIndex = i;
+                if (port == _com_port_setting) comboComPort.SelectedIndex = i;
             }
 
-            if(comboComPort.SelectedIndex == -1)
+            if (comboComPort.SelectedIndex == -1)
             {
                 updateCombos(false);
             }
@@ -284,13 +284,13 @@ namespace Thetis
                 if (baudRate == _baud_rate_setting) comboBaudRate.SelectedIndex = i;
             }
 
-            foreach(int dataBits in _dataBits)
+            foreach (int dataBits in _dataBits)
             {
                 int i = comboDataBits.Items.Add(dataBits);
                 if (dataBits == _data_bits_setting) comboDataBits.SelectedIndex = i;
             }
 
-            foreach(StopBits stopBits in _stopBits)
+            foreach (StopBits stopBits in _stopBits)
             {
                 string sb = "";
                 switch (stopBits)

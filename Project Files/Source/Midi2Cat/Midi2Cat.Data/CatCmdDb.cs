@@ -25,15 +25,6 @@ by Chris Codella, W2PA, Feb 2017.  Indicated by //-W2PA comment lines.
 
 */
 
-using Midi2Cat.Helpers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Thetis; 
-
 namespace Midi2Cat.Data
 {
     public static class CatCmdDb
@@ -46,11 +37,11 @@ namespace Midi2Cat.Data
             var CatCommand = ((CatCommandAttribute)attributes[0]);
             CatCommand.CatCommandId = Id;
             return CatCommand;
-        }       
+        }
     }
-    
+
     public enum CatCmd
-    {        
+    {
         [CatCommandAttribute("Not Mapped", ControlType.Unknown)]
         None = 0,
         [CatCommandAttribute("VfoA To B", ControlType.Button)]
@@ -59,39 +50,39 @@ namespace Midi2Cat.Data
         VfoBtoA = 02,
         [CatCommandAttribute("Vfo Swap", ControlType.Button)]
         VfoSwap = 03,
-        [CatCommandAttribute("Split On Off", ControlType.Button,true)]  
+        [CatCommandAttribute("Split On Off", ControlType.Button, true)]
         SplitOnOff = 04,
         [CatCommandAttribute("Zero Beat", ControlType.Button)]
         ZeroBeatPress = 05,
-        [CatCommandAttribute("Rit On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rit On Off", ControlType.Button, true)]
         RitOnOff = 06,
-        [CatCommandAttribute("Xit On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Xit On Off", ControlType.Button, true)]
         XitOnOff = 07,
         [CatCommandAttribute("RIT Clear", ControlType.Button)]
         RIT_clear = 08,
         [CatCommandAttribute("XIT Clear", ControlType.Button)]
         XIT_clear = 09,
-        [CatCommandAttribute("Multi Rx On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Multi Rx On Off", ControlType.Button, true)]
         MultiRxOnOff = 10,
-        [CatCommandAttribute("Vfo Sync On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Vfo Sync On Off", ControlType.Button, true)]
         VfoSyncOnOff = 11,
         [CatCommandAttribute("Toggle VFO Lock - A,both,off", ControlType.Button, true)]
         LockVFOOnOff = 12,
         [CatCommandAttribute("MOX On Off", ControlType.Button, true)]
         MOXOnOff = 13,
-        [CatCommandAttribute("VOX On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("VOX On Off", ControlType.Button, true)]
         VOXOnOff = 14,
-        [CatCommandAttribute("Mute On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Mute On Off", ControlType.Button, true)]
         MuteOnOff = 15,
-        [CatCommandAttribute("Rx1 Noise Blanker1 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rx1 Noise Blanker1 On Off", ControlType.Button, true)]
         Rx1NoiseBlanker1OnOff = 16,
-        [CatCommandAttribute("Rx1 Noise Blanker2 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rx1 Noise Blanker2 On Off", ControlType.Button, true)]
         Rx1Noiseblanker2OnOff = 17,
-        [CatCommandAttribute("Auto Notch On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Auto Notch On Off", ControlType.Button, true)]
         AutoNotchOnOff = 18,
-        [CatCommandAttribute("Noise Reduction 1 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Noise Reduction 1 On Off", ControlType.Button, true)]
         NoiseReductionOnOff = 19,
-        [CatCommandAttribute("Noise Reduction 2 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Noise Reduction 2 On Off", ControlType.Button, true)]
         NoiseReduction2OnOff = 20,  //-W2PA Renamed function to reflect actual meaning
         [CatCommandAttribute("Noise Reduction 3 On Off", ControlType.Button, true)]
         NoiseReduction3OnOff = 113,
@@ -99,7 +90,7 @@ namespace Midi2Cat.Data
         NoiseReduction4OnOff = 114,
         [CatCommandAttribute("Noise Reduction 4 Amount", ControlType.Knob_or_Slider)]
         NoiseReduction4Amount = 115,
-        [CatCommandAttribute("Binaural On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Binaural On Off", ControlType.Button, true)]
         BinauralOnOff = 21,
         [CatCommandAttribute("Rx1 Filter Wider", ControlType.Button)]
         Rx1FilterWider = 22,
@@ -117,21 +108,21 @@ namespace Midi2Cat.Data
         BandUp = 28,
         [CatCommandAttribute("Band Down", ControlType.Button)]
         BandDown = 29,
-        [CatCommandAttribute("Start On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Start On Off", ControlType.Button, true)]
         StartOnOff = 30,
-        [CatCommandAttribute("Tuner On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Tuner On Off", ControlType.Button, true)]
         TunerOnOff = 31,
-        [CatCommandAttribute("Compander On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Compander On Off", ControlType.Button, true)]
         CompanderOnOff = 32,
         [CatCommandAttribute("Stereo Diversity On Off", ControlType.Button, true)]
         StereoDiversityOnOff = 33,
-        [CatCommandAttribute("DEXP On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("DEXP On Off", ControlType.Button, true)]
         DEXPOnOff = 34,
-        [CatCommandAttribute("RX2 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("RX2 On Off", ControlType.Button, true)]
         RX2OnOff = 35,
-        [CatCommandAttribute("Rx2 Pre Amp On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rx2 Pre Amp On Off", ControlType.Button, true)]
         Rx2PreAmpOnOff = 36,
-        [CatCommandAttribute("Rx2 Noise Blanker1 On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rx2 Noise Blanker1 On Off", ControlType.Button, true)]
         Rx2NoiseBlanker1OnOff = 37,
         [CatCommandAttribute("Rx2 Noise Blanker2 On Off", ControlType.Button, true)]
         Rx2Noiseblanker2OnOff = 38,
@@ -139,9 +130,9 @@ namespace Midi2Cat.Data
         Rx2BandUp = 39,
         [CatCommandAttribute("Rx2 Band Down", ControlType.Button)]
         Rx2BandDown = 40,
-        [CatCommandAttribute("RX EQ On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("RX EQ On Off", ControlType.Button, true)]
         RXEQOnOff = 41,
-        [CatCommandAttribute("TX EQ On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("TX EQ On Off", ControlType.Button, true)]
         TXEQOnOff = 42,
         [CatCommandAttribute("Squelch On Off", ControlType.Button, true)]
         SquelchOnOff = 43,
@@ -151,7 +142,7 @@ namespace Midi2Cat.Data
         AGCModeUp = 45,
         [CatCommandAttribute("AGC Mode Down", ControlType.Button)]
         AGCModeDown = 46,
-        [CatCommandAttribute("Rx2 Spectral Noise Blanker On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("Rx2 Spectral Noise Blanker On Off", ControlType.Button, true)]
         SpectralNoiseBlankerRx2OnOff = 47,
         [CatCommandAttribute("Display Average", ControlType.Button)]
         DisplayAverage = 48,
@@ -191,25 +182,25 @@ namespace Midi2Cat.Data
         CWXMacro9 = 65,
         [CatCommandAttribute("CWX Stop", ControlType.Button)]
         CWXStop = 66,
-        [CatCommandAttribute("MON On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("MON On Off", ControlType.Button, true)]
         MONOnOff = 67,
         [CatCommandAttribute("Pan Center", ControlType.Button)]
         PanCenter = 68,
-        [CatCommandAttribute("VAC On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("VAC On Off", ControlType.Button, true)]
         VACOnOff = 69,
         [CatCommandAttribute("Rx1 IQ To VAC", ControlType.Button)]
         IQtoVAC = 70,
         [CatCommandAttribute("Rx2 IQ to VAC", ControlType.Button)]
         IQtoVACRX2 = 71,
-        [CatCommandAttribute("VAC 2 On Off", ControlType.Button,true)]
+        [CatCommandAttribute("VAC 2 On Off", ControlType.Button, true)]
         VAC2OnOff = 72,
         [CatCommandAttribute("Click Tune On Off", ControlType.Button, true)]
         CTunOnOff = 73,
-        [CatCommandAttribute("ESC Form On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("ESC Form On Off", ControlType.Button, true)]
         ESCFormOnOff = 74,
-        [CatCommandAttribute("RX2 Mute On Off", ControlType.Button, true)]  
+        [CatCommandAttribute("RX2 Mute On Off", ControlType.Button, true)]
         MuteRX2OnOff = 75,
-        [CatCommandAttribute("Tune On Off", ControlType.Button,true)] 
+        [CatCommandAttribute("Tune On Off", ControlType.Button, true)]
         TunOnOff = 76,
         [CatCommandAttribute("Tuner Bypass", ControlType.Button, true)]
         TunerBypassOnOff = 77,
@@ -314,7 +305,7 @@ namespace Midi2Cat.Data
         [CatCommandAttribute("Multi Step Vfo A", ControlType.Wheel)]
         MultiStepVfoA = 110,
         [CatCommandAttribute("RIT", ControlType.Knob_or_Slider)]
-        RIT = 201,       
+        RIT = 201,
         [CatCommandAttribute("Manual or Semi Break-In", ControlType.Button, true)]
         CWBreakIn = 111,
         [CatCommandAttribute("Semi or QSK Break-In", ControlType.Button, true)]
@@ -381,7 +372,7 @@ namespace Midi2Cat.Data
         VolumeVfoA_inc = 241,
         [CatCommandAttribute("Volume VfoB Incr", ControlType.Wheel)]
         VolumeVfoB_inc = 242,
-        [CatCommandAttribute("RX1 AGC Level Incr", ControlType.Wheel)] 
+        [CatCommandAttribute("RX1 AGC Level Incr", ControlType.Wheel)]
         AGCLevel_inc = 243,
         [CatCommandAttribute("RX2 AGC Level Incr", ControlType.Wheel)]
         RX2AGCLevel_inc = 244,
@@ -405,7 +396,7 @@ namespace Midi2Cat.Data
         Rx2NoiseReduction4OnOff = 310,
         [CatCommandAttribute("Rx2 Noise Reduction 4 Amount", ControlType.Knob_or_Slider)]
         Rx2NoiseReduction4Amount = 311,
-        [CatCommandAttribute("Increase wheel rotation per VFO tune step", ControlType.Button)] 
+        [CatCommandAttribute("Increase wheel rotation per VFO tune step", ControlType.Button)]
         MidiMessagesPerTuneStepUp = 252,
         [CatCommandAttribute("Decrease wheel rotation per VFO tune step", ControlType.Button)]
         MidiMessagesPerTuneStepDown = 253,
@@ -422,7 +413,7 @@ namespace Midi2Cat.Data
         [CatCommandAttribute("Diversity Enable", ControlType.Button, true)]
         DiversityEnable = 259,
         [CatCommandAttribute("Diversity Phase", ControlType.Wheel)]
-        DiversityPhase= 260,
+        DiversityPhase = 260,
         [CatCommandAttribute("Diversity Gain", ControlType.Wheel)]
         DiversityGain = 261,
         [CatCommandAttribute("Diversity RX Reference", ControlType.Button, true)]
@@ -513,13 +504,22 @@ namespace Midi2Cat.Data
         QuickSplitOnOff = 304,
         [CatCommandAttribute("Quick Split + VFO Split On Off", ControlType.Button, true)]
         QuickSplitOnOffandSplitOnOff = 305,
-        [CatCommandAttribute("Quick Play Wave File",ControlType.Button, true)] // DH1KLM 
+        [CatCommandAttribute("Quick Play Wave File", ControlType.Button, true)] // DH1KLM 
         QuickPlayOnOff = 306,
         [CatCommandAttribute("Quick Rec Wave File", ControlType.Button, true)] // DH1KLM
         QuickRecOnOff = 307,
         [CatCommandAttribute("Audio Amp On Off", ControlType.Button, true)] // [2.10.3.6]MW0LGE 
         AudioAmpOnOff = 308,
-        //309+310 used
+        //309 to 311 inclusive used
+        [CatCommandAttribute("APF Type Double Pole", ControlType.Button)] // [2.10.3.12]MW0LGE 
+        APFType_doublepole = 312,
+        [CatCommandAttribute("APF Type Matched", ControlType.Button)] // [2.10.3.12]MW0LGE 
+        APFType_matched = 313,
+        [CatCommandAttribute("APF Type Gaussian", ControlType.Button)] // [2.10.3.12]MW0LGE 
+        APFType_gaussian = 314,
+        [CatCommandAttribute("APF Type Bi-Quad", ControlType.Button)] // [2.10.3.12]MW0LGE 
+        APFType_biquad = 315,
+
         [CatCommandAttribute("Toggle Wheel to VFOA/VFOB ", ControlType.Button)]  //-W2PA Added a toggle between A/B for main wheel 
         ToggleVFOWheel = 700
     }

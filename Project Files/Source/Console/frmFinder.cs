@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,13 +41,12 @@ mw0lge@grange-lane.co.uk
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.Threading;
-using System.IO;
-using System.Xml;
 using System.Drawing.Drawing2D;
-using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Thetis
@@ -61,7 +60,7 @@ namespace Thetis
             public string FullName { get; set; }
             public string Text { get; set; }
             public string ToolTip { get; set; }
-            public string ShortName {  get; set; }
+            public string ShortName { get; set; }
             public string XMLReplacement { get; set; }
         }
 
@@ -146,7 +145,7 @@ namespace Thetis
             public string Description { get; set; }
         }
         private void gatherCATStructSearchDataThread(string file_path)
-        {          
+        {
             try
             {
                 XDocument document = XDocument.Load(file_path);
@@ -360,7 +359,7 @@ namespace Thetis
                 _ignoreUpdateToList = true;
                 lstResults.DataSource = null;
                 lstResults.Items.Clear();
-               
+
                 lstResults.DisplayMember = "Text";
                 lstResults.DataSource = searchDataList;
                 lstResults.ClearSelected();
@@ -407,7 +406,8 @@ namespace Thetis
             Color textColor = e.State.HasFlag(DrawItemState.Selected) ? SystemColors.HighlightText : SystemColors.ControlText;
 
             // Fill the background
-            if (!e.State.HasFlag(DrawItemState.Selected)) {
+            if (!e.State.HasFlag(DrawItemState.Selected))
+            {
                 backgroundColor = e.Index % 2 == 0 ? backgroundColor : applyTint(backgroundColor, Color.LightGray);
             }
             g.FillRectangle(new SolidBrush(backgroundColor), e.Bounds);
@@ -562,12 +562,12 @@ namespace Thetis
 
         private void showControl(Control c)
         {
-            if(c == null) return;
+            if (c == null) return;
 
             Form f = c.FindForm();
-            if(f == null) return;
+            if (f == null) return;
 
-            if(!f.Visible)
+            if (!f.Visible)
                 f.Show();
 
             f.BringToFront();
@@ -673,7 +673,7 @@ namespace Thetis
             try
             {
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(filePath);                
+                xmlDoc.Load(filePath);
 
                 XmlNodeList nodes = xmlDoc.SelectNodes("//element");
                 foreach (XmlNode node in nodes)
@@ -741,13 +741,13 @@ namespace Thetis
 
                 xmlDoc.Save(filePath);
             }
-            catch {}
+            catch { }
         }
         private void frmFinder_KeyDown(object sender, KeyEventArgs e)
         {
             // alt key to show additional info when in full details mode
             // ctrl c to copy full control name to clipboard
-            if(e.Alt && _fullDetails)
+            if (e.Alt && _fullDetails)
             {
                 lock (_objLocker)
                 {
@@ -762,7 +762,7 @@ namespace Thetis
             else if (e.Control && e.KeyCode == Keys.C)
             {
                 SearchData sd = lstResults.SelectedItem as SearchData;
-                if(sd != null)
+                if (sd != null)
                 {
                     try
                     {
@@ -779,10 +779,10 @@ namespace Thetis
             lock (_objLocker)
             {
                 SearchData sd = lstResults.SelectedItem as SearchData;
-                _highlightResults = chkHighlight.Checked;                
+                _highlightResults = chkHighlight.Checked;
                 txtSearch_TextChanged(this, EventArgs.Empty);
-                if(sd != null)
-                    lstResults.SelectedItem = sd; 
+                if (sd != null)
+                    lstResults.SelectedItem = sd;
             }
         }
 

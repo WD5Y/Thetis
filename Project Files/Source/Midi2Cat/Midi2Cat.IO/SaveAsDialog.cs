@@ -23,12 +23,7 @@ The author can be reached by email at:  midi2cat@cametrix.com
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Midi2Cat.IO
@@ -82,7 +77,7 @@ namespace Midi2Cat.IO
         private void saveButton_Click(object sender, EventArgs e)
         {
             bool DoIt = true;
-            string value=textBox1.Text.Trim().ToLower();
+            string value = textBox1.Text.Trim().ToLower();
             foreach (var mapping in mappingsLB.Items)
             {
                 if (value == ((string)mapping).ToLower())
@@ -95,7 +90,7 @@ namespace Midi2Cat.IO
                     break;
                 }
             }
-            if (DoIt )
+            if (DoIt)
                 this.DialogResult = DialogResult.OK;
         }
     }

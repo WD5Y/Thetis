@@ -22,13 +22,7 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 */
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Midi2Cat.IO
@@ -75,13 +69,13 @@ namespace Midi2Cat.IO
 
         private void mappingsLB_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            int count=mappingsLB.CheckedItems.Count;
+            int count = mappingsLB.CheckedItems.Count;
             if (e.NewValue == CheckState.Checked)
                 count++;
             else
                 count--;
             doneButton.Enabled = count > 0;
         }
-                   
+
     }
 }

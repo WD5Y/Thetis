@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -71,7 +71,8 @@ namespace Thetis
         public string Caption
         {
             get { return m_sCaption; }
-            set { 
+            set
+            {
                 m_sCaption = value;
                 this.Invalidate();
             }
@@ -94,7 +95,7 @@ namespace Thetis
         {
             get
             { return m_dPlusMinusSwing; }
-            set 
+            set
             {
                 m_dPlusMinusSwing = value;
 
@@ -176,7 +177,7 @@ namespace Thetis
             e.Graphics.DrawLines(Pens.Red, points);
 
             // yellow ring buffer perc line
-            int xBufferPos = (this.Height - 1) - (int)((this.Height-1) * (m_dRingBufferPerc / 100));
+            int xBufferPos = (this.Height - 1) - (int)((this.Height - 1) * (m_dRingBufferPerc / 100));
             e.Graphics.DrawLine(Pens.Yellow, 0, xBufferPos, 10, xBufferPos);
         }
 

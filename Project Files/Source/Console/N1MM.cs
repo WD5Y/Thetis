@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,14 +39,12 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
-using System.Diagnostics;
-using SharpDX.Direct2D1;
 
 namespace Thetis
 {
@@ -56,7 +54,7 @@ namespace Thetis
 
         private struct ReceiverStoredData
         {
-            public float[] storedData;
+            public float[] spectrum_data;
             public double LowFreq;
             public double HighFreq;
             public bool Enabled;
@@ -98,22 +96,25 @@ namespace Thetis
             if (RXstoredData == null || rx > RXstoredData.Length || rx < 1) return;
 
             RXstoredData[rx - 1].Enabled = enable;
+
+            Resize(rx);
         }
         private static void setLowFrequencyMHz(int rx, double freq)
         {
             if (RXstoredData == null || rx > RXstoredData.Length || rx < 1) return;
 
-            RXstoredData[rx-1].LowFreq = freq;
+            RXstoredData[rx - 1].LowFreq = freq;
         }
         private static void setHighFrequencyMHz(int rx, double freq)
         {
             if (RXstoredData == null || rx > RXstoredData.Length || rx < 1) return;
 
-            RXstoredData[rx-1].HighFreq = freq;
+            RXstoredData[rx - 1].HighFreq = freq;
         }
 
         private static int m_nSendRate = 8;
-        public static int SendRate {
+        public static int SendRate
+        {
             get { return m_nSendRate; }
             set { m_nSendRate = value; }
         }
@@ -136,7 +137,7 @@ namespace Thetis
         private static void setMaxRXs(int rxNumber)
         {
             RXstoredData = new ReceiverStoredData[rxNumber];
-            for(int i = 0; i < RXstoredData.Length; i++)
+            for (int i = 0; i < RXstoredData.Length; i++)
             {
                 RXstoredData[i].ID = string.Empty;
                 RXstoredData[i].DataReady = false;
@@ -147,7 +148,36 @@ namespace Thetis
         //{
         //    _console = c;
         //}
+        public static void Resize()
+        {
+            if (!Display.IsDX2DSetup) return;
 
+            for (int i = 0; i < RXstoredData.Length; i++)
+            {
+                if (RXstoredData[i].Enabled)
+                {
+                    Resize(i + 1);
+                }
+            }
+        }
+        private static bool _cw_shift_enable = false;
+        public static bool CWShiftEnable
+        {
+            set
+            {
+                bool old = _cw_shift_enable;
+                _cw_shift_enable = value;
+                if (old != _cw_shift_enable)
+                {
+                    Resize(1);
+                    Resize(2);
+                }
+            }
+            get
+            {
+                return _cw_shift_enable;
+            }
+        }
         public static void Resize(int rx)
         {
             if (!Display.IsDX2DSetup) return;
@@ -157,9 +187,9 @@ namespace Thetis
 
             int width = Display.Target.Width / Display.Decimation;
 
-            if (RXstoredData[rx - 1].storedData == null || RXstoredData[rx - 1].Width < width)
+            if (RXstoredData[rx - 1].spectrum_data == null || RXstoredData[rx - 1].Width < width)
             {
-                RXstoredData[rx - 1].storedData = new float[width];
+                RXstoredData[rx - 1].spectrum_data = new float[width];
             }
             RXstoredData[rx - 1].Width = width;
 
@@ -173,33 +203,37 @@ namespace Thetis
                 double dH = Math.Round(centreFrequency + ((bandWidth / 2) * 1e-6), 6);
 
                 // MW0LGE [2.9.0.7] fix issue where spectrum is offset by cwpitch
+                // MW0LGE [2.10.3.15] added option to disable cw shift. N1mm seemingly does not require this, but added for backwards compatibility
                 int nPitch = 0;
-                switch (rx)
+                if (_cw_shift_enable)
                 {
-                    case 1:
-                        {
-                            if (Display.RX1DSPMode == DSPMode.CWL)
+                    switch (rx)
+                    {
+                        case 1:
                             {
-                                nPitch = Display.CWPitch;
+                                if (Display.RX1DSPMode == DSPMode.CWL)
+                                {
+                                    nPitch = -Display.CWPitch;
+                                }
+                                else if (Display.RX1DSPMode == DSPMode.CWU)
+                                {
+                                    nPitch = Display.CWPitch;
+                                }
                             }
-                            else if (Display.RX1DSPMode == DSPMode.CWU)
+                            break;
+                        case 2:
+                            if (Display.RX2DSPMode == DSPMode.CWL)
                             {
                                 nPitch = -Display.CWPitch;
                             }
-                        }
-                        break;
-                    case 2:
-                        if (Display.RX2DSPMode == DSPMode.CWL)
-                        {
-                            nPitch = Display.CWPitch;
-                        }
-                        else if (Display.RX2DSPMode == DSPMode.CWU)
-                        {
-                            nPitch = -Display.CWPitch;
-                        }
-                        break;
+                            else if (Display.RX2DSPMode == DSPMode.CWU)
+                            {
+                                nPitch = Display.CWPitch;
+                            }
+                            break;
+                    }
+                    //
                 }
-                //
 
                 dL += nPitch * 1e-6;
                 dH += nPitch * 1e-6;
@@ -217,23 +251,23 @@ namespace Thetis
             if (RXstoredData == null || rx > RXstoredData.Length || rx < 1) return;
             if (!RXstoredData[rx - 1].Enabled) return;
 
-            if (RXstoredData[rx-1].DataReady) return; // not been consumed
+            if (RXstoredData[rx - 1].DataReady) return; // not been consumed
 
             lock (m_objLock)
             {
-//                RXstoredData[rx-1].DataReady = false;
+                //                RXstoredData[rx-1].DataReady = false;
 
-//                if (bUse)
-//                {
-                    unsafe
-                    {
-                        fixed (void* originalptr = &newData[0])
-                        fixed (void* newptr = &RXstoredData[rx - 1].storedData[0])
-                            Win32.memcpy(newptr, originalptr, RXstoredData[rx - 1].Width * sizeof(float));
-                    }
+                //                if (bUse)
+                //                {
+                unsafe
+                {
+                    fixed (void* originalptr = &newData[0])
+                    fixed (void* newptr = &RXstoredData[rx - 1].spectrum_data[0])
+                        Win32.memcpy(newptr, originalptr, RXstoredData[rx - 1].Width * sizeof(float));
+                }
 
-                    RXstoredData[rx-1].DataReady = true;
-//                }
+                RXstoredData[rx - 1].DataReady = true;
+                //                }
             }
         }
         public static void Start()
@@ -261,16 +295,19 @@ namespace Thetis
 
             }, cancelTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
-        public static bool IsStarted {
+        public static bool IsStarted
+        {
             get { return m_bStarted; }
         }
-        public static string DestinationIP {
+        public static string DestinationIP
+        {
             get { return m_sDestinationIP; }
-            set {
+            set
+            {
                 string[] parts = value.Split(':');
                 string sTmp = "";
 
-                if(parts.Length==1) sTmp = value;
+                if (parts.Length == 1) sTmp = value;
                 else if (parts.Length > 1)
                 {
                     sTmp = parts[0];
@@ -290,7 +327,8 @@ namespace Thetis
                 }
             }
         }
-        public static int DestinationPort {
+        public static int DestinationPort
+        {
             get { return m_nDestinationPort; }
             set { m_nDestinationPort = value; }
         }
@@ -308,7 +346,7 @@ namespace Thetis
             {
                 ReceiverStoredData rsd = RXstoredData[nn];
 
-                if (rsd.storedData != null && rsd.Enabled && rsd.DataReady)
+                if (rsd.spectrum_data != null && rsd.Enabled && rsd.DataReady)
                 {
                     XmlDocument doc = new XmlDocument();
                     doc.PreserveWhitespace = false;
@@ -328,7 +366,7 @@ namespace Thetis
                     app.InnerText = "WaterfallBandmap";
 
                     XmlElement name = doc.CreateElement("Name");
-                    if(string.IsNullOrEmpty(rsd.ID))
+                    if (string.IsNullOrEmpty(rsd.ID))
                     {
                         name.InnerText = "Thetis_" + (nn + 1).ToString();
                     }
@@ -355,15 +393,15 @@ namespace Thetis
                     string specData = "";
 
                     double min = double.MaxValue;
-                    for(int i = 0; i < rsd.Width; i++)
+                    for (int i = 0; i < rsd.Width; i++)
                     {
-                        if (rsd.storedData[i] < min) min = rsd.storedData[i];
+                        if (rsd.spectrum_data[i] < min) min = rsd.spectrum_data[i];
                     }
                     min = Math.Abs(min);
 
                     for (int n = 0; n < rsd.Width; n++)
                     {
-                        int v = (int)rsd.storedData[n] + (int)min;
+                        int v = (int)rsd.spectrum_data[n] + (int)min;
                         specData += v.ToString() + ",";
                     }
                     if (specData != "") specData = specData.Substring(0, specData.Length - 1); // drop ,

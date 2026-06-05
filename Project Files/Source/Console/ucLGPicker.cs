@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,13 +41,11 @@ mw0lge@grange-lane.co.uk
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -126,8 +124,8 @@ namespace Thetis
         public bool ShowAsPercent
         {
             get { return _show_percent; }
-            set 
-            { 
+            set
+            {
                 _show_percent = value;
                 this.Invalidate();
             }
@@ -139,7 +137,7 @@ namespace Thetis
             lock (m_objListLocker)
             {
                 List<KeyValuePair<int, GradColours>> list = m_dictColours.ToList();
-                
+
                 m_kvpSortedColours = from pair in list
                                      where pair.Value.enabled == true
                                      orderby pair.Value.percent ascending
@@ -158,7 +156,7 @@ namespace Thetis
             }
         }
 
-        private void addColour(int index, float percpos, Color c, Dictionary<int,GradColours> lstColours, bool bEnable = true)
+        private void addColour(int index, float percpos, Color c, Dictionary<int, GradColours> lstColours, bool bEnable = true)
         {
             lock (m_objListLocker)
             {
@@ -172,7 +170,8 @@ namespace Thetis
             }
         }
 
-        private int actualWidth {
+        private int actualWidth
+        {
             get { return this.Width - m_nPadding * 2; }
             set { }
         }
@@ -549,13 +548,16 @@ namespace Thetis
                 m_nMouseOverIndex = -1;
             }
         }
-        public Color ColourForSelectedGripper {
-            get {
+        public Color ColourForSelectedGripper
+        {
+            get
+            {
                 if (m_nSelectedGripper == -1) return Color.Empty;
 
                 return m_dictColours[m_nSelectedGripper].color;
             }
-            set {
+            set
+            {
                 if (m_nSelectedGripper == -1) return;
 
                 setColour(m_nSelectedGripper, value, true);
@@ -663,8 +665,10 @@ namespace Thetis
 
             OnChanged(EventArgs.Empty);
         }
-        public override string Text {
-            get {
+        public override string Text
+        {
+            get
+            {
                 string sRet = m_dictColours.Count.ToString() + "|";
                 for (int i = 0; i < m_dictColours.Count; i++)
                 {
@@ -681,13 +685,14 @@ namespace Thetis
                 }
                 return sRet;
             }
-            set {
+            set
+            {
                 string[] parts = value.Split('|');
 
                 bool bOk = false;
                 //lock (m_objListLocker)
                 //{
-                    //m_dictColours.Clear();
+                //m_dictColours.Clear();
 
                 Dictionary<int, GradColours> lstTmp = new Dictionary<int, GradColours>();
 
@@ -723,7 +728,7 @@ namespace Thetis
                     lock (m_objListLocker)
                     {
                         m_dictColours.Clear();
-                        foreach (KeyValuePair<int, GradColours> kvp in lstTmp) 
+                        foreach (KeyValuePair<int, GradColours> kvp in lstTmp)
                         {
                             m_dictColours.Add(kvp.Key, kvp.Value);
                         }
@@ -878,11 +883,14 @@ namespace Thetis
             }
         }
 
-        public bool IncludeAlphaInPreview {
-            get {
+        public bool IncludeAlphaInPreview
+        {
+            get
+            {
                 return m_bIncludeAlphaInPreview;
             }
-            set {
+            set
+            {
                 m_bIncludeAlphaInPreview = value;
                 rebuildSortedColours();
                 Invalidate();

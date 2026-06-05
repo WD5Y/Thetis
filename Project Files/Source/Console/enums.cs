@@ -5,7 +5,7 @@ This file is part of a program that implements a Software-Defined Radio.
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
 Copyright (C) 2000-2025 Original authors
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@ mw0lge@grange-lane.co.uk
 
 namespace Thetis
 {
+    using System; //for [Flags] attribute
+
     #region Enums
 
     public enum FocusMasterMode
@@ -125,6 +127,7 @@ namespace Thetis
         ANVELINAPRO3,
         HERMESLITE,     //MI0BOT
         REDPITAYA,      //DH1KLM
+        ANAN_G2E,       //N1GP G2E added
         LAST
     }
 
@@ -385,7 +388,7 @@ namespace Thetis
 
     public enum HPSDRHW
     {
-        Atlas = 0,
+        Atlas = 0,          // Metis in PowerSDR, but Atlas in Thetis
         Hermes = 1,         // ANAN-10 ANAN100
         HermesII = 2,       // ANAN-10E ANAN-100B HeremesII
         Angelia = 3,        // ANAN-100D
@@ -394,6 +397,7 @@ namespace Thetis
         HermesLite = 6,     // MI0BOT
         Saturn = 10,        // ANAN-G2: added G8NJJ
         SaturnMKII = 11,    // ANAN-G2: MKII board?
+        HermesC10 = 20,     // ANAN-G2E //N1GP G2E added (HermesC10)
         Unknown = 999,      // MW0LGE
     }
 
@@ -474,6 +478,26 @@ namespace Thetis
         TCPIPCat,
         SerialCat,
         TCI
+    }
+
+    public enum VFOSYNCinit
+    {
+        Nothing = 0,
+        VFO_A_to_B,
+        VFO_B_to_A
+    }
+
+    [Flags]
+    public enum PAstatusIndicatorState
+    {
+        NotUsed = 0,
+        OK = 1 << 0,
+        PSUVoltage = 1 << 1,
+        DrainCurrent = 1 << 2,
+        ReversePower = 1 << 3,
+        HeatsinkTemperature = 1 << 4,
+        ForwardPower = 1 << 5,
+        Resettable = 1 << 6
     }
     #endregion
 }

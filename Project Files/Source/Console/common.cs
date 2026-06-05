@@ -26,7 +26,7 @@
 //    USA
 //
 //=================================================================
-// Continual modifications Copyright (C) 2019-2025 Richard Samphire (MW0LGE)
+// Continual modifications Copyright (C) 2019-2026 Richard Samphire (MW0LGE)
 //=================================================================
 //
 //============================================================================================//
@@ -43,27 +43,27 @@
 //============================================================================================//
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Linq;
-using System.IO.Ports;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Security.Principal;
 using System.Globalization;
-using System.Threading.Tasks;
+using System.IO;
+using System.IO.Compression;
+using System.IO.Ports;
+using System.Linq;
+using System.Management;
 using System.Net;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.IO.Compression;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
-using System.Runtime.CompilerServices;
-using System.Management;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -72,8 +72,8 @@ namespace Thetis
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float Clamp(this float v, float min, float max) => (v < min) ? min : (v > max) ? max : v;
     }
-	public static class StringExtensions
-	{
+    public static class StringExtensions
+    {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Truncate(this string source, int maxLength)
         {
@@ -86,7 +86,7 @@ namespace Thetis
         // extend contains to be able to ignore case etc MW0LGE
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains(this string source, string toCheck, StringComparison comp)
-		{
+        {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
@@ -97,7 +97,7 @@ namespace Thetis
             }
 
             return source?.IndexOf(toCheck, comp) >= 0;
-		}
+        }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string Left(this string source, int length)
         {
@@ -175,151 +175,187 @@ namespace Thetis
     //        return Math.Abs(d) < Epsilon;
     //    }
     //}
+
+    //Code to handle enum renaming during deserialization
+    //needed for DisplayMode and WaterfallPalette where they have been renamed
+    //however the serialized data still has the old names
+    public sealed class TypeRenameBinder : SerializationBinder
+    {
+        private readonly Dictionary<string, Type> _map;
+
+        public TypeRenameBinder(Dictionary<string, Type> map)
+        {
+            _map = map;
+        }
+
+        public TypeRenameBinder Add(string oldFullName, Type newType)
+        {
+            _map[oldFullName] = newType;
+            return this;
+        }
+
+        public override Type BindToType(string assemblyName, string typeName)
+        {
+            Type mapped;
+
+            if (_map.TryGetValue(typeName, out mapped))
+                return mapped;
+
+            return Type.GetType(typeName + ", " + assemblyName, true);
+        }
+
+        public static TypeRenameBinder Create()
+        {
+            return new TypeRenameBinder(new Dictionary<string, Type>(StringComparer.Ordinal));
+        }
+    }
+    //
+
     public static class Common
-	{
-		public const MessageBoxOptions MB_TOPMOST = (MessageBoxOptions)0x00040000L; //MW0LGE_21g TOPMOST for MessageBox
+    {
+        public const MessageBoxOptions MB_TOPMOST = (MessageBoxOptions)0x00040000L; //MW0LGE_21g TOPMOST for MessageBox
 
-		#region HiglightControls
+        #region HiglightControls
 
-		private class HighlightData
-		{
-			public Color BackgroundColour { get; set; }
-			public Color ForegroundColour { get; set; }
-			public FlatStyle FlatStyle { get; set; }
-			public Image BackgroundImage { get; set; }
-		}
+        private class HighlightData
+        {
+            public Color BackgroundColour { get; set; }
+            public Color ForegroundColour { get; set; }
+            public FlatStyle FlatStyle { get; set; }
+            public Image BackgroundImage { get; set; }
+        }
 
-		private static Dictionary<string, HighlightData> _hightlightData = new Dictionary<string, HighlightData>();
+        private static Dictionary<string, HighlightData> _hightlightData = new Dictionary<string, HighlightData>();
 
-		public static void HightlightControl(Control c, bool bHighlight, bool bFromFinder = false)
-		{
-			string sKey = c.GetFullName(); //[2.10.1.0] added because control with same name can be in different forms/containers
+        public static void HightlightControl(Control c, bool bHighlight, bool bFromFinder = false)
+        {
+            string sKey = c.GetFullName(); //[2.10.1.0] added because control with same name can be in different forms/containers
 
-			HighlightData hd;
-			bool bAdd = false;
+            HighlightData hd;
+            bool bAdd = false;
 
             if (!_hightlightData.ContainsKey(sKey))
-			{
-				hd = new HighlightData();
-				hd.BackgroundColour = c.BackColor;
-				hd.ForegroundColour = c.ForeColor;
-				hd.BackgroundImage = c.BackgroundImage;
-				hd.FlatStyle = FlatStyle.Flat;
+            {
+                hd = new HighlightData();
+                hd.BackgroundColour = c.BackColor;
+                hd.ForegroundColour = c.ForeColor;
+                hd.BackgroundImage = c.BackgroundImage;
+                hd.FlatStyle = FlatStyle.Flat;
 
-				_hightlightData.Add(sKey, hd);
-				bAdd = true;
-			}
+                _hightlightData.Add(sKey, hd);
+                bAdd = true;
+            }
 
-			hd = _hightlightData[sKey];
+            hd = _hightlightData[sKey];
 
             c.BackColor = bHighlight ? Color.Yellow : hd.BackgroundColour;
             c.ForeColor = bHighlight ? Color.Black : hd.ForegroundColour;
             c.BackgroundImage = bHighlight ? null : hd.BackgroundImage;
 
-			//if (c.GetType() == typeof(NumericUpDownTS))
-			//{
-			//}
-			//else
-			if (c.GetType() == typeof(CheckBoxTS))
-			{
-				CheckBoxTS cb = c as CheckBoxTS;
-				if (bAdd) hd.FlatStyle = cb.FlatStyle;
-				cb.FlatStyle = bHighlight ? FlatStyle.Flat : hd.FlatStyle;
-			}
-			//else if (c.GetType() == typeof(TrackBarTS))
-			//{
-			//}
-			//else if (c.GetType() == typeof(PrettyTrackBar))
-			//{
-			//}
-			else if (c.GetType() == typeof(ComboBoxTS))
-			{
-				ComboBoxTS cb = c as ComboBoxTS;
+            //if (c.GetType() == typeof(NumericUpDownTS))
+            //{
+            //}
+            //else
+            if (c.GetType() == typeof(CheckBoxTS))
+            {
+                CheckBoxTS cb = c as CheckBoxTS;
                 if (bAdd) hd.FlatStyle = cb.FlatStyle;
                 cb.FlatStyle = bHighlight ? FlatStyle.Flat : hd.FlatStyle;
             }
-			else if (c.GetType() == typeof(RadioButtonTS))
-			{
-				RadioButtonTS cb = c as RadioButtonTS;
+            //else if (c.GetType() == typeof(TrackBarTS))
+            //{
+            //}
+            //else if (c.GetType() == typeof(PrettyTrackBar))
+            //{
+            //}
+            else if (c.GetType() == typeof(ComboBoxTS))
+            {
+                ComboBoxTS cb = c as ComboBoxTS;
                 if (bAdd) hd.FlatStyle = cb.FlatStyle;
                 cb.FlatStyle = bHighlight ? FlatStyle.Flat : hd.FlatStyle;
             }
-			//else if (c.GetType() == typeof(TextBoxTS))
-			//{
-			//}
-			//else if (c.GetType() == typeof(LabelTS))
-			//{
-			//}
+            else if (c.GetType() == typeof(RadioButtonTS))
+            {
+                RadioButtonTS cb = c as RadioButtonTS;
+                if (bAdd) hd.FlatStyle = cb.FlatStyle;
+                cb.FlatStyle = bHighlight ? FlatStyle.Flat : hd.FlatStyle;
+            }
+            //else if (c.GetType() == typeof(TextBoxTS))
+            //{
+            //}
+            //else if (c.GetType() == typeof(LabelTS))
+            //{
+            //}
 
-			if (!bHighlight)
-			{
-				if(_hightlightData.ContainsKey(sKey))
-				{
-					_hightlightData.Remove(sKey);
-				}
-			}
+            if (!bHighlight)
+            {
+                if (_hightlightData.ContainsKey(sKey))
+                {
+                    _hightlightData.Remove(sKey);
+                }
+            }
 
-			//c.Invalidate();
+            //c.Invalidate();
             c.Refresh();
-		}
-		#endregion
-		#region WindowDropShadow
-		private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
-		[DllImport("dwmapi.dll")]
-		private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
-		[StructLayout(LayoutKind.Sequential)]
-		private struct RECT
-		{
-			public int left;
-			public int top;
-			public int right;
-			public int bottom;
-		}
-		
-		public static Size DropShadowSize(Form f)
-		{
-			// this only works on a visibile form
-			if (!f.Visible) return new Size(0, 0);
+        }
+        #endregion
+        #region WindowDropShadow
+        private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
 
-			Size sz;
-			RECT rectWithShadow;
-			if (Environment.OSVersion.Version.Major < 6)
-			{
-				sz = new Size(0, 0);
-			}
-			else if (DwmGetWindowAttribute(f.Handle, DWMWA_EXTENDED_FRAME_BOUNDS, out rectWithShadow, Marshal.SizeOf(typeof(RECT))) == 0)
-			{
-				sz = new Size(f.Width - (rectWithShadow.right - rectWithShadow.left), f.Height - (rectWithShadow.bottom - rectWithShadow.top));
-			}
-			else
-			{
-				sz = new Size(0, 0);
-			}
+        public static Size DropShadowSize(Form f)
+        {
+            // this only works on a visibile form
+            if (!f.Visible) return new Size(0, 0);
 
-			return sz;
-		}
-		#endregion
+            Size sz;
+            RECT rectWithShadow;
+            if (Environment.OSVersion.Version.Major < 6)
+            {
+                sz = new Size(0, 0);
+            }
+            else if (DwmGetWindowAttribute(f.Handle, DWMWA_EXTENDED_FRAME_BOUNDS, out rectWithShadow, Marshal.SizeOf(typeof(RECT))) == 0)
+            {
+                sz = new Size(f.Width - (rectWithShadow.right - rectWithShadow.left), f.Height - (rectWithShadow.bottom - rectWithShadow.top));
+            }
+            else
+            {
+                sz = new Size(0, 0);
+            }
 
-		public static void ControlList(Control c, ref List<Control> a)
-		{
-			if(c.Controls.Count > 0)
-			{
+            return sz;
+        }
+        #endregion
+
+        public static void ControlList(Control c, ref List<Control> a)
+        {
+            if (c.Controls.Count > 0)
+            {
                 foreach (Control c2 in c.Controls)
                 {
                     ControlList(c2, ref a);
                 }
-			}
+            }
 
-			if(c.GetType() == typeof(CheckBoxTS) || c.GetType() == typeof(CheckBoxTS) ||
-				c.GetType() == typeof(ComboBoxTS) || c.GetType() == typeof(ComboBox) ||
-				c.GetType() == typeof(NumericUpDownTS) || c.GetType() == typeof(NumericUpDown) ||
-				c.GetType() == typeof(RadioButtonTS) || c.GetType() == typeof(RadioButton) ||
-				c.GetType() == typeof(TextBoxTS) || c.GetType() == typeof(TextBox) ||
-				c.GetType() == typeof(TrackBarTS) || c.GetType() == typeof(TrackBar) ||
-				c.GetType() == typeof(ColorButton))
-				a.Add(c);
+            if (c.GetType() == typeof(CheckBoxTS) || c.GetType() == typeof(CheckBoxTS) ||
+                c.GetType() == typeof(ComboBoxTS) || c.GetType() == typeof(ComboBox) ||
+                c.GetType() == typeof(NumericUpDownTS) || c.GetType() == typeof(NumericUpDown) ||
+                c.GetType() == typeof(RadioButtonTS) || c.GetType() == typeof(RadioButton) ||
+                c.GetType() == typeof(TextBoxTS) || c.GetType() == typeof(TextBox) ||
+                c.GetType() == typeof(TrackBarTS) || c.GetType() == typeof(TrackBar) ||
+                c.GetType() == typeof(ColorButton))
+                a.Add(c);
 
-		}
+        }
         public static void SaveForm(Form form, string tablename)
         {
             if (DB.ds == null) return;
@@ -484,34 +520,34 @@ namespace Thetis
         }
 
         public static void TabControlInsert(TabControl tc, TabPage tp, int index)
-		{
-			tc.SuspendLayout();
-			// temp storage to rearrange tabs
-			TabPage[] temp = new TabPage[tc.TabPages.Count+1];
+        {
+            tc.SuspendLayout();
+            // temp storage to rearrange tabs
+            TabPage[] temp = new TabPage[tc.TabPages.Count + 1];
 
-			// copy pages in order and insert new page when needed
-			for(int i=0; i<tc.TabPages.Count+1; i++)
-			{
-				if(i < index) temp[i] = tc.TabPages[i];
-				else if(i == index) temp[i] = tp;
-				else if(i > index) temp[i] = tc.TabPages[i-1];
-			}
-			
-			// erase all tab pages
-			while(tc.TabPages.Count > 0)
-				tc.TabPages.RemoveAt(0);
+            // copy pages in order and insert new page when needed
+            for (int i = 0; i < tc.TabPages.Count + 1; i++)
+            {
+                if (i < index) temp[i] = tc.TabPages[i];
+                else if (i == index) temp[i] = tp;
+                else if (i > index) temp[i] = tc.TabPages[i - 1];
+            }
 
-			// add them back with new page inserted
-			for(int i=0; i<temp.Length; i++)
-				tc.TabPages.Add(temp[i]);
+            // erase all tab pages
+            while (tc.TabPages.Count > 0)
+                tc.TabPages.RemoveAt(0);
 
-			tc.ResumeLayout();
-		}
+            // add them back with new page inserted
+            for (int i = 0; i < temp.Length; i++)
+                tc.TabPages.Add(temp[i]);
+
+            tc.ResumeLayout();
+        }
 
         public static string[] SortedComPorts()
         {
             string[] ports = SerialPort.GetPortNames();
-            Array.Sort<string>(ports, delegate(string strA, string strB)
+            Array.Sort<string>(ports, delegate (string strA, string strB)
             {
                 try
                 {
@@ -596,13 +632,13 @@ namespace Thetis
             }
         }
 
-		// returns the Thetis version number in "a.b.c" format
-		// MW0LGE moved here from titlebar.cs, and used by console.cs and others
-		private static string m_sVersionNumber = "";
-		private static string m_sFileVersion = "";
-		private static string m_sRevision = "";
-		public static string GetVerNum(bool include_revision = false, bool include_build = false)
-		{
+        // returns the Thetis version number in "a.b.c" format
+        // MW0LGE moved here from titlebar.cs, and used by console.cs and others
+        private static string m_sVersionNumber = "";
+        private static string m_sFileVersion = "";
+        private static string m_sRevision = "";
+        public static string GetVerNum(bool include_revision = false, bool include_build = false)
+        {
             if (string.IsNullOrEmpty(m_sVersionNumber))
             {
                 setupVersions();
@@ -615,66 +651,66 @@ namespace Thetis
                 if (sRevision == ".0") sRevision = "";
                 sret += "." + sRevision;
             }
-            if(include_build)
+            if (include_build)
             {
                 if (TitleBar.BUILD_NAME != "") sret += " " + TitleBar.BUILD_NAME;
             }
 
             return sret;
-		}
-		public static string GetFileVersion()
-		{
-			if (m_sFileVersion != "") return m_sFileVersion;
+        }
+        public static string GetFileVersion()
+        {
+            if (m_sFileVersion != "") return m_sFileVersion;
 
-			setupVersions();
+            setupVersions();
 
-			return m_sFileVersion;
-		}
-		public static string GetRevision()
-		{
-			if (m_sRevision != "") return m_sRevision;
+            return m_sFileVersion;
+        }
+        public static string GetRevision()
+        {
+            if (m_sRevision != "") return m_sRevision;
 
-			setupVersions();
+            setupVersions();
 
-			return m_sRevision;
-		}
-		private static void setupVersions()
-		{
-			//MW0LGE build version number string once and return that
-			// if called again. Issue reported by NJ2US where assembly.Location
-			// passed into GetVersionInfo failed. Perhaps because norton or something
-			// moved the file after it was accessed. The version isn't going to
-			// change anyway while running, so obtaining it once is fine.
-			if (m_sVersionNumber!="" && m_sFileVersion!="") return; // already setup
+            return m_sRevision;
+        }
+        private static void setupVersions()
+        {
+            //MW0LGE build version number string once and return that
+            // if called again. Issue reported by NJ2US where assembly.Location
+            // passed into GetVersionInfo failed. Perhaps because norton or something
+            // moved the file after it was accessed. The version isn't going to
+            // change anyway while running, so obtaining it once is fine.
+            if (m_sVersionNumber != "" && m_sFileVersion != "") return; // already setup
 
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-			m_sVersionNumber = fvi.FileVersion.Substring(0, fvi.FileVersion.LastIndexOf("."));
-			m_sFileVersion = fvi.FileVersion;
-			m_sRevision = fvi.FileVersion.Substring(fvi.FileVersion.LastIndexOf(".") + 1);
-		}
-		public static bool IsAdministrator()
-		{
-			using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
-			{
-				WindowsPrincipal principal = new WindowsPrincipal(identity);
-				return principal.IsInRole(WindowsBuiltInRole.Administrator);
-			}
-		}
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            m_sVersionNumber = fvi.FileVersion.Substring(0, fvi.FileVersion.LastIndexOf("."));
+            m_sFileVersion = fvi.FileVersion;
+            m_sRevision = fvi.FileVersion.Substring(fvi.FileVersion.LastIndexOf(".") + 1);
+        }
+        public static bool IsAdministrator()
+        {
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
         public static bool ShiftKeyDown
-		{
-			get
-			{
-				return Keyboard.IsKeyDown(Keys.LShiftKey) || Keyboard.IsKeyDown(Keys.RShiftKey);
-			}
-		}
-		public static bool CtrlKeyDown
-		{
-			get
-			{
-				return Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey);
-			}
-		}
+        {
+            get
+            {
+                return Keyboard.IsKeyDown(Keys.LShiftKey) || Keyboard.IsKeyDown(Keys.RShiftKey);
+            }
+        }
+        public static bool CtrlKeyDown
+        {
+            get
+            {
+                return Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey);
+            }
+        }
         public static bool AltlKeyDown
         {
             get
@@ -687,10 +723,10 @@ namespace Thetis
         {
             get
             {
-				return System.IntPtr.Size == 8 ? true : false;
-			}
+                return System.IntPtr.Size == 8 ? true : false;
+            }
         }
-		public static void DoubleBuffered(Control control, bool enabled)
+        public static void DoubleBuffered(Control control, bool enabled)
         {
             // Use reflection to set the protected property DoubleBuffered
             PropertyInfo doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -700,9 +736,9 @@ namespace Thetis
             }
         }
 
-		public static int FiveDigitHash(string str)
-		{
-			if(str == "") return 0;
+        public static int FiveDigitHash(string str)
+        {
+            if (str == "") return 0;
 
             // Jenkins one_at_a_time hash function
             // https://en.wikipedia.org/wiki/Jenkins_hash_function
@@ -725,19 +761,19 @@ namespace Thetis
         }
         public static System.Drawing.Color ColourFromString(string str)
         {
-			//format of string "A.R.G.B"
+            //format of string "A.R.G.B"
             string[] tmp = str.Split('.');
             if (tmp.Length == 4)
             {
                 bool bOk;
                 int A = 0, R = 0, G = 0, B = 0;
 
-				bOk = int.TryParse(tmp[0], out A);
-				if (bOk) bOk = int.TryParse(tmp[1], out R);
+                bOk = int.TryParse(tmp[0], out A);
+                if (bOk) bOk = int.TryParse(tmp[1], out R);
                 if (bOk) bOk = int.TryParse(tmp[2], out G);
                 if (bOk) bOk = int.TryParse(tmp[3], out B);
 
-				if (bOk) return System.Drawing.Color.FromArgb(A, R, G, B);
+                if (bOk) return System.Drawing.Color.FromArgb(A, R, G, B);
             }
             return System.Drawing.Color.Empty;
         }
@@ -747,7 +783,7 @@ namespace Thetis
             //return uV (rms) from dBm (50 ohms)
             return Math.Sqrt(Math.Pow(10, dbm / 10) * 50 * 1e-3) * 1e6;
         }
-		public static string SMeterFromDBM(double dbm, bool bAboveS9Frequency)
+        public static string SMeterFromDBM(double dbm, bool bAboveS9Frequency)
         {
             string sRet;
 
@@ -851,13 +887,13 @@ namespace Thetis
         }
         public static void SMeterFromDBM2(double dbm, bool bAboveS9Frequency, out int S, out int over9dBm)
         {
-			// version that returns via out parameters the S reading, and the dbm over reading
+            // version that returns via out parameters the S reading, and the dbm over reading
 
             if (bAboveS9Frequency)
             {
-				if (dbm <= -144.0f) { S = 0; over9dBm = 0; }
+                if (dbm <= -144.0f) { S = 0; over9dBm = 0; }
                 else if (dbm > -144.0f & dbm <= -138.0f) { S = 1; over9dBm = 0; }
-				else if (dbm > -138.0f & dbm <= -132.0f) { S = 2; over9dBm = 0; }
+                else if (dbm > -138.0f & dbm <= -132.0f) { S = 2; over9dBm = 0; }
                 else if (dbm > -132.0f & dbm <= -126.0f) { S = 3; over9dBm = 0; }
                 else if (dbm > -126.0f & dbm <= -120.0f) { S = 4; over9dBm = 0; }
                 else if (dbm > -120.0f & dbm <= -114.0f) { S = 5; over9dBm = 0; }
@@ -927,15 +963,15 @@ namespace Thetis
         #endregion
 
         public static string DateTimeStringForFile(string cultureName = "")
-		{
-			CultureInfo ci;
+        {
+            CultureInfo ci;
 
-			if (cultureName == "")
+            if (cultureName == "")
                 ci = CultureInfo.InstalledUICulture;
-			else
+            else
                 ci = CultureInfo.GetCultureInfo(cultureName); //"en-US"
 
-			DateTime now = DateTime.Now;
+            DateTime now = DateTime.Now;
             string sDate = now.ToString(ci.DateTimeFormat.ShortDatePattern, ci) + "_" + now.ToString(ci.DateTimeFormat.ShortTimePattern, ci);
 
             sDate = sDate.Replace("/", "_");
@@ -945,14 +981,14 @@ namespace Thetis
             // replace any non valid filename chars with _
             string sRet = string.Join("_", sDate.Split(Path.GetInvalidFileNameChars()));
 
-			return sRet;
-        }        
+            return sRet;
+        }
 
         #region WindowFade
         public static async void FadeIn(Form frm, int msTimeToFade = 500, int steps = 20)
         {
-			float stepSize = 1 / (float)steps;
-			float interval = msTimeToFade / (float)steps;
+            float stepSize = 1 / (float)steps;
+            float interval = msTimeToFade / (float)steps;
             while (frm.Opacity < 1.0)
             {
                 await Task.Delay((int)interval);
@@ -972,7 +1008,7 @@ namespace Thetis
             }
             frm.Opacity = 0;
         }
-		#endregion
+        #endregion
 
         public static int CompareVersions(string version1, string version2)
         {
@@ -1007,32 +1043,32 @@ namespace Thetis
 
         public static bool IsValidUri(string uri)
         {
-			if (uri == "") return false;
+            if (uri == "") return false;
 
-			try
-			{
-				if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
-					return false;
-				Uri tmp;
-				if (!Uri.TryCreate(uri, UriKind.Absolute, out tmp))
-					return false;
-				return tmp.Scheme == Uri.UriSchemeHttp || tmp.Scheme == Uri.UriSchemeHttps;
-			}
-			catch { return false; }
+            try
+            {
+                if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute))
+                    return false;
+                Uri tmp;
+                if (!Uri.TryCreate(uri, UriKind.Absolute, out tmp))
+                    return false;
+                return tmp.Scheme == Uri.UriSchemeHttp || tmp.Scheme == Uri.UriSchemeHttps;
+            }
+            catch { return false; }
         }
 
         public static bool OpenUri(string uri, bool check_uri = true)
         {
-			try
-			{
-				if (check_uri && !IsValidUri(uri))
-					return false;
+            try
+            {
+                if (check_uri && !IsValidUri(uri))
+                    return false;
 
-				Task.Run(() => System.Diagnostics.Process.Start(uri));
+                Task.Run(() => System.Diagnostics.Process.Start(uri));
 
-				return true;
-			}
-			catch { return false; }
+                return true;
+            }
+            catch { return false; }
         }
 
         public static int FindNextPowerOf2(int n)
@@ -1072,9 +1108,9 @@ namespace Thetis
                 return false; // Port number is out of range
             }
 
-			// Check if x.x.x.x format, where x can be 0>255
+            // Check if x.x.x.x format, where x can be 0>255
             string pattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
-			if (!Regex.IsMatch(ip, pattern)) return false;
+            if (!Regex.IsMatch(ip, pattern)) return false;
 
             return true; // IP and port are valid
         }
@@ -1100,8 +1136,18 @@ namespace Thetis
             {
                 using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
                 {
-                    IFormatter formatter = new BinaryFormatter();
-                    return (T)formatter.Deserialize(gzipStream);
+                    BinaryFormatter formatter = new BinaryFormatter();
+
+                    // required to handle renamed types in Thetis.MeterManager.clsFilterItem
+                    // DisplayMode and WaterfallPalette enums
+                    TypeRenameBinder binder = TypeRenameBinder.Create()
+                        .Add("Thetis.MeterManager+clsFilterItem+DisplayMode", typeof(MeterManager.clsFilterItem.FIDisplayMode))
+                        .Add("Thetis.MeterManager+clsFilterItem+WaterfallPalette", typeof(MeterManager.clsFilterItem.FIWaterfallPalette));
+
+                    formatter.Binder = binder;
+
+                    object obj = formatter.Deserialize(gzipStream);
+                    return (T)obj;
                 }
             }
         }
@@ -1321,7 +1367,7 @@ namespace Thetis
             }
 
             return int.TryParse(lower_comport.Substring(3), out portNumber);
-        }      
+        }
 
         //[2.10.3.9]MW0LGE performance related
         [DllImport("kernel32.dll")]
@@ -1741,6 +1787,147 @@ namespace Thetis
                 string result = Encoding.UTF8.GetString(decompressed_bytes);
                 return result;
             }
+        }
+        //
+
+        //
+        [DllImport("kernel32.dll", EntryPoint = "GetDiskFreeSpaceExW")]
+        private static extern bool GetDiskFreeSpaceExW(
+        [MarshalAs(UnmanagedType.LPWStr)] string lpDirectoryName,
+        out ulong lpFreeBytesAvailable,
+        out ulong lpTotalNumberOfBytes,
+        out ulong lpTotalNumberOfFreeBytes);
+
+        public static bool TryGetDriveTotalAndFreeBytes(string folderPath, out ulong totalBytes, out ulong freeBytes)
+        {
+            totalBytes = 0UL;
+            freeBytes = 0UL;
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(folderPath)) return false;
+
+                string fullPath = folderPath.Trim();
+
+                try
+                {
+                    fullPath = Path.GetFullPath(fullPath);
+                }
+                catch
+                {
+                }
+
+                if (fullPath.StartsWith(@"\\?\UNC\", StringComparison.OrdinalIgnoreCase))
+                {
+                    fullPath = @"\\" + fullPath.Substring(8);
+                }
+                else if (fullPath.StartsWith(@"\\?\", StringComparison.OrdinalIgnoreCase))
+                {
+                    fullPath = fullPath.Substring(4);
+                }
+
+                string queryPath = fullPath;
+
+                try
+                {
+                    if (File.Exists(queryPath))
+                    {
+                        string dir = Path.GetDirectoryName(queryPath);
+                        if (!string.IsNullOrWhiteSpace(dir)) queryPath = dir;
+                    }
+                }
+                catch
+                {
+                }
+
+                string current = queryPath;
+                for (int i = 0; i < 64; i++)
+                {
+                    bool exists = false;
+                    try
+                    {
+                        exists = Directory.Exists(current);
+                    }
+                    catch
+                    {
+                        exists = false;
+                    }
+
+                    if (exists) break;
+
+                    string parent = null;
+                    try
+                    {
+                        parent = Path.GetDirectoryName(current);
+                    }
+                    catch
+                    {
+                    }
+
+                    if (string.IsNullOrWhiteSpace(parent)) break;
+                    if (string.Equals(parent, current, StringComparison.Ordinal)) break;
+                    current = parent;
+                }
+
+                ulong freeAvail;
+                ulong total;
+                ulong totalFree;
+
+                bool ok = GetDiskFreeSpaceExW(current, out freeAvail, out total, out totalFree);
+                if (!ok)
+                {
+                    string root = null;
+                    try
+                    {
+                        root = Path.GetPathRoot(fullPath);
+                    }
+                    catch
+                    {
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(root))
+                    {
+                        ok = GetDiskFreeSpaceExW(root, out freeAvail, out total, out totalFree);
+                    }
+
+                    if (!ok && fullPath.StartsWith(@"\\", StringComparison.Ordinal))
+                    {
+                        string uncRoot = getUncShareRoot(fullPath);
+                        if (!string.IsNullOrWhiteSpace(uncRoot))
+                        {
+                            ok = GetDiskFreeSpaceExW(uncRoot, out freeAvail, out total, out totalFree);
+                        }
+                    }
+                }
+
+                if (!ok) return false;
+
+                totalBytes = total;
+                freeBytes = freeAvail;
+                return true;
+            }
+            catch
+            {
+                totalBytes = 0UL;
+                freeBytes = 0UL;
+                return false;
+            }
+        }
+
+        private static string getUncShareRoot(string uncPath)
+        {
+            if (string.IsNullOrWhiteSpace(uncPath)) return null;
+            if (!uncPath.StartsWith(@"\\", StringComparison.Ordinal)) return null;
+
+            int first = uncPath.IndexOf('\\', 2);
+            if (first < 0) return null;
+
+            int second = uncPath.IndexOf('\\', first + 1);
+            if (second < 0) second = uncPath.Length;
+
+            string root = uncPath.Substring(0, second);
+            if (!root.EndsWith("\\", StringComparison.Ordinal)) root = root + "\\";
+            return root;
         }
         //
     }

@@ -4,8 +4,8 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2000-2025 Original authors
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2000-2026 Original authors
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,17 +39,16 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
-using System.Globalization;
 
 namespace Thetis
 {
@@ -58,8 +57,8 @@ namespace Thetis
         private class DBSettings
         {
             public Guid ActiveDB_GUID { get; set; }
-            public string ActiveDB_File {  get; set; }
-            public DBSettings() 
+            public string ActiveDB_File { get; set; }
+            public DBSettings()
             {
                 ActiveDB_GUID = Guid.Empty;
                 ActiveDB_File = "";
@@ -71,14 +70,14 @@ namespace Thetis
             public string FullPath { get; set; }
             public DateTime FolderCreationTime { get; set; }
             public long TotalContentsSize { get; set; }
-            public long Size {  get; set; }
+            public long Size { get; set; }
             public string Description { get; set; }
-            public DateTime LastChanged {  get; set; }
+            public DateTime LastChanged { get; set; }
             public DateTime CreationTime { get; set; }
-            public string VersionString {  get; set; }
+            public string VersionString { get; set; }
             public string VersionNumber { get; set; }
-            public bool BackupOnStartup {  get; set; }
-            public bool BackupOnShutdown {  get; set; }
+            public bool BackupOnStartup { get; set; }
+            public bool BackupOnShutdown { get; set; }
 
             //[JsonConverter(typeof(StringEnumConverter))] //this will turn the enum (int) to a string
             [JsonConverter(typeof(DatabaseInfoDefaultStringEnumConverter), HPSDRModel.HERMES)] //[2.10.3.8]MW0LGE a custom string converter, that will default to HERMES if the model is not in the enum
@@ -216,8 +215,8 @@ namespace Thetis
 
         public static string AppDataPath
         {
-            set 
-            { 
+            set
+            {
                 _app_data_path = value;
                 _db_data_path = _app_data_path + "DB\\";
 
@@ -234,7 +233,7 @@ namespace Thetis
             if (!Common.IsValidPath(_db_data_path))
             {
                 DialogResult dr = MessageBox.Show("There is an issue with the database data path.\n\n" +
-                "[" + _db_data_path + "]\n\n" + 
+                "[" + _db_data_path + "]\n\n" +
                 "It is not valid. Please fix and try again.",
                 "Database Manager",
                 MessageBoxButtons.OK,
@@ -290,13 +289,14 @@ namespace Thetis
             }
             // ctrl key upgrade
             bool ctrl_key_force_update = false;
-            if (!new_db_from_reset && (Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey)))
+            bool updateFile = updateFileExists();
+            if (!new_db_from_reset && (Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey) || updateFile))
             {
                 Thread.Sleep(500); // ensure this is intentional
-                if (Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey))
+                if (Keyboard.IsKeyDown(Keys.LControlKey) || Keyboard.IsKeyDown(Keys.RControlKey) || updateFile)
                 {
                     DialogResult dr = MessageBox.Show(
-                         "The database force update has been triggered. Do you want to do this?\n\n",                         
+                         "The database force update has been triggered. Do you want to do this?\n\n",
                          "Force Update Database?",
                          MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
 
@@ -317,15 +317,16 @@ namespace Thetis
                 ok = createNewDB(true, true, out old_db_found);
                 if (ok)
                 {
-                    if(!old_db_found) made_new = true;
+                    if (!old_db_found) made_new = true;
                     dbs = getAvailableDBs();
                     ok = dbs.Count > 0;
                 }
-            }            
+            }
             else
                 ok = true;
 
-            if (ok) {
+            if (ok)
+            {
                 _dbman_settings = getActiveDB();
                 if (_dbman_settings != null)
                 {
@@ -388,9 +389,9 @@ namespace Thetis
                         _ignore_written = false;
 
                         //check version
-                        if(ok) checkVersion(made_new, ctrl_key_force_update);
+                        if (ok) checkVersion(made_new, ctrl_key_force_update, updateFile);
 
-                        if(ok) // note, the TakeBackup above will not prune, as the DB has not been recovered for the flag PruneBackups
+                        if (ok) // note, the TakeBackup above will not prune, as the DB has not been recovered for the flag PruneBackups
                         {
                             // prune
                             Dictionary<string, string> vals = DB.GetVarsDictionary("State");
@@ -411,7 +412,7 @@ namespace Thetis
                 else
                     ok = false;
             }
-            
+
             if (!ok)
             {
                 // try to move to broken folder
@@ -424,7 +425,42 @@ namespace Thetis
 
             return ok;
         }
-        private static void checkVersion(bool made_new, bool force_upgrade = false)
+        private static bool updateFileExists()
+        {
+            try
+            {
+                string file_path = Path.Combine(_app_data_path, "updatedb.txt");
+                return File.Exists(file_path);
+            }
+            catch { return false; }
+        }
+        private static bool renameUpdatedb()
+        {
+            try
+            {
+                string source_path = Path.Combine(_app_data_path, "updatedb.txt");
+
+                if (!File.Exists(source_path))
+                    return false;
+
+                string date_time = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string target_path = Path.Combine(_app_data_path, "updatedb_success_" + date_time + ".txt");
+
+                int n = 1;
+
+                while (File.Exists(target_path))
+                {
+                    target_path = Path.Combine(_app_data_path, "updatedb_success_" + date_time + "_" + n.ToString() + ".txt");
+                    n++;
+                }
+
+                File.Move(source_path, target_path);
+                return true;
+            }
+            catch { return false; }
+        }
+
+        private static void checkVersion(bool made_new, bool force_upgrade = false, bool force_upgrade_via_file = false)
         {
             string version;
             Dictionary<string, string> vals = DB.GetVarsDictionary("State");
@@ -436,8 +472,8 @@ namespace Thetis
             if (made_new) return;
             if (!force_upgrade && Common.GetVerNum() == version) return; // same version, dont need to do anything
 
-            string force_info = force_upgrade ? "CTRL Key force DB update. " : "";
-            
+            string force_info = force_upgrade ? "Force database update requested.\n\n" : "";
+
             DialogResult dr = MessageBox.Show(force_info + "This version [" + Common.GetVerNum() + "] of Thetis requires your database [" + version + "] to be updated.\n\n" +
                 "A new updated database will be created, and your old database merged into it. It will be made active.",
                 "Database Manager",
@@ -450,7 +486,8 @@ namespace Thetis
             string orginal_db_filename_xml = DB.FileName;
             bool ok = createNewDB(false, true, out bool _);
 
-            if (ok) {
+            if (ok)
+            {
                 // then import the one we were using into that new fresh one we just created
                 // we need to ignore merged flag so that we can contine to use and save everyting to this database
                 ok = DB.ImportAndMergeDatabase(orginal_db_filename_xml, out string log, true);
@@ -468,6 +505,8 @@ namespace Thetis
                 // not sure we want to do this
                 //// then delete the orginal
                 //RemoveDB(guid_original, true);
+
+                if (force_upgrade_via_file) renameUpdatedb();
 
                 dr = MessageBox.Show("The database update was completed sucessfully.",
                     "Database Manager",
@@ -630,7 +669,7 @@ namespace Thetis
 
                 di.VersionString = DB.VersionString;
                 di.VersionNumber = DB.VersionNumber;
-                
+
                 string jsonString = JsonConvert.SerializeObject(di, Newtonsoft.Json.Formatting.Indented);
                 try
                 {
@@ -831,9 +870,9 @@ namespace Thetis
             catch (Exception ex)
             {
                 Debug.Print($"An error occurred: {ex.Message}");
-            }  
-            
-            foreach(Guid guid in toJunk)
+            }
+
+            foreach (Guid guid in toJunk)
             {
                 moveToBroken(guid);
             }
@@ -928,7 +967,7 @@ namespace Thetis
             MessageBoxButtons.YesNo,
             MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, Common.MB_TOPMOST);
 
-            if(dr == DialogResult.Yes)
+            if (dr == DialogResult.Yes)
             {
                 // update dbman_settings.json in DB folder
                 bool ok = makeDBActive(guid);
@@ -1049,7 +1088,7 @@ namespace Thetis
                 else
                     ok = true; // just to bypass the error
             }
-            else if(key_force)
+            else if (key_force)
             {
                 if (Directory.Exists(_db_data_path + guid.ToString()))
                 {
@@ -1117,7 +1156,7 @@ namespace Thetis
                 }
             }
 
-            if(!ok)
+            if (!ok)
             {
                 DialogResult dr = MessageBox.Show("There was an issue duplicating the database.",
                 "Database Manager Issue",
@@ -1159,7 +1198,7 @@ namespace Thetis
         }
         public static void SelectedAvailable(Guid guid)
         {
-            if(guid == Guid.Empty)
+            if (guid == Guid.Empty)
             {
                 if (_dbman_settings != null)
                 {
@@ -1197,7 +1236,7 @@ namespace Thetis
             try
             {
                 // TODO: backup limits GFS
-                string backup_filename = "";                
+                string backup_filename = "";
                 string db_filename_xml = _db_data_path + guid.ToString() + "\\database.xml";
                 if (File.Exists(db_filename_xml) && Directory.Exists(backup_directory))
                 {
@@ -1248,7 +1287,7 @@ namespace Thetis
             _frm_dbman.InitBackups(backups);
         }
         private static List<BackupFileInfo> getOrderedBackupFiles(string backupFolderPath)
-        {            
+        {
             List<BackupFileInfo> backupFiles = new List<BackupFileInfo>();
             if (!Directory.Exists(backupFolderPath)) return backupFiles;
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -1313,7 +1352,7 @@ namespace Thetis
         }
         public static void RemoveBackupDB(List<string> file_paths)
         {
-            if(file_paths.Count < 1) return;
+            if (file_paths.Count < 1) return;
 
             string msg = file_paths.Count == 1 ? "Do you want to remove this backup?" : $"Do you want to remove these {file_paths.Count} backups?";
             DialogResult dr = MessageBox.Show(msg,
@@ -1345,7 +1384,7 @@ namespace Thetis
                 }
             }
         }
-        public static void Import() 
+        public static void Import()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML files (*.xml)|*.xml";
@@ -1670,7 +1709,7 @@ namespace Thetis
         }
         public static void OpenFolder(Guid guid)
         {
-            if (guid == Guid.Empty && _dbman_settings != null )
+            if (guid == Guid.Empty && _dbman_settings != null)
                 guid = _dbman_settings.ActiveDB_GUID;
 
             if (guid == Guid.Empty) return;
@@ -1743,7 +1782,7 @@ namespace Thetis
             {
                 string datetime = Common.DateTimeStringForFile();
                 string save_file;
-                if(string.IsNullOrEmpty(desc))
+                if (string.IsNullOrEmpty(desc))
                     save_file = $"Thetis_database_export_backup_{datetime}.xml";
                 else
                     save_file = $"Thetis_database_export_backup_{desc}_{datetime}.xml";

@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -42,14 +42,6 @@ mw0lge@grange-lane.co.uk
 // WORK IN PROGRESS
 //
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Thetis
 {
     internal static class HardwareSpecific
@@ -80,7 +72,7 @@ namespace Thetis
                 _old_model = _model;
                 _model = value;
 
-                NetworkIO.fwVersionsChecked = false;
+                NetworkIO.FWVersionsChecked = false;
 
                 switch (_model)
                 {
@@ -125,6 +117,13 @@ namespace Thetis
                         cmaster.SetADCSupply(0, 33);
                         NetworkIO.LRAudioSwap(0);
                         HardwareSpecific.Hardware = HPSDRHW.Angelia;
+                        break;
+                    case HPSDRModel.ANAN_G2E: //N1GP G2E added
+                        NetworkIO.SetRxADC(1);
+                        NetworkIO.SetMKIIBPF(1);
+                        cmaster.SetADCSupply(0, 33);
+                        NetworkIO.LRAudioSwap(0);
+                        HardwareSpecific.Hardware = HPSDRHW.HermesC10;
                         break;
                     case HPSDRModel.ANAN200D:
                         NetworkIO.SetRxADC(2);
@@ -240,8 +239,9 @@ namespace Thetis
             get
             {
                 return _model == HPSDRModel.ANAN7000D || _model == HPSDRModel.ANAN8000D ||
-                       _model == HPSDRModel.ANVELINAPRO3 || _model == HPSDRModel.ANAN_G2 ||
-                       _model == HPSDRModel.ANAN_G2_1K || _model == HPSDRModel.REDPITAYA;
+                       _model == HPSDRModel.ANVELINAPRO3 || _model == HPSDRModel.ANAN_G2E || //N1GP G2E added
+                       _model == HPSDRModel.ANAN_G2 || _model == HPSDRModel.ANAN_G2_1K ||
+                       _model == HPSDRModel.REDPITAYA;
             }
         }
         public static bool HasAmps
@@ -249,8 +249,9 @@ namespace Thetis
             get
             {
                 return _model == HPSDRModel.ANAN7000D || _model == HPSDRModel.ANAN8000D ||
-                       _model == HPSDRModel.ANVELINAPRO3 || _model == HPSDRModel.ANAN_G2 ||
-                       _model == HPSDRModel.ANAN_G2_1K || _model == HPSDRModel.REDPITAYA;
+                       _model == HPSDRModel.ANVELINAPRO3 || _model == HPSDRModel.ANAN_G2E || //N1GP G2E added
+                       _model == HPSDRModel.ANAN_G2 || _model == HPSDRModel.ANAN_G2_1K ||
+                       _model == HPSDRModel.REDPITAYA;
             }
         }
         public static (float, float) GetDefaultVoltCalibration()
@@ -345,6 +346,8 @@ namespace Thetis
                     return HPSDRModel.HERMESLITE;
                 case "RED-PITAYA":
                     return HPSDRModel.REDPITAYA;
+                case "ANAN-G2E":
+                    return HPSDRModel.ANAN_G2E; //N1GP G2E added
                 default:
                     return HPSDRModel.HERMES;
             }
@@ -371,6 +374,8 @@ namespace Thetis
                     return "ANAN-7000DLE";
                 case HPSDRModel.ANAN8000D:
                     return "ANAN-8000DLE";
+                case HPSDRModel.ANAN_G2E: //N1GP G2E added
+                    return "ANAN-G2E";
                 case HPSDRModel.ANAN_G2:
                     return "ANAN-G2";
                 case HPSDRModel.ANAN_G2_1K:
@@ -388,7 +393,7 @@ namespace Thetis
         public static string ModelString
         {
             get { return EnumModelToString(_model); }
-        }            
+        }
         #endregion
 
         #region RX_CALIBRATION_OFFSET
@@ -466,7 +471,7 @@ namespace Thetis
                 gains[i] = 100f;
             }
 
-            switch (model) 
+            switch (model)
             {
                 case HPSDRModel.FIRST:
                 case HPSDRModel.HERMES:
@@ -683,6 +688,7 @@ namespace Thetis
                     return gains;
 
                 case HPSDRModel.ANAN7000D:
+                case HPSDRModel.ANAN_G2E: //N1GP G2E added
                 case HPSDRModel.ANAN_G2:
                 case HPSDRModel.ANVELINAPRO3:
                 case HPSDRModel.REDPITAYA:
@@ -762,6 +768,29 @@ namespace Thetis
             {
                 return !(_model == HPSDRModel.ORIONMKII || _model == HPSDRModel.ANAN7000D || _model == HPSDRModel.ANAN8000D ||
                     _model == HPSDRModel.ANAN_G2 || _model == HPSDRModel.ANAN_G2_1K || _model == HPSDRModel.ANVELINAPRO3 || _model == HPSDRModel.REDPITAYA);
+            }
+        }
+        #endregion
+
+        #region ATTENUATION
+        public static bool HasSteppedAttenuation(int rx)
+        {
+            if (rx < 1 || rx > 2) return false;
+
+            if (rx == 1) return true; // RX1 always has stepped attenuation
+
+            //rx 2+
+            switch (_model)
+            {
+                case HPSDRModel.HERMES:
+                case HPSDRModel.ANAN_G2E: //N1GP G2E added
+                case HPSDRModel.ANAN10:
+                case HPSDRModel.ANAN10E:
+                case HPSDRModel.ANAN100:
+                case HPSDRModel.ANAN100B:
+                    return false;
+                default:
+                    return true;
             }
         }
         #endregion

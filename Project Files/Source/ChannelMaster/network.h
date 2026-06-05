@@ -52,6 +52,8 @@ typedef struct _seqLogSnapshot {
 
 typedef struct CACHE_ALIGN _radionet
 {
+	int p2_custom_port_base;			// the base port used for inbound packets from the radio, normally 1025 (P2 only)
+	int base_outbound_port;			// the base port for outbound packets to the radio, normally 1024 (P1 + P2)
 	double** RxBuff;
 	double* RxReadBufp;
 	double* TxReadBufp;
@@ -60,7 +62,6 @@ typedef struct CACHE_ALIGN _radionet
 	double* outLRbufp;
 	double* outIQbufp;
 	//double* syncrxbuff[2];
-	int rx_base_port;
 	int run;
 	int wdt;
 	int sendHighPriority;
@@ -71,6 +72,7 @@ typedef struct CACHE_ALIGN _radionet
 	int dash_in;
 	int pll_locked;
 	int oc_output;
+	int oc_output_extras;
 	int supply_volts;
 	int user_adc0;
 	int user_adc1;
@@ -106,7 +108,7 @@ typedef struct CACHE_ALIGN _radionet
 	int puresignal_run;
 
 	// wideband settings
-	int wb_base_port;
+	//int wb_base_port;
 	int wb_base_dispid;
 	int wb_samples_per_packet;
 	int wb_sample_size;
@@ -125,6 +127,7 @@ typedef struct CACHE_ALIGN _radionet
 		int id;
 		int rx_step_attn;
 		int tx_step_attn;
+		int previous_adc_overload;
 		int adc_overload;
 		int dither;
 		int random;
@@ -132,6 +135,8 @@ typedef struct CACHE_ALIGN _radionet
 		int wb_seqnum;
 		int wb_state;
 		double* wb_buff;
+		uint16_t max_magnitude;
+		uint16_t max_magnitude_at_overload;
 	} adc[MAX_ADC];
 
 	struct _cw
@@ -406,29 +411,18 @@ SOCKET listenSock;
 SYSTEMTIME lt;
 static const double const_1_div_2147483648_ = 1.0 / 2147483648.0;
 
-enum _TXPort
-{
-
-};
-
-enum _RXPort
-{
-	HPCCPort = 1025, // High Priority C&C Data
-	RxMicSampPort = 1026, // 16-bit Mic Samples
-	WB0Port = 1027, // 16-Raw ADC Samples
-};
-
 enum HPSDRHW
 {
-	Atlas = 0,
-	Hermes = 1,      // ANAN-10/100
-	HermesII = 2,    // ANAN-10E/100B
-	Angelia = 3,     // ANAN-100D
-	Orion = 4,       // ANAN-200D
-	OrionMKII = 5,   // ANAN-7000DLE/8000DLE AnvelinaPro3
-	HermesLite = 6,  // MI0BOT: HL2 allocated number
-	Saturn = 10,     // ANAN-G2: added G8NJJ
-	SaturnMKII = 11  // ANAN-G2: MKII board
+	Atlas = 0,          // Metis in PowerSDR, but Atlas in Thetis
+	Hermes = 1,         // ANAN-10 ANAN100
+	HermesII = 2,       // ANAN-10E ANAN-100B HeremesII
+	Angelia = 3,        // ANAN-100D
+	Orion = 4,          // ANAN-200D
+	OrionMKII = 5,      // AMAM-7000DLE 7000DLEMkII ANAN-8000DLE OrionMkII Anvelina-Pro3 RedPitaya
+	HermesLite = 6,     // MI0BOT
+	Saturn = 10,        // ANAN-G2: added G8NJJ
+	SaturnMKII = 11,    // ANAN-G2: MKII board?
+	HermesC10 = 20      // ANAN-G2E //N1GP G2E added (HermesC10)
 };
 
 enum _HPSDRModel //from enums.cs
@@ -448,7 +442,8 @@ enum _HPSDRModel //from enums.cs
 	HPSDRModel_ANAN_G2_1K = 12,
 	HPSDRModel_ANVELINAPRO3 = 13,
 	HPSDRModel_HERMESLITE = 14,
-	HPSDRModel_REDPITAYA = 15
+	HPSDRModel_REDPITAYA = 15,
+	HPSDRModel_ANAN_G2E = 16 //N1GP G2E added
 } HPSDRModel;
 
 enum _RadioProtocol

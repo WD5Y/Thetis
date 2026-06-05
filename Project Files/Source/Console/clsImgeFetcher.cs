@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,20 +38,20 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
+using HtmlAgilityPack;
+using SkiaSharp;
+using Svg;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using System.Threading;
-using HtmlAgilityPack;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Text;
 using System.Net.Cache;
-using SkiaSharp;
-using Svg;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Thetis
 {
@@ -111,7 +111,7 @@ namespace Thetis
 
             if (_image_stores.TryAdd(id, store) &&
                 _threads.TryAdd(id, thread) &&
-                _reset_events.TryAdd(id, reset_event) && 
+                _reset_events.TryAdd(id, reset_event) &&
                 _timeouts.TryAdd(id, timeout_secs) &&
                 _bypass_cache.TryAdd(id, bypass_cache))
             {
@@ -200,11 +200,11 @@ namespace Thetis
         {
             Debug.Print("!!!!!!! SHUTDOWN");
             List<Guid> toRemove = new List<Guid>();
-            foreach(KeyValuePair<Guid, ManualResetEvent> kvp in _reset_events)
+            foreach (KeyValuePair<Guid, ManualResetEvent> kvp in _reset_events)
             {
                 toRemove.Add(kvp.Key);
             }
-            foreach(Guid guid in toRemove)
+            foreach (Guid guid in toRemove)
             {
                 StopFetching(guid);
             }
@@ -225,7 +225,7 @@ namespace Thetis
                 reset_event.Reset();
                 while (true)
                 {
-                    bool imagesAdded = false;                    
+                    bool imagesAdded = false;
                     try
                     {
                         StateChanged?.Invoke(this, new StateEventArgs(id, State.IDLE));
@@ -242,7 +242,7 @@ namespace Thetis
                             }
 
                             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(unique_url);
-                            request.UserAgent = "Thetis v" + _version;                            
+                            request.UserAgent = "Thetis v" + _version;
 
                             request.Timeout = 2000;
                             request.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
@@ -258,7 +258,7 @@ namespace Thetis
                                     // have a guess based on url
                                     if (url.EndsWith(".html"))
                                         content_type = "text/html";
-                                    else if (url.EndsWith(".jpg") || url.EndsWith(".gif") || url.EndsWith(".png") || 
+                                    else if (url.EndsWith(".jpg") || url.EndsWith(".gif") || url.EndsWith(".png") ||
                                         url.EndsWith(".webp") || url.EndsWith(".jpeg") || url.EndsWith(".bmp") || url.EndsWith(".tif") ||
                                         url.EndsWith(".tiff"))
                                         content_type = "image";
@@ -331,7 +331,7 @@ namespace Thetis
                                                 // Attempt to decode with SkiaSharp
                                                 skBitmap = SKBitmap.Decode(memoryStream);
                                             }
-                                            catch (Exception) 
+                                            catch (Exception)
                                             {
                                                 skBitmap = null;
                                             }
@@ -380,10 +380,10 @@ namespace Thetis
                         else
                         {
                             // file
-                            if(File.Exists(url))
+                            if (File.Exists(url))
                             {
                                 SKBitmap skBitmap = SKBitmap.Decode(url);
-                                if(skBitmap != null)
+                                if (skBitmap != null)
                                 {
                                     using (SKImage skImage = SKImage.FromBitmap(skBitmap))
                                     using (SKData skData = skImage.Encode(SKEncodedImageFormat.Png, 100))
@@ -454,7 +454,7 @@ namespace Thetis
                 cleanupResources(id);
             }
             Debug.Print("!!!!!!! ENDED");
-        }        
+        }
         private void ProcessMultipartContent(Stream stream, string boundary, ImageStore store, ref bool imagesAdded, ManualResetEvent reset_event, Guid id)
         {
             byte[] boundaryBytes = Encoding.UTF8.GetBytes("--" + boundary);
@@ -636,7 +636,8 @@ namespace Thetis
 
             HtmlNodeCollection nodes = document.DocumentNode.SelectNodes("//img[@src]");
 
-            if(nodes != null && nodes.Count > 0) {
+            if (nodes != null && nodes.Count > 0)
+            {
                 foreach (HtmlNode img in nodes)
                 {
                     string src = img.GetAttributeValue("src", null);

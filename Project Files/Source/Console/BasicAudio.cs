@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,10 +39,11 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Media;
 using System.ComponentModel;
 using System.IO;
+using System.Media;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -56,20 +57,32 @@ namespace Thetis
         private event LoadComplededEventHandler loadCompleted;
         public delegate void LoadComplededEventHandler(bool bLoadedOk);
 
-        public event LoadComplededEventHandler LoadCompletedEvent {
-            add {
+        public event LoadComplededEventHandler LoadCompletedEvent
+        {
+            add
+            {
                 loadCompleted += value;
             }
-            remove {
+            remove
+            {
                 loadCompleted -= value;
             }
         }
 
         public BasicAudio()
         {
-            m_objPlayer = new SoundPlayer();
+            try
+            {
+                m_objPlayer = new SoundPlayer();
+            }
+            catch (Exception e)
+            {
+                m_objPlayer = null;
+                MessageBox.Show("Unable to create SoundPlayer object (BasicAudio)\n\n" + e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
+                return;
+            }
             m_objPlayer.LoadCompleted += new AsyncCompletedEventHandler(player_LoadCompleted);
-            m_objPlayer.SoundLocationChanged += new EventHandler(player_LocationChanged);            
+            m_objPlayer.SoundLocationChanged += new EventHandler(player_LocationChanged);
         }
         private void player_LocationChanged(object sender, EventArgs e)
         {
@@ -82,16 +95,19 @@ namespace Thetis
             loadCompleted?.Invoke(m_bOkToPlay);
         }
 
-        public bool IsReady {
+        public bool IsReady
+        {
             get { return m_bOkToPlay; }
             set { }
         }
-        public string SoundFile {
-            get { return m_objPlayer.SoundLocation; }
+        public string SoundFile
+        {
+            get { return m_objPlayer != null ? m_objPlayer.SoundLocation : ""; }
             set { }
         }
         public void LoadSound(string sFile)
         {
+            if (m_objPlayer == null) return;
             if (m_bLoading || sFile == "") return;
             m_bOkToPlay = false;
             m_bLoading = true;
@@ -114,7 +130,8 @@ namespace Thetis
             }
         }
         public void Play()
-        {            
+        {
+            if (m_objPlayer == null) return;
             if (!m_bOkToPlay) return;
 
             if (m_objThread == null || !m_objThread.IsAlive)
@@ -130,18 +147,22 @@ namespace Thetis
         }
         public void Stop()
         {
-            m_objPlayer.Stop();
+            if (m_objPlayer == null) return;
+            try
+            {
+                m_objPlayer.Stop();
+            }
+            catch { }
         }
 
         private void playSound()
         {
+            if (m_objPlayer == null) return;
             try
             {
                 m_objPlayer.Play();
             }
-            catch
-            {
-            }
+            catch { }
         }
     }
 }

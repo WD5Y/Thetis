@@ -26,12 +26,9 @@ by Chris Codella, W2PA, Feb 2017.  Indicated by //-W2PA comment lines.
 */
 
 using Midi2Cat.Data;
-using Midi2Cat.IO;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -69,7 +66,7 @@ namespace Midi2Cat.IO
         private IntPtr midi_out_handle = (IntPtr)0;
         private object in_lock_obj = new Object();
         private object out_lock_obj = new Object();
-        
+
         public const int CALLBACK_FUNCTION = 0x30000;
         public const int MIM_OPEN = 0x3C1; //961
         public const int MIM_CLOSE = 0x3C2; //962
@@ -117,7 +114,7 @@ namespace Midi2Cat.IO
 
             return mudRet;
         }
-        public bool OpenMidiIn(int deviceIndex,string deviceName)
+        public bool OpenMidiIn(int deviceIndex, string deviceName)
         {
             DeviceIndex = deviceIndex;
             this.DeviceName = deviceName;
@@ -125,7 +122,7 @@ namespace Midi2Cat.IO
 
             //this.VFOSelect = 0;
             callback = new WinMM.MidiInCallback(InCallback);
-            int result = WinMM.MidiInOpen(out midi_in_handle, (uint)DeviceIndex, callback, IntPtr.Zero, 
+            int result = WinMM.MidiInOpen(out midi_in_handle, (uint)DeviceIndex, callback, IntPtr.Zero,
                 WinMM.MidiInOpenFlags.Function | WinMM.MidiInOpenFlags.MidiIoStatus);
             if (result != 0)
             {
@@ -182,7 +179,7 @@ namespace Midi2Cat.IO
             }
             if (outDeviceID == -1)
             {
-                DebugMsg(Direction.Out, Status.Error, "MidiOutOpen Error: Unable to find "+DeviceName+" output device.");
+                DebugMsg(Direction.Out, Status.Error, "MidiOutOpen Error: Unable to find " + DeviceName + " output device.");
                 return false;
             }
             else
@@ -368,7 +365,7 @@ namespace Midi2Cat.IO
                         byte controlId = (byte)(dwParam1 >> 8);
                         byte data = (byte)(dwParam1 >> 16);
                         byte status = (byte)(dwParam1 & 0xFF);
-                        byte Event = (byte)((status & 0xF0)>>4);
+                        byte Event = (byte)((status & 0xF0) >> 4);
                         byte channel = (byte)(status & 0x0F);
 
                         // if Note off make sure the data is set to 0, its most likely set to 7F;
@@ -588,7 +585,7 @@ namespace Midi2Cat.IO
 
             return SendLongMessage(handle, bytes);
         }
-        
+
         public static int SendLongMessage(int handle, byte[] data)
         {
             /*Debug.Write("Midi Out: ");
@@ -641,7 +638,7 @@ namespace Midi2Cat.IO
 
         public void inDevice_ChannelMessageReceived(int ControlId, int Data, int Status, int Event, int Channel)
         {
-            if (onMidiInput != null) 
+            if (onMidiInput != null)
             {
                 try
                 {
@@ -690,7 +687,7 @@ namespace Midi2Cat.IO
 
                         break;
                     }
-                default :
+                default:
                     {
                         if (BuildIDFromControlIDAndChannel) // build a 16/24 bit ID from the controlID and the channel and status, as so many controlID's are duplicated for different buttons on some devices
                         {
@@ -707,7 +704,7 @@ namespace Midi2Cat.IO
             return true;
         }
         public int FixBehringerCtlID(int ControlId, int Status) //-W2PA Test for DeviceName is a Behringer type, and disambiguate the messages if necessary
-        {            
+        {
             if (DeviceName == "CMD PL-1")
             {
                 if (Status == 0xE0) //-W2PA Trap Status E0 from Behringer PL-1 slider, change the ID to something that doesn't conflict with other controls
@@ -751,12 +748,12 @@ namespace Midi2Cat.IO
             }
         }
 
-        public void SendMsg(int Event, int Channel,int Data1, int Data2 )
+        public void SendMsg(int Event, int Channel, int Data1, int Data2)
         {
             if (midi_out_handle == null)
             {
-                OpenMidiOut();            
-    
+                OpenMidiOut();
+
             }
             byte status = (byte)(Event << 4);
             status |= (byte)Channel;
@@ -765,7 +762,7 @@ namespace Midi2Cat.IO
             bytes[1] = (byte)Data1;
             bytes[2] = (byte)Data2;
             bytes[3] = 0;
-            uint msg = BitConverter.ToUInt32(bytes,0);
+            uint msg = BitConverter.ToUInt32(bytes, 0);
             if (midi_out_handle != null)
             {
                 int Rc = WinMM.MidiOutShortMessage(midi_out_handle, msg);
@@ -820,7 +817,7 @@ namespace Midi2Cat.IO
                     Rc.ErrMsg = string.Format("Msg:{0} {1}", inMsg, "SS must be the 1st and 2nd characters.");
                     return Rc;
                 }
-                 msg = msg.Replace("SS", inStatus.ToString("X2"));
+                msg = msg.Replace("SS", inStatus.ToString("X2"));
             }
             if (msg.Contains("YY"))
             {
@@ -853,7 +850,7 @@ namespace Midi2Cat.IO
                 Rc.Data2 = Int32.Parse(sData2, System.Globalization.NumberStyles.HexNumber);
                 Rc.Valid = true;
             }
-            catch 
+            catch
             {
                 Rc.ErrMsg = string.Format("Msg:{0} {1}", inMsg, "contains invalid hexideciaml characters.");
             }
@@ -862,7 +859,7 @@ namespace Midi2Cat.IO
 
         public void SendMsg(int inChannel, int inValue, int inStatus, int inControl, string inMessages)
         {
-            char[] parms= {' ', ',', ';', ':'};
+            char[] parms = { ' ', ',', ';', ':' };
             string[] messages = inMessages.Split(parms, StringSplitOptions.RemoveEmptyEntries);
             foreach (string msg in messages)
             {
@@ -876,8 +873,8 @@ namespace Midi2Cat.IO
 
         public string[] ValidateMidiMessages(string inMessages)
         {
-            List<string> Errors=new List<string>(); 
-            char[] parms= {' ', ',', ';', ':'};
+            List<string> Errors = new List<string>();
+            char[] parms = { ' ', ',', ';', ':' };
             string[] messages = inMessages.Split(parms, StringSplitOptions.RemoveEmptyEntries);
             foreach (string msg in messages)
             {

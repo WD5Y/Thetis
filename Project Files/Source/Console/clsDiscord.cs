@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,18 +38,18 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Discord;
+using Discord.Rest;
 using Discord.WebSocket;
-using System.Diagnostics;
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using Discord.Rest;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Thetis
 {
@@ -229,7 +229,7 @@ namespace Thetis
                 Debug.Print($"Failed to load channel info: {ex.Message}");
 
                 // if github fail, then adjust
-                if(!git_hub_ok) adjustRetryInterval();
+                if (!git_hub_ok) adjustRetryInterval();
             }
         }
         private static void adjustRetryInterval()
@@ -434,7 +434,7 @@ namespace Thetis
             {
                 foreach (IMessage message in _receive_queue)
                 {
-                    if(!_sent_message_ids.Contains(message.Id)) handleQueuedMessage(message);
+                    if (!_sent_message_ids.Contains(message.Id)) handleQueuedMessage(message);
                 }
                 _receive_queue.Clear();
             }
@@ -442,7 +442,7 @@ namespace Thetis
         private static void handleQueuedMessage(IMessage message)
         {
             if (!(message is SocketUserMessage || message is RestUserMessage)) return;
-            if (message.Attachments.Any()) return;          
+            if (message.Attachments.Any()) return;
 
             // check we are interested in this channel
             bool is_channel_in_list = false;
@@ -472,7 +472,7 @@ namespace Thetis
             {
                 bool found = false;
                 string[] ignores = _ignore.Split(',');
-                foreach(string f in ignores)
+                foreach (string f in ignores)
                 {
                     string tmp = f.Trim();
                     if (clean_content.Contains(tmp)) found = true;
@@ -481,7 +481,7 @@ namespace Thetis
             }
 
             // check filters
-            string filter = "";            
+            string filter = "";
             int filter_pos = clean_content.IndexOf("  [");
             if (filter_pos >= 0)
             {
@@ -584,7 +584,7 @@ namespace Thetis
 
             lock (_bot_config_lock)
             {
-                channel_info = _bot_config.channels.FirstOrDefault(c => c.can_send && (channel_id == 0 || (ulong.TryParse(c.discord_channel, out ulong id) && id == channel_id)) );
+                channel_info = _bot_config.channels.FirstOrDefault(c => c.can_send && (channel_id == 0 || (ulong.TryParse(c.discord_channel, out ulong id) && id == channel_id)));
             }
 
             if (channel_info != null && ulong.TryParse(channel_info.discord_channel, out ulong discord_channel_id))
@@ -613,7 +613,7 @@ namespace Thetis
                         _process_queue = false;
                         IUserMessage sent_message = await discord_channel.SendMessageAsync(msg).ConfigureAwait(false);
                         lock (_receive_queue)
-                        {                            
+                        {
                             _sent_message_ids.Add(sent_message.Id);
                             _process_queue = true;
                             processQueue();
@@ -670,7 +670,7 @@ namespace Thetis
 
             return messages;
         }
-        public static string GetMessagesString(ulong channel_id, int message = 0, bool include_author = true)    
+        public static string GetMessagesString(ulong channel_id, int message = 0, bool include_author = true)
         {
             // message 0 is newest
             lock (_channelMessages)
@@ -804,7 +804,7 @@ namespace Thetis
         public static void SetCallsign(string callsign)
         {
             _callsign = callsign.ToUpper().Left(12);
-            if(_started && !IsValidCallsign(_callsign, out string country))
+            if (_started && !IsValidCallsign(_callsign, out string country))
             {
                 ConnectStop();
             }

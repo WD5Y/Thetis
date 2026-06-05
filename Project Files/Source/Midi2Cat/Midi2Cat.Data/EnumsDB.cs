@@ -23,11 +23,7 @@ The author can be reached by email at:  midi2cat@cametrix.com
 */
 
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Midi2Cat.Data
@@ -68,7 +64,7 @@ namespace Midi2Cat.Data
             {
                 DataRow dr = t.NewRow();
                 dr["ControlId"] = (int)value;
-                dr["ControlDescription"] = value.ToString().Replace("_"," ");
+                dr["ControlDescription"] = value.ToString().Replace("_", " ");
                 t.Rows.Add(dr);
                 dr.AcceptChanges();
             }
@@ -119,6 +115,6 @@ namespace Midi2Cat.Data
                 dr.AcceptChanges();
             }
         }
-                
+
     }//class
 }//namespace

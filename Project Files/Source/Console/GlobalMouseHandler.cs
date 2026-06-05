@@ -5,7 +5,7 @@ This file is part of a program that implements a Software-Defined Radio.
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
 Copyright (C) 2000-2025 Original authors
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,10 +39,6 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Thetis
@@ -55,7 +51,7 @@ namespace Thetis
         //private const int WM_LBUTTONDOWN = 0x0201;
         private const int WM_LBUTTONUP = 0x0202;
 
-        public event MouseMovedEvent MouseUp; 
+        public event MouseMovedEvent MouseUp;
         public event MouseEventHandler MouseMove;   //MW0LGE_21e
 
         //public event MouseMovedEvent MouseDown;
@@ -66,7 +62,7 @@ namespace Thetis
         {
             if (m.Msg == WM_MOUSEMOVE)
             {
-                MouseMove?.Invoke(null, new MouseEventArgs(MouseButtons.None,0, Control.MousePosition.X, Control.MousePosition.Y, 0));
+                MouseMove?.Invoke(null, new MouseEventArgs(MouseButtons.None, 0, Control.MousePosition.X, Control.MousePosition.Y, 0));
             }
             //if (m.Msg == WM_LBUTTONDOWN)
             //{

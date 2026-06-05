@@ -24,12 +24,8 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 using Midi2Cat.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Midi2Cat.IO
@@ -39,7 +35,7 @@ namespace Midi2Cat.IO
         Midi2CatDatabase DB = null;
         string DeviceName = null;
 
-        public OrganiseDialog(Midi2CatDatabase DB,string DeviceName)
+        public OrganiseDialog(Midi2CatDatabase DB, string DeviceName)
         {
             this.DB = DB;
             this.DeviceName = DeviceName;
@@ -75,7 +71,7 @@ namespace Midi2Cat.IO
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            if ( mappingsLB.SelectedItem!=null)
+            if (mappingsLB.SelectedItem != null)
             {
                 DB.RemoveSavedMapping(DeviceName, ((string)mappingsLB.SelectedItem));
                 ExistingMappings = DB.GetSavedMappings();
@@ -100,7 +96,7 @@ namespace Midi2Cat.IO
             {
                 mappingsLB.BackColor = Color.Silver;
                 renameTB.Left = mappingsLB.Left + 4;
-                renameTB.Width = mappingsLB.Width-6;
+                renameTB.Width = mappingsLB.Width - 6;
                 renameTB.Top = mappingsLB.Top + ((mappingsLB.SelectedIndex - mappingsLB.TopIndex) * mappingsLB.ItemHeight) + 2;
                 renameTB.Text = ((string)mappingsLB.SelectedItem);
                 renameTB.Visible = true;

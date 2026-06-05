@@ -24,9 +24,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Thetis
 {
@@ -44,17 +41,17 @@ namespace Thetis
 
         public DXMemRecord(string _dxurl)
         {
-           
+
             dxurl = _dxurl;
-          
+
 
         }
 
         public DXMemRecord(DXMemRecord rec)
         {
-            
+
             dxurl = rec.dxurl;
-          
+
         }
 
         #endregion
@@ -97,7 +94,7 @@ namespace Thetis
                 return this.DXURL.CompareTo(rec.DXURL);
             }
 
-           
+
 
             return this.DXURL.CompareTo(rec.DXURL);
 

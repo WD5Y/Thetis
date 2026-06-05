@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,9 +40,8 @@ mw0lge@grange-lane.co.uk
 
 using System;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -80,7 +79,7 @@ namespace Thetis
         public bool HiddenByMacro
         {
             get { return _hidden_by_macro; }
-            set {  _hidden_by_macro = value; }
+            set { _hidden_by_macro = value; }
         }
         public int RX
         {
@@ -133,7 +132,7 @@ namespace Thetis
                             if (_rx2_enabled || !_container_hides_when_rx_not_used) show = !_hidden_by_macro;
                             break;
                     }
-                    if(show) this.Show();
+                    if (show) this.Show();
                 }
             }
         }
@@ -145,7 +144,7 @@ namespace Thetis
         public string ID
         {
             get { return _id; }
-            set 
+            set
             {
                 _id = value;
 
@@ -172,7 +171,7 @@ namespace Thetis
 
             m.Parent = this;
             m.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-            m.Location = new Point(0, 0);            
+            m.Location = new Point(0, 0);
             m.Size = new Size(this.Width, this.Height);
             m.BringToFront();
             m.Show();

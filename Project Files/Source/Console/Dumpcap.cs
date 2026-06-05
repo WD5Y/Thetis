@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,10 +39,6 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -68,9 +64,11 @@ namespace Thetis
             return File.Exists(m_sWireSharkPath + "\\dumpcap.exe ");
         }
 
-        public static bool Enabled {
+        public static bool Enabled
+        {
             get { return m_bEnabled; }
-            set { 
+            set
+            {
                 m_bEnabled = value;
                 if (m_bEnabled)
                 {
@@ -83,41 +81,51 @@ namespace Thetis
             }
         }
 
-        public static int Interface {
+        public static int Interface
+        {
             get { return m_nInterface; }
-            set { 
+            set
+            {
                 m_nInterface = value;
                 restartDumpcap();
             }
         }
-        public static string WireSharkPath {
-            get { return m_sWireSharkPath ; }
-            set { 
+        public static string WireSharkPath
+        {
+            get { return m_sWireSharkPath; }
+            set
+            {
                 m_sWireSharkPath = value;
                 restartDumpcap();
             }
         }
-        public static int FileSizeKB {
+        public static int FileSizeKB
+        {
             get { return m_nFileSizeKB; }
-            set { 
+            set
+            {
                 m_nFileSizeKB = value;
                 restartDumpcap();
             }
         }
-        public static int NumberOfFiles {
+        public static int NumberOfFiles
+        {
             get { return m_nNumberOfFiles; }
-            set { 
+            set
+            {
                 m_nNumberOfFiles = value;
                 restartDumpcap();
             }
         }
 
-        public static bool ClearFolderOnRestart {
+        public static bool ClearFolderOnRestart
+        {
             // just a datastore, used by console
             get { return m_bClearFolderOnRestart; }
             set { m_bClearFolderOnRestart = value; }
         }
-        public static bool KillOnNegativeSeqOnly {
+        public static bool KillOnNegativeSeqOnly
+        {
             // just a datastore, used by console
             get { return m_bKillOnNegativeSeqOnly; }
             set { m_bKillOnNegativeSeqOnly = value; }
@@ -137,10 +145,12 @@ namespace Thetis
             m_objConsole = c;
         }
 
-        private static string workingFolder {
-            get {
+        private static string workingFolder
+        {
+            get
+            {
                 if (m_objConsole == null) return "";
-                return  m_objConsole.AppDataPath + "dumpcap\\"; 
+                return m_objConsole.AppDataPath + "dumpcap\\";
             }
         }
         public static void ClearDumpFolder()
@@ -155,9 +165,9 @@ namespace Thetis
                 foreach (FileInfo file in di.GetFiles("*.pcapng"))
                 {
                     try { file.Delete(); }
-                    catch { }                    
+                    catch { }
                 }
-            }                
+            }
         }
 
         private static void dumpcapGO()
@@ -223,12 +233,13 @@ namespace Thetis
             if (!isDumpcapRunning()) return;
 
             Process[] proc = Process.GetProcessesByName("dumpcap");
-                
+
             foreach (Process p in proc)
             {
                 if (p.Id == m_nProcessID)
                 {
-                    try { 
+                    try
+                    {
                         p.Kill();
                         m_nProcessID = -1;
                     }
@@ -245,7 +256,7 @@ namespace Thetis
             bool bRet = false;
 
             Process[] proc = Process.GetProcessesByName("dumpcap");
-            foreach(Process p in proc)
+            foreach (Process p in proc)
             {
                 if (p.Id == m_nProcessID)
                 {
@@ -254,7 +265,7 @@ namespace Thetis
                 }
             }
 
-            return bRet; 
+            return bRet;
         }
 
         public static void ShowAppPathFolder()
@@ -264,7 +275,8 @@ namespace Thetis
 
             if (!Directory.Exists(workingFolder)) return;
 
-            try {
+            try
+            {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
                 {
                     FileName = workingFolder,

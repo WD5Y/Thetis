@@ -23,12 +23,6 @@ The author can be reached by email at:  midi2cat@cametrix.com
 */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Midi2Cat.IO
@@ -61,7 +55,7 @@ namespace Midi2Cat.IO
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
-        {           
+        {
             loadButton.Enabled = (textBox1.Text.Trim().Length > 0);
         }
 
@@ -77,6 +71,6 @@ namespace Midi2Cat.IO
                 textBox1.Text = (string)mappingsLB.SelectedItem;
                 this.DialogResult = DialogResult.OK;
             }
-        }        
+        }
     }
 }

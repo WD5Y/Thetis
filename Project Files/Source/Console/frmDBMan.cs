@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,8 +40,8 @@ mw0lge@grange-lane.co.uk
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -118,7 +118,7 @@ namespace Thetis
         internal void InitBackups(List<DBMan.BackupFileInfo> backups)
         {
             lstBackups.Items.Clear();
-            foreach(DBMan.BackupFileInfo backup in backups)
+            foreach (DBMan.BackupFileInfo backup in backups)
             {
                 ListViewItem lvi = new ListViewItem(backup.Description);
 
@@ -175,7 +175,7 @@ namespace Thetis
 
                 if (reselect_guid != Guid.Empty && dbi.GUID == reselect_guid) lvi.Selected = true;
 
-                lstActiveDBs.Items.Add(lvi);                
+                lstActiveDBs.Items.Add(lvi);
             }
 
             lstActiveDBs.ColumnWidthChanging -= lstActiveDBs_ColumnWidthChanging;
@@ -264,7 +264,7 @@ namespace Thetis
             Guid guid = new Guid(lvi.Tag.ToString());
 
             DBMan.RemoveDB(guid);
-        }        
+        }
         private void lstActiveDBs_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_ignore_lstActiveDBs_selectectedindexchanged) return;
@@ -326,7 +326,7 @@ namespace Thetis
             btnExportBackup.Enabled = lstBackups.SelectedItems.Count == 1;
             btnRenameBackup.Enabled = lstBackups.SelectedItems.Count == 1;
 
-            btnRemoveBackup.Enabled = lstBackups.SelectedItems.Count > 0;            
+            btnRemoveBackup.Enabled = lstBackups.SelectedItems.Count > 0;
         }
 
         private void btnMakeBackupAvailable_Click(object sender, EventArgs e)
@@ -345,7 +345,7 @@ namespace Thetis
             if (lstBackups.SelectedItems.Count < 1) return;
 
             List<string> file_paths = new List<string>();
-            foreach(ListViewItem item in lstBackups.SelectedItems)
+            foreach (ListViewItem item in lstBackups.SelectedItems)
             {
                 file_paths.Add(item.Tag.ToString());
             }

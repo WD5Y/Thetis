@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@ mw0lge@grange-lane.co.uk
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -317,7 +316,7 @@ namespace Thetis
         private void pnlBar_MouseMove(object sender, MouseEventArgs e)
         {
             if (_dragging)
-            {                
+            {
                 if (_floating)
                 {
                     Point clientPos = Parent.PointToClient(Cursor.Position);
@@ -339,7 +338,7 @@ namespace Thetis
                         {
                             Parent.Location = newPos;
                             showToolTip($"{newPos.X}, {newPos.Y}", this.Parent);
-                        }                        
+                        }
                     }
                 }
                 else
@@ -369,14 +368,14 @@ namespace Thetis
                         this.Location = newPos;
                         Repaint();
                         showToolTip($"{newPos.X}, {newPos.Y}", this);
-                    }                    
+                    }
                 }
             }
         }
         private void showToolTip(string msg, Control window, bool is_resize = false)
         {
             _tool_tip_owner = window;
-            if(is_resize)
+            if (is_resize)
                 _tool_tip.Show(msg + "\nctrl to lock", _tool_tip_owner, new Point(window.Size.Width, window.Size.Height - (pnlBar.Height * 2)));
             else
                 _tool_tip.Show(msg + "\nctrl to lock", _tool_tip_owner, new Point(0, pnlBar.Height));
@@ -418,7 +417,7 @@ namespace Thetis
             _resizing = true;
             if (_autoHeight)
             {
-                if(_floating)
+                if (_floating)
                 {
                     if (this.Parent != null)
                     {
@@ -464,7 +463,7 @@ namespace Thetis
                     if (screenHeight < height)
                     {
                         Point newPos = new Point(this.Parent.Location.X, 0);
-                        if(newPos != this.Parent.Location) this.Parent.Location = newPos;
+                        if (newPos != this.Parent.Location) this.Parent.Location = newPos;
                         shrink = true;
                     }
 
@@ -519,7 +518,7 @@ namespace Thetis
         }
         private void resize(int x, int y, bool shrink = false)
         {
-            if(Parent == null) return;
+            if (Parent == null) return;
 
             if (x < MIN_CONTAINER_WIDTH) x = MIN_CONTAINER_WIDTH; // these match max size of parent when floating
             if (y < MIN_CONTAINER_HEIGHT) y = MIN_CONTAINER_HEIGHT;
@@ -545,16 +544,17 @@ namespace Thetis
                     this.PerformLayout();
                     Repaint();
                 }
-            }            
+            }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public Point DockedLocation
         {
-            get 
+            get
             {
                 return _dockedLocation;
             }
-            set {
+            set
+            {
                 _dockedLocation = value;
             }
         }
@@ -595,8 +595,8 @@ namespace Thetis
         public bool Floating
         {
             get { return _floating; }
-            set 
-            { 
+            set
+            {
                 _floating = value;
                 setTopBarButtons();
                 setTopMost();
@@ -677,7 +677,7 @@ namespace Thetis
         public int RX
         {
             get { return _rx; }
-            set 
+            set
             {
                 _rx = value;
                 setTitle();
@@ -726,7 +726,7 @@ namespace Thetis
                         newPos.Y = roundToNearestTen(newPos.Y);
                     }
 
-                    if(newPos != Parent.Location) Parent.Location = newPos;
+                    if (newPos != Parent.Location) Parent.Location = newPos;
 
                     if (this.Parent != null)
                     {
@@ -770,7 +770,7 @@ namespace Thetis
         {
             if (!_floating && _dragging)
             {
-                if(_dockedLocation != this.Location) _dockedLocation = this.Location;
+                if (_dockedLocation != this.Location) _dockedLocation = this.Location;
             }
         }
 
@@ -785,13 +785,14 @@ namespace Thetis
         public Point Delta
         {
             get { return _delta; }
-            set { _delta = value; } 
+            set { _delta = value; }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool PinOnTop
         {
             get { return _pinOnTop; }
-            set { 
+            set
+            {
                 _pinOnTop = value;
                 setPinOnTopButton();
                 setTopMost();
@@ -801,17 +802,17 @@ namespace Thetis
         public Axis AxisLock
         {
             get { return _axisLock; }
-            set 
-            { 
-                _axisLock = value; 
+            set
+            {
+                _axisLock = value;
             }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public bool UCBorder
         {
             get { return _border; }
-            set 
-            { 
+            set
+            {
                 _border = value;
                 setupBorder();
             }
@@ -831,7 +832,7 @@ namespace Thetis
             get { return _enabled; }
             set
             {
-                _enabled = value;                
+                _enabled = value;
             }
         }
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -886,7 +887,7 @@ namespace Thetis
             get { return _notes; }
             set
             {
-                _notes = value.Replace("|",""); // need to replace this as used in split parsing
+                _notes = value.Replace("|", ""); // need to replace this as used in split parsing
                 setTitle();
             }
         }
@@ -927,7 +928,7 @@ namespace Thetis
             setAxisButton();
 
             // reset this data when the lock is changed
-            if(_console != null)
+            if (_console != null)
             {
                 Delta = new Point(_console.HDelta, _console.VDelta);
                 DockedLocation = new Point(this.Left, this.Top);

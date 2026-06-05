@@ -42,7 +42,7 @@ namespace Midi2Cat.Data
             Controller = "";
             ControlName = "";
             ControlType = ControlType.Unknown;
-            Remove = ""; 
+            Remove = "";
         }
 
         public MappedCommand(MappedCommand src)
@@ -62,9 +62,9 @@ namespace Midi2Cat.Data
         {
             foreach (DataRow row in Cmds.Rows)
             {
-                if ((CatCmd)(row["CmdId"]) == CatCmd.None) 
+                if ((CatCmd)(row["CmdId"]) == CatCmd.None)
                     continue;
-                MappedCommand mappedCommand=new MappedCommand(row);
+                MappedCommand mappedCommand = new MappedCommand(row);
                 if (GetDeviceMappings(mappedCommand, controllerDT) <= 0)
                 {
                     mappedCommand.ControlType = ((ControlType)row["ControlType"]);
@@ -77,7 +77,7 @@ namespace Midi2Cat.Data
         {
             int NumAdded = 0;
             foreach (DataRow dr in controllerDT.Rows)
-            {                        
+            {
                 if ((int)(dr["CatCmdId"]) == mappedCmd.CmdId)
                 {
                     MappedCommand mc = new MappedCommand(mappedCmd);
@@ -92,7 +92,7 @@ namespace Midi2Cat.Data
             return NumAdded;
         }
 
-        
+
 
     } // class
 }//namespace

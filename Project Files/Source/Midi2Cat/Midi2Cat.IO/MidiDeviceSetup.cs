@@ -25,21 +25,13 @@ by Chris Codella, W2PA, Feb 2017.  Indicated by //-W2PA comment lines.
 
 */
 
-using System.Linq;
+using Midi2Cat.Data;
+using Midi2Cat.Helpers;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Collections;
-using System.Threading;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Midi2Cat.Helpers;
-using Midi2Cat.IO;
-using Midi2Cat.Data;
 using System.Data;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Midi2Cat.IO
 {
@@ -99,7 +91,7 @@ namespace Midi2Cat.IO
         CatCmd CatCmdToUse = CatCmd.None;
         ControlType ControlTypeToUse = ControlType.Unknown;
         MidiDiagList _diagList;
-        DateTime ignoreMidiMessagesUntil=DateTime.Now.AddSeconds(5);
+        DateTime ignoreMidiMessagesUntil = DateTime.Now.AddSeconds(5);
 
         public Midi2CatDatabase DB
         {
@@ -197,7 +189,7 @@ namespace Midi2Cat.IO
                     else
                         sControlID = ControlId.ToString("X2");
 
-                    _diagList.Add(new MidiDiagItem { Device = DeviceIdx.ToString("X2"), ControlId = sControlID, Data = Data.ToString("X2"), Status = Status.ToString("X2"), Voice = ((MidiEvent)Event).ToString().Replace("_", " "), Channel = (Channel+1).ToString("X2") });
+                    _diagList.Add(new MidiDiagItem { Device = DeviceIdx.ToString("X2"), ControlId = sControlID, Data = Data.ToString("X2"), Status = Status.ToString("X2"), Voice = ((MidiEvent)Event).ToString().Replace("_", " "), Channel = (Channel + 1).ToString("X2") });
                     if (_diagList.Count > 100)
                     {
                         _diagList.RemoveAt(0);
@@ -205,7 +197,7 @@ namespace Midi2Cat.IO
                     midiDiagDataGrid.CurrentCell = midiDiagDataGrid.Rows[_diagList.Count - 1].Cells[0];
                 }
 
-                if (tabControl.SelectedTab == commandsTabPage) 
+                if (tabControl.SelectedTab == commandsTabPage)
                 {
                     tabControl.SelectedTab = mappedControlsTab;
                     if (mappedCommandsGridView.SelectedRows.Count == 1)
@@ -775,11 +767,11 @@ namespace Midi2Cat.IO
             ShowAddPrompt();
             ValidateDialogInput();
             eventMappingPrompt.Text = "";
-            
+
             if (string.IsNullOrWhiteSpace(newValueReceivedEventTB.Text) == false)
             {
-                string[] midiMsgErrors=midiDevice.ValidateMidiMessages(newValueReceivedEventTB.Text);
-                if ( midiMsgErrors.Length==0 )
+                string[] midiMsgErrors = midiDevice.ValidateMidiMessages(newValueReceivedEventTB.Text);
+                if (midiMsgErrors.Length == 0)
                 {
                     eventMappingPrompt.Text += "New Value Received Event(s) formatted correctly.\n";
                 }
@@ -788,12 +780,12 @@ namespace Midi2Cat.IO
                     eventMappingPrompt.Text += "New Value Received Event(s) NOT formatted correctly.\n";
                     foreach (string err in midiMsgErrors)
                     {
-                        eventMappingPrompt.Text += err+"\n";
+                        eventMappingPrompt.Text += err + "\n";
                     }
                 }
             }
 
-            if ( string.IsNullOrWhiteSpace(buttonDownEventTB.Text) == false)
+            if (string.IsNullOrWhiteSpace(buttonDownEventTB.Text) == false)
             {
                 string[] midiMsgErrors = midiDevice.ValidateMidiMessages(buttonDownEventTB.Text);
                 if (midiMsgErrors.Length == 0)
@@ -825,7 +817,7 @@ namespace Midi2Cat.IO
                         eventMappingPrompt.Text += err + "\n";
                     }
                 }
-            }            
+            }
         }
 
         private void mappedCommandsGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
@@ -837,13 +829,13 @@ namespace Midi2Cat.IO
         {
             if ((string.IsNullOrWhiteSpace(mapping.MidiOutCmdDown) == false) && inValue > 0)
             {
-                midiDevice.SendMsg(inChannel, inValue, inStatus,inControl, mapping.MidiOutCmdDown);
+                midiDevice.SendMsg(inChannel, inValue, inStatus, inControl, mapping.MidiOutCmdDown);
             }
             else if ((string.IsNullOrWhiteSpace(mapping.MidiOutCmdUp) == false) && inValue <= 0)
             {
                 midiDevice.SendMsg(inChannel, inValue, inStatus, inControl, mapping.MidiOutCmdUp);
             }
-            else if ( (string.IsNullOrWhiteSpace(mapping.MidiOutCmdSetValue) == false) )
+            else if ((string.IsNullOrWhiteSpace(mapping.MidiOutCmdSetValue) == false))
             {
                 midiDevice.SendMsg(inChannel, inValue, inStatus, inControl, mapping.MidiOutCmdSetValue);
             }
@@ -860,8 +852,8 @@ namespace Midi2Cat.IO
             dlg.ExistingMappings = DB.GetSavedMappings();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-               DB.SaveMappingAs(DeviceName, dlg.MappingName, true);
-               LoadedMappingLabel.Text = DB.GetLoadedMappingName(DeviceName);
+                DB.SaveMappingAs(DeviceName, dlg.MappingName, true);
+                LoadedMappingLabel.Text = DB.GetLoadedMappingName(DeviceName);
             }
         }
 
@@ -881,8 +873,8 @@ namespace Midi2Cat.IO
         private void exportMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PickDialog pickDlg = new PickDialog();
-            pickDlg.Prompt="Pick the mappings to export";
-            string[] existingMappings=DB.GetSavedMappings();
+            pickDlg.Prompt = "Pick the mappings to export";
+            string[] existingMappings = DB.GetSavedMappings();
             if (existingMappings.Length <= 0)
             {
                 MessageBox.Show("You can only export saved mappings,\nYou must save your current mapping before it can be exported", "Unable To Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -928,7 +920,7 @@ namespace Midi2Cat.IO
         private void organiseMappingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OrganiseDialog dlg = new OrganiseDialog(DB, DeviceName);
-            dlg.ExistingMappings =  DB.GetSavedMappings();
+            dlg.ExistingMappings = DB.GetSavedMappings();
             dlg.ShowDialog();
             LoadedMappingLabel.Text = DB.GetLoadedMappingName(DeviceName);
         }

@@ -25,13 +25,10 @@ by Chris Codella, W2PA, Feb 2017.  Indicated by //-W2PA comment lines.
 
 */
 
-using System;
-using System.Threading;
-using System.Collections.Generic; 
-using System.Linq;
-using System.Text;
-using Midi2Cat.IO;
 using Midi2Cat.Data;
+using Midi2Cat.IO;
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Midi2Cat
@@ -52,7 +49,7 @@ namespace Midi2Cat
             this.DbFile = DbFile;
         }
 
-        public void Open() 
+        public void Open()
         {
             if (bindings.Count > 0)
             {
@@ -61,11 +58,11 @@ namespace Midi2Cat
 
             MidiDevices devices = new MidiDevices();
             DB = new Midi2CatDatabase(DbFile);
-            int Idx=0;
+            int Idx = 0;
             foreach (string inDevice in devices.InDevices)
             {
                 // see if we can find settings for this device
-                List<ControllerMapping> mappings = DB.GetMappings(inDevice, MappingFilter.Active); 
+                List<ControllerMapping> mappings = DB.GetMappings(inDevice, MappingFilter.Active);
                 if (mappings.Count > 0)
                 {
                     InitDevice(inDevice, mappings, Idx);
@@ -76,7 +73,7 @@ namespace Midi2Cat
 
         public void Close()
         {
-            foreach( var binding in bindings.Values)
+            foreach (var binding in bindings.Values)
             {
                 binding.Device.CloseMidiIn();
                 binding.Device.CloseMidiOut();
@@ -117,7 +114,7 @@ namespace Midi2Cat
 
         public void SendUpdateToMidi(CatCmd cmd, double pct)  //-W2PA Send Pl-1 knob or slider LED update message (CMD Micro doesn't have such LEDs)
         {
-            int index = PL1Index(); 
+            int index = PL1Index();
             if (index < 0) return;  // no Behringer PL-1 is connected so no need to do anything
 
             ControllerMapping mapping;
@@ -203,13 +200,13 @@ namespace Midi2Cat
             device.SendMsg(0x00, 0x00, 0x00, 0x00, "902801");  //-W2PA R-CUE button
         }
 
-        void InitDevice(string deviceName,List<ControllerMapping> mappings, int Idx)
+        void InitDevice(string deviceName, List<ControllerMapping> mappings, int Idx)
         {
             MidiDevice device = new MidiDevice();
             device.OpenMidiIn(Idx, deviceName);
 
             Dictionary<int, MidMessageHandler> deviceBindings = BindMappingHandlers(mappings);
-            ControllerBinding ctrlBinding= new ControllerBinding{ DeviceName=deviceName, DeviceIndex=Idx, Device=device, CmdBindings=deviceBindings};
+            ControllerBinding ctrlBinding = new ControllerBinding { DeviceName = deviceName, DeviceIndex = Idx, Device = device, CmdBindings = deviceBindings };
 
             bindings.Add(Idx, ctrlBinding);
 
@@ -247,7 +244,7 @@ namespace Midi2Cat
                 }
                 catch
                 {
-                    System.Diagnostics.Debug.WriteLine("!!!ERROR!!! MidiMessageManager:BindMappingHandlers: failed to bind mapping "+mapping.CatCmdId.ToString() );
+                    System.Diagnostics.Debug.WriteLine("!!!ERROR!!! MidiMessageManager:BindMappingHandlers: failed to bind mapping " + mapping.CatCmdId.ToString());
                 }
             }
             return Bindings;
@@ -267,7 +264,7 @@ namespace Midi2Cat
                 if (bindings.TryGetValue(DeviceIdx, out ctrlBinding))
                 {
                     MidMessageHandler handlers;
-                    CmdState state=CmdState.NoChange;
+                    CmdState state = CmdState.NoChange;
 
                     if (ctrlBinding.CmdBindings.TryGetValue(ControlId, out handlers))
                     {
@@ -290,17 +287,17 @@ namespace Midi2Cat
 
                                 if (state == CmdState.On && handlers.MidiOutCmdDown != null)
                                 {
-                                    Device.SendMsg(Channel,0x7F, Status, ControlId,  handlers.MidiOutCmdDown);
+                                    Device.SendMsg(Channel, 0x7F, Status, ControlId, handlers.MidiOutCmdDown);
                                 }
                                 if (state == CmdState.Off && handlers.MidiOutCmdUp != null)
                                 {
-                                    Device.SendMsg(Channel, 0x00, Status,ControlId, handlers.MidiOutCmdUp);
+                                    Device.SendMsg(Channel, 0x00, Status, ControlId, handlers.MidiOutCmdUp);
                                 }
                                 if (handlers.MidiOutCmdSetValue != null)
                                 {
                                     Device.SendMsg(Channel, Data, Status, ControlId, handlers.MidiOutCmdSetValue);
                                 }
-                               
+
                             }
                         }
                     }

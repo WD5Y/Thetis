@@ -22,13 +22,6 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Midi2Cat.Data;
-
 namespace Midi2Cat.Data
 {
     [System.AttributeUsage(System.AttributeTargets.Field)]

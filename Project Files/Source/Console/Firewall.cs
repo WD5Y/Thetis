@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -69,8 +69,8 @@ mw0lge@grange-lane.co.uk
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WindowsFirewallHelper;
 using System.Windows.Forms;
+using WindowsFirewallHelper;
 
 namespace Thetis
 {
@@ -112,7 +112,7 @@ namespace Thetis
                     FirewallManager.Instance.Rules.Remove(fwr);
                 }
             }
-            catch 
+            catch
             {
                 MessageBox.Show("There was a problem removing existing firewall entries. Please configure manually.\nThetis.exe needs UDP/TCP in/out, all ports", "Firewall - Problem", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
                 return;
@@ -132,7 +132,7 @@ namespace Thetis
             else
             {
                 MessageBox.Show("There was a problem configuring the firewall. Please configure manually.\nThetis.exe needs UDP/TCP in/out, all ports", "Firewall - Problem", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, Common.MB_TOPMOST);
-            }                    
+            }
         }
 
         private static IFirewallRule findRule(string sName)
@@ -154,7 +154,7 @@ namespace Thetis
         }
         private static bool addApplicationRule(FirewallDirection direction, FirewallProtocol protocol, string sPath, string ruleName)
         {
-            bool bOk = false;            
+            bool bOk = false;
 
             try
             {

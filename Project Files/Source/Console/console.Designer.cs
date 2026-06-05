@@ -35,9 +35,6 @@
         private System.Windows.Forms.CheckBoxTS chkNB;
         private System.Windows.Forms.CheckBoxTS chkANF;
         private System.Windows.Forms.CheckBoxTS chkNR;
-        private System.Windows.Forms.CheckBoxTS chkMON;
-        private System.Windows.Forms.CheckBoxTS chkTUN;
-        private System.Windows.Forms.CheckBoxTS chkMOX;
         private System.Windows.Forms.NumericUpDownTS udXIT;
         private System.Windows.Forms.NumericUpDownTS udRIT;
         private System.Windows.Forms.CheckBoxTS chkXIT;
@@ -73,7 +70,6 @@
         private System.Windows.Forms.ComboBoxTS comboMeterTXMode;
         private System.Windows.Forms.ButtonTS btnXITReset;
         private System.Windows.Forms.ButtonTS btnRITReset;
-        private System.Windows.Forms.ComboBoxTS comboTuneMode;
         public System.Windows.Forms.ComboBoxTS comboPreamp;
         private System.Windows.Forms.LabelTS lblPreamp;
         private System.Windows.Forms.CheckBoxTS chkDSPNB2;
@@ -108,7 +104,6 @@
         private System.Windows.Forms.TextBoxTS txtVFOBMSD;
         private System.Windows.Forms.TextBoxTS txtVFOALSD;
         private System.Windows.Forms.TextBoxTS txtVFOBLSD;
-        public CheckBoxTS chk2TONE;
         private System.Windows.Forms.ButtonTS btnTuneStepChangeSmaller;
         private System.Windows.Forms.ComboBoxTS comboTXProfile;
         private System.Windows.Forms.CheckBoxTS chkShowTXFilter;
@@ -144,12 +139,9 @@
         private System.Windows.Forms.LabelTS lblDisplayModeBottom;
         private System.Windows.Forms.CheckBoxTS chkCPDR;
         private System.Windows.Forms.CheckBoxTS chkDX;
-        private System.Windows.Forms.CheckBoxTS ckQuickPlay;
-        private System.Windows.Forms.CheckBoxTS ckQuickRec;
         private System.Windows.Forms.GroupBoxTS grpDisplaySplit;
         private System.Windows.Forms.CheckBoxTS chkDisplayPeak;
         private System.Windows.Forms.CheckBoxTS chkRX2;
-        private System.Windows.Forms.CheckBoxTS chkRX2SR;
         private System.Windows.Forms.Panel panelVFOASubHover;
         private System.Windows.Forms.RadioButtonTS radRX2ModeAM;
         private System.Windows.Forms.RadioButtonTS radRX2ModeSAM;
@@ -207,7 +199,6 @@
         private PanelTS panelMode;
         private PanelTS panelFilter;
         private PanelTS panelDisplay;
-        private PanelTS panelOptions;
         private PanelTS panelSoundControls;
         private PanelTS panelVFO;
         private PanelTS panelDSP;
@@ -286,7 +277,6 @@
         private RadioButtonTS radDisplayZoom4x;
         private RadioButtonTS radDisplayZoom2x;
         private RadioButtonTS radDisplayZoom1x;
-        private CheckBoxTS chkFWCATUBypass;
         private CheckBoxTS chkFWCATU;
         private CheckBoxTS chkMicMute;
         private CheckBoxTS chkMUT;
@@ -335,21 +325,6 @@
         private ToolStripMenuItem toolStripNotchNormal;
         private ToolStripMenuItem toolStripNotchDeep;
         private ToolStripMenuItem toolStripNotchVeryDeep;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem setupToolStripMenuItem;
-        private ToolStripMenuItem memoryToolStripMenuItem;
-        private ToolStripMenuItem waveToolStripMenuItem;
-        private ToolStripMenuItem equalizerToolStripMenuItem;
-        private ToolStripMenuItem xVTRsToolStripMenuItem;
-        private ToolStripMenuItem cWXToolStripMenuItem;
-        private ToolStripMenuItem eSCToolStripMenuItem;
-        private ToolStripMenuItem collapseToolStripMenuItem;
-        private ToolStripMenuItem filterToolStripMenuItem;
-        private ToolStripMenuItem dSPToolStripMenuItem;
-        private ToolStripMenuItem displayControlsToolStripMenuItem;
-        public ToolStripMenuItem topControlsToolStripMenuItem;
-        public ToolStripMenuItem bandControlsToolStripMenuItem;
-        public ToolStripMenuItem modeControlsToolStripMenuItem;
         private ToolStripMenuItem FilterToolStripMenuItem1;
         private ToolStripMenuItem FilterToolStripMenuItem2;
         private ToolStripMenuItem FilterToolStripMenuItem3;
@@ -366,7 +341,6 @@
         private ToolStripMenuItem NB2ToolStripMenuItem;
         private ToolStripMenuItem BINToolStripMenuItem;
         private ToolStripMenuItem MultiRXToolStripMenuItem;
-        public ToolStripMenuItem bandToolStripMenuItem;
         private ToolStripMenuItem bandtoolStripMenuItem1;
         private ToolStripMenuItem bandtoolStripMenuItem2;
         private ToolStripMenuItem bandtoolStripMenuItem3;
@@ -379,7 +353,6 @@
         private ToolStripMenuItem bandtoolStripMenuItem11;
         private ToolStripMenuItem bandtoolStripMenuItem12;
         private ToolStripMenuItem bandtoolStripMenuItem13;
-        public ToolStripMenuItem modeToolStripMenuItem;
         private ToolStripMenuItem lSBToolStripMenuItem;
         private ToolStripMenuItem uSBToolStripMenuItem;
         private ToolStripMenuItem dSBToolStripMenuItem;
@@ -395,7 +368,6 @@
         private ToolStripMenuItem bandtoolStripMenuItem14;
         private PrettyTrackBar ptbFMMic;
         private CheckBoxTS chkCWSidetone;
-        private ToolStripMenuItem rX2ToolStripMenuItem;
         private ToolStripMenuItem bandToolStripMenuItem6;
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
@@ -462,11 +434,9 @@
         private ToolStripMenuItem RX1PeakToolStripMenuItem;
         private ToolStripMenuItem RX2AVGToolStripMenuItem;
         private ToolStripMenuItem RX2PeakToolStripMenuItem;
-        private ToolStripMenuItem linearityToolStripMenuItem;
         public ComboBoxTS comboRX2Preamp;
         private LabelTS lblRX2Preamp;
         public NumericUpDownTS udRX2StepAttData;
-        private ToolStripMenuItem RAtoolStripMenuItem;
         private GroupBoxTS grpCWAPF;
         private PrettyTrackBar ptbCWAPFFreq;
         private PrettyTrackBar ptbCWAPFBandwidth;
@@ -478,9 +448,6 @@
         private LabelTS lblCWAPFGain;
         private LabelTS lblRX1APF;
         private LabelTS lblRX2APF;
-        private ToolStripMenuItem wBToolStripMenuItem;
-        private ToolStripMenuItem pIToolStripMenuItem;
-        public ToolStripMenuItem spotterMenu;
         // G8NJJ
         private LabelTS lblVFOSyncLabel;
         private LabelTS lblNRLabel;
@@ -516,6 +483,223 @@
             this.timer_cpu_volts_meter = new System.Windows.Forms.Timer(this.components);
             this.timer_peak_text = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkTunerFollow = new System.Windows.Forms.CheckBoxTS();
+            this.chkTC = new System.Windows.Forms.CheckBoxTS();
+            this.chkExternalPA = new System.Windows.Forms.CheckBoxTS();
+            this.ckQuickPlay = new System.Windows.Forms.CheckBoxTS();
+            this.chkMON = new System.Windows.Forms.CheckBoxTS();
+            this.ckQuickRec = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2SR = new System.Windows.Forms.CheckBoxTS();
+            this.chkMOX = new System.Windows.Forms.CheckBoxTS();
+            this.chkTUN = new System.Windows.Forms.CheckBoxTS();
+            this.chk2TONE = new System.Windows.Forms.CheckBoxTS();
+            this.chkFWCATUBypass = new System.Windows.Forms.CheckBoxTS();
+            this.comboTuneMode = new System.Windows.Forms.ComboBoxTS();
+            this.lblPAProfile = new System.Windows.Forms.LabelTS();
+            this.btnAPF_type = new System.Windows.Forms.ButtonTS();
+            this.ptbCWAPFGain = new Thetis.PrettyTrackBar();
+            this.ptbCWAPFBandwidth = new Thetis.PrettyTrackBar();
+            this.ptbCWAPFFreq = new Thetis.PrettyTrackBar();
+            this.chkCWAPFEnabled = new System.Windows.Forms.CheckBoxTS();
+            this.chkShowCWZero = new System.Windows.Forms.CheckBoxTS();
+            this.ptbCWSpeed = new Thetis.PrettyTrackBar();
+            this.udCWPitch = new System.Windows.Forms.NumericUpDownTS();
+            this.chkQSK = new System.Windows.Forms.CheckBoxTS();
+            this.udCWBreakInDelay = new System.Windows.Forms.NumericUpDownTS();
+            this.chkShowTXCWFreq = new System.Windows.Forms.CheckBoxTS();
+            this.chkCWIambic = new System.Windows.Forms.CheckBoxTS();
+            this.chkCWSidetone = new System.Windows.Forms.CheckBoxTS();
+            this.chkCWFWKeyer = new System.Windows.Forms.CheckBoxTS();
+            this.btnDisplayZTB = new System.Windows.Forms.ButtonTS();
+            this.radDisplayZoom4x = new System.Windows.Forms.RadioButtonTS();
+            this.radDisplayZoom2x = new System.Windows.Forms.RadioButtonTS();
+            this.radDisplayZoom1x = new System.Windows.Forms.RadioButtonTS();
+            this.radDisplayZoom05 = new System.Windows.Forms.RadioButtonTS();
+            this.ptbDisplayZoom = new Thetis.PrettyTrackBar();
+            this.ptbDisplayPan = new Thetis.PrettyTrackBar();
+            this.btnDisplayPanCenter = new System.Windows.Forms.ButtonTS();
+            this.chkRX2Preamp = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX1Preamp = new System.Windows.Forms.CheckBoxTS();
+            this.chkDX = new System.Windows.Forms.CheckBoxTS();
+            this.ptbFilterShift = new Thetis.PrettyTrackBar();
+            this.ptbFilterWidth = new Thetis.PrettyTrackBar();
+            this.btnFilterShiftReset = new System.Windows.Forms.ButtonTS();
+            this.udFilterHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.udFilterLow = new System.Windows.Forms.NumericUpDownTS();
+            this.ptbRX2RF = new Thetis.PrettyTrackBar();
+            this.lblRX2RF = new System.Windows.Forms.LabelTS();
+            this.chkFullDuplex = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2Squelch = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2Mute = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2NB2 = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2NR = new System.Windows.Forms.CheckBoxTS();
+            this.chkRX2NB = new System.Windows.Forms.CheckBoxTS();
+            this.lblRX2AGC = new System.Windows.Forms.LabelTS();
+            this.chkRX2ANF = new System.Windows.Forms.CheckBoxTS();
+            this.comboRX2AGC = new System.Windows.Forms.ComboBoxTS();
+            this.chkRX2BIN = new System.Windows.Forms.CheckBoxTS();
+            this.udTXFilterLow = new System.Windows.Forms.NumericUpDownTS();
+            this.udTXFilterHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.chkMicMute = new System.Windows.Forms.CheckBoxTS();
+            this.chkShowTXFilter = new System.Windows.Forms.CheckBoxTS();
+            this.chkTXEQ = new System.Windows.Forms.CheckBoxTS();
+            this.chkRXEQ = new System.Windows.Forms.CheckBoxTS();
+            this.chkCPDR = new System.Windows.Forms.CheckBoxTS();
+            this.chkVOX = new System.Windows.Forms.CheckBoxTS();
+            this.chkNoiseGate = new System.Windows.Forms.CheckBoxTS();
+            this.comboTXProfile = new System.Windows.Forms.ComboBoxTS();
+            this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
+            this.chkX2TR = new System.Windows.Forms.CheckBoxTS();
+            this.chkFWCATU = new System.Windows.Forms.CheckBoxTS();
+            this.comboRX2Band = new System.Windows.Forms.ComboBoxTS();
+            this.chkPower = new System.Windows.Forms.CheckBoxTS();
+            this.udRX2FilterHigh = new System.Windows.Forms.NumericUpDownTS();
+            this.udRX2FilterLow = new System.Windows.Forms.NumericUpDownTS();
+            this.radRX2ModeAM = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeLSB = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeSAM = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeCWL = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeDSB = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeUSB = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeCWU = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeFMN = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeDIGU = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeDRM = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeDIGL = new System.Windows.Forms.RadioButtonTS();
+            this.radRX2ModeSPEC = new System.Windows.Forms.RadioButtonTS();
+            this.chkRX2DisplayPeak = new System.Windows.Forms.CheckBoxTS();
+            this.comboRX2DisplayMode = new System.Windows.Forms.ComboBoxTS();
+            this.chkPanSwap = new System.Windows.Forms.CheckBoxTS();
+            this.chkEnableMultiRX = new System.Windows.Forms.CheckBoxTS();
+            this.chkDisplayPeak = new System.Windows.Forms.CheckBoxTS();
+            this.comboDisplayMode = new System.Windows.Forms.ComboBoxTS();
+            this.chkDisplayAVG = new System.Windows.Forms.CheckBoxTS();
+            this.chkNR = new System.Windows.Forms.CheckBoxTS();
+            this.chkDSPNB2 = new System.Windows.Forms.CheckBoxTS();
+            this.chkBIN = new System.Windows.Forms.CheckBoxTS();
+            this.chkNB = new System.Windows.Forms.CheckBoxTS();
+            this.chkANF = new System.Windows.Forms.CheckBoxTS();
+            this.btnZeroBeat = new System.Windows.Forms.ButtonTS();
+            this.chkVFOSplit = new System.Windows.Forms.CheckBoxTS();
+            this.btnRITReset = new System.Windows.Forms.ButtonTS();
+            this.btnXITReset = new System.Windows.Forms.ButtonTS();
+            this.udRIT = new System.Windows.Forms.NumericUpDownTS();
+            this.btnIFtoVFO = new System.Windows.Forms.ButtonTS();
+            this.chkRIT = new System.Windows.Forms.CheckBoxTS();
+            this.btnVFOSwap = new System.Windows.Forms.ButtonTS();
+            this.chkXIT = new System.Windows.Forms.CheckBoxTS();
+            this.btnVFOBtoA = new System.Windows.Forms.ButtonTS();
+            this.udXIT = new System.Windows.Forms.NumericUpDownTS();
+            this.btnVFOAtoB = new System.Windows.Forms.ButtonTS();
+            this.comboAGC = new System.Windows.Forms.ComboBoxTS();
+            this.lblAGC = new System.Windows.Forms.LabelTS();
+            this.comboPreamp = new System.Windows.Forms.ComboBoxTS();
+            this.lblRF = new System.Windows.Forms.LabelTS();
+            this.chkVAC1 = new System.Windows.Forms.CheckBoxTS();
+            this.comboDigTXProfile = new System.Windows.Forms.ComboBoxTS();
+            this.chkVACStereo = new System.Windows.Forms.CheckBoxTS();
+            this.comboVACSampleRate = new System.Windows.Forms.ComboBoxTS();
+            this.radModeAM = new System.Windows.Forms.RadioButtonTS();
+            this.radModeLSB = new System.Windows.Forms.RadioButtonTS();
+            this.radModeSAM = new System.Windows.Forms.RadioButtonTS();
+            this.radModeCWL = new System.Windows.Forms.RadioButtonTS();
+            this.radModeDSB = new System.Windows.Forms.RadioButtonTS();
+            this.radModeUSB = new System.Windows.Forms.RadioButtonTS();
+            this.radModeCWU = new System.Windows.Forms.RadioButtonTS();
+            this.radModeFMN = new System.Windows.Forms.RadioButtonTS();
+            this.radModeDIGU = new System.Windows.Forms.RadioButtonTS();
+            this.radModeDRM = new System.Windows.Forms.RadioButtonTS();
+            this.radModeDIGL = new System.Windows.Forms.RadioButtonTS();
+            this.radModeSPEC = new System.Windows.Forms.RadioButtonTS();
+            this.btnBandVHF = new System.Windows.Forms.ButtonTS();
+            this.chkVFOATX = new System.Windows.Forms.CheckBoxTS();
+            this.txtWheelTune = new System.Windows.Forms.TextBoxTS();
+            this.chkVFOBTX = new System.Windows.Forms.CheckBoxTS();
+            this.comboMeterTXMode = new System.Windows.Forms.ComboBoxTS();
+            this.comboMeterRXMode = new System.Windows.Forms.ComboBoxTS();
+            this.chkSquelch = new System.Windows.Forms.CheckBoxTS();
+            this.btnMemoryQuickRestore = new System.Windows.Forms.ButtonTS();
+            this.btnMemoryQuickSave = new System.Windows.Forms.ButtonTS();
+            this.txtMemoryQuick = new System.Windows.Forms.TextBoxTS();
+            this.chkVFOLock = new System.Windows.Forms.CheckBoxTS();
+            this.chkVFOSync = new System.Windows.Forms.CheckBoxTS();
+            this.btnTuneStepChangeLarger = new System.Windows.Forms.ButtonTS();
+            this.btnTuneStepChangeSmaller = new System.Windows.Forms.ButtonTS();
+            this.chkSplitDisplay = new System.Windows.Forms.CheckBoxTS();
+            this.comboDisplayModeTop = new System.Windows.Forms.ComboBoxTS();
+            this.comboDisplayModeBottom = new System.Windows.Forms.ComboBoxTS();
+            this.comboRX2MeterMode = new System.Windows.Forms.ComboBoxTS();
+            this.chkRX2DisplayAVG = new System.Windows.Forms.CheckBoxTS();
+            this.radBand160 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN = new System.Windows.Forms.RadioButtonTS();
+            this.radBandWWV = new System.Windows.Forms.RadioButtonTS();
+            this.radBand6 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand10 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand12 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand15 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand17 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand20 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand30 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand40 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand60 = new System.Windows.Forms.RadioButtonTS();
+            this.radBand80 = new System.Windows.Forms.RadioButtonTS();
+            this.chkMUT = new System.Windows.Forms.CheckBoxTS();
+            this.radFMDeviation5kHz = new System.Windows.Forms.RadioButtonTS();
+            this.comboFMTXProfile = new System.Windows.Forms.ComboBoxTS();
+            this.udFMOffset = new System.Windows.Forms.NumericUpDownTS();
+            this.chkFMTXSimplex = new System.Windows.Forms.CheckBoxTS();
+            this.comboFMCTCSS = new System.Windows.Forms.ComboBoxTS();
+            this.btnFMMemory = new System.Windows.Forms.ButtonTS();
+            this.chkFMCTCSS = new System.Windows.Forms.CheckBoxTS();
+            this.btnFMMemoryUp = new System.Windows.Forms.ButtonTS();
+            this.btnFMMemoryDown = new System.Windows.Forms.ButtonTS();
+            this.radFMDeviation2kHz = new System.Windows.Forms.RadioButtonTS();
+            this.chkFMTXLow = new System.Windows.Forms.CheckBoxTS();
+            this.chkFMTXHigh = new System.Windows.Forms.CheckBoxTS();
+            this.chkFMTXRev = new System.Windows.Forms.CheckBoxTS();
+            this.chkTNF = new System.Windows.Forms.CheckBoxTS();
+            this.btnTNFAdd = new System.Windows.Forms.ButtonTS();
+            this.chkVAC2 = new System.Windows.Forms.CheckBoxTS();
+            this.udRX1StepAttData = new System.Windows.Forms.NumericUpDownTS();
+            this.comboRX2Preamp = new System.Windows.Forms.ComboBoxTS();
+            this.udRX2StepAttData = new System.Windows.Forms.NumericUpDownTS();
+            this.lblBandStack = new System.Windows.Forms.LabelTS();
+            this.regBandStackCurrentEntry = new System.Windows.Forms.TextBoxTS();
+            this.regBandStackTotalEntries = new System.Windows.Forms.TextBoxTS();
+            this.radBandGEN13 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN12 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN11 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN10 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN9 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN8 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN7 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN6 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN5 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN4 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN3 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN2 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN1 = new System.Windows.Forms.RadioButtonTS();
+            this.radBandGEN0 = new System.Windows.Forms.RadioButtonTS();
+            this.chkRxAnt = new System.Windows.Forms.CheckBoxTS();
+            this.chkVFOBLock = new System.Windows.Forms.CheckBoxTS();
+            this.ptbPWR = new Thetis.PrettyTrackBar();
+            this.ptbRF = new Thetis.PrettyTrackBar();
+            this.ptbAF = new Thetis.PrettyTrackBar();
+            this.ptbPanMainRX = new Thetis.PrettyTrackBar();
+            this.ptbPanSubRX = new Thetis.PrettyTrackBar();
+            this.ptbRX2Gain = new Thetis.PrettyTrackBar();
+            this.ptbRX2Pan = new Thetis.PrettyTrackBar();
+            this.ptbRX0Gain = new Thetis.PrettyTrackBar();
+            this.ptbRX1Gain = new Thetis.PrettyTrackBar();
+            this.ptbVACRXGain = new Thetis.PrettyTrackBar();
+            this.ptbVACTXGain = new Thetis.PrettyTrackBar();
+            this.ptbRX2AF = new Thetis.PrettyTrackBar();
+            this.ptbRX1AF = new Thetis.PrettyTrackBar();
+            this.ptbTune = new Thetis.PrettyTrackBar();
+            this.udTXStepAttData = new System.Windows.Forms.NumericUpDownTS();
+            this.pbAutoAttWarningRX1 = new System.Windows.Forms.PictureBox();
+            this.pbAutoAttWarningRX2 = new System.Windows.Forms.PictureBox();
+            this.chkMNU = new System.Windows.Forms.CheckBoxTS();
             this.timer_clock = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStripFilterRX1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemRX1FilterConfigure = new System.Windows.Forms.ToolStripMenuItem();
@@ -530,37 +714,18 @@
             this.toolStripNotchNormal = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripNotchDeep = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripNotchVeryDeep = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.databaseManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.memoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.waveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.equalizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xVTRsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cWXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.eSCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.spotterMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.collapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TopControlstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TXSettoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.TXSettoolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.TXSettoolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.TXSettoolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cWLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cWUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sPECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dIGLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dIGUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dRMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.bandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NR2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.NR3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NR4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ANFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NB2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SNBtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MultiRXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX1AVGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX1PeakToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bandtoolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.bandtoolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.bandtoolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -574,20 +739,18 @@
             this.bandtoolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.bandtoolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
             this.bandtoolStripMenuItem13 = new System.Windows.Forms.ToolStripMenuItem();
-            this.dSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NR2ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.NR3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NR4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ANFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NB2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SNBtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MultiRXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX1AVGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX1PeakToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dSBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cWLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cWUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sPECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dIGLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dIGUToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dRMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FilterToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.FilterToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.FilterToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -598,22 +761,6 @@
             this.FilterToolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
             this.FilterToolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.FilterToolStripMenuItem10 = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2modetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2bandtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2dSPtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RX2filtertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.VFOVACtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RXTXGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BtnBartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.linearityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RAtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BPFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.finderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.bandToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -707,7 +854,11 @@
             this.toolStripMenuItem17 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabelAndromedaMulti = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Fill = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_PAstatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_N1MM = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatus_PAspacer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_play_record = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatus_RecordPlay_spacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_TCI = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_CatTCPip = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_CatSerial = new System.Windows.Forms.ToolStripStatusLabel();
@@ -719,21 +870,58 @@
             this.tmrAutoAGC = new System.Windows.Forms.Timer(this.components);
             this.picRX2Squelch = new System.Windows.Forms.PictureBox();
             this.picSquelch = new System.Windows.Forms.PictureBox();
-            this.chkMNU = new System.Windows.Forms.CheckBoxTS();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setupToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.databaseManagerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.memoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.equalizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xVTRsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cWXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eSCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TopControlstoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TXSettoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.TXSettoolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.TXSettoolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.TXSettoolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.modeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.filterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX2modetoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX2bandtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX2dSPtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RX2filtertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.VFOVACtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RXTXGainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnBartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.linearityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RAtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPF1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BPF2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.finderMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelOptions = new System.Windows.Forms.PanelTS();
+            this.checkBoxTS1 = new System.Windows.Forms.CheckBoxTS();
+            this.panelModeSpecificCW = new System.Windows.Forms.PanelTS();
+            this.grpCWAPF = new System.Windows.Forms.GroupBoxTS();
+            this.lblCWAPFGain = new System.Windows.Forms.LabelTS();
+            this.lblCWAPFBandwidth = new System.Windows.Forms.LabelTS();
+            this.lblCWAPFTune = new System.Windows.Forms.LabelTS();
+            this.lblCWSpeed = new System.Windows.Forms.LabelTS();
+            this.grpSemiBreakIn = new System.Windows.Forms.GroupBoxTS();
+            this.lblCWBreakInDelay = new System.Windows.Forms.LabelTS();
+            this.lblCWPitchFreq = new System.Windows.Forms.LabelTS();
             this.panelDisplay = new System.Windows.Forms.PanelTS();
             this.infoBar = new Thetis.ucInfoBar();
-            this.btnDisplayZTB = new System.Windows.Forms.ButtonTS();
-            this.radDisplayZoom4x = new System.Windows.Forms.RadioButtonTS();
-            this.radDisplayZoom2x = new System.Windows.Forms.RadioButtonTS();
-            this.radDisplayZoom1x = new System.Windows.Forms.RadioButtonTS();
-            this.radDisplayZoom05 = new System.Windows.Forms.RadioButtonTS();
-            this.ptbDisplayZoom = new Thetis.PrettyTrackBar();
-            this.ptbDisplayPan = new Thetis.PrettyTrackBar();
             this.lblDisplayZoom = new System.Windows.Forms.LabelTS();
-            this.btnDisplayPanCenter = new System.Windows.Forms.ButtonTS();
             this.lblDisplayPan = new System.Windows.Forms.LabelTS();
             this.pnlDisplay = new System.Windows.Forms.Panel();
-            this.lblPAProfile = new System.Windows.Forms.LabelTS();
             this.nudPwrTemp2 = new System.Windows.Forms.NumericUpDownTS();
             this.nudPwrTemp = new System.Windows.Forms.NumericUpDownTS();
             this.grpMultimeter = new System.Windows.Forms.GroupBoxTS();
@@ -742,11 +930,6 @@
             this.txtMultiText = new System.Windows.Forms.TextBoxTS();
             this.panelFilter = new System.Windows.Forms.PanelTS();
             this.radFilter1 = new System.Windows.Forms.RadioButtonTS();
-            this.ptbFilterShift = new Thetis.PrettyTrackBar();
-            this.ptbFilterWidth = new Thetis.PrettyTrackBar();
-            this.btnFilterShiftReset = new System.Windows.Forms.ButtonTS();
-            this.udFilterHigh = new System.Windows.Forms.NumericUpDownTS();
-            this.udFilterLow = new System.Windows.Forms.NumericUpDownTS();
             this.lblFilterHigh = new System.Windows.Forms.LabelTS();
             this.lblFilterWidth = new System.Windows.Forms.LabelTS();
             this.radFilterVar2 = new System.Windows.Forms.RadioButtonTS();
@@ -763,212 +946,9 @@
             this.radFilter5 = new System.Windows.Forms.RadioButtonTS();
             this.radFilter10 = new System.Windows.Forms.RadioButtonTS();
             this.panelRX2RF = new System.Windows.Forms.PanelTS();
-            this.ptbRX2RF = new Thetis.PrettyTrackBar();
-            this.lblRX2RF = new System.Windows.Forms.LabelTS();
-            this.chkFullDuplex = new System.Windows.Forms.CheckBoxTS();
             this.ptbRX2Squelch = new Thetis.PrettyTrackBar();
-            this.chkRX2Squelch = new System.Windows.Forms.CheckBoxTS();
             this.panelRX2DSP = new System.Windows.Forms.PanelTS();
-            this.chkRX2Mute = new System.Windows.Forms.CheckBoxTS();
-            this.chkRX2NB2 = new System.Windows.Forms.CheckBoxTS();
-            this.chkRX2NR = new System.Windows.Forms.CheckBoxTS();
-            this.chkRX2NB = new System.Windows.Forms.CheckBoxTS();
-            this.lblRX2AGC = new System.Windows.Forms.LabelTS();
-            this.chkRX2ANF = new System.Windows.Forms.CheckBoxTS();
-            this.comboRX2AGC = new System.Windows.Forms.ComboBoxTS();
-            this.chkRX2BIN = new System.Windows.Forms.CheckBoxTS();
             this.btnHidden = new System.Windows.Forms.ButtonTS();
-            this.panelOptions = new System.Windows.Forms.PanelTS();
-            this.chkTunerFollow = new System.Windows.Forms.CheckBoxTS();
-            this.chkTC = new System.Windows.Forms.CheckBoxTS();
-            this.checkBoxTS1 = new System.Windows.Forms.CheckBoxTS();
-            this.chkExternalPA = new System.Windows.Forms.CheckBoxTS();
-            this.ckQuickPlay = new System.Windows.Forms.CheckBoxTS();
-            this.chkMON = new System.Windows.Forms.CheckBoxTS();
-            this.ckQuickRec = new System.Windows.Forms.CheckBoxTS();
-            this.chkRX2SR = new System.Windows.Forms.CheckBoxTS();
-            this.chkMOX = new System.Windows.Forms.CheckBoxTS();
-            this.chkTUN = new System.Windows.Forms.CheckBoxTS();
-            this.chk2TONE = new System.Windows.Forms.CheckBoxTS();
-            this.chkFWCATUBypass = new System.Windows.Forms.CheckBoxTS();
-            this.comboTuneMode = new System.Windows.Forms.ComboBoxTS();
-            this.udTXFilterLow = new System.Windows.Forms.NumericUpDownTS();
-            this.udTXFilterHigh = new System.Windows.Forms.NumericUpDownTS();
-            this.chkMicMute = new System.Windows.Forms.CheckBoxTS();
-            this.chkShowTXFilter = new System.Windows.Forms.CheckBoxTS();
-            this.chkTXEQ = new System.Windows.Forms.CheckBoxTS();
-            this.chkRXEQ = new System.Windows.Forms.CheckBoxTS();
-            this.chkCPDR = new System.Windows.Forms.CheckBoxTS();
-            this.chkVOX = new System.Windows.Forms.CheckBoxTS();
-            this.chkNoiseGate = new System.Windows.Forms.CheckBoxTS();
-            this.comboTXProfile = new System.Windows.Forms.ComboBoxTS();
-            this.comboAMTXProfile = new System.Windows.Forms.ComboBoxTS();
-            this.chkX2TR = new System.Windows.Forms.CheckBoxTS();
-            this.chkFWCATU = new System.Windows.Forms.CheckBoxTS();
-            this.comboRX2Band = new System.Windows.Forms.ComboBoxTS();
-            this.chkRX2Preamp = new System.Windows.Forms.CheckBoxTS();
-            this.chkPower = new System.Windows.Forms.CheckBoxTS();
-            this.udCWPitch = new System.Windows.Forms.NumericUpDownTS();
-            this.udCWBreakInDelay = new System.Windows.Forms.NumericUpDownTS();
-            this.chkShowTXCWFreq = new System.Windows.Forms.CheckBoxTS();
-            this.chkCWIambic = new System.Windows.Forms.CheckBoxTS();
-            this.udRX2FilterHigh = new System.Windows.Forms.NumericUpDownTS();
-            this.udRX2FilterLow = new System.Windows.Forms.NumericUpDownTS();
-            this.radRX2ModeAM = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeLSB = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeSAM = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeCWL = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeDSB = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeUSB = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeCWU = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeFMN = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeDIGU = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeDRM = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeDIGL = new System.Windows.Forms.RadioButtonTS();
-            this.radRX2ModeSPEC = new System.Windows.Forms.RadioButtonTS();
-            this.chkRX2DisplayPeak = new System.Windows.Forms.CheckBoxTS();
-            this.comboRX2DisplayMode = new System.Windows.Forms.ComboBoxTS();
-            this.chkPanSwap = new System.Windows.Forms.CheckBoxTS();
-            this.chkEnableMultiRX = new System.Windows.Forms.CheckBoxTS();
-            this.chkDisplayPeak = new System.Windows.Forms.CheckBoxTS();
-            this.comboDisplayMode = new System.Windows.Forms.ComboBoxTS();
-            this.chkDisplayAVG = new System.Windows.Forms.CheckBoxTS();
-            this.chkNR = new System.Windows.Forms.CheckBoxTS();
-            this.chkDSPNB2 = new System.Windows.Forms.CheckBoxTS();
-            this.chkBIN = new System.Windows.Forms.CheckBoxTS();
-            this.chkNB = new System.Windows.Forms.CheckBoxTS();
-            this.chkANF = new System.Windows.Forms.CheckBoxTS();
-            this.btnZeroBeat = new System.Windows.Forms.ButtonTS();
-            this.chkVFOSplit = new System.Windows.Forms.CheckBoxTS();
-            this.btnRITReset = new System.Windows.Forms.ButtonTS();
-            this.btnXITReset = new System.Windows.Forms.ButtonTS();
-            this.udRIT = new System.Windows.Forms.NumericUpDownTS();
-            this.btnIFtoVFO = new System.Windows.Forms.ButtonTS();
-            this.chkRIT = new System.Windows.Forms.CheckBoxTS();
-            this.btnVFOSwap = new System.Windows.Forms.ButtonTS();
-            this.chkXIT = new System.Windows.Forms.CheckBoxTS();
-            this.btnVFOBtoA = new System.Windows.Forms.ButtonTS();
-            this.udXIT = new System.Windows.Forms.NumericUpDownTS();
-            this.btnVFOAtoB = new System.Windows.Forms.ButtonTS();
-            this.chkRX1Preamp = new System.Windows.Forms.CheckBoxTS();
-            this.comboAGC = new System.Windows.Forms.ComboBoxTS();
-            this.lblAGC = new System.Windows.Forms.LabelTS();
-            this.comboPreamp = new System.Windows.Forms.ComboBoxTS();
-            this.lblRF = new System.Windows.Forms.LabelTS();
-            this.chkDX = new System.Windows.Forms.CheckBoxTS();
-            this.chkVAC1 = new System.Windows.Forms.CheckBoxTS();
-            this.comboDigTXProfile = new System.Windows.Forms.ComboBoxTS();
-            this.chkVACStereo = new System.Windows.Forms.CheckBoxTS();
-            this.comboVACSampleRate = new System.Windows.Forms.ComboBoxTS();
-            this.radModeAM = new System.Windows.Forms.RadioButtonTS();
-            this.radModeLSB = new System.Windows.Forms.RadioButtonTS();
-            this.radModeSAM = new System.Windows.Forms.RadioButtonTS();
-            this.radModeCWL = new System.Windows.Forms.RadioButtonTS();
-            this.radModeDSB = new System.Windows.Forms.RadioButtonTS();
-            this.radModeUSB = new System.Windows.Forms.RadioButtonTS();
-            this.radModeCWU = new System.Windows.Forms.RadioButtonTS();
-            this.radModeFMN = new System.Windows.Forms.RadioButtonTS();
-            this.radModeDIGU = new System.Windows.Forms.RadioButtonTS();
-            this.radModeDRM = new System.Windows.Forms.RadioButtonTS();
-            this.radModeDIGL = new System.Windows.Forms.RadioButtonTS();
-            this.radModeSPEC = new System.Windows.Forms.RadioButtonTS();
-            this.btnBandVHF = new System.Windows.Forms.ButtonTS();
-            this.chkVFOATX = new System.Windows.Forms.CheckBoxTS();
-            this.txtWheelTune = new System.Windows.Forms.TextBoxTS();
-            this.chkVFOBTX = new System.Windows.Forms.CheckBoxTS();
-            this.comboMeterTXMode = new System.Windows.Forms.ComboBoxTS();
-            this.comboMeterRXMode = new System.Windows.Forms.ComboBoxTS();
-            this.chkSquelch = new System.Windows.Forms.CheckBoxTS();
-            this.btnMemoryQuickRestore = new System.Windows.Forms.ButtonTS();
-            this.btnMemoryQuickSave = new System.Windows.Forms.ButtonTS();
-            this.txtMemoryQuick = new System.Windows.Forms.TextBoxTS();
-            this.chkVFOLock = new System.Windows.Forms.CheckBoxTS();
-            this.chkVFOSync = new System.Windows.Forms.CheckBoxTS();
-            this.btnTuneStepChangeLarger = new System.Windows.Forms.ButtonTS();
-            this.btnTuneStepChangeSmaller = new System.Windows.Forms.ButtonTS();
-            this.chkSplitDisplay = new System.Windows.Forms.CheckBoxTS();
-            this.comboDisplayModeTop = new System.Windows.Forms.ComboBoxTS();
-            this.comboDisplayModeBottom = new System.Windows.Forms.ComboBoxTS();
-            this.comboRX2MeterMode = new System.Windows.Forms.ComboBoxTS();
-            this.chkRX2DisplayAVG = new System.Windows.Forms.CheckBoxTS();
-            this.radBand160 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN = new System.Windows.Forms.RadioButtonTS();
-            this.radBandWWV = new System.Windows.Forms.RadioButtonTS();
-            this.radBand6 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand10 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand12 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand15 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand17 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand20 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand30 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand40 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand60 = new System.Windows.Forms.RadioButtonTS();
-            this.radBand80 = new System.Windows.Forms.RadioButtonTS();
-            this.chkMUT = new System.Windows.Forms.CheckBoxTS();
-            this.chkCWFWKeyer = new System.Windows.Forms.CheckBoxTS();
-            this.chkShowCWZero = new System.Windows.Forms.CheckBoxTS();
-            this.radFMDeviation5kHz = new System.Windows.Forms.RadioButtonTS();
-            this.comboFMTXProfile = new System.Windows.Forms.ComboBoxTS();
-            this.udFMOffset = new System.Windows.Forms.NumericUpDownTS();
-            this.chkFMTXSimplex = new System.Windows.Forms.CheckBoxTS();
-            this.comboFMCTCSS = new System.Windows.Forms.ComboBoxTS();
-            this.btnFMMemory = new System.Windows.Forms.ButtonTS();
-            this.chkFMCTCSS = new System.Windows.Forms.CheckBoxTS();
-            this.btnFMMemoryUp = new System.Windows.Forms.ButtonTS();
-            this.btnFMMemoryDown = new System.Windows.Forms.ButtonTS();
-            this.radFMDeviation2kHz = new System.Windows.Forms.RadioButtonTS();
-            this.chkFMTXLow = new System.Windows.Forms.CheckBoxTS();
-            this.chkFMTXHigh = new System.Windows.Forms.CheckBoxTS();
-            this.chkFMTXRev = new System.Windows.Forms.CheckBoxTS();
-            this.chkTNF = new System.Windows.Forms.CheckBoxTS();
-            this.btnTNFAdd = new System.Windows.Forms.ButtonTS();
-            this.chkVAC2 = new System.Windows.Forms.CheckBoxTS();
-            this.chkCWSidetone = new System.Windows.Forms.CheckBoxTS();
-            this.udRX1StepAttData = new System.Windows.Forms.NumericUpDownTS();
-            this.comboRX2Preamp = new System.Windows.Forms.ComboBoxTS();
-            this.udRX2StepAttData = new System.Windows.Forms.NumericUpDownTS();
-            this.chkCWAPFEnabled = new System.Windows.Forms.CheckBoxTS();
-            this.lblBandStack = new System.Windows.Forms.LabelTS();
-            this.regBandStackCurrentEntry = new System.Windows.Forms.TextBoxTS();
-            this.regBandStackTotalEntries = new System.Windows.Forms.TextBoxTS();
-            this.radBandGEN13 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN12 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN11 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN10 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN9 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN8 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN7 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN6 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN5 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN4 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN3 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN2 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN1 = new System.Windows.Forms.RadioButtonTS();
-            this.radBandGEN0 = new System.Windows.Forms.RadioButtonTS();
-            this.chkRxAnt = new System.Windows.Forms.CheckBoxTS();
-            this.chkVFOBLock = new System.Windows.Forms.CheckBoxTS();
-            this.chkQSK = new System.Windows.Forms.CheckBoxTS();
-            this.ptbCWSpeed = new Thetis.PrettyTrackBar();
-            this.ptbPWR = new Thetis.PrettyTrackBar();
-            this.ptbRF = new Thetis.PrettyTrackBar();
-            this.ptbAF = new Thetis.PrettyTrackBar();
-            this.ptbPanMainRX = new Thetis.PrettyTrackBar();
-            this.ptbPanSubRX = new Thetis.PrettyTrackBar();
-            this.ptbRX2Gain = new Thetis.PrettyTrackBar();
-            this.ptbRX2Pan = new Thetis.PrettyTrackBar();
-            this.ptbRX0Gain = new Thetis.PrettyTrackBar();
-            this.ptbRX1Gain = new Thetis.PrettyTrackBar();
-            this.ptbVACRXGain = new Thetis.PrettyTrackBar();
-            this.ptbVACTXGain = new Thetis.PrettyTrackBar();
-            this.ptbRX2AF = new Thetis.PrettyTrackBar();
-            this.ptbRX1AF = new Thetis.PrettyTrackBar();
-            this.ptbCWAPFGain = new Thetis.PrettyTrackBar();
-            this.ptbCWAPFBandwidth = new Thetis.PrettyTrackBar();
-            this.ptbCWAPFFreq = new Thetis.PrettyTrackBar();
-            this.ptbTune = new Thetis.PrettyTrackBar();
-            this.udTXStepAttData = new System.Windows.Forms.NumericUpDownTS();
-            this.pbAutoAttWarningRX1 = new System.Windows.Forms.PictureBox();
-            this.pbAutoAttWarningRX2 = new System.Windows.Forms.PictureBox();
             this.radBand2 = new System.Windows.Forms.RadioButtonTS();
             this.panelModeSpecificPhone = new System.Windows.Forms.PanelTS();
             this.lblTXHigh = new System.Windows.Forms.LabelTS();
@@ -1025,20 +1005,11 @@
             this.lblRX2Band = new System.Windows.Forms.LabelTS();
             this.lblRX2Preamp = new System.Windows.Forms.LabelTS();
             this.chkRX2 = new System.Windows.Forms.CheckBoxTS();
+            this.lblRF3 = new System.Windows.Forms.LabelTS();
             this.radRX1Show = new System.Windows.Forms.RadioButtonTS();
             this.radRX2Show = new System.Windows.Forms.RadioButtonTS();
-            this.lblRF3 = new System.Windows.Forms.LabelTS();
             this.lblRF2 = new System.Windows.Forms.LabelTS();
             this.panelPower = new System.Windows.Forms.PanelTS();
-            this.panelModeSpecificCW = new System.Windows.Forms.PanelTS();
-            this.grpCWAPF = new System.Windows.Forms.GroupBoxTS();
-            this.lblCWAPFGain = new System.Windows.Forms.LabelTS();
-            this.lblCWAPFBandwidth = new System.Windows.Forms.LabelTS();
-            this.lblCWAPFTune = new System.Windows.Forms.LabelTS();
-            this.lblCWSpeed = new System.Windows.Forms.LabelTS();
-            this.grpSemiBreakIn = new System.Windows.Forms.GroupBoxTS();
-            this.lblCWBreakInDelay = new System.Windows.Forms.LabelTS();
-            this.lblCWPitchFreq = new System.Windows.Forms.LabelTS();
             this.panelRX2Filter = new System.Windows.Forms.PanelTS();
             this.radRX2Filter1 = new System.Windows.Forms.RadioButtonTS();
             this.lblRX2FilterHigh = new System.Windows.Forms.LabelTS();
@@ -1154,34 +1125,21 @@
             this.lblAndromedaEncoderSlider = new System.Windows.Forms.LabelTS();
             this.lblATUTuneLabel = new System.Windows.Forms.LabelTS();
             this.ptbSquelch = new Thetis.PrettyTrackBar();
-            this.contextMenuStripFilterRX1.SuspendLayout();
-            this.contextMenuStripFilterRX2.SuspendLayout();
-            this.contextMenuStripNotch.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.statusStripMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSquelch)).BeginInit();
-            this.panelDisplay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbDisplayZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbDisplayPan)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).BeginInit();
-            this.grpMultimeter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
-            this.panelFilter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterLow)).BeginInit();
-            this.panelRX2RF.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2RF)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).BeginInit();
-            this.panelRX2DSP.SuspendLayout();
-            this.panelOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2FilterHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2FilterLow)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRIT)).BeginInit();
@@ -1189,7 +1147,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udFMOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX1StepAttData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2StepAttData)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbPWR)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAF)).BeginInit();
@@ -1203,13 +1160,30 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbVACTXGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2AF)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX1AF)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXStepAttData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX2)).BeginInit();
+            this.contextMenuStripFilterRX1.SuspendLayout();
+            this.contextMenuStripFilterRX2.SuspendLayout();
+            this.contextMenuStripNotch.SuspendLayout();
+            this.statusStripMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSquelch)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            this.panelOptions.SuspendLayout();
+            this.panelModeSpecificCW.SuspendLayout();
+            this.grpCWAPF.SuspendLayout();
+            this.grpSemiBreakIn.SuspendLayout();
+            this.panelDisplay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).BeginInit();
+            this.grpMultimeter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).BeginInit();
+            this.panelFilter.SuspendLayout();
+            this.panelRX2RF.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).BeginInit();
+            this.panelRX2DSP.SuspendLayout();
             this.panelModeSpecificPhone.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbNoiseGate)).BeginInit();
@@ -1223,9 +1197,6 @@
             this.panelVFOBLabels.SuspendLayout();
             this.panelRX2Power.SuspendLayout();
             this.panelPower.SuspendLayout();
-            this.panelModeSpecificCW.SuspendLayout();
-            this.grpCWAPF.SuspendLayout();
-            this.grpSemiBreakIn.SuspendLayout();
             this.panelRX2Filter.SuspendLayout();
             this.panelRX2Mode.SuspendLayout();
             this.panelRX2Display.SuspendLayout();
@@ -1268,1490 +1239,361 @@
             this.timer_peak_text.Interval = 500;
             this.timer_peak_text.Tick += new System.EventHandler(this.timer_peak_text_Tick);
             // 
-            // timer_clock
-            // 
-            this.timer_clock.Enabled = true;
-            this.timer_clock.Interval = 1000;
-            this.timer_clock.Tick += new System.EventHandler(this.timer_clock_Tick);
-            // 
-            // contextMenuStripFilterRX1
-            // 
-            this.contextMenuStripFilterRX1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripFilterRX1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemRX1FilterConfigure,
-            this.toolStripMenuItemRX1FilterReset});
-            this.contextMenuStripFilterRX1.Name = "contextMenuStripFilterRX1";
-            resources.ApplyResources(this.contextMenuStripFilterRX1, "contextMenuStripFilterRX1");
-            // 
-            // toolStripMenuItemRX1FilterConfigure
-            // 
-            this.toolStripMenuItemRX1FilterConfigure.Name = "toolStripMenuItemRX1FilterConfigure";
-            resources.ApplyResources(this.toolStripMenuItemRX1FilterConfigure, "toolStripMenuItemRX1FilterConfigure");
-            this.toolStripMenuItemRX1FilterConfigure.Click += new System.EventHandler(this.toolStripMenuItemRX1FilterConfigure_Click);
-            // 
-            // toolStripMenuItemRX1FilterReset
-            // 
-            this.toolStripMenuItemRX1FilterReset.Name = "toolStripMenuItemRX1FilterReset";
-            resources.ApplyResources(this.toolStripMenuItemRX1FilterReset, "toolStripMenuItemRX1FilterReset");
-            this.toolStripMenuItemRX1FilterReset.Click += new System.EventHandler(this.toolStripMenuItemRX1FilterReset_Click);
-            // 
-            // contextMenuStripFilterRX2
-            // 
-            this.contextMenuStripFilterRX2.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripFilterRX2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemRX2FilterConfigure,
-            this.toolStripMenuItemRX2FilterReset});
-            this.contextMenuStripFilterRX2.Name = "contextMenuStripFilterRX2";
-            resources.ApplyResources(this.contextMenuStripFilterRX2, "contextMenuStripFilterRX2");
-            // 
-            // toolStripMenuItemRX2FilterConfigure
-            // 
-            this.toolStripMenuItemRX2FilterConfigure.Name = "toolStripMenuItemRX2FilterConfigure";
-            resources.ApplyResources(this.toolStripMenuItemRX2FilterConfigure, "toolStripMenuItemRX2FilterConfigure");
-            this.toolStripMenuItemRX2FilterConfigure.Click += new System.EventHandler(this.toolStripMenuItemRX2FilterConfigure_Click);
-            // 
-            // toolStripMenuItemRX2FilterReset
-            // 
-            this.toolStripMenuItemRX2FilterReset.Name = "toolStripMenuItemRX2FilterReset";
-            resources.ApplyResources(this.toolStripMenuItemRX2FilterReset, "toolStripMenuItemRX2FilterReset");
-            this.toolStripMenuItemRX2FilterReset.Click += new System.EventHandler(this.toolStripMenuItemRX2FilterReset_Click);
-            // 
-            // contextMenuStripNotch
-            // 
-            this.contextMenuStripNotch.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStripNotch.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripNotchDelete,
-            this.toolStripNotchRemember,
-            this.toolStripSeparator1,
-            this.toolStripNotchNormal,
-            this.toolStripNotchDeep,
-            this.toolStripNotchVeryDeep});
-            this.contextMenuStripNotch.Name = "contextMenuStripNotch";
-            resources.ApplyResources(this.contextMenuStripNotch, "contextMenuStripNotch");
-            // 
-            // toolStripNotchDelete
-            // 
-            this.toolStripNotchDelete.Name = "toolStripNotchDelete";
-            resources.ApplyResources(this.toolStripNotchDelete, "toolStripNotchDelete");
-            this.toolStripNotchDelete.Click += new System.EventHandler(this.toolStripNotchDelete_Click);
-            // 
-            // toolStripNotchRemember
-            // 
-            this.toolStripNotchRemember.Name = "toolStripNotchRemember";
-            resources.ApplyResources(this.toolStripNotchRemember, "toolStripNotchRemember");
-            this.toolStripNotchRemember.Click += new System.EventHandler(this.toolStripNotchRemember_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
-            // 
-            // toolStripNotchNormal
-            // 
-            this.toolStripNotchNormal.Name = "toolStripNotchNormal";
-            resources.ApplyResources(this.toolStripNotchNormal, "toolStripNotchNormal");
-            this.toolStripNotchNormal.Click += new System.EventHandler(this.toolStripNotchNormal_Click);
-            // 
-            // toolStripNotchDeep
-            // 
-            this.toolStripNotchDeep.Name = "toolStripNotchDeep";
-            resources.ApplyResources(this.toolStripNotchDeep, "toolStripNotchDeep");
-            this.toolStripNotchDeep.Click += new System.EventHandler(this.toolStripNotchDeep_Click);
-            // 
-            // toolStripNotchVeryDeep
-            // 
-            this.toolStripNotchVeryDeep.Name = "toolStripNotchVeryDeep";
-            resources.ApplyResources(this.toolStripNotchVeryDeep, "toolStripNotchVeryDeep");
-            this.toolStripNotchVeryDeep.Click += new System.EventHandler(this.toolStripNotchVeryDeep_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.menuStrip1, "menuStrip1");
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setupToolStripMenuItem,
-            this.memoryToolStripMenuItem,
-            this.waveToolStripMenuItem,
-            this.equalizerToolStripMenuItem,
-            this.xVTRsToolStripMenuItem,
-            this.cWXToolStripMenuItem,
-            this.eSCToolStripMenuItem,
-            this.spotterMenu,
-            this.collapseToolStripMenuItem,
-            this.TopControlstoolStripMenuItem,
-            this.TXSettoolStripMenuItem,
-            this.TXSettoolStripMenuItem2,
-            this.TXSettoolStripMenuItem3,
-            this.TXSettoolStripMenuItem4,
-            this.modeToolStripMenuItem,
-            this.bandToolStripMenuItem,
-            this.dSPToolStripMenuItem,
-            this.filterToolStripMenuItem,
-            this.RX2modetoolStripMenuItem,
-            this.RX2bandtoolStripMenuItem,
-            this.RX2dSPtoolStripMenuItem,
-            this.RX2filtertoolStripMenuItem,
-            this.VFOVACtoolStripMenuItem,
-            this.RXTXGainToolStripMenuItem,
-            this.BtnBartoolStripMenuItem,
-            this.linearityToolStripMenuItem,
-            this.RAtoolStripMenuItem,
-            this.wBToolStripMenuItem,
-            this.pIToolStripMenuItem,
-            this.BPFToolStripMenuItem,
-            this.finderMenuItem,
-            this.miAbout});
-            this.menuStrip1.Name = "menuStrip1";
-            // 
-            // setupToolStripMenuItem
-            // 
-            this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setupToolStripMenuItem1,
-            this.databaseManagerToolStripMenuItem});
-            this.setupToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-            resources.ApplyResources(this.setupToolStripMenuItem, "setupToolStripMenuItem");
-            this.setupToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.setupToolStripMenuItem_MouseUp);
-            // 
-            // setupToolStripMenuItem1
-            // 
-            this.setupToolStripMenuItem1.Name = "setupToolStripMenuItem1";
-            resources.ApplyResources(this.setupToolStripMenuItem1, "setupToolStripMenuItem1");
-            this.setupToolStripMenuItem1.Click += new System.EventHandler(this.setupToolStripMenuItem1_Click);
-            // 
-            // databaseManagerToolStripMenuItem
-            // 
-            this.databaseManagerToolStripMenuItem.Name = "databaseManagerToolStripMenuItem";
-            resources.ApplyResources(this.databaseManagerToolStripMenuItem, "databaseManagerToolStripMenuItem");
-            this.databaseManagerToolStripMenuItem.Click += new System.EventHandler(this.databaseManagerToolStripMenuItem_Click);
-            // 
-            // memoryToolStripMenuItem
-            // 
-            this.memoryToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.memoryToolStripMenuItem.Name = "memoryToolStripMenuItem";
-            resources.ApplyResources(this.memoryToolStripMenuItem, "memoryToolStripMenuItem");
-            this.memoryToolStripMenuItem.Click += new System.EventHandler(this.memoryToolStripMenuItem_Click);
-            // 
-            // waveToolStripMenuItem
-            // 
-            this.waveToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.waveToolStripMenuItem.Name = "waveToolStripMenuItem";
-            resources.ApplyResources(this.waveToolStripMenuItem, "waveToolStripMenuItem");
-            this.waveToolStripMenuItem.Click += new System.EventHandler(this.waveToolStripMenuItem_Click);
-            // 
-            // equalizerToolStripMenuItem
-            // 
-            this.equalizerToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.equalizerToolStripMenuItem.Name = "equalizerToolStripMenuItem";
-            resources.ApplyResources(this.equalizerToolStripMenuItem, "equalizerToolStripMenuItem");
-            this.equalizerToolStripMenuItem.Click += new System.EventHandler(this.equalizerToolStripMenuItem_Click);
-            // 
-            // xVTRsToolStripMenuItem
-            // 
-            this.xVTRsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.xVTRsToolStripMenuItem.Name = "xVTRsToolStripMenuItem";
-            resources.ApplyResources(this.xVTRsToolStripMenuItem, "xVTRsToolStripMenuItem");
-            this.xVTRsToolStripMenuItem.Click += new System.EventHandler(this.xVTRsToolStripMenuItem_Click);
-            // 
-            // cWXToolStripMenuItem
-            // 
-            this.cWXToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.cWXToolStripMenuItem.Name = "cWXToolStripMenuItem";
-            resources.ApplyResources(this.cWXToolStripMenuItem, "cWXToolStripMenuItem");
-            this.cWXToolStripMenuItem.Click += new System.EventHandler(this.cWXToolStripMenuItem_Click);
-            // 
-            // eSCToolStripMenuItem
-            // 
-            this.eSCToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.eSCToolStripMenuItem.Name = "eSCToolStripMenuItem";
-            resources.ApplyResources(this.eSCToolStripMenuItem, "eSCToolStripMenuItem");
-            this.eSCToolStripMenuItem.Click += new System.EventHandler(this.eSCToolStripMenuItem_Click);
-            // 
-            // spotterMenu
-            // 
-            this.spotterMenu.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.spotterMenu.Name = "spotterMenu";
-            resources.ApplyResources(this.spotterMenu, "spotterMenu");
-            this.spotterMenu.Click += new System.EventHandler(this.spotterMenu_Click);
-            // 
-            // collapseToolStripMenuItem
-            // 
-            this.collapseToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.collapseToolStripMenuItem.Name = "collapseToolStripMenuItem";
-            resources.ApplyResources(this.collapseToolStripMenuItem, "collapseToolStripMenuItem");
-            this.collapseToolStripMenuItem.Click += new System.EventHandler(this.CollapseToolStripMenuItem_Click);
-            // 
-            // TopControlstoolStripMenuItem
-            // 
-            this.TopControlstoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TopControlstoolStripMenuItem.Name = "TopControlstoolStripMenuItem";
-            resources.ApplyResources(this.TopControlstoolStripMenuItem, "TopControlstoolStripMenuItem");
-            this.TopControlstoolStripMenuItem.Click += new System.EventHandler(this.TopControlstoolStripMenuItem_Click);
-            // 
-            // TXSettoolStripMenuItem
-            // 
-            this.TXSettoolStripMenuItem.CheckOnClick = true;
-            this.TXSettoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TXSettoolStripMenuItem.Name = "TXSettoolStripMenuItem";
-            resources.ApplyResources(this.TXSettoolStripMenuItem, "TXSettoolStripMenuItem");
-            this.TXSettoolStripMenuItem.Click += new System.EventHandler(this.TXSettoolStripMenuItem_Click);
-            // 
-            // TXSettoolStripMenuItem2
-            // 
-            this.TXSettoolStripMenuItem2.CheckOnClick = true;
-            this.TXSettoolStripMenuItem2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TXSettoolStripMenuItem2.Name = "TXSettoolStripMenuItem2";
-            resources.ApplyResources(this.TXSettoolStripMenuItem2, "TXSettoolStripMenuItem2");
-            this.TXSettoolStripMenuItem2.Click += new System.EventHandler(this.TXSettoolStripMenuItem2_Click);
-            // 
-            // TXSettoolStripMenuItem3
-            // 
-            this.TXSettoolStripMenuItem3.CheckOnClick = true;
-            this.TXSettoolStripMenuItem3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TXSettoolStripMenuItem3.Name = "TXSettoolStripMenuItem3";
-            resources.ApplyResources(this.TXSettoolStripMenuItem3, "TXSettoolStripMenuItem3");
-            this.TXSettoolStripMenuItem3.Click += new System.EventHandler(this.TXSettoolStripMenuItem3_Click);
-            // 
-            // TXSettoolStripMenuItem4
-            // 
-            this.TXSettoolStripMenuItem4.CheckOnClick = true;
-            this.TXSettoolStripMenuItem4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.TXSettoolStripMenuItem4.Name = "TXSettoolStripMenuItem4";
-            resources.ApplyResources(this.TXSettoolStripMenuItem4, "TXSettoolStripMenuItem4");
-            this.TXSettoolStripMenuItem4.Click += new System.EventHandler(this.TXSettoolStripMenuItem4_Click);
-            // 
-            // modeToolStripMenuItem
-            // 
-            this.modeToolStripMenuItem.CheckOnClick = true;
-            this.modeToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.modeToolStripMenuItem.Name = "modeToolStripMenuItem";
-            resources.ApplyResources(this.modeToolStripMenuItem, "modeToolStripMenuItem");
-            this.modeToolStripMenuItem.Click += new System.EventHandler(this.modeToolStripMenuItem_Click);
-            // 
-            // lSBToolStripMenuItem
-            // 
-            this.lSBToolStripMenuItem.Name = "lSBToolStripMenuItem";
-            resources.ApplyResources(this.lSBToolStripMenuItem, "lSBToolStripMenuItem");
-            this.lSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // uSBToolStripMenuItem
-            // 
-            this.uSBToolStripMenuItem.Name = "uSBToolStripMenuItem";
-            resources.ApplyResources(this.uSBToolStripMenuItem, "uSBToolStripMenuItem");
-            this.uSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // dSBToolStripMenuItem
-            // 
-            this.dSBToolStripMenuItem.Name = "dSBToolStripMenuItem";
-            resources.ApplyResources(this.dSBToolStripMenuItem, "dSBToolStripMenuItem");
-            this.dSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // cWLToolStripMenuItem
-            // 
-            this.cWLToolStripMenuItem.Name = "cWLToolStripMenuItem";
-            resources.ApplyResources(this.cWLToolStripMenuItem, "cWLToolStripMenuItem");
-            this.cWLToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // cWUToolStripMenuItem
-            // 
-            this.cWUToolStripMenuItem.Name = "cWUToolStripMenuItem";
-            resources.ApplyResources(this.cWUToolStripMenuItem, "cWUToolStripMenuItem");
-            this.cWUToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // fMToolStripMenuItem
-            // 
-            this.fMToolStripMenuItem.Name = "fMToolStripMenuItem";
-            resources.ApplyResources(this.fMToolStripMenuItem, "fMToolStripMenuItem");
-            this.fMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // aMToolStripMenuItem
-            // 
-            this.aMToolStripMenuItem.Name = "aMToolStripMenuItem";
-            resources.ApplyResources(this.aMToolStripMenuItem, "aMToolStripMenuItem");
-            this.aMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // sAMToolStripMenuItem
-            // 
-            this.sAMToolStripMenuItem.Name = "sAMToolStripMenuItem";
-            resources.ApplyResources(this.sAMToolStripMenuItem, "sAMToolStripMenuItem");
-            this.sAMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // sPECToolStripMenuItem
-            // 
-            this.sPECToolStripMenuItem.Name = "sPECToolStripMenuItem";
-            resources.ApplyResources(this.sPECToolStripMenuItem, "sPECToolStripMenuItem");
-            this.sPECToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // dIGLToolStripMenuItem
-            // 
-            this.dIGLToolStripMenuItem.Name = "dIGLToolStripMenuItem";
-            resources.ApplyResources(this.dIGLToolStripMenuItem, "dIGLToolStripMenuItem");
-            this.dIGLToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // dIGUToolStripMenuItem
-            // 
-            this.dIGUToolStripMenuItem.Name = "dIGUToolStripMenuItem";
-            resources.ApplyResources(this.dIGUToolStripMenuItem, "dIGUToolStripMenuItem");
-            this.dIGUToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // dRMToolStripMenuItem
-            // 
-            this.dRMToolStripMenuItem.Name = "dRMToolStripMenuItem";
-            resources.ApplyResources(this.dRMToolStripMenuItem, "dRMToolStripMenuItem");
-            this.dRMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
-            // 
-            // bandToolStripMenuItem
-            // 
-            this.bandToolStripMenuItem.CheckOnClick = true;
-            this.bandToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.bandToolStripMenuItem.Name = "bandToolStripMenuItem";
-            resources.ApplyResources(this.bandToolStripMenuItem, "bandToolStripMenuItem");
-            this.bandToolStripMenuItem.Click += new System.EventHandler(this.bandToolStripMenuItem_Click);
-            // 
-            // bandtoolStripMenuItem1
-            // 
-            this.bandtoolStripMenuItem1.Name = "bandtoolStripMenuItem1";
-            resources.ApplyResources(this.bandtoolStripMenuItem1, "bandtoolStripMenuItem1");
-            this.bandtoolStripMenuItem1.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem2
-            // 
-            this.bandtoolStripMenuItem2.Name = "bandtoolStripMenuItem2";
-            resources.ApplyResources(this.bandtoolStripMenuItem2, "bandtoolStripMenuItem2");
-            this.bandtoolStripMenuItem2.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem3
-            // 
-            this.bandtoolStripMenuItem3.Name = "bandtoolStripMenuItem3";
-            resources.ApplyResources(this.bandtoolStripMenuItem3, "bandtoolStripMenuItem3");
-            this.bandtoolStripMenuItem3.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem4
-            // 
-            this.bandtoolStripMenuItem4.Name = "bandtoolStripMenuItem4";
-            resources.ApplyResources(this.bandtoolStripMenuItem4, "bandtoolStripMenuItem4");
-            this.bandtoolStripMenuItem4.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem5
-            // 
-            this.bandtoolStripMenuItem5.Name = "bandtoolStripMenuItem5";
-            resources.ApplyResources(this.bandtoolStripMenuItem5, "bandtoolStripMenuItem5");
-            this.bandtoolStripMenuItem5.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem14
-            // 
-            this.bandtoolStripMenuItem14.Name = "bandtoolStripMenuItem14";
-            resources.ApplyResources(this.bandtoolStripMenuItem14, "bandtoolStripMenuItem14");
-            this.bandtoolStripMenuItem14.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem7
-            // 
-            this.bandtoolStripMenuItem7.Name = "bandtoolStripMenuItem7";
-            resources.ApplyResources(this.bandtoolStripMenuItem7, "bandtoolStripMenuItem7");
-            this.bandtoolStripMenuItem7.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem8
-            // 
-            this.bandtoolStripMenuItem8.Name = "bandtoolStripMenuItem8";
-            resources.ApplyResources(this.bandtoolStripMenuItem8, "bandtoolStripMenuItem8");
-            this.bandtoolStripMenuItem8.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem9
-            // 
-            this.bandtoolStripMenuItem9.Name = "bandtoolStripMenuItem9";
-            resources.ApplyResources(this.bandtoolStripMenuItem9, "bandtoolStripMenuItem9");
-            this.bandtoolStripMenuItem9.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem10
-            // 
-            this.bandtoolStripMenuItem10.Name = "bandtoolStripMenuItem10";
-            resources.ApplyResources(this.bandtoolStripMenuItem10, "bandtoolStripMenuItem10");
-            this.bandtoolStripMenuItem10.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem11
-            // 
-            this.bandtoolStripMenuItem11.Name = "bandtoolStripMenuItem11";
-            resources.ApplyResources(this.bandtoolStripMenuItem11, "bandtoolStripMenuItem11");
-            this.bandtoolStripMenuItem11.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem12
-            // 
-            this.bandtoolStripMenuItem12.Name = "bandtoolStripMenuItem12";
-            resources.ApplyResources(this.bandtoolStripMenuItem12, "bandtoolStripMenuItem12");
-            this.bandtoolStripMenuItem12.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // bandtoolStripMenuItem13
-            // 
-            this.bandtoolStripMenuItem13.Name = "bandtoolStripMenuItem13";
-            resources.ApplyResources(this.bandtoolStripMenuItem13, "bandtoolStripMenuItem13");
-            this.bandtoolStripMenuItem13.Click += new System.EventHandler(this.mnuBand_Click);
-            // 
-            // dSPToolStripMenuItem
-            // 
-            this.dSPToolStripMenuItem.CheckOnClick = true;
-            this.dSPToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dSPToolStripMenuItem.Name = "dSPToolStripMenuItem";
-            resources.ApplyResources(this.dSPToolStripMenuItem, "dSPToolStripMenuItem");
-            this.dSPToolStripMenuItem.Click += new System.EventHandler(this.dSPToolStripMenuItem_Click);
-            // 
-            // NRToolStripMenuItem
-            // 
-            this.NRToolStripMenuItem.Name = "NRToolStripMenuItem";
-            resources.ApplyResources(this.NRToolStripMenuItem, "NRToolStripMenuItem");
-            this.NRToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // NR2ToolStripMenuItem1
-            // 
-            this.NR2ToolStripMenuItem1.Name = "NR2ToolStripMenuItem1";
-            resources.ApplyResources(this.NR2ToolStripMenuItem1, "NR2ToolStripMenuItem1");
-            this.NR2ToolStripMenuItem1.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // NR3ToolStripMenuItem
-            // 
-            this.NR3ToolStripMenuItem.Name = "NR3ToolStripMenuItem";
-            resources.ApplyResources(this.NR3ToolStripMenuItem, "NR3ToolStripMenuItem");
-            this.NR3ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // NR4ToolStripMenuItem
-            // 
-            this.NR4ToolStripMenuItem.Name = "NR4ToolStripMenuItem";
-            resources.ApplyResources(this.NR4ToolStripMenuItem, "NR4ToolStripMenuItem");
-            this.NR4ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // ANFToolStripMenuItem
-            // 
-            this.ANFToolStripMenuItem.Name = "ANFToolStripMenuItem";
-            resources.ApplyResources(this.ANFToolStripMenuItem, "ANFToolStripMenuItem");
-            this.ANFToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // NBToolStripMenuItem
-            // 
-            this.NBToolStripMenuItem.Name = "NBToolStripMenuItem";
-            resources.ApplyResources(this.NBToolStripMenuItem, "NBToolStripMenuItem");
-            this.NBToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // NB2ToolStripMenuItem
-            // 
-            this.NB2ToolStripMenuItem.Name = "NB2ToolStripMenuItem";
-            resources.ApplyResources(this.NB2ToolStripMenuItem, "NB2ToolStripMenuItem");
-            this.NB2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // SNBtoolStripMenuItem
-            // 
-            this.SNBtoolStripMenuItem.Name = "SNBtoolStripMenuItem";
-            resources.ApplyResources(this.SNBtoolStripMenuItem, "SNBtoolStripMenuItem");
-            this.SNBtoolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // BINToolStripMenuItem
-            // 
-            this.BINToolStripMenuItem.Name = "BINToolStripMenuItem";
-            resources.ApplyResources(this.BINToolStripMenuItem, "BINToolStripMenuItem");
-            this.BINToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // MultiRXToolStripMenuItem
-            // 
-            this.MultiRXToolStripMenuItem.Name = "MultiRXToolStripMenuItem";
-            resources.ApplyResources(this.MultiRXToolStripMenuItem, "MultiRXToolStripMenuItem");
-            this.MultiRXToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // RX1AVGToolStripMenuItem
-            // 
-            this.RX1AVGToolStripMenuItem.Name = "RX1AVGToolStripMenuItem";
-            resources.ApplyResources(this.RX1AVGToolStripMenuItem, "RX1AVGToolStripMenuItem");
-            this.RX1AVGToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // RX1PeakToolStripMenuItem
-            // 
-            this.RX1PeakToolStripMenuItem.Name = "RX1PeakToolStripMenuItem";
-            resources.ApplyResources(this.RX1PeakToolStripMenuItem, "RX1PeakToolStripMenuItem");
-            this.RX1PeakToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
-            // 
-            // filterToolStripMenuItem
-            // 
-            this.filterToolStripMenuItem.CheckOnClick = true;
-            this.filterToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
-            resources.ApplyResources(this.filterToolStripMenuItem, "filterToolStripMenuItem");
-            this.filterToolStripMenuItem.Click += new System.EventHandler(this.filterToolStripMenuItem_Click);
-            // 
-            // FilterToolStripMenuItem1
-            // 
-            this.FilterToolStripMenuItem1.Name = "FilterToolStripMenuItem1";
-            resources.ApplyResources(this.FilterToolStripMenuItem1, "FilterToolStripMenuItem1");
-            this.FilterToolStripMenuItem1.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem2
-            // 
-            this.FilterToolStripMenuItem2.Name = "FilterToolStripMenuItem2";
-            resources.ApplyResources(this.FilterToolStripMenuItem2, "FilterToolStripMenuItem2");
-            this.FilterToolStripMenuItem2.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem3
-            // 
-            this.FilterToolStripMenuItem3.Name = "FilterToolStripMenuItem3";
-            resources.ApplyResources(this.FilterToolStripMenuItem3, "FilterToolStripMenuItem3");
-            this.FilterToolStripMenuItem3.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem4
-            // 
-            this.FilterToolStripMenuItem4.Name = "FilterToolStripMenuItem4";
-            resources.ApplyResources(this.FilterToolStripMenuItem4, "FilterToolStripMenuItem4");
-            this.FilterToolStripMenuItem4.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem5
-            // 
-            this.FilterToolStripMenuItem5.Name = "FilterToolStripMenuItem5";
-            resources.ApplyResources(this.FilterToolStripMenuItem5, "FilterToolStripMenuItem5");
-            this.FilterToolStripMenuItem5.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem6
-            // 
-            this.FilterToolStripMenuItem6.Name = "FilterToolStripMenuItem6";
-            resources.ApplyResources(this.FilterToolStripMenuItem6, "FilterToolStripMenuItem6");
-            this.FilterToolStripMenuItem6.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem7
-            // 
-            this.FilterToolStripMenuItem7.Name = "FilterToolStripMenuItem7";
-            resources.ApplyResources(this.FilterToolStripMenuItem7, "FilterToolStripMenuItem7");
-            this.FilterToolStripMenuItem7.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem8
-            // 
-            this.FilterToolStripMenuItem8.Name = "FilterToolStripMenuItem8";
-            resources.ApplyResources(this.FilterToolStripMenuItem8, "FilterToolStripMenuItem8");
-            this.FilterToolStripMenuItem8.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem9
-            // 
-            this.FilterToolStripMenuItem9.Name = "FilterToolStripMenuItem9";
-            resources.ApplyResources(this.FilterToolStripMenuItem9, "FilterToolStripMenuItem9");
-            this.FilterToolStripMenuItem9.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // FilterToolStripMenuItem10
-            // 
-            this.FilterToolStripMenuItem10.Name = "FilterToolStripMenuItem10";
-            resources.ApplyResources(this.FilterToolStripMenuItem10, "FilterToolStripMenuItem10");
-            this.FilterToolStripMenuItem10.Click += new System.EventHandler(this.mnuFilter_Click);
-            // 
-            // RX2modetoolStripMenuItem
-            // 
-            this.RX2modetoolStripMenuItem.CheckOnClick = true;
-            this.RX2modetoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RX2modetoolStripMenuItem.Name = "RX2modetoolStripMenuItem";
-            resources.ApplyResources(this.RX2modetoolStripMenuItem, "RX2modetoolStripMenuItem");
-            this.RX2modetoolStripMenuItem.Click += new System.EventHandler(this.RX2modetoolStripMenuItem_Click);
-            // 
-            // RX2bandtoolStripMenuItem
-            // 
-            this.RX2bandtoolStripMenuItem.CheckOnClick = true;
-            this.RX2bandtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RX2bandtoolStripMenuItem.Name = "RX2bandtoolStripMenuItem";
-            resources.ApplyResources(this.RX2bandtoolStripMenuItem, "RX2bandtoolStripMenuItem");
-            this.RX2bandtoolStripMenuItem.Click += new System.EventHandler(this.RX2bandtoolStripMenuItem_Click);
-            // 
-            // RX2dSPtoolStripMenuItem
-            // 
-            this.RX2dSPtoolStripMenuItem.CheckOnClick = true;
-            this.RX2dSPtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RX2dSPtoolStripMenuItem.Name = "RX2dSPtoolStripMenuItem";
-            resources.ApplyResources(this.RX2dSPtoolStripMenuItem, "RX2dSPtoolStripMenuItem");
-            this.RX2dSPtoolStripMenuItem.Click += new System.EventHandler(this.RX2dSPtoolStripMenuItem_Click);
-            // 
-            // RX2filtertoolStripMenuItem
-            // 
-            this.RX2filtertoolStripMenuItem.CheckOnClick = true;
-            this.RX2filtertoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RX2filtertoolStripMenuItem.Name = "RX2filtertoolStripMenuItem";
-            resources.ApplyResources(this.RX2filtertoolStripMenuItem, "RX2filtertoolStripMenuItem");
-            this.RX2filtertoolStripMenuItem.Click += new System.EventHandler(this.RX2filtertoolStripMenuItem_Click);
-            // 
-            // VFOVACtoolStripMenuItem
-            // 
-            this.VFOVACtoolStripMenuItem.CheckOnClick = true;
-            this.VFOVACtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.VFOVACtoolStripMenuItem.Name = "VFOVACtoolStripMenuItem";
-            resources.ApplyResources(this.VFOVACtoolStripMenuItem, "VFOVACtoolStripMenuItem");
-            this.VFOVACtoolStripMenuItem.Click += new System.EventHandler(this.VFOVACtoolStripMenuItem_Click);
-            // 
-            // RXTXGainToolStripMenuItem
-            // 
-            this.RXTXGainToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RXTXGainToolStripMenuItem.Name = "RXTXGainToolStripMenuItem";
-            resources.ApplyResources(this.RXTXGainToolStripMenuItem, "RXTXGainToolStripMenuItem");
-            this.RXTXGainToolStripMenuItem.Click += new System.EventHandler(this.RXTXGainToolStripMenuItem_Click);
-            // 
-            // BtnBartoolStripMenuItem
-            // 
-            this.BtnBartoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.BtnBartoolStripMenuItem.Name = "BtnBartoolStripMenuItem";
-            resources.ApplyResources(this.BtnBartoolStripMenuItem, "BtnBartoolStripMenuItem");
-            this.BtnBartoolStripMenuItem.Click += new System.EventHandler(this.BtnBartoolStripMenuItem_Click);
-            // 
-            // linearityToolStripMenuItem
-            // 
-            this.linearityToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.linearityToolStripMenuItem.Name = "linearityToolStripMenuItem";
-            resources.ApplyResources(this.linearityToolStripMenuItem, "linearityToolStripMenuItem");
-            this.linearityToolStripMenuItem.Click += new System.EventHandler(this.linearityToolStripMenuItem_Click);
-            // 
-            // RAtoolStripMenuItem
-            // 
-            this.RAtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.RAtoolStripMenuItem.Name = "RAtoolStripMenuItem";
-            resources.ApplyResources(this.RAtoolStripMenuItem, "RAtoolStripMenuItem");
-            this.RAtoolStripMenuItem.Click += new System.EventHandler(this.RAtoolStripMenuItem_Click);
-            // 
-            // wBToolStripMenuItem
-            // 
-            this.wBToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.wBToolStripMenuItem.Name = "wBToolStripMenuItem";
-            resources.ApplyResources(this.wBToolStripMenuItem, "wBToolStripMenuItem");
-            this.wBToolStripMenuItem.Click += new System.EventHandler(this.wBToolStripMenuItem_Click);
-            // 
-            // pIToolStripMenuItem
-            // 
-            this.pIToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pIToolStripMenuItem.Name = "pIToolStripMenuItem";
-            resources.ApplyResources(this.pIToolStripMenuItem, "pIToolStripMenuItem");
-            this.pIToolStripMenuItem.Click += new System.EventHandler(this.pIToolStripMenuItem_Click);
-            // 
-            // BPFToolStripMenuItem
-            // 
-            this.BPFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.BPF1ToolStripMenuItem,
-            this.BPF2ToolStripMenuItem});
-            this.BPFToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.BPFToolStripMenuItem.Name = "BPFToolStripMenuItem";
-            resources.ApplyResources(this.BPFToolStripMenuItem, "BPFToolStripMenuItem");
-            this.BPFToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BPFToolStripMenuItem_MouseUp);
-            // 
-            // BPF1ToolStripMenuItem
-            // 
-            this.BPF1ToolStripMenuItem.Name = "BPF1ToolStripMenuItem";
-            resources.ApplyResources(this.BPF1ToolStripMenuItem, "BPF1ToolStripMenuItem");
-            this.BPF1ToolStripMenuItem.Click += new System.EventHandler(this.BPF1ToolStripMenuItem_Click);
-            // 
-            // BPF2ToolStripMenuItem
-            // 
-            this.BPF2ToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.BPF2ToolStripMenuItem.Name = "BPF2ToolStripMenuItem";
-            resources.ApplyResources(this.BPF2ToolStripMenuItem, "BPF2ToolStripMenuItem");
-            this.BPF2ToolStripMenuItem.Click += new System.EventHandler(this.BPF2ToolStripMenuItem_Click);
-            // 
-            // finderMenuItem
-            // 
-            this.finderMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.finderMenuItem.Name = "finderMenuItem";
-            resources.ApplyResources(this.finderMenuItem, "finderMenuItem");
-            this.finderMenuItem.Click += new System.EventHandler(this.finderMenuItem_Click);
-            // 
-            // miAbout
-            // 
-            this.miAbout.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.miAbout.Name = "miAbout";
-            resources.ApplyResources(this.miAbout, "miAbout");
-            this.miAbout.Click += new System.EventHandler(this.miAbout_Click);
-            // 
-            // bandToolStripMenuItem6
-            // 
-            this.bandToolStripMenuItem6.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2,
-            this.toolStripMenuItem3,
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem5,
-            this.toolStripMenuItem6,
-            this.toolStripMenuItem7,
-            this.toolStripMenuItem8,
-            this.toolStripMenuItem9,
-            this.toolStripMenuItem10,
-            this.toolStripMenuItem11,
-            this.toolStripMenuItem12,
-            this.wWVToolStripMenuItem,
-            this.gENToolStripMenuItem});
-            this.bandToolStripMenuItem6.Name = "bandToolStripMenuItem6";
-            resources.ApplyResources(this.bandToolStripMenuItem6, "bandToolStripMenuItem6");
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
-            this.toolStripMenuItem5.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem6
-            // 
-            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
-            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
-            this.toolStripMenuItem6.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem7
-            // 
-            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-            resources.ApplyResources(this.toolStripMenuItem7, "toolStripMenuItem7");
-            this.toolStripMenuItem7.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem8
-            // 
-            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            resources.ApplyResources(this.toolStripMenuItem8, "toolStripMenuItem8");
-            this.toolStripMenuItem8.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem9
-            // 
-            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            resources.ApplyResources(this.toolStripMenuItem9, "toolStripMenuItem9");
-            this.toolStripMenuItem9.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem10
-            // 
-            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-            resources.ApplyResources(this.toolStripMenuItem10, "toolStripMenuItem10");
-            this.toolStripMenuItem10.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem11
-            // 
-            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
-            resources.ApplyResources(this.toolStripMenuItem11, "toolStripMenuItem11");
-            this.toolStripMenuItem11.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // toolStripMenuItem12
-            // 
-            this.toolStripMenuItem12.Name = "toolStripMenuItem12";
-            resources.ApplyResources(this.toolStripMenuItem12, "toolStripMenuItem12");
-            this.toolStripMenuItem12.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // wWVToolStripMenuItem
-            // 
-            this.wWVToolStripMenuItem.Name = "wWVToolStripMenuItem";
-            resources.ApplyResources(this.wWVToolStripMenuItem, "wWVToolStripMenuItem");
-            this.wWVToolStripMenuItem.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // gENToolStripMenuItem
-            // 
-            this.gENToolStripMenuItem.Name = "gENToolStripMenuItem";
-            resources.ApplyResources(this.gENToolStripMenuItem, "gENToolStripMenuItem");
-            this.gENToolStripMenuItem.Click += new System.EventHandler(this.mnuBandRX2_Click);
-            // 
-            // modeToolStripMenuItem1
-            // 
-            this.modeToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lSBToolStripMenuItem1,
-            this.uSBToolStripMenuItem1,
-            this.dSBToolStripMenuItem1,
-            this.cWLToolStripMenuItem1,
-            this.cWUToolStripMenuItem1,
-            this.fMToolStripMenuItem1,
-            this.aMToolStripMenuItem1,
-            this.sAMToolStripMenuItem1,
-            this.dIGLToolStripMenuItem1,
-            this.dIGUToolStripMenuItem1,
-            this.dRMToolStripMenuItem1});
-            this.modeToolStripMenuItem1.Name = "modeToolStripMenuItem1";
-            resources.ApplyResources(this.modeToolStripMenuItem1, "modeToolStripMenuItem1");
-            // 
-            // lSBToolStripMenuItem1
-            // 
-            this.lSBToolStripMenuItem1.Name = "lSBToolStripMenuItem1";
-            resources.ApplyResources(this.lSBToolStripMenuItem1, "lSBToolStripMenuItem1");
-            this.lSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // uSBToolStripMenuItem1
-            // 
-            this.uSBToolStripMenuItem1.Name = "uSBToolStripMenuItem1";
-            resources.ApplyResources(this.uSBToolStripMenuItem1, "uSBToolStripMenuItem1");
-            this.uSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // dSBToolStripMenuItem1
-            // 
-            this.dSBToolStripMenuItem1.Name = "dSBToolStripMenuItem1";
-            resources.ApplyResources(this.dSBToolStripMenuItem1, "dSBToolStripMenuItem1");
-            this.dSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // cWLToolStripMenuItem1
-            // 
-            this.cWLToolStripMenuItem1.Name = "cWLToolStripMenuItem1";
-            resources.ApplyResources(this.cWLToolStripMenuItem1, "cWLToolStripMenuItem1");
-            this.cWLToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // cWUToolStripMenuItem1
-            // 
-            this.cWUToolStripMenuItem1.Name = "cWUToolStripMenuItem1";
-            resources.ApplyResources(this.cWUToolStripMenuItem1, "cWUToolStripMenuItem1");
-            this.cWUToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // fMToolStripMenuItem1
-            // 
-            this.fMToolStripMenuItem1.Name = "fMToolStripMenuItem1";
-            resources.ApplyResources(this.fMToolStripMenuItem1, "fMToolStripMenuItem1");
-            this.fMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // aMToolStripMenuItem1
-            // 
-            this.aMToolStripMenuItem1.Name = "aMToolStripMenuItem1";
-            resources.ApplyResources(this.aMToolStripMenuItem1, "aMToolStripMenuItem1");
-            this.aMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // sAMToolStripMenuItem1
-            // 
-            this.sAMToolStripMenuItem1.Name = "sAMToolStripMenuItem1";
-            resources.ApplyResources(this.sAMToolStripMenuItem1, "sAMToolStripMenuItem1");
-            this.sAMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // dIGLToolStripMenuItem1
-            // 
-            this.dIGLToolStripMenuItem1.Name = "dIGLToolStripMenuItem1";
-            resources.ApplyResources(this.dIGLToolStripMenuItem1, "dIGLToolStripMenuItem1");
-            this.dIGLToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // dIGUToolStripMenuItem1
-            // 
-            this.dIGUToolStripMenuItem1.Name = "dIGUToolStripMenuItem1";
-            resources.ApplyResources(this.dIGUToolStripMenuItem1, "dIGUToolStripMenuItem1");
-            this.dIGUToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // dRMToolStripMenuItem1
-            // 
-            this.dRMToolStripMenuItem1.Name = "dRMToolStripMenuItem1";
-            resources.ApplyResources(this.dRMToolStripMenuItem1, "dRMToolStripMenuItem1");
-            this.dRMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
-            // 
-            // filterToolStripMenuItem11
-            // 
-            this.filterToolStripMenuItem11.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.kToolStripMenuItem,
-            this.kToolStripMenuItem1,
-            this.kToolStripMenuItem2,
-            this.kToolStripMenuItem3,
-            this.kToolStripMenuItem4,
-            this.toolStripMenuItem13,
-            this.toolStripMenuItem14});
-            this.filterToolStripMenuItem11.Name = "filterToolStripMenuItem11";
-            resources.ApplyResources(this.filterToolStripMenuItem11, "filterToolStripMenuItem11");
-            // 
-            // kToolStripMenuItem
-            // 
-            this.kToolStripMenuItem.Name = "kToolStripMenuItem";
-            resources.ApplyResources(this.kToolStripMenuItem, "kToolStripMenuItem");
-            this.kToolStripMenuItem.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // kToolStripMenuItem1
-            // 
-            this.kToolStripMenuItem1.Name = "kToolStripMenuItem1";
-            resources.ApplyResources(this.kToolStripMenuItem1, "kToolStripMenuItem1");
-            this.kToolStripMenuItem1.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // kToolStripMenuItem2
-            // 
-            this.kToolStripMenuItem2.Name = "kToolStripMenuItem2";
-            resources.ApplyResources(this.kToolStripMenuItem2, "kToolStripMenuItem2");
-            this.kToolStripMenuItem2.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // kToolStripMenuItem3
-            // 
-            this.kToolStripMenuItem3.Name = "kToolStripMenuItem3";
-            resources.ApplyResources(this.kToolStripMenuItem3, "kToolStripMenuItem3");
-            this.kToolStripMenuItem3.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // kToolStripMenuItem4
-            // 
-            this.kToolStripMenuItem4.Name = "kToolStripMenuItem4";
-            resources.ApplyResources(this.kToolStripMenuItem4, "kToolStripMenuItem4");
-            this.kToolStripMenuItem4.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // toolStripMenuItem13
-            // 
-            this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-            resources.ApplyResources(this.toolStripMenuItem13, "toolStripMenuItem13");
-            this.toolStripMenuItem13.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // toolStripMenuItem14
-            // 
-            this.toolStripMenuItem14.Name = "toolStripMenuItem14";
-            resources.ApplyResources(this.toolStripMenuItem14, "toolStripMenuItem14");
-            this.toolStripMenuItem14.Click += new System.EventHandler(this.mnuFilterRX2_Click);
-            // 
-            // dSPToolStripMenuItem1
-            // 
-            this.dSPToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nR2ToolStripMenuItem,
-            this.NR2StripMenuItem2,
-            this.NR3ToolStripMenuItem_rx2,
-            this.NR4ToolStripMenuItem_rx2,
-            this.aNF2ToolStripMenuItem,
-            this.nB2ToolStripMenuItem1,
-            this.nBRX2ToolStripMenuItem,
-            this.SNBtoolStripMenuItem1,
-            this.bIN2ToolStripMenuItem,
-            this.RX2AVGToolStripMenuItem,
-            this.RX2PeakToolStripMenuItem});
-            this.dSPToolStripMenuItem1.Name = "dSPToolStripMenuItem1";
-            resources.ApplyResources(this.dSPToolStripMenuItem1, "dSPToolStripMenuItem1");
-            // 
-            // nR2ToolStripMenuItem
-            // 
-            this.nR2ToolStripMenuItem.Name = "nR2ToolStripMenuItem";
-            resources.ApplyResources(this.nR2ToolStripMenuItem, "nR2ToolStripMenuItem");
-            this.nR2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // NR2StripMenuItem2
-            // 
-            this.NR2StripMenuItem2.Name = "NR2StripMenuItem2";
-            resources.ApplyResources(this.NR2StripMenuItem2, "NR2StripMenuItem2");
-            this.NR2StripMenuItem2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // NR3ToolStripMenuItem_rx2
-            // 
-            this.NR3ToolStripMenuItem_rx2.Name = "NR3ToolStripMenuItem_rx2";
-            resources.ApplyResources(this.NR3ToolStripMenuItem_rx2, "NR3ToolStripMenuItem_rx2");
-            this.NR3ToolStripMenuItem_rx2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // NR4ToolStripMenuItem_rx2
-            // 
-            this.NR4ToolStripMenuItem_rx2.Name = "NR4ToolStripMenuItem_rx2";
-            resources.ApplyResources(this.NR4ToolStripMenuItem_rx2, "NR4ToolStripMenuItem_rx2");
-            this.NR4ToolStripMenuItem_rx2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // aNF2ToolStripMenuItem
-            // 
-            this.aNF2ToolStripMenuItem.Name = "aNF2ToolStripMenuItem";
-            resources.ApplyResources(this.aNF2ToolStripMenuItem, "aNF2ToolStripMenuItem");
-            this.aNF2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // nB2ToolStripMenuItem1
-            // 
-            this.nB2ToolStripMenuItem1.Name = "nB2ToolStripMenuItem1";
-            resources.ApplyResources(this.nB2ToolStripMenuItem1, "nB2ToolStripMenuItem1");
-            this.nB2ToolStripMenuItem1.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // nBRX2ToolStripMenuItem
-            // 
-            this.nBRX2ToolStripMenuItem.Name = "nBRX2ToolStripMenuItem";
-            resources.ApplyResources(this.nBRX2ToolStripMenuItem, "nBRX2ToolStripMenuItem");
-            this.nBRX2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // SNBtoolStripMenuItem1
-            // 
-            this.SNBtoolStripMenuItem1.Name = "SNBtoolStripMenuItem1";
-            resources.ApplyResources(this.SNBtoolStripMenuItem1, "SNBtoolStripMenuItem1");
-            this.SNBtoolStripMenuItem1.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // bIN2ToolStripMenuItem
-            // 
-            this.bIN2ToolStripMenuItem.Name = "bIN2ToolStripMenuItem";
-            resources.ApplyResources(this.bIN2ToolStripMenuItem, "bIN2ToolStripMenuItem");
-            this.bIN2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // RX2AVGToolStripMenuItem
-            // 
-            this.RX2AVGToolStripMenuItem.Name = "RX2AVGToolStripMenuItem";
-            resources.ApplyResources(this.RX2AVGToolStripMenuItem, "RX2AVGToolStripMenuItem");
-            this.RX2AVGToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // RX2PeakToolStripMenuItem
-            // 
-            this.RX2PeakToolStripMenuItem.Name = "RX2PeakToolStripMenuItem";
-            resources.ApplyResources(this.RX2PeakToolStripMenuItem, "RX2PeakToolStripMenuItem");
-            this.RX2PeakToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
-            // 
-            // statusStripMain
-            // 
-            resources.ApplyResources(this.statusStripMain, "statusStripMain");
-            this.statusStripMain.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.statusStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton_ScreenSize,
-            this.toolStripStatusLabel1,
-            this.toolStripDropDownButton_CPU,
-            this.toolStripStatusLabel_Volts,
-            this.toolStripStatusLabel_Amps,
-            this.toolStripStatusLabel_TXInhibit,
-            this.toolStripStatusLabel_SeqWarning,
-            this.toolStripStatusLabelRXAnt,
-            this.toolStripStatusLabelTXAnt,
-            this.toolStripStatusLabelAndromedaMulti,
-            this.toolStripStatusLabel_Fill,
-            this.toolStripStatusLabel_N1MM,
-            this.toolStripStatusLabel_TCI,
-            this.toolStripStatusLabel_CatTCPip,
-            this.toolStripStatusLabel_CatSerial,
-            this.toolStripStatusLabel_CMstatus,
-            this.toolStripStatusLabel_timer,
-            this.toolStripStatusLabel_UTCTime,
-            this.toolStripStatusLabel_Date,
-            this.toolStripStatusLabel_LocalTime});
-            this.statusStripMain.Name = "statusStripMain";
-            // 
-            // toolStripDropDownButton_ScreenSize
-            // 
-            resources.ApplyResources(this.toolStripDropDownButton_ScreenSize, "toolStripDropDownButton_ScreenSize");
-            this.toolStripDropDownButton_ScreenSize.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.includeBordersToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.toolStripMenuItem_4by3,
-            this.toolStripMenuItem_16by9,
-            this.toolStripMenuItem_16by10,
-            this.youTubeToolStripMenuItem});
-            this.toolStripDropDownButton_ScreenSize.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripDropDownButton_ScreenSize.Image = global::Thetis.Properties.Resources.screen4;
-            this.toolStripDropDownButton_ScreenSize.Name = "toolStripDropDownButton_ScreenSize";
-            this.toolStripDropDownButton_ScreenSize.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // includeBordersToolStripMenuItem
-            // 
-            this.includeBordersToolStripMenuItem.Name = "includeBordersToolStripMenuItem";
-            resources.ApplyResources(this.includeBordersToolStripMenuItem, "includeBordersToolStripMenuItem");
-            this.includeBordersToolStripMenuItem.Click += new System.EventHandler(this.includeBordersToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
-            // 
-            // toolStripMenuItem_4by3
-            // 
-            this.toolStripMenuItem_4by3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x768ToolStripMenuItem,
-            this.x864ToolStripMenuItem,
-            this.x960ToolStripMenuItem,
-            this.x1050ToolStripMenuItem,
-            this.x1200ToolStripMenuItem});
-            this.toolStripMenuItem_4by3.Name = "toolStripMenuItem_4by3";
-            resources.ApplyResources(this.toolStripMenuItem_4by3, "toolStripMenuItem_4by3");
-            this.toolStripMenuItem_4by3.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_4by3_DropDownItemClicked);
-            // 
-            // x768ToolStripMenuItem
-            // 
-            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
-            resources.ApplyResources(this.x768ToolStripMenuItem, "x768ToolStripMenuItem");
-            // 
-            // x864ToolStripMenuItem
-            // 
-            this.x864ToolStripMenuItem.Name = "x864ToolStripMenuItem";
-            resources.ApplyResources(this.x864ToolStripMenuItem, "x864ToolStripMenuItem");
-            // 
-            // x960ToolStripMenuItem
-            // 
-            this.x960ToolStripMenuItem.Name = "x960ToolStripMenuItem";
-            resources.ApplyResources(this.x960ToolStripMenuItem, "x960ToolStripMenuItem");
-            // 
-            // x1050ToolStripMenuItem
-            // 
-            this.x1050ToolStripMenuItem.Name = "x1050ToolStripMenuItem";
-            resources.ApplyResources(this.x1050ToolStripMenuItem, "x1050ToolStripMenuItem");
-            // 
-            // x1200ToolStripMenuItem
-            // 
-            this.x1200ToolStripMenuItem.Name = "x1200ToolStripMenuItem";
-            resources.ApplyResources(this.x1200ToolStripMenuItem, "x1200ToolStripMenuItem");
-            // 
-            // toolStripMenuItem_16by9
-            // 
-            this.toolStripMenuItem_16by9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x720ToolStripMenuItem,
-            this.x768ToolStripMenuItem1,
-            this.x900ToolStripMenuItem,
-            this.x1080ToolStripMenuItem,
-            this.x1440ToolStripMenuItem,
-            this.x2160ToolStripMenuItem});
-            this.toolStripMenuItem_16by9.Name = "toolStripMenuItem_16by9";
-            resources.ApplyResources(this.toolStripMenuItem_16by9, "toolStripMenuItem_16by9");
-            this.toolStripMenuItem_16by9.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by9_DropDownItemClicked);
-            // 
-            // x720ToolStripMenuItem
-            // 
-            this.x720ToolStripMenuItem.Name = "x720ToolStripMenuItem";
-            resources.ApplyResources(this.x720ToolStripMenuItem, "x720ToolStripMenuItem");
-            // 
-            // x768ToolStripMenuItem1
-            // 
-            this.x768ToolStripMenuItem1.Name = "x768ToolStripMenuItem1";
-            resources.ApplyResources(this.x768ToolStripMenuItem1, "x768ToolStripMenuItem1");
-            // 
-            // x900ToolStripMenuItem
-            // 
-            this.x900ToolStripMenuItem.Name = "x900ToolStripMenuItem";
-            resources.ApplyResources(this.x900ToolStripMenuItem, "x900ToolStripMenuItem");
-            // 
-            // x1080ToolStripMenuItem
-            // 
-            this.x1080ToolStripMenuItem.Name = "x1080ToolStripMenuItem";
-            resources.ApplyResources(this.x1080ToolStripMenuItem, "x1080ToolStripMenuItem");
-            // 
-            // x1440ToolStripMenuItem
-            // 
-            this.x1440ToolStripMenuItem.Name = "x1440ToolStripMenuItem";
-            resources.ApplyResources(this.x1440ToolStripMenuItem, "x1440ToolStripMenuItem");
-            // 
-            // x2160ToolStripMenuItem
-            // 
-            this.x2160ToolStripMenuItem.Name = "x2160ToolStripMenuItem";
-            resources.ApplyResources(this.x2160ToolStripMenuItem, "x2160ToolStripMenuItem");
-            // 
-            // toolStripMenuItem_16by10
-            // 
-            this.toolStripMenuItem_16by10.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x800ToolStripMenuItem,
-            this.x900ToolStripMenuItem1,
-            this.x1050ToolStripMenuItem1,
-            this.x1200ToolStripMenuItem1,
-            this.x1600ToolStripMenuItem,
-            this.x2400ToolStripMenuItem});
-            this.toolStripMenuItem_16by10.Name = "toolStripMenuItem_16by10";
-            resources.ApplyResources(this.toolStripMenuItem_16by10, "toolStripMenuItem_16by10");
-            this.toolStripMenuItem_16by10.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by10_DropDownItemClicked);
-            // 
-            // x800ToolStripMenuItem
-            // 
-            this.x800ToolStripMenuItem.Name = "x800ToolStripMenuItem";
-            resources.ApplyResources(this.x800ToolStripMenuItem, "x800ToolStripMenuItem");
-            // 
-            // x900ToolStripMenuItem1
-            // 
-            this.x900ToolStripMenuItem1.Name = "x900ToolStripMenuItem1";
-            resources.ApplyResources(this.x900ToolStripMenuItem1, "x900ToolStripMenuItem1");
-            // 
-            // x1050ToolStripMenuItem1
-            // 
-            this.x1050ToolStripMenuItem1.Name = "x1050ToolStripMenuItem1";
-            resources.ApplyResources(this.x1050ToolStripMenuItem1, "x1050ToolStripMenuItem1");
-            // 
-            // x1200ToolStripMenuItem1
-            // 
-            this.x1200ToolStripMenuItem1.Name = "x1200ToolStripMenuItem1";
-            resources.ApplyResources(this.x1200ToolStripMenuItem1, "x1200ToolStripMenuItem1");
-            // 
-            // x1600ToolStripMenuItem
-            // 
-            this.x1600ToolStripMenuItem.Name = "x1600ToolStripMenuItem";
-            resources.ApplyResources(this.x1600ToolStripMenuItem, "x1600ToolStripMenuItem");
-            // 
-            // x2400ToolStripMenuItem
-            // 
-            this.x2400ToolStripMenuItem.Name = "x2400ToolStripMenuItem";
-            resources.ApplyResources(this.x2400ToolStripMenuItem, "x2400ToolStripMenuItem");
-            // 
-            // youTubeToolStripMenuItem
-            // 
-            this.youTubeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pToolStripMenuItem,
-            this.pToolStripMenuItem1,
-            this.pToolStripMenuItem2,
-            this.pToolStripMenuItem3});
-            this.youTubeToolStripMenuItem.Name = "youTubeToolStripMenuItem";
-            resources.ApplyResources(this.youTubeToolStripMenuItem, "youTubeToolStripMenuItem");
-            this.youTubeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.youTubeToolStripMenuItem_DropDownItemClicked);
-            // 
-            // pToolStripMenuItem
-            // 
-            this.pToolStripMenuItem.Name = "pToolStripMenuItem";
-            resources.ApplyResources(this.pToolStripMenuItem, "pToolStripMenuItem");
-            // 
-            // pToolStripMenuItem1
-            // 
-            this.pToolStripMenuItem1.Name = "pToolStripMenuItem1";
-            resources.ApplyResources(this.pToolStripMenuItem1, "pToolStripMenuItem1");
-            // 
-            // pToolStripMenuItem2
-            // 
-            this.pToolStripMenuItem2.Name = "pToolStripMenuItem2";
-            resources.ApplyResources(this.pToolStripMenuItem2, "pToolStripMenuItem2");
-            // 
-            // pToolStripMenuItem3
-            // 
-            this.pToolStripMenuItem3.Name = "pToolStripMenuItem3";
-            resources.ApplyResources(this.pToolStripMenuItem3, "pToolStripMenuItem3");
-            // 
-            // toolStripStatusLabel1
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            // 
-            // toolStripDropDownButton_CPU
-            // 
-            resources.ApplyResources(this.toolStripDropDownButton_CPU, "toolStripDropDownButton_CPU");
-            this.toolStripDropDownButton_CPU.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.systemToolStripMenuItem,
-            this.thetisOnlyToolStripMenuItem});
-            this.toolStripDropDownButton_CPU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripDropDownButton_CPU.Image = global::Thetis.Properties.Resources.cpu;
-            this.toolStripDropDownButton_CPU.Name = "toolStripDropDownButton_CPU";
-            this.toolStripDropDownButton_CPU.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // systemToolStripMenuItem
-            // 
-            this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
-            resources.ApplyResources(this.systemToolStripMenuItem, "systemToolStripMenuItem");
-            this.systemToolStripMenuItem.Click += new System.EventHandler(this.systemToolStripMenuItem_Click);
-            // 
-            // thetisOnlyToolStripMenuItem
-            // 
-            this.thetisOnlyToolStripMenuItem.Name = "thetisOnlyToolStripMenuItem";
-            resources.ApplyResources(this.thetisOnlyToolStripMenuItem, "thetisOnlyToolStripMenuItem");
-            this.thetisOnlyToolStripMenuItem.Click += new System.EventHandler(this.thetisOnlyToolStripMenuItem_Click);
-            // 
-            // toolStripStatusLabel_Volts
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_Volts, "toolStripStatusLabel_Volts");
-            this.toolStripStatusLabel_Volts.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_Volts.Image = global::Thetis.Properties.Resources.zap;
-            this.toolStripStatusLabel_Volts.Name = "toolStripStatusLabel_Volts";
-            this.toolStripStatusLabel_Volts.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_Amps
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_Amps, "toolStripStatusLabel_Amps");
-            this.toolStripStatusLabel_Amps.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_Amps.Name = "toolStripStatusLabel_Amps";
-            this.toolStripStatusLabel_Amps.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_TXInhibit
-            // 
-            this.toolStripStatusLabel_TXInhibit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_TXInhibit.Image = global::Thetis.Properties.Resources.stop;
-            resources.ApplyResources(this.toolStripStatusLabel_TXInhibit, "toolStripStatusLabel_TXInhibit");
-            this.toolStripStatusLabel_TXInhibit.Name = "toolStripStatusLabel_TXInhibit";
-            this.toolStripStatusLabel_TXInhibit.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_SeqWarning
-            // 
-            this.toolStripStatusLabel_SeqWarning.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_SeqWarning.Image = global::Thetis.Properties.Resources.warning4;
-            resources.ApplyResources(this.toolStripStatusLabel_SeqWarning, "toolStripStatusLabel_SeqWarning");
-            this.toolStripStatusLabel_SeqWarning.Name = "toolStripStatusLabel_SeqWarning";
-            this.toolStripStatusLabel_SeqWarning.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripStatusLabel_SeqWarning.Click += new System.EventHandler(this.toolStripStatusLabel_SeqWarning_Click);
-            // 
-            // toolStripStatusLabelRXAnt
-            // 
-            resources.ApplyResources(this.toolStripStatusLabelRXAnt, "toolStripStatusLabelRXAnt");
-            this.toolStripStatusLabelRXAnt.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem20,
-            this.toolStripMenuItem19,
-            this.toolStripMenuItem18});
-            this.toolStripStatusLabelRXAnt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabelRXAnt.Image = global::Thetis.Properties.Resources.RXAnt;
-            this.toolStripStatusLabelRXAnt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStripStatusLabelRXAnt.Name = "toolStripStatusLabelRXAnt";
-            this.toolStripStatusLabelRXAnt.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripMenuItem20
-            // 
-            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
-            resources.ApplyResources(this.toolStripMenuItem20, "toolStripMenuItem20");
-            this.toolStripMenuItem20.Click += new System.EventHandler(this.ToolStripMenuItem20_Click);
-            // 
-            // toolStripMenuItem19
-            // 
-            this.toolStripMenuItem19.Name = "toolStripMenuItem19";
-            resources.ApplyResources(this.toolStripMenuItem19, "toolStripMenuItem19");
-            this.toolStripMenuItem19.Click += new System.EventHandler(this.ToolStripMenuItem19_Click);
-            // 
-            // toolStripMenuItem18
-            // 
-            this.toolStripMenuItem18.Name = "toolStripMenuItem18";
-            resources.ApplyResources(this.toolStripMenuItem18, "toolStripMenuItem18");
-            this.toolStripMenuItem18.Click += new System.EventHandler(this.ToolStripMenuItem18_Click);
-            // 
-            // toolStripStatusLabelTXAnt
-            // 
-            resources.ApplyResources(this.toolStripStatusLabelTXAnt, "toolStripStatusLabelTXAnt");
-            this.toolStripStatusLabelTXAnt.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem16,
-            this.toolStripMenuItem15,
-            this.toolStripMenuItem17});
-            this.toolStripStatusLabelTXAnt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabelTXAnt.Image = global::Thetis.Properties.Resources.txant;
-            this.toolStripStatusLabelTXAnt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStripStatusLabelTXAnt.Name = "toolStripStatusLabelTXAnt";
-            this.toolStripStatusLabelTXAnt.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripMenuItem16
-            // 
-            this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-            resources.ApplyResources(this.toolStripMenuItem16, "toolStripMenuItem16");
-            this.toolStripMenuItem16.Click += new System.EventHandler(this.ToolStripMenuItem16_Click);
-            // 
-            // toolStripMenuItem15
-            // 
-            this.toolStripMenuItem15.Name = "toolStripMenuItem15";
-            resources.ApplyResources(this.toolStripMenuItem15, "toolStripMenuItem15");
-            this.toolStripMenuItem15.Click += new System.EventHandler(this.ToolStripMenuItem15_Click);
-            // 
-            // toolStripMenuItem17
-            // 
-            this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            resources.ApplyResources(this.toolStripMenuItem17, "toolStripMenuItem17");
-            this.toolStripMenuItem17.Click += new System.EventHandler(this.ToolStripMenuItem17_Click);
-            // 
-            // toolStripStatusLabelAndromedaMulti
-            // 
-            resources.ApplyResources(this.toolStripStatusLabelAndromedaMulti, "toolStripStatusLabelAndromedaMulti");
-            this.toolStripStatusLabelAndromedaMulti.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabelAndromedaMulti.Image = global::Thetis.Properties.Resources.Multifunction;
-            this.toolStripStatusLabelAndromedaMulti.Name = "toolStripStatusLabelAndromedaMulti";
-            this.toolStripStatusLabelAndromedaMulti.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_Fill
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_Fill, "toolStripStatusLabel_Fill");
-            this.toolStripStatusLabel_Fill.Name = "toolStripStatusLabel_Fill";
-            this.toolStripStatusLabel_Fill.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripStatusLabel_Fill.Spring = true;
-            // 
-            // toolStripStatusLabel_N1MM
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_N1MM, "toolStripStatusLabel_N1MM");
-            this.toolStripStatusLabel_N1MM.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_N1MM.Image = global::Thetis.Properties.Resources.n1mm;
-            this.toolStripStatusLabel_N1MM.Name = "toolStripStatusLabel_N1MM";
-            this.toolStripStatusLabel_N1MM.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_TCI
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_TCI, "toolStripStatusLabel_TCI");
-            this.toolStripStatusLabel_TCI.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_TCI.Image = global::Thetis.Properties.Resources.tci_status;
-            this.toolStripStatusLabel_TCI.Name = "toolStripStatusLabel_TCI";
-            this.toolStripStatusLabel_TCI.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_CatTCPip
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_CatTCPip, "toolStripStatusLabel_CatTCPip");
-            this.toolStripStatusLabel_CatTCPip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_CatTCPip.Image = global::Thetis.Properties.Resources.cat_tcp_status;
-            this.toolStripStatusLabel_CatTCPip.Name = "toolStripStatusLabel_CatTCPip";
-            this.toolStripStatusLabel_CatTCPip.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_CatSerial
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_CatSerial, "toolStripStatusLabel_CatSerial");
-            this.toolStripStatusLabel_CatSerial.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_CatSerial.Name = "toolStripStatusLabel_CatSerial";
-            this.toolStripStatusLabel_CatSerial.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_CMstatus
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_CMstatus, "toolStripStatusLabel_CMstatus");
-            this.toolStripStatusLabel_CMstatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripStatusLabel_CMstatus.Image = global::Thetis.Properties.Resources.cm_red;
-            this.toolStripStatusLabel_CMstatus.Name = "toolStripStatusLabel_CMstatus";
-            this.toolStripStatusLabel_CMstatus.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_timer
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_timer, "toolStripStatusLabel_timer");
-            this.toolStripStatusLabel_timer.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_timer.Image = global::Thetis.Properties.Resources.timer_on;
-            this.toolStripStatusLabel_timer.Name = "toolStripStatusLabel_timer";
-            this.toolStripStatusLabel_timer.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripStatusLabel_timer.Click += new System.EventHandler(this.toolStripStatusLabel_timer_Click);
-            this.toolStripStatusLabel_timer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripStatusLabel_timer_MouseUp);
-            // 
-            // toolStripStatusLabel_UTCTime
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_UTCTime, "toolStripStatusLabel_UTCTime");
-            this.toolStripStatusLabel_UTCTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_UTCTime.Name = "toolStripStatusLabel_UTCTime";
-            this.toolStripStatusLabel_UTCTime.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_Date
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_Date, "toolStripStatusLabel_Date");
-            this.toolStripStatusLabel_Date.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_Date.Name = "toolStripStatusLabel_Date";
-            this.toolStripStatusLabel_Date.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            // 
-            // toolStripStatusLabel_LocalTime
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel_LocalTime, "toolStripStatusLabel_LocalTime");
-            this.toolStripStatusLabel_LocalTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStripStatusLabel_LocalTime.Name = "toolStripStatusLabel_LocalTime";
-            // 
-            // tmrAutoAGC
-            // 
-            this.tmrAutoAGC.Enabled = true;
-            this.tmrAutoAGC.Interval = 500;
-            this.tmrAutoAGC.Tick += new System.EventHandler(this.tmrAutoAGC_Tick);
-            // 
-            // picRX2Squelch
-            // 
-            this.picRX2Squelch.BackColor = System.Drawing.SystemColors.ControlText;
-            resources.ApplyResources(this.picRX2Squelch, "picRX2Squelch");
-            this.picRX2Squelch.Name = "picRX2Squelch";
-            this.picRX2Squelch.TabStop = false;
-            this.picRX2Squelch.Paint += new System.Windows.Forms.PaintEventHandler(this.picRX2Squelch_Paint);
-            // 
-            // picSquelch
-            // 
-            this.picSquelch.BackColor = System.Drawing.SystemColors.ControlText;
-            resources.ApplyResources(this.picSquelch, "picSquelch");
-            this.picSquelch.Name = "picSquelch";
-            this.picSquelch.TabStop = false;
-            this.picSquelch.Paint += new System.Windows.Forms.PaintEventHandler(this.picSquelch_Paint);
-            // 
-            // chkMNU
-            // 
-            resources.ApplyResources(this.chkMNU, "chkMNU");
-            this.chkMNU.FlatAppearance.BorderSize = 0;
-            this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkMNU.Name = "chkMNU";
-            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
-            this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
-            // 
-            // panelDisplay
-            // 
-            resources.ApplyResources(this.panelDisplay, "panelDisplay");
-            this.panelDisplay.BackColor = System.Drawing.Color.Transparent;
-            this.panelDisplay.Controls.Add(this.infoBar);
-            this.panelDisplay.Controls.Add(this.btnDisplayZTB);
-            this.panelDisplay.Controls.Add(this.radDisplayZoom4x);
-            this.panelDisplay.Controls.Add(this.radDisplayZoom2x);
-            this.panelDisplay.Controls.Add(this.radDisplayZoom1x);
-            this.panelDisplay.Controls.Add(this.radDisplayZoom05);
-            this.panelDisplay.Controls.Add(this.ptbDisplayZoom);
-            this.panelDisplay.Controls.Add(this.ptbDisplayPan);
-            this.panelDisplay.Controls.Add(this.lblDisplayZoom);
-            this.panelDisplay.Controls.Add(this.btnDisplayPanCenter);
-            this.panelDisplay.Controls.Add(this.lblDisplayPan);
-            this.panelDisplay.Controls.Add(this.pnlDisplay);
-            this.panelDisplay.Name = "panelDisplay";
-            // 
-            // infoBar
-            // 
-            resources.ApplyResources(this.infoBar, "infoBar");
-            this.infoBar.BackColor = System.Drawing.Color.Black;
-            this.infoBar.Button1Action = Thetis.ucInfoBar.ActionTypes.Blobs;
-            this.infoBar.Button2Action = Thetis.ucInfoBar.ActionTypes.ActivePeaks;
-            this.infoBar.CurrentFlip = 0;
-            this.infoBar.HideFeedback = false;
-            this.infoBar.Name = "infoBar";
-            this.infoBar.SplitterRatio = 1F;
-            this.infoBar.SwapRedBlue = false;
-            this.infoBar.Button1Clicked += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button1Clicked);
-            this.infoBar.Button2Clicked += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2Clicked);
-            this.infoBar.Button1MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button1MouseDown);
-            this.infoBar.Button2MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2MouseDown);
-            this.infoBar.SwapRedBlueChanged += new System.EventHandler(this.infoBar_SwapRedBlueChanged);
-            this.infoBar.HideFeedbackChanged += new System.EventHandler(this.infoBar_HideFeedbackChanged);
+            // chkTunerFollow
+            // 
+            resources.ApplyResources(this.chkTunerFollow, "chkTunerFollow");
+            this.chkTunerFollow.FlatAppearance.BorderSize = 0;
+            this.chkTunerFollow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkTunerFollow.Name = "chkTunerFollow";
+            this.toolTip1.SetToolTip(this.chkTunerFollow, resources.GetString("chkTunerFollow.ToolTip"));
+            this.chkTunerFollow.CheckedChanged += new System.EventHandler(this.chkTunerFollow_CheckedChanged);
+            // 
+            // chkTC
+            // 
+            resources.ApplyResources(this.chkTC, "chkTC");
+            this.chkTC.BackColor = System.Drawing.Color.Transparent;
+            this.chkTC.FlatAppearance.BorderSize = 0;
+            this.chkTC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkTC.Name = "chkTC";
+            this.toolTip1.SetToolTip(this.chkTC, resources.GetString("chkTC.ToolTip"));
+            this.chkTC.UseVisualStyleBackColor = false;
+            this.chkTC.CheckedChanged += new System.EventHandler(this.chkTC_CheckedChanged);
+            // 
+            // chkExternalPA
+            // 
+            resources.ApplyResources(this.chkExternalPA, "chkExternalPA");
+            this.chkExternalPA.FlatAppearance.BorderSize = 0;
+            this.chkExternalPA.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkExternalPA.Name = "chkExternalPA";
+            this.toolTip1.SetToolTip(this.chkExternalPA, resources.GetString("chkExternalPA.ToolTip"));
+            this.chkExternalPA.CheckedChanged += new System.EventHandler(this.chkExternalPA_CheckedChanged);
+            this.chkExternalPA.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkExternalPA_MouseDown);
+            // 
+            // ckQuickPlay
+            // 
+            resources.ApplyResources(this.ckQuickPlay, "ckQuickPlay");
+            this.ckQuickPlay.BackColor = System.Drawing.Color.Transparent;
+            this.ckQuickPlay.FlatAppearance.BorderSize = 0;
+            this.ckQuickPlay.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ckQuickPlay.Name = "ckQuickPlay";
+            this.toolTip1.SetToolTip(this.ckQuickPlay, resources.GetString("ckQuickPlay.ToolTip"));
+            this.ckQuickPlay.UseVisualStyleBackColor = false;
+            this.ckQuickPlay.CheckedChanged += new System.EventHandler(this.ckQuickPlay_CheckedChanged);
+            // 
+            // chkMON
+            // 
+            resources.ApplyResources(this.chkMON, "chkMON");
+            this.chkMON.FlatAppearance.BorderSize = 0;
+            this.chkMON.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMON.Name = "chkMON";
+            this.toolTip1.SetToolTip(this.chkMON, resources.GetString("chkMON.ToolTip"));
+            this.chkMON.CheckedChanged += new System.EventHandler(this.chkMON_CheckedChanged);
+            // 
+            // ckQuickRec
+            // 
+            resources.ApplyResources(this.ckQuickRec, "ckQuickRec");
+            this.ckQuickRec.BackColor = System.Drawing.Color.Transparent;
+            this.ckQuickRec.FlatAppearance.BorderSize = 0;
+            this.ckQuickRec.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ckQuickRec.Name = "ckQuickRec";
+            this.toolTip1.SetToolTip(this.ckQuickRec, resources.GetString("ckQuickRec.ToolTip"));
+            this.ckQuickRec.UseVisualStyleBackColor = false;
+            this.ckQuickRec.CheckedChanged += new System.EventHandler(this.ckQuickRec_CheckedChanged);
+            // 
+            // chkRX2SR
+            // 
+            resources.ApplyResources(this.chkRX2SR, "chkRX2SR");
+            this.chkRX2SR.BackColor = System.Drawing.Color.Transparent;
+            this.chkRX2SR.FlatAppearance.BorderSize = 0;
+            this.chkRX2SR.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkRX2SR.Name = "chkRX2SR";
+            this.toolTip1.SetToolTip(this.chkRX2SR, resources.GetString("chkRX2SR.ToolTip"));
+            this.chkRX2SR.UseVisualStyleBackColor = false;
+            this.chkRX2SR.CheckedChanged += new System.EventHandler(this.chkRX2SR_CheckedChanged);
+            // 
+            // chkMOX
+            // 
+            resources.ApplyResources(this.chkMOX, "chkMOX");
+            this.chkMOX.FlatAppearance.BorderSize = 0;
+            this.chkMOX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMOX.Name = "chkMOX";
+            this.toolTip1.SetToolTip(this.chkMOX, resources.GetString("chkMOX.ToolTip"));
+            this.chkMOX.CheckedChanged += new System.EventHandler(this.chkMOX_CheckedChanged);
+            this.chkMOX.Click += new System.EventHandler(this.chkMOX_Click);
+            // 
+            // chkTUN
+            // 
+            resources.ApplyResources(this.chkTUN, "chkTUN");
+            this.chkTUN.FlatAppearance.BorderSize = 0;
+            this.chkTUN.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkTUN.Name = "chkTUN";
+            this.toolTip1.SetToolTip(this.chkTUN, resources.GetString("chkTUN.ToolTip"));
+            this.chkTUN.CheckedChanged += new System.EventHandler(this.chkTUN_CheckedChanged);
+            this.chkTUN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkTUN_MouseDown);
+            // 
+            // chk2TONE
+            // 
+            resources.ApplyResources(this.chk2TONE, "chk2TONE");
+            this.chk2TONE.BackColor = System.Drawing.Color.Transparent;
+            this.chk2TONE.FlatAppearance.BorderSize = 0;
+            this.chk2TONE.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chk2TONE.Name = "chk2TONE";
+            this.toolTip1.SetToolTip(this.chk2TONE, resources.GetString("chk2TONE.ToolTip"));
+            this.chk2TONE.UseVisualStyleBackColor = false;
+            this.chk2TONE.CheckedChanged += new System.EventHandler(this.chk2TONE_CheckedChanged);
+            this.chk2TONE.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chk2TONE_MouseDown);
+            // 
+            // chkFWCATUBypass
+            // 
+            resources.ApplyResources(this.chkFWCATUBypass, "chkFWCATUBypass");
+            this.chkFWCATUBypass.FlatAppearance.BorderSize = 0;
+            this.chkFWCATUBypass.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkFWCATUBypass.Name = "chkFWCATUBypass";
+            this.toolTip1.SetToolTip(this.chkFWCATUBypass, resources.GetString("chkFWCATUBypass.ToolTip"));
+            this.chkFWCATUBypass.CheckedChanged += new System.EventHandler(this.chkFWCATUBypass_CheckedChanged);
+            this.chkFWCATUBypass.Click += new System.EventHandler(this.chkFWCATUBypass_Click);
+            this.chkFWCATUBypass.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkFWCATUBypass_MouseDown);
+            // 
+            // comboTuneMode
+            // 
+            this.comboTuneMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.comboTuneMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboTuneMode.DropDownWidth = 42;
+            resources.ApplyResources(this.comboTuneMode, "comboTuneMode");
+            this.comboTuneMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.comboTuneMode.Items.AddRange(new object[] {
+            resources.GetString("comboTuneMode.Items"),
+            resources.GetString("comboTuneMode.Items1"),
+            resources.GetString("comboTuneMode.Items2")});
+            this.comboTuneMode.Name = "comboTuneMode";
+            this.toolTip1.SetToolTip(this.comboTuneMode, resources.GetString("comboTuneMode.ToolTip"));
+            this.comboTuneMode.SelectedIndexChanged += new System.EventHandler(this.comboTuneMode_SelectedIndexChanged);
+            // 
+            // lblPAProfile
+            // 
+            this.lblPAProfile.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
+            this.lblPAProfile.ForeColor = System.Drawing.Color.White;
+            this.lblPAProfile.Name = "lblPAProfile";
+            this.toolTip1.SetToolTip(this.lblPAProfile, resources.GetString("lblPAProfile.ToolTip"));
+            this.lblPAProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblPAProfile_MouseDown);
+            // 
+            // btnAPF_type
+            // 
+            this.btnAPF_type.FlatAppearance.BorderSize = 0;
+            resources.ApplyResources(this.btnAPF_type, "btnAPF_type");
+            this.btnAPF_type.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnAPF_type.Name = "btnAPF_type";
+            this.btnAPF_type.Selectable = true;
+            this.toolTip1.SetToolTip(this.btnAPF_type, resources.GetString("btnAPF_type.ToolTip"));
+            this.btnAPF_type.UseVisualStyleBackColor = true;
+            this.btnAPF_type.Click += new System.EventHandler(this.btnAPF_type_Click);
+            this.btnAPF_type.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnAPF_type_MouseDown);
+            // 
+            // ptbCWAPFGain
+            // 
+            resources.ApplyResources(this.ptbCWAPFGain, "ptbCWAPFGain");
+            this.ptbCWAPFGain.GreenThumb = false;
+            this.ptbCWAPFGain.HeadImage = null;
+            this.ptbCWAPFGain.LargeChange = 1;
+            this.ptbCWAPFGain.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbCWAPFGain.LimitEnabled = false;
+            this.ptbCWAPFGain.LimitValue = 0;
+            this.ptbCWAPFGain.Maximum = 100;
+            this.ptbCWAPFGain.Minimum = 0;
+            this.ptbCWAPFGain.Name = "ptbCWAPFGain";
+            this.ptbCWAPFGain.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbCWAPFGain.SmallChange = 1;
+            this.ptbCWAPFGain.TabStop = false;
+            this.toolTip1.SetToolTip(this.ptbCWAPFGain, resources.GetString("ptbCWAPFGain.ToolTip"));
+            this.ptbCWAPFGain.Value = 0;
+            this.ptbCWAPFGain.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFGain_Scroll);
+            // 
+            // ptbCWAPFBandwidth
+            // 
+            resources.ApplyResources(this.ptbCWAPFBandwidth, "ptbCWAPFBandwidth");
+            this.ptbCWAPFBandwidth.GreenThumb = false;
+            this.ptbCWAPFBandwidth.HeadImage = null;
+            this.ptbCWAPFBandwidth.LargeChange = 1;
+            this.ptbCWAPFBandwidth.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbCWAPFBandwidth.LimitEnabled = false;
+            this.ptbCWAPFBandwidth.LimitValue = 10;
+            this.ptbCWAPFBandwidth.Maximum = 150;
+            this.ptbCWAPFBandwidth.Minimum = 10;
+            this.ptbCWAPFBandwidth.Name = "ptbCWAPFBandwidth";
+            this.ptbCWAPFBandwidth.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbCWAPFBandwidth.SmallChange = 1;
+            this.ptbCWAPFBandwidth.TabStop = false;
+            this.toolTip1.SetToolTip(this.ptbCWAPFBandwidth, resources.GetString("ptbCWAPFBandwidth.ToolTip"));
+            this.ptbCWAPFBandwidth.Value = 150;
+            this.ptbCWAPFBandwidth.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFBandwidth_Scroll);
+            // 
+            // ptbCWAPFFreq
+            // 
+            resources.ApplyResources(this.ptbCWAPFFreq, "ptbCWAPFFreq");
+            this.ptbCWAPFFreq.GreenThumb = false;
+            this.ptbCWAPFFreq.HeadImage = null;
+            this.ptbCWAPFFreq.LargeChange = 1;
+            this.ptbCWAPFFreq.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbCWAPFFreq.LimitEnabled = false;
+            this.ptbCWAPFFreq.LimitValue = 0;
+            this.ptbCWAPFFreq.Maximum = 250;
+            this.ptbCWAPFFreq.Minimum = -250;
+            this.ptbCWAPFFreq.Name = "ptbCWAPFFreq";
+            this.ptbCWAPFFreq.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbCWAPFFreq.SmallChange = 1;
+            this.ptbCWAPFFreq.TabStop = false;
+            this.toolTip1.SetToolTip(this.ptbCWAPFFreq, resources.GetString("ptbCWAPFFreq.ToolTip"));
+            this.ptbCWAPFFreq.Value = 0;
+            this.ptbCWAPFFreq.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFFreq_Scroll);
+            // 
+            // chkCWAPFEnabled
+            // 
+            resources.ApplyResources(this.chkCWAPFEnabled, "chkCWAPFEnabled");
+            this.chkCWAPFEnabled.FlatAppearance.BorderSize = 0;
+            this.chkCWAPFEnabled.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkCWAPFEnabled.Name = "chkCWAPFEnabled";
+            this.toolTip1.SetToolTip(this.chkCWAPFEnabled, resources.GetString("chkCWAPFEnabled.ToolTip"));
+            this.chkCWAPFEnabled.CheckedChanged += new System.EventHandler(this.chkCWAPFEnabled_CheckedChanged);
+            this.chkCWAPFEnabled.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCWAPFEnabled_MouseDown);
+            // 
+            // chkShowCWZero
+            // 
+            resources.ApplyResources(this.chkShowCWZero, "chkShowCWZero");
+            this.chkShowCWZero.ForeColor = System.Drawing.Color.White;
+            this.chkShowCWZero.Name = "chkShowCWZero";
+            this.toolTip1.SetToolTip(this.chkShowCWZero, resources.GetString("chkShowCWZero.ToolTip"));
+            this.chkShowCWZero.CheckedChanged += new System.EventHandler(this.chkShowCWZero_CheckedChanged);
+            // 
+            // ptbCWSpeed
+            // 
+            resources.ApplyResources(this.ptbCWSpeed, "ptbCWSpeed");
+            this.ptbCWSpeed.GreenThumb = false;
+            this.ptbCWSpeed.HeadImage = null;
+            this.ptbCWSpeed.LargeChange = 1;
+            this.ptbCWSpeed.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbCWSpeed.LimitEnabled = false;
+            this.ptbCWSpeed.LimitValue = 1;
+            this.ptbCWSpeed.Maximum = 60;
+            this.ptbCWSpeed.Minimum = 1;
+            this.ptbCWSpeed.Name = "ptbCWSpeed";
+            this.ptbCWSpeed.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbCWSpeed.SmallChange = 1;
+            this.ptbCWSpeed.TabStop = false;
+            this.toolTip1.SetToolTip(this.ptbCWSpeed, resources.GetString("ptbCWSpeed.ToolTip"));
+            this.ptbCWSpeed.Value = 25;
+            this.ptbCWSpeed.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWSpeed_Scroll);
+            // 
+            // udCWPitch
+            // 
+            this.udCWPitch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.udCWPitch.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.udCWPitch.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            resources.ApplyResources(this.udCWPitch, "udCWPitch");
+            this.udCWPitch.Maximum = new decimal(new int[] {
+            2250,
+            0,
+            0,
+            0});
+            this.udCWPitch.Minimum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.udCWPitch.Name = "udCWPitch";
+            this.udCWPitch.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udCWPitch, resources.GetString("udCWPitch.ToolTip"));
+            this.udCWPitch.Value = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.udCWPitch.ValueChanged += new System.EventHandler(this.udCWPitch_ValueChanged);
+            // 
+            // chkQSK
+            // 
+            resources.ApplyResources(this.chkQSK, "chkQSK");
+            this.chkQSK.Checked = true;
+            this.chkQSK.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkQSK.FlatAppearance.BorderSize = 0;
+            this.chkQSK.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkQSK.Name = "chkQSK";
+            this.chkQSK.ThreeState = true;
+            this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
+            this.chkQSK.CheckStateChanged += new System.EventHandler(this.chkQSK_CheckStateChanged);
+            // 
+            // udCWBreakInDelay
+            // 
+            this.udCWBreakInDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
+            this.udCWBreakInDelay.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.udCWBreakInDelay.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            resources.ApplyResources(this.udCWBreakInDelay, "udCWBreakInDelay");
+            this.udCWBreakInDelay.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udCWBreakInDelay.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.udCWBreakInDelay.Name = "udCWBreakInDelay";
+            this.udCWBreakInDelay.TinyStep = false;
+            this.toolTip1.SetToolTip(this.udCWBreakInDelay, resources.GetString("udCWBreakInDelay.ToolTip"));
+            this.udCWBreakInDelay.Value = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.udCWBreakInDelay.ValueChanged += new System.EventHandler(this.udCWBreakInDelay_ValueChanged);
+            this.udCWBreakInDelay.LostFocus += new System.EventHandler(this.udCWBreakInDelay_LostFocus);
+            // 
+            // chkShowTXCWFreq
+            // 
+            this.chkShowTXCWFreq.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.chkShowTXCWFreq, "chkShowTXCWFreq");
+            this.chkShowTXCWFreq.Name = "chkShowTXCWFreq";
+            this.toolTip1.SetToolTip(this.chkShowTXCWFreq, resources.GetString("chkShowTXCWFreq.ToolTip"));
+            this.chkShowTXCWFreq.CheckedChanged += new System.EventHandler(this.chkShowTXCWFreq_CheckedChanged);
+            // 
+            // chkCWIambic
+            // 
+            this.chkCWIambic.Checked = true;
+            this.chkCWIambic.CheckState = System.Windows.Forms.CheckState.Checked;
+            resources.ApplyResources(this.chkCWIambic, "chkCWIambic");
+            this.chkCWIambic.ForeColor = System.Drawing.Color.White;
+            this.chkCWIambic.Name = "chkCWIambic";
+            this.toolTip1.SetToolTip(this.chkCWIambic, resources.GetString("chkCWIambic.ToolTip"));
+            this.chkCWIambic.CheckedChanged += new System.EventHandler(this.chkCWIambic_CheckedChanged);
+            // 
+            // chkCWSidetone
+            // 
+            this.chkCWSidetone.Checked = true;
+            this.chkCWSidetone.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCWSidetone.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.chkCWSidetone, "chkCWSidetone");
+            this.chkCWSidetone.Name = "chkCWSidetone";
+            this.toolTip1.SetToolTip(this.chkCWSidetone, resources.GetString("chkCWSidetone.ToolTip"));
+            this.chkCWSidetone.CheckedChanged += new System.EventHandler(this.chkCWSidetone_CheckedChanged);
+            // 
+            // chkCWFWKeyer
+            // 
+            this.chkCWFWKeyer.Checked = true;
+            this.chkCWFWKeyer.CheckState = System.Windows.Forms.CheckState.Checked;
+            resources.ApplyResources(this.chkCWFWKeyer, "chkCWFWKeyer");
+            this.chkCWFWKeyer.ForeColor = System.Drawing.Color.White;
+            this.chkCWFWKeyer.Name = "chkCWFWKeyer";
+            this.toolTip1.SetToolTip(this.chkCWFWKeyer, resources.GetString("chkCWFWKeyer.ToolTip"));
+            this.chkCWFWKeyer.CheckedChanged += new System.EventHandler(this.chkCWFWKeyer_CheckedChanged);
             // 
             // btnDisplayZTB
             // 
@@ -2847,12 +1689,6 @@
             this.ptbDisplayPan.Value = 500;
             this.ptbDisplayPan.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbDisplayPan_Scroll);
             // 
-            // lblDisplayZoom
-            // 
-            resources.ApplyResources(this.lblDisplayZoom, "lblDisplayZoom");
-            this.lblDisplayZoom.ForeColor = System.Drawing.Color.White;
-            this.lblDisplayZoom.Name = "lblDisplayZoom";
-            // 
             // btnDisplayPanCenter
             // 
             resources.ApplyResources(this.btnDisplayPanCenter, "btnDisplayPanCenter");
@@ -2865,166 +1701,32 @@
             this.btnDisplayPanCenter.UseVisualStyleBackColor = false;
             this.btnDisplayPanCenter.Click += new System.EventHandler(this.btnDisplayPanCenter_Click);
             // 
-            // lblDisplayPan
+            // chkRX2Preamp
             // 
-            resources.ApplyResources(this.lblDisplayPan, "lblDisplayPan");
-            this.lblDisplayPan.ForeColor = System.Drawing.Color.White;
-            this.lblDisplayPan.Name = "lblDisplayPan";
+            resources.ApplyResources(this.chkRX2Preamp, "chkRX2Preamp");
+            this.chkRX2Preamp.FlatAppearance.BorderSize = 0;
+            this.chkRX2Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkRX2Preamp.Name = "chkRX2Preamp";
+            this.toolTip1.SetToolTip(this.chkRX2Preamp, resources.GetString("chkRX2Preamp.ToolTip"));
+            this.chkRX2Preamp.CheckedChanged += new System.EventHandler(this.chkRX2Preamp_CheckedChanged);
             // 
-            // pnlDisplay
+            // chkRX1Preamp
             // 
-            resources.ApplyResources(this.pnlDisplay, "pnlDisplay");
-            this.pnlDisplay.BackColor = System.Drawing.Color.Black;
-            this.pnlDisplay.Name = "pnlDisplay";
-            this.pnlDisplay.DoubleClick += new System.EventHandler(this.pnlDisplay_DoubleClick);
-            this.pnlDisplay.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseDown);
-            this.pnlDisplay.MouseLeave += new System.EventHandler(this.pnlDisplay_MouseLeave);
-            this.pnlDisplay.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseMove);
-            this.pnlDisplay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseUp);
-            this.pnlDisplay.Resize += new System.EventHandler(this.pnlDisplay_Resize);
+            resources.ApplyResources(this.chkRX1Preamp, "chkRX1Preamp");
+            this.chkRX1Preamp.FlatAppearance.BorderSize = 0;
+            this.chkRX1Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkRX1Preamp.Name = "chkRX1Preamp";
+            this.toolTip1.SetToolTip(this.chkRX1Preamp, resources.GetString("chkRX1Preamp.ToolTip"));
+            this.chkRX1Preamp.CheckedChanged += new System.EventHandler(this.chkRX1Preamp_CheckedChanged);
             // 
-            // lblPAProfile
+            // chkDX
             // 
-            this.lblPAProfile.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.lblPAProfile, "lblPAProfile");
-            this.lblPAProfile.ForeColor = System.Drawing.Color.White;
-            this.lblPAProfile.Name = "lblPAProfile";
-            this.toolTip1.SetToolTip(this.lblPAProfile, resources.GetString("lblPAProfile.ToolTip"));
-            this.lblPAProfile.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblPAProfile_MouseDown);
-            // 
-            // nudPwrTemp2
-            // 
-            this.nudPwrTemp2.DecimalPlaces = 2;
-            this.nudPwrTemp2.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            resources.ApplyResources(this.nudPwrTemp2, "nudPwrTemp2");
-            this.nudPwrTemp2.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudPwrTemp2.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPwrTemp2.Name = "nudPwrTemp2";
-            this.nudPwrTemp2.TinyStep = false;
-            this.nudPwrTemp2.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // nudPwrTemp
-            // 
-            this.nudPwrTemp.DecimalPlaces = 1;
-            this.nudPwrTemp.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            resources.ApplyResources(this.nudPwrTemp, "nudPwrTemp");
-            this.nudPwrTemp.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudPwrTemp.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPwrTemp.Name = "nudPwrTemp";
-            this.nudPwrTemp.TinyStep = false;
-            this.nudPwrTemp.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // grpMultimeter
-            // 
-            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
-            this.grpMultimeter.Controls.Add(this.pnlResizeMeter);
-            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
-            this.grpMultimeter.Controls.Add(this.txtMultiText);
-            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
-            this.grpMultimeter.Name = "grpMultimeter";
-            this.grpMultimeter.TabStop = false;
-            // 
-            // pnlResizeMeter
-            // 
-            resources.ApplyResources(this.pnlResizeMeter, "pnlResizeMeter");
-            this.pnlResizeMeter.Cursor = System.Windows.Forms.Cursors.SizeWE;
-            this.pnlResizeMeter.Name = "pnlResizeMeter";
-            this.pnlResizeMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseDown);
-            this.pnlResizeMeter.MouseEnter += new System.EventHandler(this.pnlResizeMeter_MouseEnter);
-            this.pnlResizeMeter.MouseLeave += new System.EventHandler(this.pnlResizeMeter_MouseLeave);
-            this.pnlResizeMeter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseMove);
-            this.pnlResizeMeter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseUp);
-            // 
-            // picMultiMeterDigital
-            // 
-            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
-            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
-            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
-            this.picMultiMeterDigital.TabStop = false;
-            this.picMultiMeterDigital.Click += new System.EventHandler(this.picMultiMeterDigital_Click);
-            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
-            // 
-            // txtMultiText
-            // 
-            this.txtMultiText.BackColor = System.Drawing.Color.Black;
-            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
-            resources.ApplyResources(this.txtMultiText, "txtMultiText");
-            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
-            this.txtMultiText.Name = "txtMultiText";
-            this.txtMultiText.ReadOnly = true;
-            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
-            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
-            // 
-            // panelFilter
-            // 
-            resources.ApplyResources(this.panelFilter, "panelFilter");
-            this.panelFilter.BackColor = System.Drawing.Color.Transparent;
-            this.panelFilter.ContextMenuStrip = this.contextMenuStripFilterRX1;
-            this.panelFilter.Controls.Add(this.radFilter1);
-            this.panelFilter.Controls.Add(this.ptbFilterShift);
-            this.panelFilter.Controls.Add(this.ptbFilterWidth);
-            this.panelFilter.Controls.Add(this.btnFilterShiftReset);
-            this.panelFilter.Controls.Add(this.udFilterHigh);
-            this.panelFilter.Controls.Add(this.udFilterLow);
-            this.panelFilter.Controls.Add(this.lblFilterHigh);
-            this.panelFilter.Controls.Add(this.lblFilterWidth);
-            this.panelFilter.Controls.Add(this.radFilterVar2);
-            this.panelFilter.Controls.Add(this.lblFilterLow);
-            this.panelFilter.Controls.Add(this.radFilterVar1);
-            this.panelFilter.Controls.Add(this.lblFilterShift);
-            this.panelFilter.Controls.Add(this.radFilter9);
-            this.panelFilter.Controls.Add(this.radFilter8);
-            this.panelFilter.Controls.Add(this.radFilter2);
-            this.panelFilter.Controls.Add(this.radFilter7);
-            this.panelFilter.Controls.Add(this.radFilter3);
-            this.panelFilter.Controls.Add(this.radFilter6);
-            this.panelFilter.Controls.Add(this.radFilter4);
-            this.panelFilter.Controls.Add(this.radFilter5);
-            this.panelFilter.Controls.Add(this.radFilter10);
-            this.panelFilter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panelFilter.Name = "panelFilter";
-            // 
-            // radFilter1
-            // 
-            resources.ApplyResources(this.radFilter1, "radFilter1");
-            this.radFilter1.FlatAppearance.BorderSize = 0;
-            this.radFilter1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter1.Name = "radFilter1";
-            this.radFilter1.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            resources.ApplyResources(this.chkDX, "chkDX");
+            this.chkDX.FlatAppearance.BorderSize = 0;
+            this.chkDX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkDX.Name = "chkDX";
+            this.toolTip1.SetToolTip(this.chkDX, resources.GetString("chkDX.ToolTip"));
+            this.chkDX.CheckedChanged += new System.EventHandler(this.chkDX_CheckedChanged);
             // 
             // ptbFilterShift
             // 
@@ -3138,127 +1840,6 @@
             this.udFilterLow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Console_KeyPress);
             this.udFilterLow.LostFocus += new System.EventHandler(this.udFilterLow_LostFocus);
             // 
-            // lblFilterHigh
-            // 
-            resources.ApplyResources(this.lblFilterHigh, "lblFilterHigh");
-            this.lblFilterHigh.ForeColor = System.Drawing.Color.White;
-            this.lblFilterHigh.Name = "lblFilterHigh";
-            // 
-            // lblFilterWidth
-            // 
-            resources.ApplyResources(this.lblFilterWidth, "lblFilterWidth");
-            this.lblFilterWidth.ForeColor = System.Drawing.Color.White;
-            this.lblFilterWidth.Name = "lblFilterWidth";
-            // 
-            // radFilterVar2
-            // 
-            resources.ApplyResources(this.radFilterVar2, "radFilterVar2");
-            this.radFilterVar2.FlatAppearance.BorderSize = 0;
-            this.radFilterVar2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilterVar2.Name = "radFilterVar2";
-            this.radFilterVar2.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // lblFilterLow
-            // 
-            resources.ApplyResources(this.lblFilterLow, "lblFilterLow");
-            this.lblFilterLow.ForeColor = System.Drawing.Color.White;
-            this.lblFilterLow.Name = "lblFilterLow";
-            // 
-            // radFilterVar1
-            // 
-            resources.ApplyResources(this.radFilterVar1, "radFilterVar1");
-            this.radFilterVar1.FlatAppearance.BorderSize = 0;
-            this.radFilterVar1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilterVar1.Name = "radFilterVar1";
-            this.radFilterVar1.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // lblFilterShift
-            // 
-            resources.ApplyResources(this.lblFilterShift, "lblFilterShift");
-            this.lblFilterShift.ForeColor = System.Drawing.Color.White;
-            this.lblFilterShift.Name = "lblFilterShift";
-            // 
-            // radFilter9
-            // 
-            resources.ApplyResources(this.radFilter9, "radFilter9");
-            this.radFilter9.FlatAppearance.BorderSize = 0;
-            this.radFilter9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter9.Name = "radFilter9";
-            this.radFilter9.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter8
-            // 
-            resources.ApplyResources(this.radFilter8, "radFilter8");
-            this.radFilter8.FlatAppearance.BorderSize = 0;
-            this.radFilter8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter8.Name = "radFilter8";
-            this.radFilter8.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter2
-            // 
-            resources.ApplyResources(this.radFilter2, "radFilter2");
-            this.radFilter2.FlatAppearance.BorderSize = 0;
-            this.radFilter2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter2.Name = "radFilter2";
-            this.radFilter2.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter7
-            // 
-            resources.ApplyResources(this.radFilter7, "radFilter7");
-            this.radFilter7.FlatAppearance.BorderSize = 0;
-            this.radFilter7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter7.Name = "radFilter7";
-            this.radFilter7.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter3
-            // 
-            resources.ApplyResources(this.radFilter3, "radFilter3");
-            this.radFilter3.FlatAppearance.BorderSize = 0;
-            this.radFilter3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter3.Name = "radFilter3";
-            this.radFilter3.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter6
-            // 
-            resources.ApplyResources(this.radFilter6, "radFilter6");
-            this.radFilter6.FlatAppearance.BorderSize = 0;
-            this.radFilter6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter6.Name = "radFilter6";
-            this.radFilter6.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter4
-            // 
-            resources.ApplyResources(this.radFilter4, "radFilter4");
-            this.radFilter4.FlatAppearance.BorderSize = 0;
-            this.radFilter4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter4.Name = "radFilter4";
-            this.radFilter4.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter5
-            // 
-            resources.ApplyResources(this.radFilter5, "radFilter5");
-            this.radFilter5.FlatAppearance.BorderSize = 0;
-            this.radFilter5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter5.Name = "radFilter5";
-            this.radFilter5.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // radFilter10
-            // 
-            resources.ApplyResources(this.radFilter10, "radFilter10");
-            this.radFilter10.FlatAppearance.BorderSize = 0;
-            this.radFilter10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radFilter10.Name = "radFilter10";
-            this.radFilter10.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
-            // 
-            // panelRX2RF
-            // 
-            resources.ApplyResources(this.panelRX2RF, "panelRX2RF");
-            this.panelRX2RF.BackColor = System.Drawing.Color.Transparent;
-            this.panelRX2RF.Controls.Add(this.ptbRX2RF);
-            this.panelRX2RF.Controls.Add(this.lblRX2RF);
-            this.panelRX2RF.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panelRX2RF.Name = "panelRX2RF";
-            // 
             // ptbRX2RF
             // 
             resources.ApplyResources(this.ptbRX2RF, "ptbRX2RF");
@@ -3299,24 +1880,6 @@
             this.chkFullDuplex.UseVisualStyleBackColor = false;
             this.chkFullDuplex.CheckedChanged += new System.EventHandler(this.chkFullDuplex_CheckedChanged);
             // 
-            // ptbRX2Squelch
-            // 
-            resources.ApplyResources(this.ptbRX2Squelch, "ptbRX2Squelch");
-            this.ptbRX2Squelch.GreenThumb = false;
-            this.ptbRX2Squelch.HeadImage = null;
-            this.ptbRX2Squelch.LargeChange = 1;
-            this.ptbRX2Squelch.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbRX2Squelch.LimitEnabled = false;
-            this.ptbRX2Squelch.LimitValue = 0;
-            this.ptbRX2Squelch.Maximum = 0;
-            this.ptbRX2Squelch.Minimum = -160;
-            this.ptbRX2Squelch.Name = "ptbRX2Squelch";
-            this.ptbRX2Squelch.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbRX2Squelch.SmallChange = 1;
-            this.ptbRX2Squelch.TabStop = false;
-            this.ptbRX2Squelch.Value = 0;
-            this.ptbRX2Squelch.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbRX2Squelch_Scroll);
-            // 
             // chkRX2Squelch
             // 
             resources.ApplyResources(this.chkRX2Squelch, "chkRX2Squelch");
@@ -3327,20 +1890,6 @@
             this.toolTip1.SetToolTip(this.chkRX2Squelch, resources.GetString("chkRX2Squelch.ToolTip"));
             this.chkRX2Squelch.CheckStateChanged += new System.EventHandler(this.chkRX2Squelch_CheckStateChanged);
             this.chkRX2Squelch.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2Squelch_MouseDown);
-            // 
-            // panelRX2DSP
-            // 
-            resources.ApplyResources(this.panelRX2DSP, "panelRX2DSP");
-            this.panelRX2DSP.BackColor = System.Drawing.Color.Transparent;
-            this.panelRX2DSP.Controls.Add(this.chkRX2Mute);
-            this.panelRX2DSP.Controls.Add(this.chkRX2NB2);
-            this.panelRX2DSP.Controls.Add(this.chkRX2NR);
-            this.panelRX2DSP.Controls.Add(this.chkRX2NB);
-            this.panelRX2DSP.Controls.Add(this.lblRX2AGC);
-            this.panelRX2DSP.Controls.Add(this.chkRX2ANF);
-            this.panelRX2DSP.Controls.Add(this.comboRX2AGC);
-            this.panelRX2DSP.Controls.Add(this.chkRX2BIN);
-            this.panelRX2DSP.Name = "panelRX2DSP";
             // 
             // chkRX2Mute
             // 
@@ -3369,7 +1918,6 @@
             this.chkRX2NR.Name = "chkRX2NR";
             this.chkRX2NR.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkRX2NR, resources.GetString("chkRX2NR.ToolTip"));
-            this.chkRX2NR.CheckStateChanged += new System.EventHandler(this.chkRX2NR_CheckStateChanged);
             this.chkRX2NR.Click += new System.EventHandler(this.chkRX2NR_Click);
             this.chkRX2NR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkRX2NR_MouseDown);
             // 
@@ -3419,172 +1967,6 @@
             this.chkRX2BIN.Name = "chkRX2BIN";
             this.toolTip1.SetToolTip(this.chkRX2BIN, resources.GetString("chkRX2BIN.ToolTip"));
             this.chkRX2BIN.CheckedChanged += new System.EventHandler(this.chkRX2BIN_CheckedChanged);
-            // 
-            // btnHidden
-            // 
-            this.btnHidden.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.btnHidden, "btnHidden");
-            this.btnHidden.Name = "btnHidden";
-            this.btnHidden.Selectable = true;
-            // 
-            // panelOptions
-            // 
-            resources.ApplyResources(this.panelOptions, "panelOptions");
-            this.panelOptions.BackColor = System.Drawing.Color.Transparent;
-            this.panelOptions.Controls.Add(this.chkTunerFollow);
-            this.panelOptions.Controls.Add(this.chkTC);
-            this.panelOptions.Controls.Add(this.checkBoxTS1);
-            this.panelOptions.Controls.Add(this.chkExternalPA);
-            this.panelOptions.Controls.Add(this.ckQuickPlay);
-            this.panelOptions.Controls.Add(this.chkMON);
-            this.panelOptions.Controls.Add(this.ckQuickRec);
-            this.panelOptions.Controls.Add(this.chkRX2SR);
-            this.panelOptions.Controls.Add(this.chkMOX);
-            this.panelOptions.Controls.Add(this.chkTUN);
-            this.panelOptions.Controls.Add(this.chk2TONE);
-            this.panelOptions.Controls.Add(this.chkFWCATUBypass);
-            this.panelOptions.Controls.Add(this.comboTuneMode);
-            this.panelOptions.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.panelOptions.Name = "panelOptions";
-            // 
-            // chkTunerFollow
-            // 
-            resources.ApplyResources(this.chkTunerFollow, "chkTunerFollow");
-            this.chkTunerFollow.FlatAppearance.BorderSize = 0;
-            this.chkTunerFollow.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkTunerFollow.Name = "chkTunerFollow";
-            this.toolTip1.SetToolTip(this.chkTunerFollow, resources.GetString("chkTunerFollow.ToolTip"));
-            this.chkTunerFollow.CheckedChanged += new System.EventHandler(this.chkTunerFollow_CheckedChanged);
-            // 
-            // chkTC
-            // 
-            resources.ApplyResources(this.chkTC, "chkTC");
-            this.chkTC.BackColor = System.Drawing.Color.Transparent;
-            this.chkTC.FlatAppearance.BorderSize = 0;
-            this.chkTC.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkTC.Name = "chkTC";
-            this.toolTip1.SetToolTip(this.chkTC, resources.GetString("chkTC.ToolTip"));
-            this.chkTC.UseVisualStyleBackColor = false;
-            this.chkTC.CheckedChanged += new System.EventHandler(this.chkTC_CheckedChanged);
-            // 
-            // checkBoxTS1
-            // 
-            resources.ApplyResources(this.checkBoxTS1, "checkBoxTS1");
-            this.checkBoxTS1.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxTS1.FlatAppearance.BorderSize = 0;
-            this.checkBoxTS1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBoxTS1.Name = "checkBoxTS1";
-            this.checkBoxTS1.UseVisualStyleBackColor = false;
-            // 
-            // chkExternalPA
-            // 
-            resources.ApplyResources(this.chkExternalPA, "chkExternalPA");
-            this.chkExternalPA.FlatAppearance.BorderSize = 0;
-            this.chkExternalPA.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkExternalPA.Name = "chkExternalPA";
-            this.toolTip1.SetToolTip(this.chkExternalPA, resources.GetString("chkExternalPA.ToolTip"));
-            this.chkExternalPA.CheckedChanged += new System.EventHandler(this.chkExternalPA_CheckedChanged);
-            this.chkExternalPA.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkExternalPA_MouseDown);
-            // 
-            // ckQuickPlay
-            // 
-            resources.ApplyResources(this.ckQuickPlay, "ckQuickPlay");
-            this.ckQuickPlay.BackColor = System.Drawing.Color.Transparent;
-            this.ckQuickPlay.FlatAppearance.BorderSize = 0;
-            this.ckQuickPlay.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ckQuickPlay.Name = "ckQuickPlay";
-            this.toolTip1.SetToolTip(this.ckQuickPlay, resources.GetString("ckQuickPlay.ToolTip"));
-            this.ckQuickPlay.UseVisualStyleBackColor = false;
-            this.ckQuickPlay.CheckedChanged += new System.EventHandler(this.ckQuickPlay_CheckedChanged);
-            // 
-            // chkMON
-            // 
-            resources.ApplyResources(this.chkMON, "chkMON");
-            this.chkMON.FlatAppearance.BorderSize = 0;
-            this.chkMON.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkMON.Name = "chkMON";
-            this.toolTip1.SetToolTip(this.chkMON, resources.GetString("chkMON.ToolTip"));
-            this.chkMON.CheckedChanged += new System.EventHandler(this.chkMON_CheckedChanged);
-            // 
-            // ckQuickRec
-            // 
-            resources.ApplyResources(this.ckQuickRec, "ckQuickRec");
-            this.ckQuickRec.BackColor = System.Drawing.Color.Transparent;
-            this.ckQuickRec.FlatAppearance.BorderSize = 0;
-            this.ckQuickRec.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ckQuickRec.Name = "ckQuickRec";
-            this.toolTip1.SetToolTip(this.ckQuickRec, resources.GetString("ckQuickRec.ToolTip"));
-            this.ckQuickRec.UseVisualStyleBackColor = false;
-            this.ckQuickRec.CheckedChanged += new System.EventHandler(this.ckQuickRec_CheckedChanged);
-            // 
-            // chkRX2SR
-            // 
-            resources.ApplyResources(this.chkRX2SR, "chkRX2SR");
-            this.chkRX2SR.BackColor = System.Drawing.Color.Transparent;
-            this.chkRX2SR.FlatAppearance.BorderSize = 0;
-            this.chkRX2SR.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkRX2SR.Name = "chkRX2SR";
-            this.toolTip1.SetToolTip(this.chkRX2SR, resources.GetString("chkRX2SR.ToolTip"));
-            this.chkRX2SR.UseVisualStyleBackColor = false;
-            this.chkRX2SR.CheckedChanged += new System.EventHandler(this.chkRX2SR_CheckedChanged);
-            // 
-            // chkMOX
-            // 
-            resources.ApplyResources(this.chkMOX, "chkMOX");
-            this.chkMOX.FlatAppearance.BorderSize = 0;
-            this.chkMOX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkMOX.Name = "chkMOX";
-            this.toolTip1.SetToolTip(this.chkMOX, resources.GetString("chkMOX.ToolTip"));
-            this.chkMOX.CheckedChanged += new System.EventHandler(this.chkMOX_CheckedChanged2);
-            this.chkMOX.Click += new System.EventHandler(this.chkMOX_Click);
-            // 
-            // chkTUN
-            // 
-            resources.ApplyResources(this.chkTUN, "chkTUN");
-            this.chkTUN.FlatAppearance.BorderSize = 0;
-            this.chkTUN.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkTUN.Name = "chkTUN";
-            this.toolTip1.SetToolTip(this.chkTUN, resources.GetString("chkTUN.ToolTip"));
-            this.chkTUN.CheckedChanged += new System.EventHandler(this.chkTUN_CheckedChanged);
-            this.chkTUN.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkTUN_MouseDown);
-            // 
-            // chk2TONE
-            // 
-            resources.ApplyResources(this.chk2TONE, "chk2TONE");
-            this.chk2TONE.BackColor = System.Drawing.Color.Transparent;
-            this.chk2TONE.FlatAppearance.BorderSize = 0;
-            this.chk2TONE.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chk2TONE.Name = "chk2TONE";
-            this.toolTip1.SetToolTip(this.chk2TONE, resources.GetString("chk2TONE.ToolTip"));
-            this.chk2TONE.UseVisualStyleBackColor = false;
-            this.chk2TONE.CheckedChanged += new System.EventHandler(this.chk2TONE_CheckedChanged);
-            this.chk2TONE.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chk2TONE_MouseDown);
-            // 
-            // chkFWCATUBypass
-            // 
-            resources.ApplyResources(this.chkFWCATUBypass, "chkFWCATUBypass");
-            this.chkFWCATUBypass.FlatAppearance.BorderSize = 0;
-            this.chkFWCATUBypass.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkFWCATUBypass.Name = "chkFWCATUBypass";
-            this.toolTip1.SetToolTip(this.chkFWCATUBypass, resources.GetString("chkFWCATUBypass.ToolTip"));
-            this.chkFWCATUBypass.CheckedChanged += new System.EventHandler(this.chkFWCATUBypass_CheckedChanged);
-            this.chkFWCATUBypass.Click += new System.EventHandler(this.chkFWCATUBypass_Click);
-            this.chkFWCATUBypass.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkFWCATUBypass_MouseDown);
-            // 
-            // comboTuneMode
-            // 
-            this.comboTuneMode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.comboTuneMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboTuneMode.DropDownWidth = 42;
-            resources.ApplyResources(this.comboTuneMode, "comboTuneMode");
-            this.comboTuneMode.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.comboTuneMode.Items.AddRange(new object[] {
-            resources.GetString("comboTuneMode.Items"),
-            resources.GetString("comboTuneMode.Items1"),
-            resources.GetString("comboTuneMode.Items2")});
-            this.comboTuneMode.Name = "comboTuneMode";
-            this.toolTip1.SetToolTip(this.comboTuneMode, resources.GetString("comboTuneMode.ToolTip"));
-            this.comboTuneMode.SelectedIndexChanged += new System.EventHandler(this.comboTuneMode_SelectedIndexChanged);
             // 
             // udTXFilterLow
             // 
@@ -3790,15 +2172,6 @@
             this.toolTip1.SetToolTip(this.comboRX2Band, resources.GetString("comboRX2Band.ToolTip"));
             this.comboRX2Band.SelectedIndexChanged += new System.EventHandler(this.comboRX2Band_SelectedIndexChanged);
             // 
-            // chkRX2Preamp
-            // 
-            resources.ApplyResources(this.chkRX2Preamp, "chkRX2Preamp");
-            this.chkRX2Preamp.FlatAppearance.BorderSize = 0;
-            this.chkRX2Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkRX2Preamp.Name = "chkRX2Preamp";
-            this.toolTip1.SetToolTip(this.chkRX2Preamp, resources.GetString("chkRX2Preamp.ToolTip"));
-            this.chkRX2Preamp.CheckedChanged += new System.EventHandler(this.chkRX2Preamp_CheckedChanged);
-            // 
             // chkPower
             // 
             resources.ApplyResources(this.chkPower, "chkPower");
@@ -3808,85 +2181,6 @@
             this.toolTip1.SetToolTip(this.chkPower, resources.GetString("chkPower.ToolTip"));
             this.chkPower.UseVisualStyleBackColor = false;
             this.chkPower.CheckedChanged += new System.EventHandler(this.chkPower_CheckedChanged);
-            // 
-            // udCWPitch
-            // 
-            this.udCWPitch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.udCWPitch.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.udCWPitch.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            resources.ApplyResources(this.udCWPitch, "udCWPitch");
-            this.udCWPitch.Maximum = new decimal(new int[] {
-            2250,
-            0,
-            0,
-            0});
-            this.udCWPitch.Minimum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.udCWPitch.Name = "udCWPitch";
-            this.udCWPitch.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udCWPitch, resources.GetString("udCWPitch.ToolTip"));
-            this.udCWPitch.Value = new decimal(new int[] {
-            600,
-            0,
-            0,
-            0});
-            this.udCWPitch.ValueChanged += new System.EventHandler(this.udCWPitch_ValueChanged);
-            // 
-            // udCWBreakInDelay
-            // 
-            this.udCWBreakInDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
-            this.udCWBreakInDelay.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.udCWBreakInDelay.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            resources.ApplyResources(this.udCWBreakInDelay, "udCWBreakInDelay");
-            this.udCWBreakInDelay.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.udCWBreakInDelay.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.udCWBreakInDelay.Name = "udCWBreakInDelay";
-            this.udCWBreakInDelay.TinyStep = false;
-            this.toolTip1.SetToolTip(this.udCWBreakInDelay, resources.GetString("udCWBreakInDelay.ToolTip"));
-            this.udCWBreakInDelay.Value = new decimal(new int[] {
-            300,
-            0,
-            0,
-            0});
-            this.udCWBreakInDelay.ValueChanged += new System.EventHandler(this.udCWBreakInDelay_ValueChanged);
-            this.udCWBreakInDelay.LostFocus += new System.EventHandler(this.udCWBreakInDelay_LostFocus);
-            // 
-            // chkShowTXCWFreq
-            // 
-            this.chkShowTXCWFreq.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.chkShowTXCWFreq, "chkShowTXCWFreq");
-            this.chkShowTXCWFreq.Name = "chkShowTXCWFreq";
-            this.toolTip1.SetToolTip(this.chkShowTXCWFreq, resources.GetString("chkShowTXCWFreq.ToolTip"));
-            this.chkShowTXCWFreq.CheckedChanged += new System.EventHandler(this.chkShowTXCWFreq_CheckedChanged);
-            // 
-            // chkCWIambic
-            // 
-            this.chkCWIambic.Checked = true;
-            this.chkCWIambic.CheckState = System.Windows.Forms.CheckState.Checked;
-            resources.ApplyResources(this.chkCWIambic, "chkCWIambic");
-            this.chkCWIambic.ForeColor = System.Drawing.Color.White;
-            this.chkCWIambic.Name = "chkCWIambic";
-            this.toolTip1.SetToolTip(this.chkCWIambic, resources.GetString("chkCWIambic.ToolTip"));
-            this.chkCWIambic.CheckedChanged += new System.EventHandler(this.chkCWIambic_CheckedChanged);
             // 
             // udRX2FilterHigh
             // 
@@ -4142,7 +2436,6 @@
             this.chkNR.Name = "chkNR";
             this.chkNR.ThreeState = true;
             this.toolTip1.SetToolTip(this.chkNR, resources.GetString("chkNR.ToolTip"));
-            this.chkNR.CheckStateChanged += new System.EventHandler(this.chkNR_CheckStateChanged);
             this.chkNR.Click += new System.EventHandler(this.chkNR_Click);
             this.chkNR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkNR_MouseDown);
             // 
@@ -4345,15 +2638,6 @@
             this.toolTip1.SetToolTip(this.btnVFOAtoB, resources.GetString("btnVFOAtoB.ToolTip"));
             this.btnVFOAtoB.Click += new System.EventHandler(this.btnVFOAtoB_Click);
             // 
-            // chkRX1Preamp
-            // 
-            resources.ApplyResources(this.chkRX1Preamp, "chkRX1Preamp");
-            this.chkRX1Preamp.FlatAppearance.BorderSize = 0;
-            this.chkRX1Preamp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkRX1Preamp.Name = "chkRX1Preamp";
-            this.toolTip1.SetToolTip(this.chkRX1Preamp, resources.GetString("chkRX1Preamp.ToolTip"));
-            this.chkRX1Preamp.CheckedChanged += new System.EventHandler(this.chkRX1Preamp_CheckedChanged);
-            // 
             // comboAGC
             // 
             this.comboAGC.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
@@ -4391,15 +2675,6 @@
             this.lblRF.Name = "lblRF";
             this.toolTip1.SetToolTip(this.lblRF, resources.GetString("lblRF.ToolTip"));
             this.lblRF.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblRF_MouseDown);
-            // 
-            // chkDX
-            // 
-            resources.ApplyResources(this.chkDX, "chkDX");
-            this.chkDX.FlatAppearance.BorderSize = 0;
-            this.chkDX.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkDX.Name = "chkDX";
-            this.toolTip1.SetToolTip(this.chkDX, resources.GetString("chkDX.ToolTip"));
-            this.chkDX.CheckedChanged += new System.EventHandler(this.chkDX_CheckedChanged);
             // 
             // chkVAC1
             // 
@@ -4783,7 +3058,6 @@
             this.radBand160.UseVisualStyleBackColor = true;
             this.radBand160.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand160.Click += new System.EventHandler(this.radBand160_Click);
-            this.radBand160.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand160_MouseDown);
             // 
             // radBandGEN
             // 
@@ -4820,7 +3094,6 @@
             this.radBand6.UseVisualStyleBackColor = true;
             this.radBand6.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand6.Click += new System.EventHandler(this.radBand6_Click);
-            this.radBand6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand6_MouseDown);
             // 
             // radBand10
             // 
@@ -4833,7 +3106,6 @@
             this.radBand10.UseVisualStyleBackColor = true;
             this.radBand10.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand10.Click += new System.EventHandler(this.radBand10_Click);
-            this.radBand10.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand10_MouseDown);
             // 
             // radBand12
             // 
@@ -4846,7 +3118,6 @@
             this.radBand12.UseVisualStyleBackColor = true;
             this.radBand12.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand12.Click += new System.EventHandler(this.radBand12_Click);
-            this.radBand12.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand12_MouseDown);
             // 
             // radBand15
             // 
@@ -4859,7 +3130,6 @@
             this.radBand15.UseVisualStyleBackColor = true;
             this.radBand15.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand15.Click += new System.EventHandler(this.radBand15_Click);
-            this.radBand15.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand15_MouseDown);
             // 
             // radBand17
             // 
@@ -4872,7 +3142,6 @@
             this.radBand17.UseVisualStyleBackColor = true;
             this.radBand17.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand17.Click += new System.EventHandler(this.radBand17_Click);
-            this.radBand17.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand17_MouseDown);
             // 
             // radBand20
             // 
@@ -4885,7 +3154,6 @@
             this.radBand20.UseVisualStyleBackColor = true;
             this.radBand20.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand20.Click += new System.EventHandler(this.radBand20_Click);
-            this.radBand20.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand20_MouseDown);
             // 
             // radBand30
             // 
@@ -4898,7 +3166,6 @@
             this.radBand30.UseVisualStyleBackColor = true;
             this.radBand30.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand30.Click += new System.EventHandler(this.radBand30_Click);
-            this.radBand30.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand30_MouseDown);
             // 
             // radBand40
             // 
@@ -4911,7 +3178,6 @@
             this.radBand40.UseVisualStyleBackColor = true;
             this.radBand40.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand40.Click += new System.EventHandler(this.radBand40_Click);
-            this.radBand40.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand40_MouseDown);
             // 
             // radBand60
             // 
@@ -4924,7 +3190,6 @@
             this.radBand60.UseVisualStyleBackColor = true;
             this.radBand60.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand60.Click += new System.EventHandler(this.radBand60_Click);
-            this.radBand60.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand60_MouseDown);
             // 
             // radBand80
             // 
@@ -4937,7 +3202,6 @@
             this.radBand80.UseVisualStyleBackColor = true;
             this.radBand80.CheckedChanged += new System.EventHandler(this.radBand_CheckedChanged);
             this.radBand80.Click += new System.EventHandler(this.radBand80_Click);
-            this.radBand80.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBand80_MouseDown);
             // 
             // chkMUT
             // 
@@ -4947,24 +3211,6 @@
             this.chkMUT.Name = "chkMUT";
             this.toolTip1.SetToolTip(this.chkMUT, resources.GetString("chkMUT.ToolTip"));
             this.chkMUT.CheckedChanged += new System.EventHandler(this.chkMUT_CheckedChanged);
-            // 
-            // chkCWFWKeyer
-            // 
-            this.chkCWFWKeyer.Checked = true;
-            this.chkCWFWKeyer.CheckState = System.Windows.Forms.CheckState.Checked;
-            resources.ApplyResources(this.chkCWFWKeyer, "chkCWFWKeyer");
-            this.chkCWFWKeyer.ForeColor = System.Drawing.Color.White;
-            this.chkCWFWKeyer.Name = "chkCWFWKeyer";
-            this.toolTip1.SetToolTip(this.chkCWFWKeyer, resources.GetString("chkCWFWKeyer.ToolTip"));
-            this.chkCWFWKeyer.CheckedChanged += new System.EventHandler(this.chkCWFWKeyer_CheckedChanged);
-            // 
-            // chkShowCWZero
-            // 
-            resources.ApplyResources(this.chkShowCWZero, "chkShowCWZero");
-            this.chkShowCWZero.ForeColor = System.Drawing.Color.White;
-            this.chkShowCWZero.Name = "chkShowCWZero";
-            this.toolTip1.SetToolTip(this.chkShowCWZero, resources.GetString("chkShowCWZero.ToolTip"));
-            this.chkShowCWZero.CheckedChanged += new System.EventHandler(this.chkShowCWZero_CheckedChanged);
             // 
             // radFMDeviation5kHz
             // 
@@ -5163,16 +3409,6 @@
             this.chkVAC2.CheckedChanged += new System.EventHandler(this.chkVAC2_CheckedChanged);
             this.chkVAC2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkVAC2_MouseDown);
             // 
-            // chkCWSidetone
-            // 
-            this.chkCWSidetone.Checked = true;
-            this.chkCWSidetone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCWSidetone.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.chkCWSidetone, "chkCWSidetone");
-            this.chkCWSidetone.Name = "chkCWSidetone";
-            this.toolTip1.SetToolTip(this.chkCWSidetone, resources.GetString("chkCWSidetone.ToolTip"));
-            this.chkCWSidetone.CheckedChanged += new System.EventHandler(this.chkCWSidetone_CheckedChanged);
-            // 
             // udRX1StepAttData
             // 
             this.udRX1StepAttData.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(46)))), ((int)(((byte)(46)))));
@@ -5244,16 +3480,6 @@
             0});
             this.udRX2StepAttData.ValueChanged += new System.EventHandler(this.udRX2StepAttData_ValueChanged);
             // 
-            // chkCWAPFEnabled
-            // 
-            resources.ApplyResources(this.chkCWAPFEnabled, "chkCWAPFEnabled");
-            this.chkCWAPFEnabled.FlatAppearance.BorderSize = 0;
-            this.chkCWAPFEnabled.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkCWAPFEnabled.Name = "chkCWAPFEnabled";
-            this.toolTip1.SetToolTip(this.chkCWAPFEnabled, resources.GetString("chkCWAPFEnabled.ToolTip"));
-            this.chkCWAPFEnabled.CheckedChanged += new System.EventHandler(this.chkCWAPFEnabled_CheckedChanged);
-            this.chkCWAPFEnabled.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chkCWAPFEnabled_MouseDown);
-            // 
             // lblBandStack
             // 
             this.lblBandStack.ForeColor = System.Drawing.Color.White;
@@ -5297,7 +3523,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN13, resources.GetString("radBandGEN13.ToolTip"));
             this.radBandGEN13.UseVisualStyleBackColor = true;
             this.radBandGEN13.Click += new System.EventHandler(this.radBandGEN13_Click);
-            this.radBandGEN13.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN13_MouseDown);
             // 
             // radBandGEN12
             // 
@@ -5309,7 +3534,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN12, resources.GetString("radBandGEN12.ToolTip"));
             this.radBandGEN12.UseVisualStyleBackColor = false;
             this.radBandGEN12.Click += new System.EventHandler(this.radBandGEN12_Click);
-            this.radBandGEN12.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN12_MouseDown);
             // 
             // radBandGEN11
             // 
@@ -5321,7 +3545,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN11, resources.GetString("radBandGEN11.ToolTip"));
             this.radBandGEN11.UseVisualStyleBackColor = true;
             this.radBandGEN11.Click += new System.EventHandler(this.radBandGEN11_Click);
-            this.radBandGEN11.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN11_MouseDown);
             // 
             // radBandGEN10
             // 
@@ -5333,7 +3556,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN10, resources.GetString("radBandGEN10.ToolTip"));
             this.radBandGEN10.UseVisualStyleBackColor = true;
             this.radBandGEN10.Click += new System.EventHandler(this.radBandGEN10_Click);
-            this.radBandGEN10.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN10_MouseDown);
             // 
             // radBandGEN9
             // 
@@ -5345,7 +3567,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN9, resources.GetString("radBandGEN9.ToolTip"));
             this.radBandGEN9.UseVisualStyleBackColor = true;
             this.radBandGEN9.Click += new System.EventHandler(this.radBandGEN9_Click);
-            this.radBandGEN9.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN9_MouseDown);
             // 
             // radBandGEN8
             // 
@@ -5357,7 +3578,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN8, resources.GetString("radBandGEN8.ToolTip"));
             this.radBandGEN8.UseVisualStyleBackColor = true;
             this.radBandGEN8.Click += new System.EventHandler(this.radBandGEN8_Click);
-            this.radBandGEN8.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN8_MouseDown);
             // 
             // radBandGEN7
             // 
@@ -5369,7 +3589,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN7, resources.GetString("radBandGEN7.ToolTip"));
             this.radBandGEN7.UseVisualStyleBackColor = true;
             this.radBandGEN7.Click += new System.EventHandler(this.radBandGEN7_Click);
-            this.radBandGEN7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN7_MouseDown);
             // 
             // radBandGEN6
             // 
@@ -5381,7 +3600,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN6, resources.GetString("radBandGEN6.ToolTip"));
             this.radBandGEN6.UseVisualStyleBackColor = true;
             this.radBandGEN6.Click += new System.EventHandler(this.radBandGEN6_Click);
-            this.radBandGEN6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN6_MouseDown);
             // 
             // radBandGEN5
             // 
@@ -5393,7 +3611,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN5, resources.GetString("radBandGEN5.ToolTip"));
             this.radBandGEN5.UseVisualStyleBackColor = true;
             this.radBandGEN5.Click += new System.EventHandler(this.radBandGEN5_Click);
-            this.radBandGEN5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN5_MouseDown);
             // 
             // radBandGEN4
             // 
@@ -5405,7 +3622,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN4, resources.GetString("radBandGEN4.ToolTip"));
             this.radBandGEN4.UseVisualStyleBackColor = true;
             this.radBandGEN4.Click += new System.EventHandler(this.radBandGEN4_Click);
-            this.radBandGEN4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN4_MouseDown);
             // 
             // radBandGEN3
             // 
@@ -5417,7 +3633,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN3, resources.GetString("radBandGEN3.ToolTip"));
             this.radBandGEN3.UseVisualStyleBackColor = true;
             this.radBandGEN3.Click += new System.EventHandler(this.radBandGEN3_Click);
-            this.radBandGEN3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN3_MouseDown);
             // 
             // radBandGEN2
             // 
@@ -5429,7 +3644,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN2, resources.GetString("radBandGEN2.ToolTip"));
             this.radBandGEN2.UseVisualStyleBackColor = true;
             this.radBandGEN2.Click += new System.EventHandler(this.radBandGEN2_Click);
-            this.radBandGEN2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN2_MouseDown);
             // 
             // radBandGEN1
             // 
@@ -5441,7 +3655,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN1, resources.GetString("radBandGEN1.ToolTip"));
             this.radBandGEN1.UseVisualStyleBackColor = true;
             this.radBandGEN1.Click += new System.EventHandler(this.radBandGEN1_Click);
-            this.radBandGEN1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN1_MouseDown);
             // 
             // radBandGEN0
             // 
@@ -5453,7 +3666,6 @@
             this.toolTip1.SetToolTip(this.radBandGEN0, resources.GetString("radBandGEN0.ToolTip"));
             this.radBandGEN0.UseVisualStyleBackColor = true;
             this.radBandGEN0.Click += new System.EventHandler(this.radBandGEN0_Click);
-            this.radBandGEN0.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandGEN0_MouseDown);
             // 
             // chkRxAnt
             // 
@@ -5472,37 +3684,6 @@
             this.chkVFOBLock.Name = "chkVFOBLock";
             this.toolTip1.SetToolTip(this.chkVFOBLock, resources.GetString("chkVFOBLock.ToolTip"));
             this.chkVFOBLock.CheckedChanged += new System.EventHandler(this.chkVFOBLock_CheckedChanged);
-            // 
-            // chkQSK
-            // 
-            resources.ApplyResources(this.chkQSK, "chkQSK");
-            this.chkQSK.Checked = true;
-            this.chkQSK.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkQSK.FlatAppearance.BorderSize = 0;
-            this.chkQSK.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.chkQSK.Name = "chkQSK";
-            this.chkQSK.ThreeState = true;
-            this.toolTip1.SetToolTip(this.chkQSK, resources.GetString("chkQSK.ToolTip"));
-            this.chkQSK.CheckStateChanged += new System.EventHandler(this.chkQSK_CheckStateChanged);
-            // 
-            // ptbCWSpeed
-            // 
-            resources.ApplyResources(this.ptbCWSpeed, "ptbCWSpeed");
-            this.ptbCWSpeed.GreenThumb = false;
-            this.ptbCWSpeed.HeadImage = null;
-            this.ptbCWSpeed.LargeChange = 1;
-            this.ptbCWSpeed.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbCWSpeed.LimitEnabled = false;
-            this.ptbCWSpeed.LimitValue = 1;
-            this.ptbCWSpeed.Maximum = 60;
-            this.ptbCWSpeed.Minimum = 1;
-            this.ptbCWSpeed.Name = "ptbCWSpeed";
-            this.ptbCWSpeed.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbCWSpeed.SmallChange = 1;
-            this.ptbCWSpeed.TabStop = false;
-            this.toolTip1.SetToolTip(this.ptbCWSpeed, resources.GetString("ptbCWSpeed.ToolTip"));
-            this.ptbCWSpeed.Value = 25;
-            this.ptbCWSpeed.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWSpeed_Scroll);
             // 
             // ptbPWR
             // 
@@ -5760,63 +3941,6 @@
             this.ptbRX1AF.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbRX1AF_Scroll);
             this.ptbRX1AF.DoubleClick += new System.EventHandler(this.ptbRX1AF_DoubleClick);
             // 
-            // ptbCWAPFGain
-            // 
-            resources.ApplyResources(this.ptbCWAPFGain, "ptbCWAPFGain");
-            this.ptbCWAPFGain.GreenThumb = false;
-            this.ptbCWAPFGain.HeadImage = null;
-            this.ptbCWAPFGain.LargeChange = 1;
-            this.ptbCWAPFGain.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbCWAPFGain.LimitEnabled = false;
-            this.ptbCWAPFGain.LimitValue = 0;
-            this.ptbCWAPFGain.Maximum = 100;
-            this.ptbCWAPFGain.Minimum = 0;
-            this.ptbCWAPFGain.Name = "ptbCWAPFGain";
-            this.ptbCWAPFGain.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbCWAPFGain.SmallChange = 1;
-            this.ptbCWAPFGain.TabStop = false;
-            this.toolTip1.SetToolTip(this.ptbCWAPFGain, resources.GetString("ptbCWAPFGain.ToolTip"));
-            this.ptbCWAPFGain.Value = 0;
-            this.ptbCWAPFGain.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFGain_Scroll);
-            // 
-            // ptbCWAPFBandwidth
-            // 
-            resources.ApplyResources(this.ptbCWAPFBandwidth, "ptbCWAPFBandwidth");
-            this.ptbCWAPFBandwidth.GreenThumb = false;
-            this.ptbCWAPFBandwidth.HeadImage = null;
-            this.ptbCWAPFBandwidth.LargeChange = 1;
-            this.ptbCWAPFBandwidth.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbCWAPFBandwidth.LimitEnabled = false;
-            this.ptbCWAPFBandwidth.LimitValue = 10;
-            this.ptbCWAPFBandwidth.Maximum = 150;
-            this.ptbCWAPFBandwidth.Minimum = 10;
-            this.ptbCWAPFBandwidth.Name = "ptbCWAPFBandwidth";
-            this.ptbCWAPFBandwidth.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbCWAPFBandwidth.SmallChange = 1;
-            this.ptbCWAPFBandwidth.TabStop = false;
-            this.toolTip1.SetToolTip(this.ptbCWAPFBandwidth, resources.GetString("ptbCWAPFBandwidth.ToolTip"));
-            this.ptbCWAPFBandwidth.Value = 150;
-            this.ptbCWAPFBandwidth.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFBandwidth_Scroll);
-            // 
-            // ptbCWAPFFreq
-            // 
-            resources.ApplyResources(this.ptbCWAPFFreq, "ptbCWAPFFreq");
-            this.ptbCWAPFFreq.GreenThumb = false;
-            this.ptbCWAPFFreq.HeadImage = null;
-            this.ptbCWAPFFreq.LargeChange = 1;
-            this.ptbCWAPFFreq.LimitBarColor = System.Drawing.Color.Red;
-            this.ptbCWAPFFreq.LimitEnabled = false;
-            this.ptbCWAPFFreq.LimitValue = 0;
-            this.ptbCWAPFFreq.Maximum = 250;
-            this.ptbCWAPFFreq.Minimum = -250;
-            this.ptbCWAPFFreq.Name = "ptbCWAPFFreq";
-            this.ptbCWAPFFreq.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.ptbCWAPFFreq.SmallChange = 1;
-            this.ptbCWAPFFreq.TabStop = false;
-            this.toolTip1.SetToolTip(this.ptbCWAPFFreq, resources.GetString("ptbCWAPFFreq.ToolTip"));
-            this.ptbCWAPFFreq.Value = 0;
-            this.ptbCWAPFFreq.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbCWAPFFreq_Scroll);
-            // 
             // ptbTune
             // 
             resources.ApplyResources(this.ptbTune, "ptbTune");
@@ -5880,6 +4004,1946 @@
             this.pbAutoAttWarningRX2.Name = "pbAutoAttWarningRX2";
             this.pbAutoAttWarningRX2.TabStop = false;
             this.toolTip1.SetToolTip(this.pbAutoAttWarningRX2, resources.GetString("pbAutoAttWarningRX2.ToolTip"));
+            // 
+            // chkMNU
+            // 
+            resources.ApplyResources(this.chkMNU, "chkMNU");
+            this.chkMNU.FlatAppearance.BorderSize = 0;
+            this.chkMNU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.chkMNU.Name = "chkMNU";
+            this.toolTip1.SetToolTip(this.chkMNU, resources.GetString("chkMNU.ToolTip"));
+            this.chkMNU.CheckedChanged += new System.EventHandler(this.chkMNU_CheckedChanged);
+            // 
+            // timer_clock
+            // 
+            this.timer_clock.Enabled = true;
+            this.timer_clock.Interval = 1000;
+            this.timer_clock.Tick += new System.EventHandler(this.timer_clock_Tick);
+            // 
+            // contextMenuStripFilterRX1
+            // 
+            this.contextMenuStripFilterRX1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripFilterRX1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemRX1FilterConfigure,
+            this.toolStripMenuItemRX1FilterReset});
+            this.contextMenuStripFilterRX1.Name = "contextMenuStripFilterRX1";
+            resources.ApplyResources(this.contextMenuStripFilterRX1, "contextMenuStripFilterRX1");
+            // 
+            // toolStripMenuItemRX1FilterConfigure
+            // 
+            this.toolStripMenuItemRX1FilterConfigure.Name = "toolStripMenuItemRX1FilterConfigure";
+            resources.ApplyResources(this.toolStripMenuItemRX1FilterConfigure, "toolStripMenuItemRX1FilterConfigure");
+            this.toolStripMenuItemRX1FilterConfigure.Click += new System.EventHandler(this.toolStripMenuItemRX1FilterConfigure_Click);
+            // 
+            // toolStripMenuItemRX1FilterReset
+            // 
+            this.toolStripMenuItemRX1FilterReset.Name = "toolStripMenuItemRX1FilterReset";
+            resources.ApplyResources(this.toolStripMenuItemRX1FilterReset, "toolStripMenuItemRX1FilterReset");
+            this.toolStripMenuItemRX1FilterReset.Click += new System.EventHandler(this.toolStripMenuItemRX1FilterReset_Click);
+            // 
+            // contextMenuStripFilterRX2
+            // 
+            this.contextMenuStripFilterRX2.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripFilterRX2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemRX2FilterConfigure,
+            this.toolStripMenuItemRX2FilterReset});
+            this.contextMenuStripFilterRX2.Name = "contextMenuStripFilterRX2";
+            resources.ApplyResources(this.contextMenuStripFilterRX2, "contextMenuStripFilterRX2");
+            // 
+            // toolStripMenuItemRX2FilterConfigure
+            // 
+            this.toolStripMenuItemRX2FilterConfigure.Name = "toolStripMenuItemRX2FilterConfigure";
+            resources.ApplyResources(this.toolStripMenuItemRX2FilterConfigure, "toolStripMenuItemRX2FilterConfigure");
+            this.toolStripMenuItemRX2FilterConfigure.Click += new System.EventHandler(this.toolStripMenuItemRX2FilterConfigure_Click);
+            // 
+            // toolStripMenuItemRX2FilterReset
+            // 
+            this.toolStripMenuItemRX2FilterReset.Name = "toolStripMenuItemRX2FilterReset";
+            resources.ApplyResources(this.toolStripMenuItemRX2FilterReset, "toolStripMenuItemRX2FilterReset");
+            this.toolStripMenuItemRX2FilterReset.Click += new System.EventHandler(this.toolStripMenuItemRX2FilterReset_Click);
+            // 
+            // contextMenuStripNotch
+            // 
+            this.contextMenuStripNotch.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStripNotch.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripNotchDelete,
+            this.toolStripNotchRemember,
+            this.toolStripSeparator1,
+            this.toolStripNotchNormal,
+            this.toolStripNotchDeep,
+            this.toolStripNotchVeryDeep});
+            this.contextMenuStripNotch.Name = "contextMenuStripNotch";
+            resources.ApplyResources(this.contextMenuStripNotch, "contextMenuStripNotch");
+            // 
+            // toolStripNotchDelete
+            // 
+            this.toolStripNotchDelete.Name = "toolStripNotchDelete";
+            resources.ApplyResources(this.toolStripNotchDelete, "toolStripNotchDelete");
+            this.toolStripNotchDelete.Click += new System.EventHandler(this.toolStripNotchDelete_Click);
+            // 
+            // toolStripNotchRemember
+            // 
+            this.toolStripNotchRemember.Name = "toolStripNotchRemember";
+            resources.ApplyResources(this.toolStripNotchRemember, "toolStripNotchRemember");
+            this.toolStripNotchRemember.Click += new System.EventHandler(this.toolStripNotchRemember_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // toolStripNotchNormal
+            // 
+            this.toolStripNotchNormal.Name = "toolStripNotchNormal";
+            resources.ApplyResources(this.toolStripNotchNormal, "toolStripNotchNormal");
+            this.toolStripNotchNormal.Click += new System.EventHandler(this.toolStripNotchNormal_Click);
+            // 
+            // toolStripNotchDeep
+            // 
+            this.toolStripNotchDeep.Name = "toolStripNotchDeep";
+            resources.ApplyResources(this.toolStripNotchDeep, "toolStripNotchDeep");
+            this.toolStripNotchDeep.Click += new System.EventHandler(this.toolStripNotchDeep_Click);
+            // 
+            // toolStripNotchVeryDeep
+            // 
+            this.toolStripNotchVeryDeep.Name = "toolStripNotchVeryDeep";
+            resources.ApplyResources(this.toolStripNotchVeryDeep, "toolStripNotchVeryDeep");
+            this.toolStripNotchVeryDeep.Click += new System.EventHandler(this.toolStripNotchVeryDeep_Click);
+            // 
+            // NRToolStripMenuItem
+            // 
+            this.NRToolStripMenuItem.Name = "NRToolStripMenuItem";
+            resources.ApplyResources(this.NRToolStripMenuItem, "NRToolStripMenuItem");
+            this.NRToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // NR2ToolStripMenuItem1
+            // 
+            this.NR2ToolStripMenuItem1.Name = "NR2ToolStripMenuItem1";
+            resources.ApplyResources(this.NR2ToolStripMenuItem1, "NR2ToolStripMenuItem1");
+            this.NR2ToolStripMenuItem1.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // NR3ToolStripMenuItem
+            // 
+            this.NR3ToolStripMenuItem.Name = "NR3ToolStripMenuItem";
+            resources.ApplyResources(this.NR3ToolStripMenuItem, "NR3ToolStripMenuItem");
+            this.NR3ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // NR4ToolStripMenuItem
+            // 
+            this.NR4ToolStripMenuItem.Name = "NR4ToolStripMenuItem";
+            resources.ApplyResources(this.NR4ToolStripMenuItem, "NR4ToolStripMenuItem");
+            this.NR4ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // ANFToolStripMenuItem
+            // 
+            this.ANFToolStripMenuItem.Name = "ANFToolStripMenuItem";
+            resources.ApplyResources(this.ANFToolStripMenuItem, "ANFToolStripMenuItem");
+            this.ANFToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // NBToolStripMenuItem
+            // 
+            this.NBToolStripMenuItem.Name = "NBToolStripMenuItem";
+            resources.ApplyResources(this.NBToolStripMenuItem, "NBToolStripMenuItem");
+            this.NBToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // NB2ToolStripMenuItem
+            // 
+            this.NB2ToolStripMenuItem.Name = "NB2ToolStripMenuItem";
+            resources.ApplyResources(this.NB2ToolStripMenuItem, "NB2ToolStripMenuItem");
+            this.NB2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // SNBtoolStripMenuItem
+            // 
+            this.SNBtoolStripMenuItem.Name = "SNBtoolStripMenuItem";
+            resources.ApplyResources(this.SNBtoolStripMenuItem, "SNBtoolStripMenuItem");
+            this.SNBtoolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // BINToolStripMenuItem
+            // 
+            this.BINToolStripMenuItem.Name = "BINToolStripMenuItem";
+            resources.ApplyResources(this.BINToolStripMenuItem, "BINToolStripMenuItem");
+            this.BINToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // MultiRXToolStripMenuItem
+            // 
+            this.MultiRXToolStripMenuItem.Name = "MultiRXToolStripMenuItem";
+            resources.ApplyResources(this.MultiRXToolStripMenuItem, "MultiRXToolStripMenuItem");
+            this.MultiRXToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // RX1AVGToolStripMenuItem
+            // 
+            this.RX1AVGToolStripMenuItem.Name = "RX1AVGToolStripMenuItem";
+            resources.ApplyResources(this.RX1AVGToolStripMenuItem, "RX1AVGToolStripMenuItem");
+            this.RX1AVGToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // RX1PeakToolStripMenuItem
+            // 
+            this.RX1PeakToolStripMenuItem.Name = "RX1PeakToolStripMenuItem";
+            resources.ApplyResources(this.RX1PeakToolStripMenuItem, "RX1PeakToolStripMenuItem");
+            this.RX1PeakToolStripMenuItem.Click += new System.EventHandler(this.mnuDSP_Click);
+            // 
+            // bandtoolStripMenuItem1
+            // 
+            this.bandtoolStripMenuItem1.Name = "bandtoolStripMenuItem1";
+            resources.ApplyResources(this.bandtoolStripMenuItem1, "bandtoolStripMenuItem1");
+            this.bandtoolStripMenuItem1.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem2
+            // 
+            this.bandtoolStripMenuItem2.Name = "bandtoolStripMenuItem2";
+            resources.ApplyResources(this.bandtoolStripMenuItem2, "bandtoolStripMenuItem2");
+            this.bandtoolStripMenuItem2.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem3
+            // 
+            this.bandtoolStripMenuItem3.Name = "bandtoolStripMenuItem3";
+            resources.ApplyResources(this.bandtoolStripMenuItem3, "bandtoolStripMenuItem3");
+            this.bandtoolStripMenuItem3.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem4
+            // 
+            this.bandtoolStripMenuItem4.Name = "bandtoolStripMenuItem4";
+            resources.ApplyResources(this.bandtoolStripMenuItem4, "bandtoolStripMenuItem4");
+            this.bandtoolStripMenuItem4.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem5
+            // 
+            this.bandtoolStripMenuItem5.Name = "bandtoolStripMenuItem5";
+            resources.ApplyResources(this.bandtoolStripMenuItem5, "bandtoolStripMenuItem5");
+            this.bandtoolStripMenuItem5.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem14
+            // 
+            this.bandtoolStripMenuItem14.Name = "bandtoolStripMenuItem14";
+            resources.ApplyResources(this.bandtoolStripMenuItem14, "bandtoolStripMenuItem14");
+            this.bandtoolStripMenuItem14.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem7
+            // 
+            this.bandtoolStripMenuItem7.Name = "bandtoolStripMenuItem7";
+            resources.ApplyResources(this.bandtoolStripMenuItem7, "bandtoolStripMenuItem7");
+            this.bandtoolStripMenuItem7.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem8
+            // 
+            this.bandtoolStripMenuItem8.Name = "bandtoolStripMenuItem8";
+            resources.ApplyResources(this.bandtoolStripMenuItem8, "bandtoolStripMenuItem8");
+            this.bandtoolStripMenuItem8.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem9
+            // 
+            this.bandtoolStripMenuItem9.Name = "bandtoolStripMenuItem9";
+            resources.ApplyResources(this.bandtoolStripMenuItem9, "bandtoolStripMenuItem9");
+            this.bandtoolStripMenuItem9.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem10
+            // 
+            this.bandtoolStripMenuItem10.Name = "bandtoolStripMenuItem10";
+            resources.ApplyResources(this.bandtoolStripMenuItem10, "bandtoolStripMenuItem10");
+            this.bandtoolStripMenuItem10.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem11
+            // 
+            this.bandtoolStripMenuItem11.Name = "bandtoolStripMenuItem11";
+            resources.ApplyResources(this.bandtoolStripMenuItem11, "bandtoolStripMenuItem11");
+            this.bandtoolStripMenuItem11.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem12
+            // 
+            this.bandtoolStripMenuItem12.Name = "bandtoolStripMenuItem12";
+            resources.ApplyResources(this.bandtoolStripMenuItem12, "bandtoolStripMenuItem12");
+            this.bandtoolStripMenuItem12.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // bandtoolStripMenuItem13
+            // 
+            this.bandtoolStripMenuItem13.Name = "bandtoolStripMenuItem13";
+            resources.ApplyResources(this.bandtoolStripMenuItem13, "bandtoolStripMenuItem13");
+            this.bandtoolStripMenuItem13.Click += new System.EventHandler(this.mnuBand_Click);
+            // 
+            // lSBToolStripMenuItem
+            // 
+            this.lSBToolStripMenuItem.Name = "lSBToolStripMenuItem";
+            resources.ApplyResources(this.lSBToolStripMenuItem, "lSBToolStripMenuItem");
+            this.lSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // uSBToolStripMenuItem
+            // 
+            this.uSBToolStripMenuItem.Name = "uSBToolStripMenuItem";
+            resources.ApplyResources(this.uSBToolStripMenuItem, "uSBToolStripMenuItem");
+            this.uSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // dSBToolStripMenuItem
+            // 
+            this.dSBToolStripMenuItem.Name = "dSBToolStripMenuItem";
+            resources.ApplyResources(this.dSBToolStripMenuItem, "dSBToolStripMenuItem");
+            this.dSBToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // cWLToolStripMenuItem
+            // 
+            this.cWLToolStripMenuItem.Name = "cWLToolStripMenuItem";
+            resources.ApplyResources(this.cWLToolStripMenuItem, "cWLToolStripMenuItem");
+            this.cWLToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // cWUToolStripMenuItem
+            // 
+            this.cWUToolStripMenuItem.Name = "cWUToolStripMenuItem";
+            resources.ApplyResources(this.cWUToolStripMenuItem, "cWUToolStripMenuItem");
+            this.cWUToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // fMToolStripMenuItem
+            // 
+            this.fMToolStripMenuItem.Name = "fMToolStripMenuItem";
+            resources.ApplyResources(this.fMToolStripMenuItem, "fMToolStripMenuItem");
+            this.fMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // aMToolStripMenuItem
+            // 
+            this.aMToolStripMenuItem.Name = "aMToolStripMenuItem";
+            resources.ApplyResources(this.aMToolStripMenuItem, "aMToolStripMenuItem");
+            this.aMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // sAMToolStripMenuItem
+            // 
+            this.sAMToolStripMenuItem.Name = "sAMToolStripMenuItem";
+            resources.ApplyResources(this.sAMToolStripMenuItem, "sAMToolStripMenuItem");
+            this.sAMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // sPECToolStripMenuItem
+            // 
+            this.sPECToolStripMenuItem.Name = "sPECToolStripMenuItem";
+            resources.ApplyResources(this.sPECToolStripMenuItem, "sPECToolStripMenuItem");
+            this.sPECToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // dIGLToolStripMenuItem
+            // 
+            this.dIGLToolStripMenuItem.Name = "dIGLToolStripMenuItem";
+            resources.ApplyResources(this.dIGLToolStripMenuItem, "dIGLToolStripMenuItem");
+            this.dIGLToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // dIGUToolStripMenuItem
+            // 
+            this.dIGUToolStripMenuItem.Name = "dIGUToolStripMenuItem";
+            resources.ApplyResources(this.dIGUToolStripMenuItem, "dIGUToolStripMenuItem");
+            this.dIGUToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // dRMToolStripMenuItem
+            // 
+            this.dRMToolStripMenuItem.Name = "dRMToolStripMenuItem";
+            resources.ApplyResources(this.dRMToolStripMenuItem, "dRMToolStripMenuItem");
+            this.dRMToolStripMenuItem.Click += new System.EventHandler(this.mnuMode_Click);
+            // 
+            // FilterToolStripMenuItem1
+            // 
+            this.FilterToolStripMenuItem1.Name = "FilterToolStripMenuItem1";
+            resources.ApplyResources(this.FilterToolStripMenuItem1, "FilterToolStripMenuItem1");
+            this.FilterToolStripMenuItem1.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem2
+            // 
+            this.FilterToolStripMenuItem2.Name = "FilterToolStripMenuItem2";
+            resources.ApplyResources(this.FilterToolStripMenuItem2, "FilterToolStripMenuItem2");
+            this.FilterToolStripMenuItem2.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem3
+            // 
+            this.FilterToolStripMenuItem3.Name = "FilterToolStripMenuItem3";
+            resources.ApplyResources(this.FilterToolStripMenuItem3, "FilterToolStripMenuItem3");
+            this.FilterToolStripMenuItem3.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem4
+            // 
+            this.FilterToolStripMenuItem4.Name = "FilterToolStripMenuItem4";
+            resources.ApplyResources(this.FilterToolStripMenuItem4, "FilterToolStripMenuItem4");
+            this.FilterToolStripMenuItem4.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem5
+            // 
+            this.FilterToolStripMenuItem5.Name = "FilterToolStripMenuItem5";
+            resources.ApplyResources(this.FilterToolStripMenuItem5, "FilterToolStripMenuItem5");
+            this.FilterToolStripMenuItem5.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem6
+            // 
+            this.FilterToolStripMenuItem6.Name = "FilterToolStripMenuItem6";
+            resources.ApplyResources(this.FilterToolStripMenuItem6, "FilterToolStripMenuItem6");
+            this.FilterToolStripMenuItem6.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem7
+            // 
+            this.FilterToolStripMenuItem7.Name = "FilterToolStripMenuItem7";
+            resources.ApplyResources(this.FilterToolStripMenuItem7, "FilterToolStripMenuItem7");
+            this.FilterToolStripMenuItem7.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem8
+            // 
+            this.FilterToolStripMenuItem8.Name = "FilterToolStripMenuItem8";
+            resources.ApplyResources(this.FilterToolStripMenuItem8, "FilterToolStripMenuItem8");
+            this.FilterToolStripMenuItem8.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem9
+            // 
+            this.FilterToolStripMenuItem9.Name = "FilterToolStripMenuItem9";
+            resources.ApplyResources(this.FilterToolStripMenuItem9, "FilterToolStripMenuItem9");
+            this.FilterToolStripMenuItem9.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // FilterToolStripMenuItem10
+            // 
+            this.FilterToolStripMenuItem10.Name = "FilterToolStripMenuItem10";
+            resources.ApplyResources(this.FilterToolStripMenuItem10, "FilterToolStripMenuItem10");
+            this.FilterToolStripMenuItem10.Click += new System.EventHandler(this.mnuFilter_Click);
+            // 
+            // bandToolStripMenuItem6
+            // 
+            this.bandToolStripMenuItem6.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem5,
+            this.toolStripMenuItem6,
+            this.toolStripMenuItem7,
+            this.toolStripMenuItem8,
+            this.toolStripMenuItem9,
+            this.toolStripMenuItem10,
+            this.toolStripMenuItem11,
+            this.toolStripMenuItem12,
+            this.wWVToolStripMenuItem,
+            this.gENToolStripMenuItem});
+            this.bandToolStripMenuItem6.Name = "bandToolStripMenuItem6";
+            resources.ApplyResources(this.bandToolStripMenuItem6, "bandToolStripMenuItem6");
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            resources.ApplyResources(this.toolStripMenuItem2, "toolStripMenuItem2");
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            resources.ApplyResources(this.toolStripMenuItem3, "toolStripMenuItem3");
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            resources.ApplyResources(this.toolStripMenuItem4, "toolStripMenuItem4");
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            resources.ApplyResources(this.toolStripMenuItem5, "toolStripMenuItem5");
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            resources.ApplyResources(this.toolStripMenuItem6, "toolStripMenuItem6");
+            this.toolStripMenuItem6.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            resources.ApplyResources(this.toolStripMenuItem7, "toolStripMenuItem7");
+            this.toolStripMenuItem7.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem8
+            // 
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            resources.ApplyResources(this.toolStripMenuItem8, "toolStripMenuItem8");
+            this.toolStripMenuItem8.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem9
+            // 
+            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
+            resources.ApplyResources(this.toolStripMenuItem9, "toolStripMenuItem9");
+            this.toolStripMenuItem9.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem10
+            // 
+            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+            resources.ApplyResources(this.toolStripMenuItem10, "toolStripMenuItem10");
+            this.toolStripMenuItem10.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem11
+            // 
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            resources.ApplyResources(this.toolStripMenuItem11, "toolStripMenuItem11");
+            this.toolStripMenuItem11.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // toolStripMenuItem12
+            // 
+            this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+            resources.ApplyResources(this.toolStripMenuItem12, "toolStripMenuItem12");
+            this.toolStripMenuItem12.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // wWVToolStripMenuItem
+            // 
+            this.wWVToolStripMenuItem.Name = "wWVToolStripMenuItem";
+            resources.ApplyResources(this.wWVToolStripMenuItem, "wWVToolStripMenuItem");
+            this.wWVToolStripMenuItem.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // gENToolStripMenuItem
+            // 
+            this.gENToolStripMenuItem.Name = "gENToolStripMenuItem";
+            resources.ApplyResources(this.gENToolStripMenuItem, "gENToolStripMenuItem");
+            this.gENToolStripMenuItem.Click += new System.EventHandler(this.mnuBandRX2_Click);
+            // 
+            // modeToolStripMenuItem1
+            // 
+            this.modeToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lSBToolStripMenuItem1,
+            this.uSBToolStripMenuItem1,
+            this.dSBToolStripMenuItem1,
+            this.cWLToolStripMenuItem1,
+            this.cWUToolStripMenuItem1,
+            this.fMToolStripMenuItem1,
+            this.aMToolStripMenuItem1,
+            this.sAMToolStripMenuItem1,
+            this.dIGLToolStripMenuItem1,
+            this.dIGUToolStripMenuItem1,
+            this.dRMToolStripMenuItem1});
+            this.modeToolStripMenuItem1.Name = "modeToolStripMenuItem1";
+            resources.ApplyResources(this.modeToolStripMenuItem1, "modeToolStripMenuItem1");
+            // 
+            // lSBToolStripMenuItem1
+            // 
+            this.lSBToolStripMenuItem1.Name = "lSBToolStripMenuItem1";
+            resources.ApplyResources(this.lSBToolStripMenuItem1, "lSBToolStripMenuItem1");
+            this.lSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // uSBToolStripMenuItem1
+            // 
+            this.uSBToolStripMenuItem1.Name = "uSBToolStripMenuItem1";
+            resources.ApplyResources(this.uSBToolStripMenuItem1, "uSBToolStripMenuItem1");
+            this.uSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // dSBToolStripMenuItem1
+            // 
+            this.dSBToolStripMenuItem1.Name = "dSBToolStripMenuItem1";
+            resources.ApplyResources(this.dSBToolStripMenuItem1, "dSBToolStripMenuItem1");
+            this.dSBToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // cWLToolStripMenuItem1
+            // 
+            this.cWLToolStripMenuItem1.Name = "cWLToolStripMenuItem1";
+            resources.ApplyResources(this.cWLToolStripMenuItem1, "cWLToolStripMenuItem1");
+            this.cWLToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // cWUToolStripMenuItem1
+            // 
+            this.cWUToolStripMenuItem1.Name = "cWUToolStripMenuItem1";
+            resources.ApplyResources(this.cWUToolStripMenuItem1, "cWUToolStripMenuItem1");
+            this.cWUToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // fMToolStripMenuItem1
+            // 
+            this.fMToolStripMenuItem1.Name = "fMToolStripMenuItem1";
+            resources.ApplyResources(this.fMToolStripMenuItem1, "fMToolStripMenuItem1");
+            this.fMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // aMToolStripMenuItem1
+            // 
+            this.aMToolStripMenuItem1.Name = "aMToolStripMenuItem1";
+            resources.ApplyResources(this.aMToolStripMenuItem1, "aMToolStripMenuItem1");
+            this.aMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // sAMToolStripMenuItem1
+            // 
+            this.sAMToolStripMenuItem1.Name = "sAMToolStripMenuItem1";
+            resources.ApplyResources(this.sAMToolStripMenuItem1, "sAMToolStripMenuItem1");
+            this.sAMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // dIGLToolStripMenuItem1
+            // 
+            this.dIGLToolStripMenuItem1.Name = "dIGLToolStripMenuItem1";
+            resources.ApplyResources(this.dIGLToolStripMenuItem1, "dIGLToolStripMenuItem1");
+            this.dIGLToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // dIGUToolStripMenuItem1
+            // 
+            this.dIGUToolStripMenuItem1.Name = "dIGUToolStripMenuItem1";
+            resources.ApplyResources(this.dIGUToolStripMenuItem1, "dIGUToolStripMenuItem1");
+            this.dIGUToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // dRMToolStripMenuItem1
+            // 
+            this.dRMToolStripMenuItem1.Name = "dRMToolStripMenuItem1";
+            resources.ApplyResources(this.dRMToolStripMenuItem1, "dRMToolStripMenuItem1");
+            this.dRMToolStripMenuItem1.Click += new System.EventHandler(this.mnuModeRX2_Click);
+            // 
+            // filterToolStripMenuItem11
+            // 
+            this.filterToolStripMenuItem11.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.kToolStripMenuItem,
+            this.kToolStripMenuItem1,
+            this.kToolStripMenuItem2,
+            this.kToolStripMenuItem3,
+            this.kToolStripMenuItem4,
+            this.toolStripMenuItem13,
+            this.toolStripMenuItem14});
+            this.filterToolStripMenuItem11.Name = "filterToolStripMenuItem11";
+            resources.ApplyResources(this.filterToolStripMenuItem11, "filterToolStripMenuItem11");
+            // 
+            // kToolStripMenuItem
+            // 
+            this.kToolStripMenuItem.Name = "kToolStripMenuItem";
+            resources.ApplyResources(this.kToolStripMenuItem, "kToolStripMenuItem");
+            this.kToolStripMenuItem.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // kToolStripMenuItem1
+            // 
+            this.kToolStripMenuItem1.Name = "kToolStripMenuItem1";
+            resources.ApplyResources(this.kToolStripMenuItem1, "kToolStripMenuItem1");
+            this.kToolStripMenuItem1.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // kToolStripMenuItem2
+            // 
+            this.kToolStripMenuItem2.Name = "kToolStripMenuItem2";
+            resources.ApplyResources(this.kToolStripMenuItem2, "kToolStripMenuItem2");
+            this.kToolStripMenuItem2.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // kToolStripMenuItem3
+            // 
+            this.kToolStripMenuItem3.Name = "kToolStripMenuItem3";
+            resources.ApplyResources(this.kToolStripMenuItem3, "kToolStripMenuItem3");
+            this.kToolStripMenuItem3.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // kToolStripMenuItem4
+            // 
+            this.kToolStripMenuItem4.Name = "kToolStripMenuItem4";
+            resources.ApplyResources(this.kToolStripMenuItem4, "kToolStripMenuItem4");
+            this.kToolStripMenuItem4.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // toolStripMenuItem13
+            // 
+            this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+            resources.ApplyResources(this.toolStripMenuItem13, "toolStripMenuItem13");
+            this.toolStripMenuItem13.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // toolStripMenuItem14
+            // 
+            this.toolStripMenuItem14.Name = "toolStripMenuItem14";
+            resources.ApplyResources(this.toolStripMenuItem14, "toolStripMenuItem14");
+            this.toolStripMenuItem14.Click += new System.EventHandler(this.mnuFilterRX2_Click);
+            // 
+            // dSPToolStripMenuItem1
+            // 
+            this.dSPToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nR2ToolStripMenuItem,
+            this.NR2StripMenuItem2,
+            this.NR3ToolStripMenuItem_rx2,
+            this.NR4ToolStripMenuItem_rx2,
+            this.aNF2ToolStripMenuItem,
+            this.nB2ToolStripMenuItem1,
+            this.nBRX2ToolStripMenuItem,
+            this.SNBtoolStripMenuItem1,
+            this.bIN2ToolStripMenuItem,
+            this.RX2AVGToolStripMenuItem,
+            this.RX2PeakToolStripMenuItem});
+            this.dSPToolStripMenuItem1.Name = "dSPToolStripMenuItem1";
+            resources.ApplyResources(this.dSPToolStripMenuItem1, "dSPToolStripMenuItem1");
+            // 
+            // nR2ToolStripMenuItem
+            // 
+            this.nR2ToolStripMenuItem.Name = "nR2ToolStripMenuItem";
+            resources.ApplyResources(this.nR2ToolStripMenuItem, "nR2ToolStripMenuItem");
+            this.nR2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // NR2StripMenuItem2
+            // 
+            this.NR2StripMenuItem2.Name = "NR2StripMenuItem2";
+            resources.ApplyResources(this.NR2StripMenuItem2, "NR2StripMenuItem2");
+            this.NR2StripMenuItem2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // NR3ToolStripMenuItem_rx2
+            // 
+            this.NR3ToolStripMenuItem_rx2.Name = "NR3ToolStripMenuItem_rx2";
+            resources.ApplyResources(this.NR3ToolStripMenuItem_rx2, "NR3ToolStripMenuItem_rx2");
+            this.NR3ToolStripMenuItem_rx2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // NR4ToolStripMenuItem_rx2
+            // 
+            this.NR4ToolStripMenuItem_rx2.Name = "NR4ToolStripMenuItem_rx2";
+            resources.ApplyResources(this.NR4ToolStripMenuItem_rx2, "NR4ToolStripMenuItem_rx2");
+            this.NR4ToolStripMenuItem_rx2.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // aNF2ToolStripMenuItem
+            // 
+            this.aNF2ToolStripMenuItem.Name = "aNF2ToolStripMenuItem";
+            resources.ApplyResources(this.aNF2ToolStripMenuItem, "aNF2ToolStripMenuItem");
+            this.aNF2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // nB2ToolStripMenuItem1
+            // 
+            this.nB2ToolStripMenuItem1.Name = "nB2ToolStripMenuItem1";
+            resources.ApplyResources(this.nB2ToolStripMenuItem1, "nB2ToolStripMenuItem1");
+            this.nB2ToolStripMenuItem1.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // nBRX2ToolStripMenuItem
+            // 
+            this.nBRX2ToolStripMenuItem.Name = "nBRX2ToolStripMenuItem";
+            resources.ApplyResources(this.nBRX2ToolStripMenuItem, "nBRX2ToolStripMenuItem");
+            this.nBRX2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // SNBtoolStripMenuItem1
+            // 
+            this.SNBtoolStripMenuItem1.Name = "SNBtoolStripMenuItem1";
+            resources.ApplyResources(this.SNBtoolStripMenuItem1, "SNBtoolStripMenuItem1");
+            this.SNBtoolStripMenuItem1.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // bIN2ToolStripMenuItem
+            // 
+            this.bIN2ToolStripMenuItem.Name = "bIN2ToolStripMenuItem";
+            resources.ApplyResources(this.bIN2ToolStripMenuItem, "bIN2ToolStripMenuItem");
+            this.bIN2ToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // RX2AVGToolStripMenuItem
+            // 
+            this.RX2AVGToolStripMenuItem.Name = "RX2AVGToolStripMenuItem";
+            resources.ApplyResources(this.RX2AVGToolStripMenuItem, "RX2AVGToolStripMenuItem");
+            this.RX2AVGToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // RX2PeakToolStripMenuItem
+            // 
+            this.RX2PeakToolStripMenuItem.Name = "RX2PeakToolStripMenuItem";
+            resources.ApplyResources(this.RX2PeakToolStripMenuItem, "RX2PeakToolStripMenuItem");
+            this.RX2PeakToolStripMenuItem.Click += new System.EventHandler(this.mnuDSPRX2_Click);
+            // 
+            // statusStripMain
+            // 
+            resources.ApplyResources(this.statusStripMain, "statusStripMain");
+            this.statusStripMain.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.statusStripMain.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton_ScreenSize,
+            this.toolStripStatusLabel1,
+            this.toolStripDropDownButton_CPU,
+            this.toolStripStatusLabel_Volts,
+            this.toolStripStatusLabel_Amps,
+            this.toolStripStatusLabel_TXInhibit,
+            this.toolStripStatusLabel_SeqWarning,
+            this.toolStripStatusLabelRXAnt,
+            this.toolStripStatusLabelTXAnt,
+            this.toolStripStatusLabelAndromedaMulti,
+            this.toolStripStatusLabel_Fill,
+            this.toolStripStatusLabel_PAstatus,
+            this.toolStripStatusLabel_N1MM,
+            this.toolStripStatus_PAspacer,
+            this.toolStripStatusLabel_play_record,
+            this.toolStripStatus_RecordPlay_spacer,
+            this.toolStripStatusLabel_TCI,
+            this.toolStripStatusLabel_CatTCPip,
+            this.toolStripStatusLabel_CatSerial,
+            this.toolStripStatusLabel_CMstatus,
+            this.toolStripStatusLabel_timer,
+            this.toolStripStatusLabel_UTCTime,
+            this.toolStripStatusLabel_Date,
+            this.toolStripStatusLabel_LocalTime});
+            this.statusStripMain.Name = "statusStripMain";
+            // 
+            // toolStripDropDownButton_ScreenSize
+            // 
+            resources.ApplyResources(this.toolStripDropDownButton_ScreenSize, "toolStripDropDownButton_ScreenSize");
+            this.toolStripDropDownButton_ScreenSize.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.includeBordersToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.toolStripMenuItem_4by3,
+            this.toolStripMenuItem_16by9,
+            this.toolStripMenuItem_16by10,
+            this.youTubeToolStripMenuItem});
+            this.toolStripDropDownButton_ScreenSize.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripDropDownButton_ScreenSize.Image = global::Thetis.Properties.Resources.screen4;
+            this.toolStripDropDownButton_ScreenSize.Name = "toolStripDropDownButton_ScreenSize";
+            this.toolStripDropDownButton_ScreenSize.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // includeBordersToolStripMenuItem
+            // 
+            this.includeBordersToolStripMenuItem.Name = "includeBordersToolStripMenuItem";
+            resources.ApplyResources(this.includeBordersToolStripMenuItem, "includeBordersToolStripMenuItem");
+            this.includeBordersToolStripMenuItem.Click += new System.EventHandler(this.includeBordersToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
+            // toolStripMenuItem_4by3
+            // 
+            this.toolStripMenuItem_4by3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x768ToolStripMenuItem,
+            this.x864ToolStripMenuItem,
+            this.x960ToolStripMenuItem,
+            this.x1050ToolStripMenuItem,
+            this.x1200ToolStripMenuItem});
+            this.toolStripMenuItem_4by3.Name = "toolStripMenuItem_4by3";
+            resources.ApplyResources(this.toolStripMenuItem_4by3, "toolStripMenuItem_4by3");
+            this.toolStripMenuItem_4by3.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_4by3_DropDownItemClicked);
+            // 
+            // x768ToolStripMenuItem
+            // 
+            this.x768ToolStripMenuItem.Name = "x768ToolStripMenuItem";
+            resources.ApplyResources(this.x768ToolStripMenuItem, "x768ToolStripMenuItem");
+            // 
+            // x864ToolStripMenuItem
+            // 
+            this.x864ToolStripMenuItem.Name = "x864ToolStripMenuItem";
+            resources.ApplyResources(this.x864ToolStripMenuItem, "x864ToolStripMenuItem");
+            // 
+            // x960ToolStripMenuItem
+            // 
+            this.x960ToolStripMenuItem.Name = "x960ToolStripMenuItem";
+            resources.ApplyResources(this.x960ToolStripMenuItem, "x960ToolStripMenuItem");
+            // 
+            // x1050ToolStripMenuItem
+            // 
+            this.x1050ToolStripMenuItem.Name = "x1050ToolStripMenuItem";
+            resources.ApplyResources(this.x1050ToolStripMenuItem, "x1050ToolStripMenuItem");
+            // 
+            // x1200ToolStripMenuItem
+            // 
+            this.x1200ToolStripMenuItem.Name = "x1200ToolStripMenuItem";
+            resources.ApplyResources(this.x1200ToolStripMenuItem, "x1200ToolStripMenuItem");
+            // 
+            // toolStripMenuItem_16by9
+            // 
+            this.toolStripMenuItem_16by9.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x720ToolStripMenuItem,
+            this.x768ToolStripMenuItem1,
+            this.x900ToolStripMenuItem,
+            this.x1080ToolStripMenuItem,
+            this.x1440ToolStripMenuItem,
+            this.x2160ToolStripMenuItem});
+            this.toolStripMenuItem_16by9.Name = "toolStripMenuItem_16by9";
+            resources.ApplyResources(this.toolStripMenuItem_16by9, "toolStripMenuItem_16by9");
+            this.toolStripMenuItem_16by9.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by9_DropDownItemClicked);
+            // 
+            // x720ToolStripMenuItem
+            // 
+            this.x720ToolStripMenuItem.Name = "x720ToolStripMenuItem";
+            resources.ApplyResources(this.x720ToolStripMenuItem, "x720ToolStripMenuItem");
+            // 
+            // x768ToolStripMenuItem1
+            // 
+            this.x768ToolStripMenuItem1.Name = "x768ToolStripMenuItem1";
+            resources.ApplyResources(this.x768ToolStripMenuItem1, "x768ToolStripMenuItem1");
+            // 
+            // x900ToolStripMenuItem
+            // 
+            this.x900ToolStripMenuItem.Name = "x900ToolStripMenuItem";
+            resources.ApplyResources(this.x900ToolStripMenuItem, "x900ToolStripMenuItem");
+            // 
+            // x1080ToolStripMenuItem
+            // 
+            this.x1080ToolStripMenuItem.Name = "x1080ToolStripMenuItem";
+            resources.ApplyResources(this.x1080ToolStripMenuItem, "x1080ToolStripMenuItem");
+            // 
+            // x1440ToolStripMenuItem
+            // 
+            this.x1440ToolStripMenuItem.Name = "x1440ToolStripMenuItem";
+            resources.ApplyResources(this.x1440ToolStripMenuItem, "x1440ToolStripMenuItem");
+            // 
+            // x2160ToolStripMenuItem
+            // 
+            this.x2160ToolStripMenuItem.Name = "x2160ToolStripMenuItem";
+            resources.ApplyResources(this.x2160ToolStripMenuItem, "x2160ToolStripMenuItem");
+            // 
+            // toolStripMenuItem_16by10
+            // 
+            this.toolStripMenuItem_16by10.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.x800ToolStripMenuItem,
+            this.x900ToolStripMenuItem1,
+            this.x1050ToolStripMenuItem1,
+            this.x1200ToolStripMenuItem1,
+            this.x1600ToolStripMenuItem,
+            this.x2400ToolStripMenuItem});
+            this.toolStripMenuItem_16by10.Name = "toolStripMenuItem_16by10";
+            resources.ApplyResources(this.toolStripMenuItem_16by10, "toolStripMenuItem_16by10");
+            this.toolStripMenuItem_16by10.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripMenuItem_16by10_DropDownItemClicked);
+            // 
+            // x800ToolStripMenuItem
+            // 
+            this.x800ToolStripMenuItem.Name = "x800ToolStripMenuItem";
+            resources.ApplyResources(this.x800ToolStripMenuItem, "x800ToolStripMenuItem");
+            // 
+            // x900ToolStripMenuItem1
+            // 
+            this.x900ToolStripMenuItem1.Name = "x900ToolStripMenuItem1";
+            resources.ApplyResources(this.x900ToolStripMenuItem1, "x900ToolStripMenuItem1");
+            // 
+            // x1050ToolStripMenuItem1
+            // 
+            this.x1050ToolStripMenuItem1.Name = "x1050ToolStripMenuItem1";
+            resources.ApplyResources(this.x1050ToolStripMenuItem1, "x1050ToolStripMenuItem1");
+            // 
+            // x1200ToolStripMenuItem1
+            // 
+            this.x1200ToolStripMenuItem1.Name = "x1200ToolStripMenuItem1";
+            resources.ApplyResources(this.x1200ToolStripMenuItem1, "x1200ToolStripMenuItem1");
+            // 
+            // x1600ToolStripMenuItem
+            // 
+            this.x1600ToolStripMenuItem.Name = "x1600ToolStripMenuItem";
+            resources.ApplyResources(this.x1600ToolStripMenuItem, "x1600ToolStripMenuItem");
+            // 
+            // x2400ToolStripMenuItem
+            // 
+            this.x2400ToolStripMenuItem.Name = "x2400ToolStripMenuItem";
+            resources.ApplyResources(this.x2400ToolStripMenuItem, "x2400ToolStripMenuItem");
+            // 
+            // youTubeToolStripMenuItem
+            // 
+            this.youTubeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pToolStripMenuItem,
+            this.pToolStripMenuItem1,
+            this.pToolStripMenuItem2,
+            this.pToolStripMenuItem3});
+            this.youTubeToolStripMenuItem.Name = "youTubeToolStripMenuItem";
+            resources.ApplyResources(this.youTubeToolStripMenuItem, "youTubeToolStripMenuItem");
+            this.youTubeToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.youTubeToolStripMenuItem_DropDownItemClicked);
+            // 
+            // pToolStripMenuItem
+            // 
+            this.pToolStripMenuItem.Name = "pToolStripMenuItem";
+            resources.ApplyResources(this.pToolStripMenuItem, "pToolStripMenuItem");
+            // 
+            // pToolStripMenuItem1
+            // 
+            this.pToolStripMenuItem1.Name = "pToolStripMenuItem1";
+            resources.ApplyResources(this.pToolStripMenuItem1, "pToolStripMenuItem1");
+            // 
+            // pToolStripMenuItem2
+            // 
+            this.pToolStripMenuItem2.Name = "pToolStripMenuItem2";
+            resources.ApplyResources(this.pToolStripMenuItem2, "pToolStripMenuItem2");
+            // 
+            // pToolStripMenuItem3
+            // 
+            this.pToolStripMenuItem3.Name = "pToolStripMenuItem3";
+            resources.ApplyResources(this.pToolStripMenuItem3, "pToolStripMenuItem3");
+            // 
+            // toolStripStatusLabel1
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            // 
+            // toolStripDropDownButton_CPU
+            // 
+            resources.ApplyResources(this.toolStripDropDownButton_CPU, "toolStripDropDownButton_CPU");
+            this.toolStripDropDownButton_CPU.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.systemToolStripMenuItem,
+            this.thetisOnlyToolStripMenuItem});
+            this.toolStripDropDownButton_CPU.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripDropDownButton_CPU.Image = global::Thetis.Properties.Resources.cpu;
+            this.toolStripDropDownButton_CPU.Name = "toolStripDropDownButton_CPU";
+            this.toolStripDropDownButton_CPU.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // systemToolStripMenuItem
+            // 
+            this.systemToolStripMenuItem.Name = "systemToolStripMenuItem";
+            resources.ApplyResources(this.systemToolStripMenuItem, "systemToolStripMenuItem");
+            this.systemToolStripMenuItem.Click += new System.EventHandler(this.systemToolStripMenuItem_Click);
+            // 
+            // thetisOnlyToolStripMenuItem
+            // 
+            this.thetisOnlyToolStripMenuItem.Name = "thetisOnlyToolStripMenuItem";
+            resources.ApplyResources(this.thetisOnlyToolStripMenuItem, "thetisOnlyToolStripMenuItem");
+            this.thetisOnlyToolStripMenuItem.Click += new System.EventHandler(this.thetisOnlyToolStripMenuItem_Click);
+            // 
+            // toolStripStatusLabel_Volts
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Volts, "toolStripStatusLabel_Volts");
+            this.toolStripStatusLabel_Volts.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Volts.Image = global::Thetis.Properties.Resources.zap;
+            this.toolStripStatusLabel_Volts.Name = "toolStripStatusLabel_Volts";
+            this.toolStripStatusLabel_Volts.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_Amps
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Amps, "toolStripStatusLabel_Amps");
+            this.toolStripStatusLabel_Amps.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Amps.Name = "toolStripStatusLabel_Amps";
+            this.toolStripStatusLabel_Amps.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_TXInhibit
+            // 
+            this.toolStripStatusLabel_TXInhibit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_TXInhibit.Image = global::Thetis.Properties.Resources.stop;
+            resources.ApplyResources(this.toolStripStatusLabel_TXInhibit, "toolStripStatusLabel_TXInhibit");
+            this.toolStripStatusLabel_TXInhibit.Name = "toolStripStatusLabel_TXInhibit";
+            this.toolStripStatusLabel_TXInhibit.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_SeqWarning
+            // 
+            this.toolStripStatusLabel_SeqWarning.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_SeqWarning.Image = global::Thetis.Properties.Resources.warning4;
+            resources.ApplyResources(this.toolStripStatusLabel_SeqWarning, "toolStripStatusLabel_SeqWarning");
+            this.toolStripStatusLabel_SeqWarning.Name = "toolStripStatusLabel_SeqWarning";
+            this.toolStripStatusLabel_SeqWarning.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripStatusLabel_SeqWarning.Click += new System.EventHandler(this.toolStripStatusLabel_SeqWarning_Click);
+            // 
+            // toolStripStatusLabelRXAnt
+            // 
+            resources.ApplyResources(this.toolStripStatusLabelRXAnt, "toolStripStatusLabelRXAnt");
+            this.toolStripStatusLabelRXAnt.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem20,
+            this.toolStripMenuItem19,
+            this.toolStripMenuItem18});
+            this.toolStripStatusLabelRXAnt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabelRXAnt.Image = global::Thetis.Properties.Resources.RXAnt;
+            this.toolStripStatusLabelRXAnt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.toolStripStatusLabelRXAnt.Name = "toolStripStatusLabelRXAnt";
+            this.toolStripStatusLabelRXAnt.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripMenuItem20
+            // 
+            this.toolStripMenuItem20.Name = "toolStripMenuItem20";
+            resources.ApplyResources(this.toolStripMenuItem20, "toolStripMenuItem20");
+            this.toolStripMenuItem20.Click += new System.EventHandler(this.ToolStripMenuItem20_Click);
+            // 
+            // toolStripMenuItem19
+            // 
+            this.toolStripMenuItem19.Name = "toolStripMenuItem19";
+            resources.ApplyResources(this.toolStripMenuItem19, "toolStripMenuItem19");
+            this.toolStripMenuItem19.Click += new System.EventHandler(this.ToolStripMenuItem19_Click);
+            // 
+            // toolStripMenuItem18
+            // 
+            this.toolStripMenuItem18.Name = "toolStripMenuItem18";
+            resources.ApplyResources(this.toolStripMenuItem18, "toolStripMenuItem18");
+            this.toolStripMenuItem18.Click += new System.EventHandler(this.ToolStripMenuItem18_Click);
+            // 
+            // toolStripStatusLabelTXAnt
+            // 
+            resources.ApplyResources(this.toolStripStatusLabelTXAnt, "toolStripStatusLabelTXAnt");
+            this.toolStripStatusLabelTXAnt.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem16,
+            this.toolStripMenuItem15,
+            this.toolStripMenuItem17});
+            this.toolStripStatusLabelTXAnt.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabelTXAnt.Image = global::Thetis.Properties.Resources.txant;
+            this.toolStripStatusLabelTXAnt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.toolStripStatusLabelTXAnt.Name = "toolStripStatusLabelTXAnt";
+            this.toolStripStatusLabelTXAnt.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripMenuItem16
+            // 
+            this.toolStripMenuItem16.Name = "toolStripMenuItem16";
+            resources.ApplyResources(this.toolStripMenuItem16, "toolStripMenuItem16");
+            this.toolStripMenuItem16.Click += new System.EventHandler(this.ToolStripMenuItem16_Click);
+            // 
+            // toolStripMenuItem15
+            // 
+            this.toolStripMenuItem15.Name = "toolStripMenuItem15";
+            resources.ApplyResources(this.toolStripMenuItem15, "toolStripMenuItem15");
+            this.toolStripMenuItem15.Click += new System.EventHandler(this.ToolStripMenuItem15_Click);
+            // 
+            // toolStripMenuItem17
+            // 
+            this.toolStripMenuItem17.Name = "toolStripMenuItem17";
+            resources.ApplyResources(this.toolStripMenuItem17, "toolStripMenuItem17");
+            this.toolStripMenuItem17.Click += new System.EventHandler(this.ToolStripMenuItem17_Click);
+            // 
+            // toolStripStatusLabelAndromedaMulti
+            // 
+            resources.ApplyResources(this.toolStripStatusLabelAndromedaMulti, "toolStripStatusLabelAndromedaMulti");
+            this.toolStripStatusLabelAndromedaMulti.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabelAndromedaMulti.Image = global::Thetis.Properties.Resources.Multifunction;
+            this.toolStripStatusLabelAndromedaMulti.Name = "toolStripStatusLabelAndromedaMulti";
+            this.toolStripStatusLabelAndromedaMulti.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_Fill
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Fill, "toolStripStatusLabel_Fill");
+            this.toolStripStatusLabel_Fill.Name = "toolStripStatusLabel_Fill";
+            this.toolStripStatusLabel_Fill.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripStatusLabel_Fill.Spring = true;
+            // 
+            // toolStripStatusLabel_PAstatus
+            // 
+            this.toolStripStatusLabel_PAstatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_PAstatus.Image = global::Thetis.Properties.Resources.paflt;
+            resources.ApplyResources(this.toolStripStatusLabel_PAstatus, "toolStripStatusLabel_PAstatus");
+            this.toolStripStatusLabel_PAstatus.Name = "toolStripStatusLabel_PAstatus";
+            this.toolStripStatusLabel_PAstatus.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripStatusLabel_PAstatus.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripStatusLabel_PAstatus_MouseUp);
+            // 
+            // toolStripStatusLabel_N1MM
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_N1MM, "toolStripStatusLabel_N1MM");
+            this.toolStripStatusLabel_N1MM.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_N1MM.Image = global::Thetis.Properties.Resources.n1mm;
+            this.toolStripStatusLabel_N1MM.Name = "toolStripStatusLabel_N1MM";
+            this.toolStripStatusLabel_N1MM.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatus_PAspacer
+            // 
+            resources.ApplyResources(this.toolStripStatus_PAspacer, "toolStripStatus_PAspacer");
+            this.toolStripStatus_PAspacer.Name = "toolStripStatus_PAspacer";
+            // 
+            // toolStripStatusLabel_play_record
+            // 
+            this.toolStripStatusLabel_play_record.Image = global::Thetis.Properties.Resources.record;
+            resources.ApplyResources(this.toolStripStatusLabel_play_record, "toolStripStatusLabel_play_record");
+            this.toolStripStatusLabel_play_record.Name = "toolStripStatusLabel_play_record";
+            // 
+            // toolStripStatus_RecordPlay_spacer
+            // 
+            resources.ApplyResources(this.toolStripStatus_RecordPlay_spacer, "toolStripStatus_RecordPlay_spacer");
+            this.toolStripStatus_RecordPlay_spacer.Name = "toolStripStatus_RecordPlay_spacer";
+            // 
+            // toolStripStatusLabel_TCI
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_TCI, "toolStripStatusLabel_TCI");
+            this.toolStripStatusLabel_TCI.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_TCI.Image = global::Thetis.Properties.Resources.tci_status;
+            this.toolStripStatusLabel_TCI.Name = "toolStripStatusLabel_TCI";
+            this.toolStripStatusLabel_TCI.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_CatTCPip
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_CatTCPip, "toolStripStatusLabel_CatTCPip");
+            this.toolStripStatusLabel_CatTCPip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_CatTCPip.Image = global::Thetis.Properties.Resources.cat_tcp_status;
+            this.toolStripStatusLabel_CatTCPip.Name = "toolStripStatusLabel_CatTCPip";
+            this.toolStripStatusLabel_CatTCPip.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_CatSerial
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_CatSerial, "toolStripStatusLabel_CatSerial");
+            this.toolStripStatusLabel_CatSerial.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_CatSerial.Name = "toolStripStatusLabel_CatSerial";
+            this.toolStripStatusLabel_CatSerial.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_CMstatus
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_CMstatus, "toolStripStatusLabel_CMstatus");
+            this.toolStripStatusLabel_CMstatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripStatusLabel_CMstatus.Image = global::Thetis.Properties.Resources.cm_red;
+            this.toolStripStatusLabel_CMstatus.Name = "toolStripStatusLabel_CMstatus";
+            this.toolStripStatusLabel_CMstatus.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_timer
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_timer, "toolStripStatusLabel_timer");
+            this.toolStripStatusLabel_timer.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_timer.Image = global::Thetis.Properties.Resources.timer_on;
+            this.toolStripStatusLabel_timer.Name = "toolStripStatusLabel_timer";
+            this.toolStripStatusLabel_timer.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripStatusLabel_timer.Click += new System.EventHandler(this.toolStripStatusLabel_timer_Click);
+            this.toolStripStatusLabel_timer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripStatusLabel_timer_MouseUp);
+            // 
+            // toolStripStatusLabel_UTCTime
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_UTCTime, "toolStripStatusLabel_UTCTime");
+            this.toolStripStatusLabel_UTCTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_UTCTime.Name = "toolStripStatusLabel_UTCTime";
+            this.toolStripStatusLabel_UTCTime.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_Date
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_Date, "toolStripStatusLabel_Date");
+            this.toolStripStatusLabel_Date.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_Date.Name = "toolStripStatusLabel_Date";
+            this.toolStripStatusLabel_Date.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            // 
+            // toolStripStatusLabel_LocalTime
+            // 
+            resources.ApplyResources(this.toolStripStatusLabel_LocalTime, "toolStripStatusLabel_LocalTime");
+            this.toolStripStatusLabel_LocalTime.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripStatusLabel_LocalTime.Name = "toolStripStatusLabel_LocalTime";
+            // 
+            // tmrAutoAGC
+            // 
+            this.tmrAutoAGC.Enabled = true;
+            this.tmrAutoAGC.Interval = 500;
+            this.tmrAutoAGC.Tick += new System.EventHandler(this.tmrAutoAGC_Tick);
+            // 
+            // picRX2Squelch
+            // 
+            this.picRX2Squelch.BackColor = System.Drawing.SystemColors.ControlText;
+            resources.ApplyResources(this.picRX2Squelch, "picRX2Squelch");
+            this.picRX2Squelch.Name = "picRX2Squelch";
+            this.picRX2Squelch.TabStop = false;
+            this.picRX2Squelch.Paint += new System.Windows.Forms.PaintEventHandler(this.picRX2Squelch_Paint);
+            // 
+            // picSquelch
+            // 
+            this.picSquelch.BackColor = System.Drawing.SystemColors.ControlText;
+            resources.ApplyResources(this.picSquelch, "picSquelch");
+            this.picSquelch.Name = "picSquelch";
+            this.picSquelch.TabStop = false;
+            this.picSquelch.Paint += new System.Windows.Forms.PaintEventHandler(this.picSquelch_Paint);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setupToolStripMenuItem,
+            this.memoryToolStripMenuItem,
+            this.equalizerToolStripMenuItem,
+            this.xVTRsToolStripMenuItem,
+            this.cWXToolStripMenuItem,
+            this.eSCToolStripMenuItem,
+            this.collapseToolStripMenuItem,
+            this.TopControlstoolStripMenuItem,
+            this.TXSettoolStripMenuItem,
+            this.TXSettoolStripMenuItem2,
+            this.TXSettoolStripMenuItem3,
+            this.TXSettoolStripMenuItem4,
+            this.modeToolStripMenuItem,
+            this.bandToolStripMenuItem,
+            this.dSPToolStripMenuItem,
+            this.filterToolStripMenuItem,
+            this.RX2modetoolStripMenuItem,
+            this.RX2bandtoolStripMenuItem,
+            this.RX2dSPtoolStripMenuItem,
+            this.RX2filtertoolStripMenuItem,
+            this.VFOVACtoolStripMenuItem,
+            this.RXTXGainToolStripMenuItem,
+            this.BtnBartoolStripMenuItem,
+            this.linearityToolStripMenuItem,
+            this.RAtoolStripMenuItem,
+            this.wBToolStripMenuItem,
+            this.pIToolStripMenuItem,
+            this.BPFToolStripMenuItem,
+            this.finderMenuItem,
+            this.miAbout});
+            this.menuStrip1.Name = "menuStrip1";
+            // 
+            // setupToolStripMenuItem
+            // 
+            this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setupToolStripMenuItem1,
+            this.toolStripMenuItem1,
+            this.databaseManagerToolStripMenuItem});
+            this.setupToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+            resources.ApplyResources(this.setupToolStripMenuItem, "setupToolStripMenuItem");
+            this.setupToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.setupToolStripMenuItem_MouseUp);
+            // 
+            // setupToolStripMenuItem1
+            // 
+            this.setupToolStripMenuItem1.Name = "setupToolStripMenuItem1";
+            resources.ApplyResources(this.setupToolStripMenuItem1, "setupToolStripMenuItem1");
+            this.setupToolStripMenuItem1.Click += new System.EventHandler(this.setupToolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            resources.ApplyResources(this.toolStripMenuItem1, "toolStripMenuItem1");
+            // 
+            // databaseManagerToolStripMenuItem
+            // 
+            this.databaseManagerToolStripMenuItem.Name = "databaseManagerToolStripMenuItem";
+            resources.ApplyResources(this.databaseManagerToolStripMenuItem, "databaseManagerToolStripMenuItem");
+            this.databaseManagerToolStripMenuItem.Click += new System.EventHandler(this.databaseManagerToolStripMenuItem_Click);
+            // 
+            // memoryToolStripMenuItem
+            // 
+            this.memoryToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.memoryToolStripMenuItem.Name = "memoryToolStripMenuItem";
+            resources.ApplyResources(this.memoryToolStripMenuItem, "memoryToolStripMenuItem");
+            this.memoryToolStripMenuItem.Click += new System.EventHandler(this.memoryToolStripMenuItem_Click);
+            // 
+            // equalizerToolStripMenuItem
+            // 
+            this.equalizerToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.equalizerToolStripMenuItem.Name = "equalizerToolStripMenuItem";
+            resources.ApplyResources(this.equalizerToolStripMenuItem, "equalizerToolStripMenuItem");
+            this.equalizerToolStripMenuItem.Click += new System.EventHandler(this.equalizerToolStripMenuItem_Click);
+            // 
+            // xVTRsToolStripMenuItem
+            // 
+            this.xVTRsToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.xVTRsToolStripMenuItem.Name = "xVTRsToolStripMenuItem";
+            resources.ApplyResources(this.xVTRsToolStripMenuItem, "xVTRsToolStripMenuItem");
+            this.xVTRsToolStripMenuItem.Click += new System.EventHandler(this.xVTRsToolStripMenuItem_Click);
+            // 
+            // cWXToolStripMenuItem
+            // 
+            this.cWXToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.cWXToolStripMenuItem.Name = "cWXToolStripMenuItem";
+            resources.ApplyResources(this.cWXToolStripMenuItem, "cWXToolStripMenuItem");
+            this.cWXToolStripMenuItem.Click += new System.EventHandler(this.cWXToolStripMenuItem_Click);
+            // 
+            // eSCToolStripMenuItem
+            // 
+            this.eSCToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.eSCToolStripMenuItem.Name = "eSCToolStripMenuItem";
+            resources.ApplyResources(this.eSCToolStripMenuItem, "eSCToolStripMenuItem");
+            this.eSCToolStripMenuItem.Click += new System.EventHandler(this.eSCToolStripMenuItem_Click);
+            // 
+            // collapseToolStripMenuItem
+            // 
+            this.collapseToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.collapseToolStripMenuItem.Name = "collapseToolStripMenuItem";
+            resources.ApplyResources(this.collapseToolStripMenuItem, "collapseToolStripMenuItem");
+            this.collapseToolStripMenuItem.Click += new System.EventHandler(this.CollapseToolStripMenuItem_Click);
+            // 
+            // TopControlstoolStripMenuItem
+            // 
+            this.TopControlstoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TopControlstoolStripMenuItem.Name = "TopControlstoolStripMenuItem";
+            resources.ApplyResources(this.TopControlstoolStripMenuItem, "TopControlstoolStripMenuItem");
+            this.TopControlstoolStripMenuItem.Click += new System.EventHandler(this.TopControlstoolStripMenuItem_Click);
+            // 
+            // TXSettoolStripMenuItem
+            // 
+            this.TXSettoolStripMenuItem.CheckOnClick = true;
+            this.TXSettoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TXSettoolStripMenuItem.Name = "TXSettoolStripMenuItem";
+            resources.ApplyResources(this.TXSettoolStripMenuItem, "TXSettoolStripMenuItem");
+            this.TXSettoolStripMenuItem.Click += new System.EventHandler(this.TXSettoolStripMenuItem_Click);
+            // 
+            // TXSettoolStripMenuItem2
+            // 
+            this.TXSettoolStripMenuItem2.CheckOnClick = true;
+            this.TXSettoolStripMenuItem2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TXSettoolStripMenuItem2.Name = "TXSettoolStripMenuItem2";
+            resources.ApplyResources(this.TXSettoolStripMenuItem2, "TXSettoolStripMenuItem2");
+            this.TXSettoolStripMenuItem2.Click += new System.EventHandler(this.TXSettoolStripMenuItem2_Click);
+            // 
+            // TXSettoolStripMenuItem3
+            // 
+            this.TXSettoolStripMenuItem3.CheckOnClick = true;
+            this.TXSettoolStripMenuItem3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TXSettoolStripMenuItem3.Name = "TXSettoolStripMenuItem3";
+            resources.ApplyResources(this.TXSettoolStripMenuItem3, "TXSettoolStripMenuItem3");
+            this.TXSettoolStripMenuItem3.Click += new System.EventHandler(this.TXSettoolStripMenuItem3_Click);
+            // 
+            // TXSettoolStripMenuItem4
+            // 
+            this.TXSettoolStripMenuItem4.CheckOnClick = true;
+            this.TXSettoolStripMenuItem4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.TXSettoolStripMenuItem4.Name = "TXSettoolStripMenuItem4";
+            resources.ApplyResources(this.TXSettoolStripMenuItem4, "TXSettoolStripMenuItem4");
+            this.TXSettoolStripMenuItem4.Click += new System.EventHandler(this.TXSettoolStripMenuItem4_Click);
+            // 
+            // modeToolStripMenuItem
+            // 
+            this.modeToolStripMenuItem.CheckOnClick = true;
+            this.modeToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.modeToolStripMenuItem.Name = "modeToolStripMenuItem";
+            resources.ApplyResources(this.modeToolStripMenuItem, "modeToolStripMenuItem");
+            this.modeToolStripMenuItem.Click += new System.EventHandler(this.modeToolStripMenuItem_Click);
+            // 
+            // bandToolStripMenuItem
+            // 
+            this.bandToolStripMenuItem.CheckOnClick = true;
+            this.bandToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.bandToolStripMenuItem.Name = "bandToolStripMenuItem";
+            resources.ApplyResources(this.bandToolStripMenuItem, "bandToolStripMenuItem");
+            this.bandToolStripMenuItem.Click += new System.EventHandler(this.bandToolStripMenuItem_Click);
+            // 
+            // dSPToolStripMenuItem
+            // 
+            this.dSPToolStripMenuItem.CheckOnClick = true;
+            this.dSPToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.dSPToolStripMenuItem.Name = "dSPToolStripMenuItem";
+            resources.ApplyResources(this.dSPToolStripMenuItem, "dSPToolStripMenuItem");
+            this.dSPToolStripMenuItem.Click += new System.EventHandler(this.dSPToolStripMenuItem_Click);
+            // 
+            // filterToolStripMenuItem
+            // 
+            this.filterToolStripMenuItem.CheckOnClick = true;
+            this.filterToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.filterToolStripMenuItem.Name = "filterToolStripMenuItem";
+            resources.ApplyResources(this.filterToolStripMenuItem, "filterToolStripMenuItem");
+            this.filterToolStripMenuItem.Click += new System.EventHandler(this.filterToolStripMenuItem_Click);
+            // 
+            // RX2modetoolStripMenuItem
+            // 
+            this.RX2modetoolStripMenuItem.CheckOnClick = true;
+            this.RX2modetoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RX2modetoolStripMenuItem.Name = "RX2modetoolStripMenuItem";
+            resources.ApplyResources(this.RX2modetoolStripMenuItem, "RX2modetoolStripMenuItem");
+            this.RX2modetoolStripMenuItem.Click += new System.EventHandler(this.RX2modetoolStripMenuItem_Click);
+            // 
+            // RX2bandtoolStripMenuItem
+            // 
+            this.RX2bandtoolStripMenuItem.CheckOnClick = true;
+            this.RX2bandtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RX2bandtoolStripMenuItem.Name = "RX2bandtoolStripMenuItem";
+            resources.ApplyResources(this.RX2bandtoolStripMenuItem, "RX2bandtoolStripMenuItem");
+            this.RX2bandtoolStripMenuItem.Click += new System.EventHandler(this.RX2bandtoolStripMenuItem_Click);
+            // 
+            // RX2dSPtoolStripMenuItem
+            // 
+            this.RX2dSPtoolStripMenuItem.CheckOnClick = true;
+            this.RX2dSPtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RX2dSPtoolStripMenuItem.Name = "RX2dSPtoolStripMenuItem";
+            resources.ApplyResources(this.RX2dSPtoolStripMenuItem, "RX2dSPtoolStripMenuItem");
+            this.RX2dSPtoolStripMenuItem.Click += new System.EventHandler(this.RX2dSPtoolStripMenuItem_Click);
+            // 
+            // RX2filtertoolStripMenuItem
+            // 
+            this.RX2filtertoolStripMenuItem.CheckOnClick = true;
+            this.RX2filtertoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RX2filtertoolStripMenuItem.Name = "RX2filtertoolStripMenuItem";
+            resources.ApplyResources(this.RX2filtertoolStripMenuItem, "RX2filtertoolStripMenuItem");
+            this.RX2filtertoolStripMenuItem.Click += new System.EventHandler(this.RX2filtertoolStripMenuItem_Click);
+            // 
+            // VFOVACtoolStripMenuItem
+            // 
+            this.VFOVACtoolStripMenuItem.CheckOnClick = true;
+            this.VFOVACtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.VFOVACtoolStripMenuItem.Name = "VFOVACtoolStripMenuItem";
+            resources.ApplyResources(this.VFOVACtoolStripMenuItem, "VFOVACtoolStripMenuItem");
+            this.VFOVACtoolStripMenuItem.Click += new System.EventHandler(this.VFOVACtoolStripMenuItem_Click);
+            // 
+            // RXTXGainToolStripMenuItem
+            // 
+            this.RXTXGainToolStripMenuItem.CheckOnClick = true;
+            this.RXTXGainToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RXTXGainToolStripMenuItem.Name = "RXTXGainToolStripMenuItem";
+            resources.ApplyResources(this.RXTXGainToolStripMenuItem, "RXTXGainToolStripMenuItem");
+            this.RXTXGainToolStripMenuItem.Click += new System.EventHandler(this.RXTXGainToolStripMenuItem_Click);
+            // 
+            // BtnBartoolStripMenuItem
+            // 
+            this.BtnBartoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BtnBartoolStripMenuItem.Name = "BtnBartoolStripMenuItem";
+            resources.ApplyResources(this.BtnBartoolStripMenuItem, "BtnBartoolStripMenuItem");
+            this.BtnBartoolStripMenuItem.Click += new System.EventHandler(this.BtnBartoolStripMenuItem_Click);
+            // 
+            // linearityToolStripMenuItem
+            // 
+            this.linearityToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.linearityToolStripMenuItem.Name = "linearityToolStripMenuItem";
+            resources.ApplyResources(this.linearityToolStripMenuItem, "linearityToolStripMenuItem");
+            this.linearityToolStripMenuItem.Click += new System.EventHandler(this.linearityToolStripMenuItem_Click);
+            // 
+            // RAtoolStripMenuItem
+            // 
+            this.RAtoolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.RAtoolStripMenuItem.Name = "RAtoolStripMenuItem";
+            resources.ApplyResources(this.RAtoolStripMenuItem, "RAtoolStripMenuItem");
+            this.RAtoolStripMenuItem.Click += new System.EventHandler(this.RAtoolStripMenuItem_Click);
+            // 
+            // wBToolStripMenuItem
+            // 
+            this.wBToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.wBToolStripMenuItem.Name = "wBToolStripMenuItem";
+            resources.ApplyResources(this.wBToolStripMenuItem, "wBToolStripMenuItem");
+            this.wBToolStripMenuItem.Click += new System.EventHandler(this.wBToolStripMenuItem_Click);
+            // 
+            // pIToolStripMenuItem
+            // 
+            this.pIToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pIToolStripMenuItem.Name = "pIToolStripMenuItem";
+            resources.ApplyResources(this.pIToolStripMenuItem, "pIToolStripMenuItem");
+            this.pIToolStripMenuItem.Click += new System.EventHandler(this.pIToolStripMenuItem_Click);
+            // 
+            // BPFToolStripMenuItem
+            // 
+            this.BPFToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BPF1ToolStripMenuItem,
+            this.BPF2ToolStripMenuItem});
+            this.BPFToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BPFToolStripMenuItem.Name = "BPFToolStripMenuItem";
+            resources.ApplyResources(this.BPFToolStripMenuItem, "BPFToolStripMenuItem");
+            this.BPFToolStripMenuItem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BPFToolStripMenuItem_MouseUp);
+            // 
+            // BPF1ToolStripMenuItem
+            // 
+            this.BPF1ToolStripMenuItem.Name = "BPF1ToolStripMenuItem";
+            resources.ApplyResources(this.BPF1ToolStripMenuItem, "BPF1ToolStripMenuItem");
+            this.BPF1ToolStripMenuItem.Click += new System.EventHandler(this.BPF1ToolStripMenuItem_Click);
+            // 
+            // BPF2ToolStripMenuItem
+            // 
+            this.BPF2ToolStripMenuItem.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.BPF2ToolStripMenuItem.Name = "BPF2ToolStripMenuItem";
+            resources.ApplyResources(this.BPF2ToolStripMenuItem, "BPF2ToolStripMenuItem");
+            this.BPF2ToolStripMenuItem.Click += new System.EventHandler(this.BPF2ToolStripMenuItem_Click);
+            // 
+            // finderMenuItem
+            // 
+            this.finderMenuItem.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.finderMenuItem.Name = "finderMenuItem";
+            resources.ApplyResources(this.finderMenuItem, "finderMenuItem");
+            this.finderMenuItem.Click += new System.EventHandler(this.finderMenuItem_Click);
+            // 
+            // miAbout
+            // 
+            this.miAbout.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.miAbout.Name = "miAbout";
+            resources.ApplyResources(this.miAbout, "miAbout");
+            this.miAbout.Click += new System.EventHandler(this.miAbout_Click);
+            // 
+            // panelOptions
+            // 
+            resources.ApplyResources(this.panelOptions, "panelOptions");
+            this.panelOptions.BackColor = System.Drawing.Color.Transparent;
+            this.panelOptions.Controls.Add(this.chkTunerFollow);
+            this.panelOptions.Controls.Add(this.chkTC);
+            this.panelOptions.Controls.Add(this.checkBoxTS1);
+            this.panelOptions.Controls.Add(this.chkExternalPA);
+            this.panelOptions.Controls.Add(this.ckQuickPlay);
+            this.panelOptions.Controls.Add(this.chkMON);
+            this.panelOptions.Controls.Add(this.ckQuickRec);
+            this.panelOptions.Controls.Add(this.chkRX2SR);
+            this.panelOptions.Controls.Add(this.chkMOX);
+            this.panelOptions.Controls.Add(this.chkTUN);
+            this.panelOptions.Controls.Add(this.chk2TONE);
+            this.panelOptions.Controls.Add(this.chkFWCATUBypass);
+            this.panelOptions.Controls.Add(this.comboTuneMode);
+            this.panelOptions.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelOptions.Name = "panelOptions";
+            // 
+            // checkBoxTS1
+            // 
+            resources.ApplyResources(this.checkBoxTS1, "checkBoxTS1");
+            this.checkBoxTS1.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxTS1.FlatAppearance.BorderSize = 0;
+            this.checkBoxTS1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.checkBoxTS1.Name = "checkBoxTS1";
+            this.checkBoxTS1.UseVisualStyleBackColor = false;
+            // 
+            // panelModeSpecificCW
+            // 
+            resources.ApplyResources(this.panelModeSpecificCW, "panelModeSpecificCW");
+            this.panelModeSpecificCW.BackColor = System.Drawing.Color.Transparent;
+            this.panelModeSpecificCW.Controls.Add(this.grpCWAPF);
+            this.panelModeSpecificCW.Controls.Add(this.chkShowCWZero);
+            this.panelModeSpecificCW.Controls.Add(this.ptbCWSpeed);
+            this.panelModeSpecificCW.Controls.Add(this.udCWPitch);
+            this.panelModeSpecificCW.Controls.Add(this.lblCWSpeed);
+            this.panelModeSpecificCW.Controls.Add(this.grpSemiBreakIn);
+            this.panelModeSpecificCW.Controls.Add(this.lblCWPitchFreq);
+            this.panelModeSpecificCW.Controls.Add(this.chkShowTXCWFreq);
+            this.panelModeSpecificCW.Controls.Add(this.chkCWIambic);
+            this.panelModeSpecificCW.Controls.Add(this.chkCWSidetone);
+            this.panelModeSpecificCW.Controls.Add(this.chkCWFWKeyer);
+            this.panelModeSpecificCW.Name = "panelModeSpecificCW";
+            // 
+            // grpCWAPF
+            // 
+            this.grpCWAPF.BackColor = System.Drawing.Color.Transparent;
+            this.grpCWAPF.Controls.Add(this.btnAPF_type);
+            this.grpCWAPF.Controls.Add(this.ptbCWAPFGain);
+            this.grpCWAPF.Controls.Add(this.lblCWAPFGain);
+            this.grpCWAPF.Controls.Add(this.ptbCWAPFBandwidth);
+            this.grpCWAPF.Controls.Add(this.ptbCWAPFFreq);
+            this.grpCWAPF.Controls.Add(this.lblCWAPFBandwidth);
+            this.grpCWAPF.Controls.Add(this.lblCWAPFTune);
+            this.grpCWAPF.Controls.Add(this.chkCWAPFEnabled);
+            this.grpCWAPF.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.grpCWAPF, "grpCWAPF");
+            this.grpCWAPF.Name = "grpCWAPF";
+            this.grpCWAPF.TabStop = false;
+            // 
+            // lblCWAPFGain
+            // 
+            resources.ApplyResources(this.lblCWAPFGain, "lblCWAPFGain");
+            this.lblCWAPFGain.Name = "lblCWAPFGain";
+            // 
+            // lblCWAPFBandwidth
+            // 
+            resources.ApplyResources(this.lblCWAPFBandwidth, "lblCWAPFBandwidth");
+            this.lblCWAPFBandwidth.Name = "lblCWAPFBandwidth";
+            // 
+            // lblCWAPFTune
+            // 
+            resources.ApplyResources(this.lblCWAPFTune, "lblCWAPFTune");
+            this.lblCWAPFTune.Name = "lblCWAPFTune";
+            // 
+            // lblCWSpeed
+            // 
+            this.lblCWSpeed.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblCWSpeed, "lblCWSpeed");
+            this.lblCWSpeed.Name = "lblCWSpeed";
+            // 
+            // grpSemiBreakIn
+            // 
+            this.grpSemiBreakIn.Controls.Add(this.chkQSK);
+            this.grpSemiBreakIn.Controls.Add(this.udCWBreakInDelay);
+            this.grpSemiBreakIn.Controls.Add(this.lblCWBreakInDelay);
+            this.grpSemiBreakIn.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.grpSemiBreakIn, "grpSemiBreakIn");
+            this.grpSemiBreakIn.Name = "grpSemiBreakIn";
+            this.grpSemiBreakIn.TabStop = false;
+            // 
+            // lblCWBreakInDelay
+            // 
+            resources.ApplyResources(this.lblCWBreakInDelay, "lblCWBreakInDelay");
+            this.lblCWBreakInDelay.ForeColor = System.Drawing.Color.White;
+            this.lblCWBreakInDelay.Name = "lblCWBreakInDelay";
+            // 
+            // lblCWPitchFreq
+            // 
+            resources.ApplyResources(this.lblCWPitchFreq, "lblCWPitchFreq");
+            this.lblCWPitchFreq.ForeColor = System.Drawing.Color.White;
+            this.lblCWPitchFreq.Name = "lblCWPitchFreq";
+            // 
+            // panelDisplay
+            // 
+            resources.ApplyResources(this.panelDisplay, "panelDisplay");
+            this.panelDisplay.BackColor = System.Drawing.Color.Transparent;
+            this.panelDisplay.Controls.Add(this.infoBar);
+            this.panelDisplay.Controls.Add(this.btnDisplayZTB);
+            this.panelDisplay.Controls.Add(this.radDisplayZoom4x);
+            this.panelDisplay.Controls.Add(this.radDisplayZoom2x);
+            this.panelDisplay.Controls.Add(this.radDisplayZoom1x);
+            this.panelDisplay.Controls.Add(this.radDisplayZoom05);
+            this.panelDisplay.Controls.Add(this.ptbDisplayZoom);
+            this.panelDisplay.Controls.Add(this.ptbDisplayPan);
+            this.panelDisplay.Controls.Add(this.lblDisplayZoom);
+            this.panelDisplay.Controls.Add(this.btnDisplayPanCenter);
+            this.panelDisplay.Controls.Add(this.lblDisplayPan);
+            this.panelDisplay.Controls.Add(this.pnlDisplay);
+            this.panelDisplay.Name = "panelDisplay";
+            // 
+            // infoBar
+            // 
+            resources.ApplyResources(this.infoBar, "infoBar");
+            this.infoBar.BackColor = System.Drawing.Color.Black;
+            this.infoBar.Button1Action = Thetis.ucInfoBar.ActionTypes.Blobs;
+            this.infoBar.Button2Action = Thetis.ucInfoBar.ActionTypes.ActivePeaks;
+            this.infoBar.CurrentFlip = 0;
+            this.infoBar.HideFeedback = false;
+            this.infoBar.Name = "infoBar";
+            this.infoBar.SplitterRatio = 1F;
+            this.infoBar.SwapRedBlue = false;
+            this.infoBar.Button1Clicked += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button1Clicked);
+            this.infoBar.Button2Clicked += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2Clicked);
+            this.infoBar.Button1MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button1MouseDown);
+            this.infoBar.Button2MouseDown += new System.EventHandler<Thetis.ucInfoBar.InfoBarAction>(this.infoBar_Button2MouseDown);
+            this.infoBar.SwapRedBlueChanged += new System.EventHandler(this.infoBar_SwapRedBlueChanged);
+            this.infoBar.HideFeedbackChanged += new System.EventHandler(this.infoBar_HideFeedbackChanged);
+            // 
+            // lblDisplayZoom
+            // 
+            resources.ApplyResources(this.lblDisplayZoom, "lblDisplayZoom");
+            this.lblDisplayZoom.ForeColor = System.Drawing.Color.White;
+            this.lblDisplayZoom.Name = "lblDisplayZoom";
+            // 
+            // lblDisplayPan
+            // 
+            resources.ApplyResources(this.lblDisplayPan, "lblDisplayPan");
+            this.lblDisplayPan.ForeColor = System.Drawing.Color.White;
+            this.lblDisplayPan.Name = "lblDisplayPan";
+            // 
+            // pnlDisplay
+            // 
+            resources.ApplyResources(this.pnlDisplay, "pnlDisplay");
+            this.pnlDisplay.BackColor = System.Drawing.Color.Black;
+            this.pnlDisplay.Name = "pnlDisplay";
+            this.pnlDisplay.DoubleClick += new System.EventHandler(this.pnlDisplay_DoubleClick);
+            this.pnlDisplay.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseDown);
+            this.pnlDisplay.MouseLeave += new System.EventHandler(this.pnlDisplay_MouseLeave);
+            this.pnlDisplay.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseMove);
+            this.pnlDisplay.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlDisplay_MouseUp);
+            this.pnlDisplay.Resize += new System.EventHandler(this.pnlDisplay_Resize);
+            // 
+            // nudPwrTemp2
+            // 
+            this.nudPwrTemp2.DecimalPlaces = 2;
+            this.nudPwrTemp2.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            resources.ApplyResources(this.nudPwrTemp2, "nudPwrTemp2");
+            this.nudPwrTemp2.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudPwrTemp2.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPwrTemp2.Name = "nudPwrTemp2";
+            this.nudPwrTemp2.TinyStep = false;
+            this.nudPwrTemp2.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // nudPwrTemp
+            // 
+            this.nudPwrTemp.DecimalPlaces = 1;
+            this.nudPwrTemp.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            resources.ApplyResources(this.nudPwrTemp, "nudPwrTemp");
+            this.nudPwrTemp.Maximum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudPwrTemp.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPwrTemp.Name = "nudPwrTemp";
+            this.nudPwrTemp.TinyStep = false;
+            this.nudPwrTemp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // grpMultimeter
+            // 
+            this.grpMultimeter.BackColor = System.Drawing.Color.Transparent;
+            this.grpMultimeter.Controls.Add(this.pnlResizeMeter);
+            this.grpMultimeter.Controls.Add(this.picMultiMeterDigital);
+            this.grpMultimeter.Controls.Add(this.txtMultiText);
+            this.grpMultimeter.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.grpMultimeter, "grpMultimeter");
+            this.grpMultimeter.Name = "grpMultimeter";
+            this.grpMultimeter.TabStop = false;
+            // 
+            // pnlResizeMeter
+            // 
+            resources.ApplyResources(this.pnlResizeMeter, "pnlResizeMeter");
+            this.pnlResizeMeter.Cursor = System.Windows.Forms.Cursors.SizeWE;
+            this.pnlResizeMeter.Name = "pnlResizeMeter";
+            this.pnlResizeMeter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseDown);
+            this.pnlResizeMeter.MouseEnter += new System.EventHandler(this.pnlResizeMeter_MouseEnter);
+            this.pnlResizeMeter.MouseLeave += new System.EventHandler(this.pnlResizeMeter_MouseLeave);
+            this.pnlResizeMeter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseMove);
+            this.pnlResizeMeter.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pnlResizeMeter_MouseUp);
+            // 
+            // picMultiMeterDigital
+            // 
+            this.picMultiMeterDigital.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.picMultiMeterDigital, "picMultiMeterDigital");
+            this.picMultiMeterDigital.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.picMultiMeterDigital.Name = "picMultiMeterDigital";
+            this.picMultiMeterDigital.TabStop = false;
+            this.picMultiMeterDigital.Click += new System.EventHandler(this.picMultiMeterDigital_Click);
+            this.picMultiMeterDigital.Paint += new System.Windows.Forms.PaintEventHandler(this.picMultiMeterDigital_Paint);
+            // 
+            // txtMultiText
+            // 
+            this.txtMultiText.BackColor = System.Drawing.Color.Black;
+            this.txtMultiText.Cursor = System.Windows.Forms.Cursors.Default;
+            resources.ApplyResources(this.txtMultiText, "txtMultiText");
+            this.txtMultiText.ForeColor = System.Drawing.Color.Yellow;
+            this.txtMultiText.Name = "txtMultiText";
+            this.txtMultiText.ReadOnly = true;
+            this.txtMultiText.Click += new System.EventHandler(this.txtMultiText_Click);
+            this.txtMultiText.GotFocus += new System.EventHandler(this.HideFocus);
+            // 
+            // panelFilter
+            // 
+            resources.ApplyResources(this.panelFilter, "panelFilter");
+            this.panelFilter.BackColor = System.Drawing.Color.Transparent;
+            this.panelFilter.ContextMenuStrip = this.contextMenuStripFilterRX1;
+            this.panelFilter.Controls.Add(this.radFilter1);
+            this.panelFilter.Controls.Add(this.ptbFilterShift);
+            this.panelFilter.Controls.Add(this.ptbFilterWidth);
+            this.panelFilter.Controls.Add(this.btnFilterShiftReset);
+            this.panelFilter.Controls.Add(this.udFilterHigh);
+            this.panelFilter.Controls.Add(this.udFilterLow);
+            this.panelFilter.Controls.Add(this.lblFilterHigh);
+            this.panelFilter.Controls.Add(this.lblFilterWidth);
+            this.panelFilter.Controls.Add(this.radFilterVar2);
+            this.panelFilter.Controls.Add(this.lblFilterLow);
+            this.panelFilter.Controls.Add(this.radFilterVar1);
+            this.panelFilter.Controls.Add(this.lblFilterShift);
+            this.panelFilter.Controls.Add(this.radFilter9);
+            this.panelFilter.Controls.Add(this.radFilter8);
+            this.panelFilter.Controls.Add(this.radFilter2);
+            this.panelFilter.Controls.Add(this.radFilter7);
+            this.panelFilter.Controls.Add(this.radFilter3);
+            this.panelFilter.Controls.Add(this.radFilter6);
+            this.panelFilter.Controls.Add(this.radFilter4);
+            this.panelFilter.Controls.Add(this.radFilter5);
+            this.panelFilter.Controls.Add(this.radFilter10);
+            this.panelFilter.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelFilter.Name = "panelFilter";
+            // 
+            // radFilter1
+            // 
+            resources.ApplyResources(this.radFilter1, "radFilter1");
+            this.radFilter1.FlatAppearance.BorderSize = 0;
+            this.radFilter1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter1.Name = "radFilter1";
+            this.radFilter1.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // lblFilterHigh
+            // 
+            resources.ApplyResources(this.lblFilterHigh, "lblFilterHigh");
+            this.lblFilterHigh.ForeColor = System.Drawing.Color.White;
+            this.lblFilterHigh.Name = "lblFilterHigh";
+            // 
+            // lblFilterWidth
+            // 
+            resources.ApplyResources(this.lblFilterWidth, "lblFilterWidth");
+            this.lblFilterWidth.ForeColor = System.Drawing.Color.White;
+            this.lblFilterWidth.Name = "lblFilterWidth";
+            // 
+            // radFilterVar2
+            // 
+            resources.ApplyResources(this.radFilterVar2, "radFilterVar2");
+            this.radFilterVar2.FlatAppearance.BorderSize = 0;
+            this.radFilterVar2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilterVar2.Name = "radFilterVar2";
+            this.radFilterVar2.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilterVar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // lblFilterLow
+            // 
+            resources.ApplyResources(this.lblFilterLow, "lblFilterLow");
+            this.lblFilterLow.ForeColor = System.Drawing.Color.White;
+            this.lblFilterLow.Name = "lblFilterLow";
+            // 
+            // radFilterVar1
+            // 
+            resources.ApplyResources(this.radFilterVar1, "radFilterVar1");
+            this.radFilterVar1.FlatAppearance.BorderSize = 0;
+            this.radFilterVar1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilterVar1.Name = "radFilterVar1";
+            this.radFilterVar1.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilterVar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // lblFilterShift
+            // 
+            resources.ApplyResources(this.lblFilterShift, "lblFilterShift");
+            this.lblFilterShift.ForeColor = System.Drawing.Color.White;
+            this.lblFilterShift.Name = "lblFilterShift";
+            // 
+            // radFilter9
+            // 
+            resources.ApplyResources(this.radFilter9, "radFilter9");
+            this.radFilter9.FlatAppearance.BorderSize = 0;
+            this.radFilter9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter9.Name = "radFilter9";
+            this.radFilter9.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter9.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter8
+            // 
+            resources.ApplyResources(this.radFilter8, "radFilter8");
+            this.radFilter8.FlatAppearance.BorderSize = 0;
+            this.radFilter8.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter8.Name = "radFilter8";
+            this.radFilter8.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter8.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter2
+            // 
+            resources.ApplyResources(this.radFilter2, "radFilter2");
+            this.radFilter2.FlatAppearance.BorderSize = 0;
+            this.radFilter2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter2.Name = "radFilter2";
+            this.radFilter2.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter7
+            // 
+            resources.ApplyResources(this.radFilter7, "radFilter7");
+            this.radFilter7.FlatAppearance.BorderSize = 0;
+            this.radFilter7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter7.Name = "radFilter7";
+            this.radFilter7.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter7.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter3
+            // 
+            resources.ApplyResources(this.radFilter3, "radFilter3");
+            this.radFilter3.FlatAppearance.BorderSize = 0;
+            this.radFilter3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter3.Name = "radFilter3";
+            this.radFilter3.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter6
+            // 
+            resources.ApplyResources(this.radFilter6, "radFilter6");
+            this.radFilter6.FlatAppearance.BorderSize = 0;
+            this.radFilter6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter6.Name = "radFilter6";
+            this.radFilter6.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter6.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter4
+            // 
+            resources.ApplyResources(this.radFilter4, "radFilter4");
+            this.radFilter4.FlatAppearance.BorderSize = 0;
+            this.radFilter4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter4.Name = "radFilter4";
+            this.radFilter4.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter5
+            // 
+            resources.ApplyResources(this.radFilter5, "radFilter5");
+            this.radFilter5.FlatAppearance.BorderSize = 0;
+            this.radFilter5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter5.Name = "radFilter5";
+            this.radFilter5.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // radFilter10
+            // 
+            resources.ApplyResources(this.radFilter10, "radFilter10");
+            this.radFilter10.FlatAppearance.BorderSize = 0;
+            this.radFilter10.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radFilter10.Name = "radFilter10";
+            this.radFilter10.CheckedChanged += new System.EventHandler(this.radFilter_CheckedChanged);
+            this.radFilter10.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx1_MouseUp);
+            // 
+            // panelRX2RF
+            // 
+            resources.ApplyResources(this.panelRX2RF, "panelRX2RF");
+            this.panelRX2RF.BackColor = System.Drawing.Color.Transparent;
+            this.panelRX2RF.Controls.Add(this.ptbRX2RF);
+            this.panelRX2RF.Controls.Add(this.lblRX2RF);
+            this.panelRX2RF.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panelRX2RF.Name = "panelRX2RF";
+            // 
+            // ptbRX2Squelch
+            // 
+            resources.ApplyResources(this.ptbRX2Squelch, "ptbRX2Squelch");
+            this.ptbRX2Squelch.GreenThumb = false;
+            this.ptbRX2Squelch.HeadImage = null;
+            this.ptbRX2Squelch.LargeChange = 1;
+            this.ptbRX2Squelch.LimitBarColor = System.Drawing.Color.Red;
+            this.ptbRX2Squelch.LimitEnabled = false;
+            this.ptbRX2Squelch.LimitValue = 0;
+            this.ptbRX2Squelch.Maximum = 0;
+            this.ptbRX2Squelch.Minimum = -160;
+            this.ptbRX2Squelch.Name = "ptbRX2Squelch";
+            this.ptbRX2Squelch.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.ptbRX2Squelch.SmallChange = 1;
+            this.ptbRX2Squelch.TabStop = false;
+            this.ptbRX2Squelch.Value = 0;
+            this.ptbRX2Squelch.Scroll += new Thetis.PrettyTrackBar.ScrollHandler(this.ptbRX2Squelch_Scroll);
+            // 
+            // panelRX2DSP
+            // 
+            resources.ApplyResources(this.panelRX2DSP, "panelRX2DSP");
+            this.panelRX2DSP.BackColor = System.Drawing.Color.Transparent;
+            this.panelRX2DSP.Controls.Add(this.chkRX2Mute);
+            this.panelRX2DSP.Controls.Add(this.chkRX2NB2);
+            this.panelRX2DSP.Controls.Add(this.chkRX2NR);
+            this.panelRX2DSP.Controls.Add(this.chkRX2NB);
+            this.panelRX2DSP.Controls.Add(this.lblRX2AGC);
+            this.panelRX2DSP.Controls.Add(this.chkRX2ANF);
+            this.panelRX2DSP.Controls.Add(this.comboRX2AGC);
+            this.panelRX2DSP.Controls.Add(this.chkRX2BIN);
+            this.panelRX2DSP.Name = "panelRX2DSP";
+            // 
+            // btnHidden
+            // 
+            this.btnHidden.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.btnHidden, "btnHidden");
+            this.btnHidden.Name = "btnHidden";
+            this.btnHidden.Selectable = true;
             // 
             // radBand2
             // 
@@ -6377,6 +6441,13 @@
             this.chkRX2.Name = "chkRX2";
             this.chkRX2.CheckedChanged += new System.EventHandler(this.chkRX2_CheckedChanged);
             // 
+            // lblRF3
+            // 
+            this.lblRF3.BackColor = System.Drawing.Color.Transparent;
+            this.lblRF3.ForeColor = System.Drawing.Color.White;
+            resources.ApplyResources(this.lblRF3, "lblRF3");
+            this.lblRF3.Name = "lblRF3";
+            // 
             // radRX1Show
             // 
             this.radRX1Show.BackColor = System.Drawing.Color.Transparent;
@@ -6397,13 +6468,6 @@
             this.radRX2Show.UseVisualStyleBackColor = false;
             this.radRX2Show.CheckedChanged += new System.EventHandler(this.radRX2Show_CheckedChanged);
             // 
-            // lblRF3
-            // 
-            this.lblRF3.BackColor = System.Drawing.Color.Transparent;
-            this.lblRF3.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblRF3, "lblRF3");
-            this.lblRF3.Name = "lblRF3";
-            // 
             // lblRF2
             // 
             this.lblRF2.BackColor = System.Drawing.Color.Transparent;
@@ -6419,81 +6483,6 @@
             this.panelPower.Controls.Add(this.chkPower);
             this.panelPower.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.panelPower.Name = "panelPower";
-            // 
-            // panelModeSpecificCW
-            // 
-            resources.ApplyResources(this.panelModeSpecificCW, "panelModeSpecificCW");
-            this.panelModeSpecificCW.BackColor = System.Drawing.Color.Transparent;
-            this.panelModeSpecificCW.Controls.Add(this.grpCWAPF);
-            this.panelModeSpecificCW.Controls.Add(this.chkShowCWZero);
-            this.panelModeSpecificCW.Controls.Add(this.ptbCWSpeed);
-            this.panelModeSpecificCW.Controls.Add(this.udCWPitch);
-            this.panelModeSpecificCW.Controls.Add(this.lblCWSpeed);
-            this.panelModeSpecificCW.Controls.Add(this.grpSemiBreakIn);
-            this.panelModeSpecificCW.Controls.Add(this.lblCWPitchFreq);
-            this.panelModeSpecificCW.Controls.Add(this.chkShowTXCWFreq);
-            this.panelModeSpecificCW.Controls.Add(this.chkCWIambic);
-            this.panelModeSpecificCW.Controls.Add(this.chkCWSidetone);
-            this.panelModeSpecificCW.Controls.Add(this.chkCWFWKeyer);
-            this.panelModeSpecificCW.Name = "panelModeSpecificCW";
-            // 
-            // grpCWAPF
-            // 
-            this.grpCWAPF.BackColor = System.Drawing.Color.Transparent;
-            this.grpCWAPF.Controls.Add(this.ptbCWAPFGain);
-            this.grpCWAPF.Controls.Add(this.lblCWAPFGain);
-            this.grpCWAPF.Controls.Add(this.ptbCWAPFBandwidth);
-            this.grpCWAPF.Controls.Add(this.ptbCWAPFFreq);
-            this.grpCWAPF.Controls.Add(this.lblCWAPFBandwidth);
-            this.grpCWAPF.Controls.Add(this.lblCWAPFTune);
-            this.grpCWAPF.Controls.Add(this.chkCWAPFEnabled);
-            this.grpCWAPF.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.grpCWAPF, "grpCWAPF");
-            this.grpCWAPF.Name = "grpCWAPF";
-            this.grpCWAPF.TabStop = false;
-            // 
-            // lblCWAPFGain
-            // 
-            resources.ApplyResources(this.lblCWAPFGain, "lblCWAPFGain");
-            this.lblCWAPFGain.Name = "lblCWAPFGain";
-            // 
-            // lblCWAPFBandwidth
-            // 
-            resources.ApplyResources(this.lblCWAPFBandwidth, "lblCWAPFBandwidth");
-            this.lblCWAPFBandwidth.Name = "lblCWAPFBandwidth";
-            // 
-            // lblCWAPFTune
-            // 
-            resources.ApplyResources(this.lblCWAPFTune, "lblCWAPFTune");
-            this.lblCWAPFTune.Name = "lblCWAPFTune";
-            // 
-            // lblCWSpeed
-            // 
-            this.lblCWSpeed.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.lblCWSpeed, "lblCWSpeed");
-            this.lblCWSpeed.Name = "lblCWSpeed";
-            // 
-            // grpSemiBreakIn
-            // 
-            this.grpSemiBreakIn.Controls.Add(this.chkQSK);
-            this.grpSemiBreakIn.Controls.Add(this.udCWBreakInDelay);
-            this.grpSemiBreakIn.Controls.Add(this.lblCWBreakInDelay);
-            this.grpSemiBreakIn.ForeColor = System.Drawing.Color.White;
-            resources.ApplyResources(this.grpSemiBreakIn, "grpSemiBreakIn");
-            this.grpSemiBreakIn.Name = "grpSemiBreakIn";
-            this.grpSemiBreakIn.TabStop = false;
-            // 
-            // lblCWBreakInDelay
-            // 
-            resources.ApplyResources(this.lblCWBreakInDelay, "lblCWBreakInDelay");
-            this.lblCWBreakInDelay.ForeColor = System.Drawing.Color.White;
-            this.lblCWBreakInDelay.Name = "lblCWBreakInDelay";
-            // 
-            // lblCWPitchFreq
-            // 
-            resources.ApplyResources(this.lblCWPitchFreq, "lblCWPitchFreq");
-            this.lblCWPitchFreq.ForeColor = System.Drawing.Color.White;
-            this.lblCWPitchFreq.Name = "lblCWPitchFreq";
             // 
             // panelRX2Filter
             // 
@@ -6522,6 +6511,7 @@
             this.radRX2Filter1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter1.Name = "radRX2Filter1";
             this.radRX2Filter1.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // lblRX2FilterHigh
             // 
@@ -6542,6 +6532,7 @@
             this.radRX2Filter2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter2.Name = "radRX2Filter2";
             this.radRX2Filter2.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2FilterVar2
             // 
@@ -6550,6 +6541,7 @@
             this.radRX2FilterVar2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2FilterVar2.Name = "radRX2FilterVar2";
             this.radRX2FilterVar2.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2FilterVar2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2Filter3
             // 
@@ -6558,6 +6550,7 @@
             this.radRX2Filter3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter3.Name = "radRX2Filter3";
             this.radRX2Filter3.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2FilterVar1
             // 
@@ -6566,6 +6559,7 @@
             this.radRX2FilterVar1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2FilterVar1.Name = "radRX2FilterVar1";
             this.radRX2FilterVar1.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2FilterVar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2Filter4
             // 
@@ -6574,6 +6568,7 @@
             this.radRX2Filter4.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter4.Name = "radRX2Filter4";
             this.radRX2Filter4.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2Filter7
             // 
@@ -6582,6 +6577,7 @@
             this.radRX2Filter7.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter7.Name = "radRX2Filter7";
             this.radRX2Filter7.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter7.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2Filter5
             // 
@@ -6590,6 +6586,7 @@
             this.radRX2Filter5.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter5.Name = "radRX2Filter5";
             this.radRX2Filter5.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter5.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // radRX2Filter6
             // 
@@ -6598,6 +6595,7 @@
             this.radRX2Filter6.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.radRX2Filter6.Name = "radRX2Filter6";
             this.radRX2Filter6.CheckedChanged += new System.EventHandler(this.radRX2Filter_CheckedChanged);
+            this.radRX2Filter6.MouseUp += new System.Windows.Forms.MouseEventHandler(this.radFilter_rx2_MouseUp);
             // 
             // panelRX2Mode
             // 
@@ -6625,9 +6623,6 @@
             this.panelRX2Display.Controls.Add(this.comboRX2DisplayMode);
             this.panelRX2Display.Controls.Add(this.chkRX2DisplayAVG);
             this.panelRX2Display.Controls.Add(this.chkX2TR);
-            this.panelRX2Display.Controls.Add(this.chkDX);
-            this.panelRX2Display.Controls.Add(this.chkRX1Preamp);
-            this.panelRX2Display.Controls.Add(this.chkRX2Preamp);
             this.panelRX2Display.Name = "panelRX2Display";
             // 
             // panelRX2Mixer
@@ -7313,7 +7308,6 @@
             this.radBandVHF13.TabStop = true;
             this.radBandVHF13.UseVisualStyleBackColor = true;
             this.radBandVHF13.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF13.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF13_MouseDown);
             // 
             // radBandVHF12
             // 
@@ -7324,7 +7318,6 @@
             this.radBandVHF12.TabStop = true;
             this.radBandVHF12.UseVisualStyleBackColor = true;
             this.radBandVHF12.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF12.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF12_MouseDown);
             // 
             // radBandVHF11
             // 
@@ -7335,7 +7328,6 @@
             this.radBandVHF11.TabStop = true;
             this.radBandVHF11.UseVisualStyleBackColor = true;
             this.radBandVHF11.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF11.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF11_MouseDown);
             // 
             // radBandVHF10
             // 
@@ -7346,7 +7338,6 @@
             this.radBandVHF10.TabStop = true;
             this.radBandVHF10.UseVisualStyleBackColor = true;
             this.radBandVHF10.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF10.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF10_MouseDown);
             // 
             // radBandVHF9
             // 
@@ -7357,7 +7348,6 @@
             this.radBandVHF9.TabStop = true;
             this.radBandVHF9.UseVisualStyleBackColor = true;
             this.radBandVHF9.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF9.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF9_MouseDown);
             // 
             // radBandVHF8
             // 
@@ -7368,7 +7358,6 @@
             this.radBandVHF8.TabStop = true;
             this.radBandVHF8.UseVisualStyleBackColor = true;
             this.radBandVHF8.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF8.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF8_MouseDown);
             // 
             // radBandVHF7
             // 
@@ -7379,7 +7368,6 @@
             this.radBandVHF7.TabStop = true;
             this.radBandVHF7.UseVisualStyleBackColor = true;
             this.radBandVHF7.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF7.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF7_MouseDown);
             // 
             // radBandVHF6
             // 
@@ -7390,7 +7378,6 @@
             this.radBandVHF6.TabStop = true;
             this.radBandVHF6.UseVisualStyleBackColor = true;
             this.radBandVHF6.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF6.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF6_MouseDown);
             // 
             // radBandVHF5
             // 
@@ -7401,7 +7388,6 @@
             this.radBandVHF5.TabStop = true;
             this.radBandVHF5.UseVisualStyleBackColor = true;
             this.radBandVHF5.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF5.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF5_MouseDown);
             // 
             // radBandVHF4
             // 
@@ -7412,7 +7398,6 @@
             this.radBandVHF4.TabStop = true;
             this.radBandVHF4.UseVisualStyleBackColor = true;
             this.radBandVHF4.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF4.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF4_MouseDown);
             // 
             // radBandVHF3
             // 
@@ -7423,7 +7408,6 @@
             this.radBandVHF3.TabStop = true;
             this.radBandVHF3.UseVisualStyleBackColor = true;
             this.radBandVHF3.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF3_MouseDown);
             // 
             // radBandVHF2
             // 
@@ -7434,7 +7418,6 @@
             this.radBandVHF2.TabStop = true;
             this.radBandVHF2.UseVisualStyleBackColor = true;
             this.radBandVHF2.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF2_MouseDown);
             // 
             // radBandVHF1
             // 
@@ -7445,7 +7428,6 @@
             this.radBandVHF1.TabStop = true;
             this.radBandVHF1.UseVisualStyleBackColor = true;
             this.radBandVHF1.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF1_MouseDown);
             // 
             // radBandVHF0
             // 
@@ -7456,7 +7438,6 @@
             this.radBandVHF0.TabStop = true;
             this.radBandVHF0.UseVisualStyleBackColor = true;
             this.radBandVHF0.Click += new System.EventHandler(this.radBandVHF_Click);
-            this.radBandVHF0.MouseDown += new System.Windows.Forms.MouseEventHandler(this.radBandVHF0_MouseDown);
             // 
             // panelModeSpecificFM
             // 
@@ -7654,9 +7635,15 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.panelOptions);
             this.Controls.Add(this.chkMNU);
-            this.Controls.Add(this.panelDisplay);
             this.Controls.Add(this.lblPAProfile);
+            this.Controls.Add(this.panelModeSpecificCW);
+            this.Controls.Add(this.panelDisplay);
+            this.Controls.Add(this.chkRX2Preamp);
+            this.Controls.Add(this.chkRX1Preamp);
+            this.Controls.Add(this.chkDX);
             this.Controls.Add(this.nudPwrTemp2);
             this.Controls.Add(this.nudPwrTemp);
             this.Controls.Add(this.statusStripMain);
@@ -7668,9 +7655,7 @@
             this.Controls.Add(this.ptbRX2Squelch);
             this.Controls.Add(this.chkRX2Squelch);
             this.Controls.Add(this.panelRX2DSP);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.btnHidden);
-            this.Controls.Add(this.panelOptions);
             this.Controls.Add(this.panelRX2Filter);
             this.Controls.Add(this.panelRX2Mode);
             this.Controls.Add(this.panelRX2Display);
@@ -7710,7 +7695,6 @@
             this.Controls.Add(this.panelModeSpecificPhone);
             this.Controls.Add(this.panelModeSpecificFM);
             this.Controls.Add(this.panelModeSpecificDigital);
-            this.Controls.Add(this.panelModeSpecificCW);
             this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
@@ -7725,37 +7709,21 @@
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Console_KeyUp);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Console_MouseWheel);
             this.Resize += new System.EventHandler(this.Console_Resize);
-            this.contextMenuStripFilterRX1.ResumeLayout(false);
-            this.contextMenuStripFilterRX2.ResumeLayout(false);
-            this.contextMenuStripNotch.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.statusStripMain.ResumeLayout(false);
-            this.statusStripMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picSquelch)).EndInit();
-            this.panelDisplay.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbDisplayZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbDisplayPan)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).EndInit();
-            this.grpMultimeter.ResumeLayout(false);
-            this.grpMultimeter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
-            this.panelFilter.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterShift)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbFilterWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udFilterLow)).EndInit();
-            this.panelRX2RF.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2RF)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).EndInit();
-            this.panelRX2DSP.ResumeLayout(false);
-            this.panelOptions.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterLow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXFilterHigh)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udCWPitch)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udCWBreakInDelay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2FilterHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2FilterLow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRIT)).EndInit();
@@ -7763,7 +7731,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udFMOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX1StepAttData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udRX2StepAttData)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbPWR)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAF)).EndInit();
@@ -7777,13 +7744,35 @@
             ((System.ComponentModel.ISupportInitialize)(this.ptbVACTXGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX2AF)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbRX1AF)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFGain)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFBandwidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbCWAPFFreq)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbTune)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTXStepAttData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAutoAttWarningRX2)).EndInit();
+            this.contextMenuStripFilterRX1.ResumeLayout(false);
+            this.contextMenuStripFilterRX2.ResumeLayout(false);
+            this.contextMenuStripNotch.ResumeLayout(false);
+            this.statusStripMain.ResumeLayout(false);
+            this.statusStripMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picRX2Squelch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picSquelch)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.panelOptions.ResumeLayout(false);
+            this.panelModeSpecificCW.ResumeLayout(false);
+            this.panelModeSpecificCW.PerformLayout();
+            this.grpCWAPF.ResumeLayout(false);
+            this.grpSemiBreakIn.ResumeLayout(false);
+            this.grpSemiBreakIn.PerformLayout();
+            this.panelDisplay.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPwrTemp)).EndInit();
+            this.grpMultimeter.ResumeLayout(false);
+            this.grpMultimeter.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picMultiMeterDigital)).EndInit();
+            this.panelFilter.ResumeLayout(false);
+            this.panelRX2RF.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ptbRX2Squelch)).EndInit();
+            this.panelRX2DSP.ResumeLayout(false);
             this.panelModeSpecificPhone.ResumeLayout(false);
             this.panelModeSpecificPhone.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNoiseGate)).EndInit();
@@ -7800,11 +7789,6 @@
             this.panelVFOBLabels.PerformLayout();
             this.panelRX2Power.ResumeLayout(false);
             this.panelPower.ResumeLayout(false);
-            this.panelModeSpecificCW.ResumeLayout(false);
-            this.panelModeSpecificCW.PerformLayout();
-            this.grpCWAPF.ResumeLayout(false);
-            this.grpSemiBreakIn.ResumeLayout(false);
-            this.grpSemiBreakIn.PerformLayout();
             this.panelRX2Filter.ResumeLayout(false);
             this.panelRX2Mode.ResumeLayout(false);
             this.panelRX2Display.ResumeLayout(false);
@@ -7899,12 +7883,7 @@
         private LabelTS lblStep;
         private PanelTS panelMeterLabels;
         private LabelTS lblRXMeter;
-        public ToolStripMenuItem andromedaTopControlsToolStripMenuItem;
-        public ToolStripMenuItem andromedaButtonBarToolStripMenuItem;
         private GroupBoxTS grpMultimeterMenus;
-        private ToolStripMenuItem BPFToolStripMenuItem;
-        private ToolStripMenuItem BPF1ToolStripMenuItem;
-        private ToolStripMenuItem BPF2ToolStripMenuItem;
         private ComboBoxTS comboAMTXProfile;
         private StatusStrip statusStripMain;
         private ToolStripStatusLabel toolStripStatusLabel_Amps;
@@ -7962,8 +7941,6 @@
         private ToolStripMenuItem toolStripMenuItem18;
         private ToolStripStatusLabel toolStripStatusLabelAndromedaMulti;
         private ucQuickRecall ucQuickRecallPad;
-        private CheckBoxTS checkBoxTS1;
-        private CheckBoxTS chkExternalPA;
         private Timer tmrAutoAGC;
         private ButtonTS btnDisplayZTB;
         private ucInfoBar infoBar;
@@ -7975,39 +7952,76 @@
         private NumericUpDownTS nudPwrTemp;
         private NumericUpDownTS nudPwrTemp2;
         private ToolStripStatusLabel toolStripStatusLabel_TXInhibit;
-        private ToolStripMenuItem finderMenuItem;
         private ToolStripStatusLabel toolStripStatusLabel_CMstatus;
         private ToolStripStatusLabel toolStripStatusLabel_CatSerial;
         private ToolStripStatusLabel toolStripStatusLabel_N1MM;
         private ToolStripStatusLabel toolStripStatusLabel_CatTCPip;
         private ToolStripStatusLabel toolStripStatusLabel_TCI;
         private NumericUpDownTS udTXStepAttData;
-        private ToolStripMenuItem databaseManagerToolStripMenuItem;
-        private ToolStripMenuItem setupToolStripMenuItem1;
-        private ToolStripMenuItem miAbout;
         private PictureBox pbAutoAttWarningRX1;
         private PictureBox pbAutoAttWarningRX2;
-        private Panel pnlDisplay;
+        public Panel pnlDisplay;
         private ToolStripMenuItem NR3ToolStripMenuItem;
         private ToolStripMenuItem NR4ToolStripMenuItem;
         private ToolStripMenuItem NR3ToolStripMenuItem_rx2;
         private ToolStripMenuItem NR4ToolStripMenuItem_rx2;
+        private ButtonTS btnAPF_type;
+        private ToolStripStatusLabel toolStripStatusLabel_PAstatus;
+        private ToolStripStatusLabel toolStripStatus_PAspacer;
+        private ToolStripStatusLabel toolStripStatusLabel_play_record;
+        private ToolStripStatusLabel toolStripStatus_RecordPlay_spacer;
         //wd5y
-        private ToolStripMenuItem TopControlstoolStripMenuItem;
-        private ToolStripMenuItem BtnBartoolStripMenuItem;
-        private ToolStripMenuItem RXTXGainToolStripMenuItem;
-        private CheckBoxTS chkTC;
         private CheckBoxTS chkMNU;
-        private ToolStripMenuItem RX2modetoolStripMenuItem;
-        private ToolStripMenuItem RX2bandtoolStripMenuItem;
-        private ToolStripMenuItem RX2dSPtoolStripMenuItem;
-        private ToolStripMenuItem RX2filtertoolStripMenuItem;
+        private PanelTS panelOptions;
+        public CheckBoxTS chkTunerFollow;
+        private CheckBoxTS chkTC;
+        private CheckBoxTS checkBoxTS1;
+        private CheckBoxTS chkExternalPA;
+        private CheckBoxTS ckQuickPlay;
+        private CheckBoxTS chkMON;
+        private CheckBoxTS ckQuickRec;
+        private CheckBoxTS chkRX2SR;
+        private CheckBoxTS chkMOX;
+        private CheckBoxTS chkTUN;
+        public CheckBoxTS chk2TONE;
+        private CheckBoxTS chkFWCATUBypass;
+        private ComboBoxTS comboTuneMode;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem setupToolStripMenuItem;
+        private ToolStripMenuItem setupToolStripMenuItem1;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem databaseManagerToolStripMenuItem;
+        private ToolStripMenuItem memoryToolStripMenuItem;
+        private ToolStripMenuItem equalizerToolStripMenuItem;
+        private ToolStripMenuItem xVTRsToolStripMenuItem;
+        private ToolStripMenuItem cWXToolStripMenuItem;
+        private ToolStripMenuItem eSCToolStripMenuItem;
+        private ToolStripMenuItem collapseToolStripMenuItem;
+        private ToolStripMenuItem TopControlstoolStripMenuItem;
         private ToolStripMenuItem TXSettoolStripMenuItem;
         private ToolStripMenuItem TXSettoolStripMenuItem2;
         private ToolStripMenuItem TXSettoolStripMenuItem3;
         private ToolStripMenuItem TXSettoolStripMenuItem4;
-        public CheckBoxTS chkTunerFollow;
+        public ToolStripMenuItem modeToolStripMenuItem;
+        public ToolStripMenuItem bandToolStripMenuItem;
+        private ToolStripMenuItem dSPToolStripMenuItem;
+        private ToolStripMenuItem filterToolStripMenuItem;
+        private ToolStripMenuItem RX2modetoolStripMenuItem;
+        private ToolStripMenuItem RX2bandtoolStripMenuItem;
+        private ToolStripMenuItem RX2dSPtoolStripMenuItem;
+        private ToolStripMenuItem RX2filtertoolStripMenuItem;
         private ToolStripMenuItem VFOVACtoolStripMenuItem;
+        private ToolStripMenuItem RXTXGainToolStripMenuItem;
+        private ToolStripMenuItem BtnBartoolStripMenuItem;
+        private ToolStripMenuItem linearityToolStripMenuItem;
+        private ToolStripMenuItem RAtoolStripMenuItem;
+        private ToolStripMenuItem wBToolStripMenuItem;
+        private ToolStripMenuItem pIToolStripMenuItem;
+        private ToolStripMenuItem BPFToolStripMenuItem;
+        private ToolStripMenuItem BPF1ToolStripMenuItem;
+        private ToolStripMenuItem BPF2ToolStripMenuItem;
+        private ToolStripMenuItem finderMenuItem;
+        private ToolStripMenuItem miAbout;
         //wd5y
     }
 }

@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,12 +38,6 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Thetis
 {
     internal static class LegacyItemController
@@ -66,7 +60,7 @@ namespace Thetis
         private static bool _hide_noise_mnf;
         private static bool _hide_mic_comp;
         private static bool _hide_display_controls;
-        
+
         static LegacyItemController()
         {
             _console = null;
@@ -86,7 +80,7 @@ namespace Thetis
             _hide_noise_mnf = false;
             _hide_mic_comp = false;
             _hide_display_controls = false;
-    }
+        }
         public static void Init(Console c)
         {
             _console = c;
@@ -206,31 +200,31 @@ namespace Thetis
         }
         public static bool HideBands
         {
-            get 
-            { 
-                if(_console != null)
+            get
+            {
+                if (_console != null)
                 {
                     return _hide_bands && _console.IsExpandedView;
                 }
-                return _hide_bands; 
+                return _hide_bands;
             }
-            set 
-            { 
+            set
+            {
                 _hide_bands = value;
-                if(_update_on_property_change) Update();
+                if (_update_on_property_change) Update();
             }
         }
         public static bool HideModes
         {
-            get 
+            get
             {
                 if (_console != null)
                 {
                     return _hide_modes && _console.IsExpandedView;
                 }
-                return _hide_modes; 
+                return _hide_modes;
             }
-            set 
+            set
             {
                 _hide_modes = value;
                 if (_update_on_property_change) Update();
@@ -238,16 +232,16 @@ namespace Thetis
         }
         public static bool HideFilters
         {
-            get 
+            get
             {
                 if (_console != null)
                 {
                     return _hide_filters && _console.IsExpandedView;
                 }
-                return _hide_filters; 
+                return _hide_filters;
             }
-            set 
-            { 
+            set
+            {
                 _hide_filters = value;
                 if (_update_on_property_change) Update();
             }
@@ -291,8 +285,8 @@ namespace Thetis
         public static bool ExpandSpectrumToRight
         {
             get { return _expand_spectrum_to_right && _hide_bands && _hide_filters && _hide_modes & _hide_meters; }
-            set 
-            { 
+            set
+            {
                 _expand_spectrum_to_right = value;
                 if (_update_on_property_change) Update();
             }
@@ -316,7 +310,7 @@ namespace Thetis
                 // make control groups visible
                 _console.BandPanelVisible(!_console.SetupForm.chkShowBandControls.Checked || _console.SetupForm.chkShowAndromedaBar.Checked); // if we need to hide band controls in collapsed view, then force it with the optional parameter
                 _console.ModePanelVisible(_console.SetupForm.chkShowModeControls.Checked && !_console.SetupForm.chkShowAndromedaBar.Checked); // if we need to hide mode controls in collapsed view, then force it with the optional parameter
-                                                                                            // Note: I dislike the use of a public control, but that is how things have been done with this
+                                                                                                                                              // Note: I dislike the use of a public control, but that is how things have been done with this
                 _console.FilterPanelVisible(false);
 
                 _console.ExtendPanelDisplaySizeRight(false);
@@ -328,7 +322,7 @@ namespace Thetis
                 _console.PowerRxPanelVisible(false);
                 _console.MonTunePanelVisible(false);
             }
-            else if(_console.IsExpandedView && !_console.IsCollapsedView)
+            else if (_console.IsExpandedView && !_console.IsCollapsedView)
             {
                 // set visible based on flags
                 _console.BandPanelVisible();

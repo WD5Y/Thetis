@@ -43,12 +43,10 @@
 //============================================================================================//
 
 using System;
-using System.Data;
-using System.Windows.Forms;
-using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -64,7 +62,7 @@ namespace Thetis
         private static string _file_name = "";
         public static string FileName
         {
-            get {  return _file_name; }
+            get { return _file_name; }
             set { _file_name = value; }
         }
         private static string _version_nr = "";
@@ -196,13 +194,6 @@ namespace Thetis
         {
             if (!ds.Tables.Contains("BandText"))
                 AddBandTextTable();
-
-            //MW0LGE_21d BandStack2
-            //if (!ds.Tables.Contains("BandStack"))
-            //{
-            //    AddBandStackTable();
-            //    AddBandStackSWL(); // ke9ns add
-            //}
 
             //-BandStack2 MW0LGE_21d
             if (!ds.Tables.Contains("BandStack2Entries"))
@@ -450,7 +441,7 @@ namespace Thetis
 
             // frequencies
             t = ds.Tables["BandStack2FilterFrequencies"];
-            foreach(BandFrequencyData bfd in bsf.FrequenciesToFilterOn)
+            foreach (BandFrequencyData bfd in bsf.FrequenciesToFilterOn)
             {
                 dr = t.NewRow();
                 dr["FilterGUID"] = bsf.GUID;
@@ -590,8 +581,8 @@ namespace Thetis
             dr["GUID"] = bse.GUID;
             dr["Description"] = bse.Description;
             dr["Locked"] = bse.Locked;
-            dr["Frequency"] = Math.Round(bse.Frequency,6);
-            dr["CentreFrequency"] = Math.Round(bse.CentreFrequency,6);
+            dr["Frequency"] = Math.Round(bse.Frequency, 6);
+            dr["CentreFrequency"] = Math.Round(bse.CentreFrequency, 6);
             dr["Band"] = (int)bse.Band;
             dr["Mode"] = (int)bse.Mode;
             dr["SubMode"] = (int)bse.SubMode;
@@ -616,15 +607,15 @@ namespace Thetis
 
             DataRow[] rows = ds.Tables["BandStack2Entries"].Select();
 
-            foreach(DataRow dr in rows)
+            foreach (DataRow dr in rows)
             {
                 BandStackEntry bse = new BandStackEntry();
 
                 bse.GUID = ConvertFromDBVal<string>(dr["GUID"]);
                 bse.Description = ConvertFromDBVal<string>(dr["Description"]);
                 bse.Locked = (bool)dr["Locked"];
-                bse.Frequency = Math.Round((double)dr["Frequency"],6);
-                bse.CentreFrequency = Math.Round((double)dr["CentreFrequency"],6);
+                bse.Frequency = Math.Round((double)dr["Frequency"], 6);
+                bse.CentreFrequency = Math.Round((double)dr["CentreFrequency"], 6);
                 bse.Band = (Band)dr["Band"];
                 bse.Mode = (DSPMode)dr["Mode"];
                 bse.SubMode = (DSPSubMode)dr["SubMode"];
@@ -645,7 +636,7 @@ namespace Thetis
             DataRow[] rows;
 
             rows = ds.Tables["BandStack2Filters"].Select();
-            foreach(DataRow dr in rows)
+            foreach (DataRow dr in rows)
             {
                 BandStackFilter bsf = new BandStackFilter();
 
@@ -682,7 +673,7 @@ namespace Thetis
                 string sSelectString = "FilterGUID = '" + bsf.GUID + "'";
                 //add in freqs
                 DataRow[] rowsF = ds.Tables["BandStack2FilterFrequencies"].Select(sSelectString);
-                foreach(DataRow drF in rowsF)
+                foreach (DataRow drF in rowsF)
                 {
                     BandFrequencyData bfd = new BandFrequencyData();
                     bfd.low = (double)drF["Low"];
@@ -762,305 +753,305 @@ namespace Thetis
             t.Columns.Add("TX", typeof(bool));
 
             object[] data = {
- 								1.800000, 1.809999, "160M CW/Digital Modes",	true,
-								1.810000, 1.810000, "160M CW QRP",				true,
-								1.810001, 1.842999, "160M CW",					true,
-								1.843000, 1.909999, "160M SSB/SSTV/Wide Band",	true,
-								1.910000, 1.910000, "160M SSB QRP",				true,
-								1.910001, 1.994999, "160M SSB/SSTV/Wide Band",	true,
-								1.995000, 1.999999, "160M Experimental",		true,
+                                 1.800000, 1.809999, "160M CW/Digital Modes",    true,
+                                1.810000, 1.810000, "160M CW QRP",              true,
+                                1.810001, 1.842999, "160M CW",                  true,
+                                1.843000, 1.909999, "160M SSB/SSTV/Wide Band",  true,
+                                1.910000, 1.910000, "160M SSB QRP",             true,
+                                1.910001, 1.994999, "160M SSB/SSTV/Wide Band",  true,
+                                1.995000, 1.999999, "160M Experimental",        true,
 
-								3.500000, 3.524999, "80M Extra CW",				true,
-								3.525000, 3.579999, "80M CW",					true,
-								3.580000, 3.589999, "80M RTTY",					true,
-								3.590000, 3.590000, "80M RTTY DX",				true,
-								3.590001, 3.599999, "80M RTTY",					true,
-								3.600000, 3.699999, "75M Extra SSB",			true,
-								3.700000, 3.789999, "75M Ext/Adv SSB",			true,
-								3.790000, 3.799999, "75M Ext/Adv DX Window",	true,
-								3.800000, 3.844999, "75M SSB",					true,
-								3.845000, 3.845000, "75M SSTV",					true,
-								3.845001, 3.884999, "75M SSB",					true,
-								3.885000, 3.885000, "75M AM Calling Frequency", true,
-								3.885001, 3.999999, "75M SSB",	                true,
+                                3.500000, 3.524999, "80M Extra CW",             true,
+                                3.525000, 3.579999, "80M CW",                   true,
+                                3.580000, 3.589999, "80M RTTY",                 true,
+                                3.590000, 3.590000, "80M RTTY DX",              true,
+                                3.590001, 3.599999, "80M RTTY",                 true,
+                                3.600000, 3.699999, "75M Extra SSB",            true,
+                                3.700000, 3.789999, "75M Ext/Adv SSB",          true,
+                                3.790000, 3.799999, "75M Ext/Adv DX Window",    true,
+                                3.800000, 3.844999, "75M SSB",                  true,
+                                3.845000, 3.845000, "75M SSTV",                 true,
+                                3.845001, 3.884999, "75M SSB",                  true,
+                                3.885000, 3.885000, "75M AM Calling Frequency", true,
+                                3.885001, 3.999999, "75M SSB",                  true,
 
                                 5.100000, 5.331999, "60M General",              false,
-								5.332000, 5.332000, "60M Channel 1",			true,
+                                5.332000, 5.332000, "60M Channel 1",            true,
                                 5.332001, 5.347999, "60M General",              false,
-								5.348000, 5.348000, "60M Channel 2",			true,
+                                5.348000, 5.348000, "60M Channel 2",            true,
                                 5.348001, 5.358499, "60M General",              false,
-								5.358500, 5.358500, "60M Channel 3",			true,
+                                5.358500, 5.358500, "60M Channel 3",            true,
                                 5.358501, 5.372999, "60M General",              false,
-								5.373000, 5.373000, "60M Channel 4",			true,
+                                5.373000, 5.373000, "60M Channel 4",            true,
                                 5.373001, 5.404999, "60M General",              false,
-								5.405000, 5.405000, "60M Channel 5",			true,
+                                5.405000, 5.405000, "60M Channel 5",            true,
                                 5.405001, 5.499999, "60M General",              false,
-								
-								7.000000, 7.024999, "40M Extra CW",				true,
-								7.025000, 7.039999, "40M CW",					true,
-								7.040000, 7.040000, "40M RTTY DX",				true,
-								7.040001, 7.099999, "40M RTTY",					true,
-								7.100000, 7.124999, "40M CW",					true,
-								7.125000, 7.170999, "40M Ext/Adv SSB",			true,
-								7.171000, 7.171000, "40M SSTV",					true,
-								7.171001, 7.174999, "40M Ext/Adv SSB",			true,
-								7.175000, 7.289999, "40M SSB",					true,
-								7.290000, 7.290000, "40M AM Calling Frequency", true,
-								7.290001, 7.299999, "40M SSB",					true,
-								
-								10.100000, 10.129999, "30M CW",					true,
-								10.130000, 10.139999, "30M RTTY",				true,
-								10.140000, 10.149999, "30M Packet",				true,
 
-								14.000000, 14.024999, "20M Extra CW",			true,
-								14.025000, 14.069999, "20M CW",					true,
-								14.070000, 14.094999, "20M RTTY",				true,
-								14.095000, 14.099499, "20M Packet",				true,
-								14.099500, 14.099999, "20M CW",					true,
-								14.100000, 14.100000, "20M NCDXF Beacons",		true,
-								14.100001, 14.100499, "20M CW",					true,
-								14.100500, 14.111999, "20M Packet",				true,
-								14.112000, 14.149999, "20M CW",					true,
-								14.150000, 14.174999, "20M Extra SSB",			true,
-								14.175000, 14.224999, "20M Ext/Adv SSB",		true,
-								14.225000, 14.229999, "20M SSB",				true,
-								14.230000, 14.230000, "20M SSTV",				true,
-								14.230001, 14.285999, "20M SSB",				true,
-								14.286000, 14.286000, "20M AM Calling Frequency", true,
-								14.286001, 14.349999, "20M SSB",				true,
-								
-								18.068000, 18.099999, "17M CW",					true,
-								18.100000, 18.104999, "17M RTTY",				true,
-								18.105000, 18.109999, "17M Packet",				true,
-								18.110000, 18.110000, "17M NCDXF Beacons",		true,
-								18.110001, 18.167999, "17M SSB",				true,
-								
-								21.000000, 21.024999, "15M Extra CW",			true,
-								21.025000, 21.069999, "15M CW",					true,
-								21.070000, 21.099999, "15M RTTY",				true,
-								21.100000, 21.109999, "15M Packet",				true,
-								21.110000, 21.149999, "15M CW",					true,
-								21.150000, 21.150000, "15M NCDXF Beacons",		true,
-								21.150001, 21.199999, "15M CW",					true,
-								21.200000, 21.224999, "15M Extra SSB",			true,
-								21.225000, 21.274999, "15M Ext/Adv SSB",		true,
-								21.275000, 21.339999, "15M SSB",				true,
-								21.340000, 21.340000, "15M SSTV",				true,
-								21.340001, 21.449999, "15M SSB",				true,
-								
-								24.890000, 24.919999, "12M CW",					true,
-								24.920000, 24.924999, "12M RTTY",				true,
-								24.925000, 24.929999, "12M Packet",				true,
-								24.930000, 24.930000, "12M NCDXF Beacons",		true,
-								24.930001, 24.989999, "12M SSB",				true,
-								
-								28.000000, 28.069999, "10M CW",					true,
-								28.070000, 28.149999, "10M RTTY",				true,
-								28.150000, 28.199999, "10M CW",					true,
-								28.200000, 28.200000, "10M NCDXF Beacons",		true,
-								28.200001, 28.299999, "10M Beacons",			true,
-								28.300000, 28.679999, "10M SSB",				true,
-								28.680000, 28.680000, "10M SSTV",				true,
-								28.680001, 28.999999, "10M SSB",				true,
-								29.000000, 29.199999, "10M AM",					true,
-								29.200000, 29.299999, "10M SSB",				true,
-								29.300000, 29.509999, "10M Satellite Downlinks", true,
-								29.510000, 29.519999, "10M Deadband",			true,
-								29.520000, 29.589999, "10M Repeater Inputs",	true,
-								29.590000, 29.599999, "10M Deadband",			true,
-								29.600000, 29.600000, "10M FM Simplex",			true,
-								29.600001, 29.609999, "10M Deadband",			true,
-								29.610000, 29.699999, "10M Repeater Outputs",	true,
-								
-								50.000000, 50.059999, "6M CW",					true,
-								50.060000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.099999, "6M CW",					true,
-								50.100000, 50.124999, "6M DX Window",			true,
-								50.125000, 50.125000, "6M Calling Frequency",	true,
-								50.125001, 50.299999, "6M SSB",					true,
-								50.300000, 50.599999, "6M All Modes",			true,
-								50.600000, 50.619999, "6M Non Voice",			true,
-								50.620000, 50.620000, "6M Digital Packet Calling", true,
-								50.620001, 50.799999, "6M Non Voice",			true,
-								50.800000, 50.999999, "6M RC",					true,
-								51.000000, 51.099999, "6M Pacific DX Window",	true,
-								51.100000, 51.119999, "6M Deadband",			true,
-								51.120000, 51.179999, "6M Digital Repeater Inputs", true,
-								51.180000, 51.479999, "6M Repeater Inputs",		true,
-								51.480000, 51.619999, "6M Deadband",			true,
-								51.620000, 51.679999, "6M Digital Repeater Outputs", true,
-								51.680000, 51.979999, "6M Repeater Outputs",	true,
-								51.980000, 51.999999, "6M Deadband",			true,
-								52.000000, 52.019999, "6M Repeater Inputs",		true,
-								52.020000, 52.020000, "6M FM Simplex",			true,
-								52.020001, 52.039999, "6M Repeater Inputs",		true,
-								52.040000, 52.040000, "6M FM Simplex",			true,
-								52.040001, 52.479999, "6M Repeater Inputs",		true,
-								52.480000, 52.499999, "6M Deadband",			true,
-								52.500000, 52.524999, "6M Repeater Outputs",	true,
-								52.525000, 52.525000, "6M Primary FM Simplex",	true,
-								52.525001, 52.539999, "6M Deadband",			true,
-								52.540000, 52.540000, "6M Secondary FM Simplex", true,
-								52.540001, 52.979999, "6M Repeater Outputs",	true,
-								52.980000, 52.999999, "6M Deadbands",			true,
-								53.000000, 53.000000, "6M Remote Base FM Spx",	true,
-								53.000001, 53.019999, "6M Repeater Inputs",		true,
-								53.020000, 53.020000, "6M FM Simplex",			true,
-								53.020001, 53.479999, "6M Repeater Inputs",		true,
-								53.480000, 53.499999, "6M Deadband",			true,
-								53.500000, 53.519999, "6M Repeater Outputs",	true,
-								53.520000, 53.520000, "6M FM Simplex",			true,
-								53.520001, 53.899999, "6M Repeater Outputs",	true,
-								53.900000, 53.900000, "6M FM Simplex",			true,
-								53.900010, 53.979999, "6M Repeater Outputs",	true,
-								53.980000, 53.999999, "6M Deadband",			true,
-								
-								144.000000, 144.099999, "2M CW",				true,
-								144.100000, 144.199999, "2M CW/SSB",			true,
-								144.200000, 144.200000, "2M Calling",			true,
-								144.200001, 144.274999, "2M CW/SSB",			true,
-								144.275000, 144.299999, "2M Beacon Sub-Band",	true,
-								144.300000, 144.499999, "2M Satellite",			true,
-								144.500000, 144.599999, "2M Linear Translator Inputs", true,
-								144.600000, 144.899999, "2M FM Repeater",		true,
-								144.900000, 145.199999, "2M FM Simplex",		true,
-								145.200000, 145.499999, "2M FM Repeater",		true,
-								145.500000, 145.799999, "2M FM Simplex",		true,
-								145.800000, 145.999999, "2M Satellite",			true,
-								146.000000, 146.399999, "2M FM Repeater",		true,
-								146.400000, 146.609999, "2M FM Simplex",		true,
-								146.610000, 147.389999, "2M FM Repeater",		true,
-								147.390000, 147.599999, "2M FM Simplex",		true,
-								147.600000, 147.999999, "2M FM Repeater",		true,
+                                7.000000, 7.024999, "40M Extra CW",             true,
+                                7.025000, 7.039999, "40M CW",                   true,
+                                7.040000, 7.040000, "40M RTTY DX",              true,
+                                7.040001, 7.099999, "40M RTTY",                 true,
+                                7.100000, 7.124999, "40M CW",                   true,
+                                7.125000, 7.170999, "40M Ext/Adv SSB",          true,
+                                7.171000, 7.171000, "40M SSTV",                 true,
+                                7.171001, 7.174999, "40M Ext/Adv SSB",          true,
+                                7.175000, 7.289999, "40M SSB",                  true,
+                                7.290000, 7.290000, "40M AM Calling Frequency", true,
+                                7.290001, 7.299999, "40M SSB",                  true,
 
-								222.000000, 222.024999, "1.25M EME/Weak Signal",        true,
-								222.025000, 222.049999, "1.25M Weak Signal",	        true,
-								222.050000, 222.059999, "1.25M Propagation Beacons",    true,
-								222.060000, 222.099999, "1.25M Weak Signal",	        true,
-								222.100000, 222.100000, "1.25M SSB/CW Calling",	        true,
-								222.100001, 222.149999, "1.25M Weak Signal CW/SSB",     true,
-								222.150000, 222.249999, "1.25M Local Option",	        true,
-								222.250000, 223.380000, "1.25M FM Repeater Inputs",     true,
-								223.380001, 223.399999, "1.25M General",                true,
-								223.400000, 223.519999, "1.25M FM Simplex",		        true,
-								223.520000, 223.639999, "1.25M Digital/Packet",	        true,
-								223.640000, 223.700000, "1.25M Links/Control",	        true,
-								223.700001, 223.709999, "1.25M General",	            true,
-								223.710000, 223.849999, "1.25M Local Option",	        true,
-								223.850000, 224.980000, "1.25M Repeater Outputs",       true,
+                                10.100000, 10.129999, "30M CW",                  true,
+                                10.130000, 10.139999, "30M RTTY",               true,
+                                10.140000, 10.149999, "30M Packet",             true,
 
-								420.000000, 425.999999, "70cm ATV Repeater",	true,
-								426.000000, 431.999999, "70cm ATV Simplex",		true,
-								432.000000, 432.069999, "70cm EME",				true,
-								432.070000, 432.099999, "70cm Weak Signal CW",	true,
-								432.100000, 432.100000, "70cm Calling Frequency", true,
-								432.100001, 432.299999, "70cm Mixed Mode Weak Signal", true,
-								432.300000, 432.399999, "70cm Propagation Beacons", true,
-								432.400000, 432.999999, "70cm Mixed Mode Weak Signal", true,
-								433.000000, 434.999999, "70cm Auxillary/Repeater Links", true,
-								435.000000, 437.999999, "70cm Satellite Only",	true,
-								438.000000, 441.999999, "70cm ATV Repeater",	true,
-								442.000000, 444.999999, "70cm Local Repeaters",	true,
-								445.000000, 445.999999, "70cm Local Option",	true,
-								446.000000, 446.000000, "70cm Simplex",			true,
-								446.000001, 446.999999, "70cm Local Option",	true,
-								447.000000, 450.000000, "70cm Local Repeaters", true,
+                                14.000000, 14.024999, "20M Extra CW",            true,
+                                14.025000, 14.069999, "20M CW",                 true,
+                                14.070000, 14.094999, "20M RTTY",               true,
+                                14.095000, 14.099499, "20M Packet",             true,
+                                14.099500, 14.099999, "20M CW",                 true,
+                                14.100000, 14.100000, "20M NCDXF Beacons",      true,
+                                14.100001, 14.100499, "20M CW",                 true,
+                                14.100500, 14.111999, "20M Packet",             true,
+                                14.112000, 14.149999, "20M CW",                 true,
+                                14.150000, 14.174999, "20M Extra SSB",          true,
+                                14.175000, 14.224999, "20M Ext/Adv SSB",        true,
+                                14.225000, 14.229999, "20M SSB",                true,
+                                14.230000, 14.230000, "20M SSTV",               true,
+                                14.230001, 14.285999, "20M SSB",                true,
+                                14.286000, 14.286000, "20M AM Calling Frequency", true,
+                                14.286001, 14.349999, "20M SSB",                true,
 
-								902.000000, 902.099999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
-								902.100000, 902.100000, "33cm Weak Signal Calling", true,
-								902.100001, 902.799999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
-								902.800000, 902.999999, "33cm Weak Signal EME/CW", true,
-								903.000000, 903.099999, "33cm Digital Modes",	true,
-								903.100000, 903.100000, "33cm Alternate Calling", true,
-								903.100001, 905.999999, "33cm Digital Modes",	true,
-								906.000000, 908.999999, "33cm FM Repeater Inputs", true,
-								909.000000, 914.999999, "33cm ATV",				true,
-								915.000000, 917.999999, "33cm Digital Modes",	true,
-								918.000000, 920.999999, "33cm FM Repeater Outputs", true,
-								921.000000, 926.999999, "33cm ATV",				true,
-								927.000000, 928.000000, "33cm FM Simplex/Links", true,
-								
-								1240.000000, 1245.999999, "23cm ATV #1",		true,
-								1246.000000, 1251.999999, "23cm FM Point/Links", true,
-								1252.000000, 1257.999999, "23cm ATV #2, Digital Modes", true,
-								1258.000000, 1259.999999, "23cm FM Point/Links", true,
-								1260.000000, 1269.999999, "23cm Sat Uplinks/Wideband Exp.", true,
-								1270.000000, 1275.999999, "23cm Repeater Inputs", true,
-								1276.000000, 1281.999999, "23cm ATV #3",		true,
-								1282.000000, 1287.999999, "23cm Repeater Outputs",	true,
-								1288.000000, 1293.999999, "23cm Simplex ATV/Wideband Exp.", true,
-								1294.000000, 1294.499999, "23cm Simplex FM",		true,
-								1294.500000, 1294.500000, "23cm FM Simplex Calling", true,
-								1294.500001, 1294.999999, "23cm Simplex FM",		true,
-								1295.000000, 1295.799999, "23cm SSTV/FAX/ACSSB/Exp.", true,
-								1295.800000, 1295.999999, "23cm EME/CW Expansion",	true,
-								1296.000000, 1296.049999, "23cm EME Exclusive",		true,
-								1296.050000, 1296.069999, "23cm Weak Signal",		true,
-								1296.070000, 1296.079999, "23cm CW Beacons",		true,
-								1296.080000, 1296.099999, "23cm Weak Signal",		true,
-								1296.100000, 1296.100000, "23cm CW/SSB Calling",	true,
-								1296.100001, 1296.399999, "23cm Weak Signal",		true,
-								1296.400000, 1296.599999, "23cm X-Band Translator Input", true,
-								1296.600000, 1296.799999, "23cm X-Band Translator Output", true,
-								1296.800000, 1296.999999, "23cm Experimental Beacons", true,
-								1297.000000, 1300.000000, "23cm Digital Modes",		true,
+                                18.068000, 18.099999, "17M CW",                  true,
+                                18.100000, 18.104999, "17M RTTY",               true,
+                                18.105000, 18.109999, "17M Packet",             true,
+                                18.110000, 18.110000, "17M NCDXF Beacons",      true,
+                                18.110001, 18.167999, "17M SSB",                true,
 
-								2300.000000, 2302.999999, "2.3GHz High Data Rate", true,
-								2303.000000, 2303.499999, "2.3GHz Packet",		true,
-								2303.500000, 2303.800000, "2.3GHz TTY Packet",	true,
-								2303.800001, 2303.899999, "2.3GHz General",	true,
-								2303.900000, 2303.900000, "2.3GHz Packet/TTY/CW/EME", true,
-								2303.900001, 2304.099999, "2.3GHz CW/EME",		true,
-								2304.100000, 2304.100000, "2.3GHz Calling Frequency", true,
-								2304.100001, 2304.199999, "2.3GHz CW/EME/SSB",	true,
-								2304.200000, 2304.299999, "2.3GHz SSB/SSTV/FAX/Packet AM/Amtor", true,
-								2304.300000, 2304.319999, "2.3GHz Propagation Beacon Network", true,
-								2304.320000, 2304.399999, "2.3GHz General Propagation Beacons", true,
-								2304.400000, 2304.499999, "2.3GHz SSB/SSTV/ACSSB/FAX/Packet AM", true,
-								2304.500000, 2304.699999, "2.3GHz X-Band Translator Input", true,
-								2304.700000, 2304.899999, "2.3GHz X-Band Translator Output", true,
-								2304.900000, 2304.999999, "2.3GHz Experimental Beacons", true,
-								2305.000000, 2305.199999, "2.3GHz FM Simplex", true,
-								2305.200000, 2305.200000, "2.3GHz FM Simplex Calling", true,
-								2305.200001, 2305.999999, "2.3GHz FM Simplex", true,
-								2306.000000, 2308.999999, "2.3GHz FM Repeaters", true,
-								2309.000000, 2310.000000, "2.3GHz Control/Aux Links", true,
-								2390.000000, 2395.999999, "2.3GHz Fast-Scan TV", true,
-								2396.000000, 2398.999999, "2.3GHz High Rate Data", true,
-								2399.000000, 2399.499999, "2.3GHz Packet", true,
-								2399.500000, 2399.999999, "2.3GHz Control/Aux Links", true,
-								2400.000000, 2402.999999, "2.4GHz Satellite", true,
-								2403.000000, 2407.999999, "2.4GHz Satellite High-Rate Data", true,
-								2408.000000, 2409.999999, "2.4GHz Satellite", true,
-								2410.000000, 2412.999999, "2.4GHz FM Repeaters", true,
-								2413.000000, 2417.999999, "2.4GHz High-Rate Data", true,
-								2418.000000, 2429.999999, "2.4GHz Fast-Scan TV", true,
-								2430.000000, 2432.999999, "2.4GHz Satellite", true,
-								2433.000000, 2437.999999, "2.4GHz Sat. High-Rate Data", true,
-								2438.000000, 2450.000000, "2.4GHz Wideband FM/FSTV/FMTV", true,
+                                21.000000, 21.024999, "15M Extra CW",            true,
+                                21.025000, 21.069999, "15M CW",                 true,
+                                21.070000, 21.099999, "15M RTTY",               true,
+                                21.100000, 21.109999, "15M Packet",             true,
+                                21.110000, 21.149999, "15M CW",                 true,
+                                21.150000, 21.150000, "15M NCDXF Beacons",      true,
+                                21.150001, 21.199999, "15M CW",                 true,
+                                21.200000, 21.224999, "15M Extra SSB",          true,
+                                21.225000, 21.274999, "15M Ext/Adv SSB",        true,
+                                21.275000, 21.339999, "15M SSB",                true,
+                                21.340000, 21.340000, "15M SSTV",               true,
+                                21.340001, 21.449999, "15M SSB",                true,
 
-								3456.000000, 3456.099999, "3.4GHz General", true,
-								3456.100000, 3456.100000, "3.4GHz Calling Frequency", true,
-								3456.100001, 3456.299999, "3.4GHz General", true,
-								3456.300000, 3456.400000, "3.4GHz Propagation Beacons", true,
+                                24.890000, 24.919999, "12M CW",                  true,
+                                24.920000, 24.924999, "12M RTTY",               true,
+                                24.925000, 24.929999, "12M Packet",             true,
+                                24.930000, 24.930000, "12M NCDXF Beacons",      true,
+                                24.930001, 24.989999, "12M SSB",                true,
 
-								5760.000000, 5760.099999, "5.7GHz General", true,
-								5760.100000, 5760.100000, "5.7GHz Calling Frequency", true,
-								5760.100001, 5760.299999, "5.7GHz General", true,
-								5760.300000, 5760.400000, "5.7GHz Propagation Beacons", true,
+                                28.000000, 28.069999, "10M CW",                  true,
+                                28.070000, 28.149999, "10M RTTY",               true,
+                                28.150000, 28.199999, "10M CW",                 true,
+                                28.200000, 28.200000, "10M NCDXF Beacons",      true,
+                                28.200001, 28.299999, "10M Beacons",            true,
+                                28.300000, 28.679999, "10M SSB",                true,
+                                28.680000, 28.680000, "10M SSTV",               true,
+                                28.680001, 28.999999, "10M SSB",                true,
+                                29.000000, 29.199999, "10M AM",                 true,
+                                29.200000, 29.299999, "10M SSB",                true,
+                                29.300000, 29.509999, "10M Satellite Downlinks", true,
+                                29.510000, 29.519999, "10M Deadband",           true,
+                                29.520000, 29.589999, "10M Repeater Inputs",    true,
+                                29.590000, 29.599999, "10M Deadband",           true,
+                                29.600000, 29.600000, "10M FM Simplex",         true,
+                                29.600001, 29.609999, "10M Deadband",           true,
+                                29.610000, 29.699999, "10M Repeater Outputs",   true,
 
-								10368.000000, 10368.099999, "10GHz General", true,
-								10368.100000, 10368.100000, "10GHz Calling Frequency", true,
-								10368.100001, 10368.400000, "10GHz General", true,
+                                50.000000, 50.059999, "6M CW",                   true,
+                                50.060000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.099999, "6M CW",                  true,
+                                50.100000, 50.124999, "6M DX Window",           true,
+                                50.125000, 50.125000, "6M Calling Frequency",   true,
+                                50.125001, 50.299999, "6M SSB",                 true,
+                                50.300000, 50.599999, "6M All Modes",           true,
+                                50.600000, 50.619999, "6M Non Voice",           true,
+                                50.620000, 50.620000, "6M Digital Packet Calling", true,
+                                50.620001, 50.799999, "6M Non Voice",           true,
+                                50.800000, 50.999999, "6M RC",                  true,
+                                51.000000, 51.099999, "6M Pacific DX Window",   true,
+                                51.100000, 51.119999, "6M Deadband",            true,
+                                51.120000, 51.179999, "6M Digital Repeater Inputs", true,
+                                51.180000, 51.479999, "6M Repeater Inputs",     true,
+                                51.480000, 51.619999, "6M Deadband",            true,
+                                51.620000, 51.679999, "6M Digital Repeater Outputs", true,
+                                51.680000, 51.979999, "6M Repeater Outputs",    true,
+                                51.980000, 51.999999, "6M Deadband",            true,
+                                52.000000, 52.019999, "6M Repeater Inputs",     true,
+                                52.020000, 52.020000, "6M FM Simplex",          true,
+                                52.020001, 52.039999, "6M Repeater Inputs",     true,
+                                52.040000, 52.040000, "6M FM Simplex",          true,
+                                52.040001, 52.479999, "6M Repeater Inputs",     true,
+                                52.480000, 52.499999, "6M Deadband",            true,
+                                52.500000, 52.524999, "6M Repeater Outputs",    true,
+                                52.525000, 52.525000, "6M Primary FM Simplex",  true,
+                                52.525001, 52.539999, "6M Deadband",            true,
+                                52.540000, 52.540000, "6M Secondary FM Simplex", true,
+                                52.540001, 52.979999, "6M Repeater Outputs",    true,
+                                52.980000, 52.999999, "6M Deadbands",           true,
+                                53.000000, 53.000000, "6M Remote Base FM Spx",  true,
+                                53.000001, 53.019999, "6M Repeater Inputs",     true,
+                                53.020000, 53.020000, "6M FM Simplex",          true,
+                                53.020001, 53.479999, "6M Repeater Inputs",     true,
+                                53.480000, 53.499999, "6M Deadband",            true,
+                                53.500000, 53.519999, "6M Repeater Outputs",    true,
+                                53.520000, 53.520000, "6M FM Simplex",          true,
+                                53.520001, 53.899999, "6M Repeater Outputs",    true,
+                                53.900000, 53.900000, "6M FM Simplex",          true,
+                                53.900010, 53.979999, "6M Repeater Outputs",    true,
+                                53.980000, 53.999999, "6M Deadband",            true,
 
-								24192.000000, 24192.099999, "24GHz General", true,
-								24192.100000, 24192.100000, "24GHz Calling Frequency", true,
-								24192.100001, 24192.400000, "24GHz General", true,
+                                144.000000, 144.099999, "2M CW",              true,
+                                144.100000, 144.199999, "2M CW/SSB",            true,
+                                144.200000, 144.200000, "2M Calling",           true,
+                                144.200001, 144.274999, "2M CW/SSB",            true,
+                                144.275000, 144.299999, "2M Beacon Sub-Band",   true,
+                                144.300000, 144.499999, "2M Satellite",         true,
+                                144.500000, 144.599999, "2M Linear Translator Inputs", true,
+                                144.600000, 144.899999, "2M FM Repeater",       true,
+                                144.900000, 145.199999, "2M FM Simplex",        true,
+                                145.200000, 145.499999, "2M FM Repeater",       true,
+                                145.500000, 145.799999, "2M FM Simplex",        true,
+                                145.800000, 145.999999, "2M Satellite",         true,
+                                146.000000, 146.399999, "2M FM Repeater",       true,
+                                146.400000, 146.609999, "2M FM Simplex",        true,
+                                146.610000, 147.389999, "2M FM Repeater",       true,
+                                147.390000, 147.599999, "2M FM Simplex",        true,
+                                147.600000, 147.999999, "2M FM Repeater",       true,
 
-								47088.000000, 47088.099999, "47GHz General", true,
-								47088.100000, 47088.100000, "47GHz Calling Frequency", true,
-								47088.100001, 47088.400000, "47GHz General", true,
-			};
+                                222.000000, 222.024999, "1.25M EME/Weak Signal",        true,
+                                222.025000, 222.049999, "1.25M Weak Signal",            true,
+                                222.050000, 222.059999, "1.25M Propagation Beacons",    true,
+                                222.060000, 222.099999, "1.25M Weak Signal",            true,
+                                222.100000, 222.100000, "1.25M SSB/CW Calling",         true,
+                                222.100001, 222.149999, "1.25M Weak Signal CW/SSB",     true,
+                                222.150000, 222.249999, "1.25M Local Option",           true,
+                                222.250000, 223.380000, "1.25M FM Repeater Inputs",     true,
+                                223.380001, 223.399999, "1.25M General",                true,
+                                223.400000, 223.519999, "1.25M FM Simplex",             true,
+                                223.520000, 223.639999, "1.25M Digital/Packet",         true,
+                                223.640000, 223.700000, "1.25M Links/Control",          true,
+                                223.700001, 223.709999, "1.25M General",                true,
+                                223.710000, 223.849999, "1.25M Local Option",           true,
+                                223.850000, 224.980000, "1.25M Repeater Outputs",       true,
+
+                                420.000000, 425.999999, "70cm ATV Repeater",  true,
+                                426.000000, 431.999999, "70cm ATV Simplex",     true,
+                                432.000000, 432.069999, "70cm EME",             true,
+                                432.070000, 432.099999, "70cm Weak Signal CW",  true,
+                                432.100000, 432.100000, "70cm Calling Frequency", true,
+                                432.100001, 432.299999, "70cm Mixed Mode Weak Signal", true,
+                                432.300000, 432.399999, "70cm Propagation Beacons", true,
+                                432.400000, 432.999999, "70cm Mixed Mode Weak Signal", true,
+                                433.000000, 434.999999, "70cm Auxillary/Repeater Links", true,
+                                435.000000, 437.999999, "70cm Satellite Only",  true,
+                                438.000000, 441.999999, "70cm ATV Repeater",    true,
+                                442.000000, 444.999999, "70cm Local Repeaters", true,
+                                445.000000, 445.999999, "70cm Local Option",    true,
+                                446.000000, 446.000000, "70cm Simplex",         true,
+                                446.000001, 446.999999, "70cm Local Option",    true,
+                                447.000000, 450.000000, "70cm Local Repeaters", true,
+
+                                902.000000, 902.099999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
+                                902.100000, 902.100000, "33cm Weak Signal Calling", true,
+                                902.100001, 902.799999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
+                                902.800000, 902.999999, "33cm Weak Signal EME/CW", true,
+                                903.000000, 903.099999, "33cm Digital Modes",   true,
+                                903.100000, 903.100000, "33cm Alternate Calling", true,
+                                903.100001, 905.999999, "33cm Digital Modes",   true,
+                                906.000000, 908.999999, "33cm FM Repeater Inputs", true,
+                                909.000000, 914.999999, "33cm ATV",             true,
+                                915.000000, 917.999999, "33cm Digital Modes",   true,
+                                918.000000, 920.999999, "33cm FM Repeater Outputs", true,
+                                921.000000, 926.999999, "33cm ATV",             true,
+                                927.000000, 928.000000, "33cm FM Simplex/Links", true,
+
+                                1240.000000, 1245.999999, "23cm ATV #1",       true,
+                                1246.000000, 1251.999999, "23cm FM Point/Links", true,
+                                1252.000000, 1257.999999, "23cm ATV #2, Digital Modes", true,
+                                1258.000000, 1259.999999, "23cm FM Point/Links", true,
+                                1260.000000, 1269.999999, "23cm Sat Uplinks/Wideband Exp.", true,
+                                1270.000000, 1275.999999, "23cm Repeater Inputs", true,
+                                1276.000000, 1281.999999, "23cm ATV #3",        true,
+                                1282.000000, 1287.999999, "23cm Repeater Outputs",  true,
+                                1288.000000, 1293.999999, "23cm Simplex ATV/Wideband Exp.", true,
+                                1294.000000, 1294.499999, "23cm Simplex FM",        true,
+                                1294.500000, 1294.500000, "23cm FM Simplex Calling", true,
+                                1294.500001, 1294.999999, "23cm Simplex FM",        true,
+                                1295.000000, 1295.799999, "23cm SSTV/FAX/ACSSB/Exp.", true,
+                                1295.800000, 1295.999999, "23cm EME/CW Expansion",  true,
+                                1296.000000, 1296.049999, "23cm EME Exclusive",     true,
+                                1296.050000, 1296.069999, "23cm Weak Signal",       true,
+                                1296.070000, 1296.079999, "23cm CW Beacons",        true,
+                                1296.080000, 1296.099999, "23cm Weak Signal",       true,
+                                1296.100000, 1296.100000, "23cm CW/SSB Calling",    true,
+                                1296.100001, 1296.399999, "23cm Weak Signal",       true,
+                                1296.400000, 1296.599999, "23cm X-Band Translator Input", true,
+                                1296.600000, 1296.799999, "23cm X-Band Translator Output", true,
+                                1296.800000, 1296.999999, "23cm Experimental Beacons", true,
+                                1297.000000, 1300.000000, "23cm Digital Modes",     true,
+
+                                2300.000000, 2302.999999, "2.3GHz High Data Rate", true,
+                                2303.000000, 2303.499999, "2.3GHz Packet",      true,
+                                2303.500000, 2303.800000, "2.3GHz TTY Packet",  true,
+                                2303.800001, 2303.899999, "2.3GHz General", true,
+                                2303.900000, 2303.900000, "2.3GHz Packet/TTY/CW/EME", true,
+                                2303.900001, 2304.099999, "2.3GHz CW/EME",      true,
+                                2304.100000, 2304.100000, "2.3GHz Calling Frequency", true,
+                                2304.100001, 2304.199999, "2.3GHz CW/EME/SSB",  true,
+                                2304.200000, 2304.299999, "2.3GHz SSB/SSTV/FAX/Packet AM/Amtor", true,
+                                2304.300000, 2304.319999, "2.3GHz Propagation Beacon Network", true,
+                                2304.320000, 2304.399999, "2.3GHz General Propagation Beacons", true,
+                                2304.400000, 2304.499999, "2.3GHz SSB/SSTV/ACSSB/FAX/Packet AM", true,
+                                2304.500000, 2304.699999, "2.3GHz X-Band Translator Input", true,
+                                2304.700000, 2304.899999, "2.3GHz X-Band Translator Output", true,
+                                2304.900000, 2304.999999, "2.3GHz Experimental Beacons", true,
+                                2305.000000, 2305.199999, "2.3GHz FM Simplex", true,
+                                2305.200000, 2305.200000, "2.3GHz FM Simplex Calling", true,
+                                2305.200001, 2305.999999, "2.3GHz FM Simplex", true,
+                                2306.000000, 2308.999999, "2.3GHz FM Repeaters", true,
+                                2309.000000, 2310.000000, "2.3GHz Control/Aux Links", true,
+                                2390.000000, 2395.999999, "2.3GHz Fast-Scan TV", true,
+                                2396.000000, 2398.999999, "2.3GHz High Rate Data", true,
+                                2399.000000, 2399.499999, "2.3GHz Packet", true,
+                                2399.500000, 2399.999999, "2.3GHz Control/Aux Links", true,
+                                2400.000000, 2402.999999, "2.4GHz Satellite", true,
+                                2403.000000, 2407.999999, "2.4GHz Satellite High-Rate Data", true,
+                                2408.000000, 2409.999999, "2.4GHz Satellite", true,
+                                2410.000000, 2412.999999, "2.4GHz FM Repeaters", true,
+                                2413.000000, 2417.999999, "2.4GHz High-Rate Data", true,
+                                2418.000000, 2429.999999, "2.4GHz Fast-Scan TV", true,
+                                2430.000000, 2432.999999, "2.4GHz Satellite", true,
+                                2433.000000, 2437.999999, "2.4GHz Sat. High-Rate Data", true,
+                                2438.000000, 2450.000000, "2.4GHz Wideband FM/FSTV/FMTV", true,
+
+                                3456.000000, 3456.099999, "3.4GHz General", true,
+                                3456.100000, 3456.100000, "3.4GHz Calling Frequency", true,
+                                3456.100001, 3456.299999, "3.4GHz General", true,
+                                3456.300000, 3456.400000, "3.4GHz Propagation Beacons", true,
+
+                                5760.000000, 5760.099999, "5.7GHz General", true,
+                                5760.100000, 5760.100000, "5.7GHz Calling Frequency", true,
+                                5760.100001, 5760.299999, "5.7GHz General", true,
+                                5760.300000, 5760.400000, "5.7GHz Propagation Beacons", true,
+
+                                10368.000000, 10368.099999, "10GHz General", true,
+                                10368.100000, 10368.100000, "10GHz Calling Frequency", true,
+                                10368.100001, 10368.400000, "10GHz General", true,
+
+                                24192.000000, 24192.099999, "24GHz General", true,
+                                24192.100000, 24192.100000, "24GHz Calling Frequency", true,
+                                24192.100001, 24192.400000, "24GHz General", true,
+
+                                47088.000000, 47088.099999, "47GHz General", true,
+                                47088.100000, 47088.100000, "47GHz Calling Frequency", true,
+                                47088.100001, 47088.400000, "47GHz General", true,
+            };
 
             for (int i = 0; i < data.Length / 4; i++)
             {
@@ -1089,305 +1080,305 @@ namespace Thetis
                                // 0.135700, 0.137799, "2200M CW/DATA",   true,                                
                                // 0.472000, 0.478999, "630M CW/DATA",    true,
 
-								1.800000, 1.809999, "160M CW/Digital Modes",	true,
-								1.810000, 1.810000, "160M CW QRP",				true,
-								1.810001, 1.842999, "160M CW",					true,
-								1.843000, 1.909999, "160M SSB/SSTV/Wide Band",	true,
-								1.910000, 1.910000, "160M SSB QRP",				true,
-								1.910001, 1.994999, "160M SSB/SSTV/Wide Band",	true,
-								1.995000, 1.999999, "160M Experimental",		true,
+								1.800000, 1.809999, "160M CW/Digital Modes",    true,
+                                1.810000, 1.810000, "160M CW QRP",              true,
+                                1.810001, 1.842999, "160M CW",                  true,
+                                1.843000, 1.909999, "160M SSB/SSTV/Wide Band",  true,
+                                1.910000, 1.910000, "160M SSB QRP",             true,
+                                1.910001, 1.994999, "160M SSB/SSTV/Wide Band",  true,
+                                1.995000, 1.999999, "160M Experimental",        true,
 
-								3.500000, 3.524999, "80M Extra CW",				true,
-								3.525000, 3.579999, "80M CW",					true,
-								3.580000, 3.589999, "80M RTTY",					true,
-								3.590000, 3.590000, "80M RTTY DX",				true,
-								3.590001, 3.599999, "80M RTTY",					true,
-								3.600000, 3.699999, "75M Extra SSB",			true,
-								3.700000, 3.789999, "75M Ext/Adv SSB",			true,
-								3.790000, 3.799999, "75M Ext/Adv DX Window",	true,
-								3.800000, 3.844999, "75M SSB",					true,
-								3.845000, 3.845000, "75M SSTV",					true,
-								3.845001, 3.884999, "75M SSB",					true,
-								3.885000, 3.885000, "75M AM Calling Frequency", true,
-								3.885001, 3.999999, "75M SSB",					true,
+                                3.500000, 3.524999, "80M Extra CW",             true,
+                                3.525000, 3.579999, "80M CW",                   true,
+                                3.580000, 3.589999, "80M RTTY",                 true,
+                                3.590000, 3.590000, "80M RTTY DX",              true,
+                                3.590001, 3.599999, "80M RTTY",                 true,
+                                3.600000, 3.699999, "75M Extra SSB",            true,
+                                3.700000, 3.789999, "75M Ext/Adv SSB",          true,
+                                3.790000, 3.799999, "75M Ext/Adv DX Window",    true,
+                                3.800000, 3.844999, "75M SSB",                  true,
+                                3.845000, 3.845000, "75M SSTV",                 true,
+                                3.845001, 3.884999, "75M SSB",                  true,
+                                3.885000, 3.885000, "75M AM Calling Frequency", true,
+                                3.885001, 3.999999, "75M SSB",                  true,
 
                                 5.100000, 5.331999, "60M General",              false,
-								5.332000, 5.332000, "60M Channel 1",			true,
+                                5.332000, 5.332000, "60M Channel 1",            true,
                                 5.332001, 5.347999, "60M General",              false,
- 								5.348000, 5.348000, "60M Channel 2",			true,
+                                 5.348000, 5.348000, "60M Channel 2",            true,
                                 5.348001, 5.358499, "60M General",              false,
                                 5.358500, 5.358500, "60M Channel 3",            true,
                                 5.358501, 5.372999, "60M General",              false,
-								5.373000, 5.373000, "60M Channel 4",			true,
+                                5.373000, 5.373000, "60M Channel 4",            true,
                                 5.373001, 5.404999, "60M General",              false,
-								5.405000, 5.405000, "60M Channel 5",			true,
+                                5.405000, 5.405000, "60M Channel 5",            true,
                                 5.405001, 5.499999, "60M General",              false,
- 
-								7.000000, 7.024999, "40M Extra CW",				true,
-								7.025000, 7.039999, "40M CW",					true,
-								7.040000, 7.040000, "40M RTTY DX",				true,
-								7.040001, 7.099999, "40M RTTY",					true,
-								7.100000, 7.124999, "40M CW",					true,
-								7.125000, 7.170999, "40M Ext/Adv SSB",			true,
-								7.171000, 7.171000, "40M SSTV",					true,
-								7.171001, 7.174999, "40M Ext/Adv SSB",			true,
-								7.175000, 7.289999, "40M SSB",					true,
-								7.290000, 7.290000, "40M AM Calling Frequency", true,
-								7.290001, 7.299999, "40M SSB",					true,
-								
-								10.100000, 10.129999, "30M CW",					true,
-								10.130000, 10.139999, "30M RTTY",				true,
-								10.140000, 10.149999, "30M Packet",				true,
 
-								14.000000, 14.024999, "20M Extra CW",			true,
-								14.025000, 14.069999, "20M CW",					true,
-								14.070000, 14.094999, "20M RTTY",				true,
-								14.095000, 14.099499, "20M Packet",				true,
-								14.099500, 14.099999, "20M CW",					true,
-								14.100000, 14.100000, "20M NCDXF Beacons",		true,
-								14.100001, 14.100499, "20M CW",					true,
-								14.100500, 14.111999, "20M Packet",				true,
-								14.112000, 14.149999, "20M CW",					true,
-								14.150000, 14.174999, "20M Extra SSB",			true,
-								14.175000, 14.224999, "20M Ext/Adv SSB",		true,
-								14.225000, 14.229999, "20M SSB",				true,
-								14.230000, 14.230000, "20M SSTV",				true,
-								14.230001, 14.285999, "20M SSB",				true,
-								14.286000, 14.286000, "20M AM Calling Frequency", true,
-								14.286001, 14.349999, "20M SSB",				true,
-								
-								18.068000, 18.099999, "17M CW",					true,
-								18.100000, 18.104999, "17M RTTY",				true,
-								18.105000, 18.109999, "17M Packet",				true,
-								18.110000, 18.110000, "17M NCDXF Beacons",		true,
-								18.110001, 18.167999, "17M SSB",				true,
-								
-								21.000000, 21.024999, "15M Extra CW",			true,
-								21.025000, 21.069999, "15M CW",					true,
-								21.070000, 21.099999, "15M RTTY",				true,
-								21.100000, 21.109999, "15M Packet",				true,
-								21.110000, 21.149999, "15M CW",					true,
-								21.150000, 21.150000, "15M NCDXF Beacons",		true,
-								21.150001, 21.199999, "15M CW",					true,
-								21.200000, 21.224999, "15M Extra SSB",			true,
-								21.225000, 21.274999, "15M Ext/Adv SSB",		true,
-								21.275000, 21.339999, "15M SSB",				true,
-								21.340000, 21.340000, "15M SSTV",				true,
-								21.340001, 21.449999, "15M SSB",				true,
-								
-								24.890000, 24.919999, "12M CW",					true,
-								24.920000, 24.924999, "12M RTTY",				true,
-								24.925000, 24.929999, "12M Packet",				true,
-								24.930000, 24.930000, "12M NCDXF Beacons",		true,
-								24.930001, 24.989999, "12M SSB",				true,
-								
-								28.000000, 28.069999, "10M CW",					true,
-								28.070000, 28.149999, "10M RTTY",				true,
-								28.150000, 28.199999, "10M CW",					true,
-								28.200000, 28.200000, "10M NCDXF Beacons",		true,
-								28.200001, 28.299999, "10M Beacons",			true,
-								28.300000, 28.679999, "10M SSB",				true,
-								28.680000, 28.680000, "10M SSTV",				true,
-								28.680001, 28.999999, "10M SSB",				true,
-								29.000000, 29.199999, "10M AM",					true,
-								29.200000, 29.299999, "10M SSB",				true,
-								29.300000, 29.509999, "10M Satellite Downlinks", true,
-								29.510000, 29.519999, "10M Deadband",			true,
-								29.520000, 29.589999, "10M Repeater Inputs",	true,
-								29.590000, 29.599999, "10M Deadband",			true,
-								29.600000, 29.600000, "10M FM Simplex",			true,
-								29.600001, 29.609999, "10M Deadband",			true,
-								29.610000, 29.699999, "10M Repeater Outputs",	true,
-								
-								50.000000, 50.059999, "6M CW",					true,
-								50.060000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.099999, "6M CW",					true,
-								50.100000, 50.124999, "6M DX Window",			true,
-								50.125000, 50.125000, "6M Calling Frequency",	true,
-								50.125001, 50.299999, "6M SSB",					true,
-								50.300000, 50.599999, "6M All Modes",			true,
-								50.600000, 50.619999, "6M Non Voice",			true,
-								50.620000, 50.620000, "6M Digital Packet Calling", true,
-								50.620001, 50.799999, "6M Non Voice",			true,
-								50.800000, 50.999999, "6M RC",					true,
-								51.000000, 51.099999, "6M Pacific DX Window",	true,
-								51.100000, 51.119999, "6M Deadband",			true,
-								51.120000, 51.179999, "6M Digital Repeater Inputs", true,
-								51.180000, 51.479999, "6M Repeater Inputs",		true,
-								51.480000, 51.619999, "6M Deadband",			true,
-								51.620000, 51.679999, "6M Digital Repeater Outputs", true,
-								51.680000, 51.979999, "6M Repeater Outputs",	true,
-								51.980000, 51.999999, "6M Deadband",			true,
-								52.000000, 52.019999, "6M Repeater Inputs",		true,
-								52.020000, 52.020000, "6M FM Simplex",			true,
-								52.020001, 52.039999, "6M Repeater Inputs",		true,
-								52.040000, 52.040000, "6M FM Simplex",			true,
-								52.040001, 52.479999, "6M Repeater Inputs",		true,
-								52.480000, 52.499999, "6M Deadband",			true,
-								52.500000, 52.524999, "6M Repeater Outputs",	true,
-								52.525000, 52.525000, "6M Primary FM Simplex",	true,
-								52.525001, 52.539999, "6M Deadband",			true,
-								52.540000, 52.540000, "6M Secondary FM Simplex", true,
-								52.540001, 52.979999, "6M Repeater Outputs",	true,
-								52.980000, 52.999999, "6M Deadbands",			true,
-								53.000000, 53.000000, "6M Remote Base FM Spx",	true,
-								53.000001, 53.019999, "6M Repeater Inputs",		true,
-								53.020000, 53.020000, "6M FM Simplex",			true,
-								53.020001, 53.479999, "6M Repeater Inputs",		true,
-								53.480000, 53.499999, "6M Deadband",			true,
-								53.500000, 53.519999, "6M Repeater Outputs",	true,
-								53.520000, 53.520000, "6M FM Simplex",			true,
-								53.520001, 53.899999, "6M Repeater Outputs",	true,
-								53.900000, 53.900000, "6M FM Simplex",			true,
-								53.900010, 53.979999, "6M Repeater Outputs",	true,
-								53.980000, 53.999999, "6M Deadband",			true,
-								
-								144.000000, 144.099999, "2M CW",				true,
-								144.100000, 144.199999, "2M CW/SSB",			true,
-								144.200000, 144.200000, "2M Calling",			true,
-								144.200001, 144.274999, "2M CW/SSB",			true,
-								144.275000, 144.299999, "2M Beacon Sub-Band",	true,
-								144.300000, 144.499999, "2M Satellite",			true,
-								144.500000, 144.599999, "2M Linear Translator Inputs", true,
-								144.600000, 144.899999, "2M FM Repeater",		true,
-								144.900000, 145.199999, "2M FM Simplex",		true,
-								145.200000, 145.499999, "2M FM Repeater",		true,
-								145.500000, 145.799999, "2M FM Simplex",		true,
-								145.800000, 145.999999, "2M Satellite",			true,
-								146.000000, 146.399999, "2M FM Repeater",		true,
-								146.400000, 146.609999, "2M FM Simplex",		true,
-								146.610000, 147.389999, "2M FM Repeater",		true,
-								147.390000, 147.599999, "2M FM Simplex",		true,
-								147.600000, 147.999999, "2M FM Repeater",		true,
+                                7.000000, 7.024999, "40M Extra CW",             true,
+                                7.025000, 7.039999, "40M CW",                   true,
+                                7.040000, 7.040000, "40M RTTY DX",              true,
+                                7.040001, 7.099999, "40M RTTY",                 true,
+                                7.100000, 7.124999, "40M CW",                   true,
+                                7.125000, 7.170999, "40M Ext/Adv SSB",          true,
+                                7.171000, 7.171000, "40M SSTV",                 true,
+                                7.171001, 7.174999, "40M Ext/Adv SSB",          true,
+                                7.175000, 7.289999, "40M SSB",                  true,
+                                7.290000, 7.290000, "40M AM Calling Frequency", true,
+                                7.290001, 7.299999, "40M SSB",                  true,
 
-								222.000000, 222.024999, "1.25M EME/Weak Signal", true,
-								222.025000, 222.049999, "1.25M Weak Signal",	true,
-								222.050000, 222.059999, "1.25M Propagation Beacons", true,
-								222.060000, 222.099999, "1.25M Weak Signal",	true,
-								222.100000, 222.100000, "1.25M SSB/CW Calling",	true,
-								222.100001, 222.149999, "1.25M Weak Signal CW/SSB", true,
-								222.150000, 222.249999, "1.25M Local Option",	true,
-								222.250000, 223.380000, "1.25M FM Repeater Inputs", true,
-								223.380001, 223.399999, "1.25M General",                true,
-								223.400000, 223.519999, "1.25M FM Simplex",		true,
-								223.520000, 223.639999, "1.25M Digital/Packet",	true,
-								223.640000, 223.700000, "1.25M Links/Control",	true,
-								223.700001, 223.709999, "1.25M General",	true,
-								223.710000, 223.849999, "1.25M Local Option",	true,
-								223.850000, 224.980000, "1.25M Repeater Outputs", true,
+                                10.100000, 10.129999, "30M CW",                  true,
+                                10.130000, 10.139999, "30M RTTY",               true,
+                                10.140000, 10.149999, "30M Packet",             true,
 
-								420.000000, 425.999999, "70cm ATV Repeater",	true,
-								426.000000, 431.999999, "70cm ATV Simplex",		true,
-								432.000000, 432.069999, "70cm EME",				true,
-								432.070000, 432.099999, "70cm Weak Signal CW",	true,
-								432.100000, 432.100000, "70cm Calling Frequency", true,
-								432.100001, 432.299999, "70cm Mixed Mode Weak Signal", true,
-								432.300000, 432.399999, "70cm Propagation Beacons", true,
-								432.400000, 432.999999, "70cm Mixed Mode Weak Signal", true,
-								433.000000, 434.999999, "70cm Auxillary/Repeater Links", true,
-								435.000000, 437.999999, "70cm Satellite Only",	true,
-								438.000000, 441.999999, "70cm ATV Repeater",	true,
-								442.000000, 444.999999, "70cm Local Repeaters",	true,
-								445.000000, 445.999999, "70cm Local Option",	true,
-								446.000000, 446.000000, "70cm Simplex",			true,
-								446.000001, 446.999999, "70cm Local Option",	true,
-								447.000000, 450.000000, "70cm Local Repeaters", true,
+                                14.000000, 14.024999, "20M Extra CW",            true,
+                                14.025000, 14.069999, "20M CW",                 true,
+                                14.070000, 14.094999, "20M RTTY",               true,
+                                14.095000, 14.099499, "20M Packet",             true,
+                                14.099500, 14.099999, "20M CW",                 true,
+                                14.100000, 14.100000, "20M NCDXF Beacons",      true,
+                                14.100001, 14.100499, "20M CW",                 true,
+                                14.100500, 14.111999, "20M Packet",             true,
+                                14.112000, 14.149999, "20M CW",                 true,
+                                14.150000, 14.174999, "20M Extra SSB",          true,
+                                14.175000, 14.224999, "20M Ext/Adv SSB",        true,
+                                14.225000, 14.229999, "20M SSB",                true,
+                                14.230000, 14.230000, "20M SSTV",               true,
+                                14.230001, 14.285999, "20M SSB",                true,
+                                14.286000, 14.286000, "20M AM Calling Frequency", true,
+                                14.286001, 14.349999, "20M SSB",                true,
 
-								902.000000, 902.099999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
-								902.100000, 902.100000, "33cm Weak Signal Calling", true,
-								902.100001, 902.799999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
-								902.800000, 902.999999, "33cm Weak Signal EME/CW", true,
-								903.000000, 903.099999, "33cm Digital Modes",	true,
-								903.100000, 903.100000, "33cm Alternate Calling", true,
-								903.100001, 905.999999, "33cm Digital Modes",	true,
-								906.000000, 908.999999, "33cm FM Repeater Inputs", true,
-								909.000000, 914.999999, "33cm ATV",				true,
-								915.000000, 917.999999, "33cm Digital Modes",	true,
-								918.000000, 920.999999, "33cm FM Repeater Outputs", true,
-								921.000000, 926.999999, "33cm ATV",				true,
-								927.000000, 928.000000, "33cm FM Simplex/Links", true,
-								
-								1240.000000, 1245.999999, "23cm ATV #1",		true,
-								1246.000000, 1251.999999, "23cm FM Point/Links", true,
-								1252.000000, 1257.999999, "23cm ATV #2, Digital Modes", true,
-								1258.000000, 1259.999999, "23cm FM Point/Links", true,
-								1260.000000, 1269.999999, "23cm Sat Uplinks/Wideband Exp.", true,
-								1270.000000, 1275.999999, "23cm Repeater Inputs", true,
-								1276.000000, 1281.999999, "23cm ATV #3",		true,
-								1282.000000, 1287.999999, "23cm Repeater Outputs",	true,
-								1288.000000, 1293.999999, "23cm Simplex ATV/Wideband Exp.", true,
-								1294.000000, 1294.499999, "23cm Simplex FM",		true,
-								1294.500000, 1294.500000, "23cm FM Simplex Calling", true,
-								1294.500001, 1294.999999, "23cm Simplex FM",		true,
-								1295.000000, 1295.799999, "23cm SSTV/FAX/ACSSB/Exp.", true,
-								1295.800000, 1295.999999, "23cm EME/CW Expansion",	true,
-								1296.000000, 1296.049999, "23cm EME Exclusive",		true,
-								1296.050000, 1296.069999, "23cm Weak Signal",		true,
-								1296.070000, 1296.079999, "23cm CW Beacons",		true,
-								1296.080000, 1296.099999, "23cm Weak Signal",		true,
-								1296.100000, 1296.100000, "23cm CW/SSB Calling",	true,
-								1296.100001, 1296.399999, "23cm Weak Signal",		true,
-								1296.400000, 1296.599999, "23cm X-Band Translator Input", true,
-								1296.600000, 1296.799999, "23cm X-Band Translator Output", true,
-								1296.800000, 1296.999999, "23cm Experimental Beacons", true,
-								1297.000000, 1300.000000, "23cm Digital Modes",		true,
+                                18.068000, 18.099999, "17M CW",                  true,
+                                18.100000, 18.104999, "17M RTTY",               true,
+                                18.105000, 18.109999, "17M Packet",             true,
+                                18.110000, 18.110000, "17M NCDXF Beacons",      true,
+                                18.110001, 18.167999, "17M SSB",                true,
 
-								2300.000000, 2302.999999, "2.3GHz High Data Rate", true,
-								2303.000000, 2303.499999, "2.3GHz Packet",		true,
-								2303.500000, 2303.800000, "2.3GHz TTY Packet",	true,
-								2303.800001, 2303.899999, "2.3GHz General",	true,
-								2303.900000, 2303.900000, "2.3GHz Packet/TTY/CW/EME", true,
-								2303.900001, 2304.099999, "2.3GHz CW/EME",		true,
-								2304.100000, 2304.100000, "2.3GHz Calling Frequency", true,
-								2304.100001, 2304.199999, "2.3GHz CW/EME/SSB",	true,
-								2304.200000, 2304.299999, "2.3GHz SSB/SSTV/FAX/Packet AM/Amtor", true,
-								2304.300000, 2304.319999, "2.3GHz Propagation Beacon Network", true,
-								2304.320000, 2304.399999, "2.3GHz General Propagation Beacons", true,
-								2304.400000, 2304.499999, "2.3GHz SSB/SSTV/ACSSB/FAX/Packet AM", true,
-								2304.500000, 2304.699999, "2.3GHz X-Band Translator Input", true,
-								2304.700000, 2304.899999, "2.3GHz X-Band Translator Output", true,
-								2304.900000, 2304.999999, "2.3GHz Experimental Beacons", true,
-								2305.000000, 2305.199999, "2.3GHz FM Simplex", true,
-								2305.200000, 2305.200000, "2.3GHz FM Simplex Calling", true,
-								2305.200001, 2305.999999, "2.3GHz FM Simplex", true,
-								2306.000000, 2308.999999, "2.3GHz FM Repeaters", true,
-								2309.000000, 2310.000000, "2.3GHz Control/Aux Links", true,
-								2390.000000, 2395.999999, "2.3GHz Fast-Scan TV", true,
-								2396.000000, 2398.999999, "2.3GHz High Rate Data", true,
-								2399.000000, 2399.499999, "2.3GHz Packet", true,
-								2399.500000, 2399.999999, "2.3GHz Control/Aux Links", true,
-								2400.000000, 2402.999999, "2.4GHz Satellite", true,
-								2403.000000, 2407.999999, "2.4GHz Satellite High-Rate Data", true,
-								2408.000000, 2409.999999, "2.4GHz Satellite", true,
-								2410.000000, 2412.999999, "2.4GHz FM Repeaters", true,
-								2413.000000, 2417.999999, "2.4GHz High-Rate Data", true,
-								2418.000000, 2429.999999, "2.4GHz Fast-Scan TV", true,
-								2430.000000, 2432.999999, "2.4GHz Satellite", true,
-								2433.000000, 2437.999999, "2.4GHz Sat. High-Rate Data", true,
-								2438.000000, 2450.000000, "2.4GHz Wideband FM/FSTV/FMTV", true,
+                                21.000000, 21.024999, "15M Extra CW",            true,
+                                21.025000, 21.069999, "15M CW",                 true,
+                                21.070000, 21.099999, "15M RTTY",               true,
+                                21.100000, 21.109999, "15M Packet",             true,
+                                21.110000, 21.149999, "15M CW",                 true,
+                                21.150000, 21.150000, "15M NCDXF Beacons",      true,
+                                21.150001, 21.199999, "15M CW",                 true,
+                                21.200000, 21.224999, "15M Extra SSB",          true,
+                                21.225000, 21.274999, "15M Ext/Adv SSB",        true,
+                                21.275000, 21.339999, "15M SSB",                true,
+                                21.340000, 21.340000, "15M SSTV",               true,
+                                21.340001, 21.449999, "15M SSB",                true,
 
-								3456.000000, 3456.099999, "3.4GHz General", true,
-								3456.100000, 3456.100000, "3.4GHz Calling Frequency", true,
-								3456.100001, 3456.299999, "3.4GHz General", true,
-								3456.300000, 3456.400000, "3.4GHz Propagation Beacons", true,
+                                24.890000, 24.919999, "12M CW",                  true,
+                                24.920000, 24.924999, "12M RTTY",               true,
+                                24.925000, 24.929999, "12M Packet",             true,
+                                24.930000, 24.930000, "12M NCDXF Beacons",      true,
+                                24.930001, 24.989999, "12M SSB",                true,
 
-								5760.000000, 5760.099999, "5.7GHz General", true,
-								5760.100000, 5760.100000, "5.7GHz Calling Frequency", true,
-								5760.100001, 5760.299999, "5.7GHz General", true,
-								5760.300000, 5760.400000, "5.7GHz Propagation Beacons", true,
+                                28.000000, 28.069999, "10M CW",                  true,
+                                28.070000, 28.149999, "10M RTTY",               true,
+                                28.150000, 28.199999, "10M CW",                 true,
+                                28.200000, 28.200000, "10M NCDXF Beacons",      true,
+                                28.200001, 28.299999, "10M Beacons",            true,
+                                28.300000, 28.679999, "10M SSB",                true,
+                                28.680000, 28.680000, "10M SSTV",               true,
+                                28.680001, 28.999999, "10M SSB",                true,
+                                29.000000, 29.199999, "10M AM",                 true,
+                                29.200000, 29.299999, "10M SSB",                true,
+                                29.300000, 29.509999, "10M Satellite Downlinks", true,
+                                29.510000, 29.519999, "10M Deadband",           true,
+                                29.520000, 29.589999, "10M Repeater Inputs",    true,
+                                29.590000, 29.599999, "10M Deadband",           true,
+                                29.600000, 29.600000, "10M FM Simplex",         true,
+                                29.600001, 29.609999, "10M Deadband",           true,
+                                29.610000, 29.699999, "10M Repeater Outputs",   true,
 
-								10368.000000, 10368.099999, "10GHz General", true,
-								10368.100000, 10368.100000, "10GHz Calling Frequency", true,
-								10368.100001, 10368.400000, "10GHz General", true,
+                                50.000000, 50.059999, "6M CW",                   true,
+                                50.060000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.099999, "6M CW",                  true,
+                                50.100000, 50.124999, "6M DX Window",           true,
+                                50.125000, 50.125000, "6M Calling Frequency",   true,
+                                50.125001, 50.299999, "6M SSB",                 true,
+                                50.300000, 50.599999, "6M All Modes",           true,
+                                50.600000, 50.619999, "6M Non Voice",           true,
+                                50.620000, 50.620000, "6M Digital Packet Calling", true,
+                                50.620001, 50.799999, "6M Non Voice",           true,
+                                50.800000, 50.999999, "6M RC",                  true,
+                                51.000000, 51.099999, "6M Pacific DX Window",   true,
+                                51.100000, 51.119999, "6M Deadband",            true,
+                                51.120000, 51.179999, "6M Digital Repeater Inputs", true,
+                                51.180000, 51.479999, "6M Repeater Inputs",     true,
+                                51.480000, 51.619999, "6M Deadband",            true,
+                                51.620000, 51.679999, "6M Digital Repeater Outputs", true,
+                                51.680000, 51.979999, "6M Repeater Outputs",    true,
+                                51.980000, 51.999999, "6M Deadband",            true,
+                                52.000000, 52.019999, "6M Repeater Inputs",     true,
+                                52.020000, 52.020000, "6M FM Simplex",          true,
+                                52.020001, 52.039999, "6M Repeater Inputs",     true,
+                                52.040000, 52.040000, "6M FM Simplex",          true,
+                                52.040001, 52.479999, "6M Repeater Inputs",     true,
+                                52.480000, 52.499999, "6M Deadband",            true,
+                                52.500000, 52.524999, "6M Repeater Outputs",    true,
+                                52.525000, 52.525000, "6M Primary FM Simplex",  true,
+                                52.525001, 52.539999, "6M Deadband",            true,
+                                52.540000, 52.540000, "6M Secondary FM Simplex", true,
+                                52.540001, 52.979999, "6M Repeater Outputs",    true,
+                                52.980000, 52.999999, "6M Deadbands",           true,
+                                53.000000, 53.000000, "6M Remote Base FM Spx",  true,
+                                53.000001, 53.019999, "6M Repeater Inputs",     true,
+                                53.020000, 53.020000, "6M FM Simplex",          true,
+                                53.020001, 53.479999, "6M Repeater Inputs",     true,
+                                53.480000, 53.499999, "6M Deadband",            true,
+                                53.500000, 53.519999, "6M Repeater Outputs",    true,
+                                53.520000, 53.520000, "6M FM Simplex",          true,
+                                53.520001, 53.899999, "6M Repeater Outputs",    true,
+                                53.900000, 53.900000, "6M FM Simplex",          true,
+                                53.900010, 53.979999, "6M Repeater Outputs",    true,
+                                53.980000, 53.999999, "6M Deadband",            true,
 
-								24192.000000, 24192.099999, "24GHz General", true,
-								24192.100000, 24192.100000, "24GHz Calling Frequency", true,
-								24192.100001, 24192.400000, "24GHz General", true,
+                                144.000000, 144.099999, "2M CW",              true,
+                                144.100000, 144.199999, "2M CW/SSB",            true,
+                                144.200000, 144.200000, "2M Calling",           true,
+                                144.200001, 144.274999, "2M CW/SSB",            true,
+                                144.275000, 144.299999, "2M Beacon Sub-Band",   true,
+                                144.300000, 144.499999, "2M Satellite",         true,
+                                144.500000, 144.599999, "2M Linear Translator Inputs", true,
+                                144.600000, 144.899999, "2M FM Repeater",       true,
+                                144.900000, 145.199999, "2M FM Simplex",        true,
+                                145.200000, 145.499999, "2M FM Repeater",       true,
+                                145.500000, 145.799999, "2M FM Simplex",        true,
+                                145.800000, 145.999999, "2M Satellite",         true,
+                                146.000000, 146.399999, "2M FM Repeater",       true,
+                                146.400000, 146.609999, "2M FM Simplex",        true,
+                                146.610000, 147.389999, "2M FM Repeater",       true,
+                                147.390000, 147.599999, "2M FM Simplex",        true,
+                                147.600000, 147.999999, "2M FM Repeater",       true,
 
-								47088.000000, 47088.099999, "47GHz General", true,
-								47088.100000, 47088.100000, "47GHz Calling Frequency", true,
-								47088.100001, 47088.400000, "47GHz General", true,
-			};
+                                222.000000, 222.024999, "1.25M EME/Weak Signal", true,
+                                222.025000, 222.049999, "1.25M Weak Signal",    true,
+                                222.050000, 222.059999, "1.25M Propagation Beacons", true,
+                                222.060000, 222.099999, "1.25M Weak Signal",    true,
+                                222.100000, 222.100000, "1.25M SSB/CW Calling", true,
+                                222.100001, 222.149999, "1.25M Weak Signal CW/SSB", true,
+                                222.150000, 222.249999, "1.25M Local Option",   true,
+                                222.250000, 223.380000, "1.25M FM Repeater Inputs", true,
+                                223.380001, 223.399999, "1.25M General",                true,
+                                223.400000, 223.519999, "1.25M FM Simplex",     true,
+                                223.520000, 223.639999, "1.25M Digital/Packet", true,
+                                223.640000, 223.700000, "1.25M Links/Control",  true,
+                                223.700001, 223.709999, "1.25M General",    true,
+                                223.710000, 223.849999, "1.25M Local Option",   true,
+                                223.850000, 224.980000, "1.25M Repeater Outputs", true,
+
+                                420.000000, 425.999999, "70cm ATV Repeater",  true,
+                                426.000000, 431.999999, "70cm ATV Simplex",     true,
+                                432.000000, 432.069999, "70cm EME",             true,
+                                432.070000, 432.099999, "70cm Weak Signal CW",  true,
+                                432.100000, 432.100000, "70cm Calling Frequency", true,
+                                432.100001, 432.299999, "70cm Mixed Mode Weak Signal", true,
+                                432.300000, 432.399999, "70cm Propagation Beacons", true,
+                                432.400000, 432.999999, "70cm Mixed Mode Weak Signal", true,
+                                433.000000, 434.999999, "70cm Auxillary/Repeater Links", true,
+                                435.000000, 437.999999, "70cm Satellite Only",  true,
+                                438.000000, 441.999999, "70cm ATV Repeater",    true,
+                                442.000000, 444.999999, "70cm Local Repeaters", true,
+                                445.000000, 445.999999, "70cm Local Option",    true,
+                                446.000000, 446.000000, "70cm Simplex",         true,
+                                446.000001, 446.999999, "70cm Local Option",    true,
+                                447.000000, 450.000000, "70cm Local Repeaters", true,
+
+                                902.000000, 902.099999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
+                                902.100000, 902.100000, "33cm Weak Signal Calling", true,
+                                902.100001, 902.799999, "33cm Weak Signal SSTV/FAX/ACSSB", true,
+                                902.800000, 902.999999, "33cm Weak Signal EME/CW", true,
+                                903.000000, 903.099999, "33cm Digital Modes",   true,
+                                903.100000, 903.100000, "33cm Alternate Calling", true,
+                                903.100001, 905.999999, "33cm Digital Modes",   true,
+                                906.000000, 908.999999, "33cm FM Repeater Inputs", true,
+                                909.000000, 914.999999, "33cm ATV",             true,
+                                915.000000, 917.999999, "33cm Digital Modes",   true,
+                                918.000000, 920.999999, "33cm FM Repeater Outputs", true,
+                                921.000000, 926.999999, "33cm ATV",             true,
+                                927.000000, 928.000000, "33cm FM Simplex/Links", true,
+
+                                1240.000000, 1245.999999, "23cm ATV #1",       true,
+                                1246.000000, 1251.999999, "23cm FM Point/Links", true,
+                                1252.000000, 1257.999999, "23cm ATV #2, Digital Modes", true,
+                                1258.000000, 1259.999999, "23cm FM Point/Links", true,
+                                1260.000000, 1269.999999, "23cm Sat Uplinks/Wideband Exp.", true,
+                                1270.000000, 1275.999999, "23cm Repeater Inputs", true,
+                                1276.000000, 1281.999999, "23cm ATV #3",        true,
+                                1282.000000, 1287.999999, "23cm Repeater Outputs",  true,
+                                1288.000000, 1293.999999, "23cm Simplex ATV/Wideband Exp.", true,
+                                1294.000000, 1294.499999, "23cm Simplex FM",        true,
+                                1294.500000, 1294.500000, "23cm FM Simplex Calling", true,
+                                1294.500001, 1294.999999, "23cm Simplex FM",        true,
+                                1295.000000, 1295.799999, "23cm SSTV/FAX/ACSSB/Exp.", true,
+                                1295.800000, 1295.999999, "23cm EME/CW Expansion",  true,
+                                1296.000000, 1296.049999, "23cm EME Exclusive",     true,
+                                1296.050000, 1296.069999, "23cm Weak Signal",       true,
+                                1296.070000, 1296.079999, "23cm CW Beacons",        true,
+                                1296.080000, 1296.099999, "23cm Weak Signal",       true,
+                                1296.100000, 1296.100000, "23cm CW/SSB Calling",    true,
+                                1296.100001, 1296.399999, "23cm Weak Signal",       true,
+                                1296.400000, 1296.599999, "23cm X-Band Translator Input", true,
+                                1296.600000, 1296.799999, "23cm X-Band Translator Output", true,
+                                1296.800000, 1296.999999, "23cm Experimental Beacons", true,
+                                1297.000000, 1300.000000, "23cm Digital Modes",     true,
+
+                                2300.000000, 2302.999999, "2.3GHz High Data Rate", true,
+                                2303.000000, 2303.499999, "2.3GHz Packet",      true,
+                                2303.500000, 2303.800000, "2.3GHz TTY Packet",  true,
+                                2303.800001, 2303.899999, "2.3GHz General", true,
+                                2303.900000, 2303.900000, "2.3GHz Packet/TTY/CW/EME", true,
+                                2303.900001, 2304.099999, "2.3GHz CW/EME",      true,
+                                2304.100000, 2304.100000, "2.3GHz Calling Frequency", true,
+                                2304.100001, 2304.199999, "2.3GHz CW/EME/SSB",  true,
+                                2304.200000, 2304.299999, "2.3GHz SSB/SSTV/FAX/Packet AM/Amtor", true,
+                                2304.300000, 2304.319999, "2.3GHz Propagation Beacon Network", true,
+                                2304.320000, 2304.399999, "2.3GHz General Propagation Beacons", true,
+                                2304.400000, 2304.499999, "2.3GHz SSB/SSTV/ACSSB/FAX/Packet AM", true,
+                                2304.500000, 2304.699999, "2.3GHz X-Band Translator Input", true,
+                                2304.700000, 2304.899999, "2.3GHz X-Band Translator Output", true,
+                                2304.900000, 2304.999999, "2.3GHz Experimental Beacons", true,
+                                2305.000000, 2305.199999, "2.3GHz FM Simplex", true,
+                                2305.200000, 2305.200000, "2.3GHz FM Simplex Calling", true,
+                                2305.200001, 2305.999999, "2.3GHz FM Simplex", true,
+                                2306.000000, 2308.999999, "2.3GHz FM Repeaters", true,
+                                2309.000000, 2310.000000, "2.3GHz Control/Aux Links", true,
+                                2390.000000, 2395.999999, "2.3GHz Fast-Scan TV", true,
+                                2396.000000, 2398.999999, "2.3GHz High Rate Data", true,
+                                2399.000000, 2399.499999, "2.3GHz Packet", true,
+                                2399.500000, 2399.999999, "2.3GHz Control/Aux Links", true,
+                                2400.000000, 2402.999999, "2.4GHz Satellite", true,
+                                2403.000000, 2407.999999, "2.4GHz Satellite High-Rate Data", true,
+                                2408.000000, 2409.999999, "2.4GHz Satellite", true,
+                                2410.000000, 2412.999999, "2.4GHz FM Repeaters", true,
+                                2413.000000, 2417.999999, "2.4GHz High-Rate Data", true,
+                                2418.000000, 2429.999999, "2.4GHz Fast-Scan TV", true,
+                                2430.000000, 2432.999999, "2.4GHz Satellite", true,
+                                2433.000000, 2437.999999, "2.4GHz Sat. High-Rate Data", true,
+                                2438.000000, 2450.000000, "2.4GHz Wideband FM/FSTV/FMTV", true,
+
+                                3456.000000, 3456.099999, "3.4GHz General", true,
+                                3456.100000, 3456.100000, "3.4GHz Calling Frequency", true,
+                                3456.100001, 3456.299999, "3.4GHz General", true,
+                                3456.300000, 3456.400000, "3.4GHz Propagation Beacons", true,
+
+                                5760.000000, 5760.099999, "5.7GHz General", true,
+                                5760.100000, 5760.100000, "5.7GHz Calling Frequency", true,
+                                5760.100001, 5760.299999, "5.7GHz General", true,
+                                5760.300000, 5760.400000, "5.7GHz Propagation Beacons", true,
+
+                                10368.000000, 10368.099999, "10GHz General", true,
+                                10368.100000, 10368.100000, "10GHz Calling Frequency", true,
+                                10368.100001, 10368.400000, "10GHz General", true,
+
+                                24192.000000, 24192.099999, "24GHz General", true,
+                                24192.100000, 24192.100000, "24GHz Calling Frequency", true,
+                                24192.100001, 24192.400000, "24GHz General", true,
+
+                                47088.000000, 47088.099999, "47GHz General", true,
+                                47088.100000, 47088.100000, "47GHz Calling Frequency", true,
+                                47088.100001, 47088.400000, "47GHz General", true,
+            };
 
             for (int i = 0; i < data.Length / 4; i++)
             {
@@ -1402,75 +1393,75 @@ namespace Thetis
         }
 
         private static void AddRegionJapanBandText()
-        {            
+        {
             DataTable t = ds.Tables["BandText"];
 
             object[] data = {
-								0.135700, 0.137799, "2200M CW/DATA",   true,                                
+                                0.135700, 0.137799, "2200M CW/DATA",   true,
                                 0.472000, 0.478999, "630M CW/DATA",    true,
 
-								1.800000, 1.825000, "160M CW",	                true,																
-                                1.907500, 1.912499, "160M CW/DATA", 	true,
+                                1.800000, 1.825000, "160M CW",                  true,
+                                1.907500, 1.912499, "160M CW/DATA",     true,
 
-								3.500000, 3.519999, "80M CW",		    		true,
-								3.520000, 3.534999, "80M CW/DATA",		true,
-                                3.535000, 3.574999, "80M CW/SSB/SSTV",			true,
-                                3.599000, 3.611999, "75M CW/SSB/SSTV/DATA",		true,
-                                3.680000, 3.686999, "75M CW/SSB/SSTV",			true,
-                                3.702000, 3.715999, "75M CW/SSB/SSTV",			true,
-                                3.745000, 3.769999, "75M CW/SSB/SSTV",			true,
-                                3.791000, 3.804999, "75M CW/SSB/SSTV",	        true,
- 
-								7.000000, 7.029999, "40M CW",			    	true,
-								7.030000, 7.044999, "40M CW/DATA",				true,
-                                7.045000, 7.099999, "40M CW/SSB/SSTV",			true,
-                                7.100000, 7.199999, "40M All Modes",			true,
-								
-								10.100000, 10.129999, "30M CW",					true,
-                                10.130000, 10.149999, "30M CW/DATA",			true,
+                                3.500000, 3.519999, "80M CW",                   true,
+                                3.520000, 3.534999, "80M CW/DATA",      true,
+                                3.535000, 3.574999, "80M CW/SSB/SSTV",          true,
+                                3.599000, 3.611999, "75M CW/SSB/SSTV/DATA",     true,
+                                3.680000, 3.686999, "75M CW/SSB/SSTV",          true,
+                                3.702000, 3.715999, "75M CW/SSB/SSTV",          true,
+                                3.745000, 3.769999, "75M CW/SSB/SSTV",          true,
+                                3.791000, 3.804999, "75M CW/SSB/SSTV",          true,
 
-								14.000000, 14.069999, "20M CW",		        	true,
-								14.070000, 14.099999, "20M CW/DATA",			true,
-								14.100000, 14.100000, "20M IBP Beacon",			true,
-								14.100001, 14.111999, "20M CW/DATA",			true,
-                                14.112000, 14.349999, "20M CW/SSB/SSTV",		true,
-																
-								18.068000, 18.099999, "17M CW",					true,
-								18.100000, 18.109999, "17M CW/DATA",			true,
-								18.110000, 18.110000, "17M IBP Beacon",			true,
-                                18.110001, 18.167999, "17M CW/SSB/SSTV",		true,
-								
-								21.000000, 21.069999, "15M CW",		        	true,
-								21.070000, 21.124999, "15M CW/DATA",			true,
-								21.125000, 21.149999, "15M CW/SSB/SSTV",		true,
-								21.150000, 21.150000, "15M IBP Beacon",		    true,
-								21.150001, 21.449999, "15M CW/SSB/SSTV",	true,
-								
-								24.890000, 24.909999, "12M CW",					true,
-								24.910000, 24.929999, "12M CW/DATA",			true,
-								24.930000, 24.930000, "12M IBP Beacon",		    true,
-                                24.930001, 24.989999, "12M CW/SSB/SSTV",		true,
-								
-								28.000000, 28.069999, "10M CW",					true,
-								28.070000, 28.149999, "10M CW/DATA",			true,
-								28.150000, 28.199999, "10M CW",					true,
-								28.200000, 28.200000, "10M IBP Beacon",	    	true,
-								28.200001, 28.999999, "10M CW/SSB/RTTY/SSTV",	true,
-								29.000000, 29.299999, "10M FM/RTTY/SSTV/DATA",	true,
-								29.300000, 29.509999, "10M Satellite Downlinks", true,
-								29.510000, 29.589999, "10M Repeater Inputs",	true,
-								29.590000, 29.609999, "10M FM/RTTY/SSTV/DATA",	true,
-								29.610000, 29.699999, "10M Repeater Outputs",	true,
-								
-								50.000000, 50.099999, "6M CW",					true,
-								50.100000, 50.199999, "6M CW/SSB/RTTY/SSTV",	true,
-								50.200000, 50.999999, "6M CW/SSB/RTTY/SSTV/DATA", true,
-								51.000000, 51.999999, "6M FM/RTTY/SSTV",	    true,
-								52.000000, 52.299999, "6M VoIP",		        true,
-								52.300000, 52.499999, "6M CW/SSB/RTTY/SSTV",	true,
-								52.500000, 52.899999, "6M WB Data",	            true,
-                                52.900000, 53.999999, "6M All Modes",			true,							
-				};
+                                7.000000, 7.029999, "40M CW",                   true,
+                                7.030000, 7.044999, "40M CW/DATA",              true,
+                                7.045000, 7.099999, "40M CW/SSB/SSTV",          true,
+                                7.100000, 7.199999, "40M All Modes",            true,
+
+                                10.100000, 10.129999, "30M CW",                  true,
+                                10.130000, 10.149999, "30M CW/DATA",            true,
+
+                                14.000000, 14.069999, "20M CW",                  true,
+                                14.070000, 14.099999, "20M CW/DATA",            true,
+                                14.100000, 14.100000, "20M IBP Beacon",         true,
+                                14.100001, 14.111999, "20M CW/DATA",            true,
+                                14.112000, 14.349999, "20M CW/SSB/SSTV",        true,
+
+                                18.068000, 18.099999, "17M CW",                  true,
+                                18.100000, 18.109999, "17M CW/DATA",            true,
+                                18.110000, 18.110000, "17M IBP Beacon",         true,
+                                18.110001, 18.167999, "17M CW/SSB/SSTV",        true,
+
+                                21.000000, 21.069999, "15M CW",                  true,
+                                21.070000, 21.124999, "15M CW/DATA",            true,
+                                21.125000, 21.149999, "15M CW/SSB/SSTV",        true,
+                                21.150000, 21.150000, "15M IBP Beacon",         true,
+                                21.150001, 21.449999, "15M CW/SSB/SSTV",    true,
+
+                                24.890000, 24.909999, "12M CW",                  true,
+                                24.910000, 24.929999, "12M CW/DATA",            true,
+                                24.930000, 24.930000, "12M IBP Beacon",         true,
+                                24.930001, 24.989999, "12M CW/SSB/SSTV",        true,
+
+                                28.000000, 28.069999, "10M CW",                  true,
+                                28.070000, 28.149999, "10M CW/DATA",            true,
+                                28.150000, 28.199999, "10M CW",                 true,
+                                28.200000, 28.200000, "10M IBP Beacon",         true,
+                                28.200001, 28.999999, "10M CW/SSB/RTTY/SSTV",   true,
+                                29.000000, 29.299999, "10M FM/RTTY/SSTV/DATA",  true,
+                                29.300000, 29.509999, "10M Satellite Downlinks", true,
+                                29.510000, 29.589999, "10M Repeater Inputs",    true,
+                                29.590000, 29.609999, "10M FM/RTTY/SSTV/DATA",  true,
+                                29.610000, 29.699999, "10M Repeater Outputs",   true,
+
+                                50.000000, 50.099999, "6M CW",                   true,
+                                50.100000, 50.199999, "6M CW/SSB/RTTY/SSTV",    true,
+                                50.200000, 50.999999, "6M CW/SSB/RTTY/SSTV/DATA", true,
+                                51.000000, 51.999999, "6M FM/RTTY/SSTV",        true,
+                                52.000000, 52.299999, "6M VoIP",                true,
+                                52.300000, 52.499999, "6M CW/SSB/RTTY/SSTV",    true,
+                                52.500000, 52.899999, "6M WB Data",             true,
+                                52.900000, 53.999999, "6M All Modes",           true,
+                };
 
             for (int i = 0; i < data.Length / 4; i++)
             {
@@ -1490,44 +1481,44 @@ namespace Thetis
             DataTable t = ds.Tables["BandText"];
 
             object[] data = {
-								2.500000, 2.500000, "WWV",						false,
-								5.000000, 5.000000, "WWV",						false,
-								10.000000, 10.000000, "WWV",					false,
-								15.000000, 15.000000, "WWV",					false,
-								20.000000, 20.000000, "WWV",					false,
+                                2.500000, 2.500000, "WWV",                      false,
+                                5.000000, 5.000000, "WWV",                      false,
+                                10.000000, 10.000000, "WWV",                    false,
+                                15.000000, 15.000000, "WWV",                    false,
+                                20.000000, 20.000000, "WWV",                    false,
                                 25.000000, 25.000000, "WWV Time",               false,  // ke9ns add
                                 3.330000, 3.330000, "CHU",                      false,
                                 7.850000, 7.850000, "CHU",                      false,
                                 14.670000, 14.670000, "CHU",                    false,
                                 4.996000, 4.996000, "RWM",                      false,
-                                9.996000, 9.996000, "RWM",                     	false,
-                                14.996000, 14.996000, "RWM",                   	false,
-                                4.998000, 4.998000, "EBC",                     	false,
+                                9.996000, 9.996000, "RWM",                      false,
+                                14.996000, 14.996000, "RWM",                    false,
+                                4.998000, 4.998000, "EBC",                      false,
                                 15.006000, 15.006000, "EBC",                    false,
 
-								0.135700, 0.137799, "2200M Band",               true,
-                                0.153000, 0.279000, "AM - Long Wave",			false,
+                                0.135700, 0.137799, "2200M Band",               true,
+                                0.153000, 0.279000, "AM - Long Wave",           false,
                                 0.415000, 0.471999, "Maritime Band",            false,
                                 0.472000, 0.478999, "630M Band",                true,
                                 0.479000, 0.526400, "Maritime Band",            false,
-								0.530000, 1.710000, "Broadcast AM Med Wave",	false,				
-								2.300000, 2.495000, "120M Short Wave",			false,
-								3.200000, 3.329999, "90M Short Wave",			false,
-                                3.330001, 3.400000, "90M Short Wave",			false,
-								4.750000, 4.995999, "60M Short Wave",			false,
-                                4.996001, 4.997999, "60M Short Wave",			false,
-                                4.998001, 4.999999, "60M Short Wave",			false,
-                                5.000001, 5.060000, "60M Short Wave",			false,
-								5.900000, 6.200000, "49M Short Wave",			false,
-								7.300000, 7.350000, "41M Short Wave",			false,
-								9.400000, 9.900000, "31M Short Wave",			false,
-								11.600000, 12.100000, "25M Short Wave",			false,
-								13.570000, 13.870000, "22M Short Wave",			false,
-								15.100000, 15.800000, "19M Short Wave",			false,
-								17.480000, 17.900000, "16M Short Wave",			false,
-								18.900000, 19.020000, "15M Short Wave",			false,
-								21.450000, 21.850000, "13M Short Wave",			false,
-								25.600000, 26.100000, "11M Short Wave",			false,
+                                0.530000, 1.710000, "Broadcast AM Med Wave",    false,
+                                2.300000, 2.495000, "120M Short Wave",          false,
+                                3.200000, 3.329999, "90M Short Wave",           false,
+                                3.330001, 3.400000, "90M Short Wave",           false,
+                                4.750000, 4.995999, "60M Short Wave",           false,
+                                4.996001, 4.997999, "60M Short Wave",           false,
+                                4.998001, 4.999999, "60M Short Wave",           false,
+                                5.000001, 5.060000, "60M Short Wave",           false,
+                                5.900000, 6.200000, "49M Short Wave",           false,
+                                7.300000, 7.350000, "41M Short Wave",           false,
+                                9.400000, 9.900000, "31M Short Wave",           false,
+                                11.600000, 12.100000, "25M Short Wave",         false,
+                                13.570000, 13.870000, "22M Short Wave",         false,
+                                15.100000, 15.800000, "19M Short Wave",         false,
+                                17.480000, 17.900000, "16M Short Wave",         false,
+                                18.900000, 19.020000, "15M Short Wave",         false,
+                                21.450000, 21.850000, "13M Short Wave",         false,
+                                25.600000, 26.100000, "11M Short Wave",         false,
                                 26.330000, 27.865000, "11M Band",               true
                             };
 
@@ -1645,12 +1636,12 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.810000, 1.835999, "160M CW",	                true,
-                                1.836000, 1.836000, "160M CW QRP",	            true,
-                                1.836001, 1.837999, "160M CW",	                true,
-								1.838000, 1.839999, "160M Narrow Band Modes",	true,
-								1.840000, 1.842999, "160M All Modes & Digital",	true,
-                                1.843000, 1.999999, "160M All Modes & Digital",	true,
+                                1.810000, 1.835999, "160M CW",                  true,
+                                1.836000, 1.836000, "160M CW QRP",              true,
+                                1.836001, 1.837999, "160M CW",                  true,
+                                1.838000, 1.839999, "160M Narrow Band Modes",   true,
+                                1.840000, 1.842999, "160M All Modes & Digital", true,
+                                1.843000, 1.999999, "160M All Modes & Digital", true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1668,15 +1659,15 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								3.500000, 3.559999, "80M CW",	    			true,
-                                3.560000, 3.560000, "80M CW QRP",	    		true,
-                                3.560001, 3.579999, "80M CW",	    			true,
-								3.580000, 3.599999, "80M Narrow Band Modes",	true,
-								3.600000, 3.689999, "80M All Modes",			true,
-                                3.690000, 3.690000, "80M SSB QRP",			    true,
-                                3.690001, 3.759999, "80M All Modes",			true,
+                                3.500000, 3.559999, "80M CW",                   true,
+                                3.560000, 3.560000, "80M CW QRP",               true,
+                                3.560001, 3.579999, "80M CW",                   true,
+                                3.580000, 3.599999, "80M Narrow Band Modes",    true,
+                                3.600000, 3.689999, "80M All Modes",            true,
+                                3.690000, 3.690000, "80M SSB QRP",              true,
+                                3.690001, 3.759999, "80M All Modes",            true,
                                 3.760000, 3.760000, "80M SSB Emergency",        true,
-                                3.760001, 3.799999, "80M All Modes",			true,
+                                3.760001, 3.799999, "80M All Modes",            true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1713,13 +1704,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.029999, "40M CW",			    	true,
-                                7.030000, 7.030000, "40M CW QRP",			    true,
-                                7.030001, 7.034999, "40M CW",			    	true,
-								7.035000, 7.039999, "40M Narrow Band Modes",	true,
-								7.040000, 7.059999, "40M All Modes",			true,
+                                7.000000, 7.029999, "40M CW",                   true,
+                                7.030000, 7.030000, "40M CW QRP",               true,
+                                7.030001, 7.034999, "40M CW",                   true,
+                                7.035000, 7.039999, "40M Narrow Band Modes",    true,
+                                7.040000, 7.059999, "40M All Modes",            true,
                                 7.060000, 7.060000, "40M SSB Emergency",        true,
-                                7.060001, 7.089999, "40M All Modes",			true,
+                                7.060001, 7.089999, "40M All Modes",            true,
                                 7.090000, 7.090000, "40M SSB QRP",              true,
                                 7.090001, 7.199999, "40M All Modes",            true,
                             };
@@ -1739,10 +1730,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								10.100000, 10.115999, "30M CW",					true,
-                                10.116000, 10.116000, "30M CW QRP",				true,
-                                10.116001, 10.139999, "30M CW",					true,
-                                10.140000, 10.149999, "30M Narrow Band Modes",	true,
+                                10.100000, 10.115999, "30M CW",                 true,
+                                10.116000, 10.116000, "30M CW QRP",             true,
+                                10.116001, 10.139999, "30M CW",                 true,
+                                10.140000, 10.149999, "30M Narrow Band Modes",  true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1760,18 +1751,18 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								14.000000, 14.059999, "20M CW",		        	true,
-                                14.060000, 14.060000, "20M CW QRP",		        true,
-                                14.060001, 14.069999, "20M CW",		        	true,
-								14.070000, 14.098999, "20M Narrow Band Modes",	true,
-								14.099000, 14.100999, "20M Beacons",			true,
+                                14.000000, 14.059999, "20M CW",                 true,
+                                14.060000, 14.060000, "20M CW QRP",             true,
+                                14.060001, 14.069999, "20M CW",                 true,
+                                14.070000, 14.098999, "20M Narrow Band Modes",  true,
+                                14.099000, 14.100999, "20M Beacons",            true,
                                 14.101000, 14.111999, "20M All Mode Digital",   true,
                                 14.112000, 14.129999, "20M All Mode Digital",   true,
                                 14.130000, 14.130000, "20M Digital Voice",      true,
                                 14.130001, 14.229999, "20M All Modes",          true,
-                                14.230000, 14.230000, "20M SSTV",				true,
+                                14.230000, 14.230000, "20M SSTV",               true,
                                 14.230001, 14.284999, "20M All Modes",          true,
-                                14.285000, 14.285000, "20M SSB QRP",			true,
+                                14.285000, 14.285000, "20M SSB QRP",            true,
                                 14.285001, 14.299999, "20M All Modes",          true,
                                 14.300000, 14.300000, "20M SSB Emergency",      true,
                                 14.300001, 14.349999, "20M All Modes",          true,
@@ -1792,14 +1783,14 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								18.068000, 18.085999, "17M CW",					true,
-                                18.086000, 18.086000, "17M CW QRP",				true,
-                                18.086001, 18.094999, "17M CW",					true,
-								18.095000, 18.108999, "17M Narrow Band Modes",	true,
-								18.109000, 18.109999, "17M Beacons",		    true,
-								18.110000, 18.159999, "17M All Modes",			true,
-                                18.160000, 18.160000, "17M SSB Emergency",		true,
-                                18.160001, 18.167999, "17M All Modes",			true,
+                                18.068000, 18.085999, "17M CW",                 true,
+                                18.086000, 18.086000, "17M CW QRP",             true,
+                                18.086001, 18.094999, "17M CW",                 true,
+                                18.095000, 18.108999, "17M Narrow Band Modes",  true,
+                                18.109000, 18.109999, "17M Beacons",            true,
+                                18.110000, 18.159999, "17M All Modes",          true,
+                                18.160000, 18.160000, "17M SSB Emergency",      true,
+                                18.160001, 18.167999, "17M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1817,20 +1808,20 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								21.000000, 21.059999, "15M CW",			        true,
-                                21.060000, 21.060000, "15M CW QRP",			    true,
-                                21.060001, 21.069999, "15M CW",			        true,
-								21.070000, 21.109999, "15M Narrow Band Modes",	true,
-								21.110000, 21.119999, "15M Wide Band Digital",	true,
-                                21.120000, 21.148999, "15M Narrow Band Modes",	true,
-                                21.149000, 21.150999, "15M Beacons",		    true,
-								21.151000, 21.179999, "15M All Modes",			true,
-                                21.180000, 21.180000, "15M Digital Voice",		true,
-                                21.180001, 21.284999, "15M All Modes",			true,
-                                21.285000, 21.285000, "15M SSB QRP",	    	true,
-                                21.285001, 21.359999, "15M All Modes",			true,
+                                21.000000, 21.059999, "15M CW",                 true,
+                                21.060000, 21.060000, "15M CW QRP",             true,
+                                21.060001, 21.069999, "15M CW",                 true,
+                                21.070000, 21.109999, "15M Narrow Band Modes",  true,
+                                21.110000, 21.119999, "15M Wide Band Digital",  true,
+                                21.120000, 21.148999, "15M Narrow Band Modes",  true,
+                                21.149000, 21.150999, "15M Beacons",            true,
+                                21.151000, 21.179999, "15M All Modes",          true,
+                                21.180000, 21.180000, "15M Digital Voice",      true,
+                                21.180001, 21.284999, "15M All Modes",          true,
+                                21.285000, 21.285000, "15M SSB QRP",            true,
+                                21.285001, 21.359999, "15M All Modes",          true,
                                 21.360000, 21.360000, "15M SSB Emergency",      true,
-                                21.360001, 21.449999, "15M All Modes",			true,
+                                21.360001, 21.449999, "15M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1848,13 +1839,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								24.890000, 24.905999, "12M CW",					true,
-                                24.906000, 24.906000, "12M CW QRP",		        true,
-                                24.906001, 24.914999, "12M CW",					true,
-                                24.915000, 24.928999, "12M Narrow Band Modes",	true,
-								24.929000, 24.930999, "12M Beacons",		    true,
-                                24.931000, 24.939999, "12M All Modes Digital",	true,
-                                24.940000, 24.989999, "12M All Modes",			true,
+                                24.890000, 24.905999, "12M CW",                 true,
+                                24.906000, 24.906000, "12M CW QRP",             true,
+                                24.906001, 24.914999, "12M CW",                 true,
+                                24.915000, 24.928999, "12M Narrow Band Modes",  true,
+                                24.929000, 24.930999, "12M Beacons",            true,
+                                24.931000, 24.939999, "12M All Modes Digital",  true,
+                                24.940000, 24.989999, "12M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1872,32 +1863,32 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								28.000000, 28.059999, "10M CW",					true,
-                                28.060000, 28.060000, "10M CW QRP",	        	true,
-                                28.060001, 28.069999, "10M CW",					true,
-								28.070000, 28.189999, "10M Narrow Band Modes",	true,
-								28.190000, 28.224999, "10M Beacons",			true,
-                                28.225000, 28.299999, "10M All Mode Beacons",	true,
-                                28.300000, 28.319999, "10M All Mode Digital",	true,
-                                28.320001, 28.329999, "10M All Modes",	    	true,
-                                28.330000, 28.330000, "10M Digital Voice",	    true,
-                                28.330001, 28.359999, "10M All Modes",	    	true,
-                                28.360000, 28.360000, "10M SSB QRP",	        true,
-                                28.360001, 28.679999, "10M All Modes",	    	true,
-                                28.680000, 28.680000, "10M SSTV",	            true,
-                                28.680001, 29.199999, "10M All Modes",	    	true,
+                                28.000000, 28.059999, "10M CW",                 true,
+                                28.060000, 28.060000, "10M CW QRP",             true,
+                                28.060001, 28.069999, "10M CW",                 true,
+                                28.070000, 28.189999, "10M Narrow Band Modes",  true,
+                                28.190000, 28.224999, "10M Beacons",            true,
+                                28.225000, 28.299999, "10M All Mode Beacons",   true,
+                                28.300000, 28.319999, "10M All Mode Digital",   true,
+                                28.320001, 28.329999, "10M All Modes",          true,
+                                28.330000, 28.330000, "10M Digital Voice",      true,
+                                28.330001, 28.359999, "10M All Modes",          true,
+                                28.360000, 28.360000, "10M SSB QRP",            true,
+                                28.360001, 28.679999, "10M All Modes",          true,
+                                28.680000, 28.680000, "10M SSTV",               true,
+                                28.680001, 29.199999, "10M All Modes",          true,
                                 29.200000, 29.299999, "10M FM Digital",         true,
                                 29.300000, 29.509999, "10M FM Sat. Downlinks",  true,
-                                29.510000, 29.519999, "10M Guard Channel",		true,
+                                29.510000, 29.519999, "10M Guard Channel",      true,
                                 29.520000, 29.549999, "10M FM Simplex",         true,
-                                29.550000, 29.559999, "10M Deadband",		    true,
-                                29.560000, 29.589999, "10M Repeater Inputs",	true,
-                                29.590000, 29.599999, "10M Deadband",			true,
+                                29.550000, 29.559999, "10M Deadband",           true,
+                                29.560000, 29.589999, "10M Repeater Inputs",    true,
+                                29.590000, 29.599999, "10M Deadband",           true,
                                 29.600000, 29.600000, "10M FM Calling",         true,
-                                29.600001, 29.609999, "10M Deadband",			true,
+                                29.600001, 29.609999, "10M Deadband",           true,
                                 29.610000, 29.649999, "10M FM Simplex",         true,
-                                29.650000, 29.659999, "10M Deadband",			true,
-                                29.660000, 29.699999, "10M Repeater Outputs",	true,
+                                29.650000, 29.659999, "10M Deadband",           true,
+                                29.660000, 29.699999, "10M Repeater Outputs",   true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1916,28 +1907,28 @@ namespace Thetis
             // 50.0 - 52.0 MHz
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 51.209999, "6M All Modes",           true,
-                                51.210000, 51.389999, "6M FM Repeater Inputs",	true,
+                                51.210000, 51.389999, "6M FM Repeater Inputs",  true,
                                 51.390000, 51.409999, "6M All Modes",           true,
                                 51.410000, 51.509999, "6M FM Simplex",          true,
                                 51.510000, 51.510000, "6M FM Calling",          true,
                                 51.510001, 51.589999, "6M FM Simplex",          true,
                                 51.590000, 51.809999, "6M All Modes",           true,
-                                51.810000, 51.989999, "6M FM Repeater Ouputs",	true,
+                                51.810000, 51.989999, "6M FM Repeater Ouputs",  true,
                                 51.990000, 51.999999, "6M All Modes",          true,
                             };
 
@@ -1956,12 +1947,12 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.810000, 1.835999, "160M CW",	                true,
-                                1.836000, 1.836000, "160M CW QRP",	            true,
-                                1.836001, 1.837999, "160M CW",	                true,
-								1.838000, 1.839999, "160M Narrow Band Modes",	true,
-								1.840000, 1.842999, "160M All Modes & Digital",	true,
-                                1.843000, 1.860000, "160M All Modes & Digital",	true,
+                                1.810000, 1.835999, "160M CW",                  true,
+                                1.836000, 1.836000, "160M CW QRP",              true,
+                                1.836001, 1.837999, "160M CW",                  true,
+                                1.838000, 1.839999, "160M Narrow Band Modes",   true,
+                                1.840000, 1.842999, "160M All Modes & Digital", true,
+                                1.843000, 1.860000, "160M All Modes & Digital", true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -1979,14 +1970,14 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								3.500000, 3.559999, "80M CW",	    			true,
-                                3.560000, 3.560000, "80M CW QRP",	    		true,
-                                3.560001, 3.579999, "80M CW",	    			true,
-								3.580000, 3.599999, "80M Narrow Band Modes",	true,
-								3.600000, 3.689999, "80M All Modes",			true,
-                                3.690000, 3.690000, "80M SSB QRP",			    true,
-                                3.690001, 3.700000, "80M All Modes",			true,
-                                3.890000, 3.900000, "80M All Modes",			true,
+                                3.500000, 3.559999, "80M CW",                   true,
+                                3.560000, 3.560000, "80M CW QRP",               true,
+                                3.560001, 3.579999, "80M CW",                   true,
+                                3.580000, 3.599999, "80M Narrow Band Modes",    true,
+                                3.600000, 3.689999, "80M All Modes",            true,
+                                3.690000, 3.690000, "80M SSB QRP",              true,
+                                3.690001, 3.700000, "80M All Modes",            true,
+                                3.890000, 3.900000, "80M All Modes",            true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2004,13 +1995,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.029999, "40M CW",			    	true,
-                                7.030000, 7.030000, "40M CW QRP",			    true,
-                                7.030001, 7.034999, "40M CW",			    	true,
-								7.035000, 7.039999, "40M Narrow Band Modes",	true,
-								7.040000, 7.059999, "40M All Modes",			true,
+                                7.000000, 7.029999, "40M CW",                   true,
+                                7.030000, 7.030000, "40M CW QRP",               true,
+                                7.030001, 7.034999, "40M CW",                   true,
+                                7.035000, 7.039999, "40M Narrow Band Modes",    true,
+                                7.040000, 7.059999, "40M All Modes",            true,
                                 7.060000, 7.060000, "40M SSB Emergency",        true,
-                                7.060001, 7.089999, "40M All Modes",			true,
+                                7.060001, 7.089999, "40M All Modes",            true,
                                 7.090000, 7.090000, "40M SSB QRP",              true,
                                 7.090001, 7.199999, "40M All Modes",            true,
                             };
@@ -2030,18 +2021,18 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								14.000000, 14.059999, "20M CW",		        	true,
-                                14.060000, 14.060000, "20M CW QRP",		        true,
-                                14.060001, 14.069999, "20M CW",		        	true,
-								14.070000, 14.098999, "20M Narrow Band Modes",	true,
-								14.099000, 14.100999, "20M Beacons",			true,
+                                14.000000, 14.059999, "20M CW",                 true,
+                                14.060000, 14.060000, "20M CW QRP",             true,
+                                14.060001, 14.069999, "20M CW",                 true,
+                                14.070000, 14.098999, "20M Narrow Band Modes",  true,
+                                14.099000, 14.100999, "20M Beacons",            true,
                                 14.101000, 14.111999, "20M All Mode Digital",   true,
                                 14.112000, 14.129999, "20M All Mode Digital",   true,
                                 14.130000, 14.130000, "20M Digital Voice",      true,
                                 14.130001, 14.229999, "20M All Modes",          true,
-                                14.230000, 14.230000, "20M SSTV",				true,
+                                14.230000, 14.230000, "20M SSTV",               true,
                                 14.230001, 14.284999, "20M All Modes",          true,
-                                14.285000, 14.285000, "20M SSB QRP",			true,
+                                14.285000, 14.285000, "20M SSB QRP",            true,
                                 14.285001, 14.299999, "20M All Modes",          true,
                                 14.300000, 14.300000, "20M SSB Emergency",      true,
                                 14.300001, 14.349999, "20M All Modes",          true,
@@ -2062,14 +2053,14 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								18.068000, 18.085999, "17M CW",					true,
-                                18.086000, 18.086000, "17M CW QRP",				true,
-                                18.086001, 18.094999, "17M CW",					true,
-								18.095000, 18.108999, "17M Narrow Band Modes",	true,
-								18.109000, 18.109999, "17M Beacons",		    true,
-								18.110000, 18.159999, "17M All Modes",			true,
-                                18.160000, 18.160000, "17M SSB Emergency",		true,
-                                18.160001, 18.167999, "17M All Modes",			true,
+                                18.068000, 18.085999, "17M CW",                 true,
+                                18.086000, 18.086000, "17M CW QRP",             true,
+                                18.086001, 18.094999, "17M CW",                 true,
+                                18.095000, 18.108999, "17M Narrow Band Modes",  true,
+                                18.109000, 18.109999, "17M Beacons",            true,
+                                18.110000, 18.159999, "17M All Modes",          true,
+                                18.160000, 18.160000, "17M SSB Emergency",      true,
+                                18.160001, 18.167999, "17M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2087,20 +2078,20 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								21.000000, 21.059999, "15M CW",			        true,
-                                21.060000, 21.060000, "15M CW QRP",			    true,
-                                21.060001, 21.069999, "15M CW",			        true,
-								21.070000, 21.109999, "15M Narrow Band Modes",	true,
-								21.110000, 21.119999, "15M Wide Band Digital",	true,
-                                21.120000, 21.148999, "15M Narrow Band Modes",	true,
-                                21.149000, 21.150999, "15M Beacons",		    true,
-								21.151000, 21.179999, "15M All Modes",			true,
-                                21.180000, 21.180000, "15M Digital Voice",		true,
-                                21.180001, 21.284999, "15M All Modes",			true,
-                                21.285000, 21.285000, "15M SSB QRP",	    	true,
-                                21.285001, 21.359999, "15M All Modes",			true,
+                                21.000000, 21.059999, "15M CW",                 true,
+                                21.060000, 21.060000, "15M CW QRP",             true,
+                                21.060001, 21.069999, "15M CW",                 true,
+                                21.070000, 21.109999, "15M Narrow Band Modes",  true,
+                                21.110000, 21.119999, "15M Wide Band Digital",  true,
+                                21.120000, 21.148999, "15M Narrow Band Modes",  true,
+                                21.149000, 21.150999, "15M Beacons",            true,
+                                21.151000, 21.179999, "15M All Modes",          true,
+                                21.180000, 21.180000, "15M Digital Voice",      true,
+                                21.180001, 21.284999, "15M All Modes",          true,
+                                21.285000, 21.285000, "15M SSB QRP",            true,
+                                21.285001, 21.359999, "15M All Modes",          true,
                                 21.360000, 21.360000, "15M SSB Emergency",      true,
-                                21.360001, 21.449999, "15M All Modes",			true,
+                                21.360001, 21.449999, "15M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2118,13 +2109,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								24.890000, 24.905999, "12M CW",					true,
-                                24.906000, 24.906000, "12M CW QRP",		        true,
-                                24.906001, 24.914999, "12M CW",					true,
-                                24.915000, 24.928999, "12M Narrow Band Modes",	true,
-								24.929000, 24.930999, "12M Beacons",		    true,
-                                24.931000, 24.939999, "12M All Modes Digital",	true,
-                                24.940000, 24.989999, "12M All Modes",			true,
+                                24.890000, 24.905999, "12M CW",                 true,
+                                24.906000, 24.906000, "12M CW QRP",             true,
+                                24.906001, 24.914999, "12M CW",                 true,
+                                24.915000, 24.928999, "12M Narrow Band Modes",  true,
+                                24.929000, 24.930999, "12M Beacons",            true,
+                                24.931000, 24.939999, "12M All Modes Digital",  true,
+                                24.940000, 24.989999, "12M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2142,32 +2133,32 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								28.000000, 28.059999, "10M CW",					true,
-                                28.060000, 28.060000, "10M CW QRP",	        	true,
-                                28.060001, 28.069999, "10M CW",					true,
-								28.070000, 28.189999, "10M Narrow Band Modes",	true,
-								28.190000, 28.224999, "10M Beacons",			true,
-                                28.225000, 28.299999, "10M All Mode Beacons",	true,
-                                28.300000, 28.319999, "10M All Mode Digital",	true,
-                                28.320001, 28.329999, "10M All Modes",	    	true,
-                                28.330000, 28.330000, "10M Digital Voice",	    true,
-                                28.330001, 28.359999, "10M All Modes",	    	true,
-                                28.360000, 28.360000, "10M SSB QRP",	        true,
-                                28.360001, 28.679999, "10M All Modes",	    	true,
-                                28.680000, 28.680000, "10M SSTV",	            true,
-                                28.680001, 29.199999, "10M All Modes",	    	true,
+                                28.000000, 28.059999, "10M CW",                 true,
+                                28.060000, 28.060000, "10M CW QRP",             true,
+                                28.060001, 28.069999, "10M CW",                 true,
+                                28.070000, 28.189999, "10M Narrow Band Modes",  true,
+                                28.190000, 28.224999, "10M Beacons",            true,
+                                28.225000, 28.299999, "10M All Mode Beacons",   true,
+                                28.300000, 28.319999, "10M All Mode Digital",   true,
+                                28.320001, 28.329999, "10M All Modes",          true,
+                                28.330000, 28.330000, "10M Digital Voice",      true,
+                                28.330001, 28.359999, "10M All Modes",          true,
+                                28.360000, 28.360000, "10M SSB QRP",            true,
+                                28.360001, 28.679999, "10M All Modes",          true,
+                                28.680000, 28.680000, "10M SSTV",               true,
+                                28.680001, 29.199999, "10M All Modes",          true,
                                 29.200000, 29.299999, "10M FM Digital",         true,
                                 29.300000, 29.509999, "10M FM Sat. Downlinks",  true,
-                                29.510000, 29.519999, "10M Guard Channel",		true,
+                                29.510000, 29.519999, "10M Guard Channel",      true,
                                 29.520000, 29.549999, "10M FM Simplex",         true,
-                                29.550000, 29.559999, "10M Deadband",		    true,
-                                29.560000, 29.589999, "10M Repeater Inputs",	true,
-                                29.590000, 29.599999, "10M Deadband",			true,
+                                29.550000, 29.559999, "10M Deadband",           true,
+                                29.560000, 29.589999, "10M Repeater Inputs",    true,
+                                29.590000, 29.599999, "10M Deadband",           true,
                                 29.600000, 29.600000, "10M FM Calling",         true,
-                                29.600001, 29.609999, "10M Deadband",			true,
+                                29.600001, 29.609999, "10M Deadband",           true,
                                 29.610000, 29.649999, "10M FM Simplex",         true,
-                                29.650000, 29.659999, "10M Deadband",			true,
-                                29.660000, 29.699999, "10M Repeater Outputs",	true,
+                                29.650000, 29.659999, "10M Deadband",           true,
+                                29.660000, 29.699999, "10M Repeater Outputs",   true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2186,28 +2177,28 @@ namespace Thetis
             // 50.0 - 54.0 MHz
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 51.209999, "6M All Modes",           true,
-                                51.210000, 51.389999, "6M FM Repeater Inputs",	true,
+                                51.210000, 51.389999, "6M FM Repeater Inputs",  true,
                                 51.390000, 51.409999, "6M All Modes",           true,
                                 51.410000, 51.509999, "6M FM Simplex",          true,
                                 51.510000, 51.510000, "6M FM Calling",          true,
                                 51.510001, 51.589999, "6M FM Simplex",          true,
                                 51.590000, 51.809999, "6M All Modes",           true,
-                                51.810000, 51.989999, "6M FM Repeater Ouputs",	true,
+                                51.810000, 51.989999, "6M FM Repeater Ouputs",  true,
                                 51.990000, 53.999999, "6M All Modes",          true,
                             };
 
@@ -2226,10 +2217,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-					    		1.810000, 1.837999, "160M CW",	                true,
-								1.838000, 1.839999, "160M Digital/Packet/CW",	true,
-								1.840000, 1.842999, "160M Digital/Packet/CW/SSB",	true,
-                                1.843000, 1.999999, "160M SSB/CW",	true,
+                                1.810000, 1.837999, "160M CW",                  true,
+                                1.838000, 1.839999, "160M Digital/Packet/CW",   true,
+                                1.840000, 1.842999, "160M Digital/Packet/CW/SSB",   true,
+                                1.843000, 1.999999, "160M SSB/CW",  true,
                                };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2247,17 +2238,17 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-							    3.500000, 3.509999, "80M CW DX",	    		true,
-                                3.510000, 3.560000, "80M CW Contest",	    	true,
-                                3.560001, 3.579999, "80M CW",	    			true,
-								3.580000, 3.589999, "80M Digital/CW",	        true,
-								3.590000, 3.599999, "80M Digital/Packet/CW",	true,
-                                3.600000, 3.620000, "80M SSB/Digital/CW",		true,
-                                3.620001, 3.649999, "80M SSB/SSB Contest/CW",	true,
+                                3.500000, 3.509999, "80M CW DX",                true,
+                                3.510000, 3.560000, "80M CW Contest",           true,
+                                3.560001, 3.579999, "80M CW",                   true,
+                                3.580000, 3.589999, "80M Digital/CW",           true,
+                                3.590000, 3.599999, "80M Digital/Packet/CW",    true,
+                                3.600000, 3.620000, "80M SSB/Digital/CW",       true,
+                                3.620001, 3.649999, "80M SSB/SSB Contest/CW",   true,
                                 3.650000, 3.700000, "80M SSB/CW",               true,
                                 3.700001, 3.730000, "80M SSB/SSB Contest/CW",   true,
                                 3.730001, 3.740000, "80M SSTV/FAX/SSB/CW",      true,
-                                3.740001, 3.799999, "80M SSB DX/CW",			true,
+                                3.740001, 3.799999, "80M SSB DX/CW",            true,
                                };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2294,10 +2285,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.034999, "40M CW",			    	true,
-                                7.035000, 7.040000, "40M Digital/SSTV/FAX/CW",	true,
-                                7.040001, 7.044999, "40M Digital/SSTV/FAX/CW/SSB",	true,
-								7.045000, 7.199999, "40M SSB/CW",           	true,
+                                7.000000, 7.034999, "40M CW",                   true,
+                                7.035000, 7.040000, "40M Digital/SSTV/FAX/CW",  true,
+                                7.040001, 7.044999, "40M Digital/SSTV/FAX/CW/SSB",  true,
+                                7.045000, 7.199999, "40M SSB/CW",               true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2315,8 +2306,8 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-                                10.100000, 10.139999, "30M CW",					true,
-                                10.140000, 10.149999, "30M Digital/CW",	        true,
+                                10.100000, 10.139999, "30M CW",                 true,
+                                10.140000, 10.149999, "30M Digital/CW",         true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2334,15 +2325,15 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								14.000000, 14.059999, "20M CW Contest",		   	true,
-                                14.060000, 14.069999, "20M CW",		   	        true,
-								14.070000, 14.088999, "20M Digital/CW",	        true,
-								14.089000, 14.098999, "20M Digital(Non-Auto Packet)/CW",	true,
+                                14.000000, 14.059999, "20M CW Contest",         true,
+                                14.060000, 14.069999, "20M CW",                 true,
+                                14.070000, 14.088999, "20M Digital/CW",         true,
+                                14.089000, 14.098999, "20M Digital(Non-Auto Packet)/CW",    true,
                                 14.099000, 14.100999, "20M Beacons",            true,
                                 14.101000, 14.111999, "20M Digital/SSB/CW",     true,
                                 14.112000, 14.125000, "20M SSB/CW",             true,
                                 14.125001, 14.229999, "20M SSB Contest/CW",     true,
-                                14.230000, 14.230000, "20M SSTV/FAX Calling",	true,
+                                14.230000, 14.230000, "20M SSTV/FAX Calling",   true,
                                 14.230001, 14.299999, "20M SSB Contest/CW",     true,
                                 14.300000, 14.349999, "20M SSB/CW",             true,
                             };
@@ -2362,10 +2353,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								18.068000, 18.099999, "17M CW",					true,
-                                18.100000, 18.108999, "17M Digital/CW",			true,
-  								18.109000, 18.110999, "17M Beacons",		    true,
-								18.111000, 18.167999, "17M SSB/CW",			    true,
+                                18.068000, 18.099999, "17M CW",                 true,
+                                18.100000, 18.108999, "17M Digital/CW",         true,
+                                  18.109000, 18.110999, "17M Beacons",            true,
+                                18.111000, 18.167999, "17M SSB/CW",             true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2383,14 +2374,14 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-						    	21.000000, 21.079999, "15M CW",			        true,
-                                21.080000, 21.100000, "15M Digital/CW",			true,
-                                21.100001, 21.119999, "15M Packet/Digital/CW",	true,
-								21.120000, 21.148999, "15M CW",	                true,
-                                21.149000, 21.150999, "15M Beacons",		    true,
-								21.151000, 21.339999, "15M SSB/CW",			    true,
+                                21.000000, 21.079999, "15M CW",                 true,
+                                21.080000, 21.100000, "15M Digital/CW",         true,
+                                21.100001, 21.119999, "15M Packet/Digital/CW",  true,
+                                21.120000, 21.148999, "15M CW",                 true,
+                                21.149000, 21.150999, "15M Beacons",            true,
+                                21.151000, 21.339999, "15M SSB/CW",             true,
                                 21.340000, 21.340000, "15M SSTV/FAX Calling",   true,
-                                21.340001, 21.449999, "15M SSB/CW",			    true,
+                                21.340001, 21.449999, "15M SSB/CW",             true,
                              };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2408,10 +2399,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								24.890000, 24.919999, "12M CW",					true,
-                                24.920000, 24.928999, "12M Digital/CW",		    true,
-								24.929000, 24.930999, "12M Beacons",		    true,
-                                24.931000, 24.989999, "12M SSB/CW",		    	true,
+                                24.890000, 24.919999, "12M CW",                 true,
+                                24.920000, 24.928999, "12M Digital/CW",         true,
+                                24.929000, 24.930999, "12M Beacons",            true,
+                                24.931000, 24.989999, "12M SSB/CW",             true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2429,19 +2420,19 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								28.000000, 28.049999, "10M CW",					true,
-                                28.050000, 28.120000, "10M Digital/CW",	        true,
-                                28.120001, 28.149999, "10M Digital/Packet/CW",	true,
-								28.150000, 28.189999, "10M CW",	                true,
-								28.190000, 28.198999, "10M Regional Beacons",	true,
-                                28.199000, 28.200999, "10M World Wide Beacons",	true,
-                                28.201000, 28.224999, "10M Continous-Duty Beacons",	true,
-                                28.225000, 28.679999, "10M SSB/CW",	    	    true,
-                                28.680000, 28.680000, "10M SSTV/FAX Calling",	        true,
-                                28.680001, 29.199999, "10M SSB/CW",	    	    true,
+                                28.000000, 28.049999, "10M CW",                 true,
+                                28.050000, 28.120000, "10M Digital/CW",         true,
+                                28.120001, 28.149999, "10M Digital/Packet/CW",  true,
+                                28.150000, 28.189999, "10M CW",                 true,
+                                28.190000, 28.198999, "10M Regional Beacons",   true,
+                                28.199000, 28.200999, "10M World Wide Beacons", true,
+                                28.201000, 28.224999, "10M Continous-Duty Beacons", true,
+                                28.225000, 28.679999, "10M SSB/CW",             true,
+                                28.680000, 28.680000, "10M SSTV/FAX Calling",           true,
+                                28.680001, 29.199999, "10M SSB/CW",             true,
                                 29.200000, 29.299999, "10M NBFM Digital/Packet",true,
                                 29.300000, 29.509999, "10M Sat. Downlinks",  true,
-                                29.510000, 29.699999, "10M SSB/CW",	true,
+                                29.510000, 29.699999, "10M SSB/CW", true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2460,15 +2451,15 @@ namespace Thetis
             // 50.0 - 52.0 MHz
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-                                50.000000, 50.079999, "6M Beacon Sub-Band",		true,
-                                50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW/SSB",			    true,
+                                50.100000, 50.109999, "6M CW/SSB",              true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.149999, "6M SSB/Digital/CW",	    true,
+                                50.110001, 50.149999, "6M SSB/Digital/CW",      true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.199999, "6M SSB/Digital/CW",	    true,
+                                50.150001, 50.199999, "6M SSB/Digital/CW",      true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2487,13 +2478,13 @@ namespace Thetis
             // 70.0 - 70.5 MHz
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								70.000000, 70.089999, "4M WSPR Beacons", 		true,
-								70.090000, 70.099999, "4M Beacons",				true,
+                                70.000000, 70.089999, "4M WSPR Beacons",        true,
+                                70.090000, 70.099999, "4M Beacons",             true,
                                 70.100000, 70.249999, "4M CW & SSB",            true,
                                 70.250000, 70.250000, "4M CW & SSB Calling",    true,
-                                70.250001, 70.259999, "4M AM & FM",		    	true,
+                                70.250001, 70.259999, "4M AM & FM",             true,
                                 70.260000, 70.260000, "4M AM & FM Calling",     true,
-                                70.260001, 70.299999, "4M AM & FM",	            true,
+                                70.260001, 70.299999, "4M AM & FM",             true,
                                 70.300000, 70.300000, "4M RTTY & FAX",          true,
                                 70.300001, 70.449999, "4M FM Channels",         true,
                                 70.450000, 70.450000, "4M FM Calling",          true,
@@ -2523,7 +2514,7 @@ namespace Thetis
             DataTable t = ds.Tables["BandText"];
             object[] data = {
 								// 144 - 146 MHz
-                                144.000000, 144.034999, "2M CW & SSB EME",		        true,
+                                144.000000, 144.034999, "2M CW & SSB EME",                true,
                                 144.035000, 144.049999, "2M CW",                        true,
                                 144.050000, 144.050000, "2M CW Calling",                true,
                                 144.050001, 144.149999, "2M CW",                        true,
@@ -2545,16 +2536,16 @@ namespace Thetis
                                 145.793500, 145.799999, "2M Deadband",                  true,
                                 145.800000, 146.000000, "2M All Mode Sat.",             true,
                                 // 430 - 440 MHz
-								430.000000, 430.024999, "70cm Sub-Regional",	        true,
-                                430.025000, 430.374999, "70cm Repeater Outputs",	    true,
-                                430.375000, 430.399999, "70cm Sub-Regional",	        true,
-                                430.400000, 430.574999, "70cm FM Digital Link",	        true,
-                                430.575000, 430.599999, "70cm Sub-Regional",	        true,
-                                430.600000, 430.924999, "70cm FM Digital Repeater",	    true,
-                                430.925000, 431.024999, "70cm Multimode Channels",	    true,
-                                431.025000, 431.049999, "70cm Sub-Regional",	        true,
-                                431.050000, 431.974999, "70cm Repeater Inputs",	        true,
-                                431.975000, 431.999999, "70cm Sub-Regional",	        true,
+								430.000000, 430.024999, "70cm Sub-Regional",          true,
+                                430.025000, 430.374999, "70cm Repeater Outputs",        true,
+                                430.375000, 430.399999, "70cm Sub-Regional",            true,
+                                430.400000, 430.574999, "70cm FM Digital Link",         true,
+                                430.575000, 430.599999, "70cm Sub-Regional",            true,
+                                430.600000, 430.924999, "70cm FM Digital Repeater",     true,
+                                430.925000, 431.024999, "70cm Multimode Channels",      true,
+                                431.025000, 431.049999, "70cm Sub-Regional",            true,
+                                431.050000, 431.974999, "70cm Repeater Inputs",         true,
+                                431.975000, 431.999999, "70cm Sub-Regional",            true,
                                 432.000000, 432.024999, "70cm CW EME",                  true,
                                 432.025000, 432.049999, "70cm CW",                      true,
                                 432.050000, 432.050000, "70cm CW Calling",              true,
@@ -2600,7 +2591,7 @@ namespace Thetis
                                 439.800000, 439.974999, "70cm Digital Comm. Link",      true,
                                 439.975000, 440.000000, "70cm ATV & Sub-Regional",      true,
                                 // 1240 - 1300 MHz
-								1240.000000, 1240.999999, "23cm All Modes, Digital",	true,
+								1240.000000, 1240.999999, "23cm All Modes, Digital",   true,
                                 1241.000000, 1242.024999, "23cm All Modes",             true,
                                 1242.025000, 1242.699999, "23cm Repeater Output",       true,
                                 1242.700000, 1242.724999, "23cm All Modes",             true,
@@ -2643,17 +2634,17 @@ namespace Thetis
                                 1298.725000, 1298.999999, "23cm All Modes Packet",      true,
                                 1299.000000, 1300.000000, "23cm All Modes Digital",     true,
                                 // 2300 -2450 MHz
-								2300.000000, 2303.999999, "13cm Sub-Regional",	        true,
-                                2304.000000, 2305.999999, "13cm Narrow Band ",	        true,
-                                2306.000000, 2307.999999, "13cm Sub-Regional",	        true,
-                                2308.000000, 2309.999999, "13cm Narrow Band ",	        true,
-                                2310.000000, 2319.999999, "13cm Sub-Regional",	        true,
-                                2320.000000, 2320.024999, "13cm CW EME",	            true,
-                                2320.025000, 2320.149999, "13cm CW",	                true,
-                                2320.150000, 2320.199999, "13cm CW & SSB",	            true,
-                                2320.200000, 2320.200000, "13cm SSB Calling",	        true,
-                                2320.200001, 2320.799999, "13cm CW & SSB",	            true,
-                                2320.800000, 2320.999999, "13cm Beacons",	            true,
+								2300.000000, 2303.999999, "13cm Sub-Regional",         true,
+                                2304.000000, 2305.999999, "13cm Narrow Band ",          true,
+                                2306.000000, 2307.999999, "13cm Sub-Regional",          true,
+                                2308.000000, 2309.999999, "13cm Narrow Band ",          true,
+                                2310.000000, 2319.999999, "13cm Sub-Regional",          true,
+                                2320.000000, 2320.024999, "13cm CW EME",                true,
+                                2320.025000, 2320.149999, "13cm CW",                    true,
+                                2320.150000, 2320.199999, "13cm CW & SSB",              true,
+                                2320.200000, 2320.200000, "13cm SSB Calling",           true,
+                                2320.200001, 2320.799999, "13cm CW & SSB",              true,
+                                2320.800000, 2320.999999, "13cm Beacons",               true,
                                 2321.000000, 2321.999999, "13cm NBFM Simplex",          true,
                                 2322.000000, 2354.999999, "13cm ATV",                   true,
                                 2355.000000, 2364.999999, "13cm Digital Comms",         true,
@@ -2707,7 +2698,7 @@ namespace Thetis
                                 47000.000000, 47087.999999, "6mm All Mode",             true,
                                 47088.000000, 47088.000000, "6mm Narrow Band Calling",  true,
                                 47088.000001, 47200.000000, "6mm All Mode",             true,
-			};
+            };
 
             for (int i = 0; i < data.Length / 4; i++)
             {
@@ -2727,12 +2718,12 @@ namespace Thetis
             // 1.810 - 1.850 
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.810000, 1.835999, "160M CW",	                true,
-                                1.836000, 1.836000, "160M CW QRP",	            true,
-                                1.836001, 1.837999, "160M CW",	                true,
-								1.838000, 1.839999, "160M Narrow Band Modes",	true,
-								1.840000, 1.849999, "160M All Modes & Digital",	true,
-                                1.850000, 1.999999, "160M General RX",	        false,
+                                1.810000, 1.835999, "160M CW",                  true,
+                                1.836000, 1.836000, "160M CW QRP",              true,
+                                1.836001, 1.837999, "160M CW",                  true,
+                                1.838000, 1.839999, "160M Narrow Band Modes",   true,
+                                1.840000, 1.849999, "160M All Modes & Digital", true,
+                                1.850000, 1.999999, "160M General RX",          false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2751,12 +2742,12 @@ namespace Thetis
             // 1.810 - 1.850 
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.810000, 1.835999, "160M CW",	                true,
-                                1.836000, 1.836000, "160M CW QRP",	            true,
-                                1.836001, 1.837999, "160M CW",	                true,
-								1.838000, 1.839999, "160M Narrow Band Modes",	true,
-								1.840000, 1.879999, "160M All Modes & Digital",	true,
-                                1.880000, 1.999999, "160M General RX",	        false,
+                                1.810000, 1.835999, "160M CW",                  true,
+                                1.836000, 1.836000, "160M CW QRP",              true,
+                                1.836001, 1.837999, "160M CW",                  true,
+                                1.838000, 1.839999, "160M Narrow Band Modes",   true,
+                                1.840000, 1.879999, "160M All Modes & Digital", true,
+                                1.880000, 1.999999, "160M General RX",          false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2798,7 +2789,7 @@ namespace Thetis
                                 5.401500, 5.403499, "60M Band",              false,
                                 5.403500, 5.406499, "60M Band Segment 11",   true,
                                 5.406500, 5.499999, "60M Band",              false,
-			};
+            };
 
             for (int i = 0; i < data.Length / 4; i++)
             {
@@ -2835,15 +2826,15 @@ namespace Thetis
             DataTable t = ds.Tables["BandText"];
 
             object[] data = {
-                               5.250000, 5.309999, "60M Band", false, 
-		                       5.310000, 5.313000, "60M Band Segment 1", true, 
-		                       5.313001, 5.319999, "60M Band", false, 
-		                       5.320000, 5.323000, "60M Band Segment 2", true, 
-		                       5.323001, 5.379999, "60M Band", false, 
-		                       5.380000, 5.383000, "60M Band Segment 3", true, 
-		                       5.383001, 5.389999, "60M Band", false, 
-		                       5.390000, 5.393000, "60M Band Segment 4", true, 
-		                       5.393001, 5.449999, "60M Band", false
+                               5.250000, 5.309999, "60M Band", false,
+                               5.310000, 5.313000, "60M Band Segment 1", true,
+                               5.313001, 5.319999, "60M Band", false,
+                               5.320000, 5.323000, "60M Band Segment 2", true,
+                               5.323001, 5.379999, "60M Band", false,
+                               5.380000, 5.383000, "60M Band Segment 3", true,
+                               5.383001, 5.389999, "60M Band", false,
+                               5.390000, 5.393000, "60M Band Segment 4", true,
+                               5.393001, 5.449999, "60M Band", false
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2861,13 +2852,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.029999, "40M CW",			    	true,
-                                7.030000, 7.030000, "40M CW QRP",			    true,
-                                7.030001, 7.034999, "40M CW",			    	true,
-								7.035000, 7.039999, "40M Narrow Band Modes",	true,
-								7.040000, 7.059999, "40M All Modes",			true,
+                                7.000000, 7.029999, "40M CW",                   true,
+                                7.030000, 7.030000, "40M CW QRP",               true,
+                                7.030001, 7.034999, "40M CW",                   true,
+                                7.035000, 7.039999, "40M Narrow Band Modes",    true,
+                                7.040000, 7.059999, "40M All Modes",            true,
                                 7.060000, 7.060000, "40M SSB Emergency",        true,
-                                7.060001, 7.089999, "40M All Modes",			true,
+                                7.060001, 7.089999, "40M All Modes",            true,
                                 7.090000, 7.090000, "40M SSB QRP",              true,
                                 7.090001, 7.099999, "40M All Modes",            true,
                                 7.100000, 7.199999, "40M General RX",           false,
@@ -2888,13 +2879,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								24.890000, 24.905999, "12M CW",					true,
-                                24.906000, 24.906000, "12M CW QRP",		        true,
-                                24.906001, 24.914999, "12M CW",					true,
-                                24.915000, 24.928999, "12M Narrow Band Modes",	true,
-								24.929000, 24.930999, "12M Beacons",		    true,
-                                24.931000, 24.939999, "12M All Modes Digital",	true,
-                                24.940000, 25.139999, "12M All Modes",			true,
+                                24.890000, 24.905999, "12M CW",                 true,
+                                24.906000, 24.906000, "12M CW QRP",             true,
+                                24.906001, 24.914999, "12M CW",                 true,
+                                24.915000, 24.928999, "12M Narrow Band Modes",  true,
+                                24.929000, 24.930999, "12M Beacons",            true,
+                                24.931000, 24.939999, "12M All Modes Digital",  true,
+                                24.940000, 25.139999, "12M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2912,7 +2903,7 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								26.970000, 27.850000, "11M Citizens Band",		true,
+                                26.970000, 27.850000, "11M Citizens Band",      true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2931,22 +2922,22 @@ namespace Thetis
             // 50.80 - 51.00
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.079999, "6M Beacon Sub-Band",		false,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     false,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 50.999999, "6M All Modes",           true,
-                                51.000000, 51.999999, "6M General RX",	        false,
+                                51.000000, 51.999999, "6M General RX",          false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2965,22 +2956,22 @@ namespace Thetis
             // 50.80 - 51.20
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.079999, "6M Beacon Sub-Band",		false,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     false,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 51.199999, "6M All Modes",           true,
-                                51.200000, 51.999999, "6M General RX",	        false,
+                                51.200000, 51.999999, "6M General RX",          false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -2999,22 +2990,22 @@ namespace Thetis
             // 50.0 - 51.0
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 50.999999, "6M All Modes",           true,
-                                51.000000, 51.999999, "6M General RX",	        false,
+                                51.000000, 51.999999, "6M General RX",          false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3033,19 +3024,19 @@ namespace Thetis
             // 50.50 - 52.00
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.049999, "6M Beacon Sub-Band RX",	false,
-                                50.050000, 50.079999, "6M Beacon Sub-Band",		true,
-								50.080000, 50.089999, "6M CW",					true,
+                                50.000000, 50.049999, "6M Beacon Sub-Band RX",  false,
+                                50.050000, 50.079999, "6M Beacon Sub-Band",     true,
+                                50.080000, 50.089999, "6M CW",                  true,
                                 50.090000, 50.090000, "6M CW Calling",          true,
                                 50.090001, 50.099999, "6M CW",                  true,
-                                50.100000, 50.109999, "6M CW & SSB",			true,
+                                50.100000, 50.109999, "6M CW & SSB",            true,
                                 50.110000, 50.110000, "6M SSB DX Calling",      true,
-                                50.110001, 50.129999, "6M CW, SSB & Digital",	true,
-                                50.130000, 50.149999, "6M CW, SSB & Digital",	true,
+                                50.110001, 50.129999, "6M CW, SSB & Digital",   true,
+                                50.130000, 50.149999, "6M CW, SSB & Digital",   true,
                                 50.150000, 50.150000, "6M SSB Calling",         true,
-                                50.150001, 50.249999, "6M CW, SSB & Digital",	true,
+                                50.150001, 50.249999, "6M CW, SSB & Digital",   true,
                                 50.250000, 50.250000, "6M PSK Calling",         true,
-                                50.250001, 50.499999, "6M CW, SSB & Digital",	true,
+                                50.250001, 50.499999, "6M CW, SSB & Digital",   true,
                                 50.500000, 50.619999, "6M All Modes",           true,
                                 50.620000, 50.749999, "6M Digital Comms.",      true,
                                 50.750000, 51.999999, "6M All Modes",           true,
@@ -3067,7 +3058,7 @@ namespace Thetis
             // No transmit
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 51.999999, "6M General RX",	false,
+                                50.000000, 51.999999, "6M General RX",  false,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3542,10 +3533,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.800000, 1.829999, "160M CW",	                true,
+                                1.800000, 1.829999, "160M CW",                  true,
                                 1.830000, 1.833999, "160M CW & NB Digital",     true,
-                                1.834000, 1.839999, "160M CW",	                true,
-								1.840000, 1.999999, "160M CW & Phone",	        true,
+                                1.834000, 1.839999, "160M CW",                  true,
+                                1.840000, 1.999999, "160M CW & Phone",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3563,13 +3554,13 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								3.500000, 3.509999, "80M CW DX",	  			true,
-                                3.510000, 3.534999, "80M CW",	    	    	true,
-                                3.535000, 3.599999, "80M Phone & CW",	    	true,
+                                3.500000, 3.509999, "80M CW DX",                true,
+                                3.510000, 3.534999, "80M CW",                   true,
+                                3.535000, 3.599999, "80M Phone & CW",           true,
                                 3.600000, 3.600000, "80M IARU Emergency",       true,
-                                3.600001, 3.774999, "80M Phone & CW",	    	true,
-								3.775000, 3.799999, "80M DX Phone & CW",	    true,
-								3.800000, 3.899999, "80M Phone & CW",			true,
+                                3.600001, 3.774999, "80M Phone & CW",           true,
+                                3.775000, 3.799999, "80M DX Phone & CW",        true,
+                                3.800000, 3.899999, "80M Phone & CW",           true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3606,12 +3597,12 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.024999, "40M CW",			    	true,
-                                7.025000, 7.029999, "40M CW & NB Digital",		true,
-                                7.030000, 7.039999, "40M All Modes",	        true,
-								7.040000, 7.109999, "40M Phone & CW",       	true,
+                                7.000000, 7.024999, "40M CW",                   true,
+                                7.025000, 7.029999, "40M CW & NB Digital",      true,
+                                7.030000, 7.039999, "40M All Modes",            true,
+                                7.040000, 7.109999, "40M Phone & CW",           true,
                                 7.110000, 7.110000, "40M IARU Emergency",       true,
-                                7.110001, 7.299999, "40M Phone & CW",			true,
+                                7.110001, 7.299999, "40M Phone & CW",           true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3629,8 +3620,8 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								10.100000, 10.139999, "30M CW",					true,
-                                10.140000, 10.149999, "30M CW & NB Digital",	true,
+                                10.100000, 10.139999, "30M CW",                 true,
+                                10.140000, 10.149999, "30M CW & NB Digital",    true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3648,15 +3639,15 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								14.000000, 14.069999, "20M CW",		        	true,
-								14.070000, 14.094999, "20M CW & NB Digital",	true,
+                                14.000000, 14.069999, "20M CW",                 true,
+                                14.070000, 14.094999, "20M CW & NB Digital",    true,
                                 14.095000, 14.099499, "20M Data & Packet",      true,
-								14.099500, 14.099999, "20M Beacons",		    true,
-                                14.100000, 14.100000, "20M NCDXF Beacons",  	true,
-                                14.100001, 14.100499, "20M Beacons",		    true,
+                                14.099500, 14.099999, "20M Beacons",            true,
+                                14.100000, 14.100000, "20M NCDXF Beacons",      true,
+                                14.100001, 14.100499, "20M Beacons",            true,
                                 14.100500, 14.111999, "20M Data & Packet",      true,
                                 14.112000, 14.229999, "20M Phone & CW",         true,
-                                14.230000, 14.230000, "20M SSTV",				true,
+                                14.230000, 14.230000, "20M SSTV",               true,
                                 14.230001, 14.299999, "20M Phone & CW",         true,
                                 14.300000, 14.300000, "20M IARU Emergency",     true,
                                 14.300001, 14.349999, "20M All Modes",          true,
@@ -3677,14 +3668,14 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								18.068000, 18.099999, "17M CW",					true,
-								18.100000, 18.109499, "17M CW & NB Digital",	true,
-								18.109500, 18.109999, "17M Beacons",		    true,
-                                18.110000, 18.110000, "17M NCDXF Beacons",	    true,
-                                18.110001, 18.110499, "17M Beacons",		    true,
-								18.110500, 18.159999, "17M Phone & CW",			true,
-                                18.160000, 18.160000, "17M IARU Emergency",		true,
-                                18.160001, 18.167999, "17M All Modes",	        true,
+                                18.068000, 18.099999, "17M CW",                 true,
+                                18.100000, 18.109499, "17M CW & NB Digital",    true,
+                                18.109500, 18.109999, "17M Beacons",            true,
+                                18.110000, 18.110000, "17M NCDXF Beacons",      true,
+                                18.110001, 18.110499, "17M Beacons",            true,
+                                18.110500, 18.159999, "17M Phone & CW",         true,
+                                18.160000, 18.160000, "17M IARU Emergency",     true,
+                                18.160001, 18.167999, "17M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3702,17 +3693,17 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								21.000000, 21.069999, "15M CW",			        true,
-								21.070000, 21.124999, "15M CW & NB Digital",	true,
-								21.125000, 21.149499, "15M Phone & CW",	        true,
-                                21.149500, 21.149999, "15M Beacons",		    true,
-                                21.150000, 21.150000, "15M NCDXF Beacons",	    true,
-                                21.150001, 21.150499, "15M Beacons",		    true,
-								21.150500, 21.339999, "15M Phone & CW",			true,
-                                21.340000, 21.340000, "15M SSTV",		        true,
-                                21.340001, 21.359999, "15M Phone & CW",			true,
-                                21.360000, 21.360000, "15M Emergency",	    	true,
-                                21.360001, 21.449999, "15M All Modes",			true,
+                                21.000000, 21.069999, "15M CW",                 true,
+                                21.070000, 21.124999, "15M CW & NB Digital",    true,
+                                21.125000, 21.149499, "15M Phone & CW",         true,
+                                21.149500, 21.149999, "15M Beacons",            true,
+                                21.150000, 21.150000, "15M NCDXF Beacons",      true,
+                                21.150001, 21.150499, "15M Beacons",            true,
+                                21.150500, 21.339999, "15M Phone & CW",         true,
+                                21.340000, 21.340000, "15M SSTV",               true,
+                                21.340001, 21.359999, "15M Phone & CW",         true,
+                                21.360000, 21.360000, "15M Emergency",          true,
+                                21.360001, 21.449999, "15M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3730,12 +3721,12 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								24.890000, 24.919999, "12M CW",					true,
-                                24.920000, 24.929499, "12M CW & NB Digital",	true,
-								24.929500, 24.929999, "12M Beacons",		    true,
-                                24.930000, 24.930000, "12M NCDXF Beacons",	    true,
-                                24.930001, 24.930499, "12M Beacons",		    true,
-                                24.930500, 24.989999, "12M All Modes",			true,
+                                24.890000, 24.919999, "12M CW",                 true,
+                                24.920000, 24.929499, "12M CW & NB Digital",    true,
+                                24.929500, 24.929999, "12M Beacons",            true,
+                                24.930000, 24.930000, "12M NCDXF Beacons",      true,
+                                24.930001, 24.930499, "12M Beacons",            true,
+                                24.930500, 24.989999, "12M All Modes",          true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3753,17 +3744,17 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								28.000000, 28.049999, "10M CW",					true,
-                                28.050000, 28.149999, "10M CW & NB Digital",	true,
-                                28.150000, 28.189999, "10M CW",					true,
-								28.190000, 28.199999, "10M Beacons",	        true,
+                                28.000000, 28.049999, "10M CW",                 true,
+                                28.050000, 28.149999, "10M CW & NB Digital",    true,
+                                28.150000, 28.189999, "10M CW",                 true,
+                                28.190000, 28.199999, "10M Beacons",            true,
                                 28.200000, 28.200000, "10M NCDXF Beacons",      true,
-                                28.200001, 28.200499, "10M Beacons",	        true,
-                                28.200500, 28.679999, "10M Phone & CW",     	true,
-                                28.680000, 28.680000, "10M SSTV",	            true,
-                                28.680001, 29.299999, "10M Phone & CW",	    	true,
+                                28.200001, 28.200499, "10M Beacons",            true,
+                                28.200500, 28.679999, "10M Phone & CW",         true,
+                                28.680000, 28.680000, "10M SSTV",               true,
+                                28.680001, 29.299999, "10M Phone & CW",         true,
                                 29.300000, 29.509999, "10M Satellite & CW",     true,
-                                29.510000, 29.699999, "10M Wide Band  & CW",	true,
+                                29.510000, 29.699999, "10M Wide Band  & CW",    true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -3781,8 +3772,8 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.099999, "6M CW & Beacons",		    true,
-                                50.100000, 50.499999, "6M Phone/NB Digital/CW",	    true,
+                                50.000000, 50.099999, "6M CW & Beacons",            true,
+                                50.100000, 50.499999, "6M Phone/NB Digital/CW",     true,
                                 50.500000, 53.999999, "6M Wide Band Modes & CW",    true,
                             };
 
@@ -3803,7 +3794,7 @@ namespace Thetis
             DataTable t = ds.Tables["BandText"];
             object[] data = {
 								// 144 - 146 MHz
-                                144.000000, 144.019999, "2M EME",		                true,
+                                144.000000, 144.019999, "2M EME",                     true,
                                 144.020000, 144.099999, "2M CW & EME",                  true,
                                 144.100000, 144.399999, "2M CW/Phone & Image",          true,
                                 144.400000, 144.499999, "2M CW/Phone/NB Digital",       true,
@@ -3815,7 +3806,7 @@ namespace Thetis
                                 145.800000, 145.999999, "2M Satellite.",                true,
                                 146.000000, 147.999999, "2M All Modes",                 true,
                                 // 430 - 440 MHz
-								430.000000, 430.099999, "70cm CW",	                    true,
+								430.000000, 430.099999, "70cm CW",                        true,
                                 430.100000, 430.699999, "70cm CW/Phone & Image",        true,
                                 430.700000, 430.799999, "70cm CW/Phone/NB Digital",     true,
                                 430.800000, 431.399999, "70cm Wide Digital Modes",      true,
@@ -3830,23 +3821,23 @@ namespace Thetis
                                 439.000000, 439.999999, "70cm Repeaters",               true,
                                 440.000000, 449.999999, "70cm All Modes",               true,
                                 // 1240 - 1300 MHz
-								1240.000000, 1259.999999, "23cm All Modes",	            true,
+								1240.000000, 1259.999999, "23cm All Modes",                true,
                                 1260.000000, 1269.999999, "23cm Satellite",             true,
                                 1270.000000, 1295.999999, "23cm All Modes",             true,
                                 1296.700000, 1296.999999, "23cm EME - all modes",       true,
                                 1297.725000, 1299.999999, "23cm All Modes",             true,                                
                                 // 2300 -2450 MHz
-								2300.000000, 2303.999999, "13cm Sub-Regional",	        true,
-                                2304.000000, 2305.999999, "13cm Narrow Band ",	        true,
-                                2306.000000, 2307.999999, "13cm Sub-Regional",	        true,
-                                2308.000000, 2309.999999, "13cm Narrow Band ",	        true,
-                                2310.000000, 2319.999999, "13cm Sub-Regional",	        true,
-                                2320.000000, 2320.024999, "13cm CW EME",	            true,
-                                2320.025000, 2320.149999, "13cm CW",	                true,
-                                2320.150000, 2320.199999, "13cm CW & SSB",	            true,
-                                2320.200000, 2320.200000, "13cm SSB Calling",	        true,
-                                2320.200001, 2320.799999, "13cm CW & SSB",	            true,
-                                2320.800000, 2320.999999, "13cm Beacons",	            true,
+								2300.000000, 2303.999999, "13cm Sub-Regional",         true,
+                                2304.000000, 2305.999999, "13cm Narrow Band ",          true,
+                                2306.000000, 2307.999999, "13cm Sub-Regional",          true,
+                                2308.000000, 2309.999999, "13cm Narrow Band ",          true,
+                                2310.000000, 2319.999999, "13cm Sub-Regional",          true,
+                                2320.000000, 2320.024999, "13cm CW EME",                true,
+                                2320.025000, 2320.149999, "13cm CW",                    true,
+                                2320.150000, 2320.199999, "13cm CW & SSB",              true,
+                                2320.200000, 2320.200000, "13cm SSB Calling",           true,
+                                2320.200001, 2320.799999, "13cm CW & SSB",              true,
+                                2320.800000, 2320.999999, "13cm Beacons",               true,
                                 2321.000000, 2321.999999, "13cm NBFM Simplex",          true,
                                 2322.000000, 2354.999999, "13cm ATV",                   true,
                                 2355.000000, 2364.999999, "13cm Digital Comms",         true,
@@ -3919,8 +3910,8 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								1.800000, 1.809999, "160M Band RX",             false,
-                                1.810000, 1.824999, "160M CW",	                true,
+                                1.800000, 1.809999, "160M Band RX",             false,
+                                1.810000, 1.824999, "160M CW",                  true,
                                 1.825000, 1.907499, "160M Band RX",             false,
                                 1.907500, 1.912499, "160M CW & NB Digital",     true,
                                 1.912500, 1.999999, "160M Band RX",             false,
@@ -3941,10 +3932,10 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								3.500000, 3.519999, "80M CW",	  			    true,
-                                3.520000, 3.524999, "80M CW & NB Digital",	    true,
-                                3.525000, 3.525000, "80M Emergency",            true,                                
-                                3.525001, 3.529999, "80M Phone/CW/NB Digital",	true,
+                                3.500000, 3.519999, "80M CW",                   true,
+                                3.520000, 3.524999, "80M CW & NB Digital",      true,
+                                3.525000, 3.525000, "80M Emergency",            true,
+                                3.525001, 3.529999, "80M Phone/CW/NB Digital",  true,
                                 3.530000, 3.574999, "80M Phone/CW/Digital",     true,
                                 3.575000, 3.598999, "80M Band RX",              false,
                                 3.599000, 3.611999, "80M Phone/CW/Digital",     true,
@@ -3955,7 +3946,7 @@ namespace Thetis
                                 3.716000, 3.744999, "80M Band RX",              false,
                                 3.745000, 3.769999, "80M Phone/CW/Image",       true,
                                 3.770000, 3.790999, "80M Band RX",              false,
-                                3.791000, 3.804999, "80M Phone/CW/NB Digital",	true,
+                                3.791000, 3.804999, "80M Phone/CW/NB Digital",  true,
                                 3.805000, 3.899999, "80M Band RX",              false,
                             };
 
@@ -3974,11 +3965,11 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								7.000000, 7.024999, "40M CW",			    	true,
-                                7.025000, 7.029999, "40M CW & NB Digital",		true,
+                                7.000000, 7.024999, "40M CW",                   true,
+                                7.025000, 7.029999, "40M CW & NB Digital",      true,
                                 7.030000, 7.030000, "40M Emergency",            true,
                                 7.030001, 7.039999, "40M CW & NB Digital",      true,
-                                7.040000, 7.044999, "40M DX NB Digital/CW",	    true,
+                                7.040000, 7.044999, "40M DX NB Digital/CW",     true,
                                 7.045000, 7.099999, "40M CW/Phone/Image",       true,
                                 7.100000, 7.199999, "40M All Modes",            true,
                                 7.200000, 7.299999, "40M RX Only",              false,
@@ -3999,12 +3990,12 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								28.000000, 28.069999, "10M CW",					true,
-                                28.070000, 28.149999, "10M CW & NB Digital",	true,
-                                28.150000, 28.199499, "10M CW",					true,
-								28.199500, 28.199999, "10M Beacons",		    true,
-                                28.200000, 28.200000, "10M NCDXF Beacons",	    true,
-                                28.200001, 28.200500, "10M Beacons",		    true,
+                                28.000000, 28.069999, "10M CW",                 true,
+                                28.070000, 28.149999, "10M CW & NB Digital",    true,
+                                28.150000, 28.199499, "10M CW",                 true,
+                                28.199500, 28.199999, "10M Beacons",            true,
+                                28.200000, 28.200000, "10M NCDXF Beacons",      true,
+                                28.200001, 28.200500, "10M Beacons",            true,
                                 28.200501, 28.999999, "10M Phone/CW/NB Digital",true,
                                 29.000000, 29.299999, "10M DX Phone/CW/Digital",true,
                                 29.300000, 29.509999, "10M Satellite",          true,
@@ -4028,8 +4019,8 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								50.000000, 50.099999, "6M DX CW/EME/Beacons",	true,
-                                50.100000, 50.899999, "6M Phone/CW/Image",	    true,
+                                50.000000, 50.099999, "6M DX CW/EME/Beacons",   true,
+                                50.100000, 50.899999, "6M Phone/CW/Image",      true,
                                 50.900000, 50.999999, "6M Phone/CW/NB Digital", true,
                                 51.100000, 51.999999, "6M Wide Phone/Image/CW", true,
                                 52.000000, 52.499999, "6M Phone/CW/NB Digital", true,
@@ -4052,7 +4043,7 @@ namespace Thetis
         {
             DataTable t = ds.Tables["BandText"];
             object[] data = {
-								4.629995, 4.630005, "Japan Int. Emergency",	true,
+                                4.629995, 4.630005, "Japan Int. Emergency", true,
                             };
 
             for (int i = 0; i < data.Length / 4; i++)
@@ -4311,6 +4302,13 @@ namespace Thetis
             t.Columns.Add("Name", typeof(string));
             t.Columns.Add("FilterLow", typeof(int));
             t.Columns.Add("FilterHigh", typeof(int));
+
+            //
+            t.Columns.Add("EQUseLegacy", typeof(bool));
+            t.Columns.Add("RXParaEQData", typeof(string));
+            t.Columns.Add("TXParaEQData", typeof(string));
+            //
+
             t.Columns.Add("TXEQNumBands", typeof(int));
             t.Columns.Add("TXEQEnabled", typeof(bool));
             t.Columns.Add("TXEQPreamp", typeof(int));
@@ -4494,11 +4492,13 @@ namespace Thetis
             //
 
             // CFC
+            t.Columns.Add("CFCUseLegacy", typeof(bool));
+
             t.Columns.Add("CFCEnabled", typeof(bool));
             t.Columns.Add("CFCPostEqEnabled", typeof(bool));
             t.Columns.Add("CFCPhaseRotatorEnabled", typeof(bool));
             t.Columns.Add("CFCPhaseReverseEnabled", typeof(bool));
-            
+
             t.Columns.Add("CFCPhaseRotatorFreq", typeof(int));
             t.Columns.Add("CFCPhaseRotatorStages", typeof(int));
 
@@ -4538,12 +4538,19 @@ namespace Thetis
             t.Columns.Add("CFCEqFreq8", typeof(int));
             t.Columns.Add("CFCEqFreq9", typeof(int));
 
+            t.Columns.Add("CFCParaEQData", typeof(string));
+
             #region Default
 
             DataRow dr = t.NewRow();
             dr["Name"] = "Default";
             dr["FilterLow"] = 100;
             dr["FilterHigh"] = 3000;
+            //
+            dr["EQUseLegacy"] = true;
+            dr["RXParaEQData"] = "";
+            dr["TXParaEQData"] = "";
+            //
             dr["TXEQNumBands"] = 10;
             dr["TXEQEnabled"] = false;
             dr["TXEQPreamp"] = 0;
@@ -4567,7 +4574,7 @@ namespace Thetis
             dr["TxEqFreq7"] = 2000;
             dr["TxEqFreq8"] = 4000;
             dr["TxEqFreq9"] = 8000;
-            dr["TxEqFreq10"] = 16000; 
+            dr["TxEqFreq10"] = 16000;
 
             dr["DXOn"] = false;
             dr["DXLevel"] = 3;
@@ -4716,6 +4723,8 @@ namespace Thetis
             //
 
             // CFC
+            dr["CFCUseLegacy"] = true;
+
             dr["CFCEnabled"] = false;
             dr["CFCPostEqEnabled"] = false;
             dr["CFCPhaseRotatorEnabled"] = false;
@@ -4760,6 +4769,8 @@ namespace Thetis
             dr["CFCEqFreq8"] = 5000;
             dr["CFCEqFreq9"] = 10000;
 
+            dr["CFCParaEQData"] = "";
+
             t.Rows.Add(dr);
 
             #endregion
@@ -4770,6 +4781,11 @@ namespace Thetis
             dr["Name"] = "Default DX";
             dr["FilterLow"] = 200;
             dr["FilterHigh"] = 3100;
+            //
+            dr["EQUseLegacy"] = true;
+            dr["RXParaEQData"] = "";
+            dr["TXParaEQData"] = "";
+            //
             dr["TXEQNumBands"] = 10;
             dr["TXEQEnabled"] = false;
             dr["TXEQPreamp"] = 0;
@@ -4940,6 +4956,8 @@ namespace Thetis
             //
 
             // CFC
+            dr["CFCUseLegacy"] = true;
+
             dr["CFCEnabled"] = false;
             dr["CFCPostEqEnabled"] = false;
             dr["CFCPhaseRotatorEnabled"] = false;
@@ -4984,11 +5002,14 @@ namespace Thetis
             dr["CFCEqFreq8"] = 5000;
             dr["CFCEqFreq9"] = 10000;
 
+            dr["CFCParaEQData"] = "";
+
             t.Rows.Add(dr);
 
             #endregion
 
-            if (bIndcludeExtraProfiles) { 
+            if (bIndcludeExtraProfiles)
+            {
                 // W4TME
                 #region DIGI 1K@1500
 
@@ -4996,6 +5017,11 @@ namespace Thetis
                 dr["Name"] = "Digi 1K@1500";
                 dr["FilterLow"] = 1000;
                 dr["FilterHigh"] = 2000;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -5165,6 +5191,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -5186,7 +5214,7 @@ namespace Thetis
                 dr["CFCPreComp7"] = 5;
                 dr["CFCPreComp8"] = 5;
                 dr["CFCPreComp9"] = 5;
-             
+
                 dr["CFCPostEqGain0"] = 0;
                 dr["CFCPostEqGain1"] = 0;
                 dr["CFCPostEqGain2"] = 0;
@@ -5209,10 +5237,12 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
- 
+
                 // W4TME
                 #region DIGI 1K@2210
 
@@ -5220,6 +5250,11 @@ namespace Thetis
                 dr["Name"] = "Digi 1K@2210";
                 dr["FilterLow"] = 1710;
                 dr["FilterHigh"] = 2710;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -5389,6 +5424,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -5432,6 +5469,8 @@ namespace Thetis
                 dr["CFCEqFreq7"] = 4000;
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
+
+                dr["CFCParaEQData"] = "";
 
                 t.Rows.Add(dr);
 
@@ -5443,6 +5482,11 @@ namespace Thetis
                 dr["Name"] = "AM";
                 dr["FilterLow"] = 0;
                 dr["FilterHigh"] = 4000;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -5612,6 +5656,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -5656,6 +5702,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -5666,6 +5714,11 @@ namespace Thetis
                 dr["Name"] = "Conventional";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3100;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -5835,6 +5888,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -5879,6 +5934,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -5889,6 +5946,11 @@ namespace Thetis
                 dr["Name"] = "D-104";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3500;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = -6;
@@ -6058,6 +6120,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -6102,6 +6166,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -6112,6 +6178,11 @@ namespace Thetis
                 dr["Name"] = "D-104+CPDR";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3500;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = -6;
@@ -6281,6 +6352,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -6325,6 +6398,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -6335,6 +6410,11 @@ namespace Thetis
                 dr["Name"] = "D-104+EQ";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3500;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = -6;
@@ -6504,6 +6584,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -6548,6 +6630,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -6558,6 +6642,11 @@ namespace Thetis
                 dr["Name"] = "DX / Contest";
                 dr["FilterLow"] = 250;
                 dr["FilterHigh"] = 3250;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -6727,6 +6816,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -6771,6 +6862,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -6781,6 +6874,11 @@ namespace Thetis
                 dr["Name"] = "ESSB";
                 dr["FilterLow"] = 50;
                 dr["FilterHigh"] = 3650;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -6950,6 +7048,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -6993,6 +7093,8 @@ namespace Thetis
                 dr["CFCEqFreq7"] = 4000;
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
+
+                dr["CFCParaEQData"] = "";
 
                 t.Rows.Add(dr);
 
@@ -7004,6 +7106,11 @@ namespace Thetis
                 dr["Name"] = "HC4-5";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3100;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -7173,6 +7280,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -7216,6 +7325,8 @@ namespace Thetis
                 dr["CFCEqFreq7"] = 4000;
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
+
+                dr["CFCParaEQData"] = "";
 
                 t.Rows.Add(dr);
 
@@ -7227,6 +7338,11 @@ namespace Thetis
                 dr["Name"] = "HC4-5+CPDR";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3100;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -7396,6 +7512,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -7440,6 +7558,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -7450,6 +7570,11 @@ namespace Thetis
                 dr["Name"] = "PR40+W2IHY";
                 dr["FilterLow"] = 50;
                 dr["FilterHigh"] = 3650;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -7619,6 +7744,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -7663,6 +7790,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -7673,6 +7802,11 @@ namespace Thetis
                 dr["Name"] = "PR40+W2IHY+CPDR";
                 dr["FilterLow"] = 50;
                 dr["FilterHigh"] = 3650;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = false;
                 dr["TXEQPreamp"] = 0;
@@ -7842,6 +7976,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -7886,6 +8022,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -7896,6 +8034,11 @@ namespace Thetis
                 dr["Name"] = "PR781+EQ";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3200;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = -11;
@@ -8065,6 +8208,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -8109,6 +8254,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -8119,6 +8266,11 @@ namespace Thetis
                 dr["Name"] = "PR781+EQ+CPDR";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3200;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = -9;
@@ -8288,6 +8440,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = false;
                 dr["CFCPostEqEnabled"] = false;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -8332,6 +8486,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 5000;
                 dr["CFCEqFreq9"] = 10000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -8342,6 +8498,11 @@ namespace Thetis
                 dr["Name"] = "SSB 2.8k CFC";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 2900;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = 4;
@@ -8511,6 +8672,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -8555,6 +8718,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 2600;
                 dr["CFCEqFreq9"] = 2900;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -8565,6 +8730,11 @@ namespace Thetis
                 dr["Name"] = "SSB 3.0k CFC";
                 dr["FilterLow"] = 100;
                 dr["FilterHigh"] = 3100;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = 4;
@@ -8734,6 +8904,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -8778,6 +8950,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 2600;
                 dr["CFCEqFreq9"] = 3100;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -8788,6 +8962,11 @@ namespace Thetis
                 dr["Name"] = "SSB 3.3k CFC";
                 dr["FilterLow"] = 50;
                 dr["FilterHigh"] = 3350;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = 4;
@@ -8957,6 +9136,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -9001,6 +9182,8 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 2600;
                 dr["CFCEqFreq9"] = 3350;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
                 #endregion
@@ -9011,6 +9194,11 @@ namespace Thetis
                 dr["Name"] = "AM 10k CFC";
                 dr["FilterLow"] = 0;
                 dr["FilterHigh"] = 5000;
+                //
+                dr["EQUseLegacy"] = true;
+                dr["RXParaEQData"] = "";
+                dr["TXParaEQData"] = "";
+                //
                 dr["TXEQNumBands"] = 10;
                 dr["TXEQEnabled"] = true;
                 dr["TXEQPreamp"] = 4;
@@ -9180,6 +9368,8 @@ namespace Thetis
                 //
 
                 // CFC
+                dr["CFCUseLegacy"] = true;
+
                 dr["CFCEnabled"] = true;
                 dr["CFCPostEqEnabled"] = true;
                 dr["CFCPhaseRotatorEnabled"] = false;
@@ -9224,9 +9414,11 @@ namespace Thetis
                 dr["CFCEqFreq8"] = 4000;
                 dr["CFCEqFreq9"] = 5000;
 
+                dr["CFCParaEQData"] = "";
+
                 t.Rows.Add(dr);
 
-                    #endregion
+                #endregion
             }
         }
 
@@ -9275,7 +9467,7 @@ namespace Thetis
         {
             _merged = false;
             ds = new DataSet("Data");
-            
+
             if (File.Exists(_file_name))
             {
                 try
@@ -9286,11 +9478,11 @@ namespace Thetis
                 {
                     return false;
                 }
-            }                
+            }
 
             VerifyTables();
 
-            CheckBandTextValid();                       
+            CheckBandTextValid();
 
             //as a minimum add the version info to a new fresh db
             bool changed = false;
@@ -9316,7 +9508,7 @@ namespace Thetis
                 VersionNumber = ConvertFromDBVal<string>(d["VersionNumber"]);
             }
 
-            if(changed)
+            if (changed)
                 SaveVarsDictionary("State", ref d, true);
 
             return true;
@@ -9623,7 +9815,7 @@ namespace Thetis
         {
             purgeTableEntries("State", "mnotchdb*");
         }
-        public static void PurgeMeters(List<string>formGuids)
+        public static void PurgeMeters(List<string> formGuids)
         {
             if (ds == null) return;
 
@@ -9694,7 +9886,7 @@ namespace Thetis
 
             checkForPrimaryKeys(tableName);
 
-            foreach(string key in list)
+            foreach (string key in list)
             {
                 DataRow r = null;
                 try
@@ -9704,13 +9896,13 @@ namespace Thetis
                 catch
                 {
                 }
-                if(r != null)
+                if (r != null)
                 {
                     r.Delete();
                 }
             }
         }
-        public static void SaveVarsDictionary(string tableName, ref Dictionary<string,string> dict, bool bSaveEmptyValues = true)
+        public static void SaveVarsDictionary(string tableName, ref Dictionary<string, string> dict, bool bSaveEmptyValues = true)
         {
             if (_merged || ds == null) return; // we just merged, dont want to change anything
 
@@ -9722,7 +9914,7 @@ namespace Thetis
 
             checkForPrimaryKeys(tableName);
 
-            foreach(KeyValuePair<string,string> kvp in dict)
+            foreach (KeyValuePair<string, string> kvp in dict)
             {
                 string key = kvp.Key;
                 string value = kvp.Value;
@@ -9777,7 +9969,7 @@ namespace Thetis
 
                 if (!bSaveEmptyValues && vals.Length <= 1) // skip it as no data was provided
                     continue;
-                
+
                 //DataRow[] rows = ds.Tables[tableName].Select("Key = '" + vals[0] + "'");
 
                 //MW0LGE converted to Rows.Find because it is insanely faster, needs a primary key though
@@ -9786,7 +9978,8 @@ namespace Thetis
                 {
                     r = ds.Tables[tableName].Rows.Find(vals[0]);
                 }
-                catch {
+                catch
+                {
                 }
                 if (r != null)
                 {
@@ -9799,7 +9992,7 @@ namespace Thetis
                     newRow[1] = vals[1];
                     ds.Tables[tableName].Rows.Add(newRow);
                 }
-             }
+            }
         }
         public static Dictionary<string, string> GetVarsDictionary(string table_name)
         {
@@ -10507,7 +10700,7 @@ namespace Thetis
                 bool foundTable = false;
                 DataTable tempMergedTable = current_inuseDB_table.Clone();
                 DataTable tempTable = current_inuseDB_table.Clone();
-               
+
                 switch (current_inuseDB_table.TableName)
                 {
                     //------Uncomment this section to allow importing BandText rows from old db, and also comment out duplicate case below
@@ -10548,7 +10741,7 @@ namespace Thetis
                     case "BandStack2FilterModes":
                     case "BandStack2FilterSubModes":
                     case "BandStack2FilterBands":
-                    //case "BandStack2HiddenEntries": // not used yet
+                        //case "BandStack2HiddenEntries": // not used yet
                         tempMergedTable.Clear();
                         foreach (DataTable t in being_importedDB.Tables)
                         {
@@ -10726,7 +10919,7 @@ namespace Thetis
                             break;
                         }
 
-                        // For each row of existingDB table, if there is matching key in corresponding oldDB table, 
+                        // For each row of existingDB current in use table, if there is matching key in corresponding oldDB table, 
                         // copy that entry, else take the existing one, into tempMergedTable.                        
 
                         foreach (DataRow row in current_inuseDB_table.Rows)
@@ -10829,7 +11022,7 @@ namespace Thetis
                                 // tempTable is the oldDB table
                                 DataRow[] rows = tempTable.Select("Key like '" + "meterContData_*" + "'");
                                 if (rows != null)
-                                {                                    
+                                {
                                     foreach (DataRow dr in rows)
                                     {
                                         string key = dr["Key"].ToString();
@@ -10876,7 +11069,7 @@ namespace Thetis
                                     }
                                 }
                             }
-                            
+
                             // pa profiles are are total replace from the DB that is being imported
                             if (bOldDBhasPAProfiles)
                             {
@@ -10941,6 +11134,42 @@ namespace Thetis
                         }
                         //
 
+                        // this block of code uses a string that contains all the default settings, and it will look for these in the db
+                        // that is being merged. If they are in the db, then they are imported, unless they are already there.
+                        if (tempTable.TableName == "State")
+                        {
+                            List<string> all_settings = null;
+                            try
+                            {
+                                all_settings = Common.DeserializeFromBase64<List<string>>(_default_settings);
+                            }
+                            catch { }
+
+                            if (all_settings != null)
+                            {
+                                foreach (string s in all_settings)
+                                {
+                                    string[] parts = s.Split('/');
+                                    if (parts.Length == 2)
+                                    {
+                                        string key = parts[0];
+                                        string value = parts[1];
+                                        string selector = "Key = '" + key + "'";
+                                        DataRow[] foundRow = tempTable.Select(selector);
+                                        if (foundRow.Length >= 1)
+                                        {
+                                            // found in the table being imported, lets check we dont alrady have it, if we do, ignore as would have been done above
+                                            DataRow[] already_exists = tempMergedTable.Select(selector);
+                                            if (already_exists.Length == 0)
+                                            {
+                                                tempMergedTable.ImportRow(foundRow[0]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         // Merge in the assembled temp table into mergedDB 
                         newDB.Merge(tempMergedTable);
                         log += "Imported table <" + current_inuseDB_table.TableName + "> into database.\n";
@@ -10976,6 +11205,11 @@ namespace Thetis
         }
         //
 
+        // this is a string generated by console StateListToBase64 to get default settings to apply to state table
+        // it is a complete hack, but the console object is not available in merge as it is happening in the cosntructor
+        // this should be updated from time to time
+        private static string _default_settings = "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";
+
         //--MW0LGE
         private static bool getRadioSelectedFromOldRadButton(ref DataTable tempTable, string sRadButtonName)
         {
@@ -10999,7 +11233,7 @@ namespace Thetis
             string problems = "";
 
             //Basic kinds of non-validity:
-            if (oldDB.HasErrors 
+            if (oldDB.HasErrors
                 || oldDB.DataSetName != "Data"
                 || !oldDB.IsInitialized
                 || oldDB.Tables.Count == 0
@@ -11036,7 +11270,7 @@ namespace Thetis
             DataRow DefaultRow;
             if (DefaultRows.Length > 0) DefaultRow = DefaultRows[0];  // Found a row of default values
             else return null;
-         
+
             foreach (DataRow OldRow in oldTable.Rows)
             {
                 DataRow newRow = DefaultRow;
@@ -11048,7 +11282,7 @@ namespace Thetis
                         System.Type newType = newRow[col.ColumnName].GetType();
                         if (newType.FullName == oldType.FullName)  // Don't assign a value of a different type
                             newRow[col.ColumnName] = OldRow[col.ColumnName];
-                    }                                
+                    }
                 }
                 if ("Default" != (string)(newRow["Name"]))  // Don't take in the old Default TXProfile at all
                     expandedTable.ImportRow(newRow);
@@ -11059,7 +11293,7 @@ namespace Thetis
 
         //-W2PA Write a message to the ImportLog file during the import process
         private static void WriteImportLog(string logFN, string s)
-        {            
+        {
             File.AppendAllText(logFN, s);
             return;
         }
@@ -11127,7 +11361,7 @@ namespace Thetis
                     AddJapanBandText6m();
                     AddRegion3BandTextVHFplus();
                     AddBandTextSWB();
-                   break;
+                    break;
 
                 case FRSRegion.India:
                     //MW0LGE_21d BandStack2 AddRegion1BandStack();

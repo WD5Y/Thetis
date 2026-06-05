@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -119,18 +119,23 @@ namespace Thetis
 
             lblFlashColour.Visible = false;
         }
-        public Button NextButton {
+        public Button NextButton
+        {
             get { return this.btnNext; }
         }
-        public Button ListButton {
+        public Button ListButton
+        {
             get { return this.btnList; }
         }
-        public Button PreviousButton {
+        public Button PreviousButton
+        {
             get { return this.btnPrevious; }
         }
-        public Console console {
+        public Console console
+        {
             get { return m_objConsole; }
-            set {
+            set
+            {
                 m_objConsole = value;
                 if (m_objConsole == null) return;
 
@@ -220,7 +225,7 @@ namespace Thetis
 
         private int findExistingInVFOA(double f)
         {
-            for(int n=0;n< m_lstVFOAFrequencies.Count; n++)
+            for (int n = 0; n < m_lstVFOAFrequencies.Count; n++)
             {
                 if (m_lstVFOAFrequencies[n].dFrequency == f) return n;
             }
@@ -234,7 +239,7 @@ namespace Thetis
             if (m_lstVFOAFrequencies.Count > 16) m_lstVFOAFrequencies.RemoveAt(m_lstVFOAFrequencies.Count - 1);
             m_nVFOASelectedIndex = 0;
         }
-        
+
         private void OnBackgroundColourPingerTick(Object sender, EventArgs e)
         {
             m_objBackgroundColourPinger.Stop();
@@ -364,7 +369,7 @@ namespace Thetis
 
             for (int n = 0; n < m_lstVFOAFrequencies.Count; n++)
             {
-                int index = m_frmPopupList.AddItem(Math.Round(m_lstVFOAFrequencies[n].dFrequency,6));
+                int index = m_frmPopupList.AddItem(Math.Round(m_lstVFOAFrequencies[n].dFrequency, 6));
                 if (m_nVFOASelectedIndex == index) m_frmPopupList.FreqList.SelectedIndex = index;
             }
 
@@ -395,7 +400,7 @@ namespace Thetis
         private void lblFlashColour_Click(object sender, EventArgs e)
         {
             // if we get a click, pass it on through to the button below
-            if(btnList.Enabled) btnList_Click(sender, e);
+            if (btnList.Enabled) btnList_Click(sender, e);
         }
     }
 }

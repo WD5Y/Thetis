@@ -51,12 +51,12 @@ namespace RawInput_dll
 
         public override string ToString()
         {
-            return string.Format("DeviceInfoKeyboard\n Type: {0}\n SubType: {1}\n KeyboardMode: {2}\n NumberOfFunctionKeys: {3}\n NumberOfIndicators {4}\n NumberOfKeysTotal: {5}\n", 
-                                                             Type, 
-                                                             SubType, 
+            return string.Format("DeviceInfoKeyboard\n Type: {0}\n SubType: {1}\n KeyboardMode: {2}\n NumberOfFunctionKeys: {3}\n NumberOfIndicators {4}\n NumberOfKeysTotal: {5}\n",
+                                                             Type,
+                                                             SubType,
                                                              KeyboardMode,
-                                                             NumberOfFunctionKeys, 
-                                                             NumberOfIndicators, 
+                                                             NumberOfFunctionKeys,
+                                                             NumberOfIndicators,
                                                              NumberOfKeysTotal);
         }
     }
@@ -107,7 +107,7 @@ namespace RawInput_dll
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct  InputData
+    public struct InputData
     {
         public Rawinputheader header;           // 64 bit header size: 24  32 bit the header size: 16
         public RawData data;                    // Creating the rest in a struct allows the header size to align correctly for 32/64 bit
@@ -173,7 +173,7 @@ namespace RawInput_dll
 
         public override string ToString()
         {
-            return string.Format("Rawkeyboard\n Makecode: {0}\n Makecode(hex) : {0:X}\n Flags: {1}\n Reserved: {2}\n VKeyName: {3}\n Message: {4}\n ExtraInformation {5}\n", 
+            return string.Format("Rawkeyboard\n Makecode: {0}\n Makecode(hex) : {0:X}\n Flags: {1}\n Reserved: {2}\n VKeyName: {3}\n Message: {4}\n ExtraInformation {5}\n",
                                                 Makecode, Flags, Reserved, VKey, Message, ExtraInformation);
         }
     }

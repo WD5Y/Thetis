@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,15 +39,8 @@ mw0lge@grange-lane.co.uk
 //============================================================================================//
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace Thetis
 {
@@ -81,9 +74,9 @@ namespace Thetis
         private void setColours(bool forceUpdate = false)
         {
             bool update = false;
-            for(int i = 0; i < _hasHadIssues.Length; i++)
+            for (int i = 0; i < _hasHadIssues.Length; i++)
             {
-                switch(i)
+                switch (i)
                 {
                     case 0:
                         if (_hasHadIssues[i])
@@ -139,32 +132,32 @@ namespace Thetis
         }
         public bool OutOverflow
         {
-            set 
-            { 
+            set
+            {
                 _hasHadIssues[0] = true;
                 setColours();
             }
         }
         public bool OutUnderflow
         {
-            set 
-            { 
+            set
+            {
                 _hasHadIssues[1] = true;
                 setColours();
             }
         }
         public bool InOverflow
         {
-            set 
-            { 
+            set
+            {
                 _hasHadIssues[2] = true;
                 setColours();
             }
         }
         public bool InUnderflow
         {
-            set 
-            { 
+            set
+            {
                 _hasHadIssues[3] = true;
                 setColours();
             }
@@ -235,7 +228,7 @@ namespace Thetis
                 //h lines
                 g.DrawLine(pen, new Point(0, 0), new Point(14, 0));
                 g.DrawLine(pen, new Point(0, 7), new Point(14, 7));
-                g.DrawLine(pen, new Point(0, 14), new Point(14, 14));               
+                g.DrawLine(pen, new Point(0, 14), new Point(14, 14));
             }
 
             // rectangles

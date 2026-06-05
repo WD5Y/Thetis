@@ -65,13 +65,15 @@ namespace Thetis
             set { bw = value; }
         }
 
-        public double Low {
+        public double Low
+        {
             get { return freq - ((bw * 1e-6) / 2); }
-            set {}
+            set { }
         }
-        public double High {
+        public double High
+        {
             get { return freq + ((bw * 1e-6) / 2); }
-            set {}
+            set { }
         }
 
         /// <summary>

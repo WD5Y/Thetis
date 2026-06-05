@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,14 +38,7 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Thetis
@@ -61,7 +54,8 @@ namespace Thetis
         public bool TX
         {
             get { return m_bTX; }
-            set {
+            set
+            {
                 m_bTX = value;
                 this.Invalidate();
             }
@@ -81,11 +75,11 @@ namespace Thetis
         {
             Graphics g = e.Graphics;
 
-            for(int nPin = 0; nPin < 7; nPin++)
+            for (int nPin = 0; nPin < 7; nPin++)
             {
                 int x = nPin * 16;
 
-                Rectangle r = new Rectangle(x, 0, 15, this.Height-1);
+                Rectangle r = new Rectangle(x, 0, 15, this.Height - 1);
                 Brush b;
 
                 bool bOn = (m_nBits & (1 << nPin)) != 0;

@@ -44,17 +44,12 @@
 //============================================================================================//
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Linq;
 
 namespace Thetis
 {
@@ -1761,8 +1756,8 @@ namespace Thetis
             switch (current_region)
             {
                 case FRSRegion.Australia:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000, 
-                 3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000, 
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1800000, 1875000,
+                 3500000, 3800000, 7000000, 7300000, 10100000, 10150000, 14000000, 14350000, 18068000,
                  18168000, 21000000, 21450000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.UK:
@@ -1771,7 +1766,7 @@ namespace Thetis
                 21000000, 21450000, 24890000, 24990000, 28000000, 29700000, 50000000, 52000000, 144000000, 148000000 };
                     break;
                 case FRSRegion.India:
-                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000, 
+                    band_edge_list = new int[]{ 1810000, 1860000, 3500000, 3900000, 7000000, 7200000,
                 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
                 24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
@@ -1786,13 +1781,13 @@ namespace Thetis
                 24890000, 24990000, 28000000, 29700000, 50000000, 54000000 };
                     break;
                 case FRSRegion.Japan:
-                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1810000, 1907500, 1912500, 
+                    band_edge_list = new int[]{ 135700, 137800, 472000, 479000, 1810000, 1810000, 1907500, 1912500,
                 3500000, 3575000, 3599000, 3612000, 3687000, 3702000, 3716000, 3745000, 3770000, 3791000, 3805000,
                 7000000, 7200000, 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
                 24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
                 default:
-                    band_edge_list = new int[]{1800000, 2000000, 3500000, 4000000, 7000000, 7300000, 
+                    band_edge_list = new int[]{1800000, 2000000, 3500000, 4000000, 7000000, 7300000,
                 10100000, 10150000, 14000000, 14350000, 18068000, 18168000, 21000000, 21450000,
                 24890000, 24990000, 28000000, 29700000, 50000000, 54000000, 144000000, 148000000 };
                     break;
@@ -3310,7 +3305,8 @@ namespace Thetis
         }
 
         private Rectangle waterfallRect;
-        public Rectangle WaterfallRect {
+        public Rectangle WaterfallRect
+        {
             get { return waterfallRect; }
             set { waterfallRect = value; }
         }
@@ -3323,7 +3319,8 @@ namespace Thetis
         }
 
         private Rectangle secScaleWaterfallRect;
-        public Rectangle SecScalePanRect {
+        public Rectangle SecScalePanRect
+        {
             get { return secScaleWaterfallRect; }
             set { secScaleWaterfallRect = value; }
         }
@@ -3458,7 +3455,7 @@ namespace Thetis
             w = Math.Max(1, this.Width);
             h = Math.Max(1, this.Height);
 
-            wbDisplay_buffer = new Bitmap(w, h); 
+            wbDisplay_buffer = new Bitmap(w, h);
         }
 
         private CancellationTokenSource cancelTokenSource;
@@ -3471,7 +3468,7 @@ namespace Thetis
                 cancelTokenSource = null;
             }
 
-           // Halted = true;
+            // Halted = true;
 
         }
 
@@ -3529,19 +3526,19 @@ namespace Thetis
         {
             int flag;
 
-           // UpdateGraphicsBuffer();
+            // UpdateGraphicsBuffer();
 
-          //  while (!Halted)
-          //  {
-                if (!this.DataReady)
-                {
-                    flag = 0;
+            //  while (!Halted)
+            //  {
+            if (!this.DataReady)
+            {
+                flag = 0;
 
-                    fixed (float* ptr = &new_display_data[0])
-                        SpecHPSDRDLL.GetPixels(rx, 0, ptr, ref flag);
+                fixed (float* ptr = &new_display_data[0])
+                    SpecHPSDRDLL.GetPixels(rx, 0, ptr, ref flag);
 
-                    this.DataReady = true;
-                }
+                this.DataReady = true;
+            }
 
             //Thread.Sleep(70);
             Thread.Sleep(16);
@@ -4481,13 +4478,13 @@ namespace Thetis
                     //    }
                     //}
                     break;
-                //case MouseButtons.Middle:
-                //    if (mouse_tune_step)
-                //    {
-                //        if (shift_down) ChangeTuneStepDown();
-                //        else ChangeTuneStepUp();
-                //    }
-                //    break;
+                    //case MouseButtons.Middle:
+                    //    if (mouse_tune_step)
+                    //    {
+                    //        if (shift_down) ChangeTuneStepDown();
+                    //        else ChangeTuneStepUp();
+                    //    }
+                    //    break;
             }
         }
 

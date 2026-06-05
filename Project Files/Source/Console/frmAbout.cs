@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,12 +38,12 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Windows.Forms;
 using Newtonsoft.Json;
+using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Net.Http;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -133,7 +133,7 @@ namespace Thetis
             lstVersions.Items.Add("ChannelMaster: " + channel_master_version);
             lstVersions.Items.Add("cmASIO Version: " + cmASIO_version);
             lstVersions.Items.Add("PortAudio Version: " + portAudio_version);
-            if(!string.IsNullOrEmpty(firmware_version)) lstVersions.Items.Add("DirectX Version: " + dx_version);
+            if (!string.IsNullOrEmpty(firmware_version)) lstVersions.Items.Add("DirectX Version: " + dx_version);
         }
         private bool UpdateAvaialble
         {
@@ -153,11 +153,11 @@ namespace Thetis
         private void btnCopyContributors_Click(object sender, EventArgs e)
         {
             string text = "Thetis\n";
-            foreach(string s in lstVersions.Items)
+            foreach (string s in lstVersions.Items)
             {
                 text += s + "\n";
             }
-            
+
             try
             {
                 Clipboard.SetText(text);
@@ -210,6 +210,8 @@ namespace Thetis
                 case 17: Common.OpenUri($"file://{_exe_path}Midi2Cat_Instructions_V3.pdf", false); break;
                 case 18: Common.OpenUri($"file://{_exe_path}cmASIO Guide.pdf", false); break;
                 case 19: Common.OpenUri($"file://{_exe_path}BehringerMods_Midi2Cat_v2.pdf", false); break;
+                case 20: Common.OpenUri($"file://{_exe_path}APFtypes.pdf", false); break;
+                case 21: Common.OpenUri($"file://{_exe_path}Thetis Network Settings_0.2.pdf", false); break;
             }
 
             lstLinks.ClearSelected();
@@ -233,7 +235,7 @@ namespace Thetis
                     btnUpdatedRelease.Visible = true;
                     _update_available = true;
                 }
-                else if(_check_dev_version)
+                else if (_check_dev_version)
                 {
                     // check development
                     int development_version = Common.CompareVersions(_version, _versionInfo.DevelopmentVersion);

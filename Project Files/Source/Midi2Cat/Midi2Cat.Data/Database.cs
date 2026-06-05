@@ -27,17 +27,16 @@ by Chris Codella, W2PA, Feb 2017.  Indicated by //-W2PA comment lines.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Midi2Cat.Data
 {
     public class Midi2CatDatabase
     {
-        public DataSet importDS=null;
+        public DataSet importDS = null;
         public DataSet ds;
 
         private const string SettingsTable = "Midi2Cat--Settings";
@@ -91,7 +90,7 @@ namespace Midi2Cat.Data
                 return;
             }
         }
-        
+
         public void Exit()
         {
             SaveChanges(null);
@@ -359,7 +358,7 @@ namespace Midi2Cat.Data
                 destDT.ImportRow(srcRow);
             }
             string prefix = GetPrefixFromMidiDeviceName(midiDeviceName);
-            SetSetting(prefix+"LoadedMapping", Name);
+            SetSetting(prefix + "LoadedMapping", Name);
             this.SaveChanges(null);
             return true;
         }
@@ -369,7 +368,7 @@ namespace Midi2Cat.Data
             List<string> tables = new List<string>();
             foreach (DataTable table in this.ds.Tables)
             {
-                if (table.TableName.Contains('-') == false )
+                if (table.TableName.Contains('-') == false)
                 {
                     if (table.TableName != DefaultTableName)
                     {
@@ -383,7 +382,7 @@ namespace Midi2Cat.Data
 
         public bool LoadMapping(string midiDeviceName, string Name)
         {
-            if (midiDeviceName.ToLower() == Name.ToLower() )
+            if (midiDeviceName.ToLower() == Name.ToLower())
                 return false;
 
             DataTable destDT = GetTable(midiDeviceName);
@@ -394,7 +393,7 @@ namespace Midi2Cat.Data
                 destDT.ImportRow(srcRow);
             }
             string prefix = GetPrefixFromMidiDeviceName(midiDeviceName);
-            SetSetting(prefix+"LoadedMapping", Name);
+            SetSetting(prefix + "LoadedMapping", Name);
             this.SaveChanges(null);
             return true;
         }
@@ -454,7 +453,7 @@ namespace Midi2Cat.Data
             return tables.ToArray();
         }
 
-        public bool AddFromImport( string[] mappings)
+        public bool AddFromImport(string[] mappings)
         {
             bool Rc = true;
             try
@@ -469,7 +468,7 @@ namespace Midi2Cat.Data
                             string suffix = "";
                             do
                             {
-                                if (this.ds.Tables.Contains(table.TableName+suffix) == false)
+                                if (this.ds.Tables.Contains(table.TableName + suffix) == false)
                                     break;
                                 System.Threading.Thread.Sleep(1010);
                                 suffix = " Imported on " + DateTime.Now.ToLongDateString() + " at " + DateTime.Now.ToString("HH:mm:ss");
@@ -488,7 +487,7 @@ namespace Midi2Cat.Data
             }
             catch
             {
-                Rc=false;
+                Rc = false;
             }
             importDS = null;
             return Rc;
@@ -496,7 +495,7 @@ namespace Midi2Cat.Data
 
         public bool RemoveSavedMapping(string midiDeviceName, string Name)
         {
-            bool Rc=true;
+            bool Rc = true;
             try
             {
                 if (Name.Contains('-') == false)
@@ -515,7 +514,7 @@ namespace Midi2Cat.Data
             }
             catch
             {
-                Rc=false;
+                Rc = false;
             }
             return Rc;
         }
@@ -614,7 +613,7 @@ namespace Midi2Cat.Data
             int pos = midiDeviceName.IndexOf('-');
             if (pos >= 0)
             {
-                return midiDeviceName.Substring(0, pos+1);
+                return midiDeviceName.Substring(0, pos + 1);
             }
             else
                 return null;

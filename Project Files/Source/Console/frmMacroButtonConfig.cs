@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -38,10 +38,10 @@ mw0lge@grange-lane.co.uk
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
+using CatAtonic;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using CatAtonic;
 
 namespace Thetis
 {
@@ -163,7 +163,7 @@ namespace Thetis
             txtCatMacro.Text = _settings.CatMacro;
 
             int index = 1;
-            foreach(KeyValuePair<string, string> pair in containers)
+            foreach (KeyValuePair<string, string> pair in containers)
             {
                 clsContainerComboboxItem cci = new clsContainerComboboxItem();
 
@@ -173,7 +173,7 @@ namespace Thetis
 
                 int idx;
                 idx = comboCloseContainer_1.Items.Add(cci);
-                if(cci.ID == _settings.CloseContainerID[0]) comboCloseContainer_1.SelectedIndex = idx;
+                if (cci.ID == _settings.CloseContainerID[0]) comboCloseContainer_1.SelectedIndex = idx;
                 idx = comboCloseContainer_2.Items.Add(cci);
                 if (cci.ID == _settings.CloseContainerID[1]) comboCloseContainer_2.SelectedIndex = idx;
                 idx = comboCloseContainer_3.Items.Add(cci);
@@ -218,7 +218,7 @@ namespace Thetis
 
             DialogResult dr = this.ShowDialog();
 
-            if(_cat_tester != null && !_cat_tester.IsDisposed)
+            if (_cat_tester != null && !_cat_tester.IsDisposed)
             {
                 _cat_tester.Close();
             }
@@ -252,7 +252,7 @@ namespace Thetis
 
         private int getIndexFromName(object sender)
         {
-            if (! (sender.GetType() == typeof(CheckBoxTS) || sender.GetType() == typeof(TextBoxTS) || sender.GetType() == typeof(ComboBoxTS)) ) return -1;
+            if (!(sender.GetType() == typeof(CheckBoxTS) || sender.GetType() == typeof(TextBoxTS) || sender.GetType() == typeof(ComboBoxTS))) return -1;
 
             Control c = sender as Control;
             if (c == null) return -1;
@@ -272,7 +272,7 @@ namespace Thetis
         private void chkClosesContainer_n_CheckedChanged(object sender, EventArgs e)
         {
             //if (_init) return;
-            int idx = getIndexFromName(sender); if(idx == -1) return;
+            int idx = getIndexFromName(sender); if (idx == -1) return;
             _settings.ClosesContainer[idx] = (sender as CheckBoxTS).Checked;
 
             updateUseParent(idx);
@@ -391,8 +391,6 @@ namespace Thetis
             Control c = sender as Control;
             if (c == null) return;
 
-            OtherButtonMacroSettings.OB_ButtonState state = OtherButtonMacroSettings.OB_ButtonState.OFF;
-
             string name = c.Name;
 
             int underscore_index = name.LastIndexOf('_');
@@ -485,7 +483,7 @@ namespace Thetis
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnCatTest_Click(object sender, EventArgs e)

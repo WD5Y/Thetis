@@ -26,7 +26,7 @@
 //    USA
 //
 //=================================================================
-// Continual modifications Copyright (C) 2019-2025 Richard Samphire (MW0LGE)
+// Continual modifications Copyright (C) 2019-2026 Richard Samphire (MW0LGE)
 //=================================================================
 //
 //============================================================================================//
@@ -42,15 +42,11 @@
 // Richard Samphire can be reached by email at :  mw0lge@grange-lane.co.uk                    //
 //============================================================================================//
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
-
 namespace Thetis
 {
     class TitleBar
     {
-        public const string BUILD_NAME = "dev.18d_WD5Y";
+        public const string BUILD_NAME = "MW0LGE_WD5Y";
         public static string GetString(bool bWithFirmware = true)
         {
             string sRevision = "." + Common.GetRevision();

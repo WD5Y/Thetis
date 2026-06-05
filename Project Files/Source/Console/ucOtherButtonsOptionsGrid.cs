@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -42,12 +42,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Security.Policy;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 
 namespace Thetis
 {
@@ -187,7 +186,7 @@ namespace Thetis
         FORM_SETUP,
         FORM_DBMAN,
         FORM_MEMORY,
-        FORM_WAVE,
+        FORM_AMPVIEW,
         FORM_EQ,
         FORM_XVTR,
         FORM_CWX,
@@ -660,7 +659,7 @@ namespace Thetis
             (OtherButtonId.VOX_M1,         5, 6, "VOX-", "", "", "Decrease vox level"),
             (OtherButtonId.LEVELER,        5, 7, "Leveler", "", "", "Leveler on/off"),
             (OtherButtonId.PHASE_ROT,      5, 8, "PhaRot", "", "", "Phase rotator on/off"),
-            (OtherButtonId.WAVE_RECORD,    5, 9, "Record", "stop", "record", "Wave record"),
+            (OtherButtonId.WAVE_RECORD,    5, 9, "Wav Record", "stop", "record", "Wave record"),
 
             (OtherButtonId.INFO_TEXT,     -1, -1, "AGC", "", "", ""),
             (OtherButtonId.SPLITTER,      -1, -1, "", "", "", ""),
@@ -698,7 +697,7 @@ namespace Thetis
             (OtherButtonId.FORM_SETUP,     9, 0, "Setup", "", "", "Show setup"),
             (OtherButtonId.FORM_DBMAN,     9, 1, "DB Man", "", "", "Show database manager"),
             (OtherButtonId.FORM_MEMORY,    9, 2, "Memory", "", "", "Show memory form"),
-            (OtherButtonId.FORM_WAVE,      9, 3, "Wave", "", "", "Show wave recorder"),
+            (OtherButtonId.FORM_AMPVIEW,   9, 3, "AmpView", "", "", "Show ampview form"),
             (OtherButtonId.FORM_EQ,        9, 4, "Equaliser", "", "", "Show equaliser form"),
             (OtherButtonId.FORM_XVTR,      9, 5, "XVTR", "", "", "Show transverter form"),
             (OtherButtonId.FORM_CWX,       9, 6, "CWX", "", "", "Show CWX form"),
@@ -821,7 +820,7 @@ namespace Thetis
         {
             List<OtherButtonId> all = new List<OtherButtonId>();
 
-            for(OtherButtonId n = OtherButtonId.POWER; n <= OtherButtonId.UNKNOWN; n++)
+            for (OtherButtonId n = OtherButtonId.POWER; n <= OtherButtonId.UNKNOWN; n++)
             {
                 all.Add(n);
             }
@@ -831,8 +830,8 @@ namespace Thetis
                 (OtherButtonId id, int bit_group, int bit_number, string caption, string icon_on, string icon_off, string tool_tip) d = CheckBoxData[n];
                 if (all.Contains(d.id)) all.Remove(d.id);
             }
-            
-            foreach(OtherButtonId id in all)
+
+            foreach (OtherButtonId id in all)
             {
                 Debug.Print($"MISSED FROM OTHERBUTTONS = {id.ToString()}");
             }

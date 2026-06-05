@@ -13,7 +13,7 @@ namespace Thetis
         public static extern void DeInitMetisSockets();
 
         [DllImport("ChannelMaster.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int nativeInitMetis(String netaddr, String localaddr, int localport, int protocol, int model_id);
+        public static extern int nativeInitMetis(String netaddr, int port, String localaddr, int localport, int protocol, int model_id);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SetXVTREnable(int enable);
@@ -37,7 +37,7 @@ namespace Thetis
         public static extern void CmdRx();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int getOOO();     
+        public static extern int getOOO();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool getSeqInDelta(bool bInit, int rx, int[] deltas, StringBuilder dateTimeStamp, out uint received_seqnum, out uint last_seqnum);
@@ -83,7 +83,7 @@ namespace Thetis
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetAlex2HPFBits(int bits);
-       
+
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetBPF2Gnd(int bits);
 
@@ -249,6 +249,12 @@ namespace Thetis
         public static extern int getAndResetADC_Overload();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern ushort getADCmaxMagnitude(int adc);
+
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern ushort getAndResetADCmaxMagnitudeAtOverload(int adc);
+
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int getHaveSync();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
@@ -324,11 +330,14 @@ namespace Thetis
         public static extern void SetOCBits(int b);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetOCExtraBits(int b);
+
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetAntBits(int rx_ant, int trx_ant, int tx_ant, int rx_out, bool tx);
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetMKIIBPF(int bpf);
-        
+
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetRxADC(int n);
 
@@ -351,7 +360,7 @@ namespace Thetis
         public static extern int GetADC_cntrl_P1();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool GetPLLLock();        
+        public static extern bool GetPLLLock();
 
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ATU_Tune(int tune);
@@ -368,5 +377,11 @@ namespace Thetis
         [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetCATPort(int port);
 
+        //bandwdith monitoring
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern double GetInboundBps();
+
+        [DllImport("ChannelMaster.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern double GetOutboundBps();
     }
 }

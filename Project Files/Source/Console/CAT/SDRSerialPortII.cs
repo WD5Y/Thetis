@@ -23,7 +23,6 @@
 #define DBG_PRINT
 
 using System;
-using System.Threading;
 using System.IO.Ports;
 
 namespace Thetis
@@ -188,7 +187,7 @@ namespace Thetis
             get { return use_for_cat_ptt; }
             set { use_for_cat_ptt = value; }
         }
-        
+
         private bool use_for_keyptt = false;
         public bool UseForKeyPTT
         {
@@ -1187,7 +1186,7 @@ namespace Thetis
     }
 
     // SDRSerialPort5 is used for Andromeda front panel communication
-        public class SDRSerialPort5
+    public class SDRSerialPort5
     {
         public static event SerialRXEventHandler serial_rx_event;
 

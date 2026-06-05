@@ -70,13 +70,13 @@
             "KD5TFD, Bill (Protocol 1 initial implementation, UI & various)",
             "K5SO, Joe (Diversity Reception & firmware)",
             "WA8YWQ, Dave (various)",
-            "KE9NS, Darrin (spot & various)",
+            "KE9NS, Darrin (various)",
             "",
             "WU2O, Scott (forum admin & ideas/feedback)",
             "NC3Z, Gary (forum mod)",
             "OE3IDE, Ernst (skins & primary tester)",
             "W1AEX, Rob (skins & audio information)",
-            "DH1KLM, Sigi (skins & UI improvements)",
+            "DH1KLM, Sigi (midi, skins & UI improvements)",
             "",
             "and indirectly, all the testers"});
             this.lstContributors.Location = new System.Drawing.Point(19, 267);
@@ -148,7 +148,9 @@
             "PureSignal",
             "Midi",
             "cmASIO",
-            "Behringer"});
+            "Behringer",
+            "APF Types",
+            "Network Settings"});
             this.lstLinks.Location = new System.Drawing.Point(345, 108);
             this.lstLinks.Name = "lstLinks";
             this.lstLinks.Size = new System.Drawing.Size(267, 130);

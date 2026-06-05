@@ -7,7 +7,7 @@ namespace RawInput_dll
     {
         // I prefer to have control over the key mapping
         // This mapping could be loading from file to allow mapping changes without a recompile
-        public  static string GetKeyName(int value)
+        public static string GetKeyName(int value)
         {
             switch (value)
             {

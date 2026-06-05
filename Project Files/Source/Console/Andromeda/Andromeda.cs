@@ -1,8 +1,34 @@
-﻿using System;
+﻿//=================================================================
+// Andromeda.cs
+//=================================================================
+// Thetis is a C# implementation of a Software Defined Radio.
+// Copyright (C) 2019-2026  Laurence Barker, G8NJJ
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
+// The author can be reached by email at  
+//
+// laurence@nicklebyhouse.co.uk
+//=================================================================
+
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -29,6 +55,19 @@ namespace Thetis
         private int[] RXAntennaArrayByBand = new int[ARIESANTARRAYSIZE] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };       // 0 if unknown, else 1 2 or 3
         private bool[] RXAuxAntennaArrayByBand = new bool[ARIESANTARRAYSIZE] { false, false, false, false, false, false, false, false, false, false, false, false };       // true if an aux antenna selected
         private string[] RXAntennaNameArrayByBand = new string[ARIESANTARRAYSIZE] { "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-" };       // true if an aux antenna selected
+
+
+
+        private bool AriesPresent = false;
+
+        //
+        // send a CAT message over TCP/IP
+        //
+        private void SendAriesMsgViaTCPIPcat(string message)
+        {
+            if (m_tcpCATServer == null) return;
+            m_tcpCATServer.SendToClients(message, new List<string> { TCPIPcatServer.ID_ARIES_ATU });
+        }
 
 
         // set the ATU display label appropriately
@@ -71,11 +110,13 @@ namespace Thetis
         }
 
         // send a CAT message to Aries asking for h/w and s/w versions
+        // only required if USB CAT port - TCP/IP connected device will announce itself.
+
         private void MakeAriesVersionRequestMsg()
         {
             string CATMsg;
-
             CATMsg = "ZZZS;";
+
             if (AriesCATEnabled)
             {
                 try
@@ -92,13 +133,19 @@ namespace Thetis
             string CATMsg = "ZZTU0;";               // default no tune
             if (IsTune)
                 CATMsg = "ZZTU1;";                  // message if tune is active
-            if (AriesCATEnabled)
+
+            if (AriesPresent)
             {
-                try
+                if (AriesCATEnabled)
                 {
-                    AriesSiolisten.SIO6.put(CATMsg);
+                    try
+                    {
+                        AriesSiolisten.SIO6.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendAriesMsgViaTCPIPcat(CATMsg);
             }
         }
 
@@ -110,14 +157,19 @@ namespace Thetis
             if ((Ant >= 0) && (Ant <= 3))
             {
                 CATMsg = "ZZOC" + Ant + ";";
-                if (AriesCATEnabled)
+
+                if (AriesPresent)
                 {
-                    try
+                    if (AriesCATEnabled)
                     {
-                        AriesSiolisten.SIO6.put(CATMsg);
-                        AriesAntenna = Ant;
+                        try
+                        {
+                            AriesSiolisten.SIO6.put(CATMsg);
+                        }
+                        catch { }
                     }
-                    catch { }
+                    else
+                        SendAriesMsgViaTCPIPcat(CATMsg);
                 }
             }
         }
@@ -130,14 +182,18 @@ namespace Thetis
             if ((Ant >= 0) && (Ant <= 3))
             {
                 CATMsg = "ZZOA" + Ant + ";";
-                if (AriesCATEnabled)
+                if (AriesPresent)
                 {
-                    try
+                    if (AriesCATEnabled)
                     {
-                        AriesSiolisten.SIO6.put(CATMsg);
-                        AriesRXAntenna = Ant;
+                        try
+                        {
+                            AriesSiolisten.SIO6.put(CATMsg);
+                        }
+                        catch { }
                     }
-                    catch { }
+                    else
+                        SendAriesMsgViaTCPIPcat(CATMsg);
                 }
             }
         }
@@ -149,14 +205,18 @@ namespace Thetis
             string CATMsg = "ZZOV0;";               // default no tune
             if (IsEnabled)
                 CATMsg = "ZZOV1;";                  // message if tune is active
-            if (AriesCATEnabled)
+            if (AriesPresent)
             {
-                try
+                if (AriesCATEnabled)
                 {
-                    AriesSiolisten.SIO6.put(CATMsg);
-                    AriesEnabled = IsEnabled;
+                    try
+                    {
+                        AriesSiolisten.SIO6.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendAriesMsgViaTCPIPcat(CATMsg);
             }
         }
 
@@ -166,13 +226,18 @@ namespace Thetis
             string CATMsg = "ZZOY0;";               // default no tune
             if (IsEnabled)
                 CATMsg = "ZZOY1;";                  // message if tune is active
-            if (AriesCATEnabled)
+            if (AriesPresent)
             {
-                try
+                if (AriesCATEnabled)
                 {
-                    AriesSiolisten.SIO6.put(CATMsg);
+                    try
+                    {
+                        AriesSiolisten.SIO6.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendAriesMsgViaTCPIPcat(CATMsg);
             }
         }
 
@@ -182,15 +247,22 @@ namespace Thetis
             string CATMsg;
 
             CATMsg = "ZZOZ" + Channel + ";";
-            if (AriesCATEnabled)
+            if (AriesPresent)
             {
                 SetupForm.AriesEraseStatus = "Erase in progress for ANT " + Channel;
-                try
+                if (AriesCATEnabled)
                 {
-                    AriesSiolisten.SIO6.put(CATMsg);
+                    try
+                    {
+                        AriesSiolisten.SIO6.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendAriesMsgViaTCPIPcat(CATMsg);
             }
+
+
         }
 
         // 3 properties to set the state of the "ATU enabled" buttons - one for each TX antenna
@@ -263,7 +335,7 @@ namespace Thetis
             set
             {
                 aries_standalone = value;
-                if(AriesCATEnabled)
+                if (AriesCATEnabled)
                     SetAriesAlexMode(value);
             }
 
@@ -300,13 +372,18 @@ namespace Thetis
                 Frequency_10KHz /= 100.0;
                 freq = Frequency_10KHz.ToString("f6");
                 CATMsg = "ZZFT" + freq.Replace(separator, "").PadLeft(11, '0') + ";";
-                if (AriesCATEnabled)
+                if (AriesPresent)
                 {
-                    try
+                    if (AriesCATEnabled)
                     {
-                        AriesSiolisten.SIO6.put(CATMsg);
+                        try
+                        {
+                            AriesSiolisten.SIO6.put(CATMsg);
+                        }
+                        catch { }
                     }
-                    catch { }
+                    else
+                        SendAriesMsgViaTCPIPcat(CATMsg);
                 }
                 CheckAriesEnabled();
                 UpdateAriesDisplayLabel();
@@ -460,7 +537,7 @@ namespace Thetis
             if ((idx < ARIESANTARRAYSIZE) && (idx >= 0))
             {
                 Antenna = AntennaArrayByBand[idx];
-                if(Antenna != TXAntennaSent)
+                if (Antenna != TXAntennaSent)
                 {
                     toolStripStatusLabelTXAnt.Text = "Tx Ant " + Antenna.ToString();
                     TXAntennaSent = Antenna;
@@ -554,7 +631,7 @@ namespace Thetis
                     }
                 else
                     AntString = "Rx Ant " + Antenna.ToString();
-                if(AntString != RXAntennaSentString)
+                if (AntString != RXAntennaSentString)
                 {
                     toolStripStatusLabelRXAnt.Text = AntString;
                     RXAntennaSentString = AntString;
@@ -636,7 +713,7 @@ namespace Thetis
             {
                 // change antenna only if TX band == RX band
                 // step by the current TX antenna
-                if (SetupForm != null) 
+                if (SetupForm != null)
                     SetupForm.SetTXAntenna(Ant, TXBand);
             }
             UpdateButtonBarButtons();                           // re-label buttons if needed
@@ -649,7 +726,7 @@ namespace Thetis
             {
                 // change antenna only if TX band == RX band
                 // step by the current TX antenna
-                if (SetupForm != null) 
+                if (SetupForm != null)
                     SetupForm.SetRXAntenna(Ant, RX1Band);
             }
         }
@@ -697,7 +774,7 @@ namespace Thetis
             // tell Aries if the TX antenna has changed
             if (Antenna != AriesAntenna)
                 MakeAriesAntennaChangeMsg(Antenna);
-//finally tell Aries the RX antenna too#
+            //finally tell Aries the RX antenna too#
             SendAriesRXAntennaMsg();
         }
 
@@ -723,7 +800,7 @@ namespace Thetis
 
         //
         // initialise Aries
-        // this is called when the CAT port is enabled
+        // this is called when the CAT port is enabled, or when ZZZS from TCP/IP detected
         // work out if ATU enabled for current TX antenna
         // assume setup will already have provided the antenna settings
         private void InitialiseAries()
@@ -773,13 +850,18 @@ namespace Thetis
                 StepValue += TweakSteps;
             CATMsg += StepValue.ToString("D3");
             CATMsg += ";";
-            if (AriesCATEnabled)
+            if (AriesPresent)
             {
-                try
+                if (AriesCATEnabled)
                 {
-                    AriesSiolisten.SIO6.put(CATMsg);
+                    try
+                    {
+                        AriesSiolisten.SIO6.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendAriesMsgViaTCPIPcat(CATMsg);
             }
         }
 
@@ -791,53 +873,127 @@ namespace Thetis
         // G8NJJ: handlers for Ganymeda 500W PA protection
         #region GANYMEDE amplifier protection
 
+
+        private bool _ganymedePresent = false;
+        private bool GanymedePresent
+        {
+            get { return _ganymedePresent; }
+            set
+            {
+                _ganymedePresent = value;
+                if (!_ganymedePresent)
+                {
+                    _ganymede_pa_issue = false;
+                    PAStatusIndicator = PAstatusIndicatorState.NotUsed;
+                }
+            }
+        }
         private int GanymedeTripState = 0;                      // amplifier trip
+
+        //
+        // send a CAT message over TCP/IP
+        //
+        private void SendGanymedeMsgViaTCPIPcat(string message)
+        {
+            if (m_tcpCATServer == null) return;
+            m_tcpCATServer.SendToClients(message, new List<string> { TCPIPcatServer.ID_GANYMEDE });
+        }
+
+        public static string GetPAStatusText(PAstatusIndicatorState state)
+        {
+            //helper function to retun some status text used in tooltips, spectral display, and setupform ganymede status
+
+            if (state == PAstatusIndicatorState.NotUsed) return "Not Used";
+            if ((state & PAstatusIndicatorState.OK) != 0) return "Normal operation";
+
+            PAstatusIndicatorState fault_mask = PAstatusIndicatorState.ReversePower |
+                                                PAstatusIndicatorState.DrainCurrent |
+                                                PAstatusIndicatorState.PSUVoltage |
+                                                PAstatusIndicatorState.HeatsinkTemperature |
+                                                PAstatusIndicatorState.ForwardPower |
+                                                PAstatusIndicatorState.Resettable;
+
+            PAstatusIndicatorState faults = state & fault_mask;
+
+            if (faults == 0) return "Normal operation"; // no faults selected
+
+            StringBuilder sb = new StringBuilder(64);
+            sb.Append("TRIP Excess: ");
+
+            if ((faults & PAstatusIndicatorState.ReversePower) != 0) sb.Append("Reverse Power ");
+            if ((faults & PAstatusIndicatorState.DrainCurrent) != 0) sb.Append("Drain Current ");
+            if ((faults & PAstatusIndicatorState.PSUVoltage) != 0) sb.Append("PSU Voltage ");
+            if ((faults & PAstatusIndicatorState.HeatsinkTemperature) != 0) sb.Append("Heatsink Temperature ");
+            if ((faults & PAstatusIndicatorState.ForwardPower) != 0) sb.Append("Forward Power ");
+            if ((faults & PAstatusIndicatorState.Resettable) != 0) sb.Append("\n Awaiting RESET ");
+
+            string s = sb.ToString();
+            if (s.StartsWith("\n ")) s = s.Substring(2);
+            return s.TrimEnd(' ');
+        }
 
         // for now, put message in SETUP Apollo with current amplifier state
         // ideally when it has been tripped we should remove PTT too.
+        private volatile bool _ganymede_pa_issue = false;
         public void CATHandleAmplifierTripMessage(int TripState)
         {
-            string StatusMessage = "";
+            GanymedePresent = true;
+
+            _ganymede_pa_issue = TripState != 0; // this will also prevent MOX being re-enabled
+            if (_ganymede_pa_issue && MOX) MOX = false; //if there is a fault, undo mox if active
+
             switch (TripState)
             {
                 case 0:
-                    StatusMessage = "Normal operation";
+                    PAStatusIndicator = PAstatusIndicatorState.OK;
                     break;
                 case 1:
-                    StatusMessage = "TRIP: Excess reverse power";
+                    PAStatusIndicator = PAstatusIndicatorState.ReversePower;
                     break;
                 case 2:
-                    StatusMessage = "TRIP: Excess drain current";
+                    PAStatusIndicator = PAstatusIndicatorState.DrainCurrent;
                     break;
                 case 4:
-                    StatusMessage = "TRIP: Excess PSU voltage";
+                    PAStatusIndicator = PAstatusIndicatorState.PSUVoltage;
                     break;
                 case 8:
-                    StatusMessage = "TRIP: Excess heatsink temperature";
+                    PAStatusIndicator = PAstatusIndicatorState.HeatsinkTemperature;
                     break;
                 case 16:
-                    StatusMessage = "TRIP: Excess forward power";
+                    PAStatusIndicator = PAstatusIndicatorState.ForwardPower;
+                    break;
+                case 64:
+                    PAStatusIndicator = PAstatusIndicatorState.Resettable;
                     break;
             }
-            SetupForm.GanymedeStatus = StatusMessage;
+            SetupForm.GanymedeStatus = GetPAStatusText(PAStatusIndicator);
         }
 
         // send a CAT message to Ganymede to reset the tripped state
         public void GanymedeResetPressed()
         {
             string CATMsg;
-            if (GanymedeCATEnabled)
+            CATMsg = "ZZZA32;";
+            if (GanymedePresent)
             {
-                CATMsg = "ZZZA32;";
-                try
+                if (GanymedeCATEnabled)
                 {
-                    GanymedeSiolisten.SIO7.put(CATMsg);
+                    try
+                    {
+                        GanymedeSiolisten.SIO7.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                {
+                    SendGanymedeMsgViaTCPIPcat(CATMsg);
+                }
             }
         }
 
         // send a CAT message to Ganymede asking for h/w and s/w versions
+        // only required if USB CAT port - TCP/IP connected devices will announce themselves
+
         private void MakeGanymedeVersionRequestMsg()
         {
             string CATMsg;
@@ -860,16 +1016,28 @@ namespace Thetis
             string CATMsg;
 
             CATMsg = "ZZZA;";
-            if (GanymedeCATEnabled)
+            if (GanymedePresent)
             {
-                try
+                if (GanymedeCATEnabled)
                 {
-                    GanymedeSiolisten.SIO7.put(CATMsg);
+                    try
+                    {
+                        GanymedeSiolisten.SIO7.put(CATMsg);
+                    }
+                    catch { }
                 }
-                catch { }
+                else
+                    SendGanymedeMsgViaTCPIPcat(CATMsg);
             }
         }
 
+
+        // initialise Ganymede: called when ZZZS identify message has been received
+        // request status message
+        private void InitialiseGanymede()
+        {
+            MakeGanymedeStatusRequestMsg();
+        }
 
         #endregion
 
@@ -1102,8 +1270,8 @@ namespace Thetis
         public bool AndromedaBandButtonIsDefault
         {
             get { return andromedaBandButtonIsDefault; }
-            set 
-            { 
+            set
+            {
                 andromedaBandButtonIsDefault = value;
                 // set the start state for the band buttons function - band or other function
                 AndromedaBandButtonsEnabled = value;
@@ -1153,6 +1321,18 @@ namespace Thetis
 
         System.Timers.Timer AndromedaTimer;                         // times display of a slider on andromeda bar 
         System.Timers.Timer AndromedaMenuTimer;                     // timeout for menu activity
+        private bool G2V2PanelPresent = false;                      // presence of panel has been detected
+
+        //
+        // send a CAT message over TCP/IP
+        //
+        private void SendG2V2PanelMsgViaTCPIPcat(string message)
+        {
+            if (m_tcpCATServer == null) return;
+            m_tcpCATServer.SendToClients(message, new List<string> { TCPIPcatServer.ID_G2V2_PANEL });
+        }
+
+
 
 
         // initialise the data structures for andromeda.
@@ -1693,16 +1873,16 @@ namespace Thetis
             IndicatorTable.Columns.Add("Indicator Description", typeof(String));    // useful text?
             IndicatorTable.Columns.Add("Indicator RX Selector", typeof(int));       // 0: insensitive to RX; 1: indicator uses show_RX1 setting; 2: for RX1; 3: for RX2
             IndicatorTable.Rows.Add(1, (int)EIndicatorActions.eINMOX, "", 0);
-            IndicatorTable.Rows.Add(2, (int)EIndicatorActions.eINATUReady, "", 0);
-            IndicatorTable.Rows.Add(3, (int)EIndicatorActions.eINTune, "", 0);
-            IndicatorTable.Rows.Add(4, (int)EIndicatorActions.eINPuresignalEnabled, "", 0);
-            IndicatorTable.Rows.Add(5, (int)EIndicatorActions.eINDiversityEnabled, "", 0);
-            IndicatorTable.Rows.Add(6, (int)EIndicatorActions.eINShiftEnabled, "", 0);
-            IndicatorTable.Rows.Add(7, (int)EIndicatorActions.eINCTune, "", 1);      // pick up RX1 or 2
-            IndicatorTable.Rows.Add(8, (int)EIndicatorActions.eINRIT, "", 0);
-            IndicatorTable.Rows.Add(9, (int)EIndicatorActions.eINXIT, "", 0);
-            IndicatorTable.Rows.Add(10, (int)EIndicatorActions.eINVFOAB, "", 0);
-            IndicatorTable.Rows.Add(11, (int)EIndicatorActions.eINVFOLock, "", 0);
+            IndicatorTable.Rows.Add(2, (int)EIndicatorActions.eINTune, "", 0);
+            IndicatorTable.Rows.Add(3, (int)EIndicatorActions.eINPuresignalEnabled, "", 0);
+            IndicatorTable.Rows.Add(4, (int)EIndicatorActions.eINATUReady, "", 0);
+            IndicatorTable.Rows.Add(5, (int)EIndicatorActions.eINATUReady, "", 0);
+            IndicatorTable.Rows.Add(6, (int)EIndicatorActions.eINRIT, "", 0);
+            IndicatorTable.Rows.Add(7, (int)EIndicatorActions.eINXIT, "", 0);
+            IndicatorTable.Rows.Add(8, (int)EIndicatorActions.eINVFOAB, "", 0);
+            IndicatorTable.Rows.Add(9, (int)EIndicatorActions.eINVFOLock, "", 0);
+            IndicatorTable.Rows.Add(10, (int)EIndicatorActions.eINNone, "", 0);
+            IndicatorTable.Rows.Add(11, (int)EIndicatorActions.eINNone, "", 0);
             IndicatorTable.Rows.Add(12, (int)EIndicatorActions.eINNone, "", 0);
             IndicatorTable.Rows.Add(13, (int)EIndicatorActions.eINNone, "", 0);
             IndicatorTable.Rows.Add(14, (int)EIndicatorActions.eINNone, "", 0);
@@ -1981,7 +2161,7 @@ namespace Thetis
         //
         void AndromedaIndicatorCheck(EIndicatorActions IndicatorType, bool IsRX1, bool State)
         {
-            if (!AndromedaCATEnabled) return; // MW0LGE
+            if (!(AndromedaCATEnabled || G2V2PanelPresent)) return; // MW0LGE
 
             int Cntr;
             int Override;                                                   // indicator table setting
@@ -2011,16 +2191,20 @@ namespace Thetis
         }
 
         // send a CAT message to Andromeda asking for h/w and s/w versions
+        // only required if USB CAT port
         private void MakeAndromedaVersionRequestMsg()
         {
             string CATMsg;
-
             CATMsg = "ZZZS;";
-            try
+
+            if (AndromedaCATEnabled)
             {
-                AndromedaSiolisten.SIO5.put(CATMsg);
+                try
+                {
+                    AndromedaSiolisten.SIO5.put(CATMsg);
+                }
+                catch { }
             }
-            catch { }
         }
 
         // send a CAT message to Andromeda if enabled
@@ -2036,11 +2220,17 @@ namespace Thetis
                 CATMsg += "1;";
             else
                 CATMsg += "0;";
-            try
+
+            if (AndromedaCATEnabled)
             {
-                AndromedaSiolisten.SIO5.put(CATMsg);
+                try
+                {
+                    AndromedaSiolisten.SIO5.put(CATMsg);
+                }
+                catch { }
             }
-            catch { }
+            else if (G2V2PanelPresent)
+                SendG2V2PanelMsgViaTCPIPcat(CATMsg);
         }
 
         //
@@ -2054,9 +2244,9 @@ namespace Thetis
             int Cntr;
             int Override;
             bool Use_RX1 = false;
-            bool State = false;                             // indicator state to report
+            bool State = false;                                 // indicator state to report
             bool IsABSensitive = false;
-            if (AndromedaCATEnabled)                        // only process if we have a CAT port assigned
+            if (AndromedaCATEnabled || G2V2PanelPresent)        // only process if we have a CAT port assigned
             {
 
                 DataTable table = AndromedaSet.Tables["Indicators"];
@@ -2187,10 +2377,11 @@ namespace Thetis
 
                     }
                     if ((InitialiseAll) || (IsABSensitive))       // send message if we are scanning all, or if A/B sensitive
-                        MakeIndicatorCATMsg(Cntr + 1, State);
+                        if (IndicatorType != EIndicatorActions.eINNone)
+                            MakeIndicatorCATMsg(Cntr + 1, State);
                 }
-                if (InitialiseAll)
-                    MakeAndromedaVersionRequestMsg();
+                //               if (InitialiseAll)                            g8njj: version request now triggers initialise, not the other way around.
+                //                 MakeAndromedaVersionRequestMsg();
             }
         }
 
@@ -2250,44 +2441,44 @@ namespace Thetis
             DataTable table = AndromedaSet.Tables["Encoders"];
             int RowCount = table.Rows.Count;
             // see if control editor form open. If it is, send encoder number to that
-            if(AndromedaCATEnabled || AndromedaG2Enabled)
+            if (AndromedaCATEnabled || AndromedaG2Enabled)
             {
-            if (andromedaEditorForm != null)
-            {
-                if (andromedaEditorForm.AndromedaEditorVisible)
+                if (andromedaEditorForm != null)
                 {
-                    andromedaEditorForm.SetEncoderNumber(Encoder);
-                    UsedForSetup = true;
-                }
-            }
-            // if we didn't send it to the editor form:
-            // check the number range provided; lookup the encoder action from a table;
-            // if multifunction, either update the action assigned to multi or execute that function
-            // if the control editor form is open, pass the encoder number to it
-            if ((Encoder >= 0) && (Encoder < RowCount) && (!UsedForSetup))
-            {
-                Action = (EEncoderActions)table.Rows[Encoder]["Encoder Action"];
-                Override = (int)table.Rows[Encoder]["Encoder RX Selector"];
-                if (Action == EEncoderActions.eENMulti)                         // if multifunction
-                {
-                    DataTable multitable = AndromedaSet.Tables["Multifunction Settings"];
-                    int MultiCount = multitable.Rows.Count;
-                    if (AndromedaMultiEncoderState == true)                     // if encoder button pressed, update the assigned option
+                    if (andromedaEditorForm.AndromedaEditorVisible)
                     {
-                        EncoderUpdate(Steps, ref CurrentMultifunctionOption, 0, MultiCount - 1);      // update the selected option for multi
-                                                                                                      //                        TitleBarMultifunctionString = "   multifunction encoder = " + multitable.Rows[CurrentMultifunctionOption]["Multi Description"];
-                        toolStripStatusLabelAndromedaMulti.Text = multitable.Rows[CurrentMultifunctionOption]["Multi Description"].ToString();
-                    }
-                    else
-                    {
-                        Action = (EEncoderActions)multitable.Rows[CurrentMultifunctionOption]["Multi Action"];           // get the action multi is set to
-                        Override = (int)multitable.Rows[CurrentMultifunctionOption]["Multi RX Selector"];           // get the RX override that multi is set to
+                        andromedaEditorForm.SetEncoderNumber(Encoder);
+                        UsedForSetup = true;
                     }
                 }
-                if (Action != EEncoderActions.eENMulti)                         // if not multifunction, execute it
-                    ExecuteEncoderStep(Action, Steps, Override);
+                // if we didn't send it to the editor form:
+                // check the number range provided; lookup the encoder action from a table;
+                // if multifunction, either update the action assigned to multi or execute that function
+                // if the control editor form is open, pass the encoder number to it
+                if ((Encoder >= 0) && (Encoder < RowCount) && (!UsedForSetup))
+                {
+                    Action = (EEncoderActions)table.Rows[Encoder]["Encoder Action"];
+                    Override = (int)table.Rows[Encoder]["Encoder RX Selector"];
+                    if (Action == EEncoderActions.eENMulti)                         // if multifunction
+                    {
+                        DataTable multitable = AndromedaSet.Tables["Multifunction Settings"];
+                        int MultiCount = multitable.Rows.Count;
+                        if (AndromedaMultiEncoderState == true)                     // if encoder button pressed, update the assigned option
+                        {
+                            EncoderUpdate(Steps, ref CurrentMultifunctionOption, 0, MultiCount - 1);      // update the selected option for multi
+                                                                                                          //                        TitleBarMultifunctionString = "   multifunction encoder = " + multitable.Rows[CurrentMultifunctionOption]["Multi Description"];
+                            toolStripStatusLabelAndromedaMulti.Text = multitable.Rows[CurrentMultifunctionOption]["Multi Description"].ToString();
+                        }
+                        else
+                        {
+                            Action = (EEncoderActions)multitable.Rows[CurrentMultifunctionOption]["Multi Action"];           // get the action multi is set to
+                            Override = (int)multitable.Rows[CurrentMultifunctionOption]["Multi RX Selector"];           // get the RX override that multi is set to
+                        }
+                    }
+                    if (Action != EEncoderActions.eENMulti)                         // if not multifunction, execute it
+                        ExecuteEncoderStep(Action, Steps, Override);
+                }
             }
-        }
         }
 
 
@@ -2300,34 +2491,34 @@ namespace Thetis
         //
         public void HandleFrontPanelVFOEncoderStep(int Steps)
         {
-            if(AndromedaG2Enabled || AndromedaCATEnabled)
+            if (AndromedaG2Enabled || AndromedaCATEnabled)
             {
-            if (!IsSetupFormNull)
-                if (SetupForm.AndromedaFastTune)
-                    Steps = CalculateFastTuneSteps(Steps);
+                if (!IsSetupFormNull)
+                    if (SetupForm.AndromedaFastTune)
+                        Steps = CalculateFastTuneSteps(Steps);
 
-            if (show_rx1)
-            {
-                if (RX1DSPMode == DSPMode.FM)
+                if (show_rx1)
                 {
-                    FMSteps += Steps;                       // add the new count
-                    Steps = FMSteps / VFMSTEPCOUNT;         // see if enough to move VFO
-                    FMSteps = FMSteps % VFMSTEPCOUNT;       // and keep the residue
+                    if (RX1DSPMode == DSPMode.FM)
+                    {
+                        FMSteps += Steps;                       // add the new count
+                        Steps = FMSteps / VFMSTEPCOUNT;         // see if enough to move VFO
+                        FMSteps = FMSteps % VFMSTEPCOUNT;       // and keep the residue
+                    }
+                    VFOAFreq = CATVFOA + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
                 }
-                VFOAFreq = CATVFOA + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
-            }
 
-            else
-            {
-                if (RX2DSPMode == DSPMode.FM)
+                else
                 {
-                    FMSteps += Steps;                       // add the new count
-                    Steps = FMSteps / VFMSTEPCOUNT;         // see if enough to move VFO
-                    FMSteps = FMSteps % VFMSTEPCOUNT;       // and keep the residue
+                    if (RX2DSPMode == DSPMode.FM)
+                    {
+                        FMSteps += Steps;                       // add the new count
+                        Steps = FMSteps / VFMSTEPCOUNT;         // see if enough to move VFO
+                        FMSteps = FMSteps % VFMSTEPCOUNT;       // and keep the residue
+                    }
+                    VFOBFreq = CATVFOB + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
                 }
-                VFOBFreq = CATVFOB + (double)Steps * TuneStepList[TuneStepIndex].StepHz * 10e-7;
             }
-        }
         }
 
         // calculate fast tune rate. This uses a cubic calculation to increase apparent tune rate if tune knob moved more quickly.
@@ -2395,20 +2586,20 @@ namespace Thetis
             int RowCount = table.Rows.Count;
             bool UsedForSetup = false;                                            // true if we passed pushbutton setting to the control editor form
 
-            if(AndromedaG2Enabled || AndromedaCATEnabled)
+            if (AndromedaG2Enabled || AndromedaCATEnabled)
             {
-            // if the control editor form is open, pass the pushbutton number to it
-            if (andromedaEditorForm != null)
-            {
-                if (andromedaEditorForm.AndromedaEditorVisible)
+                // if the control editor form is open, pass the pushbutton number to it
+                if (andromedaEditorForm != null)
                 {
-                    andromedaEditorForm.SetPushbuttonNumber(Button);
-                    UsedForSetup = true;
+                    if (andromedaEditorForm.AndromedaEditorVisible)
+                    {
+                        andromedaEditorForm.SetPushbuttonNumber(Button);
+                        UsedForSetup = true;
+                    }
                 }
-            }
-            if (!UsedForSetup)                  // if not sent to setup form, process normally
-            {
-                    if(andromeda_g2_enabled)                // G2 buttons are handled differently; no shift etc
+                if (!UsedForSetup)                  // if not sent to setup form, process normally
+                {
+                    if (andromeda_g2_enabled)                // G2 buttons are handled differently; no shift etc
                     {
                         if (LongPress)
                         {
@@ -2424,120 +2615,120 @@ namespace Thetis
                         }
                     }
                     else if ((Button >= 29) && (Button <= 40))               // if it's one of the buttons in 3x4 "band" grid
-                {
-                    // one of the band button group. If a long press- just do it
-                    if(LongPress)
                     {
-                        BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
-                        BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
-                        ExecuteButtonLongpress(BtnAction, BtnParam);       // implement the button action
-                    }
-                    else if (State)             // normal button press.
-                    {
-                        if (AndromedaBandButtonsEnabled)        // perform the "band" function of the button
-                        {
-                            switch (Button)
-                            {
-                                case 29: BandName = "160m"; BandSelected = Band.B160M; break;
-                                case 30: BandName = "80m"; BandSelected = Band.B80M; break;
-                                case 31: BandName = "60m"; BandSelected = Band.B60M; break;
-                                case 32: BandName = "40m"; BandSelected = Band.B40M; break;
-                                case 33: BandName = "30m"; BandSelected = Band.B30M; break;
-                                case 34: BandName = "20m"; BandSelected = Band.B20M; break;
-                                case 35: BandName = "17m"; BandSelected = Band.B17M; break;
-                                case 36: BandName = "15m"; BandSelected = Band.B15M; break;
-                                case 37: BandName = "12m"; BandSelected = Band.B12M; break;
-                                case 38: BandName = "10m"; BandSelected = Band.B10M; break;
-                                case 39: BandName = "6m"; BandSelected = Band.B6M; break;
-                                case 40: BandName = "GEN"; BandSelected = Band.GEN; break;
-                            }
-                            // we have changed band, so setup the new band
-                            if (show_rx1)                           // set RX1 or 2 band
-                                SetCATBand(BandSelected);
-                            else
-                            {
-                                SetupRX2Band(BandName);
-                            }
-                        }
-                        else                     // perform the non band function
+                        // one of the band button group. If a long press- just do it
+                        if (LongPress)
                         {
                             BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
                             BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
-                            ExecuteButtonAction(BtnAction, BtnParam);       // implement the button action
-                        }
-// now decide if we need to release the "shift" action. If sticky, we don't change it.
-                        if(!AndromedaStickyShift)
-                        {
-                            if(AndromedaBandButtonIsDefault)
-                                AndromedaBandButtonsEnabled = true;          // cancel shift
-                            else
-                                AndromedaBandButtonsEnabled = false;          // cancel shift
-                            AndromedaIndicatorCheck(EIndicatorActions.eINShiftEnabled, false, AndromedaBandButtonsEnabled);
-                        }
-                    }
-                }
-                // else - a button not in the band group
-                else if ((Button >= 0) && (Button < RowCount))           // check valid button range
-                {
-                    BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
-                    BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
-
-                    if ((BtnAction == EButtonBarActions.eBBMenuButton) && (State == true))     // if a menu softkey button press:
-                    {
-                        switch (BtnParam)
-                        {
-                            case 0:                    // softkey 1
-                            case 11:
-                                btnAndrBar1_Click(null, null);
-                                break;
-
-                            case 1:                    // softkey 2
-                            case 12:
-                                btnAndrBar2_Click(null, null);
-                                break;
-
-                            case 2:                    // softkey 3
-                            case 13:
-                                btnAndrBar3_Click(null, null);
-                                break;
-
-                            case 3:                    // softkey 4
-                            case 14:
-                                btnAndrBar4_Click(null, null);
-                                break;
-
-                            case 4:                    // softkey 5
-                            case 15:
-                                btnAndrBar5_Click(null, null);
-                                break;
-
-                            case 5:                    // softkey 6
-                            case 16:
-                                btnAndrBar6_Click(null, null);
-                                break;
-
-                            case 6:                    // softkey 7
-                            case 17:
-                                btnAndrBar7_Click(null, null);
-                                break;
-
-                            case 7:                    // softkey 8
-                            case 18:
-                                btnAndrBar8_Click(null, null);
-                                break;
-                        }
-                    }
-                    // the button isn't in the band group or menu group
-                    else
-                    {
-                        if (State)                                     // ordinary press
-                            ExecuteButtonAction(BtnAction, BtnParam);       // implement the button action
-                        else if (LongPress)
                             ExecuteButtonLongpress(BtnAction, BtnParam);       // implement the button action
+                        }
+                        else if (State)             // normal button press.
+                        {
+                            if (AndromedaBandButtonsEnabled)        // perform the "band" function of the button
+                            {
+                                switch (Button)
+                                {
+                                    case 29: BandName = "160m"; BandSelected = Band.B160M; break;
+                                    case 30: BandName = "80m"; BandSelected = Band.B80M; break;
+                                    case 31: BandName = "60m"; BandSelected = Band.B60M; break;
+                                    case 32: BandName = "40m"; BandSelected = Band.B40M; break;
+                                    case 33: BandName = "30m"; BandSelected = Band.B30M; break;
+                                    case 34: BandName = "20m"; BandSelected = Band.B20M; break;
+                                    case 35: BandName = "17m"; BandSelected = Band.B17M; break;
+                                    case 36: BandName = "15m"; BandSelected = Band.B15M; break;
+                                    case 37: BandName = "12m"; BandSelected = Band.B12M; break;
+                                    case 38: BandName = "10m"; BandSelected = Band.B10M; break;
+                                    case 39: BandName = "6m"; BandSelected = Band.B6M; break;
+                                    case 40: BandName = "GEN"; BandSelected = Band.GEN; break;
+                                }
+                                // we have changed band, so setup the new band
+                                if (show_rx1)                           // set RX1 or 2 band
+                                    SetCATBand(BandSelected);
+                                else
+                                {
+                                    SetupRX2Band(BandName);
+                                }
+                            }
+                            else                     // perform the non band function
+                            {
+                                BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
+                                BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
+                                ExecuteButtonAction(BtnAction, BtnParam);       // implement the button action
+                            }
+                            // now decide if we need to release the "shift" action. If sticky, we don't change it.
+                            if (!AndromedaStickyShift)
+                            {
+                                if (AndromedaBandButtonIsDefault)
+                                    AndromedaBandButtonsEnabled = true;          // cancel shift
+                                else
+                                    AndromedaBandButtonsEnabled = false;          // cancel shift
+                                AndromedaIndicatorCheck(EIndicatorActions.eINShiftEnabled, false, AndromedaBandButtonsEnabled);
+                            }
+                        }
                     }
-                }
-            }//if (!UsedForSetup)
-        }
+                    // else - a button not in the band group
+                    else if ((Button >= 0) && (Button < RowCount))           // check valid button range
+                    {
+                        BtnAction = (EButtonBarActions)table.Rows[Button]["Pushbutton Action"];
+                        BtnParam = (int)table.Rows[Button]["Pushbutton RX Selector"];
+
+                        if ((BtnAction == EButtonBarActions.eBBMenuButton) && (State == true))     // if a menu softkey button press:
+                        {
+                            switch (BtnParam)
+                            {
+                                case 0:                    // softkey 1
+                                case 11:
+                                    btnAndrBar1_Click(null, null);
+                                    break;
+
+                                case 1:                    // softkey 2
+                                case 12:
+                                    btnAndrBar2_Click(null, null);
+                                    break;
+
+                                case 2:                    // softkey 3
+                                case 13:
+                                    btnAndrBar3_Click(null, null);
+                                    break;
+
+                                case 3:                    // softkey 4
+                                case 14:
+                                    btnAndrBar4_Click(null, null);
+                                    break;
+
+                                case 4:                    // softkey 5
+                                case 15:
+                                    btnAndrBar5_Click(null, null);
+                                    break;
+
+                                case 5:                    // softkey 6
+                                case 16:
+                                    btnAndrBar6_Click(null, null);
+                                    break;
+
+                                case 6:                    // softkey 7
+                                case 17:
+                                    btnAndrBar7_Click(null, null);
+                                    break;
+
+                                case 7:                    // softkey 8
+                                case 18:
+                                    btnAndrBar8_Click(null, null);
+                                    break;
+                            }
+                        }
+                        // the button isn't in the band group or menu group
+                        else
+                        {
+                            if (State)                                     // ordinary press
+                                ExecuteButtonAction(BtnAction, BtnParam);       // implement the button action
+                            else if (LongPress)
+                                ExecuteButtonLongpress(BtnAction, BtnParam);       // implement the button action
+                        }
+                    }
+                }//if (!UsedForSetup)
+            }
         }
 
 
@@ -2556,20 +2747,25 @@ namespace Thetis
                     Result += "  s/w=" + SoftwareVersion;
                     if (!IsSetupFormNull)
                         SetupForm.AndromedaVersionNumber = Result;
+                    InitialiseAndromedaIndicators(true);
                     break;
 
                 case 2:                 // Aries
+                    AriesPresent = true;
                     Result = "Aries: h/w=" + HardwareVersion;
                     Result += "  s/w=" + SoftwareVersion;
                     if (!IsSetupFormNull)
                         SetupForm.AriesVersionNumber = Result;
+                    InitialiseAries();
                     break;
 
                 case 3:                 // Ganymede
+                    GanymedePresent = true;
                     Result = "Ganymede: h/w=" + HardwareVersion;
                     Result += "  s/w=" + SoftwareVersion;
                     if (!IsSetupFormNull)
                         SetupForm.GanymedeVersionNumber = Result;
+                    InitialiseGanymede();
                     break;
 
                 case 4:                 // G2
@@ -2580,10 +2776,12 @@ namespace Thetis
                     break;
 
                 case 5:                 // G2 V2
+                    G2V2PanelPresent = true;
                     Result = "G2V2 panel: h/w=" + HardwareVersion;
                     Result += "  s/w=" + SoftwareVersion;
                     if (!IsSetupFormNull)
                         SetupForm.AndromedaVersionNumber = Result;
+                    InitialiseAndromedaIndicators(true);
                     break;
 
             }
@@ -2710,7 +2908,8 @@ namespace Thetis
                         Value = SetupForm.ATTOnRX2; //RX2ATT; // MW0LGE_21d step atten changes
                         EncoderUpdate(Steps, ref Value, (int)udRX2StepAttData.Minimum, (int)udRX2StepAttData.Maximum);
                         ShowAndromedaSlider(Value, (int)udRX2StepAttData.Minimum, (int)udRX2StepAttData.Maximum, "RX2 ATT");
-                        /*RX2ATT*/SetupForm.ATTOnRX2 = Value; // MW0LGE_21d step atten changes
+                        /*RX2ATT*/
+                        SetupForm.ATTOnRX2 = Value; // MW0LGE_21d step atten changes
                     }
                     CheckGainFormAutoShow();
                     break;
@@ -3146,7 +3345,7 @@ namespace Thetis
 
                 // now set 10s timeout timer, unless menus are set to be "sticky"
                 // after timeout, menu will change to the 1st "quick" menu
-                if(!AndromedaStickyMenus)
+                if (!AndromedaStickyMenus)
                 {
                     AndromedaMenuTimer.Enabled = false;
                     AndromedaMenuTimer.AutoReset = false;                   // just one callback
@@ -3260,7 +3459,7 @@ namespace Thetis
 
                 case EButtonBarActions.eBBBand6:
                     if (show_rx1)                           // set RX1 or 2 band
-                        SetCATBand(Band.B60M);
+                        SetCATBand(Band.B6M);
                     else
                         SetupRX2Band("6m");
                     break;
@@ -3757,12 +3956,7 @@ namespace Thetis
                     break;
 
                 case EButtonBarActions.eBBBandstackForm:           // show band stacks form
-                    //if (StackForm == null || StackForm.IsDisposed) StackForm = new StackControl(this);
-                    //Invoke(new MethodInvoker(StackForm.Show));
-                    //StackForm.Focus();
-                    //StackForm.WindowState = FormWindowState.Normal; // ke9ns add
-
-                    Invoke(new MethodInvoker(BandStack2Form.Show)); //MW0LGE_21d BandStack2
+                    Invoke(new MethodInvoker(BandStack2Form.Show)); //BandStack2
                     break;
 
                 case EButtonBarActions.eBBBandstack:
@@ -3803,9 +3997,10 @@ namespace Thetis
                     break;
 
                 case EButtonBarActions.eBBEqualiserForm:           // show equaliser form
-                    if (EQForm == null || EQForm.IsDisposed)
-                        EQForm = new EQForm(this);
-                    Invoke(new MethodInvoker(EQForm.Show));
+                    //if (EQForm == null || EQForm.IsDisposed)
+                    //    EQForm = new EQForm(this);
+                    //Invoke(new MethodInvoker(EQForm.Show));
+                    equalizerToolStripMenuItem_Click(this, EventArgs.Empty);
                     break;
 
                 case EButtonBarActions.eBBDisplaySettingsForm:    // show the display settings form
@@ -3814,9 +4009,9 @@ namespace Thetis
                     break;
 
                 case EButtonBarActions.eBBAudioForm:               // open the audio record play form
-                    if (WaveForm.IsDisposed)
-                        WaveForm = new WaveControl(this);
-                    Invoke(new MethodInvoker(WaveForm.Show));
+                    //if (WaveForm.IsDisposed)
+                    //    WaveForm = new WaveControl(this);
+                    //Invoke(new MethodInvoker(WaveForm.Show));
                     break;
 
                 case EButtonBarActions.eBBSetupForm:               // open the setup form

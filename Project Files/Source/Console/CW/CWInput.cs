@@ -27,12 +27,8 @@
 //=================================================================
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.IO.Ports;
 using System.Diagnostics;
+using System.IO.Ports;
 
 namespace Thetis
 {
@@ -123,14 +119,14 @@ namespace Thetis
             get { return cat_ptt; }
             set { cat_ptt = value; }
         }
-        
+
         public static bool SetPrimaryInput(string s)
         {
             if (s.ToUpper().StartsWith("COM") && s.Length > 3)
             {
                 int port = 0;
-                bool valid = int.TryParse(s.Substring(3, s.Length-3), out port);
-                
+                bool valid = int.TryParse(s.Substring(3, s.Length - 3), out port);
+
                 if (!valid) return false;
 
                 if (primary_com_port != null)

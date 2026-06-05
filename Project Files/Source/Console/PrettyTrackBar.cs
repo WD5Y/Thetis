@@ -45,7 +45,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace Thetis
 {
@@ -137,7 +136,7 @@ namespace Thetis
             {
                 case Orientation.Horizontal:
                     int headWidth = _head_rect.Width;// _head_image != null ? _head_rect.Width : 1;
-                    
+
                     width = this.Width - headWidth - Padding.Horizontal;
                     startPos = (int)Math.Round((_nLimitValue - min) / (double)(max - min) * width);
                     endEdge = width;
@@ -242,7 +241,8 @@ namespace Thetis
         public Color LimitBarColor
         {
             get { return _limitBarColor; }
-            set { 
+            set
+            {
                 _limitBarColor = value;
                 this.Invalidate();
             }
@@ -280,8 +280,8 @@ namespace Thetis
             set
             {
                 _nLimitValue = value;
-                if(_nLimitValue < min) _nLimitValue = min;
-                if(_nLimitValue > max) _nLimitValue = max;
+                if (_nLimitValue < min) _nLimitValue = min;
+                if (_nLimitValue > max) _nLimitValue = max;
                 UpdateLimitBar();
                 this.Invalidate();
             }
@@ -385,7 +385,7 @@ namespace Thetis
                         }
                     }
                 }
-                else if(e.Button == MouseButtons.Right && _bLimitEnabled) // the limit drag
+                else if (e.Button == MouseButtons.Right && _bLimitEnabled) // the limit drag
                 {
                     int old_val;
                     int new_val;
@@ -523,7 +523,7 @@ namespace Thetis
                         case Orientation.Horizontal:
                             int headWidth = _head_rect.Width;// _head_image != null ? _head_rect.Width : 1;
 
-                            delta = e.X - down_x;                            
+                            delta = e.X - down_x;
                             width = this.Width - headWidth - Padding.Horizontal;
 
                             //if (_limitBar_rect.X <= Padding.Left + (headWidth / 2) && delta < 0) return;

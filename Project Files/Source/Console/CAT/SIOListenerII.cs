@@ -21,16 +21,16 @@
 //=================================================================
 
 using System;
-using System.Text;
-using System.Windows.Forms; // needed for MessageBox (wjt)
-using System.Text.RegularExpressions;
 using System.IO.Ports;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Forms; // needed for MessageBox (wjt)
 
 namespace Thetis
-{	
-	public class SIOListenerII
-	{
-		#region Constructor
+{
+    public class SIOListenerII
+    {
+        #region Constructor
 
         public SIOListenerII(Console c)
         {
@@ -64,23 +64,23 @@ namespace Thetis
             }
         }
 
-		public void enableCAT() 
-		{
-			//[2.10.3]MW0LGElock ( this )    // just not needed as this object will only be created and accesed by the same thread, ie the UI thread
-			//{
-				if ( cat_enabled ) return; // nothing to do already enabled 
-				cat_enabled = true; 
-			//}
-			int port_num = console.CATPort; 
-			SIO = new SDRSerialPort(port_num);
-			SIO.setCommParms(console.CATBaudRate, 
-							console.CATParity, 
-							console.CATDataBits, 
-							console.CATStopBits); 
-		
-			Initialize();	
-		}
- 
+        public void enableCAT()
+        {
+            //[2.10.3]MW0LGElock ( this )    // just not needed as this object will only be created and accesed by the same thread, ie the UI thread
+            //{
+            if (cat_enabled) return; // nothing to do already enabled 
+            cat_enabled = true;
+            //}
+            int port_num = console.CATPort;
+            SIO = new SDRSerialPort(port_num);
+            SIO.setCommParms(console.CATBaudRate,
+                            console.CATParity,
+                            console.CATDataBits,
+                            console.CATStopBits);
+
+            Initialize();
+        }
+
         public bool UseForCATPTT
         {
             set
@@ -89,7 +89,7 @@ namespace Thetis
                     SIO.UseForCATPTT = value;
             }
         }
-        
+
         public bool UseForKeyPTT
         {
             set
@@ -143,54 +143,54 @@ namespace Thetis
                     SIO.KeyOnRTS = value;
             }
         }
-        
+
         // typically called when the end user has disabled CAT control through a UI element ... this 
-		// closes the serial port and neutralized the listeners we have in place
-		public void disableCAT() 
-		{
+        // closes the serial port and neutralized the listeners we have in place
+        public void disableCAT()
+        {
             //[2.10.3]MW0LGElock ( this ) 
             //{
-                if ( !cat_enabled )  return; // nothing to do already disabled  
-				cat_enabled = false; 
-			//}
+            if (!cat_enabled) return; // nothing to do already disabled  
+            cat_enabled = false;
+            //}
 
-			if ( SIO != null ) 
-			{
-				SIO.Destroy(); 
-				SIO = null; 
-			}
-			Fpass = true; // reset init flag 
-			return; 									
-		}
+            if (SIO != null)
+            {
+                SIO.Destroy();
+                SIO = null;
+            }
+            Fpass = true; // reset init flag 
+            return;
+        }
 
         #endregion Constructor
 
-		#region Variables
-				
-		public SDRSerialPort SIO;
+        #region Variables
 
-		Console console;
-		ASCIIEncoding AE = new ASCIIEncoding();
-		private bool Fpass = true;
-		private bool cat_enabled = false;  // is cat currently enabled by user?
+        public SDRSerialPort SIO;
 
-//		private System.Timers.Timer SIOMonitor;
-		CATParser parser;		
-//		private int SIOMonitorCount = 0;
+        Console console;
+        ASCIIEncoding AE = new ASCIIEncoding();
+        private bool Fpass = true;
+        private bool cat_enabled = false;  // is cat currently enabled by user?
 
-		#endregion variables
+        //		private System.Timers.Timer SIOMonitor;
+        CATParser parser;
+        //		private int SIOMonitorCount = 0;
 
-		#region Methods
+        #endregion variables
 
-		// Called when the console is activated for the first time.  
-		private void Initialize()
-		{	
-			if(Fpass)
-			{
-				SIO.Create();
-				Fpass = false;
-			}
-		}		
+        #region Methods
+
+        // Called when the console is activated for the first time.  
+        private void Initialize()
+        {
+            if (Fpass)
+            {
+                SIO.Create();
+                Fpass = false;
+            }
+        }
 #if UseParser
 		private char[] ParseLeftover = null; 
 
@@ -249,26 +249,26 @@ namespace Thetis
 
 #endif
 
-		#endregion Methods
+        #endregion Methods
 
-		#region Events
+        #region Events
 
-		private void console_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			if ( SIO != null ) 
-			{ 
-				SIO.Destroy();
-			}
-		}
+        private void console_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (SIO != null)
+            {
+                SIO.Destroy();
+            }
+        }
 
-		private void console_Activated(object sender, EventArgs e)
-		{
-			if ( console.CATEnabled ) 
-			{ 
-				// Initialize();   // wjt enable CAT calls Initialize 
-				enableCAT(); 
-			}
-		}
+        private void console_Activated(object sender, EventArgs e)
+        {
+            if (console.CATEnabled)
+            {
+                // Initialize();   // wjt enable CAT calls Initialize 
+                enableCAT();
+            }
+        }
 
         StringBuilder CommBuffer = new StringBuilder();//"";				//holds incoming serial data from the port
         private void SerialRXEventHandler(object source, SerialRXEvent e)
@@ -318,8 +318,8 @@ namespace Thetis
             }
         }
 
-		#endregion Events
-	}
+        #endregion Events
+    }
 
     public class SIO2ListenerII
     {
@@ -362,8 +362,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (cat2_enabled) return; // nothing to do already enabled 
-                cat2_enabled = true;
+            if (cat2_enabled) return; // nothing to do already enabled 
+            cat2_enabled = true;
             //}
             int port_num = console.CAT2Port;
             SIO2 = new SDRSerialPort2(port_num);
@@ -431,13 +431,13 @@ namespace Thetis
 
         // typically called when the end user has disabled CAT control through a UI element ... this 
         // closes the serial port and neutralized the listeners we have in place
- 
+
         public void disableCAT2()
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (!cat2_enabled) return;
-                cat2_enabled = false; 
+            if (!cat2_enabled) return;
+            cat2_enabled = false;
             //}
 
             if (SIO2 != null)
@@ -459,7 +459,7 @@ namespace Thetis
         ASCIIEncoding AE = new ASCIIEncoding();
         private bool Fpass = true;
         private bool cat2_enabled = false;
- 
+
         //		private System.Timers.Timer SIOMonitor;
         CATParser parser;
         //		private int SIOMonitorCount = 0;
@@ -508,9 +508,9 @@ namespace Thetis
             //double T0 = 0.00;
             //double T1 = 0.00;
             //int bufferLen = 0;
-           // SerialPort spL = (SerialPort)sender;
-         //   SDRSerialPort2 spL = (SDRSerialPort2)sender;
-           // if (!SIO2.IsOpen || spL.BasePort.PortName != SIO2.BasePort.PortName) return;
+            // SerialPort spL = (SerialPort)sender;
+            //   SDRSerialPort2 spL = (SDRSerialPort2)sender;
+            // if (!SIO2.IsOpen || spL.BasePort.PortName != SIO2.BasePort.PortName) return;
 
             CommBuffer.Append(e.buffer);                                		// put the data in the string
             if (parser != null)													// is the parser instantiated
@@ -587,15 +587,15 @@ namespace Thetis
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
- 
+
         }
 
         public void enableCAT3()
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (cat3_enabled) return; // nothing to do already enabled 
-                cat3_enabled = true;
+            if (cat3_enabled) return; // nothing to do already enabled 
+            cat3_enabled = true;
             //}
             int port_num = console.CAT3Port;
             SIO3 = new SDRSerialPort3(port_num);
@@ -663,13 +663,13 @@ namespace Thetis
 
         // typically called when the end user has disabled CAT control through a UI element ... this 
         // closes the serial port and neutralized the listeners we have in place
- 
+
         public void disableCAT3()
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (!cat3_enabled) return;
-                cat3_enabled = false; 
+            if (!cat3_enabled) return;
+            cat3_enabled = false;
             //}
 
             if (SIO3 != null)
@@ -795,44 +795,44 @@ namespace Thetis
             //event handler for Serial RX Events
             SDRSerialPort4.serial_rx_event += new SerialRXEventHandler(SerialRX4EventHandler);
 
-               if (console.CAT4Enabled)  // if CAT is on fire it up 
-               {
-                   try
-                   {
-                       enableCAT4();
-                   }
-                   catch (Exception ex)
-                   {
-                       // fixme??? how cool is to to pop a msg box from an exception handler in a constructor ?? 
-                       //  seems ugly to me (wjt) 
-                       console.CAT4Enabled = false;
-                       if (!console.IsSetupFormNull)
-                       {
-                           console.SetupForm.copyCAT4PropsToDialogVars(); // need to make sure the props on the setup page get reset 
-                       }
-                       MessageBox.Show("Could not initialize CAT control.  Exception was:\n\n " + ex.Message +
-                           "\n\nCAT control has been disabled.", "Error Initializing CAT control",
-                           MessageBoxButtons.OK, MessageBoxIcon.Error);
-                   }
-               } 
+            if (console.CAT4Enabled)  // if CAT is on fire it up 
+            {
+                try
+                {
+                    enableCAT4();
+                }
+                catch (Exception ex)
+                {
+                    // fixme??? how cool is to to pop a msg box from an exception handler in a constructor ?? 
+                    //  seems ugly to me (wjt) 
+                    console.CAT4Enabled = false;
+                    if (!console.IsSetupFormNull)
+                    {
+                        console.SetupForm.copyCAT4PropsToDialogVars(); // need to make sure the props on the setup page get reset 
+                    }
+                    MessageBox.Show("Could not initialize CAT control.  Exception was:\n\n " + ex.Message +
+                        "\n\nCAT control has been disabled.", "Error Initializing CAT control",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
-            public void enableCAT4()
-           {
-               //[2.10.3]MW0LGElock (this)
-               //{
-                   if (cat4_enabled) return; // nothing to do already enabled 
-                   cat4_enabled = true;
-               //}
-               int port_num = console.CAT4Port;
-               SIO4 = new SDRSerialPort4(port_num);
-               SIO4.setCommParms(console.CAT4BaudRate,
-                               console.CAT4Parity,
-                               console.CAT4DataBits,
-                               console.CAT4StopBits);
+        public void enableCAT4()
+        {
+            //[2.10.3]MW0LGElock (this)
+            //{
+            if (cat4_enabled) return; // nothing to do already enabled 
+            cat4_enabled = true;
+            //}
+            int port_num = console.CAT4Port;
+            SIO4 = new SDRSerialPort4(port_num);
+            SIO4.setCommParms(console.CAT4BaudRate,
+                            console.CAT4Parity,
+                            console.CAT4DataBits,
+                            console.CAT4StopBits);
 
-               Initialize();
-           } 
+            Initialize();
+        }
 
         public bool UseForKeyPTT
         {
@@ -890,23 +890,23 @@ namespace Thetis
 
         // typically called when the end user has disabled CAT control through a UI element ... this 
         // closes the serial port and neutralized the listeners we have in place
-  
-          public void disableCAT4()
-          {
-              //[2.10.3]MW0LGElock (this)
-              //{
-                  if (!cat4_enabled) return; 
-                  cat4_enabled = false;
-              //}
 
-              if (SIO4 != null)
-              {
-                  SIO4.Destroy();
-                  SIO4 = null;
-              }
-              Fpass = true; // reset init flag 
-              return;
-          } 
+        public void disableCAT4()
+        {
+            //[2.10.3]MW0LGElock (this)
+            //{
+            if (!cat4_enabled) return;
+            cat4_enabled = false;
+            //}
+
+            if (SIO4 != null)
+            {
+                SIO4.Destroy();
+                SIO4 = null;
+            }
+            Fpass = true; // reset init flag 
+            return;
+        }
 
         #endregion Constructor
 
@@ -1051,8 +1051,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (cat5_enabled) return; // nothing to do already enabled 
-                cat5_enabled = true;
+            if (cat5_enabled) return; // nothing to do already enabled 
+            cat5_enabled = true;
             //}
             int port_num = console.AndromedaCATPort;
             SIO5 = new SDRSerialPort5(port_num);
@@ -1068,8 +1068,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (!cat5_enabled) return;
-                cat5_enabled = false;
+            if (!cat5_enabled) return;
+            cat5_enabled = false;
             //}
 
             if (SIO5 != null)
@@ -1225,8 +1225,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (cat6_enabled) return; // nothing to do already enabled 
-                cat6_enabled = true;
+            if (cat6_enabled) return; // nothing to do already enabled 
+            cat6_enabled = true;
             //}
             int port_num = console.AriesCATPort;
             SIO6 = new SDRSerialPort6(port_num);
@@ -1242,8 +1242,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (!cat6_enabled) return;
-                cat6_enabled = false;
+            if (!cat6_enabled) return;
+            cat6_enabled = false;
             //}
 
             if (SIO6 != null)
@@ -1399,8 +1399,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (cat7_enabled) return; // nothing to do already enabled 
-                cat7_enabled = true;
+            if (cat7_enabled) return; // nothing to do already enabled 
+            cat7_enabled = true;
             //}
             int port_num = console.GanymedeCATPort;
             SIO7 = new SDRSerialPort7(port_num);
@@ -1416,8 +1416,8 @@ namespace Thetis
         {
             //[2.10.3]MW0LGElock (this)
             //{
-                if (!cat7_enabled) return;
-                cat7_enabled = false;
+            if (!cat7_enabled) return;
+            cat7_enabled = false;
             //}
 
             if (SIO7 != null)

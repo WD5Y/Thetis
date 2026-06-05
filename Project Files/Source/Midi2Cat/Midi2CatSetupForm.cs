@@ -22,16 +22,10 @@ The author can be reached by email at:  midi2cat@cametrix.com
 
 */
 
+using Midi2Cat.IO;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Midi2Cat.IO;
 
 namespace Thetis.Midi2Cat
 {
@@ -42,7 +36,7 @@ namespace Thetis.Midi2Cat
         int startDelay = 5;
         int MsgToShow = 0;
         // The messages are spoof... we need all the time to ensure the consoles are synchronised with setup, otherwise bad things happen...
-        string[] startupMessages = {"Closing Thetis Midi Input","Closing Thetis Midi Output","Attaching Midi Input and Output to Midi Setup","Midi Setup is opening Midi input and output", "Synchronising Console Controls with Midi Setup", "Initialising Database."};
+        string[] startupMessages = { "Closing Thetis Midi Input", "Closing Thetis Midi Output", "Attaching Midi Input and Output to Midi Setup", "Midi Setup is opening Midi input and output", "Synchronising Console Controls with Midi Setup", "Initialising Database." };
 
         public Midi2CatSetupForm(string DbFile)
         {
@@ -68,7 +62,7 @@ namespace Thetis.Midi2Cat
                 Setups.Add(ctrl);
                 TabPage page = new TabPage(InDevice);
                 page.Controls.Add(ctrl);
-                ctrl.Dock= DockStyle.Fill;
+                ctrl.Dock = DockStyle.Fill;
                 devicesTabControl.TabPages.Add(page);
             }
         }

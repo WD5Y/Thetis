@@ -4,7 +4,7 @@ This file is part of a program that implements a Software-Defined Radio.
 
 This code/file can be found on GitHub : https://github.com/ramdor/Thetis
 
-Copyright (C) 2020-2025 Richard Samphire MW0LGE
+Copyright (C) 2020-2026 Richard Samphire MW0LGE
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -40,9 +40,8 @@ mw0lge@grange-lane.co.uk
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Diagnostics;
+using System.Linq;
 
 namespace Thetis
 {
@@ -152,7 +151,7 @@ namespace Thetis
 
             int nRet = 1;
             BandStackEntry o = obj as BandStackEntry;
-            if( this.Frequency == o.Frequency &&
+            if (this.Frequency == o.Frequency &&
                 this.Band == o.Band
                 //this.CentreFrequency == o.CentreFrequency &&
                 //this.CTUNEnabled == o.CTUNEnabled &&
@@ -266,7 +265,7 @@ namespace Thetis
             //duplice last visited
             newBse.m_lastVisited = this.LastVisited.Copy();
             //dupe lists
-            foreach(BandFrequencyData bfd in this.FrequenciesToFilterOn)
+            foreach (BandFrequencyData bfd in this.FrequenciesToFilterOn)
             {
                 newBse.FrequenciesToFilterOn.Add(bfd.Copy());
             }
@@ -274,9 +273,9 @@ namespace Thetis
             {
                 newBse.ModesToFilterOn.Add(m);
             }
-            foreach (DSPMode sm in this.SubModesToFilterOn)
+            foreach (DSPSubMode sm in this.SubModesToFilterOn)
             {
-                newBse.ModesToFilterOn.Add(sm);
+                newBse.SubModesToFilterOn.Add(sm);
             }
             foreach (Band b in this.BandsToFilterOn)
             {
@@ -285,45 +284,54 @@ namespace Thetis
 
             return newBse;
         }
-        public string GuidOfCurrentBlind {
-            get {
+        public string GuidOfCurrentBlind
+        {
+            get
+            {
                 return m_sCurrentlySelectedGUID;
             }
             set { m_sCurrentlySelectedGUID = value; }
         }
-        public FilterReturnMode ReturnMode {
+        public FilterReturnMode ReturnMode
+        {
             get { return m_filterReturnMode; }
-            set {
+            set
+            {
                 m_filterReturnMode = value;
             }
         }
-        public string ReturnGUID {
+        public string ReturnGUID
+        {
             get { return m_sSpecificReturnGUID; }
-            set {
+            set
+            {
                 m_sSpecificReturnGUID = value;
             }
         }
-        public int NumberOfEntries {
+        public int NumberOfEntries
+        {
             get { return m_lstFilteredList.Count; }
         }
-        public List<BandStackEntry> Entries {
+        public List<BandStackEntry> Entries
+        {
             // NOTE: the use of entries is accesing a DEEP COPY
             // of the filters internal entries. 
             // You need to use UpdateEntry to make an actual change
-            get {
-                List<BandStackEntry> newBse = new List <BandStackEntry>();
-                foreach(BandStackEntry bse in m_lstFilteredList)
+            get
+            {
+                List<BandStackEntry> newBse = new List<BandStackEntry>();
+                foreach (BandStackEntry bse in m_lstFilteredList)
                 {
                     newBse.Add(bse.Copy());
                 }
-                return newBse; 
+                return newBse;
             }
         }
         public int IndexFromGUID(string sGUID)
         {
             int nRet = -1;
 
-            for(int n = 0;n < m_lstFilteredList.Count;n++)
+            for (int n = 0; n < m_lstFilteredList.Count; n++)
             {
                 BandStackEntry bse = m_lstFilteredList[n];
                 if (bse.GUID == sGUID)
@@ -341,7 +349,7 @@ namespace Thetis
             bool bRet = false;
 
             int index = IndexFromGUID(bse.GUID);
-            if(index != -1)
+            if (index != -1)
             {
                 if (!m_lstFilteredList[index].Locked)
                 {
@@ -412,7 +420,8 @@ namespace Thetis
 
             return bRet;
         }
-        public BandStackEntry LastVisited {
+        public BandStackEntry LastVisited
+        {
             get { return m_lastVisited; }
         }
         public void Remove(int index)
@@ -422,14 +431,17 @@ namespace Thetis
             m_lstFilteredList.RemoveAt(index);
             m_nCurrentlySelectedIndex--;
         }
-        public int IndexOfCurrentBlind {
+        public int IndexOfCurrentBlind
+        {
             get { return m_nCurrentlySelectedIndex; }
             set { m_nCurrentlySelectedIndex = value; } // No check version that can be used by the DB. Later calls generatefilter will fix this if needed
         }
-        public int IndexOfCurrent {
+        public int IndexOfCurrent
+        {
             get { return m_nCurrentlySelectedIndex; }
-            set {
-                if(m_lstFilteredList.Count == 0)
+            set
+            {
+                if (m_lstFilteredList.Count == 0)
                 {
                     m_nCurrentlySelectedIndex = -1;
                     return;
@@ -440,12 +452,14 @@ namespace Thetis
 
                 m_nCurrentlySelectedIndex = v;
             }
-        }        
-        public string GuidOfCurrent {
-            get {
+        }
+        public string GuidOfCurrent
+        {
+            get
+            {
                 string sRet = "";
 
-                if(m_nCurrentlySelectedIndex >=0 && m_nCurrentlySelectedIndex < m_lstFilteredList.Count)
+                if (m_nCurrentlySelectedIndex >= 0 && m_nCurrentlySelectedIndex < m_lstFilteredList.Count)
                 {
                     sRet = m_lstFilteredList[m_nCurrentlySelectedIndex].GUID;
                 }
@@ -474,10 +488,10 @@ namespace Thetis
             BandStackEntry bseRet = null;
 
             if (m_nCurrentlySelectedIndex == -1 && m_lstFilteredList.Count > 0) m_nCurrentlySelectedIndex = 0;
- 
+
             switch (m_filterReturnMode)
             {
-                case FilterReturnMode.Current:                    
+                case FilterReturnMode.Current:
                     if (m_nCurrentlySelectedIndex >= 0 && m_nCurrentlySelectedIndex < m_lstFilteredList.Count)
                     {
                         bseRet = m_lstFilteredList[m_nCurrentlySelectedIndex].Copy();
@@ -485,7 +499,7 @@ namespace Thetis
                     break;
                 case FilterReturnMode.Specific:
                     int n = IndexFromGUID(ReturnGUID);
-                    if(n < 0)
+                    if (n < 0)
                     {
                         // failed to find this guid, just return to current mode
                         m_filterReturnMode = FilterReturnMode.Current;
@@ -512,14 +526,14 @@ namespace Thetis
                 //reset last visited to this
                 BandStackEntry bseLV = bseRet.Copy();// true);
                 bseLV.Locked = false; // incase the inital was locked
-                m_lastVisited = bseLV;                
+                m_lastVisited = bseLV;
             }
-  
+
             return bseRet;
         }
         public BandStackEntry First()
         {
-            BandStackEntry bseRet = null;            
+            BandStackEntry bseRet = null;
 
             if (m_lstFilteredList.Count > 0)
             {
@@ -601,7 +615,7 @@ namespace Thetis
             //return bse;
 
             List<BandStackEntry> bse_list = new List<BandStackEntry>();
-            foreach(BandStackEntry bse in data)
+            foreach (BandStackEntry bse in data)
             {
                 bse_list.Add(bse.Copy(false));
             }
@@ -609,14 +623,14 @@ namespace Thetis
         }
         public List<BandStackEntry> FindForFrequencyRange(double frequencyLow, double frequencyHigh)
         {
-            
+
 
             IEnumerable<BandStackEntry> data = from item in m_lstFilteredList
                                                where item.Frequency >= frequencyLow && item.Frequency <= frequencyHigh
                                                select item;
 
             List<BandStackEntry> bsEntries = data.ToList();
-            
+
             return bsEntries;
         }
         public void GenerateFilteredList(bool bMaintainSelected, bool bInitalising = false)
@@ -625,7 +639,7 @@ namespace Thetis
 
             int nOldCurrentlySelectedIndex = m_nCurrentlySelectedIndex;
             string sOldSelectedGUID = m_sCurrentlySelectedGUID; // this will be from DB only as part of CurrentlySelectedGUIDBlind
-            
+
             if (!bInitalising)
             {
                 sOldSelectedGUID = ""; // we are not initalising so dont care about the old DB guid
@@ -637,7 +651,7 @@ namespace Thetis
 
             // generate a filtered list from all frequency entries that are in the gigantic list
             m_lstFilteredList.Clear();
-            m_nCurrentlySelectedIndex = -1;            
+            m_nCurrentlySelectedIndex = -1;
 
             IEnumerable<BandStackEntry> data;
 
@@ -658,14 +672,14 @@ namespace Thetis
             if (FilterOnFrequencies)
             {
                 bsesTmp = FilterOnBands ? bsesTmp : BandStackManager.BandstackEntries;
-                List <BandStackEntry> tmp = new List<BandStackEntry>();
+                List<BandStackEntry> tmp = new List<BandStackEntry>();
                 // we have some filtered by band, let us sub filter on freq
                 foreach (BandFrequencyData bfd in FrequenciesToFilterOn)
                 {
                     data = from item in bsesTmp
-                            where (bfd.lowOnly == true && bfd.low == item.Frequency) || (bfd.lowOnly == false && (item.Frequency >= bfd.low && item.Frequency < bfd.high))
-                            orderby item.Frequency ascending
-                            select item;
+                           where (bfd.lowOnly == true && bfd.low == item.Frequency) || (bfd.lowOnly == false && (item.Frequency >= bfd.low && item.Frequency < bfd.high))
+                           orderby item.Frequency ascending
+                           select item;
 
                     tmp.AddRange(data);
                 }
@@ -680,9 +694,9 @@ namespace Thetis
                 foreach (DSPMode mode in ModesToFilterOn)
                 {
                     data = from item in bsesTmp
-                            where (item.Mode == mode)
-                            orderby item.Frequency ascending
-                            select item;
+                           where (item.Mode == mode)
+                           orderby item.Frequency ascending
+                           select item;
 
                     tmp.AddRange(data);
                 }
@@ -697,9 +711,9 @@ namespace Thetis
                 foreach (DSPSubMode subMode in SubModesToFilterOn)
                 {
                     data = from item in bsesTmp
-                            where (item.SubMode == subMode)
-                            orderby item.Frequency ascending
-                            select item;
+                           where (item.SubMode == subMode)
+                           orderby item.Frequency ascending
+                           select item;
 
                     tmp.AddRange(data);
                 }
@@ -742,7 +756,7 @@ namespace Thetis
     }
 
     static class BandStackManager
-    {        
+    {
         private static List<BandStackEntry> m_lstEntries; // a big gigantic list of all the entries       
         private static Dictionary<string, BandStackFilter> m_dictFilters; // the filters
         private static FRSRegion m_Region; // region that everything works off, assigning a different region will rebuild just about everything
@@ -763,11 +777,13 @@ namespace Thetis
             m_dictFilters = new Dictionary<string, BandStackFilter>();
         }
 
-        public static List<BandStackEntry> BandstackEntries {
-            get {
+        public static List<BandStackEntry> BandstackEntries
+        {
+            get
+            {
                 if (m_bListsNeedRebuild) initLists();
 
-                return m_lstEntries; 
+                return m_lstEntries;
             }
         }
         public static void SaveToDB()
@@ -827,7 +843,8 @@ namespace Thetis
             }
             m_bReady = true;
         }
-        public static bool Ready {
+        public static bool Ready
+        {
             get { return m_bReady; }
         }
         public static int IndexFromGUID(string sGUID)
@@ -845,13 +862,13 @@ namespace Thetis
             }
 
             return nRet;
-        }        
+        }
         private static void addStandardFilters()
         {
             Array bands = Enum.GetValues(typeof(Band));
             foreach (Band b in bands)
             {
-                if(b != Band.FIRST && b != Band.LAST)
+                if (b != Band.FIRST && b != Band.LAST)
                 {
                     List<BandFrequencyData> bfds = GetFrequencyRangesForBand(b, m_bExtended, m_Region);
 
@@ -877,7 +894,7 @@ namespace Thetis
         {
             if (m_dictFilters.ContainsKey(sFilterName))
             {
-                if((bIncludeUserDefined && m_dictFilters[sFilterName].UserDefined) || !m_dictFilters[sFilterName].UserDefined)
+                if ((bIncludeUserDefined && m_dictFilters[sFilterName].UserDefined) || !m_dictFilters[sFilterName].UserDefined)
                     return m_dictFilters[sFilterName];
             }
             return null;
@@ -891,7 +908,7 @@ namespace Thetis
         {
             List<BandStackFilter> bsfilters = new List<BandStackFilter>();
 
-            foreach(KeyValuePair<string, BandStackFilter> kvpBsf in m_dictFilters)
+            foreach (KeyValuePair<string, BandStackFilter> kvpBsf in m_dictFilters)
             {
                 BandStackFilter bsf = kvpBsf.Value;
                 if ((bIncludeUserDefined && bsf.UserDefined) || !bsf.UserDefined)
@@ -963,9 +980,10 @@ namespace Thetis
         }
 
 
-        public static FRSRegion Region {
+        public static FRSRegion Region
+        {
             get { return m_Region; }
-            set 
+            set
             {
                 FRSRegion tmp = value;
 
@@ -977,9 +995,10 @@ namespace Thetis
                 }
             }
         }
-        public static bool Extended {
+        public static bool Extended
+        {
             get { return m_bExtended; }
-            set 
+            set
             {
                 bool bTmp = value;
 
@@ -1004,16 +1023,16 @@ namespace Thetis
             {
                 // ignore band
                 data = from item in fd
-                            where ((item.lowOnly == true && frequency == item.low) || ((frequency >= item.low && frequency < item.high) && item.lowOnly == false))
-                            && item.region == region
-                            select item;
+                       where ((item.lowOnly == true && frequency == item.low) || ((frequency >= item.low && frequency < item.high) && item.lowOnly == false))
+                       && item.region == region
+                       select item;
             }
             else
             {
                 data = from item in fd
-                            where ((item.lowOnly == true && frequency == item.low) || ((frequency >= item.low && frequency < item.high) && item.lowOnly == false))
-                            && item.region == region && item.band == band
-                            select item;
+                       where ((item.lowOnly == true && frequency == item.low) || ((frequency >= item.low && frequency < item.high) && item.lowOnly == false))
+                       && item.region == region && item.band == band
+                       select item;
             }
             List<BandFrequencyData> outList = data.ToList();
 
@@ -1034,12 +1053,12 @@ namespace Thetis
         public static List<BandFrequencyData> GetFrequencyRangesForBand(Band band, bool extended, FRSRegion region)
         {
             if (extended) region = FRSRegion.Extended;
-            List<BandFrequencyData> fd = frequencyData(region);              
+            List<BandFrequencyData> fd = frequencyData(region);
 
             IEnumerable<BandFrequencyData> data = from item in fd
-                                         where item.band == band && item.region == region
-                                         //orderby item.bandType ascending
-                                         select item;
+                                                  where item.band == band && item.region == region
+                                                  //orderby item.bandType ascending
+                                                  select item;
 
             List<BandFrequencyData> outList = data.ToList();
 
@@ -1050,9 +1069,9 @@ namespace Thetis
             if (extended) region = FRSRegion.Extended;
             List<BandFrequencyData> bands = GetBandFrequencyDataForFrequency(frequency, extended, region);
             bool bRet = false;
-            foreach(BandFrequencyData bfd in bands)
+            foreach (BandFrequencyData bfd in bands)
             {
-                if(bfd.bandType == bandType)
+                if (bfd.bandType == bandType)
                 {
                     bRet = true;
                     break;
@@ -1067,15 +1086,15 @@ namespace Thetis
             List<BandFrequencyData> bands = GetBandFrequencyDataForFrequency(frequency, extended, region);
             if (bands.Count > 0)
             {
-                foreach(BandFrequencyData bfd in bands)
+                foreach (BandFrequencyData bfd in bands)
                 {
-                    if(bfd.bandType == BandType.HF)
+                    if (bfd.bandType == BandType.HF)
                     {
                         if (bfd.band != Band.WWV && bfd.band != Band.BLMF)
                         {
                             bRet = true;
                             break;
-                        }                            
+                        }
                     }
                 }
             }
@@ -1206,7 +1225,7 @@ namespace Thetis
                 default:
                     return BandType.GEN;
             }
-        }        
+        }
         public static Band GetNearestBandForFrequency(double freq, bool ignoreGen, bool ignoreWWV)
         {
             Band nearestBand = Band.FIRST;
@@ -1218,7 +1237,7 @@ namespace Thetis
                 {
                     continue;
                 }
-                if (ignoreGen && data.band == Band.WWV)
+                if (ignoreWWV && data.band == Band.WWV)
                 {
                     continue;
                 }
@@ -1264,7 +1283,7 @@ namespace Thetis
             BandType ret = BandType.GEN;
             if (m_frequencyData == null || m_frequencyData.Count == 0) return ret;
 
-            List<BandFrequencyData> bfd_for_freq = m_frequencyData.Where(bfd => (bfd.lowOnly == true && bfd.low == frequency) 
+            List<BandFrequencyData> bfd_for_freq = m_frequencyData.Where(bfd => (bfd.lowOnly == true && bfd.low == frequency)
                                     || (bfd.lowOnly == false && (frequency >= bfd.low && frequency < bfd.high))).ToList();
 
             if (bfd_for_freq.Count > 0) return bfd_for_freq.First().bandType;
@@ -1327,7 +1346,7 @@ namespace Thetis
                     frequencyData.Add(new BandFrequencyData(23.17, 26.495, Band.B12M, BandType.HF, false, region));
                     frequencyData.Add(new BandFrequencyData(26.495, 29.7, Band.B10M, BandType.HF, false, region));
                     frequencyData.Add(new BandFrequencyData(50.0, 54.0, Band.B6M, BandType.HF, false, region));
-                    frequencyData.Add(new BandFrequencyData(144.0, 148.0, Band.B2M, BandType.VHF, false, region));                    
+                    frequencyData.Add(new BandFrequencyData(144.0, 148.0, Band.B2M, BandType.VHF, false, region));
 
                     break;
 
@@ -1745,7 +1764,7 @@ namespace Thetis
                 frequencyData.Add(new BandFrequencyData(14.67, 0, Band.WWV, BandType.HF, true, region));
 
                 frequencyData.Add(new BandFrequencyData(0.20, 1.8, Band.BLMF, BandType.GEN, false, region));
-                
+
                 frequencyData.Add(new BandFrequencyData(2.3, 3.0, Band.B120M, BandType.GEN, false, region));
                 frequencyData.Add(new BandFrequencyData(3.0, 3.5, Band.B90M, BandType.GEN, false, region));
                 frequencyData.Add(new BandFrequencyData(4.1, 5.06, Band.B61M, BandType.GEN, false, region));
@@ -1759,10 +1778,10 @@ namespace Thetis
                 frequencyData.Add(new BandFrequencyData(18.0, 21.0, Band.B14M, BandType.GEN, false, region));
                 frequencyData.Add(new BandFrequencyData(21.0, 25, Band.B13M, BandType.GEN, false, region));
                 frequencyData.Add(new BandFrequencyData(25.0, 28.0, Band.B11M, BandType.GEN, false, region));
-            }                     
+            }
 
             return frequencyData;
-        }        
+        }
         public static string ModeToString(DSPMode mode)
         {
             return mode.ToString();
@@ -1801,44 +1820,44 @@ namespace Thetis
                 case Band.B15M:
                 case Band.B12M:
                 case Band.B10M:
-                case Band.B6M: 
-                case Band.B2M: 
+                case Band.B6M:
+                case Band.B2M:
                     c = Color.White;
                     break;
-                case Band.WWV: 
+                case Band.WWV:
                     c = Color.Green;
                     break;
                 case Band.BLMF:
                     c = Color.White;
                     break;
-                case Band.B120M: 
+                case Band.B120M:
                 case Band.B90M:
-                case Band.B61M: 
+                case Band.B61M:
                 case Band.B49M:
                 case Band.B41M:
                 case Band.B31M:
                 case Band.B25M:
                 case Band.B22M:
                 case Band.B19M:
-                case Band.B16M: 
+                case Band.B16M:
                 case Band.B14M:
                 case Band.B13M:
-                case Band.B11M: 
+                case Band.B11M:
                     c = Color.Coral;
                     break;
-                case Band.VHF0: 
-                case Band.VHF1: 
+                case Band.VHF0:
+                case Band.VHF1:
                 case Band.VHF2:
-                case Band.VHF3: 
-                case Band.VHF4: 
+                case Band.VHF3:
+                case Band.VHF4:
                 case Band.VHF5:
                 case Band.VHF6:
-                case Band.VHF7: 
-                case Band.VHF8: 
-                case Band.VHF9: 
-                case Band.VHF10: 
-                case Band.VHF11: 
-                case Band.VHF12: 
+                case Band.VHF7:
+                case Band.VHF8:
+                case Band.VHF9:
+                case Band.VHF10:
+                case Band.VHF11:
+                case Band.VHF12:
                 case Band.VHF13:
                     c = Color.Gold;
                     break;
@@ -1890,8 +1909,8 @@ namespace Thetis
                 case Band.VHF0: ret = "VHF0"; break;
                 case Band.VHF1: ret = "VHF1"; break;
 
-//                case Band.VHF0: ret = "VU 2m"; break;
-//                case Band.VHF1: ret = "VU 70cm"; break;
+                //                case Band.VHF0: ret = "VU 2m"; break;
+                //                case Band.VHF1: ret = "VU 70cm"; break;
 
                 case Band.VHF2: ret = "VHF2"; break;
                 case Band.VHF3: ret = "VHF3"; break;
@@ -1993,11 +2012,11 @@ namespace Thetis
                     ZoomFactor = 1f,
                     ZoomSlider = ((int)o[i * 7 + 5]),
                     CentreFrequency = (double)o[i * 7 + 6],
-                    Locked = false                                    
+                    Locked = false
                 };
 
                 if (bIgnore60m && bse.Band == Band.B60M) continue;
-                
+
                 if (m_Region == FRSRegion.US && bse.Band == Band.B60M) bse.Locked = true; //pre-lock 60m band entries for the US
                 if (bse.Band == Band.WWV) bse.Locked = true; // pre-lock the WWV's
 
@@ -2013,8 +2032,8 @@ namespace Thetis
         private static bool isGuidInList(string sGUID)
         {
             IEnumerable<BandStackEntry> data = from item in m_lstEntries
-                                                  where item.GUID == sGUID
-                                                  select item;
+                                               where item.GUID == sGUID
+                                               select item;
 
             return data.Count<BandStackEntry>() > 0;
         }
@@ -2087,7 +2106,7 @@ namespace Thetis
                                 "WWV", "SAM", "F7", 15.000000, false, 150, 0.0,
                                 "WWV", "SAM", "F7", 20.000000, false, 150, 0.0,
                                 "WWV", "SAM", "F5", 25.000000, false, 150, 0.0,
-								"GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
+                                "GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 5.975000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 9.550000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 3.850000, false, 150, 0.0,
@@ -2387,7 +2406,7 @@ namespace Thetis
                                 "WWV", "SAM", "F7", 15.000000, false, 150, 0.0,
                                 "WWV", "SAM", "F7", 20.000000, false, 150, 0.0,
                                 "WWV", "SAM", "F5", 25.000000, false, 150, 0.0,
-								"GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
+                                "GEN", "SAM", "F6", 13.845000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 5.975000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 9.550000, false, 150, 0.0,
                                 "GEN", "SAM", "F7", 3.850000, false, 150, 0.0,

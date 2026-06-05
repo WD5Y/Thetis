@@ -25,12 +25,10 @@
 //    Austin, TX 78750
 //    USA
 //
+using FTD2XX_NET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FTD2XX_NET;
 
 namespace Thetis
 {
@@ -39,7 +37,7 @@ namespace Thetis
     {
         public override string Message
         {
-	        get { return "USB relay not found."; }
+            get { return "USB relay not found."; }
         }
     }
 
@@ -55,7 +53,7 @@ namespace Thetis
     {
         public override string Message
         {
-	        get { return "USB relay invalid relay number."; }
+            get { return "USB relay invalid relay number."; }
         }
     }
 
@@ -125,8 +123,8 @@ namespace Thetis
         /// Create a USB Relay Device and open it by the serial number
         /// </summary>
         /// <param name="serialNumber">Device serial number</param>
-        public UsbBCDCable( String serialNumber )
-        {          
+        public UsbBCDCable(String serialNumber)
+        {
             // Open the relay device by serial number
             //  The serial number is always uniques, so the safest
             _device = new FTDI();
@@ -142,7 +140,7 @@ namespace Thetis
             {
                 throw new UsbRelayConfigurationException();
             }
-            
+
             // Set the bit mode
             _status = _device.SetBitMode(BitMask, BitMode);
             if (_status != FTDI.FT_STATUS.FT_OK)
@@ -174,8 +172,8 @@ namespace Thetis
         {
             byte values = GetRelayValues();
 
-            byte mask = (byte) (~(byte)(1 << (relay - 1)));
-            if ( (mask & values) > 0)
+            byte mask = (byte)(~(byte)(1 << (relay - 1)));
+            if ((mask & values) > 0)
             {
                 return true;
             }
@@ -197,13 +195,13 @@ namespace Thetis
             {
                 throw new UsbRelayInvalidRelayException();
             }
-            
+
             // Get the current values
             byte newValue = GetRelayValues();
 
             // Please note, that this only works for devices with up to 8 relays 
             // note: C# doesn't have a power operator, have to use a Math a method call. 
-            byte bitValue = (byte) Math.Pow(2,relay);
+            byte bitValue = (byte)Math.Pow(2, relay);
             if (true == value)
             {
                 // Setting a relay value, or it in.
@@ -212,7 +210,7 @@ namespace Thetis
             else
             {
                 // Clearing a relay value, AND it out
-                newValue &= (byte) ~bitValue;
+                newValue &= (byte)~bitValue;
             }
             _values = newValue;
 
@@ -236,7 +234,7 @@ namespace Thetis
             {
                 throw new UsbRelayWriteException();
             }
-           // Console.WriteLine( String.Format("SetRelays(0x{0:x2})", _values));
+            // Console.WriteLine( String.Format("SetRelays(0x{0:x2})", _values));
         }
 
         public void CloseDevice()
@@ -259,7 +257,7 @@ namespace Thetis
     {
         #region Constants
         #endregion      // Constants
-       
+
         #region Private Variables
         FTDI _device;
         FTDI.FT_STATUS _status;
@@ -299,13 +297,13 @@ namespace Thetis
         {
             get { return GetDeviceCount(); }
         }
-        
+
         /// <summary>
         /// Device List
         /// </summary>
         public FTDI.FT_DEVICE_INFO_NODE[] Devices
         {
-            get 
+            get
             {
                 PopulateDeviceList();
                 return _deviceList;
@@ -361,7 +359,7 @@ namespace Thetis
 
 
         #region Public Methods
-        
+
         public void OpenDevice(string serialNumber)
         {
             UsbBCDCable relay = new UsbBCDCable(serialNumber);
@@ -519,16 +517,16 @@ namespace Thetis
             _ids = new List<uint>();
 
             // Populate each list
-            foreach( FTDI.FT_DEVICE_INFO_NODE device in _deviceList)
+            foreach (FTDI.FT_DEVICE_INFO_NODE device in _deviceList)
             {
                 _serialNumbers.Add(device.SerialNumber);
-               // Console.WriteLine("Serial Number: " + device.SerialNumber);
+                // Console.WriteLine("Serial Number: " + device.SerialNumber);
 
                 _locationIds.Add(device.LocId);
-               // Console.WriteLine("Location ID: " + device.LocId.ToString());
+                // Console.WriteLine("Location ID: " + device.LocId.ToString());
 
                 _ids.Add(device.ID);
-               // Console.WriteLine("ID: " + device.ID.ToString());
+                // Console.WriteLine("ID: " + device.ID.ToString());
             }
         }
 

@@ -8,14 +8,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace RawInput_dll
 {
-    public class RawInput : NativeWindow  
+    public class RawInput : NativeWindow
     {
         //static RawKeyboard _keyboardDriver;
         //static RawMouse _mouseDriver;
@@ -34,36 +34,41 @@ namespace RawInput_dll
         public event RawKeyboard.DeviceEventHandler KeyPressed
         {
             add { _keyboardDriver.KeyPressed += value; }
-            remove { _keyboardDriver.KeyPressed -= value;}
+            remove { _keyboardDriver.KeyPressed -= value; }
         }
-        public event RawMouse.DeviceEventHandler MouseMoved {
+        public event RawMouse.DeviceEventHandler MouseMoved
+        {
             add { _mouseDriver.MouseMoved += value; }
             remove { _mouseDriver.MouseMoved -= value; }
         }
-        public int NumberOfMice {
+        public int NumberOfMice
+        {
             get { return _mouseDriver.NumberOfMice; }
         }
         public int NumberOfKeyboards
         {
-            get { return _keyboardDriver.NumberOfKeyboards; } 
+            get { return _keyboardDriver.NumberOfKeyboards; }
         }
         public Dictionary<IntPtr, MouseEvent> MouseDevices()
         {
             return _mouseDriver._deviceList;
         }
 
-        public bool IgnoreNextWheelEvent {
-            get {
-                    if(_filter == null)
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return _filter.IgnoreNextWheelEvent;
-                    }
+        public bool IgnoreNextWheelEvent
+        {
+            get
+            {
+                if (_filter == null)
+                {
+                    return false;
                 }
-            set {
+                else
+                {
+                    return _filter.IgnoreNextWheelEvent;
+                }
+            }
+            set
+            {
                 if (_filter != null)
                 {
                     _filter.IgnoreNextWheelEvent = value;
@@ -73,7 +78,7 @@ namespace RawInput_dll
         public void AddMessageFilter()
         {
             if (null != _filter) return;
-            
+
             _filter = new PreMessageFilter();
             Application.AddMessageFilter(_filter);
         }
@@ -131,7 +136,7 @@ namespace RawInput_dll
             {
                 Debug.Print("Registration for device notifications Failed. Error: {0}", Marshal.GetLastWin32Error());
             }
-            
+
             return usbNotifyHandle;
         }
 
