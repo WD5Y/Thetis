@@ -782,6 +782,27 @@
 				Checksum="yes"
             />
 		</Component>
+			<Component Guid="*">
+			<File Id="ThirdPartyNoticesFile"
+				Source="..\..\..\Third_Party_Notices.md"
+				KeyPath="yes"
+				Checksum="yes"
+			/>
+		</Component>
+		<Component Guid="*">
+			<File Id="ThetisLicenseFile"
+				Source="..\..\..\LICENSE"
+				KeyPath="yes"
+				Checksum="yes"
+			/>
+		</Component>
+		<Component Guid="*">
+			<File Id="ThetisDualLicenseFile"
+				Source="..\..\..\LICENSE-DUAL-LICENSING"
+				KeyPath="yes"
+				Checksum="yes"
+			/>
+		</Component>
 	</ComponentGroup>
 
     <Binary Id="InstallSkins" SourceFile="OpenHPSDR_Skins.exe" />
